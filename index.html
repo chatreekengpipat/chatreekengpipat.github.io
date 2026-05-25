@@ -1,973 +1,938 @@
-// =========================================
-
-// CHATREE PORTFOLIO · Premium Animations v8
-
-// =========================================
-
-
-
-(function() {
-
-  'use strict';
-
-
-
-  // ===== 1. Scroll Reveal with Intersection Observer =====
-
-  function initScrollReveal() {
-
-    const reveals = document.querySelectorAll('section');
-
-
-
-    const observerOpts = {
-
-      root: null,
-
-      rootMargin: '0px 0px -80px 0px',
-
-      threshold: 0.08
-
-    };
-
-
-
-    // Auto-tag sections as reveals
-
-    reveals.forEach((section, idx) => {
-
-      if (idx === 0) return; // Skip hero (has its own animation)
-
-      section.classList.add('reveal');
-
-    });
-
-
-
-    // Auto-tag grid containers as stagger
-
-    const staggerTargets = document.querySelectorAll(
-
-      '.impact-strip, .methodology-grid, .focus-grid, .projects-grid, ' +
-
-      '.tools-grid, .process-flow, .photo-grid, .ideas-grid, ' +
-
-      '.coaches-grid, .subjects-grid, .hyperparam-grid, .skill-cat-grid, ' +
-
-      '.contact-grid, .results-banner'
-
-    );
-
-    staggerTargets.forEach(el => el.classList.add('stagger'));
-
-
-
-    const observer = new IntersectionObserver((entries) => {
-
-      entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-          entry.target.classList.add('visible');
-
-          observer.unobserve(entry.target);
-
-        }
-
-      });
-
-    }, observerOpts);
-
-
-
-    document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .stagger').forEach(el => {
-
-      observer.observe(el);
-
-    });
-
-  }
-
-
-
-  // ===== 2. Nav scroll effect =====
-
-  function initNavScroll() {
-
-    const nav = document.querySelector('nav');
-
-    if (!nav) return;
-
-
-
-    let lastScroll = 0;
-
-    let ticking = false;
-
-
-
-    function update() {
-
-      const scrolled = window.scrollY;
-
-      if (scrolled > 50) {
-
-        nav.classList.add('scrolled');
-
-      } else {
-
-        nav.classList.remove('scrolled');
-
-      }
-
-      lastScroll = scrolled;
-
-      ticking = false;
-
-    }
-
-
-
-    window.addEventListener('scroll', () => {
-
-      if (!ticking) {
-
-        window.requestAnimationFrame(update);
-
-        ticking = true;
-
-      }
-
-    }, { passive: true });
-
-  }
-
-
-
-  // ===== 3. Magnetic hover effect on key cards =====
-
-  function initMagneticEffect() {
-
-    const magneticTargets = document.querySelectorAll(
-
-      '.award-feature, .academic-feature, .hero-card, .impact-cell'
-
-    );
-
-
-
-    magneticTargets.forEach(el => {
-
-      el.addEventListener('mousemove', (e) => {
-
-        const rect = el.getBoundingClientRect();
-
-        const x = e.clientX - rect.left - rect.width / 2;
-
-        const y = e.clientY - rect.top - rect.height / 2;
-
-
-
-        // Subtle magnetic pull
-
-        const maxOffset = 6;
-
-        const offsetX = (x / rect.width) * maxOffset;
-
-        const offsetY = (y / rect.height) * maxOffset;
-
-
-
-        el.style.setProperty('--magnetic-x', `${offsetX}px`);
-
-        el.style.setProperty('--magnetic-y', `${offsetY}px`);
-
-        el.style.transform = `translate(${offsetX}px, ${offsetY - 4}px) scale(1.02)`;
-
-      });
-
-
-
-      el.addEventListener('mouseleave', () => {
-
-        el.style.transform = '';
-
-      });
-
-    });
-
-  }
-
-
-
-  // ===== 4. Smooth anchor scrolling =====
-
-  function initSmoothScroll() {
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-      anchor.addEventListener('click', function (e) {
-
-        const href = this.getAttribute('href');
-
-        if (href === '#' || href.length < 2) return;
-
-
-
-        const target = document.querySelector(href);
-
-        if (!target) return;
-
-
-
-        e.preventDefault();
-
-        const top = target.offsetTop - 80;
-
-        window.scrollTo({
-
-          top: top,
-
-          behavior: 'smooth'
-
-        });
-
-      });
-
-    });
-
-  }
-
-
-
-  // ===== 5. Mouse parallax on hero =====
-
-  function initHeroParallax() {
-
-    const hero = document.querySelector('.hero, .hero-v7');
-
-    if (!hero) return;
-
-
-
-    const heroVisual = hero.querySelector('.hero-visual, .hero-v7-right');
-
-    if (!heroVisual) return;
-
-
-
-    let rafId = null;
-
-
-
-    hero.addEventListener('mousemove', (e) => {
-
-      if (rafId) return;
-
-
-
-      rafId = window.requestAnimationFrame(() => {
-
-        const rect = hero.getBoundingClientRect();
-
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-
-
-        // Subtle parallax
-
-        heroVisual.style.transform = `translate(${x * -15}px, ${y * -15}px)`;
-
-        rafId = null;
-
-      });
-
-    });
-
-
-
-    hero.addEventListener('mouseleave', () => {
-
-      heroVisual.style.transform = 'translate(0px, 0px)';
-
-    });
-
-  }
-
-
-
-  // ===== 6. Number counter animation =====
-
-  function initCounters() {
-
-    const counters = document.querySelectorAll('.impact-num, .hero-card-num, .academic-metric-val, .result-val, .workplace-stat-val');
-
-
-
-    const counterObserver = new IntersectionObserver((entries) => {
-
-      entries.forEach(entry => {
-
-        if (!entry.isIntersecting) return;
-
-
-
-        const el = entry.target;
-
-        if (el.dataset.counted) return;
-
-        el.dataset.counted = 'true';
-
-
-
-        const text = el.textContent.trim();
-
-        const match = text.match(/^([▲▼↑↓\s]*)([\d.,]+)(.*)$/);
-
-
-
-        if (!match) return;
-
-
-
-        const prefix = match[1] || '';
-
-        const numStr = match[2];
-
-        const suffix = match[3] || '';
-
-        const num = parseFloat(numStr.replace(/,/g, ''));
-
-
-
-        if (isNaN(num) || num === 0) return;
-
-
-
-        const duration = 1500; // ทำให้วิ่งช้าลงนิดนึงเพื่อความหรูหรา
-
-        const start = performance.now();
-
-        const decimals = (numStr.split('.')[1] || '').length;
-
-
-
-        function frame(now) {
-
-          const progress = Math.min((now - start) / duration, 1);
-
-          const eased = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
-
-          const current = num * eased;
-
-
-
-          let formatted;
-
-          if (decimals > 0) {
-
-            formatted = current.toFixed(decimals);
-
-          } else {
-
-            formatted = Math.round(current).toLocaleString('en-US');
-
-          }
-
-
-
-          el.textContent = prefix + formatted + suffix;
-
-
-
-          if (progress < 1) {
-
-            window.requestAnimationFrame(frame);
-
-          } else {
-
-            el.textContent = text;
-
-          }
-
-        }
-
-
-
-        window.requestAnimationFrame(frame);
-
-        counterObserver.unobserve(el);
-
-      });
-
-    }, { threshold: 0.5 });
-
-
-
-    counters.forEach(el => counterObserver.observe(el));
-
-  }
-
-
-
-  // ===== 7. WORLD-CLASS NEURAL NETWORK BACKGROUND (UPGRADED) =====
-
-  function initNeuralBg() {
-
-    // รองรับทั้ง id="neuralBg" (เดิม) และ "techCanvas" (ใหม่)
-
-    const canvas = document.getElementById('neuralBg') || document.getElementById('techCanvas');
-
-    if (!canvas) return;
-
-
-
-    const ctx = canvas.getContext('2d');
-
-    const dpr = window.devicePixelRatio || 1; // ทำให้เส้นคมกริบบนจอ Retina/4K
-
-    let width, height;
-
-   
-
-    // ตั้งค่าเมาส์
-
-    let mouse = { x: -1000, y: -1000, radius: 180 };
-
-
-
-    function resize() {
-
-      width = window.innerWidth;
-
-      height = window.innerHeight;
-
-      canvas.width = width * dpr;
-
-      canvas.height = height * dpr;
-
-      canvas.style.width = width + 'px';
-
-      canvas.style.height = height + 'px';
-
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-      ctx.scale(dpr, dpr);
-
-    }
-
-    resize();
-
-    window.addEventListener('resize', resize);
-
-
-
-    // ตรวจจับเมาส์แบบ Smooth
-
-    window.addEventListener('mousemove', (e) => {
-
-      mouse.x = e.clientX;
-
-      mouse.y = e.clientY;
-
-    });
-
-    window.addEventListener('mouseleave', () => {
-
-      mouse.x = -1000;
-
-      mouse.y = -1000;
-
-    });
-
-    window.addEventListener('scroll', () => {
-
-       // อัปเดตตำแหน่งเมาส์ตอน Scroll เพื่อไม่ให้จุดค้าง
-
-       mouse.y = mouse.y;
-
-    }, { passive: true });
-
-
-
-    // คำนวณจุดตามขนาดจอ ไม่ให้รกเกินไปและไม่กินสเปค
-
-    const particleCount = window.innerWidth < 768 ? 40 : 80;
-
-    const particles = [];
-
-    const connectionDistance = window.innerWidth < 768 ? 100 : 160;
-
-
-
-    class Particle {
-
-      constructor() {
-
-        this.x = Math.random() * width;
-
-        this.y = Math.random() * height;
-
-        this.vx = (Math.random() - 0.5) * 0.6; // ความเร็วเริ่มต้น (สมูทขึ้น)
-
-        this.vy = (Math.random() - 0.5) * 0.6;
-
-        this.baseX = this.x;
-
-        this.baseY = this.y;
-
-        this.r = Math.random() * 1.5 + 1; // ขนาดจุด
-
-      }
-
-
-
-      update() {
-
-        // คำนวณฟิสิกส์หลบเมาส์ (Interactive Repel)
-
-        let dx = mouse.x - this.x;
-
-        let dy = mouse.y - this.y;
-
-        let distance = Math.sqrt(dx * dx + dy * dy);
-
-       
-
-        if (distance < mouse.radius) {
-
-          const forceDirectionX = dx / distance;
-
-          const forceDirectionY = dy / distance;
-
-          const force = (mouse.radius - distance) / mouse.radius;
-
-          const directionX = forceDirectionX * force * 2.5; // ความแรงในการผลัก
-
-          const directionY = forceDirectionY * force * 2.5;
-
-         
-
-          this.vx -= directionX * 0.05;
-
-          this.vy -= directionY * 0.05;
-
-        }
-
-
-
-        // เพิ่มแรงเสียดทาน (Friction) ให้การเคลื่อนไหวดูเป็นธรรมชาติ
-
-        this.vx *= 0.98;
-
-        this.vy *= 0.98;
-
-
-
-        // บวกความเร็วปกติเข้าไปเลี้ยงไว้ไม่ให้หยุดนิ่ง
-
-        this.x += this.vx + ((Math.random() - 0.5) * 0.2);
-
-        this.y += this.vy + ((Math.random() - 0.5) * 0.2);
-
-
-
-        // ชนขอบเด้งกลับแบบเนียนๆ
-
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-
-        if (this.y < 0 || this.y > height) this.vy *= -1;
-
-
-
-        // กันจุดวิ่งหายออกนอกจอ
-
-        this.x = Math.max(0, Math.min(width, this.x));
-
-        this.y = Math.max(0, Math.min(height, this.y));
-
-      }
-
-    }
-
-
-
-    // สร้าง Particles
-
-    for (let i = 0; i < particleCount; i++) {
-
-      particles.push(new Particle());
-
-    }
-
-
-
-    function animate() {
-
-      ctx.clearRect(0, 0, width, height);
-
-
-
-      // ดึงสีตาม Theme ปัจจุบัน (เชื่อมกับไฟล์ theme.js ของคุณ)
-
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-
-      const rgb = isDark ? '96, 165, 250' : '37, 99, 235'; // ฟ้าสว่าง / น้ำเงิน
-
-      const lineAlphaBase = isDark ? 0.3 : 0.2;
-
-      const dotAlpha = isDark ? 0.8 : 0.6;
-
-
-
-      // วนลูปวาดการเชื่อมต่อ
-
-      for (let i = 0; i < particles.length; i++) {
-
-        particles[i].update();
-
-
-
-        for (let j = i + 1; j < particles.length; j++) {
-
-          const dx = particles[i].x - particles[j].x;
-
-          const dy = particles[i].y - particles[j].y;
-
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-         
-
-          // ตีเส้นถ้าอยู่ใกล้กัน
-
-          if (dist < connectionDistance) {
-
-            const opacity = (1 - dist / connectionDistance) * lineAlphaBase;
-
-            ctx.beginPath();
-
-            ctx.strokeStyle = `rgba(${rgb}, ${opacity})`;
-
-            ctx.lineWidth = 1;
-
-            ctx.moveTo(particles[i].x, particles[i].y);
-
-            ctx.lineTo(particles[j].x, particles[j].y);
-
-            ctx.stroke();
-
-          }
-
-        }
-
-      }
-
-
-
-      // วาดจุด (Particles)
-
-      particles.forEach(p => {
-
-        // สร้างรัศมีแสงเรืองรอง (Outer Glow)
-
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-
-        gradient.addColorStop(0, `rgba(${rgb}, ${dotAlpha * 0.5})`);
-
-        gradient.addColorStop(1, `rgba(${rgb}, 0)`);
-
-       
-
-        ctx.beginPath();
-
-        ctx.fillStyle = gradient;
-
-        ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
-
-        ctx.fill();
-
-
-
-        // จุดแกนกลาง (Inner Dot)
-
-        ctx.beginPath();
-
-        ctx.fillStyle = `rgba(${rgb}, ${dotAlpha})`;
-
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-
-        ctx.fill();
-
-      });
-
-
-
-      // Interactive Mouse Connection (ลากเส้นจากเมาส์ไปยังจุดที่อยู่ใกล้)
-
-      particles.forEach(p => {
-
-        let dx = mouse.x - p.x;
-
-        let dy = mouse.y - p.y;
-
-        let dist = Math.sqrt(dx * dx + dy * dy);
-
-       
-
-        if (dist < mouse.radius) {
-
-            ctx.beginPath();
-
-            const opacity = (1 - dist / mouse.radius) * lineAlphaBase * 1.5;
-
-            ctx.strokeStyle = `rgba(${rgb}, ${opacity})`;
-
-            ctx.lineWidth = 1.5;
-
-            ctx.moveTo(p.x, p.y);
-
-            ctx.lineTo(mouse.x, mouse.y);
-
-            ctx.stroke();
-
-        }
-
-      });
-
-
-
-      requestAnimationFrame(animate);
-
-    }
-
-    animate();
-
-  }
-
-
-
-  // ===== Init when DOM ready =====
-
-  function init() {
-
-    initScrollReveal();
-
-    initNavScroll();
-
-    initMagneticEffect(); // เพิ่มกลับเข้ามาให้สมบูรณ์
-
-    initSmoothScroll();
-
-    initHeroParallax();
-
-    initCounters();
-
-    initNeuralBg();
-
-  }
-
-
-
-  if (document.readyState === 'loading') {
-
-    document.addEventListener('DOMContentLoaded', init);
-
-  } else {
-
-    init();
-
-  }
-
-})();
-
-/* ====================================
-
-   ADVANCED ANIMATIONS v8
-
-   ==================================== */
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-
-
-
-    /* --- 1. FLOW FIELD BACKGROUND (Canvas) --- */
-
-    const canvas = document.getElementById('flowFieldCanvas');
-
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-
-   
-
-    let width, height;
-
-    function resizeCanvas() {
-
-        width = canvas.width = window.innerWidth;
-
-        height = canvas.height = window.innerHeight;
-
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-
-    resizeCanvas();
-
-
-
-    const particles = [];
-
-    const particleCount = Math.min(width < 768 ? 40 : 100, 150);
-
-
-
-    class FlowParticle {
-
-        constructor() {
-
-            this.x = Math.random() * width;
-
-            this.y = Math.random() * height;
-
-            this.vx = 0;
-
-            this.vy = 0;
-
-            this.acceleration = 0.1;
-
-            this.speedMax = Math.random() * 0.5 + 0.3;
-
-            this.color = `rgba(96, 165, 250, ${Math.random() * 0.2 + 0.1})`;
-
-        }
-
-
-
-        update() {
-
-            // สร้างคลื่นพลังงาน
-
-            const angle = (this.x * 0.005) + (this.y * 0.005) + (Date.now() * 0.0005);
-
-            this.vx += Math.cos(angle) * this.acceleration;
-
-            this.vy += Math.sin(angle) * this.acceleration;
-
-
-
-            // ล็อกความเร็วสูงสุด
-
-            const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-
-            if (speed > this.speedMax) {
-
-                this.vx = (this.vx / speed) * this.speedMax;
-
-                this.vy = (this.vy / speed) * this.speedMax;
-
-            }
-
-
-
-            this.x += this.vx;
-
-            this.y += this.vy;
-
-
-
-            // กลับมาอีกฝั่งถ้าหลุดจอ
-
-            if (this.x < 0) this.x = width;
-
-            if (this.x > width) this.x = 0;
-
-            if (this.y < 0) this.y = height;
-
-            if (this.y > height) this.y = 0;
-
-        }
-
-
-
-        draw() {
-
-            ctx.beginPath();
-
-            ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
-
-            ctx.fillStyle = this.color;
-
-            ctx.fill();
-
-        }
-
-    }
-
-
-
-    for (let i = 0; i < particleCount; i++) {
-
-        particles.push(new FlowParticle());
-
-    }
-
-
-
-    function animateFlowField() {
-
-        ctx.clearRect(0, 0, width, height);
-
-        particles.forEach(p => {
-
-            p.update();
-
-            p.draw();
-
-        });
-
-        requestAnimationFrame(animateFlowField);
-
-    }
-
-    animateFlowField();
-
-
-
-    /* --- 2. GIGANTIC TITLE STAGGER (Reveal) --- */
-
-    // เราจะใช้ CSS Keyframes แทน GSAP เพื่อความประหยัด (เนื่องจากไฟล์เดิมไม่ได้รวม GSAP ไว้)
-
-    const megaTitle = document.querySelector('.mega-title');
-
-    const maskText = document.querySelector('.mask-text');
-
-   
-
-    // ค่อยๆ เปิดชื่อ "KENGPIPAT" ออกมาอย่างนุ่มนวล
-
-    if (maskText) {
-
-        // ใช้ setTimeout เพื่อให้เกิด Stagger หลังโหลดหน้าเว็บ
-
-        setTimeout(() => {
-
-            maskText.style.transition = 'opacity 1s ease, transform 1s ease';
-
-            maskText.style.opacity = '1';
-
-            maskText.style.transform = 'translateY(0)';
-
-        }, 300); // ดีเลย์นิดนึง
-
-    }
-
-
-
-    // Animation อื่นๆ ที่มีอยู่แล้ว (Parallax, Reveal) ยังคงทำงานตามปกติครับ
-
-}); 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatree Kengpipat — ERP Consultant</title>
+<meta name="description" content="Chatree Kengpipat (CEE) — ERP Consultant on XeerSoft Cloud ERP. 3+ years end-to-end implementation across Procurement, Financial Accounting, CRM, and HR.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapfamily=JetBrains+Mono:wght@400;500;600https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<script src="animation.js" defer></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Workspace of Chatree Kengpipat (Cee)
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#methodology">Method</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#featured-award">Award</a></li>
+    <li><a href="#academic">Academic</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- DYNAMIC TECH BACKGROUND -->
+<canvas id="techCanvas"></canvas>
+
+<!-- HERO v7 -->
+<canvas id="techCanvas"></canvas>
+<canvas id="flowFieldCanvas"></canvas>
+
+<section class="hero-v7 powerful-hero">
+  <div class="hero-v7-inner">
+    
+    <div class="hero-v7-content">
+      <div class="hero-v7-tag">
+        <span>XeerSoft Cloud ERP Consultant</span>
+      </div>
+      
+      <h1 class="mega-title">
+        CHATREE<br>
+        <span class="mask-text accent-line">KENGPIPAT</span>
+      </h1>
+      
+      <p class="hero-v7-tagline balanced-text">
+        Bridging Business Ops with Digital Architecture. 3+ Years Owning End-to-End ERP Implementation Cycles.
+      </p>
+      
+      <div class="hero-v7-cta">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-outline">Contact Me</a>
+      </div>
+      
+      <div class="hero-v7-meta">
+        <span class="hero-v7-meta-pill"><span class="icon">★</span> 4 Live Projects</span>
+        <span class="hero-v7-meta-pill"><span class="icon">⚡</span> SAP Achiever</span>
+      </div>
+    </div>
+    
+    <div class="hero-v7-photo-container">
+      <div class="hero-v7-right-overlay"></div>
+      <div class="hero-v7-photo-card">
+        <img src="images/profile-square.jpg" alt="Chatree Kengpipat">
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- IMPACT STRIP -->
+<section id="impact" style="background: var(--surface-2);">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Impact <em>at a glance</em></h2>
+    <span class="section-subtitle">Portfolio Summary · All Projects</span>
+  </div>
+  <div class="impact-strip">
+    <div class="impact-cell">
+      <div class="impact-num">86<small>%</small></div>
+      <div class="impact-label">Stockout Reduction</div>
+      <p style="font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem; letter-spacing: 0.1em;">22% → 3%</p>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num">97<small>%</small></div>
+      <div class="impact-label">Faster Pricing Decision</div>
+      <p style="font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem; letter-spacing: 0.1em;">480 min → 15 min</p>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num">82<small>%</small></div>
+      <div class="impact-label">Write-off Reduced</div>
+      <p style="font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem; letter-spacing: 0.1em;">฿45K → ฿8K /yr</p>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num">0</div>
+      <div class="impact-label">Critical Post-Launch Bugs</div>
+      <p style="font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem; letter-spacing: 0.1em;">CRM Go-Live · 50+ Members</p>
+    </div>
+  </div>
+
+  <!-- Overview Dashboard -->
+  <div class="dashboard-section" style="margin-top: 2rem;">
+    <div class="dashboard-header">
+      <div class="dashboard-meta">
+        <div class="dashboard-tag">Executive Portfolio Dashboard</div>
+        <div class="dashboard-title">All Projects · 7-KPI Cross-Domain Improvement</div>
+      </div>
+      <div class="dashboard-source">Power BI</div>
+    </div>
+    <img src="dashboards/dashboard-overview.png" alt="Power BI executive dashboard summarising all 4 ERP projects" class="dashboard-image">
+    <div class="dashboard-footer">
+      <strong>Source:</strong> Consolidated production data from 4 XeerSoft ERP projects at Learn Balance Group, Jan 2023 – Now. 47 staff trained · 219 tickets resolved · 7 KPIs improved across Procurement, Finance, Billing, and UAT domains.
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">About <em>me</em></h2>
+  </div>
+
+  <div class="about-grid-v7">
+    <div class="about-text-v7">
+      <p>
+        Mechanical Engineering from <strong>Chulalongkorn University (Class Honors, GPAX 3.40)</strong> who crossed into ERP consulting — bringing analytical rigour from engineering into business process design and system implementation.
+      </p>
+      <p>
+        I work as the <strong>sole Implementation Consultant</strong> at LearnBalance Group on <strong>XeerSoft Cloud ERP</strong> — owning the full implementation cycle from configuration, master data setup, integration testing, UAT facilitation, Go-live cutover, and BAU support. As part of the role I also serve as the embedded Business Analyst — <strong>gathering requirements, authoring Functional Specs (FSD), Use Cases, and User Stories</strong> for the remote development team. Single point of contact for ~200 users across 3 branches and 5 integrated modules: Inventory & Procurement (P2P), Financial Accounting (AR/AP/GL), Web POS & Pricing, CRM & Loyalty, and HR & Payroll.
+      </p>
+      <p>
+        Prior hands-on exposure to <strong>SAP in a live automotive manufacturing environment</strong> at Mitsubishi Motors Thailand — operated SAP as an end-user for procurement and asset management of my <strong>FPDU Assist Device engineering project</strong>, which won the <strong>Best Achievement Award</strong> from the full intern cohort. Currently studying for SAP S/4HANA certifications (C_TS460 SD · C_TS462 MM).
+      </p>
+
+      <div class="about-quote-v7">
+        An Implementation Consultant is the builder of business systems — turning requirements into working software through configuration, testing, and disciplined cutover.
+      </div>
+
+      <div class="focus-tags-v7">
+        <span class="focus-tag-v7">ERP Implementation</span>
+        <span class="focus-tag-v7">Configuration & Master Data</span>
+        <span class="focus-tag-v7">FSD · Use Case · User Story</span>
+        <span class="focus-tag-v7">UAT Leadership</span>
+        <span class="focus-tag-v7">Go-Live Cutover</span>
+        <span class="focus-tag-v7">SAP Procurement (End-User)</span>
+      </div>
+    </div>
+
+    <div class="about-photo-wrap">
+      <div class="about-photo-deco about-photo-deco-1"></div>
+      <div class="about-photo-deco about-photo-deco-2"></div>
+      <div class="about-photo-card">
+        <img src="photos/newton-1.jpg" alt="Chatree Kengpipat at Newton Sixth Form">
+        <div class="about-photo-badge-v7">
+          <div class="name">Chatree Kengpipat</div>
+          <div class="role">ERP Consultant · On-Site</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY SECTION -->
+<section id="methodology" style="background: var(--surface-2);">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">How <em>I work</em></h2>
+    <span class="section-subtitle">Methodology · Documentation · Agile</span>
+  </div>
+
+  <!-- Methodology Cards -->
+  <div class="methodology-grid" style="margin-bottom: 4rem;">
+    <div class="method-card">
+      <div class="method-card-icon">i.</div>
+      <div class="method-card-title">SDLC Foundation</div>
+      <div class="method-card-subtitle">Waterfall + Iterative</div>
+      <p class="method-card-desc">
+        Projects on XeerSoft followed a hybrid model — Waterfall for upfront discovery and FSD authoring, then iterative UAT cycles with weekly Dev builds. Each project averaged 5 build cycles before Go-Live.
+      </p>
+    </div>
+    <div class="method-card">
+      <div class="method-card-icon">ii.</div>
+      <div class="method-card-title">Agile Awareness</div>
+      <div class="method-card-subtitle">Sprint-like Cadence</div>
+      <p class="method-card-desc">
+        Dev team delivered weekly builds. I tested 1–3 days per build (depending on complexity), met 2× per week for review and defect triage — functionally identical to Agile Sprint cadence with shorter cycles.
+      </p>
+    </div>
+    <div class="method-card">
+      <div class="method-card-icon">iii.</div>
+      <div class="method-card-title">Documentation First</div>
+      <div class="method-card-subtitle">FSD → ERD → UAT</div>
+      <p class="method-card-desc">
+        Every project starts with a written FSD before code. ERDs map data relationships. UAT test cases trace back to FSD requirements. No code is built without a signed-off spec.
+      </p>
+    </div>
+  </div>
+
+  <!-- BA Documentation Hierarchy -->
+  <h3 class="content-h3" style="text-align: center; margin: 4rem 0 1rem;">Documentation <em>hierarchy</em></h3>
+  <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+    How a business need flows into deliverable code — every artifact has a specific audience and purpose.
+  </p>
+
+  <div class="doc-hierarchy">
+    <div class="doc-level">
+      <span class="doc-level-tag">BRD</span>
+      <div class="doc-level-content">
+        <div class="doc-level-name">Business Requirements Document</div>
+        <div class="doc-level-desc">What the business needs and why. The "agreement" between BA and Client.</div>
+      </div>
+      <span class="doc-level-audience">For Client</span>
+    </div>
+    <div class="doc-arrow">↓</div>
+
+    <div class="doc-level">
+      <span class="doc-level-tag">FSD</span>
+      <div class="doc-level-content">
+        <div class="doc-level-name">Functional Specification Document</div>
+        <div class="doc-level-desc">Business rules + system behaviour. The "blueprint" for the developer.</div>
+      </div>
+      <span class="doc-level-audience">For Dev</span>
+    </div>
+    <div class="doc-arrow">↓</div>
+
+    <div class="doc-level">
+      <span class="doc-level-tag">ERD</span>
+      <div class="doc-level-content">
+        <div class="doc-level-name">Entity-Relationship Diagram</div>
+        <div class="doc-level-desc">Data model — tables, fields, and relationships.</div>
+      </div>
+      <span class="doc-level-audience">For Dev + DBA</span>
+    </div>
+    <div class="doc-arrow">↓</div>
+
+    <div class="doc-level">
+      <span class="doc-level-tag">UC</span>
+      <div class="doc-level-content">
+        <div class="doc-level-name">Use Cases & Process Flows</div>
+        <div class="doc-level-desc">Step-by-step user-system interactions for each scenario.</div>
+      </div>
+      <span class="doc-level-audience">For Dev + QA</span>
+    </div>
+    <div class="doc-arrow">↓</div>
+
+    <div class="doc-level">
+      <span class="doc-level-tag">TC</span>
+      <div class="doc-level-content">
+        <div class="doc-level-name">Test Cases & UAT Plan</div>
+        <div class="doc-level-desc">Acceptance criteria traced back to FSD requirements.</div>
+      </div>
+      <span class="doc-level-audience">For QA + User</span>
+    </div>
+  </div>
+
+  <!-- Agile / Jira Visualization -->
+  <h3 class="content-h3" style="text-align: center; margin: 5rem 0 1rem;">Defect <em>lifecycle</em></h3>
+  <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+    Example board structure from CRM Loyalty UAT Cycle 2 — 60 defects tracked across 5 build cycles to zero critical post-launch incidents.
+  </p>
+
+  <div class="kanban-board">
+    <div class="kanban-col">
+      <div class="kanban-col-header">
+        <span>Open</span>
+        <span class="kanban-col-count">3</span>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-014</div>
+        <div class="kanban-card-title">Voucher redeem fails on partial points balance</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p2">P2</span>
+          <span class="kanban-avatar">D</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-016</div>
+        <div class="kanban-card-title">Star log timestamp shows wrong timezone</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p3">P3</span>
+          <span class="kanban-avatar">D</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-017</div>
+        <div class="kanban-card-title">UI: assign button alignment on mobile</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p3">P3</span>
+          <span class="kanban-avatar">D</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kanban-col">
+      <div class="kanban-col-header">
+        <span>In Dev</span>
+        <span class="kanban-col-count">4</span>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-001</div>
+        <div class="kanban-card-title">Bulk star assignment — only first student processed</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p1">P1</span>
+          <span class="kanban-avatar">D</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-009</div>
+        <div class="kanban-card-title">Campaign trigger fires twice on enrol</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p2">P2</span>
+          <span class="kanban-avatar">D</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-011</div>
+        <div class="kanban-card-title">Star balance not refresh after redemption</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p2">P2</span>
+          <span class="kanban-avatar">D</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-013</div>
+        <div class="kanban-card-title">Audit log missing teacher username</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p3">P3</span>
+          <span class="kanban-avatar">D</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kanban-col">
+      <div class="kanban-col-header">
+        <span>Retest</span>
+        <span class="kanban-col-count">2</span>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-005</div>
+        <div class="kanban-card-title">Duplicate voucher redemption prevented</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p1">P1</span>
+          <span class="kanban-avatar">C</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-008</div>
+        <div class="kanban-card-title">Points calculation rounding rule</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p2">P2</span>
+          <span class="kanban-avatar">C</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kanban-col">
+      <div class="kanban-col-header">
+        <span>Resolved</span>
+        <span class="kanban-col-count">3</span>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-002</div>
+        <div class="kanban-card-title">Branch filter for star balance report</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p2">P2</span>
+          <span class="kanban-avatar">✓</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-003</div>
+        <div class="kanban-card-title">Negative balance prevented after redeem</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p1">P1</span>
+          <span class="kanban-avatar">✓</span>
+        </div>
+      </div>
+      <div class="kanban-card">
+        <div class="kanban-card-id">DEF-004</div>
+        <div class="kanban-card-title">Email notification on redemption</div>
+        <div class="kanban-card-meta">
+          <span class="priority priority-p3">P3</span>
+          <span class="kanban-avatar">✓</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <span class="disclaimer-icon">i</span>
+    <div class="disclaimer-text">
+      <strong>Note on methodology framing:</strong> XeerSoft project cadence (weekly builds, 2× weekly review meetings, structured defect tracking) is functionally equivalent to Agile Sprint cycles. The exact terminology may differ, but the principles of iterative delivery, continuous feedback, and prioritised backlog management apply throughout.
+    </div>
+  </div>
+
+  <!-- BA Process Flow -->
+  <h3 class="content-h3" style="text-align: center; margin: 5rem 0 1rem;">My <em>process</em></h3>
+  <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+    From first stakeholder conversation to BAU support — the path I walk for every project.
+  </p>
+
+  <div class="process-flow">
+    <div class="process-step">
+      <div class="process-num">i</div>
+      <div class="process-name">Discover</div>
+      <div class="process-detail">Stakeholder interviews · workshops · As-Is observation</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">ii</div>
+      <div class="process-name">Specify</div>
+      <div class="process-detail">BRD · FSD · ERD · process flow diagrams</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">iii</div>
+      <div class="process-name">Design</div>
+      <div class="process-detail">Business rules · data model · workflow design</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">iv</div>
+      <div class="process-name">Validate</div>
+      <div class="process-detail">UAT/SIT · defect log · iterative fix retest</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">v</div>
+      <div class="process-name">Deliver</div>
+      <div class="process-detail">Go-Live cutover · user training · BAU hypercare</div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCTIONAL FOCUS -->
+<section id="focus">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Functional <em>focus</em></h2>
+    <span class="section-subtitle">Modules operated on XeerSoft Cloud ERP</span>
+  </div>
+  <div class="focus-grid">
+    <div class="focus-card">
+      <div class="focus-card-title">Procure-to-Pay</div>
+      <div class="focus-card-role">Implementation Lead</div>
+      <ul class="focus-list">
+        <li>PR → PO → GR → Invoice Verification</li>
+        <li>Material Master & Vendor Master Configuration</li>
+        <li>Inventory Management & Stock Control</li>
+        <li>3-Way Match & Payment Processing</li>
+        <li>MRP: Safety Stock, Lot Sizing, Reorder Point</li>
+        <li>2-Level Approval Workflow & Authorization</li>
+        <li>ABC Stock Analysis & Auto-Order Reporting</li>
+      </ul>
+    </div>
+
+    <div class="focus-card">
+      <div class="focus-card-title">Financial Accounting</div>
+      <div class="focus-card-role">FI · AR · AP · GL</div>
+      <ul class="focus-list">
+        <li>AR Open Item Management & Payment Terms</li>
+        <li>Overdue Monitoring & Dunning Process</li>
+        <li>AP Invoice Posting & Vendor Payments</li>
+        <li>GL Account Determination & Mapping</li>
+        <li>POS-to-Accounting Automatic Revenue Posting</li>
+        <li>Cost Allocation & Billing Structure</li>
+        <li>Multi-Branch Account Consolidation</li>
+      </ul>
+    </div>
+
+    <div class="focus-card">
+      <div class="focus-card-title">Pricing · CRM · HR</div>
+      <div class="focus-card-role">UAT & Business Design</div>
+      <ul class="focus-list">
+        <li>Pricing Procedure & Multi-Tier Condition Logic</li>
+        <li>AR Billing Structure & Payment Term Design</li>
+        <li>Loyalty / Reward Programme Configuration</li>
+        <li>Voucher Security & Redemption Validation</li>
+        <li>CRM Campaign & Customer Communication</li>
+        <li>HR & Payroll — ERP Training Delivery</li>
+        <li>POS Integration & Revenue Recognition</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- WORKPLACE — NEWTON SIXTH FORM -->
+<section class="workplace-section">
+  <div class="workplace-grid">
+    <div class="workplace-content" lang="en">
+      <div class="workplace-tag">Where I work</div>
+      <h2>On the floor at <em>Newton Sixth Form</em></h2>
+      <p class="balanced-paragraph">
+        Newton Sixth Form Boarding School (under <strong>Learn Balance Group</strong>) is where these XeerSoft ERP projects came to life — a 200-staff, 3-branch organisation running integrated Procurement, Finance, CRM, and HR modules on a single cloud ERP platform.
+      </p>
+      <p class="balanced-paragraph">
+        As the <strong>sole on-site Implementation Consultant</strong>, I'm the bridge between business operations and the remote XeerSoft development team — gathering requirements in walkthroughs, authoring FSDs, configuring modules, leading UAT cycles, and supporting daily users from accounting to admissions.
+      </p>
+      <div class="workplace-stats">
+        <div class="workplace-stat">
+          <div class="workplace-stat-val">200+</div>
+          <div class="workplace-stat-label">Daily ERP Users</div>
+        </div>
+        <div class="workplace-stat">
+          <div class="workplace-stat-val">3</div>
+          <div class="workplace-stat-label">Branches Supported</div>
+        </div>
+        <div class="workplace-stat">
+          <div class="workplace-stat-val">5</div>
+          <div class="workplace-stat-label">Integrated Modules</div>
+        </div>
+        <div class="workplace-stat">
+          <div class="workplace-stat-val">3+ yrs</div>
+          <div class="workplace-stat-label">Embedded On-Site</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="workplace-photos-v8">
+      <div class="workplace-photo-single">
+        <img src="photos/newton-2.jpg" alt="Chatree Kengpipat — ERP Implementation Consultant at Newton Sixth Form">
+        <div class="workplace-photo-overlay-v8">
+          <div class="tag">On site</div>
+          <div class="label">ERP Implementation Consultant · Newton Sixth Form</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="background: var(--surface-2);">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Selected <em>projects</em></h2>
+    <span class="section-subtitle">4 End-to-End Deliveries · XeerSoft Cloud ERP · 2023 – Present</span>
+  </div>
+  <div class="projects-grid">
+
+    <a href="project1.html" class="project-card">
+      <div class="project-num">01</div>
+      <div>
+        <div class="project-period">Jan – Jun 2023</div>
+        <h3 class="project-title">Inventory & Procurement Management</h3>
+        <div class="project-role">P2P Implementation · Sole Consultant</div>
+        <p class="project-desc">
+          Configured material masters, vendor data, and 2-level approval workflow on XeerSoft. Applied Poisson Distribution and Modified EOQ statistical models to solve chronic XS/XXL uniform stockouts and textbook write-off.
+        </p>
+      </div>
+      <div class="project-tags">
+        <span class="tag">XeerSoft P2P</span>
+        <span class="tag">MRP</span>
+        <span class="tag">Master Data</span>
+        <span class="tag">Statistical Modelling</span>
+      </div>
+      <div class="project-metrics-row">
+        <div class="project-metric">
+          <div class="project-metric-val">▲ 86%</div>
+          <div class="project-metric-label">Stockout</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">100%</div>
+          <div class="project-metric-label">Unauth PO Cut</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">▲ 82%</div>
+          <div class="project-metric-label">Write-off</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project2.html" class="project-card">
+      <div class="project-num">02</div>
+      <div>
+        <div class="project-period">Jun 2023 – Jun 2024</div>
+        <h3 class="project-title">Strategic Pricing & AR Configuration</h3>
+        <div class="project-role">BA + Implementation · 12-Month Discovery</div>
+        <p class="project-desc">
+          Attended 48 weekly Executive Sessions over 12 months. Extracted multi-tier pricing logic from live family advisory sessions and translated into structured FSD with 3 core pricing variables and AR billing structure.
+        </p>
+      </div>
+      <div class="project-tags">
+        <span class="tag">XeerSoft Pricing</span>
+        <span class="tag">AR / Dunning</span>
+        <span class="tag">FSD Authoring</span>
+        <span class="tag">Stakeholder Workshop</span>
+      </div>
+      <div class="project-metrics-row">
+        <div class="project-metric">
+          <div class="project-metric-val">▲ 97%</div>
+          <div class="project-metric-label">Decision Time</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">▲ 71%</div>
+          <div class="project-metric-label">Days Overdue</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">▲ 23%</div>
+          <div class="project-metric-label">AR Collection</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project3.html" class="project-card">
+      <div class="project-num">03</div>
+      <div>
+        <div class="project-period">Jun 2024 – Jan 2025</div>
+        <h3 class="project-title">CRM Star Reward Loyalty System</h3>
+        <div class="project-role">BA + UAT Lead · Defect Management</div>
+        <p class="project-desc">
+          Detected critical bulk-assignment defect on first test cycle. Led 5 iterative UAT build cycles, managing 60 defects with structured reproduction steps to zero critical post-launch incidents across 50+ members.
+        </p>
+      </div>
+      <div class="project-tags">
+        <span class="tag">XeerSoft CRM</span>
+        <span class="tag">UAT Lead</span>
+        <span class="tag">Defect Lifecycle</span>
+        <span class="tag">Custom Logic</span>
+      </div>
+      <div class="project-metrics-row">
+        <div class="project-metric">
+          <div class="project-metric-val">60 → 0</div>
+          <div class="project-metric-label">Critical Defects</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">5</div>
+          <div class="project-metric-label">UAT Cycles</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">50+</div>
+          <div class="project-metric-label">Members Live</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="project4.html" class="project-card">
+      <div class="project-num">04</div>
+      <div>
+        <div class="project-period">Jan 2025 – Present</div>
+        <h3 class="project-title">STEM Portfolio Financial Tracking</h3>
+        <div class="project-role">BA + Implementation · In Progress</div>
+        <p class="project-desc">
+          Designed AR billing structure for 50-student CU lab programme (฿3,000/session). Configured collection tracking, cost allocation logic, and per-subject P&L reporting across 6 STEM subjects.
+        </p>
+      </div>
+      <div class="project-tags">
+        <span class="tag">XeerSoft FI</span>
+        <span class="tag">AR Billing</span>
+        <span class="tag">Cost Allocation</span>
+        <span class="tag">P&L Reporting</span>
+      </div>
+      <div class="project-metrics-row">
+        <div class="project-metric">
+          <div class="project-metric-val">฿2.1M</div>
+          <div class="project-metric-label">Total Revenue</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">82%</div>
+          <div class="project-metric-label">Collection Rate</div>
+        </div>
+        <div class="project-metric">
+          <div class="project-metric-val">31%</div>
+          <div class="project-metric-label">Avg Margin</div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ★ FEATURED AWARD PROJECT (Mitsubishi) -->
+<section id="featured-award">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Featured <em>achievement</em></h2>
+    <span class="section-subtitle">★ Best Achievement Award · MMTh 2020 · Where my SAP experience began</span>
+  </div>
+
+  <a href="project5.html" class="award-feature">
+    <div class="award-icon">★</div>
+    <div class="award-content">
+      <div class="award-subtitle">Mitsubishi Motors Thailand · Engineering Internship</div>
+      <h3>FPDU Assist <em>Device</em> Project</h3>
+      <p class="award-desc">
+        Before my XeerSoft ERP work, I led an engineering project on the PHEV manual line at MMTh Factory #1 — designed an ergonomic assist device using SQCDE evaluation across 8 design alternatives, managed the full <strong>SAP procurement workflow</strong> (MSR → e-AR → PR → PO → Asset deployment), and conducted FMEA risk reduction. Selected from the full intern cohort for the Best Achievement Award. <strong>This is where my hands-on SAP end-user experience originated.</strong>
+      </p>
+    </div>
+    <div class="award-arrow">→</div>
+  </a>
+</section>
+
+<!-- 🎓 ACADEMIC FOUNDATION (Senior Project AI) -->
+<section id="academic" style="background: var(--surface-2);">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Academic <em>foundation</em></h2>
+    <span class="section-subtitle">★ Senior Project · Deep Learning · Python · 2022</span>
+  </div>
+
+  <p style="color: var(--text-muted); max-width: 700px; margin-bottom: 1.5rem; line-height: 1.8;">
+    Before ERP consulting and before the Mitsubishi internship, this is where the discipline began — a rigorous AI/ML system built in Python. The structured testing, iterative refinement, and acceptance-criteria design I learned here is exactly what powers my UAT and BA work today.
+  </p>
+
+  <a href="senior-project.html" class="academic-feature">
+    <div>
+      <div class="academic-tag">Chulalongkorn University · Department of Mechanical Engineering</div>
+      <h3 class="academic-title">LiDAR-based Autonomous Driving via <em>Deep Reinforcement Learning</em></h3>
+      <p class="academic-desc">
+        Implemented a complete <strong>Deep Deterministic Policy Gradient (DDPG)</strong> agent in Python 3 + TensorFlow 2.x, trained over 5,000 episodes in the CARLA Simulator. Two tasks: <strong>(1) smooth steering with path-following</strong> and <strong>(2) adaptive cruise control with 2-second safe-following distance</strong>. Designed 7-dim and 4-dim state spaces, custom reward functions with jerk-penalty for smoothness, and modular 5-file codebase.
+      </p>
+      <div class="tech-stack" style="margin-bottom: 1.2rem;">
+        <span class="tech-pill primary">Python 3</span>
+        <span class="tech-pill primary">TensorFlow 2.x</span>
+        <span class="tech-pill primary">DDPG</span>
+        <span class="tech-pill">CARLA Simulator</span>
+        <span class="tech-pill">Actor-Critic</span>
+        <span class="tech-pill">LiDAR</span>
+      </div>
+      <div class="academic-metrics">
+        <div class="academic-metric">
+          <div class="academic-metric-val">0.613 m</div>
+          <div class="academic-metric-label">Steering Path Error</div>
+        </div>
+        <div class="academic-metric">
+          <div class="academic-metric-val">1.914 s</div>
+          <div class="academic-metric-label">ACC Time Gap · vs 2.0s target</div>
+        </div>
+        <div class="academic-metric">
+          <div class="academic-metric-val">5,000</div>
+          <div class="academic-metric-label">Training Episodes per task</div>
+        </div>
+      </div>
+    </div>
+    <div class="academic-arrow">→</div>
+  </a>
+</section>
+
+<!-- KEY ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Key <em>achievements</em></h2>
+    <span class="section-subtitle">Highlights · 5 projects · 5 years</span>
+  </div>
+
+  <div class="achievements-wrapper">
+    <div class="achievement-item">
+      <div class="achievement-num">01</div>
+      <div class="achievement-content">
+        <div class="achievement-title">End-to-End ERP Consulting <span class="achievement-tag">XeerSoft · Live</span></div>
+        <div class="achievement-desc">
+          <strong>Sole implementation consultant and business analyst</strong> across 4 live ERP projects (P2P, Pricing/AR, CRM Loyalty, Financial Tracking) covering the full lifecycle — requirements, design, configuration, UAT, Go-live, and BAU — for a <strong>200-staff, 3-branch organisation</strong>.
+        </div>
+        <div class="achievement-metrics">
+          <span class="achievement-metric">4 projects delivered</span>
+          <span class="achievement-metric">5 modules integrated</span>
+          <span class="achievement-metric">47 staff trained</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="achievement-num">02</div>
+      <div class="achievement-content">
+        <div class="achievement-title">Inventory Optimisation <span class="achievement-tag">P2P · Poisson · EOQ</span></div>
+        <div class="achievement-desc">
+          Reduced <strong>stockout rate from 22% → &lt;3%</strong> and <strong>textbook write-off from THB 45K → THB 8K/yr</strong> using Poisson Distribution and Modified EOQ models — parameters entered directly into live ERP master data.
+        </div>
+        <div class="achievement-metrics">
+          <span class="achievement-metric">86% stockout reduction</span>
+          <span class="achievement-metric">82% write-off cut</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="achievement-num">03</div>
+      <div class="achievement-content">
+        <div class="achievement-title">Pricing System Go-Live <span class="achievement-tag">Pricing/AR · 12 months</span></div>
+        <div class="achievement-desc">
+          Designed <strong>multi-tier pricing logic</strong> from executive sessions across 12 months; Go-live June 2024 <strong>eliminated all ad-hoc per-family pricing negotiation</strong> and cut pricing-decision turnaround from 480 to 15 minutes.
+        </div>
+        <div class="achievement-metrics">
+          <span class="achievement-metric">97% decision speed-up</span>
+          <span class="achievement-metric">100% rule-based pricing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="achievement-num">04</div>
+      <div class="achievement-content">
+        <div class="achievement-title">UAT Leadership <span class="achievement-tag">CRM · 5 build cycles</span></div>
+        <div class="achievement-desc">
+          Detected critical CRM defect at entry (LOOP EXIT bug); led <strong>multi-cycle UAT to Go-live January 2025</strong> with <strong>zero post-launch critical incidents</strong> across 50+ members. 60 defects tracked, 83.8% resolved before launch.
+        </div>
+        <div class="achievement-metrics">
+          <span class="achievement-metric">0 critical post-launch</span>
+          <span class="achievement-metric">50+ members onboarded</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="achievement-num">05</div>
+      <div class="achievement-content">
+        <div class="achievement-title">★ Best Achievement Award <span class="achievement-tag">Mitsubishi · SAP · 2020</span></div>
+        <div class="achievement-desc">
+          <strong>Mitsubishi Motors Thailand MMTh Internship (2020)</strong> — selected from full cohort for outstanding cross-functional project delivery in a <strong>live SAP manufacturing environment</strong>. Managed full procurement workflow (MSR → e-AR → PR → PO) for ฿460K FPDU Assist Device project.
+        </div>
+        <div class="achievement-metrics">
+          <span class="achievement-metric">฿1M risk-cost saved</span>
+          <span class="achievement-metric">29.6s cycle time cut</span>
+          <span class="achievement-metric">11 job sequences eliminated</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools" style="background: var(--surface-2);">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Tools <em>& tech</em></h2>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-group">
+      <h4>Documentation</h4>
+      <div class="tool-list">
+        <div class="tool-item">Word · Google Docs</div>
+        <div class="tool-item">PowerPoint</div>
+        <div class="tool-item">draw.io</div>
+        <div class="tool-item">Confluence</div>
+      </div>
+    </div>
+    <div class="tool-group">
+      <h4>Project Tracking</h4>
+      <div class="tool-list">
+        <div class="tool-item">Jira</div>
+        <div class="tool-item">Defect Log (Excel)</div>
+        <div class="tool-item">Trello</div>
+      </div>
+    </div>
+    <div class="tool-group">
+      <h4>Data & Reporting</h4>
+      <div class="tool-list">
+        <div class="tool-item">SQL</div>
+        <div class="tool-item">Excel (Advanced)</div>
+        <div class="tool-item">Power BI</div>
+        <div class="tool-item">Python · Pandas · NumPy</div>
+        <div class="tool-item">MATLAB</div>
+      </div>
+    </div>
+    <div class="tool-group">
+      <h4>ERP Platforms</h4>
+      <div class="tool-list">
+        <div class="tool-item">XeerSoft Cloud ERP <em style="color: var(--success); font-size: 0.7rem;">— Implementation</em></div>
+        <div class="tool-item">SAP S/4HANA <em style="color: var(--text-muted); font-size: 0.7rem;">— End-User + Learning</em></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2 class="section-title">Education <em>& certifications</em></h2>
+  </div>
+
+  <a href="senior-project.html" class="edu-card" style="text-decoration: none; color: inherit;">
+    <div>
+      <div class="edu-school">Chulalongkorn University · 2019 – 2022</div>
+      <div class="edu-degree">B.Eng Mechanical Engineering</div>
+      <div class="edu-detail">Advanced Statistics & Probability · Python · Manufacturing Processes · Autonomous Systems. Senior Project: LiDAR-based autonomous driving with DDPG reinforcement learning across 5,000+ training episodes. <strong style="color: var(--accent);">View project details →</strong></div>
+    </div>
+    <div class="edu-badge">Class Honors<br>GPAX 3.40</div>
+  </a>
+
+  <a href="project5.html" class="edu-card" style="text-decoration: none; color: inherit;">
+    <div>
+      <div class="edu-school">Mitsubishi Motors Thailand · 2020</div>
+      <div class="edu-degree">Best Achievement Award — MMTh Talent Engineering</div>
+      <div class="edu-detail">SAP end-user in live automotive manufacturing — managed full procurement workflow (MSR → e-AR → PR → PO) and asset deployment for the FPDU Assist Device engineering project on the PHEV manual line. Selected from full intern cohort. <strong style="color: var(--accent);">View full project →</strong></div>
+    </div>
+    <div class="edu-badge">★ Best<br>Achievement</div>
+  </a>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background: var(--surface-2);">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2 class="section-title">Get <em>in touch</em></h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-text">
+      <h2>Let's build<br><em>something</em><br>together.</h2>
+      <p>Open to ERP Business Analyst and Implementation Consultant opportunities in Bangkok. Available for full-time roles with enterprise clients across any industry.</p>
+      <a href="mailto:chatree.kengpipat@gmail.com" class="btn btn-primary">Send Email →</a>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:chatree.kengpipat@gmail.com" class="contact-link">
+        <span class="contact-link-icon">✉</span>
+        chatree.kengpipat@gmail.com
+      </a>
+      <a href="tel:0864010579" class="contact-link">
+        <span class="contact-link-icon">☎</span>
+        086-401-0579
+      </a>
+      <div class="contact-link">
+        <span class="contact-link-icon">⌖</span>
+        Bangkok, Thailand
+      </div>
+      <div class="contact-link">
+        <span class="contact-link-icon">🌐</span>
+        English: Professional · Thai: Native
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Chatree Kengpipat · ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+</body>
+</html>
