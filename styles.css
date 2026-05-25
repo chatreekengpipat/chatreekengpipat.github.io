@@ -4080,11 +4080,31 @@ nav.scrolled {
   width: 100%;
 }
 
+/* ====================================
+   HERO SECTION v7 (Grid Layout)
+   ==================================== */
+
+/* 1. ตัวคุม Hero ทั้งหมด (สำคัญมาก: ล็อกความกว้างคอลัมน์แล้วดึงเข้าหากันตรงกลาง) */
+.hero-v7 {
+  min-height: 100vh;
+  padding: 8rem 2.5rem 4rem;
+  display: grid;
+  /* ล็อกฝั่งซ้ายไม่เกิน 580px ฝั่งขวาไม่เกิน 450px และไม่ปล่อยให้ยืดออกไปขอบจอ */
+  grid-template-columns: minmax(auto, 580px) minmax(auto, 450px);
+  justify-content: center; /* ดึงทั้ง 2 คอลัมน์มารวมกันตรงกลางจอ */
+  gap: 2.5rem; /* ระยะห่างระหว่างรูปและข้อความ (ปรับลดได้อีกถ้าอยากให้ชิดกว่านี้ เช่น 1.5rem) */
+  align-items: center;
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 /* ปรับขนาดฟอนต์ของ h1 ลงเล็กน้อย ป้องกันการล้นจอในบางอุปกรณ์ */
 .hero-v7 h1 {
   font-size: clamp(2.2rem, 5vw, 4.5rem); 
   /* ลดจาก 2.5rem/6vw/5rem ลงมานิดนึงเพื่อให้พอดีกับกรอบ */
 }
+
 .hero-v7-desc strong { color: var(--text); font-weight: 600; }
 
 .hero-v7-meta {
@@ -4130,8 +4150,10 @@ nav.scrolled {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* 2. เปลี่ยนจาก center เป็น flex-start เพื่อให้กรอบรูปชิดขอบซ้าย (เข้าหาข้อความ) */
+  justify-content: flex-start; 
   z-index: 2;
+  width: 100%; /* บังคับให้โครงเต็มคอลัมน์ เพื่อให้คำสั่ง flex-start ทำงานได้ 100% */
 }
 
 .hero-photo-frame {
