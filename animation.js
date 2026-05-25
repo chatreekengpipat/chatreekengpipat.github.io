@@ -486,21 +486,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Animation อื่นๆ ที่มีอยู่แล้ว (Parallax, Reveal) ยังคงทำงานตามปกติครับ
 });
 // =====================================================
-// SUBTLE REFLECTIVE HEADLINE FX
-// Use after DOM load / paste at end of animation.js
+// CLEAN REFLECTION HEADLINE FX
+// Paste at the end of animation.js
 // =====================================================
 
 (function () {
   function wrapHeadline(el) {
-    if (!el || el.dataset.luxReflect === 'true') return;
-    el.dataset.luxReflect = 'true';
-    el.classList.add('lux-reflect-headline');
+    if (!el || el.dataset.reflectReady === 'true') return;
+    el.dataset.reflectReady = 'true';
+    el.classList.add('reflect-headline');
 
-    // If previous fx spans exist, reuse text and remove old class.
-    const oldWords = el.querySelectorAll('.fx-headline-word');
-    if (oldWords.length) {
-      oldWords.forEach((span, i) => {
-        span.className = 'lux-word';
+    const oldSpans = el.querySelectorAll('.fx-headline-word, .lux-word');
+    if (oldSpans.length) {
+      oldSpans.forEach((span, i) => {
+        span.className = 'reflect-word';
         span.dataset.word = span.textContent;
         span.style.setProperty('--i', i);
       });
@@ -514,7 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
     }
 
-    let index = 0;
+    let i = 0;
 
     nodes.forEach((node) => {
       const frag = document.createDocumentFragment();
@@ -528,11 +527,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const span = document.createElement('span');
-        span.className = 'lux-word';
+        span.className = 'reflect-word';
         span.textContent = part;
         span.dataset.word = part;
-        span.style.setProperty('--i', index++);
-        span.style.animationDelay = `${index * 70}ms`;
+        span.style.setProperty('--i', i);
+        span.style.animationDelay = `${i * 80}ms`;
+        i += 1;
+
         frag.appendChild(span);
       });
 
@@ -540,7 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function initLuxReflectHeadlines() {
+  function initReflectHeadlines() {
     const targets = document.querySelectorAll(
       '.hero-v7 h1, .mega-title, .project-hero h1, .section-title, .contact-text h2'
     );
@@ -548,25 +549,25 @@ document.addEventListener("DOMContentLoaded", () => {
     targets.forEach((el) => {
       wrapHeadline(el);
 
-      el.addEventListener('mousemove', (event) => {
+      el.addEventListener('mousemove', (e) => {
         const rect = el.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width - 0.5;
-        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-        el.style.setProperty('--lux-ry', `${x * 8}deg`);
-        el.style.setProperty('--lux-rx', `${y * -6}deg`);
+        el.style.setProperty('--ry', `${x * 7}deg`);
+        el.style.setProperty('--rx', `${y * -5}deg`);
       });
 
       el.addEventListener('mouseleave', () => {
-        el.style.setProperty('--lux-ry', '0deg');
-        el.style.setProperty('--lux-rx', '0deg');
+        el.style.setProperty('--ry', '0deg');
+        el.style.setProperty('--rx', '0deg');
       });
     });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLuxReflectHeadlines);
+    document.addEventListener('DOMContentLoaded', initReflectHeadlines);
   } else {
-    initLuxReflectHeadlines();
+    initReflectHeadlines();
   }
 })();
