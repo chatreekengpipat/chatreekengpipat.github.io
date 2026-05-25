@@ -4081,22 +4081,60 @@ nav.scrolled {
 }
 
 /* ====================================
-   HERO SECTION v7 (Grid Layout)
+   HERO SECTION v7 (Center Balanced Layout)
    ==================================== */
 
-/* 1. ตัวคุม Hero ทั้งหมด (สำคัญมาก: ล็อกความกว้างคอลัมน์แล้วดึงเข้าหากันตรงกลาง) */
 .hero-v7 {
   min-height: 100vh;
   padding: 8rem 2.5rem 4rem;
-  display: grid;
-  /* ล็อกฝั่งซ้ายไม่เกิน 580px ฝั่งขวาไม่เกิน 450px และไม่ปล่อยให้ยืดออกไปขอบจอ */
-  grid-template-columns: minmax(auto, 580px) minmax(auto, 450px);
-  justify-content: center; /* ดึงทั้ง 2 คอลัมน์มารวมกันตรงกลางจอ */
-  gap: 2.5rem; /* ระยะห่างระหว่างรูปและข้อความ (ปรับลดได้อีกถ้าอยากให้ชิดกว่านี้ เช่น 1.5rem) */
+  
+  /* 1. เปลี่ยนมาใช้ Flexbox เพื่อให้ควบคุมการจัดกลุ่มตรงกลางได้เด็ดขาดกว่า Grid ในกรณีนี้ */
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* ดึงบล็อกซ้ายและขวามากระจุกรวมกันตรงกลางหน้าจอ */
   align-items: center;
-  position: relative;
+  
+  /* 2. กำหนดระยะห่างระหว่างข้อความกับรูปภาพ (ลดเหลือ 3.5rem เพื่อให้ชิดกันมากขึ้น) */
+  gap: 3.5rem; 
+  
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+}
+
+/* ล็อกความกว้างของบล็อกฝั่งซ้าย (ข้อความ) ไม่ให้ยืดออกไปหาขอบจอ */
+.hero-v7-left {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 580px; /* ล็อกความกว้างไว้เท่านี้ */
+}
+
+/* ล็อกความกว้างของบล็อกฝั่งขวา (รูปภาพ) */
+.hero-v7-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  width: 100%;
+  max-width: 450px; /* ล็อกความกว้างรูปภาพ */
+}
+
+/* 3. ตรวจสอบให้แน่ใจว่ามีส่วน Responsive สำหรับหน้าจอเล็ก/มือถือ (ห้ามลืมใส่ส่วนนี้) */
+@media (max-width: 1024px) {
+  .hero-v7 { 
+    flex-direction: column; /* เปลี่ยนเป็นเรียงบนลงล่างในจอเล็ก */
+    gap: 2.5rem; 
+    padding: 7rem 1.5rem 3rem; 
+  }
+  .hero-v7-left, .hero-v7-right {
+    max-width: 100%;
+  }
+  .hero-v7-right {
+    order: -1; /* เอารูปขึ้นก่อนข้อความในมือถือ */
+    max-width: 380px; /* ย่อรูปลงนิดหน่อยไม่ให้ล้นมือถือ */
+  }
 }
 
 /* ปรับขนาดฟอนต์ของ h1 ลงเล็กน้อย ป้องกันการล้นจอในบางอุปกรณ์ */
