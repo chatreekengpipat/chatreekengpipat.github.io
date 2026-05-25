@@ -390,3 +390,98 @@
     init();
   }
 })();
+/* ====================================
+   ADVANCED ANIMATIONS v8
+   ==================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* --- 1. FLOW FIELD BACKGROUND (Canvas) --- */
+    const canvas = document.getElementById('flowFieldCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    function resizeCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const particles = [];
+    const particleCount = Math.min(width < 768 ? 40 : 100, 150);
+
+    class FlowParticle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = 0;
+            this.vy = 0;
+            this.acceleration = 0.1;
+            this.speedMax = Math.random() * 0.5 + 0.3;
+            this.color = `rgba(96, 165, 250, ${Math.random() * 0.2 + 0.1})`;
+        }
+
+        update() {
+            // สร้างคลื่นพลังงาน
+            const angle = (this.x * 0.005) + (this.y * 0.005) + (Date.now() * 0.0005);
+            this.vx += Math.cos(angle) * this.acceleration;
+            this.vy += Math.sin(angle) * this.acceleration;
+
+            // ล็อกความเร็วสูงสุด
+            const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+            if (speed > this.speedMax) {
+                this.vx = (this.vx / speed) * this.speedMax;
+                this.vy = (this.vy / speed) * this.speedMax;
+            }
+
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // กลับมาอีกฝั่งถ้าหลุดจอ
+            if (this.x < 0) this.x = width;
+            if (this.x > width) this.x = 0;
+            if (this.y < 0) this.y = height;
+            if (this.y > height) this.y = 0;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new FlowParticle());
+    }
+
+    function animateFlowField() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animateFlowField);
+    }
+    animateFlowField();
+
+    /* --- 2. GIGANTIC TITLE STAGGER (Reveal) --- */
+    // เราจะใช้ CSS Keyframes แทน GSAP เพื่อความประหยัด (เนื่องจากไฟล์เดิมไม่ได้รวม GSAP ไว้)
+    const megaTitle = document.querySelector('.mega-title');
+    const maskText = document.querySelector('.mask-text');
+    
+    // ค่อยๆ เปิดชื่อ "KENGPIPAT" ออกมาอย่างนุ่มนวล
+    if (maskText) {
+        // ใช้ setTimeout เพื่อให้เกิด Stagger หลังโหลดหน้าเว็บ
+        setTimeout(() => {
+            maskText.style.transition = 'opacity 1s ease, transform 1s ease';
+            maskText.style.opacity = '1';
+            maskText.style.transform = 'translateY(0)';
+        }, 300); // ดีเลย์นิดนึง
+    }
+
+    // Animation อื่นๆ ที่มีอยู่แล้ว (Parallax, Reveal) ยังคงทำงานตามปกติครับ
+});
