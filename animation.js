@@ -485,3 +485,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Animation อื่นๆ ที่มีอยู่แล้ว (Parallax, Reveal) ยังคงทำงานตามปกติครับ
 });
+(function () {
+  const headline = document.getElementById('ckHeadline');
+  if (!headline) return;
+
+  headline.addEventListener('mousemove', (e) => {
+    const rect = headline.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+    headline.style.setProperty('--ck-ry', `${x * 7}deg`);
+    headline.style.setProperty('--ck-rx', `${y * -5}deg`);
+  });
+
+  headline.addEventListener('mouseleave', () => {
+    headline.style.setProperty('--ck-ry', '0deg');
+    headline.style.setProperty('--ck-rx', '0deg');
+  });
+})();
