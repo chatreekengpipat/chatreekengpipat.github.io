@@ -5268,3 +5268,129 @@ nav.scrolled {
   .hero-v7-photo-container { height: 50vh; width: 100%; order: -1; }
   .hero-v7-photo-card { transform: rotateY(0deg); }
 }
+/* =====================================================
+   SUBTLE REFLECTIVE HEADLINE FX
+   No highlight fill · glossy light reflection only
+   ===================================================== */
+
+.lux-reflect-headline {
+  position: relative;
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+.lux-word {
+  display: inline-block;
+  position: relative;
+  color: inherit;
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+  animation: luxWordIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition:
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    text-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* soft bevel, keeps original text color */
+.hero-v7 h1 .lux-word,
+.mega-title .lux-word {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 24px rgba(37, 99, 235, 0.10);
+}
+
+/* reflection layer only, not a color fill */
+.lux-word::after {
+  content: attr(data-word);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      108deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(255, 255, 255, 0.08) 44%,
+      rgba(255, 255, 255, 0.85) 49%,
+      rgba(219, 234, 254, 0.20) 54%,
+      transparent 62%,
+      transparent 100%
+    );
+  background-size: 260% 100%;
+  background-position: -160% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: luxLightSweep 4.8s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 120ms + 1s);
+}
+
+.lux-reflect-headline:hover .lux-word {
+  transform:
+    translateY(-0.045em)
+    rotateX(var(--lux-rx, 0deg))
+    rotateY(var(--lux-ry, 0deg))
+    scale(1.018);
+  filter: drop-shadow(0 14px 22px rgba(37, 99, 235, 0.16));
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.38),
+    0 18px 34px rgba(37, 99, 235, 0.16);
+}
+
+.lux-reflect-headline:hover .lux-word::after {
+  opacity: 1;
+  animation-duration: 1.4s;
+}
+
+/* tiny shadow clone for 3D depth, still not highlighted */
+.hero-v7 h1 .lux-word::before,
+.mega-title .lux-word::before {
+  content: attr(data-word);
+  position: absolute;
+  inset: 0;
+  color: currentColor;
+  opacity: 0.13;
+  transform: translate3d(0.035em, 0.045em, -1px);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(0.2px);
+}
+
+@keyframes luxWordIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.32em) rotateX(22deg) scale(0.98);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes luxLightSweep {
+  0%, 18% {
+    opacity: 0;
+    background-position: -180% 50%;
+  }
+  32% {
+    opacity: 0.9;
+  }
+  52%, 100% {
+    opacity: 0;
+    background-position: 180% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lux-word,
+  .lux-word::after {
+    animation: none !important;
+    opacity: 1;
+    transform: none !important;
+  }
+}

@@ -485,3 +485,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Animation อื่นๆ ที่มีอยู่แล้ว (Parallax, Reveal) ยังคงทำงานตามปกติครับ
 });
+// =====================================================
+// SUBTLE REFLECTIVE HEADLINE FX
+// Use after DOM load / paste at end of animation.js
+// =====================================================
+
+(function () {
+  function wrapHeadline(el) {
+    if (!el || el.dataset.luxReflect === 'true') return;
+    el.dataset.luxReflect = 'true';
+    el.classList.add('lux-reflect-headline');
+
+    // If previous fx spans exist, reuse text and remove old class.
+    const oldWords = el.querySelectorAll('.fx-headline-word');
+    if (oldWords.length) {
+      oldWords.forEach((span, i) => {
+        span.className = 'lux-word';
+        span.dataset.word = span.textContent;
+        span.style.setProperty('--i', i);
+      });
+      return;
+    }
+
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+
+    while (walker.nextNode()) {
+      if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
+    }
+
+    let index = 0;
+
+    nodes.forEach((node) => {
+      const frag = document.createDocumentFragment();
+
+      node.nodeValue.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+          return;
+        }
+
+        const span = document.createElement('span');
+        span.className = 'lux-word';
+        span.textContent = part;
+        span.dataset.word = part;
+        span.style.setProperty('--i', index++);
+        span.style.animationDelay = `${index * 70}ms`;
+        frag.appendChild(span);
+      });
+
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+
+  function initLuxReflectHeadlines() {
+    const targets = document.querySelectorAll(
+      '.hero-v7 h1, .mega-title, .project-hero h1, .section-title, .contact-text h2'
+    );
+
+    targets.forEach((el) => {
+      wrapHeadline(el);
+
+      el.addEventListener('mousemove', (event) => {
+        const rect = el.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+        el.style.setProperty('--lux-ry', `${x * 8}deg`);
+        el.style.setProperty('--lux-rx', `${y * -6}deg`);
+      });
+
+      el.addEventListener('mouseleave', () => {
+        el.style.setProperty('--lux-ry', '0deg');
+        el.style.setProperty('--lux-rx', '0deg');
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLuxReflectHeadlines);
+  } else {
+    initLuxReflectHeadlines();
+  }
+})();
