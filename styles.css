@@ -4370,6 +4370,47 @@ nav.scrolled {
   margin: 0 auto;
 }
 
+/* 1. ขยับ Layout ทั้งก้อนให้มาอยู่ตรงกลางจอ ไม่เทไปชิดซ้าย */
+.workplace-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* แม่เหล็กดึงบล็อกซ้ายและขวามากระจุกตรงกลาง */
+  align-items: center;
+  gap: 4rem; /* ระยะห่างระหว่างข้อความและรูปภาพฝั่งขวา */
+}
+
+/* ล็อกความกว้างของบล็อกข้อความ ไม่ให้ยืดไปติดขอบจอซ้ายสุด */
+.workplace-content {
+  max-width: 540px; 
+  width: 100%;
+}
+/* 2. จัดขอบขวาของตัวหนังสือให้ตรงเป๊ะเป็นเส้นไม้บรรทัด (Block Text) */
+.balanced-paragraph {
+  text-align: justify;
+  text-justify: inter-word; /* กระจายช่องว่างระหว่างคำให้สวยงาม */
+  hyphens: auto;            /* ให้เบราว์เซอร์ช่วยตัดคำยาวๆ ลงมาบรรทัดใหม่ */
+  -webkit-hyphens: auto;
+  word-spacing: -0.04em;    /* บีบช่องว่างระหว่างคำนิดหน่อย ป้องกันรูโหว่ใหญ่ๆ */
+  line-height: 1.8;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.balanced-paragraph strong { 
+  color: var(--text); 
+  font-weight: 600; 
+}
+
+/* Responsive สำหรับหน้าจอมือถือ/แท็บเล็ต */
+@media (max-width: 1024px) {
+  .workplace-grid {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .workplace-content {
+    max-width: 100%;
+  }
+}
 .workplace-grid {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
