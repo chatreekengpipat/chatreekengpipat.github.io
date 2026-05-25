@@ -4918,3 +4918,62 @@ nav.scrolled {
   .about-grid-v7 { gap: 2rem; }
   .workplace-photos-v8 { max-width: 320px; }
 }
+/* ====================================
+   WORLD-CLASS TECH BACKGROUND & GLASS
+   ==================================== */
+
+#techCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -999;
+  background: radial-gradient(circle at center, #020617 0%, #0f172a 100%);
+  transition: background 0.5s ease;
+}
+
+/* พื้นหลังสว่างสำหรับ Light Mode */
+[data-theme="light"] #techCanvas {
+  background: radial-gradient(circle at center, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* Glassmorphism for Cards - เปลี่ยนกล่องทึบให้เป็นกระจกหรูๆ */
+.hero-card, .project-card, .impact-cell, .about-photo-card, .edu-card, .method-card, .focus-card {
+  background: rgba(30, 41, 59, 0.4) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="light"] .hero-card, 
+[data-theme="light"] .project-card, 
+[data-theme="light"] .impact-cell, 
+[data-theme="light"] .about-photo-card, 
+[data-theme="light"] .edu-card, 
+[data-theme="light"] .method-card,
+[data-theme="light"] .focus-card {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Premium Hover Effects */
+.hero-card:hover, .project-card:hover, .impact-cell:hover, .edu-card:hover, .method-card:hover, .focus-card:hover {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(96, 165, 250, 0.4) !important;
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-6px) scale(1.02);
+}
+
+[data-theme="light"] .hero-card:hover, 
+[data-theme="light"] .project-card:hover, 
+[data-theme="light"] .impact-cell:hover, 
+[data-theme="light"] .edu-card:hover, 
+[data-theme="light"] .method-card:hover,
+[data-theme="light"] .focus-card:hover {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(37, 99, 235, 0.3) !important;
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.15), 0 8px 32px 0 rgba(15, 23, 42, 0.1) !important;
+}

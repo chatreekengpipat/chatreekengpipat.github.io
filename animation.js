@@ -1,11 +1,11 @@
 // =========================================
-// CHATREE PORTFOLIO · Premium Animations
+// CHATREE PORTFOLIO · Premium Animations v8
 // =========================================
 
 (function() {
   'use strict';
 
-  // ===== Scroll Reveal with Intersection Observer =====
+  // ===== 1. Scroll Reveal with Intersection Observer =====
   function initScrollReveal() {
     const reveals = document.querySelectorAll('section');
 
@@ -44,7 +44,7 @@
     });
   }
 
-  // ===== Nav scroll effect =====
+  // ===== 2. Nav scroll effect =====
   function initNavScroll() {
     const nav = document.querySelector('nav');
     if (!nav) return;
@@ -54,13 +54,11 @@
 
     function update() {
       const scrolled = window.scrollY;
-
       if (scrolled > 50) {
         nav.classList.add('scrolled');
       } else {
         nav.classList.remove('scrolled');
       }
-
       lastScroll = scrolled;
       ticking = false;
     }
@@ -73,7 +71,7 @@
     }, { passive: true });
   }
 
-  // ===== Magnetic hover effect on key cards =====
+  // ===== 3. Magnetic hover effect on key cards =====
   function initMagneticEffect() {
     const magneticTargets = document.querySelectorAll(
       '.award-feature, .academic-feature, .hero-card, .impact-cell'
@@ -85,7 +83,7 @@
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
 
-        // Subtle magnetic pull (max 8px in any direction)
+        // Subtle magnetic pull
         const maxOffset = 6;
         const offsetX = (x / rect.width) * maxOffset;
         const offsetY = (y / rect.height) * maxOffset;
@@ -101,7 +99,7 @@
     });
   }
 
-  // ===== Smooth anchor scrolling =====
+  // ===== 4. Smooth anchor scrolling =====
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -121,12 +119,12 @@
     });
   }
 
-  // ===== Mouse parallax on hero =====
+  // ===== 5. Mouse parallax on hero =====
   function initHeroParallax() {
-    const hero = document.querySelector('.hero');
+    const hero = document.querySelector('.hero, .hero-v7');
     if (!hero) return;
 
-    const heroVisual = hero.querySelector('.hero-visual');
+    const heroVisual = hero.querySelector('.hero-visual, .hero-v7-right');
     if (!heroVisual) return;
 
     let rafId = null;
@@ -139,20 +137,20 @@
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-        // Subtle parallax (max 10px)
-        heroVisual.style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+        // Subtle parallax
+        heroVisual.style.transform = `translate(${x * -15}px, ${y * -15}px)`;
         rafId = null;
       });
     });
 
     hero.addEventListener('mouseleave', () => {
-      heroVisual.style.transform = '';
+      heroVisual.style.transform = 'translate(0px, 0px)';
     });
   }
 
-  // ===== Number counter animation =====
+  // ===== 6. Number counter animation =====
   function initCounters() {
-    const counters = document.querySelectorAll('.impact-num, .hero-card-num, .academic-metric-val, .result-val');
+    const counters = document.querySelectorAll('.impact-num, .hero-card-num, .academic-metric-val, .result-val, .workplace-stat-val');
 
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -174,14 +172,13 @@
 
         if (isNaN(num) || num === 0) return;
 
-        const duration = 1200;
+        const duration = 1500; // ทำให้วิ่งช้าลงนิดนึงเพื่อความหรูหรา
         const start = performance.now();
         const decimals = (numStr.split('.')[1] || '').length;
 
         function frame(now) {
           const progress = Math.min((now - start) / duration, 1);
-          // Ease-out cubic
-          const eased = 1 - Math.pow(1 - progress, 3);
+          const eased = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
           const current = num * eased;
 
           let formatted;
@@ -196,7 +193,7 @@
           if (progress < 1) {
             window.requestAnimationFrame(frame);
           } else {
-            el.textContent = text; // Final exact value
+            el.textContent = text; 
           }
         }
 
@@ -208,15 +205,18 @@
     counters.forEach(el => counterObserver.observe(el));
   }
 
-  // ===== Canvas-based Neural Network Background =====
+  // ===== 7. WORLD-CLASS NEURAL NETWORK BACKGROUND (UPGRADED) =====
   function initNeuralBg() {
-    const canvas = document.getElementById('neuralBg');
+    // รองรับทั้ง id="neuralBg" (เดิม) และ "techCanvas" (ใหม่)
+    const canvas = document.getElementById('neuralBg') || document.getElementById('techCanvas');
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = window.devicePixelRatio || 1; // ทำให้เส้นคมกริบบนจอ Retina/4K
     let width, height;
-    let mouseX = -1000, mouseY = -1000;
+    
+    // ตั้งค่าเมาส์
+    let mouse = { x: -1000, y: -1000, radius: 180 };
 
     function resize() {
       width = window.innerWidth;
@@ -231,77 +231,100 @@
     resize();
     window.addEventListener('resize', resize);
 
-    // Track mouse for interactive particle effect
+    // ตรวจจับเมาส์แบบ Smooth
     window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     });
     window.addEventListener('mouseleave', () => {
-      mouseX = -1000; mouseY = -1000;
+      mouse.x = -1000; 
+      mouse.y = -1000;
     });
+    window.addEventListener('scroll', () => {
+       // อัปเดตตำแหน่งเมาส์ตอน Scroll เพื่อไม่ให้จุดค้าง
+       mouse.y = mouse.y; 
+    }, { passive: true });
 
-    const particleCount = window.innerWidth < 768 ? 22 : 50;
+    // คำนวณจุดตามขนาดจอ ไม่ให้รกเกินไปและไม่กินสเปค
+    const particleCount = window.innerWidth < 768 ? 40 : 80;
     const particles = [];
+    const connectionDistance = window.innerWidth < 768 ? 100 : 160;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.6; // ความเร็วเริ่มต้น (สมูทขึ้น)
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.r = Math.random() * 1.5 + 1; // ขนาดจุด
+      }
+
+      update() {
+        // คำนวณฟิสิกส์หลบเมาส์ (Interactive Repel)
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < mouse.radius) {
+          const forceDirectionX = dx / distance;
+          const forceDirectionY = dy / distance;
+          const force = (mouse.radius - distance) / mouse.radius;
+          const directionX = forceDirectionX * force * 2.5; // ความแรงในการผลัก
+          const directionY = forceDirectionY * force * 2.5;
+          
+          this.vx -= directionX * 0.05;
+          this.vy -= directionY * 0.05;
+        }
+
+        // เพิ่มแรงเสียดทาน (Friction) ให้การเคลื่อนไหวดูเป็นธรรมชาติ
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+
+        // บวกความเร็วปกติเข้าไปเลี้ยงไว้ไม่ให้หยุดนิ่ง
+        this.x += this.vx + ((Math.random() - 0.5) * 0.2);
+        this.y += this.vy + ((Math.random() - 0.5) * 0.2);
+
+        // ชนขอบเด้งกลับแบบเนียนๆ
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+
+        // กันจุดวิ่งหายออกนอกจอ
+        this.x = Math.max(0, Math.min(width, this.x));
+        this.y = Math.max(0, Math.min(height, this.y));
+      }
+    }
+
+    // สร้าง Particles
     for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: 1.2 + Math.random() * 1.8
-      });
+      particles.push(new Particle());
     }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
 
+      // ดึงสีตาม Theme ปัจจุบัน (เชื่อมกับไฟล์ theme.js ของคุณ)
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const rgb = isDark ? '96, 165, 250' : '37, 99, 235';
-      const lineAlpha = isDark ? 0.22 : 0.16;
-      const dotAlpha = isDark ? 0.7 : 0.55;
+      const rgb = isDark ? '96, 165, 250' : '37, 99, 235'; // ฟ้าสว่าง / น้ำเงิน
+      const lineAlphaBase = isDark ? 0.3 : 0.2;
+      const dotAlpha = isDark ? 0.8 : 0.6;
 
-      // Update positions
-      particles.forEach(p => {
-        // Mouse repulsion (subtle)
-        const dxM = p.x - mouseX;
-        const dyM = p.y - mouseY;
-        const dM = Math.sqrt(dxM * dxM + dyM * dyM);
-        if (dM < 120 && dM > 0) {
-          const force = (120 - dM) / 120 * 0.04;
-          p.vx += (dxM / dM) * force;
-          p.vy += (dyM / dM) * force;
-        }
-
-        // Friction
-        p.vx *= 0.99;
-        p.vy *= 0.99;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Bounce off edges
-        if (p.x < 0) { p.x = 0; p.vx *= -1; }
-        if (p.x > width) { p.x = width; p.vx *= -1; }
-        if (p.y < 0) { p.y = 0; p.vy *= -1; }
-        if (p.y > height) { p.y = height; p.vy *= -1; }
-
-        // Min velocity to keep moving
-        if (Math.abs(p.vx) < 0.1) p.vx += (Math.random() - 0.5) * 0.05;
-        if (Math.abs(p.vy) < 0.1) p.vy += (Math.random() - 0.5) * 0.05;
-      });
-
-      // Draw connections
-      const maxDist = 150;
+      // วนลูปวาดการเชื่อมต่อ
       for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDist) {
-            const opacity = (1 - dist / maxDist) * lineAlpha;
+          
+          // ตีเส้นถ้าอยู่ใกล้กัน
+          if (dist < connectionDistance) {
+            const opacity = (1 - dist / connectionDistance) * lineAlphaBase;
             ctx.beginPath();
             ctx.strokeStyle = `rgba(${rgb}, ${opacity})`;
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = 1;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
@@ -309,22 +332,40 @@
         }
       }
 
-      // Draw particles with glow
+      // วาดจุด (Particles)
       particles.forEach(p => {
-        // Outer glow
+        // สร้างรัศมีแสงเรืองรอง (Outer Glow)
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
         gradient.addColorStop(0, `rgba(${rgb}, ${dotAlpha * 0.5})`);
         gradient.addColorStop(1, `rgba(${rgb}, 0)`);
+        
         ctx.beginPath();
         ctx.fillStyle = gradient;
         ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
         ctx.fill();
 
-        // Inner dot
+        // จุดแกนกลาง (Inner Dot)
         ctx.beginPath();
         ctx.fillStyle = `rgba(${rgb}, ${dotAlpha})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
+      });
+
+      // Interactive Mouse Connection (ลากเส้นจากเมาส์ไปยังจุดที่อยู่ใกล้)
+      particles.forEach(p => {
+        let dx = mouse.x - p.x;
+        let dy = mouse.y - p.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < mouse.radius) {
+            ctx.beginPath();
+            const opacity = (1 - dist / mouse.radius) * lineAlphaBase * 1.5;
+            ctx.strokeStyle = `rgba(${rgb}, ${opacity})`;
+            ctx.lineWidth = 1.5;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+        }
       });
 
       requestAnimationFrame(animate);
@@ -336,6 +377,7 @@
   function init() {
     initScrollReveal();
     initNavScroll();
+    initMagneticEffect(); // เพิ่มกลับเข้ามาให้สมบูรณ์
     initSmoothScroll();
     initHeroParallax();
     initCounters();

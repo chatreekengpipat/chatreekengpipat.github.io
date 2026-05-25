@@ -8,8 +8,8 @@
       const saved = localStorage.getItem('theme');
       if (saved) return saved;
     } catch (e) {}
-    // Default to light mode for professional first impression
-    return 'light';
+    // Default to dark mode for the premium tech / physics vibe
+    return 'dark';
   }
 
   root.setAttribute('data-theme', getInitialTheme());
