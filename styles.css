@@ -3642,3 +3642,254 @@ nav.scrolled {
     transform: none;
   }
 }
+
+/* =====================================================
+   v6 — HERO PROFILE CARD + KEY ACHIEVEMENTS
+   ===================================================== */
+
+/* HERO PROFILE CARD (spans 2 cols of bento grid) */
+.hero-profile-card {
+  grid-column: span 2;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.25rem 1.25rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-smooth);
+  margin-bottom: 0;
+}
+
+.hero-profile-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+}
+
+.hero-profile-wrapper {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.85rem;
+}
+
+.hero-profile-photo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 4px solid var(--surface);
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  box-shadow: var(--shadow-md);
+  background: var(--surface-2);
+  transition: all 0.4s var(--ease-bounce);
+}
+
+.hero-profile-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-strong);
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-profile-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.hero-profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+
+.hero-profile-meta-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.hero-profile-meta-item .icon {
+  color: var(--accent);
+  font-size: 0.75rem;
+  width: 14px;
+  text-align: center;
+}
+
+.hero-profile-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 40px -10px var(--glow-color),
+    0 0 30px var(--glow-color),
+    var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+.hero-profile-card:hover .hero-profile-photo {
+  transform: scale(1.06) rotate(-2deg);
+  box-shadow: 0 0 25px var(--glow-strong);
+}
+
+/* =========== KEY ACHIEVEMENTS LIST =========== */
+.achievements-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 2rem;
+  transition: all 0.4s var(--ease-smooth);
+}
+
+.achievements-wrapper:hover {
+  box-shadow: 0 20px 40px -10px var(--glow-color);
+  border-color: var(--border-strong);
+}
+
+.achievement-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 1.5rem;
+  align-items: flex-start;
+  transition: all 0.3s var(--ease-smooth);
+  position: relative;
+}
+
+.achievement-item:last-child { border-bottom: none; }
+
+.achievement-item:hover {
+  padding-left: 0.5rem;
+}
+
+.achievement-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--accent);
+  background: var(--accent-bg);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  flex-shrink: 0;
+  transition: all 0.3s var(--ease-bounce);
+}
+
+.achievement-item:hover .achievement-num {
+  background: var(--accent);
+  color: white;
+  transform: scale(1.08) rotate(-3deg);
+  box-shadow: 0 0 20px var(--glow-color);
+}
+
+.achievement-content { flex: 1; }
+
+.achievement-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--text-strong);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.achievement-title .achievement-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.achievement-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.achievement-desc strong { color: var(--text); font-weight: 600; }
+
+.achievement-metrics {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.achievement-metric {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--success);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.achievement-metric::before {
+  content: '▲';
+  font-size: 0.7rem;
+}
+
+/* About section: single column simplified */
+.about-simple {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-simple .focus-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.about-simple .focus-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: var(--accent-bg);
+  padding: 0.4rem 0.8rem;
+  border-radius: 100px;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  transition: all 0.3s var(--ease-smooth);
+}
+
+.about-simple .focus-tag:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px -3px var(--glow-color);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero-profile-card { grid-column: span 1; }
+}
