@@ -4362,27 +4362,65 @@ nav.scrolled {
   box-shadow: 0 0 15px var(--glow-color);
 }
 
-/* =========== NEWTON WORKPLACE SECTION =========== */
+/* ====================================
+   WORKPLACE SECTION - PERFECT CENTERING
+   ==================================== */
+
 .workplace-section {
-  position: relative;
-  padding: 5rem 2.5rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  /* เพิ่มคำสั่งนี้เพื่อบังคับให้เนื้อหาทั้งหมดถูกดันมาอยู่กึ่งกลางหน้าจออย่างเด็ดขาด */
+  display: flex;
+  justify-content: center; 
+  padding: 6rem 2.5rem;
 }
 
-/* 1. ขยับ Layout ทั้งก้อนให้มาอยู่ตรงกลางจอ ไม่เทไปชิดซ้าย */
 .workplace-grid {
   display: flex;
   flex-direction: row;
-  justify-content: center; /* แม่เหล็กดึงบล็อกซ้ายและขวามากระจุกตรงกลาง */
+  justify-content: center;
   align-items: center;
-  gap: 4rem; /* ระยะห่างระหว่างข้อความและรูปภาพฝั่งขวา */
+  gap: 5rem; /* เพิ่มระยะห่างระหว่างตัวหนังสือกับรูปให้หายใจสะดวกขึ้น */
+  
+  /* หัวใจสำคัญ: ล็อกความกว้างรวมของเนื้อหาไว้ที่ 1100px แล้วจัดกึ่งกลาง */
+  /* จะแก้ปัญหาข้อมูลเทไปกองฝั่งซ้ายได้อย่างสมบูรณ์ */
+  width: 100%;
+  max-width: 1100px; 
+  margin: 0 auto;
 }
 
-/* ล็อกความกว้างของบล็อกข้อความ ไม่ให้ยืดไปติดขอบจอซ้ายสุด */
 .workplace-content {
-  max-width: 540px; 
   width: 100%;
+  max-width: 520px; /* ล็อกความกว้างของบล็อกตัวหนังสือ */
+}
+
+/* ====================================
+   บังคับขอบขวาตรงเป๊ะ (Magazaine Style)
+   ==================================== */
+/* ใช้ !important เพื่อการันตีว่าจะไม่มีโค้ดบรรทัดอื่นมาแหกกฎนี้ได้ */
+.workplace-content p {
+  text-align: justify !important;
+  text-justify: inter-word !important;
+  hyphens: auto !important;
+  -webkit-hyphens: auto !important;
+  word-spacing: -0.04em !important; 
+  line-height: 1.85 !important;
+  margin-bottom: 1.25rem;
+  color: var(--text-muted);
+}
+
+.workplace-content p strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Responsive สำหรับแท็บเล็ตและมือถือ */
+@media (max-width: 1024px) {
+  .workplace-grid {
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+  .workplace-content {
+    max-width: 100%;
+  }
 }
 /* 2. จัดขอบขวาของตัวหนังสือให้ตรงเป๊ะเป็นเส้นไม้บรรทัด (Block Text) */
 .balanced-paragraph {
