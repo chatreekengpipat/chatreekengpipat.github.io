@@ -1,5 +1,5 @@
 // =========================================
-// CHATREE PORTFOLIO · Premium Animations v8
+// CHATREE PORTFOLIO · Premium Animations v9 (FULL MERGE)
 // =========================================
 
 (function() {
@@ -15,13 +15,11 @@
       threshold: 0.08
     };
 
-    // Auto-tag sections as reveals
     reveals.forEach((section, idx) => {
-      if (idx === 0) return; // Skip hero (has its own animation)
+      if (idx === 0) return; 
       section.classList.add('reveal');
     });
 
-    // Auto-tag grid containers as stagger
     const staggerTargets = document.querySelectorAll(
       '.impact-strip, .methodology-grid, .focus-grid, .projects-grid, ' +
       '.tools-grid, .process-flow, .photo-grid, .ideas-grid, ' +
@@ -83,7 +81,6 @@
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
 
-        // Subtle magnetic pull
         const maxOffset = 6;
         const offsetX = (x / rect.width) * maxOffset;
         const offsetY = (y / rect.height) * maxOffset;
@@ -124,7 +121,7 @@
     const hero = document.querySelector('.hero, .hero-v7');
     if (!hero) return;
 
-    const heroVisual = hero.querySelector('.hero-visual, .hero-v7-right');
+    const heroVisual = hero.querySelector('.hero-visual, .hero-v7-right, .hero-v7-photo-container');
     if (!heroVisual) return;
 
     let rafId = null;
@@ -137,7 +134,6 @@
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-        // Subtle parallax
         heroVisual.style.transform = `translate(${x * -15}px, ${y * -15}px)`;
         rafId = null;
       });
@@ -172,13 +168,13 @@
 
         if (isNaN(num) || num === 0) return;
 
-        const duration = 1500; // ทำให้วิ่งช้าลงนิดนึงเพื่อความหรูหรา
+        const duration = 1500; 
         const start = performance.now();
         const decimals = (numStr.split('.')[1] || '').length;
 
         function frame(now) {
           const progress = Math.min((now - start) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
+          const eased = 1 - Math.pow(1 - progress, 3);
           const current = num * eased;
 
           let formatted;
@@ -205,17 +201,14 @@
     counters.forEach(el => counterObserver.observe(el));
   }
 
-  // ===== 7. WORLD-CLASS NEURAL NETWORK BACKGROUND (UPGRADED) =====
+  // ===== 7. WORLD-CLASS NEURAL NETWORK BACKGROUND (Original) =====
   function initNeuralBg() {
-    // รองรับทั้ง id="neuralBg" (เดิม) และ "techCanvas" (ใหม่)
     const canvas = document.getElementById('neuralBg') || document.getElementById('techCanvas');
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1; // ทำให้เส้นคมกริบบนจอ Retina/4K
+    const dpr = window.devicePixelRatio || 1;
     let width, height;
-    
-    // ตั้งค่าเมาส์
     let mouse = { x: -1000, y: -1000, radius: 180 };
 
     function resize() {
@@ -231,7 +224,6 @@
     resize();
     window.addEventListener('resize', resize);
 
-    // ตรวจจับเมาส์แบบ Smooth
     window.addEventListener('mousemove', (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
@@ -241,11 +233,9 @@
       mouse.y = -1000;
     });
     window.addEventListener('scroll', () => {
-       // อัปเดตตำแหน่งเมาส์ตอน Scroll เพื่อไม่ให้จุดค้าง
        mouse.y = mouse.y; 
     }, { passive: true });
 
-    // คำนวณจุดตามขนาดจอ ไม่ให้รกเกินไปและไม่กินสเปค
     const particleCount = window.innerWidth < 768 ? 40 : 80;
     const particles = [];
     const connectionDistance = window.innerWidth < 768 ? 100 : 160;
@@ -254,15 +244,12 @@
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.6; // ความเร็วเริ่มต้น (สมูทขึ้น)
+        this.vx = (Math.random() - 0.5) * 0.6;
         this.vy = (Math.random() - 0.5) * 0.6;
-        this.baseX = this.x;
-        this.baseY = this.y;
-        this.r = Math.random() * 1.5 + 1; // ขนาดจุด
+        this.r = Math.random() * 1.5 + 1;
       }
 
       update() {
-        // คำนวณฟิสิกส์หลบเมาส์ (Interactive Repel)
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
@@ -271,55 +258,40 @@
           const forceDirectionX = dx / distance;
           const forceDirectionY = dy / distance;
           const force = (mouse.radius - distance) / mouse.radius;
-          const directionX = forceDirectionX * force * 2.5; // ความแรงในการผลัก
-          const directionY = forceDirectionY * force * 2.5;
-          
-          this.vx -= directionX * 0.05;
-          this.vy -= directionY * 0.05;
+          this.vx -= forceDirectionX * force * 2.5 * 0.05;
+          this.vy -= forceDirectionY * force * 2.5 * 0.05;
         }
 
-        // เพิ่มแรงเสียดทาน (Friction) ให้การเคลื่อนไหวดูเป็นธรรมชาติ
         this.vx *= 0.98;
         this.vy *= 0.98;
-
-        // บวกความเร็วปกติเข้าไปเลี้ยงไว้ไม่ให้หยุดนิ่ง
         this.x += this.vx + ((Math.random() - 0.5) * 0.2);
         this.y += this.vy + ((Math.random() - 0.5) * 0.2);
 
-        // ชนขอบเด้งกลับแบบเนียนๆ
         if (this.x < 0 || this.x > width) this.vx *= -1;
         if (this.y < 0 || this.y > height) this.vy *= -1;
-
-        // กันจุดวิ่งหายออกนอกจอ
         this.x = Math.max(0, Math.min(width, this.x));
         this.y = Math.max(0, Math.min(height, this.y));
       }
     }
 
-    // สร้าง Particles
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle());
     }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
-
-      // ดึงสีตาม Theme ปัจจุบัน (เชื่อมกับไฟล์ theme.js ของคุณ)
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const rgb = isDark ? '96, 165, 250' : '37, 99, 235'; // ฟ้าสว่าง / น้ำเงิน
+      const rgb = isDark ? '96, 165, 250' : '37, 99, 235';
       const lineAlphaBase = isDark ? 0.3 : 0.2;
       const dotAlpha = isDark ? 0.8 : 0.6;
 
-      // วนลูปวาดการเชื่อมต่อ
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
-
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           
-          // ตีเส้นถ้าอยู่ใกล้กัน
           if (dist < connectionDistance) {
             const opacity = (1 - dist / connectionDistance) * lineAlphaBase;
             ctx.beginPath();
@@ -332,9 +304,7 @@
         }
       }
 
-      // วาดจุด (Particles)
       particles.forEach(p => {
-        // สร้างรัศมีแสงเรืองรอง (Outer Glow)
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
         gradient.addColorStop(0, `rgba(${rgb}, ${dotAlpha * 0.5})`);
         gradient.addColorStop(1, `rgba(${rgb}, 0)`);
@@ -344,14 +314,12 @@
         ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
         ctx.fill();
 
-        // จุดแกนกลาง (Inner Dot)
         ctx.beginPath();
         ctx.fillStyle = `rgba(${rgb}, ${dotAlpha})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // Interactive Mouse Connection (ลากเส้นจากเมาส์ไปยังจุดที่อยู่ใกล้)
       particles.forEach(p => {
         let dx = mouse.x - p.x;
         let dy = mouse.y - p.y;
@@ -373,30 +341,8 @@
     animate();
   }
 
-  // ===== Init when DOM ready =====
-  function init() {
-    initScrollReveal();
-    initNavScroll();
-    initMagneticEffect(); // เพิ่มกลับเข้ามาให้สมบูรณ์
-    initSmoothScroll();
-    initHeroParallax();
-    initCounters();
-    initNeuralBg();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-/* ====================================
-   ADVANCED ANIMATIONS v8
-   ==================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    /* --- 1. FLOW FIELD BACKGROUND (Canvas) --- */
+  // ===== 8. FLOW FIELD BACKGROUND (NEW - Energy Waves) =====
+  function initFlowField() {
     const canvas = document.getElementById('flowFieldCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -424,12 +370,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         update() {
-            // สร้างคลื่นพลังงาน
             const angle = (this.x * 0.005) + (this.y * 0.005) + (Date.now() * 0.0005);
             this.vx += Math.cos(angle) * this.acceleration;
             this.vy += Math.sin(angle) * this.acceleration;
 
-            // ล็อกความเร็วสูงสุด
             const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
             if (speed > this.speedMax) {
                 this.vx = (this.vx / speed) * this.speedMax;
@@ -439,7 +383,6 @@ document.addEventListener("DOMContentLoaded", () => {
             this.x += this.vx;
             this.y += this.vy;
 
-            // กลับมาอีกฝั่งถ้าหลุดจอ
             if (this.x < 0) this.x = width;
             if (this.x > width) this.x = 0;
             if (this.y < 0) this.y = height;
@@ -467,21 +410,37 @@ document.addEventListener("DOMContentLoaded", () => {
         requestAnimationFrame(animateFlowField);
     }
     animateFlowField();
+  }
 
-    /* --- 2. GIGANTIC TITLE STAGGER (Reveal) --- */
-    // เราจะใช้ CSS Keyframes แทน GSAP เพื่อความประหยัด (เนื่องจากไฟล์เดิมไม่ได้รวม GSAP ไว้)
-    const megaTitle = document.querySelector('.mega-title');
+  // ===== 9. GIGANTIC TITLE STAGGER REVEAL (NEW) =====
+  function initTitleReveal() {
     const maskText = document.querySelector('.mask-text');
-    
-    // ค่อยๆ เปิดชื่อ "KENGPIPAT" ออกมาอย่างนุ่มนวล
     if (maskText) {
-        // ใช้ setTimeout เพื่อให้เกิด Stagger หลังโหลดหน้าเว็บ
         setTimeout(() => {
             maskText.style.transition = 'opacity 1s ease, transform 1s ease';
             maskText.style.opacity = '1';
             maskText.style.transform = 'translateY(0)';
-        }, 300); // ดีเลย์นิดนึง
+        }, 300);
     }
+  }
 
-    // Animation อื่นๆ ที่มีอยู่แล้ว (Parallax, Reveal) ยังคงทำงานตามปกติครับ
-});
+  // ===== INIT ALL SCRIPTS =====
+  function init() {
+    initScrollReveal();
+    initNavScroll();
+    initMagneticEffect();
+    initSmoothScroll();
+    initHeroParallax();
+    initCounters();
+    initNeuralBg();       // ของเดิม
+    initFlowField();      // ของใหม่
+    initTitleReveal();    // ของใหม่
+  }
+
+  // ป้องกันปัญหาโหลดซ้อนทับกัน
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
