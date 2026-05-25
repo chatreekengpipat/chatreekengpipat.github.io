@@ -5127,3 +5127,29 @@ nav.scrolled {
   max-width: 580px; 
   width: 100%;
 }
+/* ====================================
+   FORCE CENTER - WORKPLACE SECTION
+   (แก้ปัญหาโดนขังฝั่งซ้ายจาก Grid เก่า)
+   ==================================== */
+
+.workplace-section {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.workplace-grid {
+  /* เปลี่ยนจาก grid เป็น flex เพื่อทลายคอลัมน์ฝั่งขวาที่ว่างเปล่าทิ้ง */
+  display: flex !important;
+  justify-content: center !important; /* ดึงทุกอย่างมาไว้ตรงกลางจอ */
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  gap: 4rem !important;
+}
+
+.workplace-content {
+  width: 100% !important;
+  max-width: 580px !important; /* ล็อกความกว้างข้อความให้สวยงาม */
+}
