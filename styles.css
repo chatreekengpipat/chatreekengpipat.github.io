@@ -4439,22 +4439,6 @@ nav.scrolled {
   font-weight: 600; 
 }
 
-/* Responsive สำหรับหน้าจอมือถือ/แท็บเล็ต */
-@media (max-width: 1024px) {
-  .workplace-grid {
-    flex-direction: column;
-    gap: 2.5rem;
-  }
-  .workplace-content {
-    max-width: 100%;
-  }
-}
-
-.workplace-content {
-  position: relative;
-  z-index: 2;
-}
-
 .workplace-tag {
   display: inline-flex;
   align-items: center;
