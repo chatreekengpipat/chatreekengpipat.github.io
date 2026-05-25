@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 01 · Inventory & Procurement (P2P) — Chatree Kengpipat</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapfamily=JetBrains+Mono:wght@400;500;600https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<script src="animation.js" defer></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Chatree K.
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#projects" class="active">Projects</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- PROJECT HERO -->
+<section class="project-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="index.html#projects">Projects</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>Project 01</span>
+  </div>
+
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">XeerSoft Cloud ERP · Implementation</div>
+      <div class="project-meta">Project 01 · Jan – Jun 2023 · Go-Live Jun 2023</div>
+      <h1>Inventory & <em>Procurement</em><br>Management</h1>
+      <p class="project-hero-desc">
+        Full P2P implementation on <strong>XeerSoft Cloud ERP</strong> as sole Implementation Consultant — gathered procurement requirements, configured master data for 180+ materials and 10+ vendors, designed 2-level approval workflow, and applied statistical modelling to solve chronic stockouts at Newton Sixth Form School.
+      </p>
+    </div>
+
+    <div class="project-info-card">
+      <div class="project-info-row">
+        <span class="project-info-label">Platform</span>
+        <span class="project-info-val">XeerSoft Cloud ERP</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Role</span>
+        <span class="project-info-val">Implementation Consultant</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Duration</span>
+        <span class="project-info-val">6 months</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Modules</span>
+        <span class="project-info-val">Inventory · Procurement · Workflow</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Users</span>
+        <span class="project-info-val">15+ procurement staff</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Status</span>
+        <span class="project-info-val" style="color: var(--success); font-family: 'DM Mono', monospace; font-size: 0.75rem;">✓ LIVE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS BANNER -->
+<section style="padding: 4rem 4rem 2rem;">
+  <div class="results-banner">
+    <div class="result-cell">
+      <div class="result-val">▲ 86%</div>
+      <div class="result-label">Stockout Reduction</div>
+      <div class="result-change">22% → 3%</div>
+    </div>
+    <div class="result-cell">
+      <div class="result-val">100%</div>
+      <div class="result-label">Unauth PO Cut</div>
+      <div class="result-change">30% → 0%</div>
+    </div>
+    <div class="result-cell">
+      <div class="result-val">▲ 82%</div>
+      <div class="result-label">Write-off Reduced</div>
+      <div class="result-change">฿45K → ฿8K</div>
+    </div>
+    <div class="result-cell">
+      <div class="result-val">▲ 28%</div>
+      <div class="result-label">Vendor On-Time</div>
+      <div class="result-change">68% → 87%</div>
+    </div>
+  </div>
+</section>
+
+<!-- POWER BI DASHBOARD -->
+<section style="padding: 0 2.5rem 2rem; max-width: 1400px; margin: 0 auto;">
+  <div class="dashboard-section">
+    <div class="dashboard-header">
+      <div class="dashboard-meta">
+        <div class="dashboard-tag">Live Production Dashboard</div>
+        <div class="dashboard-title">Procurement Project · KPI Improvement Visualisation</div>
+      </div>
+      <div class="dashboard-source">Power BI</div>
+    </div>
+    <img src="dashboards/dashboard-p1.png" alt="Power BI dashboard showing procurement KPI improvements" class="dashboard-image">
+    <div class="dashboard-footer">
+      <strong>Source:</strong> Production data exported from XeerSoft Cloud ERP, analyzed in Power BI Desktop. Shows before/after comparison of 4 KPIs over Jan–Jun 2023 — Stockout Rate (XS/XXL), Unauthorised PO Rate, Vendor On-Time Delivery, and Textbook Write-off cost.
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section style="padding-top: 2rem;">
+  <div class="content-section">
+
+    <h3 class="content-h3">The <em>Problem</em></h3>
+    <p class="content-p">
+      Newton Sixth Form managed procurement for school uniforms (~180 SKUs) and textbooks (~40 titles) <strong>without a structured system</strong> — purchase requests were uncontrolled, approval was informal, and uniform stockouts occurred every intake season due to intuition-based ordering.
+    </p>
+
+    <div class="callout">
+      <div class="callout-title">Three core issues identified</div>
+      <p>· Chronic XS/XXL stockout rate at <strong>22% of intake seasons</strong> — root cause: planning parameters set by intuition, not statistical models</p>
+      <p>· Textbook over-ordering at 8–12% buffer above enrolment → <strong>฿28–45K annual write-off</strong> from obsolete editions</p>
+      <p>· No approval threshold — <strong>any staff could raise unlimited purchase requests</strong></p>
+    </div>
+
+    <h3 class="content-h3">My <em>Approach</em></h3>
+    <p class="content-p">
+      I joined as <strong>sole Implementation Consultant</strong>. The challenge wasn't simply to configure an ERP module — it was to diagnose <em>why</em> the existing process was failing, design a system that solved root causes, and ensure adoption across 15+ procurement staff.
+    </p>
+
+    <p class="content-p">
+      I split the work into three streams running in parallel: <strong>(1) Master Data Configuration</strong> for 180+ materials and 10+ vendors on XeerSoft, <strong>(2) Statistical Modelling</strong> to calculate scientifically-grounded reorder parameters, and <strong>(3) Workflow Design</strong> for 2-level purchase approval authorization.
+    </p>
+
+    <!-- DRAW.IO STYLE FLOW DIAGRAM -->
+    <div class="diagram-container">
+      <div class="diagram-title">P2P Process Flow · Designed for XeerSoft</div>
+      <svg class="diagram-svg" viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowhead-p1" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#888880"/>
+          </marker>
+        </defs>
+
+        <!-- Start -->
+        <rect class="node-start" x="300" y="20" width="120" height="40" rx="20"/>
+        <text class="label" x="360" y="44" text-anchor="middle">START</text>
+        <line class="arrow" x1="360" y1="60" x2="360" y2="95" marker-end="url(#arrowhead-p1)"/>
+
+        <!-- Create PR -->
+        <rect class="node-box" x="270" y="100" width="180" height="55" rx="4"/>
+        <text class="label" x="360" y="125" text-anchor="middle" font-weight="600">1. Create Purchase Requisition</text>
+        <text class="label-small" x="360" y="142" text-anchor="middle">Requester · PR Form</text>
+        <line class="arrow" x1="360" y1="155" x2="360" y2="195" marker-end="url(#arrowhead-p1)"/>
+
+        <!-- Decision Diamond -->
+        <polygon class="node-decision" points="360,200 470,265 360,330 250,265"/>
+        <text class="label" x="360" y="260" text-anchor="middle" font-weight="600">Amount</text>
+        <text class="label" x="360" y="278" text-anchor="middle">≤ ฿50,000 ?</text>
+
+        <!-- Branch labels -->
+        <text class="label-accent" x="200" y="260" text-anchor="middle">YES</text>
+        <text class="label-accent" x="520" y="260" text-anchor="middle">NO</text>
+
+        <!-- Lines to approval -->
+        <line class="arrow" x1="250" y1="265" x2="180" y2="265" stroke="#888880" stroke-width="1.5"/>
+        <line class="arrow" x1="180" y1="265" x2="180" y2="345" marker-end="url(#arrowhead-p1)"/>
+
+        <line class="arrow" x1="470" y1="265" x2="540" y2="265" stroke="#888880" stroke-width="1.5"/>
+        <line class="arrow" x1="540" y1="265" x2="540" y2="345" marker-end="url(#arrowhead-p1)"/>
+
+        <!-- D1 Approval -->
+        <rect class="node-box" x="100" y="350" width="160" height="55" rx="4"/>
+        <text class="label" x="180" y="375" text-anchor="middle" font-weight="600">2a. D1 Approve</text>
+        <text class="label-small" x="180" y="392" text-anchor="middle">Department Head</text>
+
+        <!-- D2 Approval -->
+        <rect class="node-box" x="460" y="350" width="160" height="55" rx="4"/>
+        <text class="label" x="540" y="375" text-anchor="middle" font-weight="600">2b. D2 Approve</text>
+        <text class="label-small" x="540" y="392" text-anchor="middle">Director</text>
+
+        <!-- Merge lines -->
+        <line class="arrow" x1="180" y1="405" x2="180" y2="445" stroke="#888880" stroke-width="1.5"/>
+        <line class="arrow" x1="180" y1="445" x2="360" y2="445" stroke="#888880" stroke-width="1.5"/>
+        <line class="arrow" x1="540" y1="405" x2="540" y2="445" stroke="#888880" stroke-width="1.5"/>
+        <line class="arrow" x1="540" y1="445" x2="360" y2="445" stroke="#888880" stroke-width="1.5"/>
+        <line class="arrow" x1="360" y1="445" x2="360" y2="475" marker-end="url(#arrowhead-p1)"/>
+
+        <!-- Create PO -->
+        <rect class="node-box" x="270" y="480" width="180" height="55" rx="4"/>
+        <text class="label" x="360" y="505" text-anchor="middle" font-weight="600">3. Create Purchase Order</text>
+        <text class="label-small" x="360" y="522" text-anchor="middle">Vendor + PIR Price</text>
+        <line class="arrow" x1="360" y1="535" x2="360" y2="575" marker-end="url(#arrowhead-p1)"/>
+
+        <!-- Goods Receipt -->
+        <rect class="node-box" x="270" y="580" width="180" height="55" rx="4"/>
+        <text class="label" x="360" y="605" text-anchor="middle" font-weight="600">4. Goods Receipt</text>
+        <text class="label-small" x="360" y="622" text-anchor="middle">3-Way Match · Invoice</text>
+        <line class="arrow" x1="360" y1="635" x2="360" y2="670" marker-end="url(#arrowhead-p1)"/>
+
+        <!-- End -->
+        <rect class="node-end" x="300" y="675" width="120" height="40" rx="20"/>
+        <text class="label" x="360" y="699" text-anchor="middle">END</text>
+      </svg>
+    </div>
+
+    <!-- XEERSOFT TO SAP MAPPING -->
+    <h3 class="content-h3">XeerSoft → SAP <em>terminology mapping</em></h3>
+    <p class="content-p">
+      Below is the cross-platform reference I maintain to translate my XeerSoft project work to standard SAP terminology — useful for SAP-focused interviews and learning. <strong>All implementation work was performed on XeerSoft</strong>; the SAP column is shown for vocabulary reference and learning purposes only.
+    </p>
+
+    <div class="mapping-section">
+      <div class="mapping-section-header">
+        <div class="mapping-title">P2P Process · Cross-Platform Reference</div>
+        <span class="mapping-note">XeerSoft = actual platform · SAP = vocabulary mapping</span>
+      </div>
+      <table class="mapping-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>XeerSoft Action <small style="color: var(--success); text-transform: none; letter-spacing: 0;">(implemented)</small></th>
+            <th class="sap-col">SAP Equivalent T-Code <small style="color: var(--text-muted); text-transform: none; letter-spacing: 0;">(reference)</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="xeer-action">Create Purchase Requisition in PR Module</td>
+            <td><span class="sap-tcode">ME51N</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="xeer-action">2-Level Workflow Approval (≤฿50K / >฿50K)</td>
+            <td><span class="sap-tcode">ME54N</span> · Release Strategy</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="xeer-action">Generate Purchase Order with Vendor Reference</td>
+            <td><span class="sap-tcode">ME21N</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="xeer-action">Record Goods Receipt against PO</td>
+            <td><span class="sap-tcode">MIGO</span> · Mvt 101</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="xeer-action">Invoice Match & Verification (3-Way)</td>
+            <td><span class="sap-tcode">MIRO</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="xeer-action">Stock Position Report</td>
+            <td><span class="sap-tcode">MB52</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td class="xeer-action">Material Master Creation</td>
+            <td><span class="sap-tcode">MM01</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td class="xeer-action">Vendor Master Creation</td>
+            <td><span class="sap-tcode">XK01</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="disclaimer">
+      <span class="disclaimer-icon">i</span>
+      <div class="disclaimer-text">
+        <strong>Honest framing:</strong> I have not personally configured SAP MM in a production environment. The SAP T-codes above are mappings I maintain as part of my SAP S/4HANA learning journey. My production-grade implementation experience is on XeerSoft Cloud ERP, plus SAP <em>end-user</em> experience during my Mitsubishi Motors internship.
+      </div>
+    </div>
+
+    <h3 class="content-h3">Statistical <em>Modelling</em></h3>
+    <p class="content-p">
+      Rather than guess safety stock values, I applied <strong>three different statistical models</strong> based on SKU demand patterns — and entered the calculated parameters directly into XeerSoft inventory planning fields.
+    </p>
+
+    <div class="callout">
+      <div class="callout-title">Model selection by SKU type</div>
+      <p><strong>· Poisson Distribution</strong> for low-volume SKUs (λ &lt; 25) — XS and XXL uniform sizes at 97% service level</p>
+      <p><strong>· Normal Z-score</strong> for mid-range sizes (S–L) with stable demand patterns</p>
+      <p><strong>· Modified EOQ with Edition-Risk Penalty</strong> for textbooks subject to edition obsolescence</p>
+    </div>
+
+    <h3 class="content-h3">Configuration <em>Parameters</em></h3>
+
+    <div class="code-block"><span class="comment">// Inventory Planning Parameters (XeerSoft)</span>
+<span class="keyword">Planning Type:</span>     Reorder Point Planning
+<span class="keyword">Lot Sizing:</span>        Lot-for-lot
+<span class="keyword">Safety Stock:</span>      calculated per SKU via Poisson/Normal
+<span class="keyword">Reorder Point:</span>     trigger for auto-replenishment
+<span class="keyword">Service Level:</span>     97% target for XS/XXL
+
+<span class="comment">// Approval Matrix (Workflow Authorization)</span>
+<span class="keyword">Level 1:</span>          Dept Head         ≤ THB 50,000
+<span class="keyword">Level 2:</span>          Director          &gt; THB 50,000
+<span class="keyword">Release:</span>          Sequential — L1 must approve before L2</div>
+
+    <h3 class="content-h3">Master <em>Data Volume</em></h3>
+    <p class="content-p">
+      Configured the full master data foundation for the P2P cycle from scratch on XeerSoft.
+    </p>
+
+    <div class="results-banner" style="margin: 2rem 0;">
+      <div class="result-cell">
+        <div class="result-val" style="color: var(--accent);">~180</div>
+        <div class="result-label">Material Records</div>
+        <div class="result-change">Uniforms + Textbooks</div>
+      </div>
+      <div class="result-cell">
+        <div class="result-val" style="color: var(--accent);">10+</div>
+        <div class="result-label">Vendor Masters</div>
+        <div class="result-change">Full price record integration</div>
+      </div>
+      <div class="result-cell">
+        <div class="result-val" style="color: var(--accent);">4 × 6</div>
+        <div class="result-label">Uniform Variants</div>
+        <div class="result-change">Types × Sizes (XS–XXL)</div>
+      </div>
+      <div class="result-cell">
+        <div class="result-val" style="color: var(--accent);">~40</div>
+        <div class="result-label">Textbook Titles</div>
+        <div class="result-change">Edition-tracked</div>
+      </div>
+    </div>
+
+    <h3 class="content-h3">Tools <em>& Technologies</em></h3>
+    <div class="module-tags">
+      <span class="module-tag">XeerSoft Inventory Module</span>
+      <span class="module-tag">XeerSoft Procurement Module</span>
+      <span class="module-tag">XeerSoft Workflow Authorization</span>
+      <span class="module-tag">Python (Statistical Modelling)</span>
+      <span class="module-tag">Power BI</span>
+      <span class="module-tag">Jira (Defect Tracking)</span>
+      <span class="module-tag">Excel · SQL</span>
+      <span class="module-tag">draw.io (Process Flow)</span>
+      <span class="module-tag">Word (FSD/BRD)</span>
+    </div>
+
+    <h3 class="content-h3">Lessons <em>Learned</em></h3>
+    <p class="content-p">
+      The biggest learning was that <strong>ERP success is 30% configuration and 70% adoption</strong>. The statistical models were rigorous, the workflow was clean — but the real win came from training procurement staff to trust system-driven reorder points instead of intuition. Weekly review sessions for the first 3 months post Go-Live were critical to making the change stick.
+    </p>
+
+  </div>
+</section>
+
+<!-- PROJECT NAVIGATION -->
+<section style="padding: 2rem 4rem 4rem;">
+  <div class="project-nav">
+    <a href="index.html#projects" class="project-nav-link">
+      <span class="project-nav-direction">← All Projects</span>
+      <span class="project-nav-title">Back to Portfolio</span>
+    </a>
+    <a href="project2.html" class="project-nav-link next">
+      <span class="project-nav-direction">Next Project →</span>
+      <span class="project-nav-title">Strategic Pricing & AR Configuration</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Chatree Kengpipat · ERP Business Analyst & Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+</body>
+</html>
