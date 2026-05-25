@@ -34,10 +34,11 @@
   </ul>
 </nav>
 
-<!-- ANIMATED TECH BACKGROUND -->
+<!-- DYNAMIC TECH BACKGROUND -->
+<div class="gradient-mesh"></div>
+<canvas id="neuralBg"></canvas>
 <div class="tech-bg"></div>
 <div class="tech-grid"></div>
-<div class="tech-particles" id="techParticles"></div>
 
 <!-- HERO v7 -->
 <section class="hero-v7">
@@ -138,26 +139,43 @@
     <span class="section-num">02</span>
     <h2 class="section-title">About <em>me</em></h2>
   </div>
-  <div class="about-simple">
-    <p style="color: var(--text-muted); margin-bottom: 1rem; line-height: 1.75; font-size: 0.98rem;">
-      Mechanical Engineer from <strong style="color: var(--text);">Chulalongkorn University (Class Honors, GPAX 3.40)</strong> who crossed into ERP consulting — bringing analytical rigour from engineering into business process design and system implementation.
-    </p>
-    <p style="color: var(--text-muted); margin-bottom: 1rem; line-height: 1.75; font-size: 0.98rem;">
-      I work as the <strong style="color: var(--text);">sole Implementation Consultant</strong> at Learn Balance Group on <strong style="color: var(--text);">XeerSoft Cloud ERP</strong> — owning the full implementation cycle from <strong style="color: var(--text);">configuration, master data setup, integration testing, UAT facilitation, Go-live cutover, and BAU support</strong>. As part of the role I also serve as the embedded Business Analyst — <strong style="color: var(--text);">gathering requirements, authoring Functional Specs (FSD), Use Cases, and User Stories</strong> for the remote development team. Single point of contact for ~200 users across 3 branches and 5 integrated modules: Inventory & Procurement (P2P), Financial Accounting (AR/AP/GL), Web POS & Pricing, CRM & Loyalty, and HR & Payroll.
-    </p>
-    <p style="color: var(--text-muted); margin-bottom: 1rem; line-height: 1.75; font-size: 0.98rem;">
-      Prior hands-on exposure to <strong style="color: var(--text);">SAP in a live automotive manufacturing environment</strong> at Mitsubishi Motors Thailand — operated SAP as an end-user for procurement and asset management of my <strong style="color: var(--text);">FPDU Assist Device engineering project</strong>, which won the <strong style="color: var(--text);">Best Achievement Award</strong> from the full intern cohort. Currently studying for SAP S/4HANA certifications (C_TS460 SD · C_TS462 MM).
-    </p>
-    <div class="about-quote">
-      "An Implementation Consultant is the builder of business systems — turning requirements into working software through configuration, testing, and disciplined cutover."
+
+  <div class="about-grid-v7">
+    <div class="about-text-v7">
+      <p>
+        Mechanical Engineer from <strong>Chulalongkorn University (Class Honors, GPAX 3.40)</strong> who crossed into ERP consulting — bringing analytical rigour from engineering into business process design and system implementation.
+      </p>
+      <p>
+        I work as the <strong>sole Implementation Consultant</strong> at Learn Balance Group on <strong>XeerSoft Cloud ERP</strong> — owning the full implementation cycle from configuration, master data setup, integration testing, UAT facilitation, Go-live cutover, and BAU support. As part of the role I also serve as the embedded Business Analyst — <strong>gathering requirements, authoring Functional Specs (FSD), Use Cases, and User Stories</strong> for the remote development team. Single point of contact for ~200 users across 3 branches and 5 integrated modules: Inventory & Procurement (P2P), Financial Accounting (AR/AP/GL), Web POS & Pricing, CRM & Loyalty, and HR & Payroll.
+      </p>
+      <p>
+        Prior hands-on exposure to <strong>SAP in a live automotive manufacturing environment</strong> at Mitsubishi Motors Thailand — operated SAP as an end-user for procurement and asset management of my <strong>FPDU Assist Device engineering project</strong>, which won the <strong>Best Achievement Award</strong> from the full intern cohort. Currently studying for SAP S/4HANA certifications (C_TS460 SD · C_TS462 MM).
+      </p>
+
+      <div class="about-quote-v7">
+        An Implementation Consultant is the builder of business systems — turning requirements into working software through configuration, testing, and disciplined cutover.
+      </div>
+
+      <div class="focus-tags-v7">
+        <span class="focus-tag-v7">ERP Implementation</span>
+        <span class="focus-tag-v7">Configuration & Master Data</span>
+        <span class="focus-tag-v7">FSD · Use Case · User Story</span>
+        <span class="focus-tag-v7">UAT Leadership</span>
+        <span class="focus-tag-v7">Go-Live Cutover</span>
+        <span class="focus-tag-v7">SAP Procurement (End-User)</span>
+      </div>
     </div>
-    <div class="focus-tags">
-      <span class="focus-tag">ERP Implementation</span>
-      <span class="focus-tag">Configuration & Master Data</span>
-      <span class="focus-tag">FSD · Use Case · User Story</span>
-      <span class="focus-tag">UAT Leadership</span>
-      <span class="focus-tag">Go-Live Cutover</span>
-      <span class="focus-tag">SAP Procurement (End-User)</span>
+
+    <div class="about-photo-wrap">
+      <div class="about-photo-deco about-photo-deco-1"></div>
+      <div class="about-photo-deco about-photo-deco-2"></div>
+      <div class="about-photo-card">
+        <img src="photos/newton-1.jpg" alt="Chatree Kengpipat at Newton Sixth Form">
+        <div class="about-photo-badge-v7">
+          <div class="name">Chatree Kengpipat</div>
+          <div class="role">ERP Consultant · On-Site</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -513,19 +531,12 @@
       </div>
     </div>
 
-    <div class="workplace-photos">
-      <div class="workplace-photo workplace-photo-1">
-        <img src="photos/newton-1.jpg" alt="At Newton Sixth Form — Implementation Consultant">
-        <div class="workplace-photo-overlay">
-          <div class="workplace-photo-overlay-tag">Day-to-day</div>
-          Newton Sixth Form · Office
-        </div>
-      </div>
-      <div class="workplace-photo workplace-photo-2">
-        <img src="photos/newton-2.jpg" alt="At work — Newton Sixth Form team">
-        <div class="workplace-photo-overlay">
-          <div class="workplace-photo-overlay-tag">On site</div>
-          Implementation Consultant
+    <div class="workplace-photos-v8">
+      <div class="workplace-photo-single">
+        <img src="photos/newton-2.jpg" alt="Chatree Kengpipat — Implementation Consultant at Newton Sixth Form">
+        <div class="workplace-photo-overlay-v8">
+          <div class="tag">On site</div>
+          <div class="label">Implementation Consultant · Newton Sixth Form</div>
         </div>
       </div>
     </div>
