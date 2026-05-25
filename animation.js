@@ -482,10 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
             maskText.style.transform = 'translateY(0)';
         }, 300); // ดีเลย์นิดนึง
     }
-
-    // Animation อื่นๆ ที่มีอยู่แล้ว (Parallax, Reveal) ยังคงทำงานตามปกติครับ
-});
-(function () {
+    (function () {
   const headline = document.getElementById('ckHeadline');
   if (!headline) return;
 
