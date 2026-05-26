@@ -5684,3 +5684,76 @@ nav.scrolled {
     filter: none !important;
   }
 }
+/* =====================================================
+   CK HEADLINE SIZE FIX
+   ลดขนาดไม่ให้ชน/อยู่หลังรูป
+   ===================================================== */
+
+.ck-signature {
+  max-width: min(100%, 680px);
+  overflow: visible;
+}
+
+.ck-signature__line {
+  font-size: clamp(3.1rem, 6.2vw, 6.4rem) !important;
+  line-height: 0.86;
+  letter-spacing: -0.058em;
+}
+
+/* ถ้ายังใหญ่ไป ลด KENGPIPAT นิดหนึ่งเพราะยาวกว่า */
+.ck-signature__line--blue {
+  font-size: clamp(3rem, 5.9vw, 6.1rem) !important;
+}
+
+/* กัน hero ฝั่งซ้ายกินพื้นที่รูป */
+.hero-v7-left,
+.hero-v7-content {
+  max-width: 620px !important;
+  min-width: 0;
+  z-index: 5;
+}
+
+.hero-v7-right,
+.hero-v7-photo-container {
+  z-index: 4;
+}
+
+/* Desktop กว้างมาก */
+@media (min-width: 1440px) {
+  .ck-signature__line {
+    font-size: clamp(3.5rem, 5.5vw, 6.8rem) !important;
+  }
+
+  .ck-signature__line--blue {
+    font-size: clamp(3.35rem, 5.25vw, 6.45rem) !important;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .ck-signature {
+    max-width: 100%;
+    align-items: center;
+  }
+
+  .ck-signature__line {
+    font-size: clamp(3rem, 10vw, 5.4rem) !important;
+    text-align: center;
+  }
+
+  .ck-signature__line--blue {
+    font-size: clamp(2.8rem, 9.4vw, 5rem) !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .ck-signature__line {
+    font-size: clamp(2.6rem, 14vw, 4.4rem) !important;
+    letter-spacing: -0.052em;
+  }
+
+  .ck-signature__line--blue {
+    font-size: clamp(2.35rem, 12.5vw, 4rem) !important;
+  }
+}
