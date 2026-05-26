@@ -5721,11 +5721,11 @@ nav.scrolled {
 /* Desktop กว้างมาก */
 @media (min-width: 1440px) {
   .ck-signature__line {
-    font-size: clamp(3.5rem, 5.5vw, 6.8rem) !important;
+    font-size: clamp(2.65rem, 5.3vw, 5.5rem) !important;
   }
 
   .ck-signature__line--blue {
-    font-size: clamp(3.35rem, 5.25vw, 6.45rem) !important;
+    font-size: clamp(2.65rem, 5.3vw, 5.5rem) !important;
   }
 }
 
