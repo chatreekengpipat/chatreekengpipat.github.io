@@ -5406,3 +5406,281 @@ nav.scrolled {
     transform: none !important;
   }
 }
+/* =====================================================
+   CHATREE KENGPIPAT — Signature Light Sculpture FX
+   Premium reveal · reflective glint · 3D hover
+   ===================================================== */
+
+/* กันแท่งน้ำเงินเก่ากลับมา */
+.accent-line::before,
+.accent-line::after,
+.hero-v7 h1::before,
+.hero-v7 h1::after,
+.mega-title::before,
+.mega-title::after {
+  content: none !important;
+  display: none !important;
+}
+
+.ck-signature {
+  --ck-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ck-ink: var(--text-strong);
+  --ck-blue: var(--accent);
+  --ck-glow: color-mix(in srgb, var(--accent) 24%, transparent);
+  --ck-glow-strong: color-mix(in srgb, var(--accent) 48%, transparent);
+
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.02em;
+  width: fit-content;
+  isolation: isolate;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  cursor: default;
+}
+
+/* ambient glow behind headline */
+.ck-signature::before {
+  content: '';
+  position: absolute;
+  inset: -0.12em -0.08em;
+  z-index: -2;
+  border-radius: 0.18em;
+  background:
+    radial-gradient(circle at 18% 18%, var(--ck-glow-strong), transparent 34%),
+    radial-gradient(circle at 78% 78%, var(--ck-glow), transparent 42%);
+  filter: blur(34px);
+  opacity: 0.22;
+  transform: translateZ(-80px);
+  animation: ckAuraBreath 4.8s ease-in-out infinite;
+}
+
+/* small travelling edge light */
+.ck-signature::after {
+  content: '';
+  position: absolute;
+  left: -8%;
+  top: 45%;
+  width: 34%;
+  height: 0.075em;
+  z-index: 5;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
+  box-shadow: 0 0 22px rgba(96, 165, 250, 0.35);
+  opacity: 0;
+  transform: translateX(-60%) rotate(-8deg);
+  animation: ckEdgeComet 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.ck-signature__line {
+  position: relative;
+  display: block;
+  width: fit-content;
+  color: var(--ck-ink);
+  font-size: clamp(4.1rem, 9vw, 9rem);
+  font-weight: 950;
+  line-height: 0.82;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+  transform-style: preserve-3d;
+  transform:
+    rotateX(var(--ck-rx, 0deg))
+    rotateY(var(--ck-ry, 0deg))
+    translateZ(0);
+  transition:
+    transform 520ms var(--ck-ease),
+    filter 520ms var(--ck-ease),
+    text-shadow 520ms var(--ck-ease);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.34),
+    0 18px 36px rgba(37,99,235,0.08);
+}
+
+.ck-signature__line--blue {
+  color: var(--ck-blue);
+}
+
+/* depth layer */
+.ck-signature__line::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: currentColor;
+  opacity: 0.12;
+  transform: translate3d(0.035em, 0.045em, -12px);
+  filter: blur(0.4px);
+  pointer-events: none;
+}
+
+/* glossy reflection only */
+.ck-signature__line::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  color: transparent;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      108deg,
+      transparent 0%,
+      transparent 37%,
+      rgba(255,255,255,0.08) 43%,
+      rgba(255,255,255,0.96) 49%,
+      rgba(219,234,254,0.18) 54%,
+      transparent 62%,
+      transparent 100%
+    );
+  background-size: 260% 100%;
+  background-position: -170% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: ckGlassSweep 2.65s ease-in-out infinite;
+}
+
+.ck-signature__line--blue::after {
+  animation-delay: 0.16s;
+}
+
+.ck-signature__char {
+  display: inline-block;
+  position: relative;
+  transform-origin: 50% 82%;
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(0.48em) rotateX(34deg) scale(0.96);
+  animation: ckCharReveal 900ms var(--ck-ease) forwards;
+  animation-delay: calc(var(--ck-i) * 52ms + var(--ck-line-delay, 0ms));
+  will-change: transform, opacity, filter;
+}
+
+.ck-signature__space {
+  display: inline-block;
+  width: 0.22em;
+}
+
+.ck-signature:hover .ck-signature__line {
+  transform:
+    rotateX(var(--ck-rx, 0deg))
+    rotateY(var(--ck-ry, 0deg))
+    translateY(-0.035em)
+    translateZ(28px)
+    scale(1.012);
+  filter: drop-shadow(0 18px 30px var(--ck-glow));
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.42),
+    0 26px 58px rgba(37,99,235,0.16);
+}
+
+.ck-signature:hover .ck-signature__char {
+  animation-play-state: running;
+}
+
+.ck-signature:hover .ck-signature__line::after {
+  animation-duration: 1.05s;
+}
+
+/* subtle individual letter lift on hover */
+.ck-signature__char:hover {
+  transform: translateY(-0.08em) translateZ(42px) rotateX(-8deg) scale(1.04);
+  transition: transform 260ms var(--ck-ease);
+}
+
+[data-theme="dark"] .ck-signature {
+  --ck-glow: color-mix(in srgb, var(--accent) 32%, transparent);
+  --ck-glow-strong: color-mix(in srgb, var(--accent) 62%, transparent);
+}
+
+[data-theme="dark"] .ck-signature__line {
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.16),
+    0 20px 44px rgba(96,165,250,0.18);
+}
+
+@keyframes ckCharReveal {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(0.48em) rotateX(34deg) scale(0.96);
+  }
+  62% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(-0.045em) rotateX(-5deg) scale(1.012);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) rotateX(0) scale(1);
+  }
+}
+
+@keyframes ckGlassSweep {
+  0%, 18% {
+    opacity: 0;
+    background-position: -170% 50%;
+  }
+  34% {
+    opacity: 0.88;
+  }
+  52%, 100% {
+    opacity: 0;
+    background-position: 170% 50%;
+  }
+}
+
+@keyframes ckAuraBreath {
+  0%, 100% {
+    opacity: 0.18;
+    transform: translateZ(-80px) scale(0.98);
+  }
+  50% {
+    opacity: 0.34;
+    transform: translateZ(-80px) scale(1.04);
+  }
+}
+
+@keyframes ckEdgeComet {
+  0%, 18% {
+    opacity: 0;
+    transform: translateX(-70%) rotate(-8deg);
+  }
+  34% {
+    opacity: 0.75;
+  }
+  55%, 100% {
+    opacity: 0;
+    transform: translateX(270%) rotate(-8deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .ck-signature__line {
+    font-size: clamp(3.15rem, 16vw, 5.1rem);
+    letter-spacing: -0.06em;
+  }
+
+  .ck-signature::after {
+    height: 0.09em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-signature,
+  .ck-signature::before,
+  .ck-signature::after,
+  .ck-signature__line,
+  .ck-signature__line::after,
+  .ck-signature__char {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
