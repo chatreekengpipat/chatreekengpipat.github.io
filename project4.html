@@ -4,10 +4,153 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project 04 · STEM Portfolio Financial Tracking — Chatree Kengpipat</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapfamily=JetBrains+Mono:wght@400;500;600https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapdisplay=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script src="theme.js"></script>
 <script src="animation.js" defer></script>
+<!-- FX-ENHANCE :: additive motion + micro-interactions (Claude) -->
+<style id="fx-enhance">
+:root{
+  --fx-accent: var(--accent,#c8962d);
+  --fx-success: var(--success,#3a9d6b);
+  --fx-glow: rgba(200,150,45,.30);
+  --fx-glow: color-mix(in srgb, var(--accent,#c8962d) 32%, transparent);
+}
+html{ scroll-behavior:smooth; }
+#fx-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;
+  background:linear-gradient(90deg,var(--fx-accent),var(--fx-success));
+  box-shadow:0 0 14px var(--fx-glow);transition:width .12s linear;}
+
+html.js .fx-reveal{opacity:0;transform:translateY(22px);
+  transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
+  will-change:opacity,transform;}
+html.js .fx-reveal.fx-in{opacity:1;transform:none;}
+
+html.js .fx-stagger.fx-in>*{animation:fxRise .6s cubic-bezier(.22,.61,.36,1) backwards;}
+html.js .fx-stagger.fx-in>*:nth-child(1){animation-delay:.04s}
+html.js .fx-stagger.fx-in>*:nth-child(2){animation-delay:.10s}
+html.js .fx-stagger.fx-in>*:nth-child(3){animation-delay:.16s}
+html.js .fx-stagger.fx-in>*:nth-child(4){animation-delay:.22s}
+html.js .fx-stagger.fx-in>*:nth-child(5){animation-delay:.28s}
+html.js .fx-stagger.fx-in>*:nth-child(6){animation-delay:.34s}
+html.js .fx-stagger.fx-in>*:nth-child(7){animation-delay:.40s}
+html.js .fx-stagger.fx-in>*:nth-child(8){animation-delay:.46s}
+@keyframes fxRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+.result-cell,.project-info-card,.callout,.dashboard-section,.code-block,.process-table,.diagram-container{
+  transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s ease,border-color .35s ease;}
+.result-cell:hover{transform:translateY(-6px);box-shadow:0 22px 45px -26px var(--fx-glow);}
+.project-info-card:hover{transform:translateY(-4px);box-shadow:0 24px 50px -30px var(--fx-glow);}
+.callout:hover,.code-block:hover,.process-table:hover{box-shadow:0 20px 46px -30px var(--fx-glow);}
+.module-tag{transition:transform .3s ease,box-shadow .3s ease,color .3s ease;}
+.module-tag:hover{transform:translateY(-3px);box-shadow:0 10px 22px -12px var(--fx-glow);}
+.dashboard-image{transition:transform .6s cubic-bezier(.22,.61,.36,1);}
+.dashboard-section:hover .dashboard-image{transform:scale(1.012);}
+
+.content-h3 em{position:relative;}
+.content-h3 em::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:linear-gradient(90deg,var(--fx-accent),transparent);transform:scaleX(0);transform-origin:left;
+  transition:transform .7s cubic-bezier(.22,.61,.36,1) .15s;}
+.content-h3.fx-in em::after{transform:scaleX(1);}
+
+.project-hero{position:relative;}
+.project-hero::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(720px 360px at 88% -12%, var(--fx-glow), transparent 68%);}
+.project-hero>*{position:relative;z-index:1;}
+
+html.js .diagram-container .diagram-svg line,
+html.js .diagram-container .diagram-svg polyline{stroke-dasharray:1400;stroke-dashoffset:1400;
+  transition:stroke-dashoffset 1.2s ease .1s;}
+html.js .diagram-container.fx-in .diagram-svg line,
+html.js .diagram-container.fx-in .diagram-svg polyline{stroke-dashoffset:0;}
+html.js .diagram-container .diagram-svg rect,
+html.js .diagram-container .diagram-svg polygon,
+html.js .diagram-container .diagram-svg text{opacity:0;transition:opacity .7s ease .35s;}
+html.js .diagram-container.fx-in .diagram-svg rect,
+html.js .diagram-container.fx-in .diagram-svg polygon,
+html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
+
+.xn-fn{font-family:'DM Mono','JetBrains Mono',monospace;font-size:.82em;letter-spacing:.2px;}
+
+@media (prefers-reduced-motion: reduce){
+  html.js .fx-reveal{opacity:1!important;transform:none!important;transition:none!important;}
+  html.js .fx-stagger.fx-in>*{animation:none!important;}
+  #fx-progress{display:none;}
+  html.js .diagram-container .diagram-svg *{opacity:1!important;stroke-dashoffset:0!important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+<script>document.documentElement.classList.add('js');</script>
+<!-- XSIM :: scoped interactive spec-simulation styles (Claude) -->
+<style id="xsim-style">
+.xsim{--xs-accent:var(--accent,#c8962d);--xs-surface:var(--surface,#16160f);--xs-bg:var(--bg,#0e0e0c);
+ --xs-text:var(--text,#e9e6dc);--xs-muted:var(--text-muted,#8f8a7c);--xs-border:var(--border,#2c2a22);
+ --xs-ok:var(--success,#3a9d6b);--xs-warn:#d8973a;--xs-bad:#d2553f;--xs-info:#4f9bd6;
+ border:1px solid var(--xs-border);border-radius:14px;overflow:hidden;margin:1.4rem 0;background:var(--xs-surface);
+ box-shadow:0 26px 64px -42px rgba(0,0,0,.65);font-family:'DM Sans',Inter,system-ui,sans-serif;}
+.xsim *{box-sizing:border-box}
+.xsim-bar{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-bottom:1px solid var(--xs-border);
+ background:linear-gradient(180deg,rgba(255,255,255,.045),transparent);font-family:'DM Mono','JetBrains Mono',monospace;font-size:.72rem;}
+.xsim-dots{display:flex;gap:.34rem}.xsim-dots i{width:9px;height:9px;border-radius:50%;display:inline-block;opacity:.6}
+.xsim-dots i:nth-child(1){background:#d2553f}.xsim-dots i:nth-child(2){background:#d8973a}.xsim-dots i:nth-child(3){background:#3a9d6b}
+.xsim-crumb{color:var(--xs-muted);letter-spacing:.03em}.xsim-crumb b{color:var(--xs-text);font-weight:600}
+.xsim-live{margin-left:auto;display:inline-flex;align-items:center;gap:.42rem;color:var(--xs-accent);
+ border:1px solid var(--xs-border);border-radius:99px;padding:.2rem .62rem;font-size:.64rem;letter-spacing:.1em}
+.xsim-live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--xs-accent);animation:xsPulse 1.9s infinite}
+@keyframes xsPulse{0%{box-shadow:0 0 0 0 rgba(200,150,45,.5)}70%{box-shadow:0 0 0 7px rgba(200,150,45,0)}100%{box-shadow:0 0 0 0 rgba(200,150,45,0)}}
+.xsim-tabs{display:flex;gap:.1rem;padding:.5rem 1rem 0;border-bottom:1px solid var(--xs-border)}
+.xsim-tab{background:none;border:0;color:var(--xs-muted);font:inherit;font-size:.8rem;padding:.5rem .85rem;border-bottom:2px solid transparent;cursor:pointer;transition:.2s}
+.xsim-tab.on{color:var(--xs-text);border-bottom-color:var(--xs-accent)}
+.xsim-body{padding:1.2rem}
+.xsim-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+@media(max-width:680px){.xsim-grid{grid-template-columns:1fr}}
+.xsim-panel{background:var(--xs-bg);border:1px solid var(--xs-border);border-radius:10px;padding:1rem}
+.xsim-h{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--xs-muted);margin:0 0 .7rem}
+.xsim label{display:block;font-size:.76rem;color:var(--xs-muted);margin:.7rem 0 .3rem}
+.xsim input[type=number],.xsim input[type=text],.xsim select{width:100%;background:var(--xs-surface);border:1px solid var(--xs-border);
+ border-radius:8px;color:var(--xs-text);padding:.55rem .7rem;font:inherit;font-size:.9rem}
+.xsim input[type=range]{width:100%;accent-color:var(--xs-accent);margin:.2rem 0}
+.xsim-seg{display:flex;gap:.4rem;flex-wrap:wrap}
+.xsim-seg button{flex:1;min-width:60px;background:var(--xs-surface);border:1px solid var(--xs-border);color:var(--xs-muted);
+ border-radius:8px;padding:.5rem;font:inherit;font-size:.82rem;cursor:pointer;transition:.2s}
+.xsim-seg button.on{background:var(--xs-accent);color:#1a1408;border-color:var(--xs-accent);font-weight:600}
+.xsim-btn{margin-top:1rem;width:100%;background:var(--xs-accent);color:#1a1408;border:0;border-radius:8px;padding:.7rem;font:inherit;font-weight:700;font-size:.9rem;cursor:pointer;transition:transform .15s,filter .2s}
+.xsim-btn:hover{filter:brightness(1.07)}.xsim-btn:active{transform:translateY(1px)}
+.xsim-btn.ghost{background:transparent;color:var(--xs-muted);border:1px solid var(--xs-border)}
+.xsim-chip{display:inline-flex;align-items:center;gap:.35rem;font-family:'DM Mono',monospace;font-size:.7rem;padding:.22rem .55rem;border-radius:99px;border:1px solid;transition:.25s}
+.xsim-chip.ok{color:var(--xs-ok);border-color:var(--xs-ok);background:color-mix(in srgb,var(--xs-ok) 14%,transparent)}
+.xsim-chip.warn{color:var(--xs-warn);border-color:var(--xs-warn);background:color-mix(in srgb,var(--xs-warn) 14%,transparent)}
+.xsim-chip.bad{color:var(--xs-bad);border-color:var(--xs-bad);background:color-mix(in srgb,var(--xs-bad) 14%,transparent)}
+.xsim-chip.info{color:var(--xs-info);border-color:var(--xs-info);background:color-mix(in srgb,var(--xs-info) 14%,transparent)}
+.xsim-kvs{display:flex;flex-direction:column;gap:.1rem;font-size:.82rem;margin-top:.4rem}
+.xsim-kv{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-bottom:1px dashed var(--xs-border)}
+.xsim-kv span:first-child{color:var(--xs-muted)}.xsim-kv span:last-child{font-family:'DM Mono',monospace;color:var(--xs-text)}
+.xsim-kpi{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:600;color:var(--xs-text);line-height:1}
+.xsim-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.xsim-tbl th,.xsim-tbl td{text-align:left;padding:.45rem .5rem;border-bottom:1px solid var(--xs-border);vertical-align:middle}
+.xsim-tbl th{color:var(--xs-muted);font-weight:500;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em}
+.xsim-flow{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}
+.xsim-node{border:1px solid var(--xs-border);border-radius:8px;padding:.45rem .65rem;font-size:.74rem;color:var(--xs-muted);transition:.3s;text-align:center}
+.xsim-node small{opacity:.8;font-size:.66rem}
+.xsim-node.active{border-color:var(--xs-accent);color:var(--xs-text);background:color-mix(in srgb,var(--xs-accent) 12%,transparent);box-shadow:0 0 20px -6px var(--xs-accent)}
+.xsim-node.skip{opacity:.32}
+.xsim-arr{color:var(--xs-muted)}
+.xsim-cap{font-size:.69rem;color:var(--xs-muted);padding:.6rem 1rem;border-top:1px solid var(--xs-border);font-style:italic}
+.xsim-row{display:flex;align-items:center;gap:.6rem;padding:.45rem .1rem;border-bottom:1px solid var(--xs-border);font-size:.84rem}
+.xsim-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--xs-accent)}
+.xsim-row small{color:var(--xs-muted)}
+.xsim-toggle{display:inline-flex;align-items:center;gap:.55rem;cursor:pointer;font-size:.8rem;color:var(--xs-muted);user-select:none}
+.xsim-switch{width:42px;height:22px;border-radius:99px;background:var(--xs-border);position:relative;transition:.25s;flex:0 0 auto}
+.xsim-switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s}
+.xsim-toggle.on .xsim-switch{background:var(--xs-bad)}.xsim-toggle.on .xsim-switch::after{transform:translateX(20px)}
+.xsim-log{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--xs-muted);max-height:150px;overflow:auto;margin-top:.7rem;border:1px solid var(--xs-border);border-radius:8px;padding:.5rem .7rem;background:var(--xs-bg)}
+.xsim-log div{padding:.18rem 0;border-bottom:1px dashed var(--xs-border)}.xsim-log div:last-child{border:0}
+.xsim-meter{height:10px;border-radius:99px;background:var(--xs-border);overflow:hidden;margin-top:.5rem}
+.xsim-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:width .5s}
+.xsim-post{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--xs-text);line-height:1.7;margin-top:.4rem}
+</style>
 </head>
 <body>
 
@@ -15,7 +158,7 @@
 <nav>
   <a href="index.html" class="nav-logo">
     <span class="nav-logo-mark"></span>
-    Workspace of Chatree Kengpipat (Cee)
+    Chatree K.
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -277,63 +420,110 @@
       </svg>
     </div>
 
-    <!-- MAPPING TABLE -->
-    <h3 class="content-h3">XeerSoft → SAP <em>terminology mapping</em></h3>
+    <!-- XEERSOFT-NATIVE: MODULE FLOW + FSD -->
+    <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
-      Cross-platform reference for AR billing and cost allocation work. All implementation performed on XeerSoft FI; SAP equivalents shown for transition learning.
+      The STEM billing &amp; profitability process as configured in XeerSoft — module → function paths.
     </p>
 
-    <div class="mapping-section">
-      <div class="mapping-section-header">
-        <div class="mapping-title">AR Billing + CO · Cross-Platform Reference</div>
-        <span class="mapping-note">XeerSoft = actual · SAP = vocabulary</span>
+    <table class="process-table">
+      <thead>
+        <tr><th>#</th><th>Process Step</th><th>XeerSoft Module → Function</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Student enrolment per session</td><td><span class="xn-fn">Enrolment › Register Session</span></td></tr>
+        <tr><td>2</td><td>Create per-student AR invoices</td><td><span class="xn-fn">Financial Accounting › AR Invoice</span></td></tr>
+        <tr><td>3</td><td>Track collection status</td><td><span class="xn-fn">Financial Accounting › AR Open Items</span></td></tr>
+        <tr><td>4</td><td>Investigate discrepancy</td><td><span class="xn-fn">Financial Accounting › Payment Matching</span></td></tr>
+        <tr><td>5</td><td>Cost allocation per session</td><td><span class="xn-fn">Cost Allocation › Session Order</span></td></tr>
+        <tr><td>6</td><td>Session P&amp;L reporting</td><td><span class="xn-fn">Reporting › Session P&amp;L</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="content-h3">Functional Specification <em>Logic</em></h3>
+    <p class="content-p">
+      The AR posting and reporting logic I authored in the FSD and submitted to the XeerSoft development team.
+    </p>
+
+    <div class="code-block"><span class="comment">// FSD-P4-01 · Per-student AR invoice generation</span>
+<span class="keyword">FOR EACH</span> student <span class="keyword">IN</span> session.enrolled:
+   invoice.line[1] = { 110100 Student AR    · Debit  · 3,000 THB · term NET30 }
+   invoice.line[2] = { 400150 STEM Revenue  · Credit · 3,000 THB · CC branch+Academic }
+   <span class="keyword">IF</span> post(invoice) ok → COMMIT   <span class="keyword">ELSE</span> → ROLLBACK
+
+<span class="comment">// FSD-P4-02 · Session P&amp;L report</span>
+revenue      = SUM(invoices WHERE ref ~ 'STEM%')
+collected    = SUM(cleared  WHERE ref ~ 'STEM%')
+cost         = SUM(session_order.actual_costs)
+gross_profit = collected − cost
+margin %     = gross_profit / collected × 100</div>
+
+    <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
+    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser — it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
+
+    <div class="xsim xnative-section" id="sim4">
+      <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
+        <span class="xsim-crumb">XeerSoft Cloud ERP &middot; <b>Financial Accounting</b> &rsaquo; Session P&amp;L Simulation</span>
+        <span class="xsim-live">SIMULATION</span></div>
+      <div class="xsim-body">
+        <div class="xsim-grid">
+          <div class="xsim-panel">
+            <p class="xsim-h">Session inputs &middot; FSD-P4-01</p>
+            <label>Students enrolled &middot; <b id="p4stv">50</b></label>
+            <input type="range" id="p4st" min="1" max="60" value="50">
+            <label>Fee per student (THB)</label>
+            <input type="number" id="p4fee" value="3000" step="100">
+            <label>Collection rate &middot; <b id="p4colv">82%</b></label>
+            <input type="range" id="p4col" min="0" max="100" value="82">
+            <label>Lab fee (fixed / session)</label>
+            <input type="number" id="p4lab" value="40000" step="1000">
+            <label>Materials (per student)</label>
+            <input type="number" id="p4mat" value="900" step="50">
+            <label>Transport (fixed / session)</label>
+            <input type="number" id="p4tr" value="12000" step="1000">
+          </div>
+          <div class="xsim-panel">
+            <p class="xsim-h">Session P&amp;L &middot; FSD-P4-02</p>
+            <div class="xsim-kpi" id="p4gp">&#3647;0</div>
+            <span class="xsim-chip ok" style="margin-top:.3rem">Gross profit &middot; margin <b id="p4margin">0%</b></span>
+            <div class="xsim-meter"><i id="p4meter" style="width:0%"></i></div>
+            <div class="xsim-kvs" style="margin-top:.7rem">
+              <div class="xsim-kv"><span>Revenue invoiced</span><span id="p4rev">&#3647;0</span></div>
+              <div class="xsim-kv"><span>Collected</span><span id="p4collected">&#3647;0</span></div>
+              <div class="xsim-kv"><span>Total cost</span><span id="p4cost">&#3647;0</span></div>
+            </div>
+            <p class="xsim-h" style="margin-top:.8rem">AR position</p>
+            <div id="p4ar"></div>
+            <p class="xsim-h" style="margin-top:.8rem">Per-invoice posting</p>
+            <div class="xsim-post">DR 110100 &middot; Student AR &nbsp;&nbsp;<span id="p4fee2">&#3647;3,000</span><br>CR 400150 &middot; STEM Revenue &nbsp;<span id="p4fee3">&#3647;3,000</span></div>
+          </div>
+        </div>
       </div>
-      <table class="mapping-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>XeerSoft Action <small style="color: var(--success); text-transform: none; letter-spacing: 0;">(implemented)</small></th>
-            <th class="sap-col">SAP Equivalent <small style="color: var(--text-muted); text-transform: none; letter-spacing: 0;">(reference)</small></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td class="xeer-action">Generate Customer AR Invoice</td>
-            <td><span class="sap-tcode">FB70</span> · BAPI_ACC_DOCUMENT_POST</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td class="xeer-action">Map AR / Revenue GL Accounts</td>
-            <td><span class="sap-tcode">VKOA</span> · <span class="sap-tcode">OB52</span></td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td class="xeer-action">Track Customer Open Items</td>
-            <td><span class="sap-tcode">FBL5N</span></td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td class="xeer-action">Clear Customer Payment</td>
-            <td><span class="sap-tcode">F-28</span> · <span class="sap-tcode">F-32</span></td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td class="xeer-action">Create Cost Allocation Object</td>
-            <td><span class="sap-tcode">KO01</span> Internal Order</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td class="xeer-action">Settle Costs to Cost Centre</td>
-            <td><span class="sap-tcode">KO88</span></td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td class="xeer-action">P&L Margin Reporting per Session</td>
-            <td>Custom ALV · <span class="sap-tcode">S_ALR_87013611</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="xsim-cap">A neutral calculator running the spec &mdash; plug in your own actuals; default cost figures are illustrative.</div>
+    </div>
+    <script>
+    (function(){
+      var root=document.getElementById('sim4');
+      function fmt(n){return '\u0e3f'+Math.round(n).toLocaleString('en-US');}
+      var g=function(id){return root.querySelector(id);};
+      var st=g('#p4st'),fee=g('#p4fee'),col=g('#p4col'),lab=g('#p4lab'),mat=g('#p4mat'),tr=g('#p4tr');
+      function upd(){var S=+st.value,F=+fee.value,C=+col.value,L=+lab.value,M=+mat.value,T=+tr.value;
+        g('#p4stv').textContent=S;g('#p4colv').textContent=C+'%';
+        var rev=S*F,collected=rev*C/100,cost=L+M*S+T,gp=collected-cost,margin=collected?gp/collected*100:0;
+        var cleared=Math.round(S*C/100),open=S-cleared;
+        g('#p4rev').textContent=fmt(rev);g('#p4collected').textContent=fmt(collected);g('#p4cost').textContent=fmt(cost);
+        g('#p4gp').textContent=fmt(gp);g('#p4margin').textContent=margin.toFixed(1)+'%';
+        g('#p4meter').style.width=Math.max(0,Math.min(100,margin))+'%';
+        g('#p4fee2').textContent=fmt(F);g('#p4fee3').textContent=fmt(F);
+        g('#p4ar').innerHTML='<span class="xsim-chip ok">CLEARED '+cleared+'</span> <span class="xsim-chip warn">OPEN '+open+'</span> <span class="xsim-chip info">INVOICES '+S+'</span>';}
+      [st,fee,col,lab,mat,tr].forEach(function(i){i.addEventListener('input',upd);});upd();
+    })();
+    </script>
+
+    <div class="callout">
+      <div class="callout-title">Delivery model · role boundary</div>
+      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong> — owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable) — not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
     </div>
 
     <h3 class="content-h3">Configuration <em>Parameters</em></h3>
@@ -414,5 +604,48 @@ Lab Fee (fixed)     · Materials (variable)  · Transport
   <p>Bangkok · Thailand</p>
 </footer>
 
+<!-- FX-ENHANCE :: runtime (Claude) -->
+<script>
+(function(){
+  var d=document, root=d.documentElement;
+  var bar=d.createElement('div'); bar.id='fx-progress'; d.body.appendChild(bar);
+  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.width=(100*sc/max)+'%';}
+  addEventListener('scroll',prog,{passive:true}); prog();
+
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel='.content-h3,.content-p,.callout,.code-block,.diagram-container,.results-banner,.process-table,.xnative-section,.dashboard-section,.project-info-card,.module-tags,.disclaimer,.project-nav';
+  var els=[].slice.call(d.querySelectorAll(sel));
+  els.forEach(function(el){el.classList.add('fx-reveal'); if(el.matches('.results-banner,.module-tags'))el.classList.add('fx-stagger');});
+
+  function countUp(scope){
+    scope.querySelectorAll('.result-val').forEach(function(node){
+      if(node.dataset.fxDone)return; node.dataset.fxDone='1';
+      var raw=node.textContent.trim();
+      var m=raw.match(/^(\D*?)(\d[\d,]*(?:\.\d+)?)(.*)$/);
+      if(!m)return;
+      var pre=m[1],numStr=m[2],suf=m[3];
+      var dec=(numStr.split('.')[1]||'').length, hasComma=numStr.indexOf(',')>-1;
+      var target=parseFloat(numStr.replace(/,/g,'')); if(isNaN(target))return;
+      var t0=performance.now(),dur=1100;
+      function fmt(v){var s; if(hasComma){s=Number(v.toFixed(dec)).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});}else{s=v.toFixed(dec);} return pre+s+suf;}
+      function step(now){var p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3); node.textContent=fmt(target*e); if(p<1)requestAnimationFrame(step); else node.textContent=pre+numStr+suf;}
+      requestAnimationFrame(step);
+    });
+  }
+  function reveal(el){ if(el.classList.contains('fx-in'))return; el.classList.add('fx-in'); if(el.matches('.results-banner'))countUp(el); }
+
+  if(reduce){ els.forEach(function(el){el.classList.add('fx-in');}); return; }
+
+  var vh=innerHeight||root.clientHeight;
+  els.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top < vh*0.92) reveal(el); });
+
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){reveal(e.target); io.unobserve(e.target);} });},{threshold:0.12, rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(el){ if(!el.classList.contains('fx-in')) io.observe(el); });
+  } else { els.forEach(reveal); }
+
+  setTimeout(function(){ els.forEach(reveal); }, 1600);
+})();
+</script>
 </body>
 </html>

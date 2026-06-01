@@ -4,10 +4,153 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project 02 · Strategic Pricing & AR Configuration — Chatree Kengpipat</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapfamily=JetBrains+Mono:wght@400;500;600https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapdisplay=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script src="theme.js"></script>
 <script src="animation.js" defer></script>
+<!-- FX-ENHANCE :: additive motion + micro-interactions (Claude) -->
+<style id="fx-enhance">
+:root{
+  --fx-accent: var(--accent,#c8962d);
+  --fx-success: var(--success,#3a9d6b);
+  --fx-glow: rgba(200,150,45,.30);
+  --fx-glow: color-mix(in srgb, var(--accent,#c8962d) 32%, transparent);
+}
+html{ scroll-behavior:smooth; }
+#fx-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;
+  background:linear-gradient(90deg,var(--fx-accent),var(--fx-success));
+  box-shadow:0 0 14px var(--fx-glow);transition:width .12s linear;}
+
+html.js .fx-reveal{opacity:0;transform:translateY(22px);
+  transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
+  will-change:opacity,transform;}
+html.js .fx-reveal.fx-in{opacity:1;transform:none;}
+
+html.js .fx-stagger.fx-in>*{animation:fxRise .6s cubic-bezier(.22,.61,.36,1) backwards;}
+html.js .fx-stagger.fx-in>*:nth-child(1){animation-delay:.04s}
+html.js .fx-stagger.fx-in>*:nth-child(2){animation-delay:.10s}
+html.js .fx-stagger.fx-in>*:nth-child(3){animation-delay:.16s}
+html.js .fx-stagger.fx-in>*:nth-child(4){animation-delay:.22s}
+html.js .fx-stagger.fx-in>*:nth-child(5){animation-delay:.28s}
+html.js .fx-stagger.fx-in>*:nth-child(6){animation-delay:.34s}
+html.js .fx-stagger.fx-in>*:nth-child(7){animation-delay:.40s}
+html.js .fx-stagger.fx-in>*:nth-child(8){animation-delay:.46s}
+@keyframes fxRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+.result-cell,.project-info-card,.callout,.dashboard-section,.code-block,.process-table,.diagram-container{
+  transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s ease,border-color .35s ease;}
+.result-cell:hover{transform:translateY(-6px);box-shadow:0 22px 45px -26px var(--fx-glow);}
+.project-info-card:hover{transform:translateY(-4px);box-shadow:0 24px 50px -30px var(--fx-glow);}
+.callout:hover,.code-block:hover,.process-table:hover{box-shadow:0 20px 46px -30px var(--fx-glow);}
+.module-tag{transition:transform .3s ease,box-shadow .3s ease,color .3s ease;}
+.module-tag:hover{transform:translateY(-3px);box-shadow:0 10px 22px -12px var(--fx-glow);}
+.dashboard-image{transition:transform .6s cubic-bezier(.22,.61,.36,1);}
+.dashboard-section:hover .dashboard-image{transform:scale(1.012);}
+
+.content-h3 em{position:relative;}
+.content-h3 em::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:linear-gradient(90deg,var(--fx-accent),transparent);transform:scaleX(0);transform-origin:left;
+  transition:transform .7s cubic-bezier(.22,.61,.36,1) .15s;}
+.content-h3.fx-in em::after{transform:scaleX(1);}
+
+.project-hero{position:relative;}
+.project-hero::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(720px 360px at 88% -12%, var(--fx-glow), transparent 68%);}
+.project-hero>*{position:relative;z-index:1;}
+
+html.js .diagram-container .diagram-svg line,
+html.js .diagram-container .diagram-svg polyline{stroke-dasharray:1400;stroke-dashoffset:1400;
+  transition:stroke-dashoffset 1.2s ease .1s;}
+html.js .diagram-container.fx-in .diagram-svg line,
+html.js .diagram-container.fx-in .diagram-svg polyline{stroke-dashoffset:0;}
+html.js .diagram-container .diagram-svg rect,
+html.js .diagram-container .diagram-svg polygon,
+html.js .diagram-container .diagram-svg text{opacity:0;transition:opacity .7s ease .35s;}
+html.js .diagram-container.fx-in .diagram-svg rect,
+html.js .diagram-container.fx-in .diagram-svg polygon,
+html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
+
+.xn-fn{font-family:'DM Mono','JetBrains Mono',monospace;font-size:.82em;letter-spacing:.2px;}
+
+@media (prefers-reduced-motion: reduce){
+  html.js .fx-reveal{opacity:1!important;transform:none!important;transition:none!important;}
+  html.js .fx-stagger.fx-in>*{animation:none!important;}
+  #fx-progress{display:none;}
+  html.js .diagram-container .diagram-svg *{opacity:1!important;stroke-dashoffset:0!important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+<script>document.documentElement.classList.add('js');</script>
+<!-- XSIM :: scoped interactive spec-simulation styles (Claude) -->
+<style id="xsim-style">
+.xsim{--xs-accent:var(--accent,#c8962d);--xs-surface:var(--surface,#16160f);--xs-bg:var(--bg,#0e0e0c);
+ --xs-text:var(--text,#e9e6dc);--xs-muted:var(--text-muted,#8f8a7c);--xs-border:var(--border,#2c2a22);
+ --xs-ok:var(--success,#3a9d6b);--xs-warn:#d8973a;--xs-bad:#d2553f;--xs-info:#4f9bd6;
+ border:1px solid var(--xs-border);border-radius:14px;overflow:hidden;margin:1.4rem 0;background:var(--xs-surface);
+ box-shadow:0 26px 64px -42px rgba(0,0,0,.65);font-family:'DM Sans',Inter,system-ui,sans-serif;}
+.xsim *{box-sizing:border-box}
+.xsim-bar{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-bottom:1px solid var(--xs-border);
+ background:linear-gradient(180deg,rgba(255,255,255,.045),transparent);font-family:'DM Mono','JetBrains Mono',monospace;font-size:.72rem;}
+.xsim-dots{display:flex;gap:.34rem}.xsim-dots i{width:9px;height:9px;border-radius:50%;display:inline-block;opacity:.6}
+.xsim-dots i:nth-child(1){background:#d2553f}.xsim-dots i:nth-child(2){background:#d8973a}.xsim-dots i:nth-child(3){background:#3a9d6b}
+.xsim-crumb{color:var(--xs-muted);letter-spacing:.03em}.xsim-crumb b{color:var(--xs-text);font-weight:600}
+.xsim-live{margin-left:auto;display:inline-flex;align-items:center;gap:.42rem;color:var(--xs-accent);
+ border:1px solid var(--xs-border);border-radius:99px;padding:.2rem .62rem;font-size:.64rem;letter-spacing:.1em}
+.xsim-live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--xs-accent);animation:xsPulse 1.9s infinite}
+@keyframes xsPulse{0%{box-shadow:0 0 0 0 rgba(200,150,45,.5)}70%{box-shadow:0 0 0 7px rgba(200,150,45,0)}100%{box-shadow:0 0 0 0 rgba(200,150,45,0)}}
+.xsim-tabs{display:flex;gap:.1rem;padding:.5rem 1rem 0;border-bottom:1px solid var(--xs-border)}
+.xsim-tab{background:none;border:0;color:var(--xs-muted);font:inherit;font-size:.8rem;padding:.5rem .85rem;border-bottom:2px solid transparent;cursor:pointer;transition:.2s}
+.xsim-tab.on{color:var(--xs-text);border-bottom-color:var(--xs-accent)}
+.xsim-body{padding:1.2rem}
+.xsim-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+@media(max-width:680px){.xsim-grid{grid-template-columns:1fr}}
+.xsim-panel{background:var(--xs-bg);border:1px solid var(--xs-border);border-radius:10px;padding:1rem}
+.xsim-h{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--xs-muted);margin:0 0 .7rem}
+.xsim label{display:block;font-size:.76rem;color:var(--xs-muted);margin:.7rem 0 .3rem}
+.xsim input[type=number],.xsim input[type=text],.xsim select{width:100%;background:var(--xs-surface);border:1px solid var(--xs-border);
+ border-radius:8px;color:var(--xs-text);padding:.55rem .7rem;font:inherit;font-size:.9rem}
+.xsim input[type=range]{width:100%;accent-color:var(--xs-accent);margin:.2rem 0}
+.xsim-seg{display:flex;gap:.4rem;flex-wrap:wrap}
+.xsim-seg button{flex:1;min-width:60px;background:var(--xs-surface);border:1px solid var(--xs-border);color:var(--xs-muted);
+ border-radius:8px;padding:.5rem;font:inherit;font-size:.82rem;cursor:pointer;transition:.2s}
+.xsim-seg button.on{background:var(--xs-accent);color:#1a1408;border-color:var(--xs-accent);font-weight:600}
+.xsim-btn{margin-top:1rem;width:100%;background:var(--xs-accent);color:#1a1408;border:0;border-radius:8px;padding:.7rem;font:inherit;font-weight:700;font-size:.9rem;cursor:pointer;transition:transform .15s,filter .2s}
+.xsim-btn:hover{filter:brightness(1.07)}.xsim-btn:active{transform:translateY(1px)}
+.xsim-btn.ghost{background:transparent;color:var(--xs-muted);border:1px solid var(--xs-border)}
+.xsim-chip{display:inline-flex;align-items:center;gap:.35rem;font-family:'DM Mono',monospace;font-size:.7rem;padding:.22rem .55rem;border-radius:99px;border:1px solid;transition:.25s}
+.xsim-chip.ok{color:var(--xs-ok);border-color:var(--xs-ok);background:color-mix(in srgb,var(--xs-ok) 14%,transparent)}
+.xsim-chip.warn{color:var(--xs-warn);border-color:var(--xs-warn);background:color-mix(in srgb,var(--xs-warn) 14%,transparent)}
+.xsim-chip.bad{color:var(--xs-bad);border-color:var(--xs-bad);background:color-mix(in srgb,var(--xs-bad) 14%,transparent)}
+.xsim-chip.info{color:var(--xs-info);border-color:var(--xs-info);background:color-mix(in srgb,var(--xs-info) 14%,transparent)}
+.xsim-kvs{display:flex;flex-direction:column;gap:.1rem;font-size:.82rem;margin-top:.4rem}
+.xsim-kv{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-bottom:1px dashed var(--xs-border)}
+.xsim-kv span:first-child{color:var(--xs-muted)}.xsim-kv span:last-child{font-family:'DM Mono',monospace;color:var(--xs-text)}
+.xsim-kpi{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:600;color:var(--xs-text);line-height:1}
+.xsim-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.xsim-tbl th,.xsim-tbl td{text-align:left;padding:.45rem .5rem;border-bottom:1px solid var(--xs-border);vertical-align:middle}
+.xsim-tbl th{color:var(--xs-muted);font-weight:500;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em}
+.xsim-flow{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}
+.xsim-node{border:1px solid var(--xs-border);border-radius:8px;padding:.45rem .65rem;font-size:.74rem;color:var(--xs-muted);transition:.3s;text-align:center}
+.xsim-node small{opacity:.8;font-size:.66rem}
+.xsim-node.active{border-color:var(--xs-accent);color:var(--xs-text);background:color-mix(in srgb,var(--xs-accent) 12%,transparent);box-shadow:0 0 20px -6px var(--xs-accent)}
+.xsim-node.skip{opacity:.32}
+.xsim-arr{color:var(--xs-muted)}
+.xsim-cap{font-size:.69rem;color:var(--xs-muted);padding:.6rem 1rem;border-top:1px solid var(--xs-border);font-style:italic}
+.xsim-row{display:flex;align-items:center;gap:.6rem;padding:.45rem .1rem;border-bottom:1px solid var(--xs-border);font-size:.84rem}
+.xsim-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--xs-accent)}
+.xsim-row small{color:var(--xs-muted)}
+.xsim-toggle{display:inline-flex;align-items:center;gap:.55rem;cursor:pointer;font-size:.8rem;color:var(--xs-muted);user-select:none}
+.xsim-switch{width:42px;height:22px;border-radius:99px;background:var(--xs-border);position:relative;transition:.25s;flex:0 0 auto}
+.xsim-switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s}
+.xsim-toggle.on .xsim-switch{background:var(--xs-bad)}.xsim-toggle.on .xsim-switch::after{transform:translateX(20px)}
+.xsim-log{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--xs-muted);max-height:150px;overflow:auto;margin-top:.7rem;border:1px solid var(--xs-border);border-radius:8px;padding:.5rem .7rem;background:var(--xs-bg)}
+.xsim-log div{padding:.18rem 0;border-bottom:1px dashed var(--xs-border)}.xsim-log div:last-child{border:0}
+.xsim-meter{height:10px;border-radius:99px;background:var(--xs-border);overflow:hidden;margin-top:.5rem}
+.xsim-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:width .5s}
+.xsim-post{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--xs-text);line-height:1.7;margin-top:.4rem}
+</style>
 </head>
 <body>
 
@@ -15,7 +158,7 @@
 <nav>
   <a href="index.html" class="nav-logo">
     <span class="nav-logo-mark"></span>
-    Workspace of Chatree Kengpipat (Cee)
+    Chatree K.
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -231,68 +374,143 @@
       </svg>
     </div>
 
-    <!-- MAPPING TABLE -->
-    <h3 class="content-h3">XeerSoft → SAP <em>terminology mapping</em></h3>
+    <!-- XEERSOFT-NATIVE: MODULE FLOW + FSD -->
+    <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
-      Cross-platform reference for the Pricing & AR configuration. All work was performed on XeerSoft; SAP equivalents shown for transitional learning purposes.
+      Pricing and AR process as configured in XeerSoft — module → function paths, no transaction codes.
     </p>
 
-    <div class="mapping-section">
-      <div class="mapping-section-header">
-        <div class="mapping-title">Pricing & AR · Cross-Platform Reference</div>
-        <span class="mapping-note">XeerSoft = actual · SAP = vocabulary</span>
+    <table class="process-table">
+      <thead>
+        <tr><th>#</th><th>Process Step</th><th>XeerSoft Module → Function</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Define multi-tier condition types</td><td><span class="xn-fn">Pricing › Condition Setup</span></td></tr>
+        <tr><td>2</td><td>Enter discount records per tier</td><td><span class="xn-fn">Pricing › Price / Discount List</span></td></tr>
+        <tr><td>3</td><td>Pricing &rarr; Accounting integration</td><td><span class="xn-fn">Financial Accounting › Revenue Account Mapping</span></td></tr>
+        <tr><td>4</td><td>Monitor AR open items per family</td><td><span class="xn-fn">Financial Accounting › AR Open Items</span></td></tr>
+        <tr><td>5</td><td>3-level dunning run</td><td><span class="xn-fn">Financial Accounting › Overdue / Dunning</span></td></tr>
+        <tr><td>6</td><td>Clear customer payment</td><td><span class="xn-fn">Financial Accounting › Payment Matching</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="content-h3">Functional Specification <em>Logic</em></h3>
+    <p class="content-p">
+      The pricing and AR business rules I authored in the FSD and submitted to the XeerSoft development team.
+    </p>
+
+    <div class="code-block"><span class="comment">// FSD-P2-01 · Family-tier discount (posted as contra-revenue)</span>
+<span class="keyword">FUNCTION</span> family_discount(parent):
+   children = COUNT(enrolments WHERE parent_id = parent AND status ≠ Cancelled)
+   <span class="keyword">CASE</span> children:
+      1   → 0
+      2   → 50,000           <span class="comment">// 2nd child</span>
+      3+  → 100,000          <span class="comment">// 3 or more</span>
+   <span class="keyword">RETURN</span> discount × -1      <span class="comment">// negative → GL 400300 contra-revenue</span>
+
+<span class="comment">// FSD-P2-02 · AR aging → dunning trigger</span>
+<span class="keyword">FOR EACH</span> open_item:
+   overdue = today − due_date
+   0      → CURRENT
+   1–15   → WARN
+   16–30  → FORMAL      <span class="comment">// Dunning L1</span>
+   &gt;30    → ESCALATE    <span class="comment">// Dunning L2 / L3</span></div>
+
+    <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
+    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser — it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
+
+    <div class="xsim xnative-section" id="sim2">
+      <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
+        <span class="xsim-crumb">XeerSoft Cloud ERP &middot; <b>Pricing &amp; Financial Accounting</b> &rsaquo; Spec Simulation</span>
+        <span class="xsim-live">SIMULATION</span></div>
+      <div class="xsim-tabs">
+        <button class="xsim-tab on" data-t="a">Tuition Pricing</button>
+        <button class="xsim-tab" data-t="b">AR Dunning</button>
       </div>
-      <table class="mapping-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>XeerSoft Action <small style="color: var(--success); text-transform: none; letter-spacing: 0;">(implemented)</small></th>
-            <th class="sap-col">SAP Equivalent <small style="color: var(--text-muted); text-transform: none; letter-spacing: 0;">(reference)</small></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td class="xeer-action">Define Multi-Tier Pricing Conditions</td>
-            <td><span class="sap-tcode">V/06</span> Condition Types</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td class="xeer-action">Enter Discount Records per Tier</td>
-            <td><span class="sap-tcode">VK11</span> Condition Records</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td class="xeer-action">Create Sales Order with Pricing</td>
-            <td><span class="sap-tcode">VA01</span></td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td class="xeer-action">Generate Billing Document</td>
-            <td><span class="sap-tcode">VF01</span></td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td class="xeer-action">Map Revenue & Discount to GL</td>
-            <td><span class="sap-tcode">VKOA</span> Account Determination</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td class="xeer-action">Monitor AR Open Items per Customer</td>
-            <td><span class="sap-tcode">FBL5N</span></td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td class="xeer-action">Execute 3-Level Dunning Process</td>
-            <td><span class="sap-tcode">F150</span> · <span class="sap-tcode">FBMP</span></td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td class="xeer-action">Clear Customer Payment</td>
-            <td><span class="sap-tcode">F-28</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="xsim-body">
+        <div data-p="a">
+          <div class="xsim-grid">
+            <div class="xsim-panel">
+              <p class="xsim-h">Pricing conditions</p>
+              <label>C1 &middot; Children enrolled</label>
+              <div class="xsim-seg" data-seg="children">
+                <button class="on" data-v="1">1</button><button data-v="2">2</button><button data-v="3">3+</button></div>
+              <label>C2 &middot; Commitment horizon</label>
+              <div class="xsim-seg" data-seg="commit">
+                <button class="on" data-v="1yr">1 yr</button><button data-v="2yr">2 yr</button></div>
+              <label>C3 &middot; Academic profile</label>
+              <div class="xsim-seg" data-seg="acad">
+                <button class="on" data-v="Standard">Standard</button><button data-v="Advanced">Advanced</button></div>
+            </div>
+            <div class="xsim-panel">
+              <p class="xsim-h">Family-size discount &middot; FSD-P2-01</p>
+              <div class="xsim-kpi" id="p2disc">&#3647;0</div>
+              <div style="margin:.7rem 0;display:flex;gap:.4rem;flex-wrap:wrap" id="p2flags">
+                <span id="p2c1"></span><span id="p2c2"></span><span id="p2c3"></span></div>
+              <p class="xsim-h" style="margin-top:.6rem">AR / Revenue posting</p>
+              <div class="xsim-post" id="p2post"></div>
+            </div>
+          </div>
+        </div>
+        <div data-p="b" hidden>
+          <div class="xsim-grid">
+            <div class="xsim-panel">
+              <p class="xsim-h">AR open item</p>
+              <label>Days overdue &middot; <b id="p2dval">0 days</b></label>
+              <input type="range" id="p2days" min="0" max="60" value="0">
+              <p class="content-p" style="font-size:.78rem;margin-top:.8rem">Bucketed per FSD-P2-02; each bucket triggers the matching dunning level.</p>
+            </div>
+            <div class="xsim-panel">
+              <p class="xsim-h">Dunning decision</p>
+              <div id="p2dchip"></div>
+              <div class="xsim-kvs">
+                <div class="xsim-kv"><span>Level</span><span id="p2dlvl">&mdash;</span></div>
+                <div class="xsim-kv"><span>Action</span><span id="p2dact" style="text-align:right">&mdash;</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="xsim-cap">C2 / C3 are documented condition flags; only the C1 family-size tier (&#3647;0 / &#3647;50K / &#3647;100K) is a fixed value in the spec.</div>
+    </div>
+    <script>
+    (function(){
+      var root=document.getElementById('sim2');
+      root.querySelectorAll('.xsim-tab').forEach(function(b){b.addEventListener('click',function(){
+        root.querySelectorAll('.xsim-tab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+        root.querySelectorAll('[data-p]').forEach(function(p){p.hidden=(p.getAttribute('data-p')!==b.getAttribute('data-t'))});});});
+      function seg(name,cb){root.querySelectorAll('[data-seg="'+name+'"] button').forEach(function(b){
+        b.addEventListener('click',function(){root.querySelectorAll('[data-seg="'+name+'"] button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');cb();});});}
+      function fmt(n){return '\u0e3f'+Number(n).toLocaleString('en-US');}
+      function price(){
+        var c=root.querySelector('[data-seg="children"] button.on').getAttribute('data-v');
+        var disc=c==='1'?0:(c==='2'?50000:100000);
+        root.querySelector('#p2disc').textContent=fmt(disc);
+        root.querySelector('#p2c1').innerHTML='<span class="xsim-chip '+(disc?'ok':'info')+'">C1 '+fmt(disc)+'</span>';
+        var commit=root.querySelector('[data-seg="commit"] button.on').getAttribute('data-v');
+        var acad=root.querySelector('[data-seg="acad"] button.on').getAttribute('data-v');
+        root.querySelector('#p2c2').innerHTML='<span class="xsim-chip info">C2 '+commit+'</span>';
+        root.querySelector('#p2c3').innerHTML='<span class="xsim-chip info">C3 '+acad+'</span>';
+        root.querySelector('#p2post').innerHTML='DR 110100 &middot; Student AR<br>CR 400100 &middot; Tuition Revenue<br>DR 400300 &middot; Family Discount (contra) &nbsp;'+fmt(disc);
+      }
+      seg('children',price);seg('commit',price);seg('acad',price);price();
+      var dl=root.querySelector('#p2days');
+      function dun(){var d=parseInt(dl.value,10);root.querySelector('#p2dval').textContent=d+' days';
+        var c,cls,a,l;
+        if(d===0){c='CURRENT';cls='ok';a='No action \u2014 within terms';l='\u2014';}
+        else if(d<=15){c='WARN';cls='info';a='Day+15 reminder (soft tone, no penalty)';l='Dunning L1';}
+        else if(d<=30){c='FORMAL';cls='warn';a='Day+30 formal notice + academic-access warning';l='Dunning L2';}
+        else{c='ESCALATE';cls='bad';a='Day+45 Director escalation + enrolment hold';l='Dunning L3';}
+        root.querySelector('#p2dchip').innerHTML='<span class="xsim-chip '+cls+'">'+c+'</span>';
+        root.querySelector('#p2dact').textContent=a;root.querySelector('#p2dlvl').textContent=l;}
+      dl.addEventListener('input',dun);dun();
+    })();
+    </script>
+
+    <div class="callout">
+      <div class="callout-title">Delivery model · role boundary</div>
+      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong> — owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable) — not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
     </div>
 
     <h3 class="content-h3">Pricing <em>Configuration</em></h3>
@@ -369,5 +587,48 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
   <p>Bangkok · Thailand</p>
 </footer>
 
+<!-- FX-ENHANCE :: runtime (Claude) -->
+<script>
+(function(){
+  var d=document, root=d.documentElement;
+  var bar=d.createElement('div'); bar.id='fx-progress'; d.body.appendChild(bar);
+  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.width=(100*sc/max)+'%';}
+  addEventListener('scroll',prog,{passive:true}); prog();
+
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sel='.content-h3,.content-p,.callout,.code-block,.diagram-container,.results-banner,.process-table,.xnative-section,.dashboard-section,.project-info-card,.module-tags,.disclaimer,.project-nav';
+  var els=[].slice.call(d.querySelectorAll(sel));
+  els.forEach(function(el){el.classList.add('fx-reveal'); if(el.matches('.results-banner,.module-tags'))el.classList.add('fx-stagger');});
+
+  function countUp(scope){
+    scope.querySelectorAll('.result-val').forEach(function(node){
+      if(node.dataset.fxDone)return; node.dataset.fxDone='1';
+      var raw=node.textContent.trim();
+      var m=raw.match(/^(\D*?)(\d[\d,]*(?:\.\d+)?)(.*)$/);
+      if(!m)return;
+      var pre=m[1],numStr=m[2],suf=m[3];
+      var dec=(numStr.split('.')[1]||'').length, hasComma=numStr.indexOf(',')>-1;
+      var target=parseFloat(numStr.replace(/,/g,'')); if(isNaN(target))return;
+      var t0=performance.now(),dur=1100;
+      function fmt(v){var s; if(hasComma){s=Number(v.toFixed(dec)).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});}else{s=v.toFixed(dec);} return pre+s+suf;}
+      function step(now){var p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3); node.textContent=fmt(target*e); if(p<1)requestAnimationFrame(step); else node.textContent=pre+numStr+suf;}
+      requestAnimationFrame(step);
+    });
+  }
+  function reveal(el){ if(el.classList.contains('fx-in'))return; el.classList.add('fx-in'); if(el.matches('.results-banner'))countUp(el); }
+
+  if(reduce){ els.forEach(function(el){el.classList.add('fx-in');}); return; }
+
+  var vh=innerHeight||root.clientHeight;
+  els.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top < vh*0.92) reveal(el); });
+
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){reveal(e.target); io.unobserve(e.target);} });},{threshold:0.12, rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(el){ if(!el.classList.contains('fx-in')) io.observe(el); });
+  } else { els.forEach(reveal); }
+
+  setTimeout(function(){ els.forEach(reveal); }, 1600);
+})();
+</script>
 </body>
 </html>
