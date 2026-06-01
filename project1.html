@@ -151,6 +151,82 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:width .5s}
 .xsim-post{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--xs-text);line-height:1.7;margin-top:.4rem}
 </style>
+<!-- TRACK :: Delivery & Schedule styles (Claude) -->
+<style id="track-style">
+.trk{--t-accent:var(--accent,#c8962d);--t-surface:var(--surface,#16160f);--t-bg:var(--bg,#0e0e0c);
+ --t-text:var(--text,#e9e6dc);--t-muted:var(--text-muted,#8f8a7c);--t-border:var(--border,#2c2a22);
+ --t-ok:var(--success,#3a9d6b);--t-warn:#d8973a;--t-bad:#d2553f;--t-info:#4f9bd6;
+ font-family:'DM Sans',Inter,system-ui,sans-serif;}
+.trk *{box-sizing:border-box}
+.trk-card{background:var(--t-surface);border:1px solid var(--t-border);border-radius:14px;padding:1.2rem 1.3rem;margin:1.1rem 0;}
+.trk-h{font-family:'DM Mono','JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.13em;text-transform:uppercase;color:var(--t-muted);margin:0 0 .9rem;display:flex;align-items:center;gap:.5rem}
+.trk-h::before{content:"";width:6px;height:14px;border-radius:2px;background:var(--t-accent);display:inline-block}
+.trk-scroll{overflow-x:auto}
+.trk-gantt{min-width:540px}
+.trk-row{display:grid;grid-template-columns:165px 1fr;align-items:center;gap:.55rem;margin:.28rem 0}
+.trk-label{font-size:.78rem;color:var(--t-text);padding-right:.4rem;line-height:1.2}
+.trk-track{position:relative;height:30px;border-radius:6px;
+ background:repeating-linear-gradient(90deg,transparent,transparent calc(100%/var(--cols) - 1px),var(--t-border) calc(100%/var(--cols)));}
+.trk-track.head{height:auto;background:none;display:flex}
+.trk-mon{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--t-muted);letter-spacing:.03em;border-left:1px solid var(--t-border);padding:.2rem 0}
+.trk-mon:first-child{border-left:0}
+.trk-bar{position:absolute;top:5px;bottom:5px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+ font-family:'JetBrains Mono','DM Mono',monospace;font-size:.62rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;
+ left:calc((var(--s) - 1)/var(--cols)*100%);width:calc(var(--l)/var(--cols)*100%);min-width:10px;transition:.3s;color:#19130a}
+.trk-bar:hover{filter:brightness(1.08)}
+.trk-bar.done{background:var(--t-accent)}
+.trk-bar.plan{background:transparent;border:1px dashed var(--t-muted);color:var(--t-muted)}
+.trk-bar.warn{background:var(--t-warn);color:#23170a}
+.trk-bar.recover{background:linear-gradient(90deg,var(--t-warn),var(--t-ok));color:#0d2017}
+.trk-bar.live{background:var(--t-ok);color:#08130d}
+.trk-legend{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:.9rem;font-size:.7rem;color:var(--t-muted)}
+.trk-legend span{display:inline-flex;align-items:center;gap:.4rem}
+.trk-legend i{width:15px;height:10px;border-radius:3px;display:inline-block}
+.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-left:3px solid var(--t-warn);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
+.trk-flag.ok{border-left-color:var(--t-ok)}
+.trk-flag .ic{font-size:1rem;line-height:1.4;flex:0 0 auto}
+.trk-flag b{color:var(--t-text);font-size:.84rem}.trk-flag p{margin:.25rem 0 0;font-size:.79rem;color:var(--t-muted);line-height:1.5}
+.trk-flag .res{color:var(--t-ok);font-weight:600}
+.trk-steps{display:flex;flex-wrap:wrap;gap:.5rem}
+.trk-step{flex:1 1 145px;background:var(--t-bg);border:1px solid var(--t-border);border-radius:10px;padding:.8rem}
+.trk-step .n{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--t-accent);font-weight:600}
+.trk-step b{display:block;font-size:.84rem;color:var(--t-text);margin:.25rem 0}
+.trk-step span{font-size:.73rem;color:var(--t-muted);line-height:1.45}
+.trk-two{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:1rem}
+@media(max-width:680px){.trk-two{grid-template-columns:1fr}.trk-row{grid-template-columns:108px 1fr}}
+.trk-panel{background:var(--t-bg);border:1px solid var(--t-border);border-radius:10px;padding:1rem}
+.trk-panel .trk-h{margin-bottom:.5rem}
+.trk-panel ul{margin:.3rem 0 0;padding-left:1.05rem}
+.trk-panel li{font-size:.79rem;color:var(--t-muted);margin:.32rem 0;line-height:1.45}
+.trk-panel li b{color:var(--t-text)}
+.trk-week{display:flex;gap:.5rem;flex-wrap:wrap}
+.trk-day{flex:1 1 110px;background:var(--t-bg);border:1px solid var(--t-border);border-radius:10px;padding:.7rem}
+.trk-day .d{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--t-accent);letter-spacing:.1em}
+.trk-day p{margin:.32rem 0 0;font-size:.75rem;color:var(--t-text);line-height:1.4}
+.trk-kpis{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.95rem}
+.trk-kpi{background:var(--t-bg);border:1px solid var(--t-border);border-radius:10px;padding:.75rem .9rem;flex:1 1 130px}
+.trk-kpi .v{font-family:'DM Sans',Inter,system-ui,sans-serif;font-variant-numeric:tabular-nums;font-weight:800;font-size:1.55rem;color:var(--t-text);line-height:1;letter-spacing:-.5px}
+.trk-kpi .l{font-size:.67rem;color:var(--t-muted);margin-top:.28rem;line-height:1.3}
+.trk-hub{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.8rem;color:var(--t-muted);margin-bottom:.85rem}
+.trk-hub .you{background:var(--t-accent);color:#19130a;border-radius:8px;padding:.4rem .7rem;font-weight:700}
+.trk-hub b{color:var(--t-text)}
+.trk-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.trk-tbl th,.trk-tbl td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--t-border);vertical-align:top}
+.trk-tbl th{color:var(--t-muted);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+.trk-tbl td b{color:var(--t-text)}
+.trk-tbl .raci{font-family:'DM Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.05em}
+.trk-tbl .cnt{font-family:'JetBrains Mono','DM Mono',monospace;font-variant-numeric:tabular-nums;color:var(--t-text)}
+.trk-note{font-size:.76rem;color:var(--t-muted);margin-top:.85rem;line-height:1.5;border-top:1px dashed var(--t-border);padding-top:.7rem}
+.trk-confirm{display:inline-block;font-family:'DM Mono',monospace;font-size:.58rem;color:var(--t-warn);border:1px solid var(--t-warn);border-radius:4px;padding:0 .3rem;margin-left:.35rem;vertical-align:middle;letter-spacing:.04em}
+</style>
+<!-- XSIM number readability override (Claude) -->
+<style id="xsim-num">
+.xsim{font-feature-settings:"tnum" 1;}
+.xsim .xsim-kpi{font-family:'DM Sans',Inter,system-ui,sans-serif;font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:-.6px;}
+.xsim .xsim-kv span:last-child,.xsim .xsim-chip,.xsim .xsim-post,.xsim .xsim-tbl td,.xsim .xsim-log,.xsim .xsim-node small{font-variant-numeric:tabular-nums;}
+.xsim .xsim-chip{font-family:'JetBrains Mono','DM Mono',monospace;font-size:.74rem;}
+.xsim .xsim-kv span:last-child,.xsim .xsim-post{font-family:'JetBrains Mono','DM Mono',monospace;}
+</style>
 </head>
 <body>
 
@@ -158,7 +234,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 <nav>
   <a href="index.html" class="nav-logo">
     <span class="nav-logo-mark"></span>
-    Workspace of Chatree Kengpipat (Cee)
+    Chatree K.
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -490,6 +566,53 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       <div class="callout-title">Delivery model · role boundary</div>
       <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong> — owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
       <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable) — not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
+    </div>
+
+    <!-- DELIVERY & SCHEDULE -->
+    <div class="trk">
+    <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
+    <p class="content-p">How the project was actually run end-to-end — the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
+
+    <div class="callout">
+      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
+      <p>Go-Live was gated to the <b>June intake season</b> — uniforms and textbooks had to be on shelf before the Jun–Jul intake. Slipping the date meant <b>another full season at the old 22% stockout rate</b> plus ฿28–45K of textbook write-off. The schedule was not flexible: the intake calendar set a hard, externally-fixed deadline.</p>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Project timeline &middot; month-by-month</p>
+      <div class="trk-scroll"><div class="trk-gantt" style="--cols:6">
+        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
+        <div class="trk-row"><div class="trk-label">Requirements & As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Requirements & As-Is">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Master data (~180 items)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Master data (~180 items)">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Statistical modelling</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="Statistical modelling">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Config + workflow + FSD</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:2" title="Config + workflow + FSD">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT & defect fixes</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="UAT & defect fixes">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Training + Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:6;--l:1" title="Training + Go-Live">LIVE</span></div></div>
+      </div></div>
+      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Schedule risk &amp; recovery</p>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>UAT blocker — Goods-Receipt could not post</b><p>During UAT, GR posting was blocked for the IT-asset item category because no GL account determination existed (FSD-P1-02) — a silent stopper that would have frozen receiving.<span class="res"> Resolved → I traced it to a missing mapping, specified the fix to dev (category → GL 160000), retested, and kept Go-Live on the intake date.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Adoption risk — staff trusting the system over intuition</b><p>The statistical reorder points were correct, but procurement staff were used to ordering by gut feel — the real risk to the result was non-adoption, not configuration.<span class="res"> Resolved → I ran weekly adoption reviews for the first 3 months post Go-Live until system-driven reorder points became the default.</span></p></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Spec design → developer handoff → build verification</p>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD — data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-two">
+        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field — keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b> — every FSD rule reproduced in the build.</li><li><b>Data model check</b> — fields, keys and validation match the spec.</li><li><b>Posting check</b> — correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b> — routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b> — nothing closes without a retest.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Weekly Agile cadence</p>
+      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>Backlog & defect triage by severity</p></div><div class="trk-day"><div class="d">TUE</div><p>Spec clarification with dev</p></div><div class="trk-day"><div class="d">WED</div><p>Build structure review vs FSD</p></div><div class="trk-day"><div class="d">THU</div><p>Test / retest fixed items</p></div><div class="trk-day"><div class="d">FRI</div><p>Demo + stakeholder sign-off</p></div></div>
+      <div class="trk-kpis"><div class="trk-kpi"><div class="v">2× / wk</div><div class="l">Dev structure reviews<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">12 wk</div><div class="l">Weekly post-live adoption reviews</div></div><div class="trk-kpi"><div class="v">0</div><div class="l">Unauthorised POs since Go-Live</div></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Stakeholder network &amp; RACI</p>
+      <div class="trk-hub"><span class="you">Chatree — sole consultant</span> single point of accountability across <b>~15 procurement staff &middot; dept heads + director &middot; 10+ vendors &middot; remote XeerSoft dev team</b></div>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You — Consultant/BA</b></td><td class="cnt">1</td><td>Requirements, config, FSD, UAT, training</td><td class="raci">A / R</td></tr><tr><td><b>Director & Dept Heads</b></td><td class="cnt">2+</td><td>Approval workflow authority (฿50K rule)</td><td class="raci">C / A</td></tr><tr><td><b>Procurement staff</b></td><td class="cnt">~15</td><td>Day-to-day users; trained &amp; on-boarded</td><td class="raci">I / R</td></tr><tr><td><b>Vendors</b></td><td class="cnt">10+</td><td>Master data, lead-time, scorecard</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built config logic from my FSD</td><td class="raci">R</td></tr></tbody></table>
+      <p class="trk-note">I was the only consultant — but not working alone. I was the single node connecting approvers, ~15 users and the vendor dev team, and the only person with end-to-end visibility of requirements, build and adoption.</p>
+    </div>
     </div>
 
     <h3 class="content-h3">Statistical <em>Modelling</em></h3>
