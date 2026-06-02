@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-02T00:00:00Z",
+  "title": "Design System: Chatree Kengpipat — ERP Consultant Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "implementation-blue": {
+        "role": "primary",
+        "displayName": "Implementation Blue",
+        "canonical": "#2563eb",
+        "darkModeValue": "#60a5fa",
+        "tonalRamp": ["#172554", "#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#dbeafe"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Slate Ink",
+        "canonical": "#0f172a",
+        "tonalRamp": ["#020617", "#0f172a", "#1e293b", "#334155", "#64748b", "#94a3b8", "#cbd5e1", "#f1f5f9"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Cool Surface",
+        "canonical": "#f8fafc",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#cbd5e1", "#e2e8f0", "#f1f5f9", "#f8fafc", "#ffffff"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Signature Display", "purpose": "Hero name lockup (.ck-signature) only — one per page." },
+      "heading": { "displayName": "Section Heading", "purpose": "Section titles; use text-wrap: balance." },
+      "body": { "displayName": "Body", "purpose": "Default prose, Inter 400 at 15px; cap measure 65–75ch." },
+      "label": { "displayName": "Mono Label", "purpose": "Pills, tags, metric readouts — JetBrains Mono only." }
+    },
+    "shadows": [
+      { "name": "shadow-sm", "value": "0 1px 2px rgba(15,23,42,0.04)", "purpose": "Hairline lift on resting buttons." },
+      { "name": "shadow-md", "value": "0 4px 6px -1px rgba(15,23,42,0.08), 0 2px 4px -2px rgba(15,23,42,0.04)", "purpose": "Hover card elevation and scrolled nav." },
+      { "name": "accent-glow", "value": "0 15px 30px -8px var(--glow-strong), 0 0 25px var(--glow-color)", "purpose": "Signature hover glow on primary buttons and key cards." }
+    ],
+    "motion": [
+      { "name": "ease-smooth", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for transitions and reveals (ease-out-expo feel)." },
+      { "name": "ease-bounce", "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Metric/number value pops only." },
+      { "name": "ease-snappy", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Quick UI state changes." },
+      { "name": "transition-base", "value": "300ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Standard transition duration + easing." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main call-to-action; Implementation Blue fill that lifts and glows on hover.",
+      "html": "<button class=\"ds-btn-primary\">View Implementation Projects</button>",
+      "css": ".ds-btn-primary { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.875rem; letter-spacing: -0.01em; color: #fff; background: #2563eb; border: none; border-radius: 6px; padding: 0.75rem 1.4rem; box-shadow: 0 1px 3px rgba(15,23,42,0.08); cursor: pointer; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: #1d4ed8; transform: translateY(-2px) scale(1.02); box-shadow: 0 15px 30px -8px rgba(37,99,235,0.6), 0 0 25px rgba(37,99,235,0.35); } .ds-btn-primary:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action; hairline stroke that shifts to accent on hover.",
+      "html": "<button class=\"ds-btn-outline\">Contact Me</button>",
+      "css": ".ds-btn-outline { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.875rem; letter-spacing: -0.01em; color: #0f172a; background: transparent; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.75rem 1.4rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.16,1,0.3,1); } .ds-btn-outline:hover { color: #2563eb; border-color: #2563eb; background: #eff6ff; } .ds-btn-outline:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat surface card that lifts on hover; title shifts to accent.",
+      "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-card-eyebrow\">XEERSOFT CLOUD ERP</div><h3 class=\"ds-card-title\">End-to-end Implementation</h3><p class=\"ds-card-body\">Configuration, master data, UAT and Go-live across a live project.</p></a>",
+      "css": ".ds-card { display: block; text-decoration: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2rem; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-card:hover { transform: translateY(-4px); border-color: #cbd5e1; box-shadow: 0 4px 6px -1px rgba(15,23,42,0.08); } .ds-card-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.05em; color: #64748b; margin-bottom: 0.75rem; } .ds-card-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.25rem; color: #0f172a; margin: 0 0 0.5rem; transition: color 0.3s; } .ds-card:hover .ds-card-title { color: #2563eb; } .ds-card-body { font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; color: #64748b; margin: 0; }"
+    },
+    {
+      "name": "Meta Pill",
+      "kind": "chip",
+      "refersTo": "pill",
+      "description": "Neutral mono pill for credentials/metrics; border shifts to accent on hover.",
+      "html": "<span class=\"ds-pill\"><span>★</span> 4 Live Projects</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 100px; padding: 0.4rem 0.75rem; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-pill:hover { color: #2563eb; border-color: #2563eb; transform: translateY(-2px); box-shadow: 0 5px 15px -3px rgba(37,99,235,0.35); }"
+    },
+    {
+      "name": "Accent Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "The 'now / focus' marker — accent-tinted mono tag.",
+      "html": "<span class=\"ds-tag\">XeerSoft Cloud ERP</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 0.05em; color: #2563eb; background: #eff6ff; border: 1px solid rgba(37,99,235,0.25); border-radius: 100px; padding: 0.5rem 1rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Engineer's Console",
+    "overview": "The portfolio of an engineer-turned-ERP-consultant, with an interface that reads like an instrument panel: precise alignment, a restrained slate palette, monospace labels framing content like readouts, and a single decisive blue that behaves like a signal. Modern, technical, bold — bold in committed scale and a confident dark mode, never loud. Depth comes from tonal layering and interaction, not chrome: surfaces sit flat and come alive on hover and focus with a soft accent glow. It explicitly rejects the generic portfolio / AI-template look.",
+    "keyCharacteristics": [
+      "Slate-neutral foundation with one Implementation Blue accent",
+      "Two-voice typography: Inter (prose) + JetBrains Mono (labels only)",
+      "Flat-by-default surfaces; accent glow appears on interaction",
+      "Full light/dark theme parity via a toggle",
+      "Monospace readouts frame content like an instrument console"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Implementation Blue is the only chromatic voice. Every other surface is a slate neutral. Emphasis comes from blue, weight, or scale, not a new color.", "section": "colors" },
+      { "name": "The Twin-Theme Rule", "body": "Light and dark are first-class equals via [data-theme]. Any new color must be defined for both themes and hold contrast in each.", "section": "colors" },
+      { "name": "The Two-Voice Rule", "body": "Inter for everything readable; JetBrains Mono only for labels, tags, and numeric readouts. Mono never sets a paragraph.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. Shadow and glow appear only in response to state (hover, focus, scrolled).", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep Implementation Blue (#2563eb) as the only accent; carry everything else on slate neutrals.",
+      "Do reserve JetBrains Mono for labels, tags, and readouts; set all prose in Inter.",
+      "Do keep surfaces flat at rest and let shadow/glow appear only on hover, focus, or scroll.",
+      "Do define every new color for both light and dark themes and verify body text ≥4.5:1, large text ≥3:1 in each.",
+      "Do honor prefers-reduced-motion: the animated tech-canvas background and any reveal must have a reduced/instant alternative.",
+      "Do lead with specific ERP evidence (module names, phases, live dashboards)."
+    ],
+    "donts": [
+      "Don't let it look like a generic portfolio or an AI-template / bought theme.",
+      "Don't use tiny tracked-uppercase eyebrows above every section, or numbered 01 / 02 / 03 section scaffolding.",
+      "Don't ship identical icon-heading-text card grids, gradient text, decorative glassmorphism, or the hero-metric template.",
+      "Don't use a colored border-left/border-right greater than 1px as a side-stripe accent (the current .formula-block 3px stripe is this anti-pattern).",
+      "Don't use marketing buzzwords (streamline, empower, leverage, seamless, world-class).",
+      "Don't introduce a third type family or a second accent hue."
+    ]
+  }
+}

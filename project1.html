@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project 01 · Inventory & Procurement (P2P) — Chatree Kengpipat</title>
+<title>Project 01 · Inventory & Procurement (P2P) · Chatree Kengpipat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -265,7 +265,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       <div class="project-meta">Project 01 · Jan – Jun 2023 · Go-Live Jun 2023</div>
       <h1>Inventory & <em>Procurement</em><br>Management</h1>
       <p class="project-hero-desc">
-        Full P2P implementation on <strong>XeerSoft Cloud ERP</strong> as sole Implementation Consultant — gathered procurement requirements, configured master data for 180+ materials and 10+ vendors, designed 2-level approval workflow, and applied statistical modelling to solve chronic stockouts at Newton Sixth Form School.
+        Full P2P implementation on <strong>XeerSoft Cloud ERP</strong> as sole Implementation Consultant: gathered procurement requirements, configured master data for 180+ materials and 10+ vendors, designed 2-level approval workflow, and applied statistical modelling to solve chronic stockouts at Newton Sixth Form School.
       </p>
     </div>
 
@@ -336,7 +336,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </div>
     <img src="dashboards/dashboard-p1.png" alt="Power BI dashboard showing procurement KPI improvements" class="dashboard-image">
     <div class="dashboard-footer">
-      <strong>Source:</strong> Production data exported from XeerSoft Cloud ERP, analyzed in Power BI Desktop. Shows before/after comparison of 4 KPIs over Jan–Jun 2023 — Stockout Rate (XS/XXL), Unauthorised PO Rate, Vendor On-Time Delivery, and Textbook Write-off cost.
+      <strong>Source:</strong> Production data exported from XeerSoft Cloud ERP, analyzed in Power BI Desktop. Shows before/after comparison of 4 KPIs over Jan–Jun 2023: Stockout Rate (XS/XXL), Unauthorised PO Rate, Vendor On-Time Delivery, and Textbook Write-off cost.
     </div>
   </div>
 </section>
@@ -347,19 +347,19 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <h3 class="content-h3">The <em>Problem</em></h3>
     <p class="content-p">
-      Newton Sixth Form managed procurement for school uniforms (~180 SKUs) and textbooks (~40 titles) <strong>without a structured system</strong> — purchase requests were uncontrolled, approval was informal, and uniform stockouts occurred every intake season due to intuition-based ordering.
+      Newton Sixth Form managed procurement for school uniforms (~180 SKUs) and textbooks (~40 titles) <strong>without a structured system</strong>: purchase requests were uncontrolled, approval was informal, and uniform stockouts occurred every intake season due to intuition-based ordering.
     </p>
 
     <div class="callout">
       <div class="callout-title">Three core issues identified</div>
-      <p>· Chronic XS/XXL stockout rate at <strong>22% of intake seasons</strong> — root cause: planning parameters set by intuition, not statistical models</p>
+      <p>· Chronic XS/XXL stockout rate at <strong>22% of intake seasons</strong>, root cause: planning parameters set by intuition, not statistical models</p>
       <p>· Textbook over-ordering at 8–12% buffer above enrolment → <strong>฿28–45K annual write-off</strong> from obsolete editions</p>
-      <p>· No approval threshold — <strong>any staff could raise unlimited purchase requests</strong></p>
+      <p>· No approval threshold: <strong>any staff could raise unlimited purchase requests</strong></p>
     </div>
 
     <h3 class="content-h3">My <em>Approach</em></h3>
     <p class="content-p">
-      I joined as <strong>sole Implementation Consultant</strong>. The challenge wasn't simply to configure an ERP module — it was to diagnose <em>why</em> the existing process was failing, design a system that solved root causes, and ensure adoption across 15+ procurement staff.
+      I joined as <strong>sole Implementation Consultant</strong>. The challenge wasn't simply to configure an ERP module: it was to diagnose <em>why</em> the existing process was failing, design a system that solved root causes, and ensure adoption across 15+ procurement staff.
     </p>
 
     <p class="content-p">
@@ -441,7 +441,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     <!-- XEERSOFT-NATIVE: MODULE FLOW + FSD -->
     <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
-      The full P2P process as configured in XeerSoft — driven by module screens and menu navigation (no transaction codes). Each step maps to a <strong>module → function</strong> path in the live system.
+      The full P2P process as configured in XeerSoft, driven by module screens and menu navigation (no transaction codes). Each step maps to a <strong>module → function</strong> path in the live system.
     </p>
 
     <table class="process-table">
@@ -450,10 +450,10 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       </thead>
       <tbody>
         <tr><td>1</td><td>Create Purchase Requisition</td><td><span class="xn-fn">Procurement › Purchase Requisition › Create</span></td></tr>
-        <tr><td>2</td><td>PR Approval &mdash; 2-level</td><td><span class="xn-fn">Workflow Authorization › Release Rule</span></td></tr>
+        <tr><td>2</td><td>PR Approval · 2-level</td><td><span class="xn-fn">Workflow Authorization › Release Rule</span></td></tr>
         <tr><td>3</td><td>Create Purchase Order</td><td><span class="xn-fn">Procurement › Purchase Order › Create</span></td></tr>
         <tr><td>4</td><td>Goods Receipt</td><td><span class="xn-fn">Inventory › Goods Receipt</span></td></tr>
-        <tr><td>5</td><td>Invoice Verification &mdash; 3-way match</td><td><span class="xn-fn">Procurement › Invoice Matching</span></td></tr>
+        <tr><td>5</td><td>Invoice Verification · 3-way match</td><td><span class="xn-fn">Procurement › Invoice Matching</span></td></tr>
         <tr><td>6</td><td>Stock Monitoring</td><td><span class="xn-fn">Inventory › Stock Balance / Reorder Report</span></td></tr>
         <tr><td>7</td><td>Vendor Evaluation</td><td><span class="xn-fn">Procurement › Vendor Scorecard</span></td></tr>
         <tr><td>8</td><td>Master Data</td><td><span class="xn-fn">Inventory › Item &amp; Vendor Master</span></td></tr>
@@ -465,7 +465,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       The business logic I authored in the Functional Specification Document (FSD) and handed to the XeerSoft development team to implement.
     </p>
 
-    <div class="code-block"><span class="comment">// FSD-P1-01 · Workflow Authorization — 2-level PR approval</span>
+    <div class="code-block"><span class="comment">// FSD-P1-01 · Workflow Authorization · 2-level PR approval</span>
 <span class="keyword">ON</span> purchase_requisition.submit:
    total = SUM(pr.line_items.amount)
    <span class="keyword">IF</span> total ≤ 50,000  → approver ∈ { Dept Head, Director }
@@ -477,14 +477,14 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
    <span class="keyword">IF</span> gl is empty → block posting; "account determination missing"
    <span class="comment">// resolution (config): map category 'IT Asset' → GL 160000</span>
 
-<span class="comment">// FSD-P1-03 · Report — Size-Mix vs statistical target</span>
+<span class="comment">// FSD-P1-03 · Report · Size-Mix vs statistical target</span>
 <span class="keyword">FOR EACH</span> sku:
    <span class="keyword">IF</span> on_hand &lt; safety_stock        → STOCKOUT
    <span class="keyword">ELSE IF</span> on_hand &gt; target × 1.2   → OVERSTOCK
    <span class="keyword">ELSE</span>                            → OK</div>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
-    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser — it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
+    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
 
     <div class="xsim xnative-section" id="sim1">
       <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
@@ -515,16 +515,16 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
                 <span class="xsim-node" id="p1po">PO</span>
               </div>
               <div class="xsim-kvs">
-                <div class="xsim-kv"><span>Required approver</span><span id="p1req">&mdash;</span></div>
+                <div class="xsim-kv"><span>Required approver</span><span id="p1req">&ndash;</span></div>
                 <div class="xsim-kv"><span>Threshold rule</span><span>&#3647;50,000</span></div>
-                <div class="xsim-kv"><span>Result</span><span id="p1res">&mdash;</span></div>
+                <div class="xsim-kv"><span>Result</span><span id="p1res">&ndash;</span></div>
               </div>
             </div>
           </div>
         </div>
         <div data-p="b" hidden>
           <p class="xsim-h">Stock vs statistical target &middot; FSD-P1-03</p>
-          <p class="content-p" style="margin:.1rem 0 .8rem;font-size:.8rem">Drag on-hand to watch status recompute &mdash; <b>STOCKOUT</b> if below safety stock, <b>OVERSTOCK</b> if above target &times; 1.2.</p>
+          <p class="content-p" style="margin:.1rem 0 .8rem;font-size:.8rem">Drag on-hand to watch status recompute: <b>STOCKOUT</b> if below safety stock, <b>OVERSTOCK</b> if above target &times; 1.2.</p>
           <table class="xsim-tbl" id="p1tbl"><thead><tr><th>SKU</th><th>On-hand</th><th>Safety</th><th>Target</th><th>Status</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
@@ -564,18 +564,18 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
-      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong> — owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable) — not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
+      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
     </div>
 
     <!-- DELIVERY & SCHEDULE -->
     <div class="trk">
     <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
-    <p class="content-p">How the project was actually run end-to-end — the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
+    <p class="content-p">How the project was actually run end-to-end: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
 
     <div class="callout">
       <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
-      <p>Go-Live was gated to the <b>June intake season</b> — uniforms and textbooks had to be on shelf before the Jun–Jul intake. Slipping the date meant <b>another full season at the old 22% stockout rate</b> plus ฿28–45K of textbook write-off. The schedule was not flexible: the intake calendar set a hard, externally-fixed deadline.</p>
+      <p>Go-Live was gated to the <b>June intake season</b>: uniforms and textbooks had to be on shelf before the Jun–Jul intake. Slipping the date meant <b>another full season at the old 22% stockout rate</b> plus ฿28–45K of textbook write-off. The schedule was not flexible: the intake calendar set a hard, externally-fixed deadline.</p>
     </div>
 
     <div class="trk-card xnative-section">
@@ -589,15 +589,15 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>UAT blocker — Goods-Receipt could not post</b><p>During UAT, GR posting was blocked for the IT-asset item category because no GL account determination existed (FSD-P1-02) — a silent stopper that would have frozen receiving.<span class="res"> Resolved → I traced it to a missing mapping, specified the fix to dev (category → GL 160000), retested, and kept Go-Live on the intake date.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Adoption risk — staff trusting the system over intuition</b><p>The statistical reorder points were correct, but procurement staff were used to ordering by gut feel — the real risk to the result was non-adoption, not configuration.<span class="res"> Resolved → I ran weekly adoption reviews for the first 3 months post Go-Live until system-driven reorder points became the default.</span></p></div></div>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>UAT blocker · Goods-Receipt could not post</b><p>During UAT, GR posting was blocked for the IT-asset item category because no GL account determination existed (FSD-P1-02), a silent stopper that would have frozen receiving.<span class="res"> Resolved → I traced it to a missing mapping, specified the fix to dev (category → GL 160000), retested, and kept Go-Live on the intake date.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Adoption risk · staff trusting the system over intuition</b><p>The statistical reorder points were correct, but procurement staff were used to ordering by gut feel: the real risk to the result was non-adoption, not configuration.<span class="res"> Resolved → I ran weekly adoption reviews for the first 3 months post Go-Live until system-driven reorder points became the default.</span></p></div></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD — data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
       <div class="trk-two">
-        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field — keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b> — every FSD rule reproduced in the build.</li><li><b>Data model check</b> — fields, keys and validation match the spec.</li><li><b>Posting check</b> — correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b> — routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b> — nothing closes without a retest.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
       </div>
     </div>
 
@@ -609,20 +609,20 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Stakeholder network &amp; RACI</p>
-      <div class="trk-hub"><span class="you">Chatree — sole consultant</span> single point of accountability across <b>~15 procurement staff &middot; dept heads + director &middot; 10+ vendors &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You — Consultant/BA</b></td><td class="cnt">1</td><td>Requirements, config, FSD, UAT, training</td><td class="raci">A / R</td></tr><tr><td><b>Director & Dept Heads</b></td><td class="cnt">2+</td><td>Approval workflow authority (฿50K rule)</td><td class="raci">C / A</td></tr><tr><td><b>Procurement staff</b></td><td class="cnt">~15</td><td>Day-to-day users; trained &amp; on-boarded</td><td class="raci">I / R</td></tr><tr><td><b>Vendors</b></td><td class="cnt">10+</td><td>Master data, lead-time, scorecard</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built config logic from my FSD</td><td class="raci">R</td></tr></tbody></table>
-      <p class="trk-note">I was the only consultant — but not working alone. I was the single node connecting approvers, ~15 users and the vendor dev team, and the only person with end-to-end visibility of requirements, build and adoption.</p>
+      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>~15 procurement staff &middot; dept heads + director &middot; 10+ vendors &middot; remote XeerSoft dev team</b></div>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · Consultant/BA</b></td><td class="cnt">1</td><td>Requirements, config, FSD, UAT, training</td><td class="raci">A / R</td></tr><tr><td><b>Director & Dept Heads</b></td><td class="cnt">2+</td><td>Approval workflow authority (฿50K rule)</td><td class="raci">C / A</td></tr><tr><td><b>Procurement staff</b></td><td class="cnt">~15</td><td>Day-to-day users; trained &amp; on-boarded</td><td class="raci">I / R</td></tr><tr><td><b>Vendors</b></td><td class="cnt">10+</td><td>Master data, lead-time, scorecard</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built config logic from my FSD</td><td class="raci">R</td></tr></tbody></table>
+      <p class="trk-note">I was the only consultant, but not working alone. I was the single node connecting approvers, ~15 users and the vendor dev team, and the only person with end-to-end visibility of requirements, build and adoption.</p>
     </div>
     </div>
 
     <h3 class="content-h3">Statistical <em>Modelling</em></h3>
     <p class="content-p">
-      Rather than guess safety stock values, I applied <strong>three different statistical models</strong> based on SKU demand patterns — and entered the calculated parameters directly into XeerSoft inventory planning fields.
+      Rather than guess safety stock values, I applied <strong>three different statistical models</strong> based on SKU demand patterns, and entered the calculated parameters directly into XeerSoft inventory planning fields.
     </p>
 
     <div class="callout">
       <div class="callout-title">Model selection by SKU type</div>
-      <p><strong>· Poisson Distribution</strong> for low-volume SKUs (λ &lt; 25) — XS and XXL uniform sizes at 97% service level</p>
+      <p><strong>· Poisson Distribution</strong> for low-volume SKUs (λ &lt; 25): XS and XXL uniform sizes at 97% service level</p>
       <p><strong>· Normal Z-score</strong> for mid-range sizes (S–L) with stable demand patterns</p>
       <p><strong>· Modified EOQ with Edition-Risk Penalty</strong> for textbooks subject to edition obsolescence</p>
     </div>
@@ -639,7 +639,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 <span class="comment">// Approval Matrix (Workflow Authorization)</span>
 <span class="keyword">Level 1:</span>          Dept Head         ≤ THB 50,000
 <span class="keyword">Level 2:</span>          Director          &gt; THB 50,000
-<span class="keyword">Release:</span>          Sequential — L1 must approve before L2</div>
+<span class="keyword">Release:</span>          Sequential, L1 approves before L2</div>
 
     <h3 class="content-h3">Master <em>Data Volume</em></h3>
     <p class="content-p">
@@ -684,7 +684,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <h3 class="content-h3">Lessons <em>Learned</em></h3>
     <p class="content-p">
-      The biggest learning was that <strong>ERP success is 30% configuration and 70% adoption</strong>. The statistical models were rigorous, the workflow was clean — but the real win came from training procurement staff to trust system-driven reorder points instead of intuition. Weekly review sessions for the first 3 months post Go-Live were critical to making the change stick.
+      The biggest learning was that <strong>ERP success is 30% configuration and 70% adoption</strong>. The statistical models were rigorous, the workflow was clean, but the real win came from training procurement staff to trust system-driven reorder points instead of intuition. Weekly review sessions for the first 3 months post Go-Live were critical to making the change stick.
     </p>
 
   </div>

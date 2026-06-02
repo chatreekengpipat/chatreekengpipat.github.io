@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project 03 · CRM Star Reward Loyalty System — Chatree Kengpipat</title>
+<title>Project 03 · CRM Star Reward Loyalty System · Chatree Kengpipat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -336,7 +336,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </div>
     <img src="dashboards/dashboard-p3.png" alt="Power BI dashboard showing UAT defect tracking across 5 build cycles" class="dashboard-image">
     <div class="dashboard-footer">
-      <strong>Source:</strong> UAT defect log exported from Jira + Excel, analyzed in Power BI Desktop. Tracks 60 defects across 5 build cycles — total count, go-live blockers (P1), regression count, and reduction percentage per cycle. Final result: 83.8% resolved · zero critical post-launch.
+      <strong>Source:</strong> UAT defect log exported from Jira + Excel, analyzed in Power BI Desktop. Tracks 60 defects across 5 build cycles: total count, go-live blockers (P1), regression count, and reduction percentage per cycle. Final result: 83.8% resolved · zero critical post-launch.
     </div>
   </div>
 </section>
@@ -347,19 +347,19 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <h3 class="content-h3">The <em>Brief</em></h3>
     <p class="content-p">
-      The school required a <strong>points-based student recognition system</strong> — teachers assign 'stars' to students for behaviour and achievement; students redeem accumulated stars for certificates and rewards (comparable to a Starbucks loyalty model).
+      The school required a <strong>points-based student recognition system</strong>: teachers assign 'stars' to students for behaviour and achievement; students redeem accumulated stars for certificates and rewards (comparable to a Starbucks loyalty model).
     </p>
 
     <p class="content-p">
-      I joined the project <strong>mid-implementation</strong>, with XeerSoft development already in progress on the custom CRM logic. Within the first UAT cycle, I identified a critical defect that would have blocked Go-Live — and proceeded to lead 5 iterative test cycles through to deployment.
+      I joined the project <strong>mid-implementation</strong>, with XeerSoft development already in progress on the custom CRM logic. Within the first UAT cycle, I identified a critical defect that would have blocked Go-Live, and proceeded to lead 5 iterative test cycles through to deployment.
     </p>
 
     <h3 class="content-h3">The <em>Critical Defect</em></h3>
     <div class="callout">
       <div class="callout-title">DEF-001 · Entry-level blocker found Cycle 1</div>
-      <p><strong>Symptom:</strong> Bulk star-point assignment to multiple students simultaneously was non-functional — only the first student received points; all others were silently skipped.</p>
+      <p><strong>Symptom:</strong> Bulk star-point assignment to multiple students simultaneously was non-functional: only the first student received points; all others were silently skipped.</p>
       <p><strong>Root cause (identified by Dev after my escalation):</strong> The assignment function contained a loop with an inadvertent early exit after the first iteration.</p>
-      <p><strong>Severity:</strong> P1 — would silently fail in production with no error message, making it the hardest type of bug to detect post-launch.</p>
+      <p><strong>Severity:</strong> P1: would silently fail in production with no error message, making it the hardest type of bug to detect post-launch.</p>
     </div>
 
     <!-- DEFECT LIFECYCLE DIAGRAM -->
@@ -454,7 +454,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <h3 class="content-h3">UAT <em>Build Cycle Results</em></h3>
     <p class="content-p">
-      I structured UAT into 5 build cycles, each with explicit entry criteria, test scenarios, and exit gates. The defect log was the central artifact — every defect tracked from <strong>OPEN → IN-DEV → RETEST → RESOLVED</strong> with reproduction steps, severity, and regression test status.
+      I structured UAT into 5 build cycles, each with explicit entry criteria, test scenarios, and exit gates. The defect log was the central artifact: every defect tracked from <strong>OPEN → IN-DEV → RETEST → RESOLVED</strong> with reproduction steps, severity, and regression test status.
     </p>
 
     <table class="process-table">
@@ -509,7 +509,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     <!-- XEERSOFT-NATIVE: MODULE FLOW + DATA MODEL + FSD -->
     <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
-      The loyalty process as built in the XeerSoft CRM module — module → function paths.
+      The loyalty process as built in the XeerSoft CRM module: module → function paths.
     </p>
 
     <table class="process-table">
@@ -527,7 +527,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <h3 class="content-h3">Functional <em>Data Model</em></h3>
     <p class="content-p">
-      The logical entities I specified for the loyalty module in the FSD — field design defined by me, physical implementation by the development team.
+      The logical entities I specified for the loyalty module in the FSD: field design defined by me, physical implementation by the development team.
     </p>
 
     <table class="process-table">
@@ -561,10 +561,10 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <h3 class="content-h3">Specified <em>Fix Logic</em> · DEF-001</h3>
     <p class="content-p">
-      My defect report specified the corrected expected behaviour for the bulk-assignment routine — it must iterate over <strong>every</strong> selected student, not stop after the first.
+      My defect report specified the corrected expected behaviour for the bulk-assignment routine: it must iterate over <strong>every</strong> selected student, not stop after the first.
     </p>
 
-    <div class="code-block"><span class="comment">// FSD-P3-02 · DEF-001 corrected behaviour — iterate ALL selected students</span>
+    <div class="code-block"><span class="comment">// FSD-P3-02 · DEF-001 corrected behaviour: iterate ALL selected students</span>
 <span class="keyword">FUNCTION</span> assign_stars(selected[], stars, reason, user):
    <span class="keyword">FOR EACH</span> student <span class="keyword">IN</span> selected:        <span class="comment">// defect stopped after the 1st record</span>
       bal = find_balance(student, current_year)
@@ -574,7 +574,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
    <span class="keyword">COMMIT</span> all updates atomically          <span class="comment">// all-or-nothing</span></div>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
-    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser — it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
+    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
 
     <div class="xsim xnative-section" id="sim3">
       <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
@@ -591,7 +591,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
             <input type="text" id="p3reason" value="Outstanding behaviour">
             <label style="margin-top:1rem" class="xsim-toggle" id="p3bug">
               <span class="xsim-switch"></span>
-              <span>Simulate DEF-001 &mdash; <b id="p3mode">Fixed &mdash; specified behaviour</b></span>
+              <span>Simulate DEF-001 &middot; <b id="p3mode">Fixed &middot; specified behaviour</b></span>
             </label>
             <button class="xsim-btn" id="p3assign">Assign Stars</button>
             <button class="xsim-btn ghost" id="p3reset">Reset balances</button>
@@ -644,40 +644,40 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
-      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong> — owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable) — not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
+      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>: owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
     </div>
 
     <!-- DELIVERY & SCHEDULE -->
     <div class="trk">
     <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
-    <p class="content-p">How the project was actually run end-to-end — the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
+    <p class="content-p">How the project was actually run end-to-end: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
 
     <div class="callout">
       <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
-      <p>Go-Live was tied to the <b>January academic term</b> — the reward programme had to launch with the term to be meaningful. At Cycle 1 the project carried <b>11 go-live blockers</b> including the critical DEF-001 bulk-assign defect, directly threatening that fixed date.</p>
+      <p>Go-Live was tied to the <b>January academic term</b>: the reward programme had to launch with the term to be meaningful. At Cycle 1 the project carried <b>11 go-live blockers</b> including the critical DEF-001 bulk-assign defect, directly threatening that fixed date.</p>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Project timeline &middot; month-by-month</p>
       <div class="trk-scroll"><div class="trk-gantt" style="--cols:8">
         <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div></div></div>
-        <div class="trk-row"><div class="trk-label">Onboarding + acceptance criteria</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Onboarding + acceptance criteria">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT Cycle 1 — DEF-001 found</div><div class="trk-track"><span class="trk-bar warn" style="--s:2;--l:1" title="UAT Cycle 1 — DEF-001 found">C1 ⚠</span></div></div><div class="trk-row"><div class="trk-label">Cycles 2–4 — blocker burn-down</div><div class="trk-track"><span class="trk-bar recover" style="--s:3;--l:3" title="Cycles 2–4 — blocker burn-down">C2–4</span></div></div><div class="trk-row"><div class="trk-label">Cycle 5 + regression + sign-off</div><div class="trk-track"><span class="trk-bar done" style="--s:6;--l:2" title="Cycle 5 + regression + sign-off">C5</span></div></div><div class="trk-row"><div class="trk-label">Go-Live (academic term)</div><div class="trk-track"><span class="trk-bar live" style="--s:8;--l:1" title="Go-Live (academic term)">LIVE</span></div></div>
+        <div class="trk-row"><div class="trk-label">Onboarding + acceptance criteria</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Onboarding + acceptance criteria">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT Cycle 1 · DEF-001 found</div><div class="trk-track"><span class="trk-bar warn" style="--s:2;--l:1" title="UAT Cycle 1 · DEF-001 found">C1 ⚠</span></div></div><div class="trk-row"><div class="trk-label">Cycles 2–4 · blocker burn-down</div><div class="trk-track"><span class="trk-bar recover" style="--s:3;--l:3" title="Cycles 2–4 · blocker burn-down">C2–4</span></div></div><div class="trk-row"><div class="trk-label">Cycle 5 + regression + sign-off</div><div class="trk-track"><span class="trk-bar done" style="--s:6;--l:2" title="Cycle 5 + regression + sign-off">C5</span></div></div><div class="trk-row"><div class="trk-label">Go-Live (academic term)</div><div class="trk-track"><span class="trk-bar live" style="--s:8;--l:1" title="Go-Live (academic term)">LIVE</span></div></div>
       </div></div>
       <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>11 go-live blockers threatened the Jan date</b><p>The bulk-assignment defect (DEF-001) failed silently and 11 P1 blockers stood between the build and a usable launch with only months of runway.<span class="res"> Resolved → I severity-triaged every defect, ran 5 iterative UAT cycles, and drove blockers 7 → 2 → 2 → 0 — clearing all of them by Cycle 4 and hitting the January Go-Live with <span class="res">zero critical post-launch incidents</span>.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Silent-failure class of bug</b><p>DEF-001 produced no error message — the hardest type to catch and the kind that would have surfaced months into production.<span class="res"> Resolved → I made multi-select / negative-path testing a mandatory entry gate, so the same failure class is caught at Cycle 1, not in production.</span></p></div></div>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>11 go-live blockers threatened the Jan date</b><p>The bulk-assignment defect (DEF-001) failed silently and 11 P1 blockers stood between the build and a usable launch with only months of runway.<span class="res"> Resolved → I severity-triaged every defect, ran 5 iterative UAT cycles, and drove blockers 7 → 2 → 2 → 0, clearing all of them by Cycle 4 and hitting the January Go-Live with <span class="res">zero critical post-launch incidents</span>.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Silent-failure class of bug</b><p>DEF-001 produced no error message, the hardest type to catch and the kind that would have surfaced months into production.<span class="res"> Resolved → I made multi-select / negative-path testing a mandatory entry gate, so the same failure class is caught at Cycle 1, not in production.</span></p></div></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD — data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
       <div class="trk-two">
-        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field — keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b> — every FSD rule reproduced in the build.</li><li><b>Data model check</b> — fields, keys and validation match the spec.</li><li><b>Posting check</b> — correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b> — routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b> — nothing closes without a retest.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
       </div>
     </div>
 
@@ -689,9 +689,9 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Stakeholder network &amp; RACI</p>
-      <div class="trk-hub"><span class="you">Chatree — sole consultant</span> single point of accountability across <b>50+ UAT participants &middot; teachers (assign) &middot; students (redeem) &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You — BA + UAT Lead</b></td><td class="cnt">1</td><td>Acceptance criteria, defect mgmt, sign-off</td><td class="raci">A / R</td></tr><tr><td><b>UAT participants</b></td><td class="cnt">50+</td><td>Executed test scenarios across branches</td><td class="raci">R</td></tr><tr><td><b>Teachers</b></td><td class="cnt">many</td><td>Assign stars; primary operators</td><td class="raci">I / R</td></tr><tr><td><b>Students</b></td><td class="cnt">50+</td><td>Redeem rewards; end beneficiaries</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Fixed DEF-001 + built custom logic</td><td class="raci">R</td></tr></tbody></table>
-      <p class="trk-note">I joined mid-build and became the single owner of quality — coordinating 50+ testers and the dev team across 5 cycles. The DEF-001 catch alone changed whether this launched working or broken.</p>
+      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>50+ UAT participants &middot; teachers (assign) &middot; students (redeem) &middot; remote XeerSoft dev team</b></div>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA + UAT Lead</b></td><td class="cnt">1</td><td>Acceptance criteria, defect mgmt, sign-off</td><td class="raci">A / R</td></tr><tr><td><b>UAT participants</b></td><td class="cnt">50+</td><td>Executed test scenarios across branches</td><td class="raci">R</td></tr><tr><td><b>Teachers</b></td><td class="cnt">many</td><td>Assign stars; primary operators</td><td class="raci">I / R</td></tr><tr><td><b>Students</b></td><td class="cnt">50+</td><td>Redeem rewards; end beneficiaries</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Fixed DEF-001 + built custom logic</td><td class="raci">R</td></tr></tbody></table>
+      <p class="trk-note">I joined mid-build and became the single owner of quality, coordinating 50+ testers and the dev team across 5 cycles. The DEF-001 catch alone changed whether this launched working or broken.</p>
     </div>
     </div>
 
@@ -702,11 +702,11 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <div class="callout">
       <div class="callout-title">Acceptance criteria verified</div>
-      <p>· <strong>Voucher security controls</strong> — preventing duplicate redemption of same voucher</p>
-      <p>· <strong>Points redemption logic</strong> — partial vs full redemption, balance verification</p>
-      <p>· <strong>Campaign triggers</strong> — automated points award on configured events</p>
-      <p>· <strong>Regression testing</strong> — verified individual assignment still worked after bulk fix</p>
-      <p>· <strong>Audit trail</strong> — every transaction traceable via star log</p>
+      <p>· <strong>Voucher security controls</strong>: preventing duplicate redemption of same voucher</p>
+      <p>· <strong>Points redemption logic</strong>: partial vs full redemption, balance verification</p>
+      <p>· <strong>Campaign triggers</strong>: automated points award on configured events</p>
+      <p>· <strong>Regression testing</strong>: verified individual assignment still worked after bulk fix</p>
+      <p>· <strong>Audit trail</strong>: every transaction traceable via star log</p>
     </div>
 
     <h3 class="content-h3">Tools <em>& Technologies</em></h3>
@@ -723,7 +723,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 
     <h3 class="content-h3">Key <em>Insight</em></h3>
     <p class="content-p">
-      The biggest takeaway: <strong>UAT isn't just confirming what works — it's hunting for what fails silently</strong>. The bulk-assignment bug would have been invisible in production for months because there was no error message. Finding it required deliberately testing the <em>edge case</em> (multi-student selection) rather than the happy path (single student). Every UAT plan I write now starts with "what could fail without anyone noticing?"
+      The biggest takeaway: <strong>UAT isn't just confirming what works: it's hunting for what fails silently</strong>. The bulk-assignment bug would have been invisible in production for months because there was no error message. Finding it required deliberately testing the <em>edge case</em> (multi-student selection) rather than the happy path (single student). Every UAT plan I write now starts with "what could fail without anyone noticing?"
     </p>
 
   </div>

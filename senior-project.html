@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Senior Project · LiDAR-based Autonomous Driving (DDPG) — Chatree Kengpipat</title>
-<meta name="description" content="Senior Project at Chulalongkorn University — LiDAR-based Autonomous Driving Development using Deep Reinforcement Learning (DDPG) in CARLA Simulator. Python + TensorFlow 2.x.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapfamily=JetBrains+Mono:wght@400;500;600https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swapdisplay=swap" rel="stylesheet">
+<title>Senior Project · LiDAR-based Autonomous Driving (DDPG) · Chatree Kengpipat</title>
+<meta name="description" content="Senior Project at Chulalongkorn University: LiDAR-based Autonomous Driving Development using Deep Reinforcement Learning (DDPG) in CARLA Simulator. Python + TensorFlow 2.x.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script src="theme.js"></script>
 <script src="animation.js" defer></script>
@@ -126,7 +128,7 @@
 
     <h3 class="content-h3">Problem <em>Statement</em></h3>
     <p class="content-p">
-      Chulalongkorn University operates <strong>CU Toyota Ha:mo</strong> as part of an on-campus self-mobility service. The challenge was to develop an autonomous driving system that could respond to customer use cases — but previous research using <strong>Deep Q-Network (DQN)</strong> had two critical limitations:
+      Chulalongkorn University operates <strong>CU Toyota Ha:mo</strong> as part of an on-campus self-mobility service. The challenge was to develop an autonomous driving system that could respond to customer use cases, but previous research using <strong>Deep Q-Network (DQN)</strong> had two critical limitations:
     </p>
 
     <div class="callout">
@@ -138,12 +140,12 @@
 
     <h3 class="content-h3">My <em>Solution Strategy</em></h3>
     <p class="content-p">
-      Replace DQN with <strong>Deep Deterministic Policy Gradient (DDPG)</strong> — an actor-critic algorithm designed for continuous action spaces. DDPG outputs continuous values (e.g., steering angle ∈ [-1, +1]) instead of discrete bins, enabling smoother control. Extend the system to handle two parallel tasks: <strong>(1) Smooth Steering</strong> and <strong>(2) Adaptive Cruise Control</strong>.
+      Replace DQN with <strong>Deep Deterministic Policy Gradient (DDPG)</strong>, an actor-critic algorithm designed for continuous action spaces. DDPG outputs continuous values (e.g., steering angle ∈ [-1, +1]) instead of discrete bins, enabling smoother control. Extend the system to handle two parallel tasks: <strong>(1) Smooth Steering</strong> and <strong>(2) Adaptive Cruise Control</strong>.
     </p>
 
     <h3 class="content-h3">System <em>Architecture</em></h3>
     <p class="content-p">
-      The codebase is divided into <strong>5 modular Python files</strong>, each with a single responsibility. This separation enabled iterative development — I could modify reward functions or state representations without touching the DDPG agent code itself.
+      The codebase is divided into <strong>5 modular Python files</strong>, each with a single responsibility. This separation enabled iterative development: I could modify reward functions or state representations without touching the DDPG agent code itself.
     </p>
 
     <table class="process-table">
@@ -273,7 +275,7 @@
         <span class="algo-card-tag">Experience Replay</span>
       </div>
       <p class="algo-card-desc">
-        Stores transitions <strong>(s, a, r, s', done)</strong> in a deque buffer of max size 100,000. During training, batches of 64 transitions are sampled uniformly at random — this breaks temporal correlation between consecutive samples, which is essential for stable gradient updates in deep RL.
+        Stores transitions <strong>(s, a, r, s', done)</strong> in a deque buffer of max size 100,000. During training, batches of 64 transitions are sampled uniformly at random: this breaks temporal correlation between consecutive samples, which is essential for stable gradient updates in deep RL.
       </p>
       <div class="code-block-num">
         <div class="code-block-header">
@@ -301,7 +303,7 @@
         <span class="algo-card-tag">Exploration Strategy</span>
       </div>
       <p class="algo-card-desc">
-        Standard Gaussian noise is uncorrelated across time steps, which produces jittery exploration behaviour unsuitable for vehicle control. <strong>OU noise generates temporally-correlated random values</strong> — better suited to physical systems with momentum like cars.
+        Standard Gaussian noise is uncorrelated across time steps, which produces jittery exploration behaviour unsuitable for vehicle control. <strong>OU noise generates temporally-correlated random values</strong>, better suited to physical systems with momentum like cars.
       </p>
       <div class="hyperparam-grid">
         <div class="hyperparam">
@@ -371,7 +373,7 @@
         <span class="algo-card-tag">Value Function</span>
       </div>
       <p class="algo-card-desc">
-        The Critic estimates the <strong>Q-value</strong> for a (state, action) pair. Unlike the Actor, state and action enter via <strong>separate processing branches</strong> and are concatenated mid-network — this design choice allows the network to learn richer state-action interactions than direct early-fusion would.
+        The Critic estimates the <strong>Q-value</strong> for a (state, action) pair. Unlike the Actor, state and action enter via <strong>separate processing branches</strong> and are concatenated mid-network: this design choice allows the network to learn richer state-action interactions than direct early-fusion would.
       </p>
       <div class="formula-block">
         <div class="formula-label">Architecture</div>
@@ -451,7 +453,7 @@ Soft Update: θ_target ← τ·θ + (1 − τ)·θ_target
 
       <h3 class="content-h3" style="font-size: 1.4rem;">State <em>Space Design (7-dim)</em></h3>
       <p class="content-p">
-        I designed a 7-dimensional state vector after iterating across several earlier configurations. <strong>Model 4 (the final design) was the best performer</strong> — the inclusion of <code>last_action</code> was the breakthrough that produced smooth, jerk-free steering.
+        I designed a 7-dimensional state vector after iterating across several earlier configurations. <strong>Model 4 (the final design) was the best performer</strong>: the inclusion of <code>last_action</code> was the breakthrough that produced smooth, jerk-free steering.
       </p>
 
       <table class="state-table">
@@ -504,7 +506,7 @@ Soft Update: θ_target ← τ·θ + (1 − τ)·θ_target
             <td class="state-num">7</td>
             <td class="state-name">last_action</td>
             <td class="state-range">[−1, 1]</td>
-            <td><strong>Previous steering — enables smooth control</strong></td>
+            <td><strong>Previous steering: enables smooth control</strong></td>
           </tr>
         </tbody>
       </table>
@@ -527,7 +529,7 @@ Out-of-track       = −5.0   (lateral dist > 3 m)
         <div class="callout-title">Rationale of each term</div>
         <p><strong>· COS(φ):</strong> Maximum (=1) when car heading aligns with path direction; smoothly decays to −1 when 180° opposite</p>
         <p><strong>· −0.1 × dist_from_track:</strong> Linear penalty on lateral drift; coefficient 0.1 chosen so it doesn't dominate the alignment signal</p>
-        <p><strong>· −1 jerk penalty:</strong> Triggered when steering changes by ≥0.4 between consecutive steps — teaches the agent to plan smooth manoeuvres</p>
+        <p><strong>· −1 jerk penalty:</strong> Triggered when steering changes by ≥0.4 between consecutive steps: teaches the agent to plan smooth manoeuvres</p>
         <p><strong>· −10 / −5 hard penalties:</strong> Terminate the episode quickly when the agent fails catastrophically (collision or off-track)</p>
       </div>
 
@@ -570,7 +572,7 @@ Out-of-track       = −5.0   (lateral dist > 3 m)
 
       <div class="callout">
         <div class="callout-title">Key finding · Generalisation</div>
-        <p>The trained model performed almost as well on an <strong>unseen path (0.693m error)</strong> as on the training path (0.613m). This was the central success criterion — proving the agent learned <em>general steering principles</em> rather than memorising one specific route. Previous DQN-based research had failed this test.</p>
+        <p>The trained model performed almost as well on an <strong>unseen path (0.693m error)</strong> as on the training path (0.613m). This was the central success criterion, proving the agent learned <em>general steering principles</em> rather than memorising one specific route. Previous DQN-based research had failed this test.</p>
       </div>
     </div>
 
@@ -589,12 +591,12 @@ Out-of-track       = −5.0   (lateral dist > 3 m)
       </div>
 
       <p class="content-p">
-        <strong>Objective:</strong> Maintain a safe <strong>2-second time gap</strong> from the lead vehicle — the industry-standard safe-following distance. The agent controls throttle/brake (continuous, single axis) while the lead car cruises at a random fixed speed.
+        <strong>Objective:</strong> Maintain a safe <strong>2-second time gap</strong> from the lead vehicle, the industry-standard safe-following distance. The agent controls throttle/brake (continuous, single axis) while the lead car cruises at a random fixed speed.
       </p>
 
       <h3 class="content-h3" style="font-size: 1.4rem;">State <em>Space Design (4-dim)</em></h3>
       <p class="content-p">
-        For ACC, I designed a 4-dimensional state vector — distance to lead car (current and rate-of-change), time-gap in seconds, and ego velocity. The <code>dist_change</code> dimension was critical for the agent to learn predictive braking.
+        For ACC, I designed a 4-dimensional state vector: distance to lead car (current and rate-of-change), time-gap in seconds, and ego velocity. The <code>dist_change</code> dimension was critical for the agent to learn predictive braking.
       </p>
 
       <table class="state-table">
@@ -636,7 +638,7 @@ Out-of-track       = −5.0   (lateral dist > 3 m)
 
       <h3 class="content-h3" style="font-size: 1.4rem;">Reward <em>Function Design</em></h3>
       <p class="content-p">
-        The ACC reward uses an <strong>asymmetric penalty</strong> — too far behind incurs full penalty (<code>n=1</code>), but too close incurs only half penalty (<code>n=0.5</code>). This was a deliberate design choice: collision is far more dangerous than excessive following distance, so the loss landscape needed to reflect that asymmetry.
+        The ACC reward uses an <strong>asymmetric penalty</strong>: too far behind incurs full penalty (<code>n=1</code>), but too close incurs only half penalty (<code>n=0.5</code>). This was a deliberate design choice: collision is far more dangerous than excessive following distance, so the loss landscape needed to reflect that asymmetry.
       </p>
 
       <div class="formula-block">
@@ -653,7 +655,7 @@ Stopped penalty   = −2.0   (velocity < 0.1 m/s)
 
       <div class="callout">
         <div class="callout-title">Design intuition</div>
-        <p>Maximum reward (=1.0) is achieved <strong>exactly at T = 2 seconds</strong>. The asymmetric n value (1.0 vs 0.5) makes the agent more tolerant of being slightly too close than slightly too far — but the −10 collision penalty ensures it never gets <em>too</em> close. This shapes a useful trade-off rather than letting the agent default to following far behind.</p>
+        <p>Maximum reward (=1.0) is achieved <strong>exactly at T = 2 seconds</strong>. The asymmetric n value (1.0 vs 0.5) makes the agent more tolerant of being slightly too close than slightly too far, but the −10 collision penalty ensures it never gets <em>too</em> close. This shapes a useful trade-off rather than letting the agent default to following far behind.</p>
       </div>
 
       <h3 class="content-h3" style="font-size: 1.4rem;">Vehicle <em>Setup</em></h3>
@@ -700,13 +702,13 @@ Stopped penalty   = −2.0   (velocity < 0.1 m/s)
 
       <div class="callout">
         <div class="callout-title">Challenge mode validation</div>
-        <p>In Challenge Mode, the lead vehicle decelerates mid-episode from ~10 m/s down to 3–6 m/s. The trained agent successfully reduced throttle and applied brake in response — proving it had learned <strong>reactive control</strong> rather than just steady-state following.</p>
+        <p>In Challenge Mode, the lead vehicle decelerates mid-episode from ~10 m/s down to 3–6 m/s. The trained agent successfully reduced throttle and applied brake in response, proving it had learned <strong>reactive control</strong> rather than just steady-state following.</p>
       </div>
     </div>
 
     <h3 class="content-h3">Training <em>Methodology</em></h3>
     <p class="content-p">
-      Both tasks used <strong>5,000 episodes</strong> with a warm-up phase of random actions (1,000 steps for steering, 500 for ACC) before training begins. This warm-up populates the Replay Buffer with diverse experiences before any gradient updates — critical for stable early training.
+      Both tasks used <strong>5,000 episodes</strong> with a warm-up phase of random actions (1,000 steps for steering, 500 for ACC) before training begins. This warm-up populates the Replay Buffer with diverse experiences before any gradient updates, critical for stable early training.
     </p>
 
     <table class="process-table">
@@ -771,7 +773,7 @@ python train.py --task steer --host localhost --port <span class="number">2000</
 
     <div class="callout">
       <div class="callout-title">The testing discipline that became my BA habit</div>
-      <p>This Senior Project planted the seed of what I now call "<strong>structured testing methodology</strong>" — define acceptance criteria up front, test across multiple scenarios (including edge cases), measure quantitatively, and iterate until convergence. <strong>The exact same discipline appears in my UAT work on the CRM Loyalty project</strong> (5 build cycles, 60 defects tracked) — different domain, identical method.</p>
+      <p>This Senior Project planted the seed of what I now call "<strong>structured testing methodology</strong>": define acceptance criteria up front, test across multiple scenarios (including edge cases), measure quantitatively, and iterate until convergence. <strong>The exact same discipline appears in my UAT work on the CRM Loyalty project</strong> (5 build cycles, 60 defects tracked), different domain, identical method.</p>
     </div>
 
     <h3 class="content-h3">Final <em>Results Summary</em></h3>
@@ -819,9 +821,9 @@ python train.py --task steer --host localhost --port <span class="number">2000</
 
     <div class="callout">
       <div class="callout-title">Four transferable disciplines</div>
-      <p><strong>1. Modular system design.</strong> 5 files, single responsibility per file. The same separation principle I apply when structuring BRDs, FSDs, ERDs, and Test Cases — each artifact has one purpose and one audience.</p>
+      <p><strong>1. Modular system design.</strong> 5 files, single responsibility per file. The same separation principle I apply when structuring BRDs, FSDs, ERDs, and Test Cases: each artifact has one purpose and one audience.</p>
       <p><strong>2. Iterative refinement with quantified feedback.</strong> Model 1 → 2 → 3 → 4, each version measured against the same metric (path error). Same as UAT Cycle 1 → 2 → 3 → 4 → 5 in my CRM project.</p>
-      <p><strong>3. Reward / acceptance criteria design.</strong> Asking "what behaviour do I want to incentivise?" — whether shaping an RL reward or writing UAT pass/fail criteria, the design discipline is identical.</p>
+      <p><strong>3. Reward / acceptance criteria design.</strong> Asking "what behaviour do I want to incentivise?", whether shaping an RL reward or writing UAT pass/fail criteria, the design discipline is identical.</p>
       <p><strong>4. Generalisation testing.</strong> Always test on data different from what you trained on. In BA work: always test edge cases, not just the happy path.</p>
     </div>
 
