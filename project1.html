@@ -19,9 +19,10 @@
   --fx-glow: color-mix(in srgb, var(--accent,#c8962d) 32%, transparent);
 }
 html{ scroll-behavior:smooth; }
-#fx-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;
+#fx-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:9999;
+  transform:scaleX(0);transform-origin:left;will-change:transform;
   background:linear-gradient(90deg,var(--fx-accent),var(--fx-success));
-  box-shadow:0 0 14px var(--fx-glow);transition:width .12s linear;}
+  box-shadow:0 0 14px var(--fx-glow);transition:transform .12s linear;}
 
 html.js .fx-reveal{opacity:0;transform:translateY(22px);
   transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
@@ -148,7 +149,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim-log{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--xs-muted);max-height:150px;overflow:auto;margin-top:.7rem;border:1px solid var(--xs-border);border-radius:8px;padding:.5rem .7rem;background:var(--xs-bg)}
 .xsim-log div{padding:.18rem 0;border-bottom:1px dashed var(--xs-border)}.xsim-log div:last-child{border:0}
 .xsim-meter{height:10px;border-radius:99px;background:var(--xs-border);overflow:hidden;margin-top:.5rem}
-.xsim-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:width .5s}
+.xsim-meter i{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:transform .5s}
 .xsim-post{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--xs-text);line-height:1.7;margin-top:.4rem}
 </style>
 <!-- TRACK :: Delivery & Schedule styles (Claude) -->
@@ -182,8 +183,8 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .trk-legend{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:.9rem;font-size:.7rem;color:var(--t-muted)}
 .trk-legend span{display:inline-flex;align-items:center;gap:.4rem}
 .trk-legend i{width:15px;height:10px;border-radius:3px;display:inline-block}
-.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-left:3px solid var(--t-warn);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
-.trk-flag.ok{border-left-color:var(--t-ok)}
+.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
+.trk-flag.ok{border-color:color-mix(in srgb,var(--t-ok) 38%,var(--t-border))}
 .trk-flag .ic{font-size:1rem;line-height:1.4;flex:0 0 auto}
 .trk-flag b{color:var(--t-text);font-size:.84rem}.trk-flag p{margin:.25rem 0 0;font-size:.79rem;color:var(--t-muted);line-height:1.5}
 .trk-flag .res{color:var(--t-ok);font-weight:600}
@@ -226,6 +227,341 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-chip,.xsim .xsim-post,.xsim .xsim-tbl td,.xsim .xsim-log,.xsim .xsim-node small{font-variant-numeric:tabular-nums;}
 .xsim .xsim-chip{font-family:'JetBrains Mono','DM Mono',monospace;font-size:.74rem;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-post{font-family:'JetBrains Mono','DM Mono',monospace;}
+</style>
+<!-- P1-LUX :: project-scoped luxury layer · Engineer's Console / Implementation Blue (Claude) -->
+<style id="p1-lux">
+/* Refined rendering, selection & focus for this page only */
+::selection{ background: color-mix(in srgb, var(--accent) 26%, transparent); color: var(--text-strong); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+.result-cell:focus-visible, .module-tag:focus-visible{
+  outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 5px;
+}
+.result-val, .result-change, .p1-delta-num, .trk-kpi .v,
+.xsim-kv span:last-child, .process-table td{ font-variant-numeric: tabular-nums; }
+
+/* ---------------- HERO · atmosphere + spec sheet ---------------- */
+.project-hero{ isolation: isolate; }
+.project-hero::before{                       /* faint engineering grid, masked to fade out */
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px);
+  background-size: 58px 58px, 58px 58px;
+  -webkit-mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%);
+          mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%);
+  opacity:.55;
+}
+.project-hero h1{ text-wrap: balance; overflow-wrap: anywhere; }
+/* Stop grid min-content blow-out so the hero never overflows / clips on narrow screens */
+.project-hero-grid{ min-width:0; }
+.project-hero-grid > *{ min-width:0; }
+.platform-badge{ flex-wrap:wrap; max-width:100%; }
+
+.project-info-card{
+  background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 5%, var(--surface)), var(--surface));
+}
+.p1-spec-head{
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:'JetBrains Mono',monospace; font-size:.62rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-subtle);
+  padding-bottom:.85rem; margin-bottom:.5rem; border-bottom:1px solid var(--border);
+}
+.p1-spec-head span:last-child{ color:var(--accent); }
+.project-info-val.p1-live{
+  display:inline-flex; align-items:center; justify-content:flex-end; gap:.45rem;
+  color:var(--success); font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600;
+}
+.project-info-val.p1-live::before{
+  content:""; width:7px; height:7px; border-radius:50%; background:var(--success);
+  animation:p1Pulse 2.2s infinite;
+}
+@keyframes p1Pulse{
+  0%{ box-shadow:0 0 0 0 color-mix(in srgb,var(--success) 55%,transparent); }
+  70%{ box-shadow:0 0 0 7px transparent; }
+  100%{ box-shadow:0 0 0 0 transparent; }
+}
+
+/* ---------------- KPI BANNER · before→after delta cells ---------------- */
+.results-banner .result-cell::before{ display:none; }   /* remove banned green side-stripe */
+.p1-stat{
+  background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 4%, var(--surface)), var(--surface));
+  padding: 1.55rem 1.45rem;
+}
+.p1-stat:hover{
+  border-color: color-mix(in srgb,var(--accent) 45%, var(--border));
+  box-shadow: 0 24px 52px -32px color-mix(in srgb,var(--accent) 70%, transparent);
+}
+.p1-stat-head{ display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; }
+.p1-stat .result-val{ font-size:2.05rem; color:var(--text-strong); letter-spacing:-.045em; margin:0; }
+.p1-stat-dir{
+  font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:600; letter-spacing:.03em;
+  color:var(--success); white-space:nowrap;
+  background: color-mix(in srgb,var(--success) 12%, transparent);
+  border:1px solid color-mix(in srgb,var(--success) 30%, transparent);
+  padding:.2rem .5rem; border-radius:100px;
+}
+.p1-stat .result-label{ margin:.55rem 0 .9rem; }
+.p1-delta{ display:flex; flex-direction:column; gap:.45rem; }
+.p1-delta-row{ display:grid; grid-template-columns:3.2rem 1fr 3.2rem; align-items:center; gap:.55rem; min-width:0; }
+.p1-delta-tag{
+  font-family:'JetBrains Mono',monospace; font-size:.56rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--text-subtle);
+}
+.p1-delta-track{ height:7px; border-radius:100px; background:var(--surface-3); overflow:hidden; }
+.p1-delta-bar{ display:block; height:100%; border-radius:100px; transform-origin:left; transform:scaleX(var(--w)); }
+.p1-delta-bar.before{ background: color-mix(in srgb, var(--text-subtle) 60%, transparent); }
+.p1-delta-bar.after{ background: linear-gradient(90deg, var(--accent), var(--accent-soft)); }
+.p1-delta-num{ font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--text); text-align:right; }
+.p1-delta-row.before .p1-delta-num{ color:var(--text-muted); }
+/* JS path: visible by default, html.js collapses then fills on reveal (never ships blank) */
+html.js .p1-delta-bar{ transform:scaleX(0); transition:transform 1s cubic-bezier(.22,.61,.36,1); }
+html.js .fx-in .p1-delta-bar{ transform:scaleX(var(--w)); }
+html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
+
+/* ---------------- CALLOUT · side-stripe → label-chip card ---------------- */
+.content-section .callout{
+  border: 1px solid color-mix(in srgb,var(--accent) 20%, var(--border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent) 5%, var(--bg));
+  padding: 1.4rem 1.6rem;
+  transition: border-color .35s ease, box-shadow .35s ease, transform .35s ease;
+}
+.content-section .callout:hover{
+  border-color: color-mix(in srgb,var(--accent) 42%, var(--border));
+  box-shadow: 0 20px 46px -32px color-mix(in srgb,var(--accent) 62%, transparent);
+}
+.content-section .callout-title{
+  display:inline-flex; align-items:center; gap:.5rem; margin-bottom:.95rem;
+  background: var(--accent-bg); color: var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 25%, transparent);
+  padding:.32rem .7rem; border-radius:100px;
+}
+.content-section .callout-title::before{
+  content:""; width:6px; height:6px; border-radius:1.5px; background:var(--accent); transform:rotate(45deg);
+}
+
+/* ---------------- CODE · editor-chrome window ---------------- */
+.p1-code{
+  margin:1.25rem 0; border:1px solid var(--border); border-radius:var(--radius-md);
+  overflow:hidden; background:var(--surface); box-shadow:var(--shadow-sm);
+}
+.p1-code .code-block{ margin:0; border:0; border-radius:0; background:transparent; }
+.p1-code-bar{
+  display:flex; align-items:center; gap:.7rem; padding:.6rem .95rem; flex-wrap:wrap;
+  background:var(--surface-2); border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--text-muted);
+}
+.p1-code-dots{ display:flex; gap:.34rem; flex:0 0 auto; }
+.p1-code-dots i{ width:9px; height:9px; border-radius:50%; background:var(--border-strong); }
+.p1-code-file{ color:var(--text); font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.p1-code-lang{
+  margin-left:auto; color:var(--accent); font-weight:600;
+  background:var(--accent-bg); border-radius:100px; padding:.14rem .6rem;
+  border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);
+}
+
+/* ---------------- DASHBOARD frame ---------------- */
+.dashboard-section{ box-shadow: var(--shadow-lg); }
+.dashboard-image{ border-top:1px solid var(--border); }
+
+/* ---------------- DELIVERY · flag icon emphasis ---------------- */
+.trk-flag .ic{ color:var(--t-warn); }
+.trk-flag.ok .ic{ color:var(--t-ok); }
+
+/* ---------------- reduced motion ---------------- */
+@media (prefers-reduced-motion: reduce){
+  html.js .p1-delta-bar{ transition:none !important; transform:scaleX(var(--w)) !important; }
+  .project-info-val.p1-live::before{ animation:none; }
+}
+</style>
+<!-- P1-PR :: procurement order-entry exhibit (recreation) (Claude) -->
+<style id="p1-pr">
+.pr{border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.6rem 0;background:var(--surface);
+  box-shadow:0 26px 64px -42px rgba(15,23,42,.5);font-family:Inter,system-ui,sans-serif;}
+.pr *{box-sizing:border-box}
+.pr-ribbon{display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;font-family:'JetBrains Mono',monospace;
+  font-size:.64rem;letter-spacing:.01em;color:var(--text-muted);line-height:1.5;
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warning) 9%,transparent) 0 10px,transparent 10px 20px);
+  border-bottom:1px dashed var(--border-strong);}
+.pr-ribbon b{color:var(--text);font-weight:700}
+.pr-bar{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);
+  background:var(--surface-2);font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-muted)}
+.pr-dots{display:flex;gap:.34rem;flex:0 0 auto}.pr-dots i{width:9px;height:9px;border-radius:50%;background:var(--border-strong)}
+.pr-crumb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pr-crumb b{color:var(--text)}
+.pr-live{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;gap:.4rem;color:var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:99px;padding:.18rem .6rem;
+  font-size:.6rem;letter-spacing:.12em;background:var(--accent-bg)}
+.pr-body{display:grid;grid-template-columns:1fr 322px;gap:0}
+.pr-catalog{padding:1rem 1.1rem;min-width:0;border-right:1px solid var(--border)}
+.pr-cats{display:flex;gap:.4rem;margin-bottom:.9rem}
+.pr-cat{flex:0 0 auto;background:var(--bg);border:1px solid var(--border);color:var(--text-muted);
+  border-radius:8px;padding:.5rem .9rem;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:.45rem;transition:color .2s,border-color .2s,background .2s}
+.pr-cat.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pr-cat .ct{font-family:'JetBrains Mono',monospace;font-size:.62rem;opacity:.85;
+  background:color-mix(in srgb,var(--text) 8%,transparent);border-radius:99px;padding:.05rem .35rem}
+.pr-cat.on .ct{background:rgba(255,255,255,.22)}
+.pr-bands{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.85rem}
+.pr-band{background:var(--bg);border:1px solid var(--border);color:var(--text-muted);border-radius:99px;
+  padding:.32rem .75rem;font:inherit;font-size:.72rem;cursor:pointer;transition:.2s}
+.pr-band.on{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);font-weight:600}
+.pr-band small{font-family:'JetBrains Mono',monospace;opacity:.7;margin-left:.35rem}
+.pr-list{display:flex;flex-direction:column;gap:.45rem;max-height:440px;overflow:auto;padding-right:.25rem}
+.pr-item{display:grid;grid-template-columns:1fr auto;gap:.5rem .8rem;align-items:center;min-width:0;
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.6rem .75rem;transition:border-color .2s}
+.pr-item:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--border))}
+.pr-it-main{min-width:0}
+.pr-code{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--accent);letter-spacing:.02em}
+.pr-name{display:block;font-size:.84rem;color:var(--text);font-weight:600;margin:.12rem 0 .3rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-tags{display:flex;flex-wrap:wrap;gap:.3rem}
+.pr-tag{font-family:'JetBrains Mono',monospace;font-size:.57rem;padding:.12rem .42rem;border-radius:99px;
+  border:1px solid var(--border);color:var(--text-muted);white-space:nowrap}
+.pr-tag.poisson{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);background:var(--accent-bg)}
+.pr-tag.reorder{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 42%,transparent);background:color-mix(in srgb,var(--warning) 13%,transparent)}
+.pr-tag.ok{color:var(--success);border-color:color-mix(in srgb,var(--success) 35%,transparent);background:color-mix(in srgb,var(--success) 10%,transparent)}
+.pr-it-side{display:flex;flex-direction:column;align-items:flex-end;gap:.45rem}
+.pr-price{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text);font-variant-numeric:tabular-nums}
+.pr-add-row{display:flex;align-items:center;gap:.35rem}
+.pr-step{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.pr-step button{background:var(--surface-2);border:0;color:var(--text);width:24px;height:26px;font:inherit;font-size:.95rem;cursor:pointer;line-height:1}
+.pr-step button:hover{background:var(--surface-3)}
+.pr-step input{width:36px;height:26px;border:0;border-left:1px solid var(--border);border-right:1px solid var(--border);
+  text-align:center;background:var(--bg);color:var(--text);font:inherit;font-size:.78rem;font-variant-numeric:tabular-nums}
+.pr-add{background:var(--accent);color:#fff;border:0;border-radius:8px;width:28px;height:28px;font-size:1.05rem;line-height:1;cursor:pointer;flex:0 0 auto;transition:filter .15s,transform .1s}
+.pr-add:hover{filter:brightness(1.08)}.pr-add:active{transform:scale(.94)}
+.pr-cart{display:flex;flex-direction:column;background:var(--surface-2);min-width:0}
+.pr-cart-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;
+  font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);display:flex;justify-content:space-between;align-items:center}
+.pr-cart-head b{color:var(--text)}
+.pr-lines{flex:1;min-height:118px;max-height:300px;overflow:auto;padding:.7rem .85rem;display:flex;flex-direction:column;gap:.5rem}
+.pr-empty{color:var(--text-subtle);font-size:.78rem;text-align:center;padding:1.7rem .5rem;line-height:1.6}
+.pr-line{display:grid;grid-template-columns:1fr auto auto;gap:.5rem;align-items:center;font-size:.78rem;border-bottom:1px dashed var(--border);padding-bottom:.5rem}
+.pr-line:last-child{border-bottom:0;padding-bottom:0}
+.pr-line-name{min-width:0;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr-line-name small{display:block;color:var(--text-subtle);font-family:'JetBrains Mono',monospace;font-size:.6rem;white-space:nowrap}
+.pr-line-amt{font-family:'JetBrains Mono',monospace;color:var(--text);font-variant-numeric:tabular-nums}
+.pr-line-x{background:none;border:0;color:var(--text-subtle);cursor:pointer;font-size:.95rem;padding:0 .15rem;line-height:1}
+.pr-line-x:hover{color:var(--danger)}
+.pr-foot{border-top:1px solid var(--border);padding:.85rem 1rem;display:flex;flex-direction:column;gap:.7rem}
+.pr-sub{display:flex;justify-content:space-between;align-items:baseline}
+.pr-sub .l{font-size:.72rem;color:var(--text-muted)}
+.pr-sub .v{font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.pr-route{font-size:.72rem;border:1px solid var(--border);border-radius:8px;padding:.55rem .65rem;background:var(--bg);line-height:1.5}
+.pr-route .rl{font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-subtle);display:block;margin-bottom:.3rem}
+.pr-route .hint{color:var(--text-muted);font-size:.68rem;margin-left:.4rem}
+.pr-chip{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;padding:.18rem .5rem;border-radius:99px;border:1px solid}
+.pr-chip.l1{color:var(--success);border-color:color-mix(in srgb,var(--success) 35%,transparent);background:color-mix(in srgb,var(--success) 10%,transparent)}
+.pr-chip.l2{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 42%,transparent);background:color-mix(in srgb,var(--warning) 11%,transparent)}
+.pr-submit{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:.65rem;font:inherit;font-weight:700;font-size:.85rem;cursor:pointer;transition:filter .15s,transform .1s}
+.pr-submit:hover{filter:brightness(1.07)}.pr-submit:active{transform:translateY(1px)}
+.pr-ok{font-size:.74rem;line-height:1.6}.pr-ok b{font-family:'JetBrains Mono',monospace}
+.pr-cap{font-size:.69rem;color:var(--text-muted);padding:.6rem 1rem;border-top:1px solid var(--border);font-style:italic;background:var(--surface)}
+@media(max-width:760px){.pr-body{grid-template-columns:1fr}.pr-catalog{border-right:0;border-bottom:1px solid var(--border)}}
+@media (prefers-reduced-motion:reduce){.pr-add:active,.pr-submit:active{transform:none}}
+</style>
+<!-- P1-EXH :: worked-calc + vendor scorecard exhibits (recreation) (Claude) -->
+<style id="p1-exh">
+.exh{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:1.5rem 0;background:var(--surface)}
+.exh-ribbon{display:flex;gap:.45rem;align-items:flex-start;padding:.55rem .9rem;font-family:'JetBrains Mono',monospace;
+  font-size:.63rem;line-height:1.5;color:var(--text-muted);
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warning) 9%,transparent) 0 10px,transparent 10px 20px);
+  border-bottom:1px dashed var(--border-strong)}
+.exh-ribbon b{color:var(--text);font-weight:700}
+.exh-body{padding:.85rem .95rem;overflow-x:auto}
+.exh-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.exh-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--text-muted);text-align:left;padding:.5rem .55rem;border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap}
+.exh-table td{padding:.55rem .55rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;font-variant-numeric:tabular-nums}
+.exh-table tbody tr:last-child td{border-bottom:0}
+.exh-table .sku{font-weight:600;white-space:nowrap}
+.exh-table .res{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700}
+.exh-tag{font-family:'JetBrains Mono',monospace;font-size:.56rem;padding:.08rem .38rem;border-radius:99px;border:1px solid var(--border);color:var(--text-muted);margin-left:.3rem}
+.exh-tag.po{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);background:var(--accent-bg)}
+.exh-formula{font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.75;color:var(--text);white-space:pre-wrap;
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin-top:.85rem;overflow-x:auto}
+.exh-formula .k{color:var(--accent);font-weight:600}.exh-formula .c{color:var(--text-muted);font-style:italic}
+.vs-score{display:flex;align-items:center;gap:.5rem;min-width:108px}
+.vs-bar{flex:1;height:6px;border-radius:99px;background:var(--surface-3);overflow:hidden;min-width:44px}
+.vs-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-soft))}
+.vs-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text);font-variant-numeric:tabular-nums}
+.vs-ot{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+.vs-foot{font-size:.74rem;color:var(--text-muted);padding:.7rem .95rem;border-top:1px solid var(--border);background:var(--surface-2);line-height:1.6}
+.vs-foot b{color:var(--text)}
+</style>
+<!-- P1-MRP :: MRP methodology simulation section (Claude) -->
+<style id="p1-mrp">
+.mrp-sub{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;margin:2.2rem 0 .7rem;display:flex;align-items:center;gap:.6rem}
+.mrp-sub::before{content:"";width:18px;height:2px;background:var(--accent);border-radius:2px;flex:0 0 auto}
+.mrp-duo{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0}
+.mrp-cell{border:1px solid var(--border);border-radius:var(--radius-md);padding:1.1rem 1.2rem;background:var(--surface)}
+.mrp-cell.dep{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 7%,var(--surface)),var(--surface));
+  border-color:color-mix(in srgb,var(--accent) 30%,var(--border))}
+.mrp-cell .lab{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-subtle);letter-spacing:.08em;text-transform:uppercase}
+.mrp-cell.dep .lab{color:var(--accent)}
+.mrp-cell h5{font-size:.98rem;margin:.2rem 0 0;color:var(--text-strong)}
+.mrp-cell p{font-size:.84rem;color:var(--text-muted);line-height:1.6;margin:.5rem 0 0}
+.mrp-cell p strong{color:var(--text)}
+.mrp-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:.5rem;margin:1rem 0}
+.mrp-node{border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;background:var(--surface);text-align:center;display:flex;flex-direction:column;justify-content:center;gap:.45rem}
+.mrp-node.eng{background:var(--accent);border-color:var(--accent);box-shadow:0 20px 40px -24px color-mix(in srgb,var(--accent) 85%,transparent)}
+.mrp-node .nt{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-subtle)}
+.mrp-node.eng .nt{color:rgba(255,255,255,.82)}
+.mrp-node b{font-size:.95rem;color:var(--text-strong)}.mrp-node.eng b{color:#fff;font-size:1.15rem;letter-spacing:.02em}
+.mrp-node .it{display:flex;flex-direction:column;gap:.32rem;margin-top:.1rem}
+.mrp-node .it span{font-size:.72rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;line-height:1.35}
+.mrp-node.eng .sub{font-family:'JetBrains Mono',monospace;font-size:.64rem;color:rgba(255,255,255,.9)}
+.mrp-arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;font-weight:700}
+.mrp-procs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+.mrp-proc{flex:1 1 158px;border:1px solid var(--border);border-radius:var(--radius-md);padding:.9rem 1rem;background:var(--surface)}
+.mrp-proc .n{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);font-weight:700}
+.mrp-proc b{display:block;font-size:.92rem;color:var(--text-strong);margin:.25rem 0 .25rem}
+.mrp-proc span{font-size:.76rem;color:var(--text-muted);line-height:1.5}
+.mrp-rec{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:.9rem 0;background:var(--surface)}
+.mrp-rec-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem .9rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.mrp-rec-h b{font-size:1.05rem;color:var(--text-strong);font-weight:800;letter-spacing:-.01em}
+.mrp-rec-h .meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted)}
+.mrp-rec-h .meta .hl{color:var(--accent)}
+.mrp-scroll{overflow-x:auto}
+.mrp-tbl{border-collapse:collapse;width:100%;min-width:560px;font-size:.8rem}
+.mrp-tbl th,.mrp-tbl td{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:.44rem .55rem;text-align:center;font-variant-numeric:tabular-nums}
+.mrp-tbl th:last-child,.mrp-tbl td:last-child{border-right:0}
+.mrp-tbl thead th{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);background:var(--surface-2);font-weight:600}
+.mrp-tbl tbody th{font-weight:500;color:var(--text);text-align:left;white-space:nowrap;font-size:.75rem;
+  position:sticky;left:0;background:var(--surface);z-index:1;border-right:1px solid var(--border-strong);min-width:150px}
+.mrp-tbl td{color:var(--text-subtle)}
+.mrp-tbl td.v{color:var(--text);font-weight:700}
+.mrp-tbl tr.oh th{color:var(--text-muted)}.mrp-tbl tr.oh td{color:var(--text-muted)}
+.mrp-tbl tr.net th,.mrp-tbl tr.net td{background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.mrp-tbl tr.net td.v{color:var(--accent)}
+.mrp-tbl tr.rel th{color:var(--accent);font-weight:700}
+.mrp-tbl tr.rel td.v{color:#fff;background:var(--accent)}
+.mrp-tbl tbody tr:last-child th,.mrp-tbl tbody tr:last-child td{border-bottom:0}
+.mrp-cal-tbl{border-collapse:collapse;width:100%;min-width:580px}
+.mrp-cal-tbl th,.mrp-cal-tbl td{padding:.5rem .4rem;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+.mrp-cal-tbl th:last-child,.mrp-cal-tbl td:last-child{border-right:0}
+.mrp-cal-tbl thead th{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);background:var(--surface-2)}
+.mrp-cal-tbl tbody th{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;color:var(--text-strong);
+  position:sticky;left:0;background:var(--surface);border-right:1px solid var(--border-strong);min-width:64px}
+.mrp-cal-tbl tbody tr:last-child th,.mrp-cal-tbl tbody tr:last-child td{border-bottom:0}
+.mrp-rel{display:inline-block;background:var(--accent);color:#fff;border-radius:8px;padding:.3rem .55rem;
+  font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums;
+  box-shadow:0 10px 20px -12px color-mix(in srgb,var(--accent) 85%,transparent)}
+.mrp-cal-cap{font-size:.74rem;color:var(--text-muted);padding:.7rem .95rem;border-top:1px solid var(--border);background:var(--surface-2);line-height:1.6}
+.mrp-insight{border:1px solid color-mix(in srgb,var(--accent) 26%,var(--border));border-radius:var(--radius-md);
+  background:color-mix(in srgb,var(--accent) 6%,var(--bg));padding:1.2rem 1.4rem;margin:1.3rem 0}
+.mrp-insight .ttl{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.05em;color:var(--accent);font-weight:700;display:block;margin-bottom:.6rem}
+.mrp-insight p{font-size:.9rem;color:var(--text);line-height:1.7;margin:0}
+.mrp-insight p+p{margin-top:.6rem}
+.mrp-insight strong{color:var(--text-strong)}
+.mrp-chain{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--accent);font-weight:600;background:var(--bg);
+  border:1px solid var(--border);border-radius:var(--radius);padding:.6rem .8rem;margin:.7rem 0;overflow-x:auto;white-space:nowrap}
+@media(max-width:760px){
+  .mrp-duo{grid-template-columns:1fr}
+  .mrp-flow{grid-template-columns:1fr}
+  .mrp-arrow{transform:rotate(90deg);height:24px}
+}
 </style>
 </head>
 <body>
@@ -270,6 +606,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </div>
 
     <div class="project-info-card">
+      <div class="p1-spec-head"><span>Project Spec</span><span>P-01</span></div>
       <div class="project-info-row">
         <span class="project-info-label">Platform</span>
         <span class="project-info-val">XeerSoft Cloud ERP</span>
@@ -292,7 +629,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Status</span>
-        <span class="project-info-val" style="color: var(--success); font-family: 'DM Mono', monospace; font-size: 0.75rem;">✓ LIVE</span>
+        <span class="project-info-val p1-live">LIVE · Jun 2023</span>
       </div>
     </div>
   </div>
@@ -301,25 +638,37 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 <!-- RESULTS BANNER -->
 <section style="padding: 4rem 4rem 2rem;">
   <div class="results-banner">
-    <div class="result-cell">
-      <div class="result-val">▲ 86%</div>
-      <div class="result-label">Stockout Reduction</div>
-      <div class="result-change">22% → 3%</div>
+    <div class="result-cell p1-stat">
+      <div class="p1-stat-head"><div class="result-val">86%</div><span class="p1-stat-dir">▼ reduced</span></div>
+      <div class="result-label">Uniform stockout rate</div>
+      <div class="p1-delta">
+        <div class="p1-delta-row before"><span class="p1-delta-tag">before</span><span class="p1-delta-track"><i class="p1-delta-bar before" style="--w:.73"></i></span><span class="p1-delta-num">22%</span></div>
+        <div class="p1-delta-row after"><span class="p1-delta-tag">after</span><span class="p1-delta-track"><i class="p1-delta-bar after" style="--w:.10"></i></span><span class="p1-delta-num">3%</span></div>
+      </div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">100%</div>
-      <div class="result-label">Unauth PO Cut</div>
-      <div class="result-change">30% → 0%</div>
+    <div class="result-cell p1-stat">
+      <div class="p1-stat-head"><div class="result-val">100%</div><span class="p1-stat-dir">✓ eliminated</span></div>
+      <div class="result-label">Unauthorised POs</div>
+      <div class="p1-delta">
+        <div class="p1-delta-row before"><span class="p1-delta-tag">before</span><span class="p1-delta-track"><i class="p1-delta-bar before" style="--w:1"></i></span><span class="p1-delta-num">30%</span></div>
+        <div class="p1-delta-row after"><span class="p1-delta-tag">after</span><span class="p1-delta-track"><i class="p1-delta-bar after" style="--w:0"></i></span><span class="p1-delta-num">0%</span></div>
+      </div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">▲ 82%</div>
-      <div class="result-label">Write-off Reduced</div>
-      <div class="result-change">฿45K → ฿8K</div>
+    <div class="result-cell p1-stat">
+      <div class="p1-stat-head"><div class="result-val">82%</div><span class="p1-stat-dir">▼ reduced</span></div>
+      <div class="result-label">Textbook write-off</div>
+      <div class="p1-delta">
+        <div class="p1-delta-row before"><span class="p1-delta-tag">before</span><span class="p1-delta-track"><i class="p1-delta-bar before" style="--w:1"></i></span><span class="p1-delta-num">฿45K</span></div>
+        <div class="p1-delta-row after"><span class="p1-delta-tag">after</span><span class="p1-delta-track"><i class="p1-delta-bar after" style="--w:.18"></i></span><span class="p1-delta-num">฿8K</span></div>
+      </div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">▲ 28%</div>
-      <div class="result-label">Vendor On-Time</div>
-      <div class="result-change">68% → 87%</div>
+    <div class="result-cell p1-stat">
+      <div class="p1-stat-head"><div class="result-val">28%</div><span class="p1-stat-dir">▲ improved</span></div>
+      <div class="result-label">Vendor on-time delivery</div>
+      <div class="p1-delta">
+        <div class="p1-delta-row before"><span class="p1-delta-tag">before</span><span class="p1-delta-track"><i class="p1-delta-bar before" style="--w:.68"></i></span><span class="p1-delta-num">68%</span></div>
+        <div class="p1-delta-row after"><span class="p1-delta-tag">after</span><span class="p1-delta-track"><i class="p1-delta-bar after" style="--w:.87"></i></span><span class="p1-delta-num">87%</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -460,11 +809,157 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       </tbody>
     </table>
 
+    <h3 class="content-h3">Purchase Requisition · <em>Order Entry</em></h3>
+    <p class="content-p">
+      How a procurement officer raises a requisition in the configured system. The catalog is driven by the <strong>item master I set up</strong>, grouped category &rarr; class &rarr; size / subject &times; year band, and every line carries its <strong>planning class</strong> (Poisson for low-volume sizes and minority subjects, Normal-Z for the rest) plus a live stock signal. Each unit is tracked by a <strong>9-character serial</strong> on the item, with a <strong>Learn Balance Code</strong> (e.g. <code>LB######</code>) engraved to the owning student at issue. Submitting applies the <strong>2-level approval rule</strong> from FSD-P1-01 (&le; &#3647;50,000 &rarr; Dept Head; &gt; &#3647;50,000 &rarr; Director).
+    </p>
+
+    <div class="pr xnative-section" id="pr1">
+      <div class="pr-ribbon">&#128274; <b>Illustrative reconstruction</b> &middot; order-entry UI rebuilt to match the configured master data &middot; original XeerSoft screens under NDA &middot; serial / Learn-Balance codes and stock levels illustrative; prices and structure per author.</div>
+      <div class="pr-bar"><span class="pr-dots"><i></i><i></i><i></i></span>
+        <span class="pr-crumb">XeerSoft Cloud ERP &middot; <b>Procurement</b> &rsaquo; Purchase Requisition &rsaquo; Create</span>
+        <span class="pr-live">RECREATION</span></div>
+      <div class="pr-body">
+        <div class="pr-catalog">
+          <div class="pr-cats">
+            <button class="pr-cat on" data-cat="uni">Uniforms <span class="ct">5</span></button>
+            <button class="pr-cat" data-cat="txt">Textbooks <span class="ct">10</span></button>
+          </div>
+          <div class="pr-bands" id="prBands" hidden></div>
+          <div class="pr-list" id="prList"></div>
+        </div>
+        <aside class="pr-cart">
+          <div class="pr-cart-head"><span>Requisition</span><span><b id="prCount">0</b> lines</span></div>
+          <div class="pr-lines" id="prLines"><div class="pr-empty">No lines yet.<br>Pick items from the catalog to build the PR.</div></div>
+          <div class="pr-foot">
+            <div class="pr-sub"><span class="l">Estimated total</span><span class="v" id="prTotal">&#3647;0</span></div>
+            <div class="pr-route"><span class="rl">Approval routing &middot; FSD-P1-01</span><div id="prRoute"><span class="pr-chip l1">&le; &#3647;50K &middot; DEPT HEAD (L1)</span><span class="hint">single-level release</span></div></div>
+            <button class="pr-submit" id="prSubmit">Submit requisition</button>
+            <div id="prOk"></div>
+          </div>
+        </aside>
+      </div>
+      <div class="pr-cap">Interactive reconstruction of the configured catalog and approval routing &middot; not the proprietary XeerSoft interface.</div>
+    </div>
+    <script>
+    (function(){
+      var root=document.getElementById('pr1'); if(!root) return;
+      var THB=function(n){return '฿'+Math.round(n).toLocaleString('en-US');};
+      // master data (reconstructed) · ~300 students · uniform ฿500 · textbook priced by year band
+      var uni=[
+        {sn:'UNI240101', name:'PE Shirt · XS', price:500, demand:'poisson', onhand:22,  rop:30},
+        {sn:'UNI240102', name:'PE Shirt · S',  price:500, demand:'normal',  onhand:96,  rop:75},
+        {sn:'UNI240103', name:'PE Shirt · M',  price:500, demand:'normal',  onhand:120, rop:95},
+        {sn:'UNI240104', name:'PE Shirt · XL', price:500, demand:'normal',  onhand:71,  rop:60},
+        {sn:'UNI240105', name:'PE Shirt · XXL',price:500, demand:'poisson', onhand:14,  rop:30}
+      ];
+      var subjects=[
+        {ab:'MATH', name:'Mathematics',         demand:'normal'},
+        {ab:'BIO',  name:'Biology',             demand:'normal'},
+        {ab:'PHY',  name:'Physics',             demand:'normal'},
+        {ab:'CHEM', name:'Chemistry',           demand:'normal'},
+        {ab:'FMATH',name:'Further Mathematics', demand:'poisson'},
+        {ab:'HIST', name:'History',             demand:'poisson'},
+        {ab:'ESL',  name:'English (ESL)',       demand:'normal'},
+        {ab:'LIT',  name:'English Literature',  demand:'normal'},
+        {ab:'PSY',  name:'Psychology',          demand:'poisson'},
+        {ab:'HBIO', name:'Human Biology',       demand:'poisson'}
+      ];
+      // 1 book per subject per level · price rises by year band (AS/A-Level ฿2,345 confirmed; lower bands approx)
+      var bands=[
+        {id:'P9', label:'Pre-IGCSE',       sub:'Year 8–9',   ed:'2023', price:1089},
+        {id:'IG', label:'IGCSE',           sub:'Year 10–11', ed:'2024', price:2245},
+        {id:'AL', label:'Int. AS/A-Level', sub:'Year 11–12', ed:'2024', price:2345}
+      ];
+      var cat='uni', band='IG', cart={};
+      var list=root.querySelector('#prList'), bandsEl=root.querySelector('#prBands');
+      function dtag(d){return d==='poisson'
+        ? '<span class="pr-tag poisson">λ Poisson · low-vol</span>'
+        : '<span class="pr-tag">Normal-Z</span>';}
+      function esc(s){return s.replace(/"/g,'&quot;');}
+      function row(sn,name,price,meta){
+        return '<div class="pr-item"><div class="pr-it-main">'
+          +'<span class="pr-code">S/N '+sn+' · LBC@issue</span>'
+          +'<span class="pr-name" title="'+esc(name)+'">'+name+'</span>'
+          +'<div class="pr-tags">'+meta+'</div></div>'
+          +'<div class="pr-it-side"><span class="pr-price">'+THB(price)+'</span>'
+          +'<div class="pr-add-row"><span class="pr-step">'
+          +'<button data-d="-1" aria-label="decrease quantity">−</button>'
+          +'<input type="text" value="10" inputmode="numeric" aria-label="quantity">'
+          +'<button data-d="1" aria-label="increase quantity">+</button></span>'
+          +'<button class="pr-add" data-code="'+sn+'" data-name="'+esc(name)+'" data-price="'+price+'" aria-label="Add '+esc(name)+' to requisition">+</button>'
+          +'</div></div></div>';
+      }
+      function uniRow(it){
+        var low=it.onhand<it.rop;
+        var stock=low?'<span class="pr-tag reorder">Reorder · '+it.onhand+'/'+it.rop+'</span>'
+                     :'<span class="pr-tag ok">Stock '+it.onhand+'</span>';
+        return row(it.sn,it.name,it.price,dtag(it.demand)+stock);
+      }
+      function txtRow(s,i){
+        var bi=0; for(var k=0;k<bands.length;k++){ if(bands[k].id===band) bi=k; }
+        var b=bands[bi];
+        var sn='TXB24'+('000'+(i*3+bi+1)).slice(-4);
+        var meta=dtag(s.demand)+'<span class="pr-tag">Edition '+b.ed+'</span><span class="pr-tag">EOQ-managed · 1/level</span>';
+        return row(sn,s.name+' · '+b.label,b.price,meta);
+      }
+      function render(){
+        if(cat==='uni'){ bandsEl.hidden=true; bandsEl.innerHTML='';
+          list.innerHTML=uni.map(uniRow).join(''); }
+        else{ bandsEl.hidden=false;
+          bandsEl.innerHTML=bands.map(function(b){return '<button class="pr-band'+(b.id===band?' on':'')+'" data-band="'+b.id+'">'+b.label+'<small>'+b.sub+'</small></button>';}).join('');
+          list.innerHTML=subjects.map(txtRow).join(''); }
+      }
+      render();
+      root.querySelectorAll('.pr-cat').forEach(function(b){b.addEventListener('click',function(){
+        root.querySelectorAll('.pr-cat').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+        cat=b.getAttribute('data-cat'); render();});});
+      bandsEl.addEventListener('click',function(e){var b=e.target.closest('.pr-band'); if(!b)return; band=b.getAttribute('data-band'); render();});
+      list.addEventListener('click',function(e){
+        var step=e.target.closest('.pr-step button');
+        if(step){var i=step.parentNode.querySelector('input'); i.value=Math.max(0,(parseInt(i.value,10)||0)+parseInt(step.getAttribute('data-d'),10)); return;}
+        var add=e.target.closest('.pr-add');
+        if(add){var i=add.parentNode.querySelector('input'); var qty=Math.max(0,parseInt(i.value,10)||0); if(!qty)return;
+          var c=add.getAttribute('data-code');
+          if(cart[c]) cart[c].qty+=qty; else cart[c]={name:add.getAttribute('data-name'),price:parseFloat(add.getAttribute('data-price')),qty:qty};
+          drawCart();}
+      });
+      var linesEl=root.querySelector('#prLines');
+      linesEl.addEventListener('click',function(e){var x=e.target.closest('[data-rm]'); if(!x)return; delete cart[x.getAttribute('data-rm')]; drawCart();});
+      function drawCart(){
+        var keys=Object.keys(cart);
+        if(!keys.length){linesEl.innerHTML='<div class="pr-empty">No lines yet.<br>Pick items from the catalog to build the PR.</div>';}
+        else{linesEl.innerHTML=keys.map(function(c){var it=cart[c];
+          return '<div class="pr-line"><span class="pr-line-name">'+it.name+'<small>'+c+' · '+it.qty+' × '+THB(it.price)+'</small></span>'
+            +'<span class="pr-line-amt">'+THB(it.qty*it.price)+'</span>'
+            +'<button class="pr-line-x" data-rm="'+c+'" aria-label="remove line">×</button></div>';}).join('');}
+        var total=keys.reduce(function(s,c){return s+cart[c].qty*cart[c].price;},0);
+        root.querySelector('#prTotal').textContent=THB(total);
+        root.querySelector('#prCount').textContent=keys.length;
+        var route=root.querySelector('#prRoute');
+        if(total<=50000) route.innerHTML='<span class="pr-chip l1">≤ ฿50K · DEPT HEAD (L1)</span><span class="hint">single-level release</span>';
+        else route.innerHTML='<span class="pr-chip l2">&gt; ฿50K · DIRECTOR (L2)</span><span class="hint">Dept-Head-only release blocked</span>';
+        root.querySelector('#prOk').innerHTML='';
+      }
+      var seq=141;
+      root.querySelector('#prSubmit').addEventListener('click',function(){
+        var keys=Object.keys(cart), ok=root.querySelector('#prOk');
+        if(!keys.length){ok.innerHTML='<div class="pr-ok" style="color:var(--warning)">Add at least one line before submitting.</div>';return;}
+        var total=keys.reduce(function(s,c){return s+cart[c].qty*cart[c].price;},0);
+        var appr=total<=50000?'Dept Head':'Director';
+        seq++; var id='PR-NSF-'+('000'+seq).slice(-4);
+        ok.innerHTML='<div class="pr-ok" style="color:var(--success)">✓ <b>'+id+'</b> created · '+keys.length+' lines · '+THB(total)+'<br>routed to <b>'+appr+'</b> for release</div>';
+      });
+    })();
+    </script>
+
     <h3 class="content-h3">Functional Specification <em>Logic</em></h3>
     <p class="content-p">
       The business logic I authored in the Functional Specification Document (FSD) and handed to the XeerSoft development team to implement.
     </p>
 
+    <figure class="p1-code">
+    <figcaption class="p1-code-bar"><span class="p1-code-dots"><i></i><i></i><i></i></span><span class="p1-code-file">FSD-P1 · approval &amp; posting rules</span><span class="p1-code-lang">spec · pseudocode</span></figcaption>
     <div class="code-block"><span class="comment">// FSD-P1-01 · Workflow Authorization · 2-level PR approval</span>
 <span class="keyword">ON</span> purchase_requisition.submit:
    total = SUM(pr.line_items.amount)
@@ -482,6 +977,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
    <span class="keyword">IF</span> on_hand &lt; safety_stock        → STOCKOUT
    <span class="keyword">ELSE IF</span> on_hand &gt; target × 1.2   → OVERSTOCK
    <span class="keyword">ELSE</span>                            → OK</div>
+    </figure>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
     <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
@@ -548,7 +1044,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
           chip.innerHTML='<span class="xsim-chip warn">ROUTE &middot; DIRECTOR REQUIRED</span>';
           req.textContent='Director only';res.textContent='Dept-Head-only release blocked';}}
       amt.addEventListener('input',route);root.querySelector('#p1submit').addEventListener('click',route);route();
-      var skus=[{n:'PE Shirt XS',s:6,t:27,o:12},{n:'PE Shirt M',s:4,t:67,o:70},{n:'PE Shirt XXL',s:6,t:22,o:4}];
+      var skus=[{n:'PE Shirt XS',s:9,t:55,o:22},{n:'PE Shirt M',s:17,t:160,o:120},{n:'PE Shirt XXL',s:9,t:55,o:14}];
       var tb=root.querySelector('#p1tbl tbody');
       skus.forEach(function(sk,i){var tr=document.createElement('tr');
         tr.innerHTML='<td>'+sk.n+'</td><td style="min-width:120px"><input type="range" min="0" max="'+Math.round(sk.t*1.6)+'" value="'+sk.o+'" data-i="'+i+'"> <b data-o="'+i+'">'+sk.o+'</b></td><td>'+sk.s+'</td><td>'+sk.t+'</td><td data-st="'+i+'"></td>';
@@ -627,8 +1123,205 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       <p><strong>· Modified EOQ with Edition-Risk Penalty</strong> for textbooks subject to edition obsolescence</p>
     </div>
 
+    <h3 class="content-h3">Reorder Point &amp; EOQ · <em>Worked Example</em></h3>
+    <p class="content-p">
+      Turning the models into the actual numbers entered into XeerSoft's Reorder-Point Planning fields. The inputs below are <strong>reconstructed</strong> so they reproduce the safety stock and reorder points behind the <strong>97% service level</strong> (the same ROPs the order screen above flags against); the achieved outcomes (stockout 22% &rarr; 3%, write-off &#3647;45K &rarr; &#3647;8K) are the real results.
+    </p>
+
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Worked example</b> &middot; inputs reconstructed to reproduce the achieved 97% service level and reorder points &middot; original working data not retained (confidential) &middot; figures approx.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>SKU</th><th>Model</th><th>Demand</th><th>Lead&nbsp;time</th><th>λ / σ_LT</th><th>Safety stock</th><th>Reorder point</th></tr></thead>
+          <tbody>
+            <tr><td class="sku">PE Shirt · XS<span class="exh-tag po">low-vol</span></td><td>Poisson</td><td>~3 /wk</td><td>~7 wk</td><td>λ = 21</td><td class="res">9</td><td class="res">30</td></tr>
+            <tr><td class="sku">PE Shirt · M</td><td>Normal-Z</td><td>~13 /wk</td><td>~6 wk</td><td>σ_LT ≈ 8.8</td><td class="res">17</td><td class="res">95</td></tr>
+            <tr><td class="sku">PE Shirt · XXL<span class="exh-tag po">low-vol</span></td><td>Poisson</td><td>~3 /wk</td><td>~7 wk</td><td>λ = 21</td><td class="res">9</td><td class="res">30</td></tr>
+          </tbody>
+        </table>
+<div class="exh-formula"><span class="c">// service level 97% → Z = 1.88   (chosen SL for the XS / XXL tails)</span>
+<span class="k">Poisson</span> (low-volume, λ &lt; 25):   SS = ⌈Z·√λ⌉      ROP = λ + SS
+   XS:  λ = 21   →   SS = ⌈1.88·√21⌉ = 9    →   ROP = 30
+<span class="k">Normal-Z</span> (stable demand):       SS = ⌈Z·σ_LT⌉    σ_LT = σ·√LT     ROP = μ_LT + SS
+   M:   μ_LT = 78,  σ_LT ≈ 8.8   →   SS = 17    →   ROP = 95
+<span class="c">→ entered per-SKU into XeerSoft Reorder-Point Planning fields</span></div>
+<div class="exh-formula"><span class="c">// Modified EOQ with edition-risk penalty · textbook (AS/A-Level · ฿2,345)</span>
+   D ≈ 120 /yr      S ≈ ฿500 /order      H = 25% · ฿2,345 ≈ ฿586 /yr
+   EOQ  = √(2DS / H) = √(2·120·500 / 586) ≈ <span class="k">14 copies</span>
+   + edition-risk (obsolescence) → H_eff ≈ ฿879 → EOQ* ≈ <span class="k">12 copies</span>
+<span class="c">→ smaller, more frequent lots = less stranded stock at edition change → write-off ฿45K → ฿8K</span></div>
+      </div>
+    </div>
+
+    <h3 class="content-h3">Methodology Simulation · <em>MRP</em></h3>
+    <p class="content-p">
+      The reorder-point and EOQ models above plan <strong>independent-demand</strong> items, whose demand comes from forecasts. But when an item's demand is <em>derived</em> from a parent through a bill of materials, you don't forecast it, you <strong>calculate</strong> it. That is Material Requirements Planning. Below is a full MRP run worked end-to-end on a 4-item, 3-level BOM, every number traced from the master schedule down to the shop-floor release.
+    </p>
+    <p class="content-p" style="font-size:.82rem;color:var(--text-subtle);margin-top:-.4rem">Standard A/B/C/D worked example, used to demonstrate the MRP method itself, not a specific client BOM.</p>
+
+    <div class="mrp-sub">01 · Supply system basis</div>
+    <p class="content-p">MRP is a <strong>push system</strong>: a master schedule pushes calculated requirements down the BOM and out as orders, rather than pulling against live consumption. The split that decides the planning method is the type of demand.</p>
+    <div class="mrp-duo">
+      <div class="mrp-cell"><span class="lab">Independent demand</span><h5>Forecast-driven</h5><p>Originates outside the system (customers, term intake). Planned with <strong>reorder point / EOQ / statistics</strong> &mdash; the uniform and textbook SKUs above.</p></div>
+      <div class="mrp-cell dep"><span class="lab">Dependent demand</span><h5>Calculated via BOM</h5><p>Derived from a parent item's schedule. Never forecast: it is <strong>exploded</strong> from the parent through the bill of materials. This is the job MRP does.</p></div>
+    </div>
+
+    <div class="mrp-sub">02 · The MRP overall</div>
+    <div class="mrp-flow">
+      <div class="mrp-node"><span class="nt">Inputs</span><div class="it"><span>MPS — A: 100 @W6 · 50 @W8</span><span>BOM — A = 2B + 1C · B = 1D</span><span>Inventory — on-hand · lead time</span></div></div>
+      <div class="mrp-arrow">&rarr;</div>
+      <div class="mrp-node eng"><span class="nt">Engine</span><b>MRP</b><span class="sub">explode · net · lot-size · offset</span></div>
+      <div class="mrp-arrow">&rarr;</div>
+      <div class="mrp-node"><span class="nt">Outputs</span><div class="it"><span>Planned order releases</span><span>per item · time-phased</span><span>reschedule signals</span></div></div>
+    </div>
+
+    <div class="mrp-sub">03 · Basic processing steps</div>
+    <div class="mrp-procs">
+      <div class="mrp-proc"><span class="n">01</span><b>Explode</b><span>Break the parent's planned release into component gross requirements via the BOM (&times;2 B, &times;1 C, &times;1 D).</span></div>
+      <div class="mrp-proc"><span class="n">02</span><b>Net</b><span>Subtract projected on-hand and scheduled receipts to get the net requirement.</span></div>
+      <div class="mrp-proc"><span class="n">03</span><b>Lot-size</b><span>Apply the lot rule. Here lot-for-lot: order exactly the net, no more.</span></div>
+      <div class="mrp-proc"><span class="n">04</span><b>Offset</b><span>Shift the order earlier by the item's lead time to get the planned order release.</span></div>
+    </div>
+
+    <div class="mrp-sub">04 · Exploding &amp; netting</div>
+    <p class="content-p">Each parent's planned release becomes the child's gross requirement, then on-hand is netted off:</p>
+    <div class="mrp-rec"><div class="mrp-scroll"><table class="exh-table" style="min-width:540px">
+      <thead><tr><th>Component</th><th>Source (parent release)</th><th>&times; per parent</th><th>= Gross req</th><th>On-hand</th><th>Net req</th></tr></thead>
+      <tbody>
+        <tr><td class="sku">B</td><td>A: 80 @W5 · 50 @W7</td><td>&times;2</td><td>160 @W5 · 100 @W7</td><td>30</td><td class="res">130 @W5 · 100 @W7</td></tr>
+        <tr><td class="sku">C</td><td>A: 80 @W5 · 50 @W7</td><td>&times;1</td><td>80 @W5 · 50 @W7</td><td>10</td><td class="res">70 @W5 · 50 @W7</td></tr>
+        <tr><td class="sku">D</td><td>B: 130 @W3 · 100 @W5</td><td>&times;1</td><td>130 @W3 · 100 @W5</td><td>0</td><td class="res">130 @W3 · 100 @W5</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <div class="mrp-sub">05 · Basic MRP record · time-phased</div>
+    <div class="mrp-rec">
+      <div class="mrp-rec-h"><b>Item A</b><span class="meta">LT <span class="hl">1 wk</span> · on-hand <span class="hl">20</span> · lot-for-lot · level 0 (MPS / end item)</span></div>
+      <div class="mrp-scroll"><table class="mrp-tbl">
+        <thead><tr><th>Week</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
+        <tbody>
+          <tr><th>Gross requirements</th><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">100</td><td>–</td><td class="v">50</td></tr>
+          <tr><th>Scheduled receipts</th><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr class="oh"><th>Projected on-hand</th><td>20</td><td>20</td><td>20</td><td>20</td><td>20</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr class="net"><th>Net requirements</th><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">80</td><td>–</td><td class="v">50</td></tr>
+          <tr><th>Planned order receipt</th><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">80</td><td>–</td><td class="v">50</td></tr>
+          <tr class="rel"><th>Planned order release</th><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">80</td><td>–</td><td class="v">50</td><td>–</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="mrp-rec">
+      <div class="mrp-rec-h"><b>Item B</b><span class="meta">LT <span class="hl">2 wk</span> · on-hand <span class="hl">30</span> · lot-for-lot · level 1 (= 2 per A)</span></div>
+      <div class="mrp-scroll"><table class="mrp-tbl">
+        <thead><tr><th>Week</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
+        <tbody>
+          <tr><th>Gross requirements</th><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">160</td><td>–</td><td class="v">100</td><td>–</td></tr>
+          <tr><th>Scheduled receipts</th><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr class="oh"><th>Projected on-hand</th><td>30</td><td>30</td><td>30</td><td>30</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr class="net"><th>Net requirements</th><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">130</td><td>–</td><td class="v">100</td><td>–</td></tr>
+          <tr><th>Planned order receipt</th><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">130</td><td>–</td><td class="v">100</td><td>–</td></tr>
+          <tr class="rel"><th>Planned order release</th><td>–</td><td>–</td><td class="v">130</td><td>–</td><td class="v">100</td><td>–</td><td>–</td><td>–</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="mrp-rec">
+      <div class="mrp-rec-h"><b>Item C</b><span class="meta">LT <span class="hl">1 wk</span> · on-hand <span class="hl">10</span> · lot-for-lot · level 1 (= 1 per A)</span></div>
+      <div class="mrp-scroll"><table class="mrp-tbl">
+        <thead><tr><th>Week</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
+        <tbody>
+          <tr><th>Gross requirements</th><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">80</td><td>–</td><td class="v">50</td><td>–</td></tr>
+          <tr><th>Scheduled receipts</th><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr class="oh"><th>Projected on-hand</th><td>10</td><td>10</td><td>10</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr class="net"><th>Net requirements</th><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">70</td><td>–</td><td class="v">50</td><td>–</td></tr>
+          <tr><th>Planned order receipt</th><td>–</td><td>–</td><td>–</td><td>–</td><td class="v">70</td><td>–</td><td class="v">50</td><td>–</td></tr>
+          <tr class="rel"><th>Planned order release</th><td>–</td><td>–</td><td>–</td><td class="v">70</td><td>–</td><td class="v">50</td><td>–</td><td>–</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="mrp-rec">
+      <div class="mrp-rec-h"><b>Item D</b><span class="meta">LT <span class="hl">1 wk</span> · on-hand <span class="hl">0</span> · lot-for-lot · level 2 (= 1 per B)</span></div>
+      <div class="mrp-scroll"><table class="mrp-tbl">
+        <thead><tr><th>Week</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
+        <tbody>
+          <tr><th>Gross requirements</th><td>–</td><td>–</td><td class="v">130</td><td>–</td><td class="v">100</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr><th>Scheduled receipts</th><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr class="oh"><th>Projected on-hand</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr class="net"><th>Net requirements</th><td>–</td><td>–</td><td class="v">130</td><td>–</td><td class="v">100</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr><th>Planned order receipt</th><td>–</td><td>–</td><td class="v">130</td><td>–</td><td class="v">100</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr class="rel"><th>Planned order release</th><td>–</td><td class="v">130</td><td>–</td><td class="v">100</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="mrp-sub">06 · Planned order release · summary</div>
+    <div class="mrp-rec"><div class="mrp-scroll"><table class="exh-table">
+      <thead><tr><th>Item</th><th>BOM level</th><th>Planned order releases</th></tr></thead>
+      <tbody>
+        <tr><td class="sku">A</td><td>0 · end item</td><td class="res">W5 &rarr; 80 · W7 &rarr; 50</td></tr>
+        <tr><td class="sku">B</td><td>1</td><td class="res">W3 &rarr; 130 · W5 &rarr; 100</td></tr>
+        <tr><td class="sku">C</td><td>1</td><td class="res">W4 &rarr; 70 · W6 &rarr; 50</td></tr>
+        <tr><td class="sku">D</td><td>2</td><td class="res">W2 &rarr; 130 · W4 &rarr; 100</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <div class="mrp-sub">07 · BOM tree &amp; lead-time offset</div>
+    <div class="diagram-container">
+      <div class="diagram-title">BOM Tree · multi-level dependency, demand explodes downward</div>
+      <svg class="diagram-svg" viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowhead-mrp" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#888880"/>
+          </marker>
+        </defs>
+        <rect class="node-start" x="300" y="22" width="120" height="50" rx="6"/>
+        <text class="label" x="360" y="44" text-anchor="middle" font-weight="700">A</text>
+        <text class="label-small" x="360" y="60" text-anchor="middle">end item · LT 1</text>
+        <line class="arrow" x1="338" y1="72" x2="244" y2="150" marker-end="url(#arrowhead-mrp)"/>
+        <text class="label-accent" x="262" y="116" text-anchor="middle">&times;2</text>
+        <line class="arrow" x1="382" y1="72" x2="476" y2="150" marker-end="url(#arrowhead-mrp)"/>
+        <text class="label-accent" x="460" y="116" text-anchor="middle">&times;1</text>
+        <rect class="node-box" x="160" y="152" width="120" height="50" rx="4"/>
+        <text class="label" x="220" y="174" text-anchor="middle" font-weight="700">B</text>
+        <text class="label-small" x="220" y="190" text-anchor="middle">LT 2 · OH 30</text>
+        <rect class="node-box" x="440" y="152" width="120" height="50" rx="4"/>
+        <text class="label" x="500" y="174" text-anchor="middle" font-weight="700">C</text>
+        <text class="label-small" x="500" y="190" text-anchor="middle">LT 1 · OH 10</text>
+        <line class="arrow" x1="220" y1="202" x2="220" y2="288" marker-end="url(#arrowhead-mrp)"/>
+        <text class="label-accent" x="240" y="248" text-anchor="middle">&times;1</text>
+        <rect class="node-box" x="160" y="290" width="120" height="50" rx="4"/>
+        <text class="label" x="220" y="312" text-anchor="middle" font-weight="700">D</text>
+        <text class="label-small" x="220" y="328" text-anchor="middle">LT 1 · OH 0</text>
+        <text class="label-small" x="556" y="300" text-anchor="start" font-style="italic">release cascade</text>
+        <text class="label-small" x="556" y="318" text-anchor="start">D W2 &rarr; B W3 &rarr; A W5</text>
+        <text class="label-small" x="556" y="334" text-anchor="start">&rarr; A ready W6</text>
+      </svg>
+    </div>
+
+    <div class="mrp-sub">08 · Combined planning calendar</div>
+    <p class="content-p">All planned order releases on one timeline. Read the staircase: the <strong>deeper the item, the earlier it must start</strong>, so the schedule cascades up from D toward the end item A.</p>
+    <div class="mrp-rec">
+      <div class="mrp-scroll"><table class="mrp-cal-tbl">
+        <thead><tr><th>Item</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th><th>W7</th><th>W8</th></tr></thead>
+        <tbody>
+          <tr><th>D</th><td>–</td><td><span class="mrp-rel">130</span></td><td>–</td><td><span class="mrp-rel">100</span></td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+          <tr><th>B</th><td>–</td><td>–</td><td><span class="mrp-rel">130</span></td><td>–</td><td><span class="mrp-rel">100</span></td><td>–</td><td>–</td><td>–</td></tr>
+          <tr><th>C</th><td>–</td><td>–</td><td>–</td><td><span class="mrp-rel">70</span></td><td>–</td><td><span class="mrp-rel">50</span></td><td>–</td><td>–</td></tr>
+          <tr><th>A</th><td>–</td><td>–</td><td>–</td><td>–</td><td><span class="mrp-rel">80</span></td><td>–</td><td><span class="mrp-rel">50</span></td><td>–</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mrp-cal-cap">Each cell is a <strong>planned order release</strong> (quantity to start that week). The first batch fires at D&nbsp;W2 and finishes as A at W6; the second batch D&nbsp;W4 &rarr; A&nbsp;W8.</div>
+    </div>
+
+    <div class="mrp-insight">
+      <span class="ttl">&#9656; Why lead times stack</span>
+      <p>Every BOM level adds its own lead-time offset, and the offsets <strong>compound down the tree</strong>. To have <strong>A ready in Week&nbsp;6</strong>, the deepest branch has to start far earlier:</p>
+      <div class="mrp-chain">release D · W2 &nbsp;&rarr;(LT1)&nbsp; D ready W3 &nbsp;&rarr;(LT2)&nbsp; B ready W5 &nbsp;&rarr;(LT1)&nbsp; A ready W6</div>
+      <p>That is a <strong>4-week cumulative lead time across three levels</strong> for what looks like a 1-week end item. The same compounding is exactly why the independent-demand SKUs above carry a <strong>6&ndash;7 week planning lead time</strong>: the supplier offset plus every upstream step, stacked. Plan against the <em>cumulative</em> lead time, never the item's own.</p>
+    </div>
+
     <h3 class="content-h3">Configuration <em>Parameters</em></h3>
 
+    <figure class="p1-code">
+    <figcaption class="p1-code-bar"><span class="p1-code-dots"><i></i><i></i><i></i></span><span class="p1-code-file">XeerSoft · planning &amp; approval config</span><span class="p1-code-lang">parameters</span></figcaption>
     <div class="code-block"><span class="comment">// Inventory Planning Parameters (XeerSoft)</span>
 <span class="keyword">Planning Type:</span>     Reorder Point Planning
 <span class="keyword">Lot Sizing:</span>        Lot-for-lot
@@ -640,6 +1333,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 <span class="keyword">Level 1:</span>          Dept Head         ≤ THB 50,000
 <span class="keyword">Level 2:</span>          Director          &gt; THB 50,000
 <span class="keyword">Release:</span>          Sequential, L1 approves before L2</div>
+    </figure>
 
     <h3 class="content-h3">Master <em>Data Volume</em></h3>
     <p class="content-p">
@@ -667,6 +1361,28 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
         <div class="result-label">Textbook Titles</div>
         <div class="result-change">Edition-tracked</div>
       </div>
+    </div>
+
+    <h3 class="content-h3">Vendor <em>Scorecard</em></h3>
+    <p class="content-p">
+      Vendor master records were scored each cycle on delivery, quality, price and lead time, and the underperformers actively managed. Driving them up moved <strong>portfolio on-time delivery 68% &rarr; 87%</strong>.
+    </p>
+
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; vendor names masked &middot; per-vendor figures illustrative &middot; portfolio on-time 68% &rarr; 87% is the real cohort result.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Vendor</th><th>Scope</th><th>On-time</th><th>Quality</th><th>Lead&nbsp;time</th><th>Score</th></tr></thead>
+          <tbody>
+            <tr><td class="sku">Vendor A</td><td>Uniforms</td><td class="vs-ot">92%</td><td class="vs-ot">98%</td><td>35 d</td><td><div class="vs-score"><span class="vs-bar"><i style="width:92%"></i></span><span class="vs-num">4.6</span></div></td></tr>
+            <tr><td class="sku">Vendor B</td><td>Core textbooks</td><td class="vs-ot">88%</td><td class="vs-ot">96%</td><td>21 d</td><td><div class="vs-score"><span class="vs-bar"><i style="width:88%"></i></span><span class="vs-num">4.4</span></div></td></tr>
+            <tr><td class="sku">Vendor C</td><td>Imported texts</td><td class="vs-ot">81%</td><td class="vs-ot">95%</td><td>45 d</td><td><div class="vs-score"><span class="vs-bar"><i style="width:80%"></i></span><span class="vs-num">4.0</span></div></td></tr>
+            <tr><td class="sku">Vendor D</td><td>Stationery</td><td class="vs-ot">90%</td><td class="vs-ot">97%</td><td>14 d</td><td><div class="vs-score"><span class="vs-bar"><i style="width:90%"></i></span><span class="vs-num">4.5</span></div></td></tr>
+            <tr><td class="sku">Vendor E</td><td>Lab consumables</td><td class="vs-ot">84%</td><td class="vs-ot">94%</td><td>28 d</td><td><div class="vs-score"><span class="vs-bar"><i style="width:82%"></i></span><span class="vs-num">4.1</span></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="vs-foot">Weighted score = on-time 35% &middot; quality 30% &middot; price 20% &middot; lead-time 15%. Cohort on-time delivery improved <b>68% &rarr; 87%</b> after the scorecard rollout (real result); per-vendor values illustrative. Average on-time across the five = 87%.</div>
     </div>
 
     <h3 class="content-h3">Tools <em>& Technologies</em></h3>
@@ -715,7 +1431,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 (function(){
   var d=document, root=d.documentElement;
   var bar=d.createElement('div'); bar.id='fx-progress'; d.body.appendChild(bar);
-  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.width=(100*sc/max)+'%';}
+  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.transform='scaleX('+Math.min(sc/max,1)+')';}
   addEventListener('scroll',prog,{passive:true}); prog();
 
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
