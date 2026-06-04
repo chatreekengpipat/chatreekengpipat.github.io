@@ -1115,7 +1115,6 @@ section {
 .academic-feature {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
   border-radius: var(--radius-md);
   padding: 2.25rem;
   transition: all 0.2s;
@@ -1131,7 +1130,6 @@ section {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
   border-color: var(--accent);
-  border-left-color: var(--accent);
 }
 
 .academic-tag {
@@ -3249,7 +3247,7 @@ footer p {
     0 30px 60px -15px var(--glow-color),
     0 0 40px var(--glow-color),
     var(--shadow-xl);
-  border-left-width: 6px;
+  border-color: var(--accent);
 }
 
 .academic-feature:hover .academic-title { color: var(--accent); }
@@ -3362,6 +3360,53 @@ footer p {
 .btn-outline:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 10px 25px -5px var(--glow-color);
+}
+
+/* ========== PRESS FEEDBACK (was missing) ========== */
+/* Sub-100ms tactile press: the button dips back to rest and compresses
+   slightly. Gives the click a physical acknowledgement on every device. */
+.btn:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 90ms;
+}
+
+.project-card:active,
+.award-feature:active,
+.academic-feature:active,
+.edu-card:active,
+.contact-link:active,
+.project-nav-link:active {
+  transform: translateY(-2px) scale(0.995);
+  transition-duration: 90ms;
+}
+
+/* ========== KEYBOARD FOCUS (a11y · was missing) ========== */
+/* Visible focus ring for keyboard users only — never removed without a
+   replacement. Mouse clicks stay clean via :focus-visible. */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.project-card:focus-visible,
+.award-feature:focus-visible,
+.academic-feature:focus-visible,
+.edu-card:focus-visible,
+.contact-link:focus-visible,
+.project-nav-link:focus-visible,
+.hero-v7-meta-pill:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Cards already carry their own radius — keep the ring hugging it. */
+.project-card:focus-visible,
+.award-feature:focus-visible,
+.academic-feature:focus-visible,
+.edu-card:focus-visible,
+.project-nav-link:focus-visible {
+  outline-offset: 4px;
+  border-radius: var(--radius-md);
 }
 
 /* ========== ENHANCED HOVER · KANBAN CARDS ========== */
@@ -3532,21 +3577,12 @@ footer p {
     var(--shadow-lg);
 }
 
-/* ========== HEADING SHIMMER (h1 sections) ========== */
+/* Section-title emphasis: solid Implementation Blue. Emphasis comes from the
+   accent + weight, not gradient text (a documented brand ban). The previous
+   gradient-clip + perpetual shimmer was both the ban and ambient motion noise. */
 .section-title em {
-  background: linear-gradient(
-    90deg,
-    var(--accent) 0%,
-    var(--accent-soft) 25%,
-    var(--accent-hover) 50%,
-    var(--accent-soft) 75%,
-    var(--accent) 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: textShine 6s linear infinite;
+  color: var(--accent);
+  font-weight: 800;
 }
 
 /* ========== NAV LINK UNDERLINE ========== */
@@ -3573,6 +3609,18 @@ footer p {
 .theme-toggle:hover {
   transform: rotate(15deg) scale(1.1);
   box-shadow: 0 0 20px var(--glow-color);
+}
+
+/* ========== NAV LOGO MARK ========== */
+/* The diamond is the smallest brand atom — let it answer to the logo hover
+   with a quarter-turn and a faint signal glow. */
+.nav-logo-mark {
+  transition: transform 0.45s var(--ease-bounce), box-shadow 0.3s var(--ease-smooth);
+}
+
+.nav-logo:hover .nav-logo-mark {
+  transform: rotate(135deg) scale(1.18);
+  box-shadow: 0 0 14px var(--glow-color);
 }
 
 /* ========== PLATFORM BADGE PULSE ========== */
@@ -4937,23 +4985,23 @@ nav.scrolled {
 
 .about-text-v7 .about-quote-v7 {
   background: linear-gradient(135deg, var(--accent-bg) 0%, var(--surface) 100%);
-  border-left: 4px solid var(--accent);
-  padding: 1.25rem 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  padding: 1.5rem 1.6rem;
   margin: 2rem 0;
   font-size: 1.05rem;
   font-weight: 500;
   color: var(--text);
   line-height: 1.6;
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: var(--radius-md);
   font-style: normal;
   position: relative;
   transition: all 0.3s var(--ease-smooth);
 }
 
 .about-text-v7 .about-quote-v7:hover {
-  transform: translateX(4px);
-  box-shadow: 0 10px 25px -5px var(--glow-color);
-  border-left-width: 6px;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -8px var(--glow-color);
+  border-color: var(--accent);
 }
 
 .about-text-v7 .about-quote-v7::before {
@@ -5249,52 +5297,18 @@ nav.scrolled {
   width: 100vw;
   height: 100vh;
   z-index: -999;
-  background: radial-gradient(circle at center, #020617 0%, #0f172a 100%);
+  /* Token-driven so it tracks the theme automatically (deep slate in dark,
+     soft slate-white in light) with no hard-coded values and no flash. */
+  background: radial-gradient(circle at center, var(--bg) 0%, var(--surface-3) 100%);
   transition: background 0.5s ease;
 }
 
-/* พื้นหลังสว่างสำหรับ Light Mode */
-[data-theme="light"] #techCanvas {
-  background: radial-gradient(circle at center, #f8fafc 0%, #e2e8f0 100%);
-}
-
-/* Glassmorphism for Cards - เปลี่ยนกล่องทึบให้เป็นกระจกหรูๆ */
-.hero-card, .project-card, .impact-cell, .about-photo-card, .edu-card, .focus-card {
-  background: rgba(30, 41, 59, 0.4) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
-}
-
-[data-theme="light"] .hero-card, 
-[data-theme="light"] .project-card, 
-[data-theme="light"] .impact-cell, 
-[data-theme="light"] .about-photo-card, 
-[data-theme="light"] .edu-card,
-[data-theme="light"] .focus-card {
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1px solid rgba(255, 255, 255, 0.5) !important;
-  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05) !important;
-}
-
-/* Premium Hover Effects */
-.hero-card:hover, .project-card:hover, .impact-cell:hover, .edu-card:hover, .focus-card:hover {
-  background: rgba(30, 41, 59, 0.6) !important;
-  border-color: rgba(96, 165, 250, 0.4) !important;
-  box-shadow: 0 0 40px rgba(37, 99, 235, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
-  transform: translateY(-6px) scale(1.02);
-}
-
-[data-theme="light"] .hero-card:hover, 
-[data-theme="light"] .project-card:hover, 
-[data-theme="light"] .impact-cell:hover, 
-[data-theme="light"] .edu-card:hover,
-[data-theme="light"] .focus-card:hover {
-  background: rgba(255, 255, 255, 0.8) !important;
-  border-color: rgba(37, 99, 235, 0.3) !important;
-  box-shadow: 0 0 40px rgba(37, 99, 235, 0.15), 0 8px 32px 0 rgba(15, 23, 42, 0.1) !important;
-}
+/* Cards stay FLAT by default (design-system rule). Depth is built from the
+   slate tonal ramp + the hover lift/glow defined in the animation layer above,
+   not from a resting glass blur. The previous global glassmorphism override
+   (hard-coded rgba + !important) was removed: it broke The Flat-By-Default Rule
+   and The One Accent Rule, and fought every token-driven surface. Surfaces now
+   resolve to var(--surface)/var(--border) in both themes. */
 .balanced-text {
   text-align: left;
   
