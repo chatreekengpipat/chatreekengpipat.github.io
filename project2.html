@@ -19,9 +19,10 @@
   --fx-glow: color-mix(in srgb, var(--accent,#c8962d) 32%, transparent);
 }
 html{ scroll-behavior:smooth; }
-#fx-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;
+#fx-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:9999;
+  transform:scaleX(0);transform-origin:left;will-change:transform;
   background:linear-gradient(90deg,var(--fx-accent),var(--fx-success));
-  box-shadow:0 0 14px var(--fx-glow);transition:width .12s linear;}
+  box-shadow:0 0 14px var(--fx-glow);transition:transform .12s linear;}
 
 html.js .fx-reveal{opacity:0;transform:translateY(22px);
   transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
@@ -148,7 +149,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim-log{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--xs-muted);max-height:150px;overflow:auto;margin-top:.7rem;border:1px solid var(--xs-border);border-radius:8px;padding:.5rem .7rem;background:var(--xs-bg)}
 .xsim-log div{padding:.18rem 0;border-bottom:1px dashed var(--xs-border)}.xsim-log div:last-child{border:0}
 .xsim-meter{height:10px;border-radius:99px;background:var(--xs-border);overflow:hidden;margin-top:.5rem}
-.xsim-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:width .5s}
+.xsim-meter i{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:transform .5s}
 .xsim-post{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--xs-text);line-height:1.7;margin-top:.4rem}
 </style>
 <!-- TRACK :: Delivery & Schedule styles (Claude) -->
@@ -182,8 +183,8 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .trk-legend{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:.9rem;font-size:.7rem;color:var(--t-muted)}
 .trk-legend span{display:inline-flex;align-items:center;gap:.4rem}
 .trk-legend i{width:15px;height:10px;border-radius:3px;display:inline-block}
-.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-left:3px solid var(--t-warn);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
-.trk-flag.ok{border-left-color:var(--t-ok)}
+.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
+.trk-flag.ok{border-color:color-mix(in srgb,var(--t-ok) 38%,var(--t-border))}
 .trk-flag .ic{font-size:1rem;line-height:1.4;flex:0 0 auto}
 .trk-flag b{color:var(--t-text);font-size:.84rem}.trk-flag p{margin:.25rem 0 0;font-size:.79rem;color:var(--t-muted);line-height:1.5}
 .trk-flag .res{color:var(--t-ok);font-weight:600}
@@ -226,6 +227,174 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-chip,.xsim .xsim-post,.xsim .xsim-tbl td,.xsim .xsim-log,.xsim .xsim-node small{font-variant-numeric:tabular-nums;}
 .xsim .xsim-chip{font-family:'JetBrains Mono','DM Mono',monospace;font-size:.74rem;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-post{font-family:'JetBrains Mono','DM Mono',monospace;}
+</style>
+<!-- P2-EXH :: pricing / AR aging / measurement exhibits (recreation) (Claude) -->
+<style id="p2-exh">
+.exh{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:1.5rem 0;background:var(--surface)}
+.exh-ribbon{display:flex;gap:.45rem;align-items:flex-start;padding:.55rem .9rem;font-family:'JetBrains Mono',monospace;
+  font-size:.63rem;line-height:1.5;color:var(--text-muted);
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warning) 9%,transparent) 0 10px,transparent 10px 20px);
+  border-bottom:1px dashed var(--border-strong)}
+.exh-ribbon b{color:var(--text);font-weight:700}
+.exh-body{padding:.6rem .7rem;overflow-x:auto}
+.exh-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:540px}
+.exh-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--text-muted);text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap}
+.exh-table td{padding:.6rem .6rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;line-height:1.5}
+.exh-table tbody tr:last-child td{border-bottom:0}
+.exh-table .sku{font-weight:700;white-space:nowrap;font-family:'JetBrains Mono',monospace;color:var(--accent)}
+.exh-table .res{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;color:var(--text)}
+.exh-table .neg{color:var(--success);font-weight:600}
+.exh-muted{color:var(--text-subtle);font-style:italic}
+.exh-foot{font-size:.74rem;color:var(--text-muted);padding:.7rem .95rem;border-top:1px solid var(--border);background:var(--surface-2);line-height:1.6}
+.exh-foot b{color:var(--text)}
+.arc{display:inline-flex;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.14rem .5rem;border-radius:99px;border:1px solid;white-space:nowrap}
+.arc.ok{color:var(--success);border-color:color-mix(in srgb,var(--success) 35%,transparent);background:color-mix(in srgb,var(--success) 10%,transparent)}
+.arc.l1{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 35%,transparent);background:var(--accent-bg)}
+.arc.l2{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 42%,transparent);background:color-mix(in srgb,var(--warning) 11%,transparent)}
+.arc.l3{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 42%,transparent);background:color-mix(in srgb,var(--danger) 11%,transparent)}
+.mbasis{border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:var(--radius-md);
+  background:color-mix(in srgb,var(--accent) 5%,var(--bg));padding:1.2rem 1.35rem;margin:1.3rem 0}
+.mbasis .mt{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.05em;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:.4rem;margin-bottom:.8rem}
+.mbasis-row{display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:stretch;margin:.6rem 0}
+.mbasis-cell{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:.85rem 1rem}
+.mbasis-cell .l{font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-subtle)}
+.mbasis-cell .big{font-size:1.5rem;font-weight:800;color:var(--text-strong);letter-spacing:-.02em;line-height:1.1;margin:.2rem 0;font-variant-numeric:tabular-nums}
+.mbasis-cell.after .big{color:var(--accent)}
+.mbasis-cell p{font-size:.78rem;color:var(--text-muted);line-height:1.5;margin:.3rem 0 0}
+.mbasis-arrow{display:flex;align-items:center;color:var(--accent);font-size:1.4rem;font-weight:700}
+.mbasis-note{font-size:.78rem;color:var(--text-muted);line-height:1.6;margin:.7rem 0 0}
+.mbasis-note b{color:var(--text)}
+@media(max-width:680px){.mbasis-row{grid-template-columns:1fr}.mbasis-arrow{transform:rotate(90deg);justify-content:center}}
+</style>
+<!-- P2-LUX :: luxury layer matching Project 1 (Claude) -->
+<style id="p2-lux">
+::selection{ background: color-mix(in srgb, var(--accent) 26%, transparent); color: var(--text-strong); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 5px; }
+.result-val, .result-change, .lx-delta-num, .trk-kpi .v, .xsim-kv span:last-child, .process-table td{ font-variant-numeric: tabular-nums; }
+.project-hero{ isolation: isolate; }
+.project-hero::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px);
+  background-size: 58px 58px, 58px 58px;
+  -webkit-mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%);
+          mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%); opacity:.55; }
+.project-hero h1{ text-wrap: balance; overflow-wrap: anywhere; }
+.project-hero-grid{ min-width:0; }
+.project-hero-grid > *{ min-width:0; }
+.platform-badge{ flex-wrap:wrap; max-width:100%; }
+.project-info-card{ background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 5%, var(--surface)), var(--surface)); }
+.lx-spec-head{ display:flex; align-items:center; justify-content:space-between; font-family:'JetBrains Mono',monospace;
+  font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-subtle);
+  padding-bottom:.85rem; margin-bottom:.5rem; border-bottom:1px solid var(--border); }
+.lx-spec-head span:last-child{ color:var(--accent); }
+.project-info-val.lx-live{ display:inline-flex; align-items:center; justify-content:flex-end; gap:.45rem;
+  color:var(--success); font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; }
+.project-info-val.lx-live::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--success); animation:lxPulse 2.2s infinite; }
+@keyframes lxPulse{ 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--success) 55%,transparent);} 70%{box-shadow:0 0 0 7px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
+.results-banner .result-cell::before{ display:none; }
+.lx-stat{ background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 4%, var(--surface)), var(--surface)); padding:1.55rem 1.45rem; }
+.lx-stat:hover{ border-color: color-mix(in srgb,var(--accent) 45%, var(--border)); box-shadow: 0 24px 52px -32px color-mix(in srgb,var(--accent) 70%, transparent); }
+.lx-stat-head{ display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; }
+.lx-stat .result-val{ font-size:2.05rem; color:var(--text-strong); letter-spacing:-.045em; margin:0; }
+.lx-stat-dir{ font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:600; letter-spacing:.03em; color:var(--success); white-space:nowrap;
+  background: color-mix(in srgb,var(--success) 12%, transparent); border:1px solid color-mix(in srgb,var(--success) 30%, transparent); padding:.2rem .5rem; border-radius:100px; }
+.lx-stat .result-label{ margin:.55rem 0 .9rem; }
+.lx-stat-note{ font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--text-muted); line-height:1.6; padding-top:.1rem; }
+.lx-delta{ display:flex; flex-direction:column; gap:.45rem; }
+.lx-delta-row{ display:grid; grid-template-columns:3.1rem 1fr 3.6rem; align-items:center; gap:.55rem; min-width:0; }
+.lx-delta-tag{ font-family:'JetBrains Mono',monospace; font-size:.56rem; letter-spacing:.08em; text-transform:uppercase; color:var(--text-subtle); }
+.lx-delta-track{ height:7px; border-radius:100px; background:var(--surface-3); overflow:hidden; }
+.lx-delta-bar{ display:block; height:100%; border-radius:100px; transform-origin:left; transform:scaleX(var(--w)); }
+.lx-delta-bar.before{ background: color-mix(in srgb, var(--text-subtle) 60%, transparent); }
+.lx-delta-bar.after{ background: linear-gradient(90deg, var(--accent), var(--accent-soft)); }
+.lx-delta-num{ font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--text); text-align:right; }
+.lx-delta-row.before .lx-delta-num{ color:var(--text-muted); }
+html.js .lx-delta-bar{ transform:scaleX(0); transition:transform 1s cubic-bezier(.22,.61,.36,1); }
+html.js .fx-in .lx-delta-bar{ transform:scaleX(var(--w)); }
+html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
+.content-section .callout{ border:1px solid color-mix(in srgb,var(--accent) 20%, var(--border)); border-radius:var(--radius-md);
+  background: color-mix(in srgb, var(--accent) 5%, var(--bg)); padding:1.4rem 1.6rem; transition: border-color .35s ease, box-shadow .35s ease, transform .35s ease; }
+.content-section .callout:hover{ border-color: color-mix(in srgb,var(--accent) 42%, var(--border)); box-shadow: 0 20px 46px -32px color-mix(in srgb,var(--accent) 62%, transparent); }
+.content-section .callout-title{ display:inline-flex; align-items:center; gap:.5rem; margin-bottom:.95rem; background: var(--accent-bg); color: var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 25%, transparent); padding:.32rem .7rem; border-radius:100px; }
+.content-section .callout-title::before{ content:""; width:6px; height:6px; border-radius:1.5px; background:var(--accent); transform:rotate(45deg); }
+.lx-code{ margin:1.25rem 0; border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; background:var(--surface); box-shadow:var(--shadow-sm); }
+.lx-code .code-block{ margin:0; border:0; border-radius:0; background:transparent; }
+.lx-code-bar{ display:flex; align-items:center; gap:.7rem; padding:.6rem .95rem; flex-wrap:wrap; background:var(--surface-2); border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--text-muted); }
+.lx-code-dots{ display:flex; gap:.34rem; flex:0 0 auto; }
+.lx-code-dots i{ width:9px; height:9px; border-radius:50%; background:var(--border-strong); }
+.lx-code-file{ color:var(--text); font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lx-code-lang{ margin-left:auto; color:var(--accent); font-weight:600; background:var(--accent-bg); border-radius:100px; padding:.14rem .6rem; border:1px solid color-mix(in srgb,var(--accent) 22%,transparent); }
+.dashboard-section{ box-shadow: var(--shadow-lg); }
+.dashboard-image{ border-top:1px solid var(--border); }
+.trk-flag .ic{ color:var(--t-warn); }
+.trk-flag.ok .ic{ color:var(--t-ok); }
+@media (prefers-reduced-motion: reduce){
+  html.js .lx-delta-bar{ transition:none !important; transform:scaleX(var(--w)) !important; }
+  .project-info-val.lx-live::before{ animation:none; }
+}
+</style>
+<!-- P2-ARCH :: system architecture blueprint (Claude) -->
+<style id="p2-arch">
+.arch-note{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);line-height:1.55;
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warning) 8%,transparent) 0 10px,transparent 10px 20px);
+  border:1px dashed var(--border-strong);border-radius:8px;padding:.6rem .85rem;margin:1rem 0}
+.arch-note b{color:var(--text);font-weight:700}
+.arch-sub{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:2rem 0 .7rem;display:flex;align-items:center;gap:.6rem}
+.arch-sub::before{content:"";width:18px;height:2px;background:var(--accent);border-radius:2px;flex:0 0 auto}
+.arch-tiers{display:flex;flex-direction:column;gap:.4rem;margin:1rem 0}
+.arch-tier{display:grid;grid-template-columns:140px 1fr;gap:.8rem;align-items:center;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:.9rem 1rem;transition:border-color .25s,box-shadow .25s,transform .25s}
+.arch-tier:hover{border-color:color-mix(in srgb,var(--accent) 42%,var(--border));box-shadow:0 18px 40px -28px color-mix(in srgb,var(--accent) 70%,transparent)}
+.arch-tier.app{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 6%,var(--surface)),var(--surface));border-color:color-mix(in srgb,var(--accent) 25%,var(--border))}
+.arch-tier-l{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle)}
+.arch-tier-l b{display:block;color:var(--accent);font-size:.82rem;letter-spacing:0;margin-top:.2rem}
+.arch-boxes{display:flex;flex-wrap:wrap;gap:.5rem}
+.arch-box{flex:1 1 150px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.6rem .7rem;transition:border-color .2s}
+.arch-tier:hover .arch-box{border-color:color-mix(in srgb,var(--accent) 25%,var(--border))}
+.arch-box b{display:block;font-size:.82rem;color:var(--text);font-weight:600}
+.arch-box span{font-size:.7rem;color:var(--text-muted);line-height:1.4}
+.arch-conn{text-align:center;color:var(--accent);font-size:1.1rem;line-height:.6;opacity:.7}
+.arch-mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.7rem;margin:1rem 0}
+.arch-mod{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.1rem 1.15rem;transition:.25s}
+.arch-mod:hover{border-color:color-mix(in srgb,var(--accent) 42%,var(--border));transform:translateY(-2px);box-shadow:0 18px 40px -28px color-mix(in srgb,var(--accent) 65%,transparent)}
+.arch-mod .n{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);font-weight:700}
+.arch-mod h5{font-size:.98rem;color:var(--text-strong);margin:.2rem 0 .35rem}
+.arch-mod p{font-size:.8rem;color:var(--text-muted);line-height:1.5;margin:0 0 .6rem}
+.arch-chips{display:flex;flex-wrap:wrap;gap:.3rem}
+.arch-chip{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text-muted);background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:.12rem .45rem}
+.arch-pf{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.1rem 1.2rem;margin:1rem 0}
+.arch-pf-seg{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.arch-pf-seg button{background:var(--bg);border:1px solid var(--border);color:var(--text-muted);border-radius:8px;padding:.5rem .8rem;font:inherit;font-size:.8rem;cursor:pointer;transition:.2s}
+.arch-pf-seg button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.arch-pf-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:.5rem}
+.arch-pf-node{border:1px solid var(--border);border-radius:10px;background:var(--bg);padding:.8rem;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:.25rem}
+.arch-pf-node .t{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle)}
+.arch-pf-node .v{font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.arch-pf-node.net{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface));border-color:var(--accent)}
+.arch-pf-node.net .v{color:var(--accent);font-size:1.05rem}
+.arch-pf-arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700}
+.arch-pf-cap{font-size:.74rem;color:var(--text-muted);margin-top:.8rem;line-height:1.55}
+.arch-ref{border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:var(--radius-md);background:color-mix(in srgb,var(--accent) 4%,var(--bg));padding:1.1rem 1.2rem;margin:1rem 0}
+.arch-ref-h{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.04em;color:var(--accent);font-weight:700;margin-bottom:.2rem}
+.arch-ref-note{font-size:.72rem;color:var(--text-muted);font-style:italic;margin-bottom:.8rem;line-height:1.5}
+.arch-ref-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.5rem}
+.arch-ref-row{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.6rem .7rem}
+.arch-ref-row .l{font-family:'JetBrains Mono',monospace;font-size:.56rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle)}
+.arch-ref-row b{display:block;font-size:.82rem;color:var(--text);margin-top:.15rem}
+.er-entity rect{fill:var(--surface);stroke:var(--border-strong)}
+.er-entity.derived rect{stroke-dasharray:4 3}
+.er-title{font-family:'JetBrains Mono',monospace;font-weight:700;fill:var(--accent);font-size:13px}
+.er-field{font-family:'JetBrains Mono',monospace;fill:var(--text-muted);font-size:11px}
+.er-rel{stroke:var(--border-strong);stroke-width:1.5;fill:none}
+.er-card{font-family:'JetBrains Mono',monospace;fill:var(--accent);font-size:11px;font-weight:700}
+@media(max-width:760px){
+  .arch-tier{grid-template-columns:1fr;gap:.5rem}
+  .arch-pf-flow{grid-template-columns:1fr}
+  .arch-pf-arrow{transform:rotate(90deg)}
+}
 </style>
 </head>
 <body>
@@ -270,6 +439,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </div>
 
     <div class="project-info-card">
+      <div class="lx-spec-head"><span>Project Spec</span><span>P-02</span></div>
       <div class="project-info-row">
         <span class="project-info-label">Platform</span>
         <span class="project-info-val">XeerSoft Cloud ERP</span>
@@ -292,7 +462,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Status</span>
-        <span class="project-info-val" style="color: var(--success); font-family: 'DM Mono', monospace; font-size: 0.75rem;">✓ LIVE</span>
+        <span class="project-info-val lx-live">LIVE · Jun 2024</span>
       </div>
     </div>
   </div>
@@ -301,25 +471,34 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 <!-- RESULTS BANNER -->
 <section style="padding: 4rem 4rem 2rem;">
   <div class="results-banner">
-    <div class="result-cell">
-      <div class="result-val">▲ 97%</div>
-      <div class="result-label">Pricing Decision Time</div>
-      <div class="result-change">480 min → 15 min</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">97%</div><span class="lx-stat-dir">▼ reduced</span></div>
+      <div class="result-label">Pricing decision time</div>
+      <div class="lx-delta">
+        <div class="lx-delta-row before"><span class="lx-delta-tag">before</span><span class="lx-delta-track"><i class="lx-delta-bar before" style="--w:1"></i></span><span class="lx-delta-num">480 min</span></div>
+        <div class="lx-delta-row after"><span class="lx-delta-tag">after</span><span class="lx-delta-track"><i class="lx-delta-bar after" style="--w:.03"></i></span><span class="lx-delta-num">15 min</span></div>
+      </div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">▲ 71%</div>
-      <div class="result-label">Avg Days Overdue</div>
-      <div class="result-change">42 days → 12 days</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">71%</div><span class="lx-stat-dir">▼ reduced</span></div>
+      <div class="result-label">Avg days overdue</div>
+      <div class="lx-delta">
+        <div class="lx-delta-row before"><span class="lx-delta-tag">before</span><span class="lx-delta-track"><i class="lx-delta-bar before" style="--w:1"></i></span><span class="lx-delta-num">42 d</span></div>
+        <div class="lx-delta-row after"><span class="lx-delta-tag">after</span><span class="lx-delta-track"><i class="lx-delta-bar after" style="--w:.29"></i></span><span class="lx-delta-num">12 d</span></div>
+      </div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">▲ 23%</div>
-      <div class="result-label">AR Collection Rate</div>
-      <div class="result-change">78% → 96%</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">23%</div><span class="lx-stat-dir">▲ improved</span></div>
+      <div class="result-label">AR collection rate</div>
+      <div class="lx-delta">
+        <div class="lx-delta-row before"><span class="lx-delta-tag">before</span><span class="lx-delta-track"><i class="lx-delta-bar before" style="--w:.78"></i></span><span class="lx-delta-num">78%</span></div>
+        <div class="lx-delta-row after"><span class="lx-delta-tag">after</span><span class="lx-delta-track"><i class="lx-delta-bar after" style="--w:.96"></i></span><span class="lx-delta-num">96%</span></div>
+      </div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">100%</div>
-      <div class="result-label">UAT Pass Rate</div>
-      <div class="result-change">4 sessions · all scenarios</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">100%</div><span class="lx-stat-dir">✓ passed</span></div>
+      <div class="result-label">UAT pass rate</div>
+      <div class="lx-stat-note">4 UAT sessions<br>every scenario · May 2024</div>
     </div>
   </div>
 </section>
@@ -357,6 +536,16 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       <p>· Knowledge concentrated in one person: no way to scale or delegate pricing decisions</p>
     </div>
 
+    <div class="mbasis">
+      <span class="mt">&#9202; How the 480 &rarr; 15 min was measured</span>
+      <div class="mbasis-row">
+        <div class="mbasis-cell"><span class="l">Before</span><div class="big">~480 min</div><p>The owner re-derived every family quote from scratch, holding all the discount logic in her head &mdash; roughly 8 hours of senior time per pricing case.</p></div>
+        <div class="mbasis-arrow">&rarr;</div>
+        <div class="mbasis-cell after"><span class="l">After</span><div class="big">~15 min</div><p>The system applies the 3-variable model and generates the quote and posting; admin staff run it without involving the owner.</p></div>
+      </div>
+      <p class="mbasis-note"><b>Basis:</b> elapsed senior-decision time per new pricing case, before vs after Go-Live. Figures are <b>approximate</b> (owner-reported): the point is the order-of-magnitude shift from manual derivation to system-generated pricing, not a stopwatch measurement.</p>
+    </div>
+
     <h3 class="content-h3">My <em>Approach</em></h3>
     <p class="content-p">
       The hardest part wasn't building the system: it was <strong>extracting tacit pricing knowledge</strong> from the owner's head. I volunteered to attend <strong>weekly Executive Sessions every Sunday for 12 months (4 hours each, 48 sessions total)</strong> as the sole consultant to do so consistently.
@@ -367,10 +556,175 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </p>
 
     <div class="callout">
-      <div class="callout-title">Three core pricing variables identified</div>
-      <p><strong>1. Family enrolment size & tenure</strong>: How many children currently enrolled, and for how long</p>
-      <p><strong>2. Parent commitment horizon</strong>: 1-year vs 2-year contract commitment</p>
-      <p><strong>3. Student academic tier</strong>: Standard vs Advanced premium track</p>
+      <div class="callout-title">The pricing conditions identified</div>
+      <p><strong>1. Family / sibling (Z001)</strong>: a sibling already enrolled &rarr; &minus;฿50,000</p>
+      <p><strong>2. Group / cohort (Z002)</strong>: three enrolling together &rarr; &minus;฿75,000 on the third</p>
+      <p><strong>3. Referral (Z003)</strong>: referred by an existing family &rarr; &minus;฿15,000 to &minus;฿30,000</p>
+    </div>
+
+    <h3 class="content-h3">System Architecture · <em>Strategic Pricing &amp; AR</em></h3>
+    <p class="content-p">The discovery distilled into a system blueprint: how a pricing-and-AR platform would be structured to operationalize the conditions above. Presented as design; prospect data anonymized (e.g. <code>Prospect-001</code>).</p>
+    <div class="arch-note">&#128274; <b>System design blueprint</b> &mdash; conceptual architecture and reference stack, not a deployed production system. Pricing figures per author; conditions do not stack (best single discount applies, <b>TBC</b>).</div>
+
+    <div class="arch-sub">A · 3-tier architecture</div>
+    <div class="arch-tiers" role="img" aria-label="Three-tier architecture. Presentation tier: Admin Console and Parent Portal. Application tier: Pricing Engine, Billing Rules, Enrollment Workflow. Data tier: Customer, Catalog, Pricing and AR stores.">
+      <div class="arch-tier">
+        <div class="arch-tier-l">Tier 1<b>Presentation</b></div>
+        <div class="arch-boxes">
+          <div class="arch-box"><b>Admin Console</b><span>pricing &amp; AR operations</span></div>
+          <div class="arch-box"><b>Parent Portal</b><span>quotes · invoices · payments</span></div>
+        </div>
+      </div>
+      <div class="arch-conn">&#8645;</div>
+      <div class="arch-tier app">
+        <div class="arch-tier-l">Tier 2<b>Application</b></div>
+        <div class="arch-boxes">
+          <div class="arch-box"><b>Pricing Engine</b><span>rate card + conditions</span></div>
+          <div class="arch-box"><b>Billing Rules</b><span>invoice · terms · dunning</span></div>
+          <div class="arch-box"><b>Enrollment Workflow</b><span>prospect &rarr; enrolled</span></div>
+        </div>
+      </div>
+      <div class="arch-conn">&#8645;</div>
+      <div class="arch-tier">
+        <div class="arch-tier-l">Tier 3<b>Data</b></div>
+        <div class="arch-boxes">
+          <div class="arch-box"><b>Customer</b><span>prospects · families</span></div>
+          <div class="arch-box"><b>Catalog</b><span>programmes · tracks</span></div>
+          <div class="arch-box"><b>Pricing</b><span>price list · conditions</span></div>
+          <div class="arch-box"><b>AR</b><span>invoices · payments</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-sub">B · Module map</div>
+    <div class="arch-mods">
+      <div class="arch-mod"><div class="n">01</div><h5>CRM / Customer Master</h5><p>Prospect &rarr; Lead &rarr; Enrolled, holding the discovery data captured across the executive sessions.</p><div class="arch-chips"><span class="arch-chip">Prospect</span><span class="arch-chip">Family</span><span class="arch-chip">Stage</span></div></div>
+      <div class="arch-mod"><div class="n">02</div><h5>Program Catalog</h5><p>Three tracks, each a sellable programme on the rate card.</p><div class="arch-chips"><span class="arch-chip">Medicine</span><span class="arch-chip">Com-AI</span><span class="arch-chip">Business</span></div></div>
+      <div class="arch-mod"><div class="n">03</div><h5>Pricing Engine</h5><p>Rate card (base ฿350,000) plus discount conditions Z001&ndash;Z003, applied as the best single discount.</p><div class="arch-chips"><span class="arch-chip">PR00 base</span><span class="arch-chip">Z001/2/3</span></div></div>
+      <div class="arch-mod"><div class="n">04</div><h5>Billing &amp; AR</h5><p>Invoice, payment terms, receivable, and the 3-level AR aging / dunning.</p><div class="arch-chips"><span class="arch-chip">Invoice</span><span class="arch-chip">Payment</span><span class="arch-chip">Aging</span></div></div>
+      <div class="arch-mod"><div class="n">05</div><h5>Analytics</h5><p>Segmentation, gross-vs-net revenue, and the prospect &rarr; enrolled conversion funnel.</p><div class="arch-chips"><span class="arch-chip">Segments</span><span class="arch-chip">Gross/Net</span><span class="arch-chip">Funnel</span></div></div>
+    </div>
+
+    <div class="arch-sub">C · Data model · ER diagram</div>
+    <div class="diagram-container">
+      <div class="diagram-title">Entity-relationship · pricing &amp; AR schema</div>
+      <svg class="diagram-svg" viewBox="0 0 820 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ER diagram. Prospect one-to-many Enrollment. Program one-to-many Enrollment. PriceList one-to-many PricingCondition. Enrollment one-to-many Invoice. Invoice one-to-many Payment. Receivable equals Invoice minus Payment.">
+        <defs>
+          <marker id="er-arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#888880"/></marker>
+        </defs>
+        <g class="er-entity">
+          <rect x="30" y="36" width="180" height="104" rx="6"/>
+          <text class="er-title" x="44" y="60">Prospect</text>
+          <text class="er-field" x="44" y="82">id · alias (anon)</text>
+          <text class="er-field" x="44" y="100">stage: Prospect&rarr;Enrolled</text>
+          <text class="er-field" x="44" y="118">discovery data</text>
+        </g>
+        <g class="er-entity">
+          <rect x="30" y="232" width="180" height="84" rx="6"/>
+          <text class="er-title" x="44" y="256">Program / Track</text>
+          <text class="er-field" x="44" y="278">id · name</text>
+          <text class="er-field" x="44" y="296">Medicine · Com-AI · Business</text>
+        </g>
+        <g class="er-entity">
+          <rect x="30" y="356" width="180" height="72" rx="6"/>
+          <text class="er-title" x="44" y="380">PriceList</text>
+          <text class="er-field" x="44" y="402">id · PR00 base 350,000</text>
+        </g>
+        <g class="er-entity">
+          <rect x="330" y="110" width="180" height="104" rx="6"/>
+          <text class="er-title" x="344" y="134">Enrollment</text>
+          <text class="er-field" x="344" y="156">id · prospect · program</text>
+          <text class="er-field" x="344" y="174">net price</text>
+          <text class="er-field" x="344" y="192">status</text>
+        </g>
+        <g class="er-entity">
+          <rect x="330" y="332" width="180" height="96" rx="6"/>
+          <text class="er-title" x="344" y="356">PricingCondition</text>
+          <text class="er-field" x="344" y="378">Z001 sibling &minus;50,000</text>
+          <text class="er-field" x="344" y="396">Z002 group &minus;75,000</text>
+          <text class="er-field" x="344" y="414">Z003 referral &minus;15..30k</text>
+        </g>
+        <g class="er-entity">
+          <rect x="620" y="80" width="180" height="100" rx="6"/>
+          <text class="er-title" x="634" y="104">Invoice</text>
+          <text class="er-field" x="634" y="126">id · enrollment</text>
+          <text class="er-field" x="634" y="144">amount · terms NET30</text>
+          <text class="er-field" x="634" y="162">status</text>
+        </g>
+        <g class="er-entity">
+          <rect x="620" y="210" width="180" height="60" rx="6"/>
+          <text class="er-title" x="634" y="234">Payment</text>
+          <text class="er-field" x="634" y="256">id · invoice · amount</text>
+        </g>
+        <g class="er-entity derived">
+          <rect x="620" y="300" width="180" height="62" rx="6"/>
+          <text class="er-title" x="634" y="324">Receivable</text>
+          <text class="er-field" x="634" y="346">= Invoice &minus; Payment</text>
+        </g>
+        <polyline class="er-rel" points="210,92 270,92 270,150 330,150" marker-end="url(#er-arrow)"/>
+        <text class="er-card" x="216" y="86">1</text><text class="er-card" x="312" y="146">M</text>
+        <polyline class="er-rel" points="210,272 270,272 270,178 330,178" marker-end="url(#er-arrow)"/>
+        <text class="er-card" x="216" y="266">1</text><text class="er-card" x="312" y="174">M</text>
+        <polyline class="er-rel" points="210,392 270,392 270,378 330,378" marker-end="url(#er-arrow)"/>
+        <text class="er-card" x="216" y="386">1</text><text class="er-card" x="312" y="374">M</text>
+        <polyline class="er-rel" points="510,150 565,150 565,120 620,120" marker-end="url(#er-arrow)"/>
+        <text class="er-card" x="516" y="144">1</text><text class="er-card" x="602" y="116">M</text>
+        <polyline class="er-rel" points="710,180 710,210" marker-end="url(#er-arrow)"/>
+        <text class="er-card" x="716" y="196">1</text><text class="er-card" x="716" y="208">M</text>
+        <polyline class="er-rel" points="710,270 710,300" stroke-dasharray="4 3"/>
+        <text class="er-field" x="640" y="290">derived</text>
+      </svg>
+    </div>
+
+    <div class="arch-sub">D · Pricing engine flow</div>
+    <div class="arch-pf" id="archpf">
+      <div class="arch-pf-seg" role="tablist" aria-label="Pricing scenario">
+        <button class="on" data-s="single">Single</button>
+        <button data-s="group">Group of 3</button>
+        <button data-s="sibling">Sibling</button>
+        <button data-s="referral">Referral (example)</button>
+      </div>
+      <div class="arch-pf-flow">
+        <div class="arch-pf-node"><span class="t">Base · PR00</span><span class="v">฿350,000</span></div>
+        <div class="arch-pf-arrow">&rarr;</div>
+        <div class="arch-pf-node"><span class="t">Condition</span><span class="v" id="pfCond">none</span></div>
+        <div class="arch-pf-arrow">&rarr;</div>
+        <div class="arch-pf-node net"><span class="t">Net price</span><span class="v" id="pfNet">฿350,000</span></div>
+        <div class="arch-pf-arrow">&rarr;</div>
+        <div class="arch-pf-node"><span class="t">Invoice &rarr; AR</span><span class="v">open item</span></div>
+      </div>
+      <div class="arch-pf-cap" id="pfCap">Single enrolment: full base tuition, no discount.</div>
+    </div>
+    <script>
+    (function(){
+      var r=document.getElementById('archpf'); if(!r) return;
+      var THB=function(n){return '฿'+n.toLocaleString('en-US');};
+      var S={
+        single:{cond:'none',net:350000,cap:'Single enrolment: full base tuition, no discount.'},
+        group:{cond:'Z002 −฿75,000',net:975000,cap:'Group of 3 enrolling together: 350,000 + 350,000 + 275,000 = ฿975,000. Z002 −฿75,000 lands on the 3rd enrolment.'},
+        sibling:{cond:'Z001 −฿50,000',net:300000,cap:'Sibling already enrolled: 350,000 − 50,000 = ฿300,000 (Z001).'},
+        referral:{cond:'Z003 −฿20,000',net:330000,cap:'Referral (example −฿20,000; range ฿15,000–30,000): 350,000 − 20,000 = ฿330,000 (Z003).'}
+      };
+      r.querySelectorAll('.arch-pf-seg button').forEach(function(b){b.addEventListener('click',function(){
+        r.querySelectorAll('.arch-pf-seg button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
+        var s=S[b.getAttribute('data-s')];
+        r.querySelector('#pfCond').textContent=s.cond;
+        r.querySelector('#pfNet').textContent=THB(s.net);
+        r.querySelector('#pfCap').textContent=s.cap;
+      });});
+    })();
+    </script>
+
+    <div class="arch-sub">E · Reference architecture</div>
+    <div class="arch-ref">
+      <div class="arch-ref-h">&#128274; Reference architecture (conceptual)</div>
+      <div class="arch-ref-note">A design proposal mapping the tiers to a candidate stack &mdash; not a deployed system. Stack is illustrative and to be confirmed.</div>
+      <div class="arch-ref-rows">
+        <div class="arch-ref-row"><span class="l">Presentation</span><b>React</b></div>
+        <div class="arch-ref-row"><span class="l">Application</span><b>Node · NestJS</b></div>
+        <div class="arch-ref-row"><span class="l">Data</span><b>PostgreSQL</b></div>
+        <div class="arch-ref-row"><span class="l">Pricing</span><b>Rules engine</b></div>
+      </div>
     </div>
 
     <!-- DUNNING FLOW DIAGRAM -->
@@ -475,14 +829,16 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       The pricing and AR business rules I authored in the FSD and submitted to the XeerSoft development team.
     </p>
 
-    <div class="code-block"><span class="comment">// FSD-P2-01 · Family-tier discount (posted as contra-revenue)</span>
-<span class="keyword">FUNCTION</span> family_discount(parent):
-   children = COUNT(enrolments WHERE parent_id = parent AND status ≠ Cancelled)
-   <span class="keyword">CASE</span> children:
-      1   → 0
-      2   → 50,000           <span class="comment">// 2nd child</span>
-      3+  → 100,000          <span class="comment">// 3 or more</span>
-   <span class="keyword">RETURN</span> discount × -1      <span class="comment">// negative → GL 400300 contra-revenue</span>
+    <figure class="lx-code">
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FSD-P2 · pricing &amp; AR rules</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
+    <div class="code-block"><span class="comment">// FSD-P2-01 · Pricing conditions (best single discount, no stacking — TBC)</span>
+<span class="keyword">ON</span> enrolment.price:
+   base = 350,000                       <span class="comment">// PR00 base tuition / yr</span>
+   <span class="keyword">Z001</span> sibling enrolled  → −50,000
+   <span class="keyword">Z002</span> cohort of 3      → −75,000     <span class="comment">// on the 3rd enrolment</span>
+   <span class="keyword">Z003</span> referral         → −15,000 … −30,000
+   discount = best_applicable           <span class="comment">// conditions do not stack</span>
+   net = base − discount                <span class="comment">// → Invoice + AR · GL 400300 contra</span>
 
 <span class="comment">// FSD-P2-02 · AR aging → dunning trigger</span>
 <span class="keyword">FOR EACH</span> open_item:
@@ -491,6 +847,26 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
    1–15   → WARN
    16–30  → FORMAL      <span class="comment">// Dunning L1</span>
    &gt;30    → ESCALATE    <span class="comment">// Dunning L2 / L3</span></div>
+    </figure>
+
+    <h3 class="content-h3">AR Aging &amp; <em>Dunning Trigger</em></h3>
+    <p class="content-p">The aging analysis the dunning run reads (FSD-P2-02): every open item is bucketed by days overdue, and each bucket fires the matching dunning level. Driving overdue items down moved average days overdue <strong>42 &rarr; 12</strong> and collection <strong>78% &rarr; 96%</strong>.</p>
+
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; aging buckets per FSD-P2-02 &middot; item counts and amounts illustrative &middot; the 42 &rarr; 12 days and 78% &rarr; 96% aggregates are the real results.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Aging bucket</th><th>Status</th><th>Dunning action</th><th>Open items</th><th>Amount (illus.)</th></tr></thead>
+          <tbody>
+            <tr><td class="sku">0 days</td><td><span class="arc ok">CURRENT</span></td><td>Within terms &mdash; no action</td><td class="res">—</td><td class="res">—</td></tr>
+            <tr><td class="sku">1–15</td><td><span class="arc l1">WARN · L1</span></td><td>Day+15 soft reminder (no penalty)</td><td class="res">12</td><td class="res">฿186,000</td></tr>
+            <tr><td class="sku">16–30</td><td><span class="arc l2">FORMAL · L2</span></td><td>Day+30 formal notice + academic warning</td><td class="res">5</td><td class="res">฿98,000</td></tr>
+            <tr><td class="sku">&gt; 30</td><td><span class="arc l3">ESCALATE · L3</span></td><td>Day+45 director escalation + enrolment hold</td><td class="res">2</td><td class="res">฿44,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">Real outcomes: average days overdue <b>42 &rarr; 12</b> · collection rate <b>78% &rarr; 96%</b>. Bucket counts and amounts are illustrative; the bucket-to-dunning mapping is the configured logic.</div>
+    </div>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
     <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
@@ -641,14 +1017,14 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       The three variables were mapped into structured pricing conditions within XeerSoft. Each variable has scale-based discount logic with clear thresholds.
     </p>
 
+    <figure class="lx-code">
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft · pricing condition config</span><span class="lx-code-lang">parameters</span></figcaption>
     <div class="code-block"><span class="comment">// PRICING CONDITION TYPES (XeerSoft Pricing Module)</span>
-<span class="keyword">Z001</span> Family Size Discount → Scale-based
-   Scale 1: 1 child     = ฿0
-   Scale 2: 2 children  = ฿50,000   ← threshold 1
-   Scale 3: 3+ children = ฿100,000  ← threshold 2
-
-<span class="keyword">Z002</span> Commitment Horizon → 1yr=standard | 2yr=additional discount
-<span class="keyword">Z003</span> Academic Profile  → Standard | Advanced premium track
+<span class="keyword">PR00</span> Base Tuition     = ฿350,000 / year
+<span class="keyword">Z001</span> Family / Sibling = −฿50,000         ← sibling already enrolled
+<span class="keyword">Z002</span> Group / Cohort   = −฿75,000         ← 3 together, on the 3rd
+<span class="keyword">Z003</span> Referral         = −฿15,000 … −฿30,000
+   <span class="comment">// conditions do not stack — best single discount applies (TBC)</span>
 
 <span class="comment">// PAYMENT TERMS</span>
 <span class="keyword">NT30</span>   Net 30 days
@@ -659,6 +1035,26 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 ZSD → GL 400100  Tuition Fee Revenue
 ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     → GL 110100  Student AR (Customer open item)</div>
+    </figure>
+
+    <h3 class="content-h3">Pricing <em>Condition Records</em></h3>
+    <p class="content-p">The pricing model as condition records: a base tuition plus three discount conditions. Conditions do not stack &mdash; the best single discount applies (assumption, TBC).</p>
+
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; condition records per author &middot; original XeerSoft master data under NDA &middot; referral shown as a range.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Code</th><th>Condition</th><th>Logic</th><th>Value</th><th>Posts to</th></tr></thead>
+          <tbody>
+            <tr><td class="sku">PR00</td><td>Base tuition</td><td>Rate card · per year</td><td class="res">฿350,000</td><td class="res">CR 400100 revenue</td></tr>
+            <tr><td class="sku">Z001</td><td>Family / sibling</td><td>Sibling already enrolled</td><td class="res"><span class="neg">−฿50,000</span></td><td class="res">GL 400300 contra-rev</td></tr>
+            <tr><td class="sku">Z002</td><td>Group / cohort</td><td>3 enrolling together</td><td class="res"><span class="neg">−฿75,000</span> <span class="exh-muted">on the 3rd</span></td><td class="res">GL 400300 contra-rev</td></tr>
+            <tr><td class="sku">Z003</td><td>Referral</td><td>Referred by a family</td><td class="res"><span class="neg">−฿15,000 … −฿30,000</span></td><td class="res">GL 400300 contra-rev</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">Posting per priced contract: <b>DR 110100</b> Student AR · <b>CR 400100</b> Tuition Revenue · <b>DR 400300</b> Discount (contra, negative). Conditions do not stack; best single discount applies (TBC). Earlier commitment / academic flags retired (no supporting data). Payment terms: NT30 · INST2 (50/50) · INST4 (25×4).</div>
+    </div>
 
     <h3 class="content-h3">UAT <em>Validation</em></h3>
     <p class="content-p">
@@ -715,7 +1111,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
 (function(){
   var d=document, root=d.documentElement;
   var bar=d.createElement('div'); bar.id='fx-progress'; d.body.appendChild(bar);
-  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.width=(100*sc/max)+'%';}
+  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.transform='scaleX('+Math.min(sc/max,1)+')';}
   addEventListener('scroll',prog,{passive:true}); prog();
 
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

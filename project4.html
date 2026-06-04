@@ -19,9 +19,10 @@
   --fx-glow: color-mix(in srgb, var(--accent,#c8962d) 32%, transparent);
 }
 html{ scroll-behavior:smooth; }
-#fx-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;
+#fx-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:9999;
+  transform:scaleX(0);transform-origin:left;will-change:transform;
   background:linear-gradient(90deg,var(--fx-accent),var(--fx-success));
-  box-shadow:0 0 14px var(--fx-glow);transition:width .12s linear;}
+  box-shadow:0 0 14px var(--fx-glow);transition:transform .12s linear;}
 
 html.js .fx-reveal{opacity:0;transform:translateY(22px);
   transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
@@ -148,7 +149,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim-log{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--xs-muted);max-height:150px;overflow:auto;margin-top:.7rem;border:1px solid var(--xs-border);border-radius:8px;padding:.5rem .7rem;background:var(--xs-bg)}
 .xsim-log div{padding:.18rem 0;border-bottom:1px dashed var(--xs-border)}.xsim-log div:last-child{border:0}
 .xsim-meter{height:10px;border-radius:99px;background:var(--xs-border);overflow:hidden;margin-top:.5rem}
-.xsim-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:width .5s}
+.xsim-meter i{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:transform .5s}
 .xsim-post{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--xs-text);line-height:1.7;margin-top:.4rem}
 </style>
 <!-- TRACK :: Delivery & Schedule styles (Claude) -->
@@ -182,8 +183,8 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .trk-legend{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:.9rem;font-size:.7rem;color:var(--t-muted)}
 .trk-legend span{display:inline-flex;align-items:center;gap:.4rem}
 .trk-legend i{width:15px;height:10px;border-radius:3px;display:inline-block}
-.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-left:3px solid var(--t-warn);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
-.trk-flag.ok{border-left-color:var(--t-ok)}
+.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
+.trk-flag.ok{border-color:color-mix(in srgb,var(--t-ok) 38%,var(--t-border))}
 .trk-flag .ic{font-size:1rem;line-height:1.4;flex:0 0 auto}
 .trk-flag b{color:var(--t-text);font-size:.84rem}.trk-flag p{margin:.25rem 0 0;font-size:.79rem;color:var(--t-muted);line-height:1.5}
 .trk-flag .res{color:var(--t-ok);font-weight:600}
@@ -226,6 +227,84 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-chip,.xsim .xsim-post,.xsim .xsim-tbl td,.xsim .xsim-log,.xsim .xsim-node small{font-variant-numeric:tabular-nums;}
 .xsim .xsim-chip{font-family:'JetBrains Mono','DM Mono',monospace;font-size:.74rem;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-post{font-family:'JetBrains Mono','DM Mono',monospace;}
+</style>
+<!-- P4-EXH :: P&L / cost-allocation exhibit styles (recreation) (Claude) -->
+<style id="p4-exh">
+.exh{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:1.5rem 0;background:var(--surface)}
+.exh-ribbon{display:flex;gap:.45rem;align-items:flex-start;padding:.55rem .9rem;font-family:'JetBrains Mono',monospace;
+  font-size:.63rem;line-height:1.5;color:var(--text-muted);
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warning) 9%,transparent) 0 10px,transparent 10px 20px);
+  border-bottom:1px dashed var(--border-strong)}
+.exh-ribbon b{color:var(--text);font-weight:700}
+.exh-body{padding:.6rem .7rem;overflow-x:auto}
+.exh-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:540px}
+.exh-table th{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap}
+.exh-table th.r{text-align:right}
+.exh-table td{padding:.55rem .6rem;border-bottom:1px solid var(--border);color:var(--text-muted);vertical-align:middle}
+.exh-table tbody tr:last-child td{border-bottom:0}
+.exh-table .nm{color:var(--text);font-weight:600}
+.exh-table .v{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;text-align:right;color:var(--text);font-weight:600;white-space:nowrap}
+.exh-table .sub td{background:color-mix(in srgb,var(--accent) 5%,transparent);color:var(--text);font-weight:700}
+.exh-table .sub td:first-child{text-align:right;font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted)}
+.exh-foot{font-size:.74rem;color:var(--text-muted);padding:.7rem .95rem;border-top:1px solid var(--border);background:var(--surface-2);line-height:1.6}
+.exh-foot b{color:var(--text)}
+.exh .process-table{margin:0;border:0;border-radius:0;min-width:520px}
+</style>
+<!-- P4-LUX :: luxury layer matching Projects 1-3 (Claude) -->
+<style id="p4-lux">
+::selection{ background: color-mix(in srgb, var(--accent) 26%, transparent); color: var(--text-strong); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 5px; }
+.result-val, .result-change, .lx-delta-num, .trk-kpi .v, .xsim-kv span:last-child, .process-table td{ font-variant-numeric: tabular-nums; }
+.project-hero{ isolation: isolate; }
+.project-hero::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px);
+  background-size: 58px 58px, 58px 58px;
+  -webkit-mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%);
+          mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%); opacity:.55; }
+.project-hero h1{ text-wrap: balance; overflow-wrap: anywhere; }
+.project-hero-grid{ min-width:0; }
+.project-hero-grid > *{ min-width:0; }
+.platform-badge{ flex-wrap:wrap; max-width:100%; }
+.project-info-card{ background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 5%, var(--surface)), var(--surface)); }
+.lx-spec-head{ display:flex; align-items:center; justify-content:space-between; font-family:'JetBrains Mono',monospace;
+  font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-subtle);
+  padding-bottom:.85rem; margin-bottom:.5rem; border-bottom:1px solid var(--border); }
+.lx-spec-head span:last-child{ color:var(--accent); }
+.project-info-val.lx-prog{ display:inline-flex; align-items:center; justify-content:flex-end; gap:.45rem;
+  color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; }
+.project-info-val.lx-prog::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); animation:lxPulseA 2.2s infinite; }
+@keyframes lxPulseA{ 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent);} 70%{box-shadow:0 0 0 7px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
+.results-banner .result-cell::before{ display:none; }
+.lx-stat{ background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 4%, var(--surface)), var(--surface)); padding:1.55rem 1.45rem; }
+.lx-stat:hover{ border-color: color-mix(in srgb,var(--accent) 45%, var(--border)); box-shadow: 0 24px 52px -32px color-mix(in srgb,var(--accent) 70%, transparent); }
+.lx-stat-head{ display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; }
+.lx-stat .result-val{ font-size:2.05rem; color:var(--text-strong); letter-spacing:-.045em; margin:0; }
+.lx-stat-dir{ font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:600; letter-spacing:.03em; color:var(--success); white-space:nowrap;
+  background: color-mix(in srgb,var(--success) 12%, transparent); border:1px solid color-mix(in srgb,var(--success) 30%, transparent); padding:.2rem .5rem; border-radius:100px; }
+.lx-stat-dir.prog{ color:var(--warning); background: color-mix(in srgb,var(--warning) 12%, transparent); border-color: color-mix(in srgb,var(--warning) 32%, transparent); }
+.lx-stat .result-label{ margin:.55rem 0 .9rem; }
+.lx-stat-note{ font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--text-muted); line-height:1.6; padding-top:.1rem; }
+.content-section .callout{ border:1px solid color-mix(in srgb,var(--accent) 20%, var(--border)); border-radius:var(--radius-md);
+  background: color-mix(in srgb, var(--accent) 5%, var(--bg)); padding:1.4rem 1.6rem; transition: border-color .35s ease, box-shadow .35s ease, transform .35s ease; }
+.content-section .callout:hover{ border-color: color-mix(in srgb,var(--accent) 42%, var(--border)); box-shadow: 0 20px 46px -32px color-mix(in srgb,var(--accent) 62%, transparent); }
+.content-section .callout-title{ display:inline-flex; align-items:center; gap:.5rem; margin-bottom:.95rem; background: var(--accent-bg); color: var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 25%, transparent); padding:.32rem .7rem; border-radius:100px; }
+.content-section .callout-title::before{ content:""; width:6px; height:6px; border-radius:1.5px; background:var(--accent); transform:rotate(45deg); }
+.lx-code{ margin:1.25rem 0; border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; background:var(--surface); box-shadow:var(--shadow-sm); }
+.lx-code .code-block{ margin:0; border:0; border-radius:0; background:transparent; }
+.lx-code-bar{ display:flex; align-items:center; gap:.7rem; padding:.6rem .95rem; flex-wrap:wrap; background:var(--surface-2); border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--text-muted); }
+.lx-code-dots{ display:flex; gap:.34rem; flex:0 0 auto; }
+.lx-code-dots i{ width:9px; height:9px; border-radius:50%; background:var(--border-strong); }
+.lx-code-file{ color:var(--text); font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lx-code-lang{ margin-left:auto; color:var(--accent); font-weight:600; background:var(--accent-bg); border-radius:100px; padding:.14rem .6rem; border:1px solid color-mix(in srgb,var(--accent) 22%,transparent); }
+.dashboard-section{ box-shadow: var(--shadow-lg); }
+.dashboard-image{ border-top:1px solid var(--border); }
+.trk-flag .ic{ color:var(--t-warn); }
+.trk-flag.ok .ic{ color:var(--t-ok); }
+@media (prefers-reduced-motion: reduce){ .project-info-val.lx-prog::before{ animation:none; } }
 </style>
 </head>
 <body>
@@ -270,6 +349,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </div>
 
     <div class="project-info-card">
+      <div class="lx-spec-head"><span>Project Spec</span><span>P-04</span></div>
       <div class="project-info-row">
         <span class="project-info-label">Platform</span>
         <span class="project-info-val">XeerSoft Cloud ERP</span>
@@ -292,7 +372,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Status</span>
-        <span class="project-info-val" style="color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.75rem;">◐ IN PROGRESS</span>
+        <span class="project-info-val lx-prog">IN PROGRESS · since Jan 2025</span>
       </div>
     </div>
   </div>
@@ -301,25 +381,25 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 <!-- RESULTS BANNER -->
 <section style="padding: 4rem 4rem 2rem;">
   <div class="results-banner">
-    <div class="result-cell">
-      <div class="result-val">฿2.13M</div>
-      <div class="result-label">Total Revenue Tracked</div>
-      <div class="result-change">Across 6 subjects</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">฿2.13M</div></div>
+      <div class="result-label">Revenue tracked</div>
+      <div class="lx-stat-note">6 STEM subjects<br>Chulalongkorn lab programme</div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">82.4%</div>
-      <div class="result-label">Collection Rate</div>
-      <div class="result-change">฿1.76M Collected</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">82.4%</div><span class="lx-stat-dir prog">● ongoing</span></div>
+      <div class="result-label">Collection rate</div>
+      <div class="lx-stat-note">฿1.76M of ฿2.13M<br>actively managed · target 95%</div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">฿679K</div>
-      <div class="result-label">Gross Profit</div>
-      <div class="result-change">31% Avg Margin</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">฿679K</div></div>
+      <div class="result-label">Gross profit</div>
+      <div class="lx-stat-note">~31% avg margin<br>per-subject P&amp;L</div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">50</div>
-      <div class="result-label">Students per Session</div>
-      <div class="result-change">฿3K each</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">50</div></div>
+      <div class="result-label">Students / session</div>
+      <div class="lx-stat-note">฿3,000 each<br>recurring billing cycle</div>
     </div>
   </div>
 </section>
@@ -355,7 +435,10 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </p>
 
     <h3 class="content-h3">P&L <em>by Subject</em></h3>
-    <table class="process-table">
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-subject P&amp;L &middot; figures author-provided &middot; original XeerSoft FI data under NDA.</div>
+      <div class="exh-body" style="padding:0">
+      <table class="process-table">
       <thead>
         <tr>
           <th>Subject</th>
@@ -417,6 +500,27 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
         </tr>
       </tbody>
     </table>
+      </div>
+      <div class="exh-foot">Totals: revenue <b>฿2.136M</b> · collected <b>฿1.761M</b> (82.4%) · gross profit <b>฿678,869</b>. Margin = gross profit ÷ revenue per subject; figures author-provided, masked for confidentiality.</div>
+    </div>
+
+    <h3 class="content-h3">Cost <em>Allocation</em></h3>
+    <p class="content-p">Each session's cost splits across three categories &mdash; one variable (materials, per student), two fixed (lab fee, transport) &mdash; producing the cost side of the P&amp;L.</p>
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-session cost model &middot; figures illustrative &middot; actual costs vary by session.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Cost category</th><th>Type</th><th>Basis</th><th class="r">Per session</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Lab fee</td><td>Fixed</td><td>per session (CU lab)</td><td class="v">฿40,000</td></tr>
+            <tr><td class="nm">Materials</td><td>Variable</td><td>฿900 × 50 students</td><td class="v">฿45,000</td></tr>
+            <tr><td class="nm">Transport</td><td>Fixed</td><td>per session</td><td class="v">฿12,000</td></tr>
+            <tr class="sub"><td colspan="3">Total cost / session</td><td class="v">฿97,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">Illustrative per-session model: revenue ฿150,000 (50 × ฿3,000) &minus; cost ฿97,000 = gross profit ฿53,000 (~35%). This is the allocation method, not a specific session.</div>
+    </div>
 
     <h3 class="content-h3">My <em>Approach</em></h3>
     <p class="content-p">
@@ -521,6 +625,8 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       The AR posting and reporting logic I authored in the FSD and submitted to the XeerSoft development team.
     </p>
 
+    <figure class="lx-code">
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FSD-P4 · AR invoice &amp; P&amp;L report</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
     <div class="code-block"><span class="comment">// FSD-P4-01 · Per-student AR invoice generation</span>
 <span class="keyword">FOR EACH</span> student <span class="keyword">IN</span> session.enrolled:
    invoice.line[1] = { 110100 Student AR    · Debit  · 3,000 THB · term NET30 }
@@ -533,6 +639,7 @@ collected    = SUM(cleared  WHERE ref ~ 'STEM%')
 cost         = SUM(session_order.actual_costs)
 gross_profit = collected − cost
 margin %     = gross_profit / collected × 100</div>
+    </figure>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
     <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
@@ -589,7 +696,7 @@ margin %     = gross_profit / collected × 100</div>
         var cleared=Math.round(S*C/100),open=S-cleared;
         g('#p4rev').textContent=fmt(rev);g('#p4collected').textContent=fmt(collected);g('#p4cost').textContent=fmt(cost);
         g('#p4gp').textContent=fmt(gp);g('#p4margin').textContent=margin.toFixed(1)+'%';
-        g('#p4meter').style.width=Math.max(0,Math.min(100,margin))+'%';
+        g('#p4meter').style.transform='scaleX('+Math.max(0,Math.min(100,margin))/100+')';
         g('#p4fee2').textContent=fmt(F);g('#p4fee3').textContent=fmt(F);
         g('#p4ar').innerHTML='<span class="xsim-chip ok">CLEARED '+cleared+'</span> <span class="xsim-chip warn">OPEN '+open+'</span> <span class="xsim-chip info">INVOICES '+S+'</span>';}
       [st,fee,col,lab,mat,tr].forEach(function(i){i.addEventListener('input',upd);});upd();
@@ -650,6 +757,8 @@ margin %     = gross_profit / collected × 100</div>
     </div>
 
     <h3 class="content-h3">Configuration <em>Parameters</em></h3>
+    <figure class="lx-code">
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft FI · programme &amp; GL config</span><span class="lx-code-lang">parameters</span></figcaption>
     <div class="code-block"><span class="comment">// PROGRAMME PARAMETERS</span>
 Students per session : 50 pax
 Fee per student      : THB 3,000 / session
@@ -669,6 +778,7 @@ Lab Fee (fixed)     · Materials (variable)  · Transport
 <span class="keyword">PARTIAL</span>  : Partial payment received, balance outstanding
 <span class="keyword">CLEARED</span>  : Full payment confirmed and reconciled
 <span class="keyword">DISPUTED</span> : Amount discrepancy under investigation</div>
+    </figure>
 
     <h3 class="content-h3">AR <em>Lifecycle Management</em></h3>
     <p class="content-p">
@@ -732,7 +842,7 @@ Lab Fee (fixed)     · Materials (variable)  · Transport
 (function(){
   var d=document, root=d.documentElement;
   var bar=d.createElement('div'); bar.id='fx-progress'; d.body.appendChild(bar);
-  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.width=(100*sc/max)+'%';}
+  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.transform='scaleX('+Math.min(sc/max,1)+')';}
   addEventListener('scroll',prog,{passive:true}); prog();
 
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

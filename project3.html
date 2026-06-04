@@ -19,9 +19,10 @@
   --fx-glow: color-mix(in srgb, var(--accent,#c8962d) 32%, transparent);
 }
 html{ scroll-behavior:smooth; }
-#fx-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;
+#fx-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:9999;
+  transform:scaleX(0);transform-origin:left;will-change:transform;
   background:linear-gradient(90deg,var(--fx-accent),var(--fx-success));
-  box-shadow:0 0 14px var(--fx-glow);transition:width .12s linear;}
+  box-shadow:0 0 14px var(--fx-glow);transition:transform .12s linear;}
 
 html.js .fx-reveal{opacity:0;transform:translateY(22px);
   transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
@@ -148,7 +149,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim-log{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--xs-muted);max-height:150px;overflow:auto;margin-top:.7rem;border:1px solid var(--xs-border);border-radius:8px;padding:.5rem .7rem;background:var(--xs-bg)}
 .xsim-log div{padding:.18rem 0;border-bottom:1px dashed var(--xs-border)}.xsim-log div:last-child{border:0}
 .xsim-meter{height:10px;border-radius:99px;background:var(--xs-border);overflow:hidden;margin-top:.5rem}
-.xsim-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:width .5s}
+.xsim-meter i{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--xs-accent),var(--xs-ok));transition:transform .5s}
 .xsim-post{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--xs-text);line-height:1.7;margin-top:.4rem}
 </style>
 <!-- TRACK :: Delivery & Schedule styles (Claude) -->
@@ -182,8 +183,8 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .trk-legend{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:.9rem;font-size:.7rem;color:var(--t-muted)}
 .trk-legend span{display:inline-flex;align-items:center;gap:.4rem}
 .trk-legend i{width:15px;height:10px;border-radius:3px;display:inline-block}
-.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-left:3px solid var(--t-warn);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
-.trk-flag.ok{border-left-color:var(--t-ok)}
+.trk-flag{display:flex;gap:.7rem;padding:.7rem .85rem;border:1px solid var(--t-border);border-radius:8px;margin-top:.7rem;background:var(--t-bg)}
+.trk-flag.ok{border-color:color-mix(in srgb,var(--t-ok) 38%,var(--t-border))}
 .trk-flag .ic{font-size:1rem;line-height:1.4;flex:0 0 auto}
 .trk-flag b{color:var(--t-text);font-size:.84rem}.trk-flag p{margin:.25rem 0 0;font-size:.79rem;color:var(--t-muted);line-height:1.5}
 .trk-flag .res{color:var(--t-ok);font-weight:600}
@@ -226,6 +227,101 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-chip,.xsim .xsim-post,.xsim .xsim-tbl td,.xsim .xsim-log,.xsim .xsim-node small{font-variant-numeric:tabular-nums;}
 .xsim .xsim-chip{font-family:'JetBrains Mono','DM Mono',monospace;font-size:.74rem;}
 .xsim .xsim-kv span:last-child,.xsim .xsim-post{font-family:'JetBrains Mono','DM Mono',monospace;}
+</style>
+<!-- P3-EXH :: defect-log exhibit styles (recreation) (Claude) -->
+<style id="p3-exh">
+.exh{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:1.5rem 0;background:var(--surface)}
+.exh-ribbon{display:flex;gap:.45rem;align-items:flex-start;padding:.55rem .9rem;font-family:'JetBrains Mono',monospace;
+  font-size:.63rem;line-height:1.5;color:var(--text-muted);
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warning) 9%,transparent) 0 10px,transparent 10px 20px);
+  border-bottom:1px dashed var(--border-strong)}
+.exh-ribbon b{color:var(--text);font-weight:700}
+.exh-body{padding:.6rem .7rem;overflow-x:auto}
+.exh-table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:620px}
+.exh-table th{font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);text-align:left;padding:.5rem .55rem;border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap}
+.exh-table td{padding:.55rem .55rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;line-height:1.45}
+.exh-table tbody tr:last-child td{border-bottom:0}
+.exh-table .sku{font-weight:700;white-space:nowrap;font-family:'JetBrains Mono',monospace;color:var(--accent)}
+.exh-foot{font-size:.74rem;color:var(--text-muted);padding:.7rem .95rem;border-top:1px solid var(--border);background:var(--surface-2);line-height:1.6}
+.exh-foot b{color:var(--text)}
+.exh-mut{color:var(--text-subtle);font-style:italic;font-weight:400;font-size:.92em}
+.dsev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.12rem .42rem;border-radius:5px;border:1px solid}
+.dsev.p1{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 40%,transparent);background:color-mix(in srgb,var(--danger) 11%,transparent)}
+.dsev.p2{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 42%,transparent);background:color-mix(in srgb,var(--warning) 11%,transparent)}
+.dsev.p3{color:var(--text-muted);border-color:var(--border-strong);background:var(--surface-2)}
+.dst{display:inline-flex;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:.12rem .45rem;border-radius:99px;border:1px solid;white-space:nowrap}
+.dst.res{color:var(--success);border-color:color-mix(in srgb,var(--success) 35%,transparent);background:color-mix(in srgb,var(--success) 10%,transparent)}
+.dst.def{color:var(--text-muted);border-color:var(--border-strong);background:var(--surface-2)}
+</style>
+<!-- P3-LUX :: luxury layer matching Projects 1 & 2 (Claude) -->
+<style id="p3-lux">
+::selection{ background: color-mix(in srgb, var(--accent) 26%, transparent); color: var(--text-strong); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 5px; }
+.result-val, .result-change, .lx-delta-num, .trk-kpi .v, .xsim-kv span:last-child, .process-table td{ font-variant-numeric: tabular-nums; }
+.project-hero{ isolation: isolate; }
+.project-hero::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb,var(--accent) 8%,transparent) 1px, transparent 1px);
+  background-size: 58px 58px, 58px 58px;
+  -webkit-mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%);
+          mask: radial-gradient(125% 105% at 90% -8%, #000 0%, transparent 60%); opacity:.55; }
+.project-hero h1{ text-wrap: balance; overflow-wrap: anywhere; }
+.project-hero-grid{ min-width:0; }
+.project-hero-grid > *{ min-width:0; }
+.platform-badge{ flex-wrap:wrap; max-width:100%; }
+.project-info-card{ background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 5%, var(--surface)), var(--surface)); }
+.lx-spec-head{ display:flex; align-items:center; justify-content:space-between; font-family:'JetBrains Mono',monospace;
+  font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-subtle);
+  padding-bottom:.85rem; margin-bottom:.5rem; border-bottom:1px solid var(--border); }
+.lx-spec-head span:last-child{ color:var(--accent); }
+.project-info-val.lx-live{ display:inline-flex; align-items:center; justify-content:flex-end; gap:.45rem;
+  color:var(--success); font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; }
+.project-info-val.lx-live::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--success); animation:lxPulse 2.2s infinite; }
+@keyframes lxPulse{ 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--success) 55%,transparent);} 70%{box-shadow:0 0 0 7px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
+.results-banner .result-cell::before{ display:none; }
+.lx-stat{ background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 4%, var(--surface)), var(--surface)); padding:1.55rem 1.45rem; }
+.lx-stat:hover{ border-color: color-mix(in srgb,var(--accent) 45%, var(--border)); box-shadow: 0 24px 52px -32px color-mix(in srgb,var(--accent) 70%, transparent); }
+.lx-stat-head{ display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; }
+.lx-stat .result-val{ font-size:2.05rem; color:var(--text-strong); letter-spacing:-.045em; margin:0; }
+.lx-stat-dir{ font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:600; letter-spacing:.03em; color:var(--success); white-space:nowrap;
+  background: color-mix(in srgb,var(--success) 12%, transparent); border:1px solid color-mix(in srgb,var(--success) 30%, transparent); padding:.2rem .5rem; border-radius:100px; }
+.lx-stat .result-label{ margin:.55rem 0 .9rem; }
+.lx-stat-note{ font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--text-muted); line-height:1.6; padding-top:.1rem; }
+.lx-delta{ display:flex; flex-direction:column; gap:.45rem; }
+.lx-delta-row{ display:grid; grid-template-columns:3.4rem 1fr 2.4rem; align-items:center; gap:.55rem; min-width:0; }
+.lx-delta-tag{ font-family:'JetBrains Mono',monospace; font-size:.56rem; letter-spacing:.06em; text-transform:uppercase; color:var(--text-subtle); }
+.lx-delta-track{ height:7px; border-radius:100px; background:var(--surface-3); overflow:hidden; }
+.lx-delta-bar{ display:block; height:100%; border-radius:100px; transform-origin:left; transform:scaleX(var(--w)); }
+.lx-delta-bar.before{ background: color-mix(in srgb, var(--text-subtle) 60%, transparent); }
+.lx-delta-bar.after{ background: linear-gradient(90deg, var(--accent), var(--accent-soft)); }
+.lx-delta-num{ font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--text); text-align:right; }
+.lx-delta-row.before .lx-delta-num{ color:var(--text-muted); }
+html.js .lx-delta-bar{ transform:scaleX(0); transition:transform 1s cubic-bezier(.22,.61,.36,1); }
+html.js .fx-in .lx-delta-bar{ transform:scaleX(var(--w)); }
+html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
+.content-section .callout{ border:1px solid color-mix(in srgb,var(--accent) 20%, var(--border)); border-radius:var(--radius-md);
+  background: color-mix(in srgb, var(--accent) 5%, var(--bg)); padding:1.4rem 1.6rem; transition: border-color .35s ease, box-shadow .35s ease, transform .35s ease; }
+.content-section .callout:hover{ border-color: color-mix(in srgb,var(--accent) 42%, var(--border)); box-shadow: 0 20px 46px -32px color-mix(in srgb,var(--accent) 62%, transparent); }
+.content-section .callout-title{ display:inline-flex; align-items:center; gap:.5rem; margin-bottom:.95rem; background: var(--accent-bg); color: var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 25%, transparent); padding:.32rem .7rem; border-radius:100px; }
+.content-section .callout-title::before{ content:""; width:6px; height:6px; border-radius:1.5px; background:var(--accent); transform:rotate(45deg); }
+.lx-code{ margin:1.25rem 0; border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; background:var(--surface); box-shadow:var(--shadow-sm); }
+.lx-code .code-block{ margin:0; border:0; border-radius:0; background:transparent; }
+.lx-code-bar{ display:flex; align-items:center; gap:.7rem; padding:.6rem .95rem; flex-wrap:wrap; background:var(--surface-2); border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--text-muted); }
+.lx-code-dots{ display:flex; gap:.34rem; flex:0 0 auto; }
+.lx-code-dots i{ width:9px; height:9px; border-radius:50%; background:var(--border-strong); }
+.lx-code-file{ color:var(--text); font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lx-code-lang{ margin-left:auto; color:var(--accent); font-weight:600; background:var(--accent-bg); border-radius:100px; padding:.14rem .6rem; border:1px solid color-mix(in srgb,var(--accent) 22%,transparent); }
+.dashboard-section{ box-shadow: var(--shadow-lg); }
+.dashboard-image{ border-top:1px solid var(--border); }
+.trk-flag .ic{ color:var(--t-warn); }
+.trk-flag.ok .ic{ color:var(--t-ok); }
+@media (prefers-reduced-motion: reduce){
+  html.js .lx-delta-bar{ transition:none !important; transform:scaleX(var(--w)) !important; }
+  .project-info-val.lx-live::before{ animation:none; }
+}
 </style>
 </head>
 <body>
@@ -270,6 +366,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </div>
 
     <div class="project-info-card">
+      <div class="lx-spec-head"><span>Project Spec</span><span>P-03</span></div>
       <div class="project-info-row">
         <span class="project-info-label">Platform</span>
         <span class="project-info-val">XeerSoft Cloud ERP</span>
@@ -292,7 +389,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Status</span>
-        <span class="project-info-val" style="color: var(--success); font-family: 'DM Mono', monospace; font-size: 0.75rem;">✓ LIVE</span>
+        <span class="project-info-val lx-live">LIVE · Jan 2025</span>
       </div>
     </div>
   </div>
@@ -301,25 +398,28 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 <!-- RESULTS BANNER -->
 <section style="padding: 4rem 4rem 2rem;">
   <div class="results-banner">
-    <div class="result-cell">
-      <div class="result-val">60</div>
-      <div class="result-label">Total Defects Found</div>
-      <div class="result-change">All documented</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">100%</div><span class="lx-stat-dir">✓ cleared</span></div>
+      <div class="result-label">Go-live blockers cleared</div>
+      <div class="lx-delta">
+        <div class="lx-delta-row before"><span class="lx-delta-tag">found</span><span class="lx-delta-track"><i class="lx-delta-bar before" style="--w:1"></i></span><span class="lx-delta-num">11</span></div>
+        <div class="lx-delta-row after"><span class="lx-delta-tag">go-live</span><span class="lx-delta-track"><i class="lx-delta-bar after" style="--w:0"></i></span><span class="lx-delta-num">0</span></div>
+      </div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">83.8%</div>
-      <div class="result-label">Defects Resolved</div>
-      <div class="result-change">Pre Go-Live</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">0</div><span class="lx-stat-dir">✓ zero</span></div>
+      <div class="result-label">Critical post-launch</div>
+      <div class="lx-stat-note">across 50+ members<br>live since Jan 2025</div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">0</div>
-      <div class="result-label">Critical Post-Launch</div>
-      <div class="result-change">Zero incidents</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">60</div></div>
+      <div class="result-label">Defects tracked</div>
+      <div class="lx-stat-note">5 UAT cycles · all documented<br>83.8% resolved pre go-live</div>
     </div>
-    <div class="result-cell">
-      <div class="result-val">50+</div>
-      <div class="result-label">Members Enrolled</div>
-      <div class="result-change">Live since Jan 2025</div>
+    <div class="result-cell lx-stat">
+      <div class="lx-stat-head"><div class="result-val">5</div></div>
+      <div class="result-label">UAT build cycles</div>
+      <div class="lx-stat-note">blockers 7 → 2 → 2 → 0</div>
     </div>
   </div>
 </section>
@@ -507,6 +607,27 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
     </table>
 
     <!-- XEERSOFT-NATIVE: MODULE FLOW + DATA MODEL + FSD -->
+    <h3 class="content-h3">Defect <em>Log</em></h3>
+    <p class="content-p">The central UAT artifact: every defect tracked with ID, area, severity, the cycle it surfaced in, and status. DEF-001 (the silent bulk-assign failure) was the entry blocker; the rest span the validation scope below.</p>
+
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; DEF-001 is the real defect; other rows illustrative and masked &middot; the totals (60 tracked &middot; 11 blockers &rarr; 0 by Cycle 4 &middot; 0 critical post-launch) are the real results.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>ID</th><th>Title</th><th>Area</th><th>Severity</th><th>Cycle</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="sku">DEF-001</td><td>Bulk star-assign stops after first student (silent)</td><td>Loyalty · Assign</td><td><span class="dsev p1">P1</span></td><td>C1</td><td><span class="dst res">Resolved</span></td></tr>
+            <tr><td class="sku">DEF-002 <span class="exh-mut">illus.</span></td><td>Voucher re-redeemable after first use</td><td>Redemption</td><td><span class="dsev p1">P1</span></td><td>C1</td><td><span class="dst res">Resolved</span></td></tr>
+            <tr><td class="sku">DEF-014 <span class="exh-mut">illus.</span></td><td>Partial redemption leaves balance mismatch</td><td>Star balance</td><td><span class="dsev p2">P2</span></td><td>C2</td><td><span class="dst res">Resolved</span></td></tr>
+            <tr><td class="sku">DEF-021 <span class="exh-mut">illus.</span></td><td>Campaign trigger fires twice on record edit</td><td>Campaign</td><td><span class="dsev p2">P2</span></td><td>C2</td><td><span class="dst res">Resolved</span></td></tr>
+            <tr><td class="sku">DEF-038 <span class="exh-mut">illus.</span></td><td>Star-log timestamp missing on bulk action</td><td>Audit trail</td><td><span class="dsev p3">P3</span></td><td>C3</td><td><span class="dst res">Resolved</span></td></tr>
+            <tr><td class="sku">DEF-052 <span class="exh-mut">illus.</span></td><td>Reward label truncated on student portal</td><td>UI</td><td><span class="dsev p3">P3</span></td><td>C4</td><td><span class="dst def">Deferred</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">Real totals: <b>60</b> defects across <b>5</b> cycles · <b>11</b> P1 blockers driven <b>7 &rarr; 2 &rarr; 2 &rarr; 0</b> (cleared by Cycle 4) · <b>0</b> critical post-launch. Rows other than DEF-001 are illustrative, masked to the validation areas below.</div>
+    </div>
+
     <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
       The loyalty process as built in the XeerSoft CRM module: module → function paths.
@@ -564,6 +685,8 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       My defect report specified the corrected expected behaviour for the bulk-assignment routine: it must iterate over <strong>every</strong> selected student, not stop after the first.
     </p>
 
+    <figure class="lx-code">
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FSD-P3-02 · bulk-assign fix</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
     <div class="code-block"><span class="comment">// FSD-P3-02 · DEF-001 corrected behaviour: iterate ALL selected students</span>
 <span class="keyword">FUNCTION</span> assign_stars(selected[], stars, reason, user):
    <span class="keyword">FOR EACH</span> student <span class="keyword">IN</span> selected:        <span class="comment">// defect stopped after the 1st record</span>
@@ -572,6 +695,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
       <span class="keyword">ELSE</span>               → bal.current += stars; bal.earned += stars
       write_log(student, action = A, stars, reason, user)
    <span class="keyword">COMMIT</span> all updates atomically          <span class="comment">// all-or-nothing</span></div>
+    </figure>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
     <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
@@ -754,7 +878,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 (function(){
   var d=document, root=d.documentElement;
   var bar=d.createElement('div'); bar.id='fx-progress'; d.body.appendChild(bar);
-  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.width=(100*sc/max)+'%';}
+  function prog(){var sc=root.scrollTop||d.body.scrollTop;var max=(root.scrollHeight-root.clientHeight)||1;bar.style.transform='scaleX('+Math.min(sc/max,1)+')';}
   addEventListener('scroll',prog,{passive:true}); prog();
 
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

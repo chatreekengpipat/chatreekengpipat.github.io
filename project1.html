@@ -563,6 +563,53 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
   .mrp-arrow{transform:rotate(90deg);height:24px}
 }
 </style>
+<!-- P1-PS :: interactive procurement simulation (Claude) -->
+<style id="p1-ps">
+.ps-panel{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.1rem 1.2rem;margin:1rem 0}
+.ps-panel-h{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:.85rem}
+.ps-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
+.ps-field{display:flex;flex-direction:column;gap:.32rem;min-width:0}
+.ps-field label{font-size:.72rem;color:var(--text);font-weight:600}
+.ps-field .hint{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-subtle)}
+.ps-field .hint b{color:var(--accent)}
+.ps-two{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
+.ps-num,.ps-sel{background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.5rem .6rem;font:inherit;font-size:.86rem;width:100%}
+.ps-num:focus,.ps-sel:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.ps-disc{font-size:.7rem;color:var(--text-subtle);font-style:italic;margin-top:.85rem;line-height:1.5}
+.ps-tbl{width:100%;border-collapse:collapse;font-size:.82rem;min-width:480px}
+.ps-tbl th{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap}
+.ps-tbl th.r{text-align:right}
+.ps-tbl td{padding:.5rem .6rem;border-bottom:1px solid var(--border);color:var(--text-muted);vertical-align:middle}
+.ps-tbl tbody tr:last-child td{border-bottom:0}
+.ps-tbl .nm{color:var(--text);font-weight:600}
+.ps-tbl .v{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;text-align:right;color:var(--text);font-weight:600;white-space:nowrap}
+.ps-tbl .grp td{background:var(--surface-2);font-family:'JetBrains Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700}
+.ps-tbl .sub td{background:color-mix(in srgb,var(--accent) 5%,transparent);color:var(--text);font-weight:700}
+.ps-tbl .sub td:first-child{text-align:right;font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted)}
+.ps-mut{color:var(--text-subtle);font-style:italic;font-weight:400;font-size:.92em}
+.ps-total{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem;
+  border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:var(--radius-md);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 8%,var(--surface)),var(--surface));padding:1rem 1.2rem;margin:.9rem 0}
+.ps-total .l{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.ps-total .v{font-size:2rem;font-weight:800;color:var(--accent);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.ps-sub-pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem}
+.ps-pill{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text-muted);background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:.2rem .55rem;font-variant-numeric:tabular-nums}
+.ps-pill b{color:var(--text)}
+.ps-tl{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:.95rem 1rem;margin:.9rem 0}
+.ps-tl-inner{min-width:580px}
+.ps-tl-head{display:grid;grid-template-columns:160px 1fr;gap:.5rem;margin-bottom:.45rem}
+.ps-tl-weeks{display:flex}
+.ps-tl-weeks span{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted)}
+.ps-tl-weeks span.zero{color:var(--accent);font-weight:700}
+.ps-tl-row{display:grid;grid-template-columns:160px 1fr;gap:.5rem;align-items:center;margin:.32rem 0}
+.ps-tl-label{font-size:.76rem;color:var(--text);line-height:1.25}
+.ps-tl-label small{display:block;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text-subtle);margin-top:.1rem}
+.ps-tl-track{position:relative;height:28px;border-radius:6px;background:repeating-linear-gradient(90deg,transparent,transparent calc(100%/6 - 1px),var(--border) calc(100%/6))}
+.ps-tl-bar{position:absolute;top:4px;bottom:4px;left:var(--l);width:var(--w);border-radius:6px;background:linear-gradient(90deg,var(--accent-soft),var(--accent));display:flex;align-items:center;padding:0 .55rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#fff;white-space:nowrap;overflow:hidden}
+.ps-tl-bar.bot{background:linear-gradient(90deg,var(--warning),color-mix(in srgb,var(--warning) 65%,var(--danger)))}
+.ps-tl-cap{font-size:.72rem;color:var(--text-muted);margin-top:.6rem;line-height:1.55}
+@media(max-width:680px){.ps-controls{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
@@ -1317,6 +1364,182 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <div class="mrp-chain">release D · W2 &nbsp;&rarr;(LT1)&nbsp; D ready W3 &nbsp;&rarr;(LT2)&nbsp; B ready W5 &nbsp;&rarr;(LT1)&nbsp; A ready W6</div>
       <p>That is a <strong>4-week cumulative lead time across three levels</strong> for what looks like a 1-week end item. The same compounding is exactly why the independent-demand SKUs above carry a <strong>6&ndash;7 week planning lead time</strong>: the supplier offset plus every upstream step, stacked. Plan against the <em>cumulative</em> lead time, never the item's own.</p>
     </div>
+
+    <h3 class="content-h3">Procurement <em>Simulation</em></h3>
+    <p class="content-p">
+      The MRP run above is the method in the abstract; this is the same explode &rarr; pool &rarr; cost &rarr; offset logic applied to the institute's real start-of-term procurement. Three headcounts drive the whole plan: change them (or pick a different device model) and the demand, cost and order timeline recompute live.
+    </p>
+
+    <div class="ps-panel" id="ps1">
+      <div class="ps-panel-h">&#9671; Parameters · edit to recompute</div>
+      <div class="ps-controls">
+        <div class="ps-field"><label>Students</label>
+          <div class="ps-two"><input class="ps-num" id="psMath" type="number" min="0" value="60" aria-label="Math students"><input class="ps-num" id="psSci" type="number" min="0" value="40" aria-label="Science students"></div>
+          <span class="hint">Math / Science &middot; total <b id="psStudTotal">100</b></span>
+        </div>
+        <div class="ps-field"><label>Teachers / staff</label><input class="ps-num" id="psTeach" type="number" min="0" value="10"></div>
+        <div class="ps-field"><label>Classrooms</label><input class="ps-num" id="psRoom" type="number" min="0" value="5"></div>
+        <div class="ps-field"><label>Teacher iPad</label>
+          <select class="ps-sel" id="psIpad">
+            <option value="A16">iPad (A16) 11" &middot; ฿12,900</option>
+            <option value="mini">iPad mini (A17 Pro) &middot; ฿18,900</option>
+            <option value="air11">iPad Air (M4) 11" &middot; ฿21,900</option>
+            <option value="air13">iPad Air (M4) 13" &middot; ฿28,900</option>
+          </select></div>
+        <div class="ps-field"><label>Teacher laptop (Lenovo)</label>
+          <select class="ps-sel" id="psLaptop">
+            <option value="v">V14 / V15 &middot; ฿12,900</option>
+            <option value="slim3">IdeaPad Slim 3 &middot; ฿13,900</option>
+            <option value="slim5" selected>IdeaPad Slim 5 &middot; ฿22,900</option>
+            <option value="thinkbook">ThinkBook 14/16 &middot; ฿21,900</option>
+          </select></div>
+        <div class="ps-field"><label>Classroom MacBook</label>
+          <select class="ps-sel" id="psMac">
+            <option value="neo">MacBook Neo (A18 Pro) &middot; ฿19,900</option>
+            <option value="air13" selected>MacBook Air 13" &middot; ฿36,900</option>
+            <option value="air15">MacBook Air 15" &middot; ฿44,900</option>
+            <option value="pro14">MacBook Pro 14" &middot; ฿54,900</option>
+            <option value="pro16">MacBook Pro 16" &middot; ฿80,900</option>
+          </select></div>
+      </div>
+      <p class="ps-disc">Prices are Thai-market reference (2026), starting configurations; adjust per quote. Lead times in weeks. Everything below recomputes from these inputs.</p>
+    </div>
+
+    <div class="mrp-sub">01 · Demand explosion</div>
+    <p class="content-p">Each headcount explodes into per-item quantities through its kit:</p>
+    <div class="mrp-rec"><div class="mrp-scroll"><table class="ps-tbl">
+      <thead><tr><th>Item</th><th>Per unit</th><th>Headcount</th><th class="r">Quantity</th></tr></thead>
+      <tbody id="psExplode"></tbody>
+    </table></div></div>
+
+    <div class="mrp-sub">02 · Common-component pooling</div>
+    <p class="content-p">Pens, folders and the teacher set are stationery-class items used across kits. Instead of ordering them per-kit, they net into <strong>one consolidated stationery PO</strong> (the Stationery vendor from the scorecard above): fewer POs, one delivery, volume pricing.</p>
+    <div class="mrp-rec"><div class="mrp-scroll"><table class="ps-tbl">
+      <thead><tr><th>Pooled item</th><th>Source</th><th class="r">Qty</th><th class="r">Cost</th></tr></thead>
+      <tbody id="psPool"></tbody>
+    </table></div></div>
+
+    <div class="mrp-sub">03 · Cost breakdown</div>
+    <div class="mrp-rec"><div class="mrp-scroll"><table class="ps-tbl">
+      <thead><tr><th>Item</th><th class="r">Qty</th><th class="r">Unit ฿</th><th class="r">Line ฿</th></tr></thead>
+      <tbody id="psCost"></tbody>
+    </table></div></div>
+    <div class="ps-total"><div><div class="l">Estimated procurement total</div><div class="ps-sub-pills" id="psPills"></div></div><div class="v" id="psTotal">฿0</div></div>
+
+    <div class="mrp-sub">04 · Lead-time offset timeline</div>
+    <p class="content-p">Goods-ready is week 0 (term start). Order release = 0 &minus; lead time:</p>
+    <div class="ps-tl"><div class="ps-tl-inner">
+      <div class="ps-tl-head"><div></div><div class="ps-tl-weeks"><span>&minus;5</span><span>&minus;4</span><span>&minus;3</span><span>&minus;2</span><span>&minus;1</span><span class="zero">0 · ready</span></div></div>
+      <div class="ps-tl-row"><div class="ps-tl-label">Laptops &amp; tablets<small>LT5 · release &minus;5</small></div><div class="ps-tl-track"><div class="ps-tl-bar bot" style="--l:0%;--w:100%">Lenovo · iPad · MacBook</div></div></div>
+      <div class="ps-tl-row"><div class="ps-tl-label">Lockers<small>LT4 · release &minus;4</small></div><div class="ps-tl-track"><div class="ps-tl-bar" style="--l:16.67%;--w:83.33%">Locker</div></div></div>
+      <div class="ps-tl-row"><div class="ps-tl-label">Cutter &amp; scanner<small>LT3 · release &minus;3</small></div><div class="ps-tl-track"><div class="ps-tl-bar" style="--l:33.33%;--w:66.67%">Paper cutter · scanner</div></div></div>
+      <div class="ps-tl-row"><div class="ps-tl-label">Math &amp; science kit<small>LT2 · release &minus;2</small></div><div class="ps-tl-track"><div class="ps-tl-bar" style="--l:50%;--w:50%">Casio · compass · lab coat · goggles</div></div></div>
+      <div class="ps-tl-row"><div class="ps-tl-label">Stationery &amp; consumables<small>LT1 · release &minus;1</small></div><div class="ps-tl-track"><div class="ps-tl-bar" style="--l:66.67%;--w:33.33%">base kit · plan book · answer sheets</div></div></div>
+    </div></div>
+    <p class="ps-tl-cap">The longer the bar, the earlier the order must be placed. The Apple / laptop devices (LT5) start the whole procurement, five weeks before term.</p>
+
+    <div class="mrp-sub">05 · Flow</div>
+    <div class="mrp-flow" style="grid-template-columns:1fr auto 1fr auto 1fr auto 1fr">
+      <div class="mrp-node"><span class="nt">Input</span><b>Headcount</b><div class="it"><span>students · teachers · rooms</span></div></div>
+      <div class="mrp-arrow">&rarr;</div>
+      <div class="mrp-node"><span class="nt">Map</span><b>3 Kits</b><div class="it"><span>Student · Teacher · Classroom</span></div></div>
+      <div class="mrp-arrow">&rarr;</div>
+      <div class="mrp-node eng"><span class="nt">Compute</span><b>Explode + Pool</b><span class="sub">qty · net common</span></div>
+      <div class="mrp-arrow">&rarr;</div>
+      <div class="mrp-node"><span class="nt">Output</span><b>Offset &rarr; PO</b><div class="it"><span>release &minus;5 … 0 wk</span></div></div>
+    </div>
+
+    <div class="mrp-sub">06 · Insight</div>
+    <div class="mrp-insight">
+      <span class="ttl">&#9656; The bottleneck is the Apple / laptop devices</span>
+      <p>The LT5 devices (Lenovo laptop, iPad, MacBook) are both the <strong>schedule bottleneck</strong> &mdash; ordered <strong>5 weeks before term</strong>, earliest of anything &mdash; and the <strong>cost centre</strong>:</p>
+      <div class="mrp-chain"><span id="psBotCost">฿542,500</span> in LT5 devices = <span id="psBotT">98.6%</span> of the Teacher kit · <span id="psBotTC">83.1%</span> of Teacher + Classroom spend</div>
+      <p>Everything else can wait until the last 1&ndash;2 weeks, but slip the device order and the whole term opening slips. Same compounding lead-time logic as the MRP run above: <strong>plan the long-lead, high-value items first</strong> &mdash; which is why those sit at the 6&ndash;7 week end of the planning horizon.</p>
+    </div>
+    <script>
+    (function(){
+      var root=document.getElementById('ps1'); if(!root) return;
+      var THB=function(n){return '฿'+Math.round(n).toLocaleString('en-US');};
+      var P={ ipad:{A16:12900,mini:18900,air11:21900,air13:28900},
+        laptop:{v:12900,slim3:13900,slim5:22900,thinkbook:21900},
+        macbook:{neo:19900,air13:36900,air15:44900,pro14:54900,pro16:80900} };
+      var BASE=[
+        {n:'Notebook (×3)',q:3,price:30,lt:1},
+        {n:'3-colour pen set',q:1,price:40,lt:1,common:1},
+        {n:'Mechanical pencil',q:1,price:30,lt:1},
+        {n:'Eraser',q:1,price:10,lt:1},
+        {n:'Ruler',q:1,price:20,lt:1},
+        {n:'Highlighter',q:1,price:25,lt:1},
+        {n:'Folder',q:1,price:30,lt:1,common:1},
+        {n:'Post-it',q:1,price:50,lt:1}
+      ];
+      var MATH=[{n:'Casio FX-991',q:1,price:850,lt:2},{n:'Compass / protractor',q:1,price:100,lt:2}];
+      var SCI=[{n:'Lab coat',q:1,price:350,lt:2},{n:'Safety goggles',q:1,price:290,lt:2}];
+      var TEACH=[{n:'Laptop (Lenovo)',q:1,dev:'laptop',lt:5,bot:1},{n:'iPad',q:1,dev:'ipad',lt:5,bot:1},{n:'Plan book',q:1,price:100,lt:1},{n:'Teacher stationery set',q:1,price:400,lt:1,common:1}];
+      var ROOM=[{n:'MacBook',q:1,dev:'macbook',lt:5,bot:1},{n:'Locker',q:1,price:5000,lt:4},{n:'Paper cutter',q:1,price:3000,lt:3},{n:'Document scanner',q:1,price:12000,lt:3},{n:'Answer sheets (500)',q:1,price:1000,lt:1}];
+      var $=function(id){return root.querySelector(id);};
+      var inMath=$('#psMath'),inSci=$('#psSci'),inT=$('#psTeach'),inR=$('#psRoom'),selI=$('#psIpad'),selL=$('#psLaptop'),selM=$('#psMac');
+      function v(el){var n=parseInt(el.value,10);return (isNaN(n)||n<0)?0:n;}
+      function build(){
+        var math=v(inMath),sci=v(inSci),teach=v(inT),room=v(inR),stud=math+sci;
+        var dp={laptop:P.laptop[selL.value],ipad:P.ipad[selI.value],macbook:P.macbook[selM.value]};
+        var L=[];
+        function add(grp,sub,arr,count){arr.forEach(function(it){var unit=it.dev?dp[it.dev]:it.price;var qty=it.q*count;
+          L.push({grp:grp,sub:sub,name:it.n,perUnit:it.q,count:count,qty:qty,unit:unit,line:qty*unit,lt:it.lt,common:!!it.common,bot:!!it.bot});});}
+        add('Student','Base',BASE,stud);add('Student','Math',MATH,math);add('Student','Science',SCI,sci);
+        add('Teacher','',TEACH,teach);add('Classroom','',ROOM,room);
+        return {L:L,math:math,sci:sci,stud:stud,teach:teach,room:room};
+      }
+      function render(){
+        var D=build(),L=D.L;
+        $('#psStudTotal').textContent=D.stud;
+        function sum(f){return L.reduce(function(s,x){return s+(f(x)?x.line:0);},0);}
+        var studSub=sum(function(x){return x.grp==='Student';});
+        var teachSub=sum(function(x){return x.grp==='Teacher';});
+        var roomSub=sum(function(x){return x.grp==='Classroom';});
+        var grand=studSub+teachSub+roomSub;
+        function tag(s){return (s&&s!=='Base')?' <span class="exh-tag">'+s+'</span>':'';}
+        // explosion
+        var ex='';
+        ['Student','Teacher','Classroom'].forEach(function(g){
+          ex+='<tr class="grp"><td colspan="4">'+g+' Kit</td></tr>';
+          L.filter(function(x){return x.grp===g;}).forEach(function(x){
+            ex+='<tr><td class="nm">'+x.name+tag(x.sub)+'</td><td>'+x.perUnit+' / unit</td><td>×'+x.count.toLocaleString('en-US')+'</td><td class="v">'+x.qty.toLocaleString('en-US')+'</td></tr>';});
+        });
+        $('#psExplode').innerHTML=ex;
+        // cost
+        var co='';
+        [['Student',studSub],['Teacher',teachSub],['Classroom',roomSub]].forEach(function(pr){
+          co+='<tr class="grp"><td colspan="4">'+pr[0]+' Kit</td></tr>';
+          L.filter(function(x){return x.grp===pr[0];}).forEach(function(x){
+            co+='<tr><td class="nm">'+x.name+tag(x.sub)+'</td><td class="v">'+x.qty.toLocaleString('en-US')+'</td><td class="v">'+THB(x.unit)+'</td><td class="v">'+THB(x.line)+'</td></tr>';});
+          co+='<tr class="sub"><td colspan="3">'+pr[0]+' subtotal</td><td class="v">'+THB(pr[1])+'</td></tr>';
+        });
+        $('#psCost').innerHTML=co;
+        $('#psTotal').textContent=THB(grand);
+        $('#psPills').innerHTML='<span class="ps-pill">Student <b>'+THB(studSub)+'</b></span><span class="ps-pill">Teacher <b>'+THB(teachSub)+'</b></span><span class="ps-pill">Classroom <b>'+THB(roomSub)+'</b></span>';
+        // pooling
+        var penQ=D.stud,folderQ=D.stud,setQ=D.teach;
+        var poolCost=penQ*40+folderQ*30+setQ*400;
+        $('#psPool').innerHTML=
+          '<tr><td class="nm">3-colour pen set</td><td>Student</td><td class="v">'+penQ.toLocaleString('en-US')+'</td><td class="v">'+THB(penQ*40)+'</td></tr>'+
+          '<tr><td class="nm">Folder</td><td>Student</td><td class="v">'+folderQ.toLocaleString('en-US')+'</td><td class="v">'+THB(folderQ*30)+'</td></tr>'+
+          '<tr><td class="nm">Teacher stationery set <span class="ps-mut">(incl. folder, stapler, scissors, binding)</span></td><td>Teacher</td><td class="v">'+setQ.toLocaleString('en-US')+'</td><td class="v">'+THB(setQ*400)+'</td></tr>'+
+          '<tr class="sub"><td colspan="3">Consolidated stationery PO</td><td class="v">'+THB(poolCost)+'</td></tr>';
+        // insight
+        var teachBot=sum(function(x){return x.grp==='Teacher'&&x.bot;});
+        var roomBot=sum(function(x){return x.grp==='Classroom'&&x.bot;});
+        var botCost=teachBot+roomBot;
+        var pctT=teachSub?(Math.round(teachBot/teachSub*1000)/10):0;
+        var pctTC=(teachSub+roomSub)?(Math.round(botCost/(teachSub+roomSub)*1000)/10):0;
+        $('#psBotCost').textContent=THB(botCost);
+        $('#psBotT').textContent=pctT+'%';
+        $('#psBotTC').textContent=pctTC+'%';
+      }
+      [inMath,inSci,inT,inR,selI,selL,selM].forEach(function(el){el.addEventListener('input',render);el.addEventListener('change',render);});
+      render();
+    })();
+    </script>
 
     <h3 class="content-h3">Configuration <em>Parameters</em></h3>
 
