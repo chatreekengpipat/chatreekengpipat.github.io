@@ -20,9 +20,14 @@
     <span class="nav-logo-mark"></span>
     Workspace of Chatree Kengpipat (Cee)
   </a>
-  <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox" aria-label="Toggle navigation menu">
-  <label for="nav-toggle" class="nav-hamburger" aria-hidden="true"><span></span><span></span><span></span></label>
-  <ul class="nav-links">
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head">
+      <span class="nav-drawer-title">Menu</span>
+      <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
+    </li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#featured-award">Award</a></li>
     <li><a href="#about">About</a></li>

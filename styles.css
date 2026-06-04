@@ -160,9 +160,10 @@ nav {
 .nav-links a.nav-cta:hover,
 .nav-links a.nav-cta.active { background: var(--accent-hover); color: #fff; }
 
-/* Hamburger + its checkbox are desktop-hidden (no phantom tab stop); shown only on mobile. */
-.nav-hamburger,
-.nav-toggle-checkbox { display: none; }
+/* Hamburger is a real <button>, desktop-hidden; drawer chrome only exists on mobile. */
+.nav-hamburger { display: none; }
+.nav-drawer-head { display: none; }
+.nav-overlay { display: none; }
 
 .theme-toggle {
   background: var(--surface);
@@ -2561,67 +2562,143 @@ footer p {
 }
 
 @media (max-width: 768px) {
-  nav { padding: 0.85rem 1rem; }
-  .nav-logo { font-size: 0.8rem; }
+  nav { padding: 0.85rem 1rem; justify-content: flex-start; gap: 0.7rem; }
+  .nav-logo { font-size: 0.8rem; margin-right: auto; }
 
-  /* Mobile: collapse the 6-link nav into a hamburger drawer so it never overflows the bar. */
+  /* ===== Left off-canvas drawer (Google-Sites style) ===== */
+  /* Hamburger: real <button>, pulled to the far left of the bar. */
   .nav-hamburger {
+    order: -1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 4px;
     width: 38px;
     height: 38px;
-    align-items: center;
+    padding: 0;
     cursor: pointer;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s;
   }
+  .nav-hamburger:hover { border-color: var(--accent); background: var(--accent-bg); }
+  .nav-hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .nav-hamburger span {
     display: block;
     width: 18px;
     height: 2px;
     background: var(--text);
     border-radius: 2px;
-    transition: transform 0.25s var(--ease-smooth), opacity 0.2s;
+    transition: transform 0.28s var(--ease-smooth), opacity 0.2s;
   }
-  /* Visually hidden but focusable on mobile (keyboard can toggle the drawer). */
-  .nav-toggle-checkbox { display: block; position: absolute; width: 1px; height: 1px; opacity: 0; }
-  .nav-toggle-checkbox:focus + .nav-hamburger { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* hamburger bars → X when the drawer is open (driven by aria-expanded on the button) */
+  .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-  /* Animate hamburger → X when open */
-  .nav-toggle-checkbox:checked + .nav-hamburger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-  .nav-toggle-checkbox:checked + .nav-hamburger span:nth-child(2) { opacity: 0; }
-  .nav-toggle-checkbox:checked + .nav-hamburger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
+  /* The link list becomes the sliding panel. */
   .nav-links {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(82vw, 320px);
+    height: 100dvh;
     flex-direction: column;
     align-items: stretch;
-    gap: 0.2rem;
-    padding: 0.75rem 1rem 1rem;
-    background: color-mix(in srgb, var(--bg) 97%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
+    gap: 0.15rem;
+    padding: 1rem 1rem 1.5rem;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
     box-shadow: var(--shadow-lg);
-    transform: translateY(-12px);
+    transform: translateX(-100%);
+    transition: transform 0.34s var(--ease-smooth);
+    z-index: 200;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .nav-links.open { transform: translateX(0); }
+
+  /* Drawer header: title + close (✕). */
+  .nav-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.15rem 0.1rem 0.85rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-drawer-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .nav-drawer-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-smooth);
+  }
+  .nav-drawer-close:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+  .nav-drawer-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .nav-links a { font-size: 0.98rem; padding: 0.8rem 0.85rem; width: 100%; border-radius: var(--radius-sm); }
+  .nav-links a.nav-cta { text-align: center; margin-top: 0.5rem; }
+  .nav-links li:last-child {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Dark scrim behind the drawer (intentionally dark in both light & dark themes). */
+  .nav-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.55);
     opacity: 0;
-    pointer-events: none;
-    transition: transform 0.25s var(--ease-smooth), opacity 0.2s;
+    visibility: hidden;
+    transition: opacity 0.3s var(--ease-smooth), visibility 0.3s;
+    z-index: 150;
   }
-  .nav-toggle-checkbox:checked ~ .nav-links {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
+  .nav-overlay.open { opacity: 1; visibility: visible; }
+
+  /* Gentle staggered entrance for the items once the panel is open. */
+  .nav-links.open li { animation: navItemIn 0.42s var(--ease-smooth) backwards; }
+  .nav-links.open li.nav-drawer-head { animation: none; }
+  .nav-links.open li:nth-child(2) { animation-delay: 0.04s; }
+  .nav-links.open li:nth-child(3) { animation-delay: 0.09s; }
+  .nav-links.open li:nth-child(4) { animation-delay: 0.14s; }
+  .nav-links.open li:nth-child(5) { animation-delay: 0.19s; }
+  .nav-links.open li:nth-child(6) { animation-delay: 0.24s; }
+  .nav-links.open li:nth-child(7) { animation-delay: 0.29s; }
+  .nav-links.open li:nth-child(8) { animation-delay: 0.34s; }
+
+  @keyframes navItemIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: none; }
   }
-  .nav-links a { font-size: 0.95rem; padding: 0.65rem 0.75rem; width: 100%; }
-  .nav-links a.nav-cta { text-align: center; margin-top: 0.3rem; }
-  .nav-links li:last-child { display: flex; justify-content: flex-end; padding-top: 0.4rem; }
+
+  /* Reduced motion: drawer + scrim snap, no slide or stagger. */
+  @media (prefers-reduced-motion: reduce) {
+    .nav-links, .nav-overlay { transition: none !important; }
+    .nav-hamburger span { transition: none !important; }
+    .nav-links.open li { animation: none !important; }
+  }
   .hero { padding: 6rem 1.25rem 3rem; }
   .hero-visual { grid-template-columns: 1fr; }
   .hero-card.span-2 { grid-column: span 1; }

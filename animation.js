@@ -500,3 +500,64 @@ document.addEventListener("DOMContentLoaded", () => {
     headline.style.setProperty('--ck-rx', '0deg');
   });
 })();
+
+/* ===== Mobile nav — left off-canvas drawer ===== */
+(function () {
+  var toggle = document.getElementById('nav-toggle');
+  var drawer = document.getElementById('primary-nav');
+  // Only wire up the JS drawer; bail cleanly on pages without the button markup.
+  if (!toggle || !drawer || toggle.tagName !== 'BUTTON') return;
+
+  var closeBtn = drawer.querySelector('.nav-drawer-close');
+  var overlay = document.createElement('div');
+  overlay.className = 'nav-overlay';
+  document.body.appendChild(overlay);
+
+  var mq = window.matchMedia('(max-width: 768px)');
+  var lastFocus = null;
+
+  function focusable() {
+    return Array.prototype.slice.call(drawer.querySelectorAll('a[href], button'));
+  }
+  function isOpen() { return drawer.classList.contains('open'); }
+
+  function open() {
+    if (isOpen()) return;
+    lastFocus = document.activeElement;
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';          // lock body scroll
+    document.addEventListener('keydown', onKey, true);
+    (closeBtn || drawer).focus();
+  }
+  function close(restoreFocus) {
+    if (!isOpen()) return;
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onKey, true);
+    if (restoreFocus !== false && lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function onKey(e) {
+    if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); close(); return; }
+    if (e.key !== 'Tab') return;
+    var f = focusable(); if (!f.length) return;       // focus trap
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  toggle.addEventListener('click', function () { isOpen() ? close() : open(); });
+  if (closeBtn) closeBtn.addEventListener('click', function () { close(); });
+  overlay.addEventListener('click', function () { close(); });
+
+  // Tapping a real link navigates → close the panel (theme toggle is a <button>, so it stays open).
+  drawer.addEventListener('click', function (e) {
+    if (e.target.closest('a[href]')) close(false);
+  });
+
+  // If the viewport grows back to the desktop bar while open, reset everything.
+  mq.addEventListener('change', function (e) { if (!e.matches) close(false); });
+})();
