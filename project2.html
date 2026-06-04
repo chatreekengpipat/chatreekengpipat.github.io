@@ -530,7 +530,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">The <em>Problem</em></h3>
     <p class="content-p">
-      Tuition fee pricing was managed <strong>ad-hoc per family by the school owner</strong>. No structured pricing model existed in the system: discounts varied by family size, commitment horizon, and academic profile but were only held in the owner's knowledge.
+      Tuition fee pricing was managed <strong>ad-hoc per family by the school owner</strong>. No structured pricing model existed in the system: discounts varied by sibling enrolment, group/cohort intake, and referral but were only held in the owner's knowledge.
     </p>
 
     <div class="callout">
@@ -693,7 +693,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <div class="arch-pf-arrow">&rarr;</div>
         <div class="arch-pf-node"><span class="t">Condition</span><span class="v" id="pfCond">none</span></div>
         <div class="arch-pf-arrow">&rarr;</div>
-        <div class="arch-pf-node net"><span class="t">Net price</span><span class="v" id="pfNet">฿350,000</span></div>
+        <div class="arch-pf-node net"><span class="t" id="pfNetT">Net price</span><span class="v" id="pfNet">฿350,000</span></div>
         <div class="arch-pf-arrow">&rarr;</div>
         <div class="arch-pf-node"><span class="t">Invoice &rarr; AR</span><span class="v">open item</span></div>
       </div>
@@ -704,16 +704,17 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       var r=document.getElementById('archpf'); if(!r) return;
       var THB=function(n){return '฿'+n.toLocaleString('en-US');};
       var S={
-        single:{cond:'none',net:350000,cap:'Single enrolment: full base tuition, no discount.'},
-        group:{cond:'Z002 −฿75,000',net:975000,cap:'Group of 3 enrolling together: 350,000 + 350,000 + 275,000 = ฿975,000. Z002 −฿75,000 lands on the 3rd enrolment.'},
-        sibling:{cond:'Z001 −฿50,000',net:300000,cap:'Sibling already enrolled: 350,000 − 50,000 = ฿300,000 (Z001).'},
-        referral:{cond:'Z003 −฿20,000',net:330000,cap:'Referral (example −฿20,000; range ฿15,000–30,000): 350,000 − 20,000 = ฿330,000 (Z003).'}
+        single:{cond:'none',net:350000,title:'Net price',cap:'Single enrolment: full base tuition, no discount.'},
+        group:{cond:'Z002 −฿75,000',net:975000,title:'Package total · 3',cap:'Group of 3 enrolling together: 350,000 + 350,000 + 275,000 = ฿975,000 (package total for 3, not per head). Z002 −฿75,000 lands on the 3rd enrolment.'},
+        sibling:{cond:'Z001 −฿50,000',net:300000,title:'Net price',cap:'Sibling already enrolled: 350,000 − 50,000 = ฿300,000 (Z001).'},
+        referral:{cond:'Z003 −฿20,000',net:330000,title:'Net price',cap:'Referral (example −฿20,000; range ฿15,000–30,000): 350,000 − 20,000 = ฿330,000 (Z003).'}
       };
       r.querySelectorAll('.arch-pf-seg button').forEach(function(b){b.addEventListener('click',function(){
         r.querySelectorAll('.arch-pf-seg button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
         var s=S[b.getAttribute('data-s')];
         r.querySelector('#pfCond').textContent=s.cond;
         r.querySelector('#pfNet').textContent=THB(s.net);
+        r.querySelector('#pfNetT').textContent=s.title;
         r.querySelector('#pfCap').textContent=s.cap;
       });});
     })();
@@ -848,9 +849,9 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 <span class="keyword">FOR EACH</span> open_item:
    overdue = today − due_date
    0      → CURRENT
-   1–15   → WARN
-   16–30  → FORMAL      <span class="comment">// Dunning L1</span>
-   &gt;30    → ESCALATE    <span class="comment">// Dunning L2 / L3</span></div>
+   1–15   → WARN        <span class="comment">// Dunning L1</span>
+   16–30  → FORMAL      <span class="comment">// Dunning L2</span>
+   &gt;30    → ESCALATE    <span class="comment">// Dunning L3</span></div>
     </figure>
 
     <h3 class="content-h3">AR Aging &amp; <em>Dunning Trigger</em></h3>
@@ -887,22 +888,17 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <div data-p="a">
           <div class="xsim-grid">
             <div class="xsim-panel">
-              <p class="xsim-h">Pricing conditions</p>
-              <label>C1 &middot; Children enrolled</label>
-              <div class="xsim-seg" data-seg="children">
-                <button class="on" data-v="1">1</button><button data-v="2">2</button><button data-v="3">3+</button></div>
-              <label>C2 &middot; Commitment horizon</label>
-              <div class="xsim-seg" data-seg="commit">
-                <button class="on" data-v="1yr">1 yr</button><button data-v="2yr">2 yr</button></div>
-              <label>C3 &middot; Academic profile</label>
-              <div class="xsim-seg" data-seg="acad">
-                <button class="on" data-v="Standard">Standard</button><button data-v="Advanced">Advanced</button></div>
+              <p class="xsim-h">Applicable conditions</p>
+              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2sib"><span>Sibling already enrolled <small>Z001 &minus;฿50,000</small></span></label>
+              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2grp"><span>3rd of a group of 3 <small>Z002 &minus;฿75,000</small></span></label>
+              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2ref"><span>Referred by a family <small>Z003 &minus;฿15&ndash;30k</small></span></label>
+              <label>Referral amount</label>
+              <select id="p2refamt"><option value="15000">฿15,000</option><option value="20000" selected>฿20,000</option><option value="25000">฿25,000</option><option value="30000">฿30,000</option></select>
             </div>
             <div class="xsim-panel">
-              <p class="xsim-h">Family-size discount &middot; FSD-P2-01</p>
-              <div class="xsim-kpi" id="p2disc">&#3647;0</div>
-              <div style="margin:.7rem 0;display:flex;gap:.4rem;flex-wrap:wrap" id="p2flags">
-                <span id="p2c1"></span><span id="p2c2"></span><span id="p2c3"></span></div>
+              <p class="xsim-h">Net price &middot; best single discount</p>
+              <div class="xsim-kpi" id="p2net">฿350,000</div>
+              <div style="margin:.7rem 0;display:flex;gap:.4rem;flex-wrap:wrap" id="p2flags"></div>
               <p class="xsim-h" style="margin-top:.6rem">AR / Revenue posting</p>
               <div class="xsim-post" id="p2post"></div>
             </div>
@@ -927,7 +923,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           </div>
         </div>
       </div>
-      <div class="xsim-cap">C2 / C3 are documented condition flags; only the C1 family-size tier (&#3647;0 / &#3647;50K / &#3647;100K) is a fixed value in the spec.</div>
+      <div class="xsim-cap">Conditions do not stack &mdash; the best single discount applies (assumption &middot; TBC). Z002 &minus;฿75,000 is the adjustment on the 3rd enrolment of a group of 3.</div>
     </div>
     <script>
     (function(){
@@ -935,21 +931,28 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       root.querySelectorAll('.xsim-tab').forEach(function(b){b.addEventListener('click',function(){
         root.querySelectorAll('.xsim-tab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
         root.querySelectorAll('[data-p]').forEach(function(p){p.hidden=(p.getAttribute('data-p')!==b.getAttribute('data-t'))});});});
-      function seg(name,cb){root.querySelectorAll('[data-seg="'+name+'"] button').forEach(function(b){
-        b.addEventListener('click',function(){root.querySelectorAll('[data-seg="'+name+'"] button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');cb();});});}
       function fmt(n){return '\u0e3f'+Number(n).toLocaleString('en-US');}
+      var p2sib=root.querySelector('#p2sib'),p2grp=root.querySelector('#p2grp'),p2ref=root.querySelector('#p2ref'),p2refamt=root.querySelector('#p2refamt');
       function price(){
-        var c=root.querySelector('[data-seg="children"] button.on').getAttribute('data-v');
-        var disc=c==='1'?0:(c==='2'?50000:100000);
-        root.querySelector('#p2disc').textContent=fmt(disc);
-        root.querySelector('#p2c1').innerHTML='<span class="xsim-chip '+(disc?'ok':'info')+'">C1 '+fmt(disc)+'</span>';
-        var commit=root.querySelector('[data-seg="commit"] button.on').getAttribute('data-v');
-        var acad=root.querySelector('[data-seg="acad"] button.on').getAttribute('data-v');
-        root.querySelector('#p2c2').innerHTML='<span class="xsim-chip info">C2 '+commit+'</span>';
-        root.querySelector('#p2c3').innerHTML='<span class="xsim-chip info">C3 '+acad+'</span>';
-        root.querySelector('#p2post').innerHTML='DR 110100 &middot; Student AR<br>CR 400100 &middot; Tuition Revenue<br>DR 400300 &middot; Family Discount (contra) &nbsp;'+fmt(disc);
+        var base=350000,cands=[];
+        if(p2sib.checked) cands.push({c:'Z001 sibling',d:50000});
+        if(p2grp.checked) cands.push({c:'Z002 group',d:75000});
+        if(p2ref.checked) cands.push({c:'Z003 referral',d:parseInt(p2refamt.value,10)});
+        var best={c:'none',d:0};
+        cands.forEach(function(x){ if(x.d>best.d) best=x; });
+        var net=base-best.d;
+        root.querySelector('#p2net').textContent=fmt(net);
+        root.querySelector('#p2flags').innerHTML = cands.length
+          ? cands.map(function(x){return '<span class="xsim-chip '+(x===best?'ok':'info')+'">'+x.c+' \u2212'+fmt(x.d)+(x===best?' \u2713':'')+'</span>';}).join('')
+          : '<span class="xsim-chip info">no condition \u00b7 full base</span>';
+        if(best.d>0){
+          root.querySelector('#p2post').innerHTML='DR 110100 &middot; Student AR &nbsp;'+fmt(net)+'<br>CR 400100 &middot; Tuition Revenue &nbsp;'+fmt(base)+'<br>DR 400300 &middot; Discount (contra) &nbsp;\u2212'+fmt(best.d)+' &middot; '+best.c;
+        } else {
+          root.querySelector('#p2post').innerHTML='DR 110100 &middot; Student AR &nbsp;'+fmt(base)+'<br>CR 400100 &middot; Tuition Revenue &nbsp;'+fmt(base);
+        }
       }
-      seg('children',price);seg('commit',price);seg('acad',price);price();
+      [p2sib,p2grp,p2ref,p2refamt].forEach(function(el){el.addEventListener('change',price);});
+      price();
       var dl=root.querySelector('#p2days');
       function dun(){var d=parseInt(dl.value,10);root.querySelector('#p2dval').textContent=d+' days';
         var c,cls,a,l;
