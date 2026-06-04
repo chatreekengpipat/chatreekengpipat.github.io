@@ -26,8 +26,9 @@ html{ scroll-behavior:smooth; }
 
 html.js .fx-reveal{opacity:0;transform:translateY(22px);
   transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
-  will-change:opacity,transform;}
-html.js .fx-reveal.fx-in{opacity:1;transform:none;}
+  animation:fxAutoIn .6s ease 1.8s forwards;}
+html.js .fx-reveal.fx-in{opacity:1;transform:none;animation:none;}
+@keyframes fxAutoIn{to{opacity:1;transform:none;}}
 
 html.js .fx-stagger.fx-in>*{animation:fxRise .6s cubic-bezier(.22,.61,.36,1) backwards;}
 html.js .fx-stagger.fx-in>*:nth-child(1){animation-delay:.04s}
@@ -76,7 +77,7 @@ html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
 .xn-fn{font-family:'DM Mono','JetBrains Mono',monospace;font-size:.82em;letter-spacing:.2px;}
 
 @media (prefers-reduced-motion: reduce){
-  html.js .fx-reveal{opacity:1!important;transform:none!important;transition:none!important;}
+  html.js .fx-reveal{opacity:1!important;transform:none!important;transition:none!important;animation:none!important;}
   html.js .fx-stagger.fx-in>*{animation:none!important;}
   #fx-progress{display:none;}
   html.js .diagram-container .diagram-svg *{opacity:1!important;stroke-dashoffset:0!important;}
