@@ -24,10 +24,9 @@ html{ scroll-behavior:smooth; }
   background:linear-gradient(90deg,var(--fx-accent),var(--fx-success));
   box-shadow:0 0 14px var(--fx-glow);transition:transform .12s linear;}
 
-html.js .fx-reveal{opacity:0;transform:translateY(22px);
-  transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
-  will-change:opacity,transform;}
+html.js .fx-reveal{animation:fxIn .7s cubic-bezier(.22,.61,.36,1) both;}
 html.js .fx-reveal.fx-in{opacity:1;transform:none;}
+@keyframes fxIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
 html.js .fx-stagger.fx-in>*{animation:fxRise .6s cubic-bezier(.22,.61,.36,1) backwards;}
 html.js .fx-stagger.fx-in>*:nth-child(1){animation-delay:.04s}
@@ -62,24 +61,20 @@ html.js .fx-stagger.fx-in>*:nth-child(8){animation-delay:.46s}
 .project-hero>*{position:relative;z-index:1;}
 
 html.js .diagram-container .diagram-svg line,
-html.js .diagram-container .diagram-svg polyline{stroke-dasharray:1400;stroke-dashoffset:1400;
-  transition:stroke-dashoffset 1.2s ease .1s;}
-html.js .diagram-container.fx-in .diagram-svg line,
-html.js .diagram-container.fx-in .diagram-svg polyline{stroke-dashoffset:0;}
+html.js .diagram-container .diagram-svg polyline{stroke-dasharray:1400;animation:fxDraw 1.2s ease .15s both;}
+@keyframes fxDraw{from{stroke-dashoffset:1400}to{stroke-dashoffset:0}}
 html.js .diagram-container .diagram-svg rect,
 html.js .diagram-container .diagram-svg polygon,
-html.js .diagram-container .diagram-svg text{opacity:0;transition:opacity .7s ease .35s;}
-html.js .diagram-container.fx-in .diagram-svg rect,
-html.js .diagram-container.fx-in .diagram-svg polygon,
-html.js .diagram-container.fx-in .diagram-svg text{opacity:1;}
+html.js .diagram-container .diagram-svg text{animation:fxFade .7s ease .35s both;}
+@keyframes fxFade{from{opacity:0}to{opacity:1}}
 
 .xn-fn{font-family:'DM Mono','JetBrains Mono',monospace;font-size:.82em;letter-spacing:.2px;}
 
 @media (prefers-reduced-motion: reduce){
-  html.js .fx-reveal{opacity:1!important;transform:none!important;transition:none!important;}
+  html.js .fx-reveal{opacity:1!important;transform:none!important;transition:none!important;animation:none!important;}
   html.js .fx-stagger.fx-in>*{animation:none!important;}
   #fx-progress{display:none;}
-  html.js .diagram-container .diagram-svg *{opacity:1!important;stroke-dashoffset:0!important;}
+  html.js .diagram-container .diagram-svg *{opacity:1!important;stroke-dashoffset:0!important;animation:none!important;}
   html{scroll-behavior:auto;}
 }
 </style>
