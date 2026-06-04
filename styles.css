@@ -508,14 +508,14 @@ section {
 
 .about-quote {
   background: var(--accent-bg);
-  border-left: 3px solid var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   padding: 1rem 1.25rem;
   margin: 1.5rem 0;
   font-size: 1.05rem;
   font-weight: 500;
   color: var(--text);
   line-height: 1.5;
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: var(--radius-md);
 }
 
 .skills-grid {
@@ -1793,10 +1793,10 @@ footer p {
 /* ============= CALLOUT ============= */
 .callout {
   background: var(--accent-bg);
-  border-left: 3px solid var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   padding: 1.25rem 1.5rem;
   margin: 1.5rem 0;
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: var(--radius-md);
 }
 
 .callout-title {
@@ -2337,8 +2337,8 @@ footer p {
 
 .formula-block {
   background: var(--surface-2);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: var(--radius);
   padding: 1rem 1.25rem;
   margin: 1rem 0;
   font-family: 'JetBrains Mono', monospace;
@@ -3741,7 +3741,7 @@ section:hover .section-num {
 .callout { transition: all 0.4s var(--ease-smooth); }
 
 .callout:hover {
-  border-left-width: 6px;
+  border-color: var(--accent);
   box-shadow:
     0 10px 25px -5px var(--glow-color),
     0 0 20px var(--glow-color);
