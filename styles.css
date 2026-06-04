@@ -562,29 +562,22 @@ section {
 .methodology-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0;
+  gap: 1.25rem;
 }
 
-/* Methodology reads as a flat 3-step band, not boxed cards — distinct from the bordered focus cards below. */
+/* Flat surface cards (design-system card): solid surface, hairline border, even padding all round.
+   No glassmorphism, no side dividers — depth comes from the hover lift + accent glow. */
 .method-card {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0.25rem 2rem;
-  transition: all 0.2s;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.6rem 1.75rem;
+  transition: transform 0.4s var(--ease-smooth),
+              border-color 0.3s var(--ease-smooth),
+              box-shadow 0.4s var(--ease-smooth);
 }
 
-.methodology-grid .method-card:first-child {
-  padding-left: 0;
-}
-
-.methodology-grid .method-card:not(:last-child) {
-  border-right: 1px solid var(--border);
-}
-
-.method-card:hover {
-  transform: translateY(-2px);
-}
+.method-card:hover .method-card-title { color: var(--accent); }
 
 .method-card:hover .method-card-icon {
   background: var(--accent);
@@ -2540,8 +2533,7 @@ footer p {
   .hero { grid-template-columns: 1fr; }
   .impact-strip { grid-template-columns: repeat(2, 1fr); }
   .methodology-grid { grid-template-columns: 1fr; }
-  .method-card { padding: 1.25rem 0; }
-  .methodology-grid .method-card:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+  .method-card { padding: 1.4rem 1.5rem; }
   .focus-grid { grid-template-columns: 1fr; }
   .focus-grid .focus-card:first-child .focus-list { grid-template-columns: 1fr; }
   .projects-grid { grid-template-columns: 1fr; }
@@ -3164,12 +3156,11 @@ footer p {
 .method-card { transition: all 0.4s var(--ease-smooth); cursor: default; }
 
 .method-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow:
-    0 20px 40px -10px var(--glow-color),
-    0 0 25px var(--glow-color),
-    var(--shadow-lg);
+  transform: translateY(-5px);
   border-color: var(--accent);
+  box-shadow:
+    0 18px 38px -20px var(--glow-strong),
+    0 0 22px -4px var(--glow-color);
 }
 
 .method-card:hover .method-card-icon {
@@ -5268,7 +5259,7 @@ nav.scrolled {
 }
 
 /* Glassmorphism for Cards - เปลี่ยนกล่องทึบให้เป็นกระจกหรูๆ */
-.hero-card, .project-card, .impact-cell, .about-photo-card, .edu-card, .method-card, .focus-card {
+.hero-card, .project-card, .impact-cell, .about-photo-card, .edu-card, .focus-card {
   background: rgba(30, 41, 59, 0.4) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -5280,8 +5271,7 @@ nav.scrolled {
 [data-theme="light"] .project-card, 
 [data-theme="light"] .impact-cell, 
 [data-theme="light"] .about-photo-card, 
-[data-theme="light"] .edu-card, 
-[data-theme="light"] .method-card,
+[data-theme="light"] .edu-card,
 [data-theme="light"] .focus-card {
   background: rgba(255, 255, 255, 0.6) !important;
   border: 1px solid rgba(255, 255, 255, 0.5) !important;
@@ -5289,7 +5279,7 @@ nav.scrolled {
 }
 
 /* Premium Hover Effects */
-.hero-card:hover, .project-card:hover, .impact-cell:hover, .edu-card:hover, .method-card:hover, .focus-card:hover {
+.hero-card:hover, .project-card:hover, .impact-cell:hover, .edu-card:hover, .focus-card:hover {
   background: rgba(30, 41, 59, 0.6) !important;
   border-color: rgba(96, 165, 250, 0.4) !important;
   box-shadow: 0 0 40px rgba(37, 99, 235, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
@@ -5299,8 +5289,7 @@ nav.scrolled {
 [data-theme="light"] .hero-card:hover, 
 [data-theme="light"] .project-card:hover, 
 [data-theme="light"] .impact-cell:hover, 
-[data-theme="light"] .edu-card:hover, 
-[data-theme="light"] .method-card:hover,
+[data-theme="light"] .edu-card:hover,
 [data-theme="light"] .focus-card:hover {
   background: rgba(255, 255, 255, 0.8) !important;
   border-color: rgba(37, 99, 235, 0.3) !important;
