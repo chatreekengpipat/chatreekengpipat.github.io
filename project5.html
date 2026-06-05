@@ -101,15 +101,15 @@
   </p>
   <div class="photo-grid">
     <div class="photo-item">
-      <img src="photos/factory-fpdu.jpg" alt="FPDU component on assembly line" loading="lazy">
+      <img src="MMTh%20Photos/factory-fpdu.jpg" alt="FPDU component on assembly line" loading="lazy">
       <div class="photo-caption">FPDU Component · 16.5 kg Unit</div>
     </div>
     <div class="photo-item">
-      <img src="photos/factory-line.jpg" alt="PHEV manual assembly line at MMTh Factory 1" loading="lazy">
+      <img src="MMTh%20Photos/factory-line.jpg" alt="PHEV manual assembly line at MMTh Factory 1" loading="lazy">
       <div class="photo-caption">PHEV Manual Line · F01 Station</div>
     </div>
     <div class="photo-item">
-      <img src="photos/factory-install.jpg" alt="Assist device installation at PHEV line" loading="lazy">
+      <img src="MMTh%20Photos/factory-install.jpg" alt="Assist device installation at PHEV line" loading="lazy">
       <div class="photo-caption">Cross-Functional Review · Production Floor</div>
     </div>
   </div>
@@ -145,6 +145,31 @@
 <section style="padding-top: 2rem;">
   <div class="content-section">
 
+    <style id="p5-extra">
+      .p5-slide{margin:1.5rem 0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--surface);transition:border-color .3s var(--ease-smooth),box-shadow .3s var(--ease-smooth),transform .3s var(--ease-smooth)}
+      .p5-slide:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 20px 44px -26px var(--glow-color)}
+      .p5-slide img{width:100%;height:auto;display:block;background:#fff}
+      .p5-slide figcaption{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);padding:.7rem .95rem;border-top:1px solid var(--border);background:var(--surface-2);letter-spacing:.02em;line-height:1.5}
+      .p5-slide figcaption b{color:var(--text)}
+      .p5-slides2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+      @media(max-width:760px){.p5-slides2{grid-template-columns:1fr}}
+      .p5-slides2 .p5-slide{margin:0}
+      .p5-src{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;
+        letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);
+        border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:100px;padding:.3rem .75rem;font-weight:700}
+      .process-table .sel td{background:var(--accent-bg);font-weight:600}
+      .process-table td .win{color:var(--accent);font-weight:700}
+      .p5-eval{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.5rem 1.7rem;margin:1.5rem 0}
+      .p5-eval-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 2rem;margin:.4rem 0 .6rem}
+      @media(max-width:600px){.p5-eval-grid{grid-template-columns:1fr}}
+      .p5-eval-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.86rem;color:var(--text)}
+      .p5-eval-row .sc{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;white-space:nowrap}
+      .p5-eval-5 .sc{color:var(--success)}
+      .p5-eval-4 .sc{color:var(--accent)}
+      .p5-eval-quote{font-style:italic;color:var(--text);border-top:1px solid var(--border);padding-top:1.1rem;margin-top:.7rem;line-height:1.7}
+      .p5-eval-quote .by{display:block;font-family:'JetBrains Mono',monospace;font-style:normal;font-size:.68rem;color:var(--text-muted);margin-top:.6rem;letter-spacing:.02em}
+    </style>
+
     <h3 class="content-h3">The <em>Challenge</em></h3>
     <p class="content-p">
       The FPDU (<strong>Front Power Drive Unit</strong>) is a critical component that transforms electrical energy in PHEV vehicles. At Mitsubishi Motors Thailand's Factory #1 PHEV manual line, the F01 station required manual lifting and assembly of the FPDU into the vehicle chassis.
@@ -155,6 +180,18 @@
       <p><strong>1. Overweight:</strong> FPDU actual weight <strong>16.5 kg</strong>, which exceeded MMC global ergonomic recommendation of <strong>15 kg max</strong> for single-person manual lifting. Each operator handled this every cycle.</p>
       <p><strong>2. High waste time:</strong> Assembly process required <strong>33 job sequences</strong> at the F01 station, with operators walking back and forth to fetch tools, brackets, and surrounding parts, pushing cycle time above target.</p>
       <p><strong>Safety risk:</strong> FPDU drop damage estimated at <strong>฿200,000</strong> per incident; cumulative operator strain risk on multi-year basis.</p>
+    </div>
+
+    <span class="p5-src">◆ From my MMTh final presentation · 2020</span>
+    <div class="p5-slides2">
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Purpose%20of%20project.png" alt="FPDU assembly purpose slide: FPDU transforms electrical energy to the PHEV; weight 16.5 kg over the 15 kg MMC limit, assembled by hand at the F01 station of the Factory 1 PHEV line" loading="lazy">
+        <figcaption><b>Purpose &amp; problem</b> · FPDU position on the PHEV line · 16.5 kg vs 15 kg MMC limit</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Problem%20Solving.png" alt="Problem-solving slide: reduce job sequences by 11 and waste time by 29.6 seconds with the assist device and Intelligent Factory Automation, before/after job-sequence maps" loading="lazy">
+        <figcaption><b>Problem solving</b> · ▲11 job sequences · ▲29.6 s waste time removed</figcaption>
+      </figure>
     </div>
 
     <h3 class="content-h3">My <em>Role</em></h3>
@@ -235,7 +272,38 @@
 
     <div class="callout">
       <div class="callout-title">Idea 3 selected · C-Shape Air Cylinder Lifting Dolly</div>
-      <p>Best overall SQCDE score (17/25): balanced cost (under ฿400K), high safety rating from MT and Safety teams, low maintenance overhead, and floor-mobile design allowing flexible repositioning along the manual line.</p>
+      <p>Best overall SQCDE score (17): balanced cost (under ฿400K), high safety rating from MT and Safety teams, low maintenance overhead, and floor-mobile design allowing flexible repositioning along the manual line.</p>
+    </div>
+
+    <p class="content-p">Each idea was scored against the SQCDE matrix with the four stakeholder teams (PE Assembly, Vehicle Production, Maintenance, Safety) keeping comments. Idea 3 won on the consolidated compare sheet:</p>
+    <table class="process-table">
+      <thead><tr><th>#</th><th>Design idea</th><th>SQCDE score</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>C-Shape Air Pulley Dolly</td><td>15</td></tr>
+        <tr><td>2</td><td>Mechanical Arm Dolly</td><td>14</td></tr>
+        <tr class="sel"><td>3</td><td>C-Shape Air Cylinder Lifting Dolly <span class="win">★ selected</span></td><td><span class="win">17</span></td></tr>
+        <tr><td>4</td><td>Hydraulic Dolly</td><td>14</td></tr>
+        <tr><td>5</td><td>KBK Rail · Two I-Beam</td><td>15</td></tr>
+        <tr><td>6</td><td>KBK Rail · Cantilever Beam</td><td>15</td></tr>
+        <tr><td>7</td><td>Mechanical Arm · KBK Rail</td><td>13</td></tr>
+        <tr><td>8</td><td>Spring Balancer + KBK Rail</td><td>13</td></tr>
+      </tbody>
+    </table>
+
+    <span class="p5-src">◆ From my MMTh final presentation · 2020</span>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/Design%20Phase%20Assist%20Device.png" alt="Design phase slide showing all eight assist-device concepts: air pulley dolly, mechanical arm dolly, air cylinder dolly, hydraulic dolly, KBK rail two I-beam, KBK rail cantilever beam, mechanical arm KBK rail, and spring balancer" loading="lazy">
+      <figcaption><b>Design phase</b> · 8 assist-device concepts generated, then evaluated by SQCDE</figcaption>
+    </figure>
+    <div class="p5-slides2">
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/SQCDE_Choosing%20Design%20for%20FPDU%20Assist%20Device.png" alt="SQCDE compare sheet with keep-comments from PE Assembly, VP Assembly, Maintenance and Safety; Idea 3 (C-Shape Air Cylinder Lifting Dolly) selected with the top total score of 17" loading="lazy">
+        <figcaption><b>SQCDE compare sheet</b> · cross-functional comments → Idea 3 wins (17)</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Transforming%20Design.png" alt="My MMTh concept design transformed into a 3D-maker concept of the FPDU assist device, with the procurement next-action steps and overall schedule" loading="lazy">
+        <figcaption><b>Concept → maker design</b> · my MMTh concept handed to the 3D-design maker</figcaption>
+      </figure>
     </div>
 
     <h3 class="content-h3">SAP <em>Procurement Workflow</em></h3>
@@ -408,6 +476,46 @@
       Once delivered and commissioned, the assist device was registered as a <strong>fixed asset</strong> in the MMTh SAP system with a 5-year support coverage from Mar-Dec Engineering. I authored the <strong>Standard Operating Procedure (SOP)</strong> document for operators, covering 5 main check steps: safety plug verification, dolly engagement, pickup confirmation, transport-and-mount, and return to home position.
     </p>
 
+    <h3 class="content-h3">Execution <em>&amp; Schedule</em></h3>
+    <p class="content-p">
+      The next-action plan handed off from design into procurement and install, each step with an owner and a due date. My step (the MSR) fed the SAP chain run by PE Assembly:
+    </p>
+    <table class="process-table">
+      <thead><tr><th>Step</th><th>Detail</th><th>Owner (PIC)</th><th>Due date</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>MSR · Maker Selection Sheet (Step #2)</td><td>Intern · <strong>Chatree</strong></td><td>29 Jul 2020</td></tr>
+        <tr><td>2</td><td>Issue <code>e-AR → PR → PO</code></td><td>PE Assy · Mr. Thirapong</td><td>4 Aug 2020</td></tr>
+        <tr><td>3</td><td>Approved drawing</td><td>PE Assy · Mr. Thirapong</td><td>12 Aug 2020</td></tr>
+        <tr><td>4</td><td>Implement / install</td><td>PE Assy · Mr. Thirapong</td><td>30 Aug 2020</td></tr>
+      </tbody>
+    </table>
+
+    <span class="p5-src">◆ From my MMTh final presentation · 2020</span>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/Timeline.png" alt="Project overall schedule Gantt chart from June to September 2020: tooling sheet, MSR/RFQ, e-AR, PR and PO, design approval, fabrication, installation, problem follow-up and goods receipt, with the internship ending in July and the payment period split 10/20/30/40 percent" loading="lazy">
+      <figcaption><b>Overall schedule</b> · Jun–Sep 2020 · on plan at end of internship (payment 10/20/30/40%)</figcaption>
+    </figure>
+
+    <h3 class="content-h3">Biweekly <em>Internship Log</em></h3>
+    <p class="content-p">
+      The week-by-week record I kept and had signed off by my supervising engineers, from onboarding to the final presentation. It traces the same implementer arc I use today: study the process, design options, select, cost, validate, hand over.
+    </p>
+    <table class="process-table">
+      <thead><tr><th>Period (2020)</th><th>Phase</th><th>Key work accomplished</th></tr></thead>
+      <tbody>
+        <tr><td>1–5 Jun</td><td>Onboarding</td><td>Induction (company profile, safety, process overview, warehouse, education academic); PE Assembly orientation</td></tr>
+        <tr><td>8–12 Jun</td><td>Study</td><td>Surveyed the F01 station; studied trim / chassis / final-line assembly; interviewed FPDU operators; sketched first device ideas; presented proposal to the chief engineer</td></tr>
+        <tr><td>15–19 Jun</td><td>Concept</td><td>Consulted the manager on designs; learned SQCD; researched assist-device types; built the tooling sheet; presented SQCD to the general manager</td></tr>
+        <tr><td>22–26 Jun</td><td>Selection</td><td>Presented the rail assist device to the GM; finalised the tooling sheet; drafted the MSR; researched operation time</td></tr>
+        <tr><td>29 Jun–3 Jul</td><td>Approval</td><td>Presented the internship to the CGM; researched Intelligent Factory Automation (IFA); appointed bidding with the maker; re-balanced the F01 sequence</td></tr>
+        <tr><td>6–10 Jul</td><td>Costing</td><td>Ran assessment &amp; price breakdown; confirmed true function with the maker; prepared the concept presentation; planned the quality self-check</td></tr>
+        <tr><td>13–17 Jul</td><td>Quality</td><td>Ran FMEA; calculated RPN (Severity × Occurrence × Detection); presented to CGM Assembly; built the slide deck</td></tr>
+        <tr><td>20–26 Jul</td><td>Validation</td><td>Studied e-WI in Factory 1; presented the device to Maintenance, VP-Assembly and Safety; mock-up tested on the PHEV car</td></tr>
+        <tr><td>27–31 Jul</td><td>Handover</td><td>Investigated factory areas for the cohort; delivered the final presentation &amp; Q&amp;A; cleared all reports</td></tr>
+      </tbody>
+    </table>
+    <span class="p5-src">◆ Typed from my signed biweekly progress logs · Jun–Jul 2020</span>
+
     <h3 class="content-h3">Quality <em>Improvement · FMEA</em></h3>
     <p class="content-p">
       Beyond cycle time reduction, I conducted <strong>Failure Mode and Effects Analysis (FMEA)</strong> across <strong>109 risk items</strong> identified in the new assembly process, finding 5 items with RPN (Risk Priority Number) over 100, requiring intervention.
@@ -418,6 +526,18 @@
       <p><strong>· Baseline:</strong> 5 high-risk items averaged <strong>135 RPN</strong> (above 100 threshold = critical)</p>
       <p><strong>· Intervention:</strong> Designed <strong>electronic Work Instruction (e-WI)</strong>, a mobile-based step-by-step guide with photo references and OK/NG confirmation per critical step</p>
       <p><strong>· Result:</strong> RPN reduced to <strong>72</strong> (below 100 = acceptable) · <strong>46.7% risk reduction</strong></p>
+    </div>
+
+    <span class="p5-src">◆ From my MMTh final presentation · 2020</span>
+    <div class="p5-slides2">
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Improve%20Quality%20Self-Check.png" alt="Quality self-check slide: utilising the 29.6 seconds saved, with the before/after time comparison of left labor at F01 station and the FMEA finding of 5 high-risk items" loading="lazy">
+        <figcaption><b>Quality self-check</b> · reinvesting the 29.6 s saved into FMEA-driven checks</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/FMEA.png" alt="FMEA slide: 5 of 109 items found with high risk, RPN over 100 reduced from 135 to 72 via an electronic Work Instruction (e-WI) on a mobile device" loading="lazy">
+        <figcaption><b>FMEA</b> · 5 / 109 items high-risk · 135 → 72 RPN via electronic Work Instruction</figcaption>
+      </figure>
     </div>
 
     <h3 class="content-h3">Engineering <em>Skills Applied</em></h3>
@@ -462,6 +582,40 @@
       <span class="module-tag">Cross-Functional Coordination</span>
       <span class="module-tag">Vendor RFQ Management</span>
       <span class="module-tag">Cost Breakdown Analysis</span>
+    </div>
+
+    <h3 class="content-h3">Productivity · <em>Before → After</em></h3>
+    <p class="content-p">The consolidated productivity summary the project was judged on: every line moved from a manual baseline to an assist-device outcome.</p>
+    <table class="process-table">
+      <thead><tr><th>Metric</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr><td>Work ability</td><td>Manual lift · 1 operator</td><td><strong>Assist device</strong></td></tr>
+        <tr><td>Cycle time · F01 station</td><td>2,118 s</td><td><strong>2,088.4 s</strong> (▲ 29.6 s)</td></tr>
+        <tr><td>Assembly job sequences</td><td>33</td><td><strong>22</strong> (▲ 11)</td></tr>
+        <tr><td>FPDU handling</td><td>16.5 kg by hand · over 15 kg MMC limit</td><td><strong>Device-assisted</strong> · within limit</td></tr>
+        <tr><td>Risk cost</td><td>฿0.2M damage · FPDU drop</td><td><strong>Save ฿1M risk</strong> · 5-year support</td></tr>
+      </tbody>
+    </table>
+    <span class="p5-src">◆ From my MMTh final presentation · 2020</span>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/Productivity.png" alt="Productivity summary slide comparing before and after across work ability, cycle time, job sequences and risk cost, with the assist device pictured" loading="lazy">
+      <figcaption><b>Productivity summary</b> · the before/after scorecard presented to the CGM cohort</figcaption>
+    </figure>
+
+    <h3 class="content-h3">Mentor <em>Evaluation</em></h3>
+    <p class="content-p">My supervising engineer's end-of-internship assessment across seven behaviours, five of them rated the top band:</p>
+    <div class="p5-eval">
+      <div class="p5-eval-grid">
+        <div class="p5-eval-row p5-eval-4"><span>Applying engineering knowledge</span><span class="sc">Very good · 4/5</span></div>
+        <div class="p5-eval-row p5-eval-4"><span>Leadership &amp; teamwork</span><span class="sc">Very good · 4/5</span></div>
+        <div class="p5-eval-row p5-eval-5"><span>Responsibility</span><span class="sc">Excellent · 5/5</span></div>
+        <div class="p5-eval-row p5-eval-5"><span>Communication</span><span class="sc">Excellent · 5/5</span></div>
+        <div class="p5-eval-row p5-eval-5"><span>Adaptation to the organisation</span><span class="sc">Excellent · 5/5</span></div>
+        <div class="p5-eval-row p5-eval-5"><span>Self-development</span><span class="sc">Excellent · 5/5</span></div>
+        <div class="p5-eval-row p5-eval-5"><span>Punctuality &amp; discipline</span><span class="sc">Excellent · 5/5</span></div>
+      </div>
+      <p class="p5-eval-quote">"Please keep logical thinking to improve in everyday life and other ways."
+        <span class="by">— Aphichai Suppharangsri · Manager, MMTh · 31 Jul 2020</span></p>
     </div>
 
     <h3 class="content-h3">Why <em>I Won the Award</em></h3>
