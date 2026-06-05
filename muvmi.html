@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MUVMI Regen-Brake Software &amp; Ergonomics Hardware Integration · Chatree Kengpipat</title>
-<meta name="description" content="Chulalongkorn University engineering design project with MUVMI (electric tuk-tuk, Bangkok): EV regenerative-brake software plus driver-ergonomics hardware integration. 5-person team led by Chatree Kengpipat, Aug 2020 to Mar 2021. Mentor-voted Top 3 of 16+ projects.">
+<meta name="description" content="Chulalongkorn University engineering design project with MUVMI (electric tuk-tuk, Bangkok): EV regenerative-brake software (analog sensor, speed-banded regen, Fusion 360 + MATLAB Simulink) plus driver-ergonomics hardware integration. 5-person team led by Chatree Kengpipat, Aug 2020 to Mar 2021. Mentor-voted Top 3 of 16+ projects.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -13,28 +13,61 @@
 <script src="animation.js?v=4" defer></script>
 <!-- MUVMI :: page-scoped helpers reusing existing tokens (Claude) -->
 <style id="muvmi-style">
-.muvmi-imgph{border:1px dashed var(--border-strong);border-radius:var(--radius-md);background:var(--surface);
-  padding:2.2rem 1.5rem;text-align:center;color:var(--text-muted);margin:1.4rem 0;
-  font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.02em;line-height:1.6}
-.muvmi-imgph b{display:block;color:var(--accent);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.4rem}
-.muvmi-cost{display:inline-flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;
-  font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text-muted);
-  background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);
-  border-radius:100px;padding:.4rem .9rem;margin:.4rem 0}
+.muvmi-cost{display:inline-flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text-muted);background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);border-radius:100px;padding:.4rem .9rem;margin:.4rem 0}
 .muvmi-cost b{color:var(--accent);font-weight:700}
-.muvmi-todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.78rem;
-  color:var(--warning);background:color-mix(in srgb,var(--warning) 10%,transparent);
-  border:1px solid color-mix(in srgb,var(--warning) 40%,transparent);border-radius:6px;padding:.15rem .55rem}
+/* phase chip */
+.mv-phase{display:inline-flex;align-items:center;gap:.6rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:100px;padding:.35rem .9rem;margin:2.6rem 0 .2rem}
+.mv-phase::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.mv-phase span{color:var(--text-subtle);font-weight:500}
 /* two-track lead-in */
 .mv-tracks{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.3rem 0}
-.mv-tcard{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.2rem 1.3rem}
+.mv-tcard{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.2rem 1.3rem;transition:transform .35s var(--ease-smooth),box-shadow .35s var(--ease-smooth),border-color .35s var(--ease-smooth)}
+.mv-tcard:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 40%,var(--border));box-shadow:0 18px 40px -26px var(--glow-strong)}
 .mv-tcard.soft{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 7%,var(--surface)),var(--surface));border-color:color-mix(in srgb,var(--accent) 30%,var(--border))}
 .mv-tcard .tk{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-subtle)}
 .mv-tcard.soft .tk{color:var(--accent)}
 .mv-tcard h5{font-size:1rem;color:var(--text-strong);margin:.25rem 0 .4rem}
 .mv-tcard p{font-size:.83rem;color:var(--text-muted);line-height:1.6;margin:0}
 .mv-tcard p b{color:var(--text)}
-@media(max-width:680px){.mv-tracks{grid-template-columns:1fr}}
+/* figures */
+.mv-fig{margin:1.4rem 0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--surface);transition:transform .35s var(--ease-smooth),box-shadow .35s var(--ease-smooth)}
+.mv-fig:hover{transform:translateY(-3px);box-shadow:0 18px 40px -28px var(--glow-strong)}
+.mv-fig img,.mv-fig video{display:block;width:100%;height:auto;background:var(--surface-2)}
+.mv-fig figcaption{font-size:.74rem;color:var(--text-muted);padding:.6rem .9rem;border-top:1px solid var(--border);background:var(--surface-2);font-family:'JetBrains Mono',monospace;line-height:1.5}
+.mv-fig figcaption b{color:var(--text)}
+.mv-figs{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
+.mv-figs .mv-fig{margin:0}
+@media(max-width:680px){.mv-tracks,.mv-figs{grid-template-columns:1fr}}
+/* generic key-value param grid */
+.mv-params{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem;margin:1.2rem 0}
+.mv-param{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:.6rem .8rem}
+.mv-param .k{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-subtle)}
+.mv-param .v{font-family:'JetBrains Mono',monospace;font-size:.92rem;color:var(--text-strong);font-weight:600;font-variant-numeric:tabular-nums;margin-top:.1rem}
+/* pass/fail screening pills */
+.pf{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;padding:.12rem .5rem;border-radius:100px;letter-spacing:.04em}
+.pf.pass{color:var(--success,#059669);background:color-mix(in srgb,var(--success) 12%,transparent);border:1px solid color-mix(in srgb,var(--success) 35%,transparent)}
+.pf.fail{color:var(--text-subtle);background:var(--surface-2);border:1px solid var(--border)}
+.tagwin{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--accent);background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:100px;padding:.1rem .45rem}
+/* custom charts */
+.mv-chart{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.1rem 1.2rem 1rem;margin:1.3rem 0}
+.mv-chart-t{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.mv-chart-t .legend{display:inline-flex;gap:.9rem;text-transform:none;letter-spacing:0;color:var(--text-subtle)}
+.mv-chart-t .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:.3rem;vertical-align:-1px}
+.mv-svg{width:100%;height:auto;display:block;overflow:visible}
+.mv-svg .axis{stroke:var(--border-strong,#cbd5e1);stroke-width:1}
+.mv-svg .grid{stroke:var(--border);stroke-width:.6}
+.mv-svg .bar-b{fill:color-mix(in srgb,var(--text-subtle) 55%,transparent)}
+.mv-svg .bar-a{fill:var(--accent,#2563eb)}
+.mv-svg .lbl{fill:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:8.5px}
+.mv-svg .val{fill:var(--text-strong);font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700}
+.mv-svg .delta{fill:var(--accent,#2563eb);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700}
+.mv-svg .ln-c{fill:none;stroke:var(--accent-soft,#60a5fa);stroke-width:2;stroke-linejoin:round}
+.mv-svg .ln-e{fill:none;stroke:var(--accent,#2563eb);stroke-width:2;stroke-linejoin:round}
+.mv-svg .cal{fill:none;stroke:var(--accent,#2563eb);stroke-width:2;stroke-linejoin:round}
+.mv-fns{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:680px){.mv-fns{grid-template-columns:1fr}}
+.mv-fn h6{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text);margin:0 0 .1rem}
+.mv-fn small{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text-subtle)}
 /* schedule / gantt */
 .mv-sched{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.2rem 1.3rem;margin:1.3rem 0}
 .mv-sched-h{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin:0 0 .9rem;display:flex;align-items:center;gap:.5rem}
@@ -48,8 +81,7 @@
 .mv-track.head{height:auto;background:none;display:flex}
 .mv-mon{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);border-left:1px solid var(--border);padding:.2rem 0}
 .mv-mon:first-child{border-left:0}
-.mv-bar{position:absolute;top:5px;bottom:5px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.61rem;white-space:nowrap;overflow:hidden;color:#fff;
-  left:calc((var(--s) - 1)/8*100%);width:calc(var(--l)/8*100%);min-width:8px}
+.mv-bar{position:absolute;top:5px;bottom:5px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.61rem;white-space:nowrap;overflow:hidden;color:#fff;left:calc((var(--s) - 1)/8*100%);width:calc(var(--l)/8*100%);min-width:8px}
 .mv-bar.soft{background:var(--accent)}
 .mv-bar.hw{background:var(--accent-soft,#60a5fa);color:#0f172a}
 .mv-bar.lead{background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--accent) 80%,#000) 0 6px,var(--accent) 6px 12px)}
@@ -64,7 +96,35 @@
 .mv-day.me{border-color:color-mix(in srgb,var(--accent) 40%,var(--border));background:color-mix(in srgb,var(--accent) 6%,var(--bg))}
 .mv-note{font-size:.8rem;color:var(--text-muted);line-height:1.6;margin-top:1rem;border-top:1px dashed var(--border);padding-top:.8rem}
 .mv-note b{color:var(--text)}
-@media(max-width:640px){.mv-week{grid-template-columns:1fr 1fr}.mv-row{grid-template-columns:120px 1fr}}
+/* bill of materials */
+.mv-bom{border:1px solid color-mix(in srgb,var(--accent) 28%,var(--border));border-radius:var(--radius-md);background:color-mix(in srgb,var(--accent) 5%,var(--bg));padding:1.3rem 1.4rem;margin:1.4rem 0}
+.mv-bom-h{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem}
+.mv-bom-rows{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:.95rem}
+.mv-bom-cell{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:.9rem 1rem}
+.mv-bom-cell.tot{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 9%,var(--surface)),var(--surface));border-color:color-mix(in srgb,var(--accent) 35%,var(--border))}
+.mv-bom-cell .l{font-family:'JetBrains Mono',monospace;font-size:.57rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle)}
+.mv-bom-cell .v{font-size:1.5rem;font-weight:800;color:var(--text-strong);letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:.15rem 0;line-height:1.1}
+.mv-bom-cell.tot .v{color:var(--accent)}
+.mv-bom-cell .s{font-size:.72rem;color:var(--text-muted);line-height:1.4}
+.mv-bom p{font-size:.85rem;color:var(--text-muted);line-height:1.65;margin:0}
+.mv-bom p b{color:var(--text)}
+/* business model canvas */
+.bmc{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin:1.3rem 0}
+.bmc-cell{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:.7rem .8rem}
+.bmc-cell.span2{grid-column:span 2}
+.bmc-cell .h{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.4rem}
+.bmc-cell ul{margin:0;padding-left:1rem}
+.bmc-cell li{font-size:.72rem;color:var(--text-muted);line-height:1.45;margin:.15rem 0}
+@media(max-width:680px){.bmc{grid-template-columns:1fr 1fr}.bmc-cell.span2{grid-column:span 2}}
+/* tooling */
+.mv-tools{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.3rem 0}
+.mv-tool{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.2rem 1.3rem}
+.mv-tool .badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);border-radius:100px;padding:.2rem .6rem}
+.mv-tool h5{font-size:1.05rem;color:var(--text-strong);margin:.6rem 0 .3rem}
+.mv-tool p{font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0}
+.mv-tool p b{color:var(--text)}
+@media(max-width:680px){.mv-tools{grid-template-columns:1fr}}
+@media(max-width:640px){.mv-week{grid-template-columns:1fr 1fr}.mv-row{grid-template-columns:120px 1fr}.mv-bom-rows{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -111,48 +171,27 @@
       <div class="project-meta">EV Software (Regen Brake) + Hardware Integration (Ergonomics) · with MUVMI · 5-person team</div>
       <h1>MUVMI Regen-Brake <em>Software</em><br>&amp; Ergonomics Hardware Integration</h1>
       <p class="project-hero-desc">
-        A <strong>5-person engineering design project</strong> with <strong>MUVMI</strong>, an electric tuk-tuk ride-sharing service in Bangkok, split across two tracks: an <strong>EV software / control</strong> side that redesigned the regenerative-brake sensing and control logic, and a <strong>hardware</strong> side that redesigned and installed the driver-ergonomics parts. I led the team as <strong>Project Manager</strong>, personally owned the regenerative-brake software with one teammate, and consolidated everyone's work into the weekly deliverable. Implemented over eight months, August 2020 to March 2021, working directly with MUVMI's CEO and senior engineers on the live vehicle. Voted by the course mentors into the <strong>Top 3 of 16+ Mechanical Engineering Design projects</strong> across all groups (Chulalongkorn, cohort 101).
+        A <strong>5-person engineering design project</strong> with <strong>MUVMI</strong>, an electric tuk-tuk ride-sharing service in Bangkok, split across two tracks: an <strong>EV software / control</strong> side that redesigned the regenerative-brake sensing and control logic, and a <strong>hardware</strong> side that redesigned and installed the driver-ergonomics parts. I led the team as <strong>Project Manager</strong>, personally led the regenerative-brake software with one teammate, also worked hands-on on the hardware build, and consolidated everyone's work into the weekly deliverable. Implemented over eight months, August 2020 to March 2021, working directly with MUVMI's CEO and senior engineers on the live vehicle. Voted by the course mentors into the <strong>Top 3 of 16+ Mechanical Engineering Design projects</strong> across all groups (Chulalongkorn, cohort 101).
       </p>
       <div class="tech-stack">
         <span class="tech-pill primary">Regen Control Logic</span>
-        <span class="tech-pill primary">EV Energy Recovery</span>
-        <span class="tech-pill primary">Team Lead</span>
-        <span class="tech-pill">Analog Sensor Signal</span>
+        <span class="tech-pill primary">MATLAB Simulink</span>
+        <span class="tech-pill primary">Fusion 360</span>
+        <span class="tech-pill">Analog Sensor</span>
         <span class="tech-pill">Vehicle Dynamics</span>
-        <span class="tech-pill">Hardware Integration</span>
-        <span class="tech-pill">CAD</span>
+        <span class="tech-pill">Team Lead</span>
       </div>
     </div>
 
     <div class="project-info-card">
-      <div class="project-info-row">
-        <span class="project-info-label">Institution</span>
-        <span class="project-info-val">Chulalongkorn University</span>
-      </div>
-      <div class="project-info-row">
-        <span class="project-info-label">Course</span>
-        <span class="project-info-val">Mechanical Engineering Design</span>
-      </div>
-      <div class="project-info-row">
-        <span class="project-info-label">Partner</span>
-        <span class="project-info-val">MUVMI · electric tuk-tuk</span>
-      </div>
-      <div class="project-info-row">
-        <span class="project-info-label">Team</span>
-        <span class="project-info-val">5 people · "5 Inw Group"</span>
-      </div>
-      <div class="project-info-row">
-        <span class="project-info-label">My Role</span>
-        <span class="project-info-val">Team Lead · Regen software + integration</span>
-      </div>
-      <div class="project-info-row">
-        <span class="project-info-label">Duration</span>
-        <span class="project-info-val">8 months · Aug 2020 – Mar 2021</span>
-      </div>
-      <div class="project-info-row">
-        <span class="project-info-label">Recognition</span>
-        <span class="project-info-val" style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600;">★ Top 3 / 16+ · mentor-voted</span>
-      </div>
+      <div class="project-info-row"><span class="project-info-label">Institution</span><span class="project-info-val">Chulalongkorn University</span></div>
+      <div class="project-info-row"><span class="project-info-label">Course</span><span class="project-info-val">Mechanical Engineering Design</span></div>
+      <div class="project-info-row"><span class="project-info-label">Partner</span><span class="project-info-val">MUVMI · electric tuk-tuk</span></div>
+      <div class="project-info-row"><span class="project-info-label">Team</span><span class="project-info-val">5 people · "5 Inw Group"</span></div>
+      <div class="project-info-row"><span class="project-info-label">My Role</span><span class="project-info-val">Team Lead · Regen software + integration</span></div>
+      <div class="project-info-row"><span class="project-info-label">Tooling</span><span class="project-info-val">Fusion 360 · MATLAB Simulink</span></div>
+      <div class="project-info-row"><span class="project-info-label">Duration</span><span class="project-info-val">8 months · Aug 2020 – Mar 2021</span></div>
+      <div class="project-info-row"><span class="project-info-label">Recognition</span><span class="project-info-val" style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600;">★ Top 3 / 16+ · mentor-voted</span></div>
     </div>
   </div>
 </section>
@@ -189,112 +228,249 @@
 
     <h3 class="content-h3">Two Tracks, <em>One Vehicle</em></h3>
     <p class="content-p">
-      The same MUVMI tuk-tuk had two separate problems, so the team ran <strong>two engineering tracks in parallel</strong>: a software/control track and a hardware track. As team lead I focused personally on the software side and pulled both tracks together into one weekly deliverable.
+      The same MUVMI tuk-tuk had two separate problems, so the team ran <strong>two engineering tracks in parallel</strong>. As team lead I focused on the software side, also worked hands-on on the hardware build, and pulled both tracks together into one weekly deliverable. The project followed a four-phase design process: <strong>Define Problem, Conceptual Design, Detail Design, Result</strong>.
     </p>
 
     <div class="mv-tracks">
       <div class="mv-tcard soft">
         <div class="tk">Track 1 · my focus</div>
         <h5>EV Software · Regenerative Brake</h5>
-        <p>Redesigned how the brake is <b>sensed and controlled</b> so the vehicle recovers energy smoothly while braking: an analog angular-position signal, speed-banded regen functions, and a vehicle-dynamics safety check, tested live on the vehicle.</p>
+        <p>Redesigned how the brake is <b>sensed and controlled</b> so the vehicle recovers energy smoothly while braking: an analog angular-position signal, speed-banded regen functions, a vehicle-dynamics safety check, and a calibration tested live on the vehicle. Built and simulated in <b>MATLAB Simulink</b>.</p>
       </div>
       <div class="mv-tcard">
-        <div class="tk">Track 2 · integrated by me</div>
+        <div class="tk">Track 2 · hands-on, team-led design</div>
         <h5>Hardware · Driver Ergonomics</h5>
-        <p>Redesigned and <b>installed the physical parts</b>: a new brake lever, a rest pedal, and the sensor mounting bracket. My teammates owned the build; I consolidated it into the combined design and the weekly submission.</p>
+        <p>Redesigned and <b>installed the physical parts</b>: a new brake lever, a rest pedal, and the sensor mounting bracket, modelled in <b>Fusion 360</b>. My teammates led the design; I worked on it hands-on with them and folded it into the combined deliverable.</p>
       </div>
     </div>
 
-    <h3 class="content-h3">The <em>Problem</em></h3>
+    <!-- ===================== DEFINE PROBLEM ===================== -->
+    <div class="mv-phase">Define Problem <span>· phase 1 of 4</span></div>
+    <h3 class="content-h3">MUVMI's <em>Two Problems</em></h3>
     <p class="content-p">
-      Information was gathered from <strong>MUVMI staff, MUVMI drivers, and literature research</strong>, and pointed to two separate problems on the same vehicle.
+      Information was gathered from <strong>MUVMI staff, MUVMI drivers, and literature research</strong>, working directly with the company's engineers on a vehicle in service. Two problems surfaced.
     </p>
 
-    <div class="callout">
-      <div class="callout-title">Two problems, one vehicle</div>
-      <p><strong>1. Regenerative brake (software / control).</strong> The existing system used a <strong>pressure sensor</strong> producing a <strong>digital / step</strong> signal, and regeneration only triggered on accelerator release. The result was an uncomfortable braking feel and low energy-recovery efficiency.</p>
-      <p><strong>2. Driver ergonomics (hardware).</strong> The brake pedal sat too steep, uncomfortable across an all-day shift. Measured joint angles fell short of the preferred values: knee <strong>100°</strong> (preferred 110°) and ankle <strong>75°</strong> (preferred 85°). Preferred angles were referenced from a published anthropometry source.</p>
+    <div class="mv-figs">
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Cee%20keeps%20requirements.png" alt="Chatree gathering requirements from a MUVMI driver beside an electric tuk-tuk" loading="lazy">
+        <figcaption><b>Requirements gathering</b> · with MUVMI drivers and staff on site</figcaption>
+      </figure>
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Regenerative%20Brake%20Problem.png" alt="Current pressure sensor position and its digital step signal output on the MUVMI brake" loading="lazy">
+        <figcaption><b>Regen problem</b> · pressure sensor giving a digital step signal</figcaption>
+      </figure>
     </div>
 
-    <h3 class="content-h3">Software Track · <em>Regenerative Brake</em></h3>
-    <p class="content-p">
-      This was my personal focus, co-owned with one teammate. We replaced the pressure sensor with an <strong>analog angular-position sensor</strong> that reads the brake-lever angle, producing a smooth analog signal instead of a digital step, so regeneration can respond continuously to how hard the driver brakes.
-    </p>
+    <div class="callout">
+      <div class="callout-title">Problem 1 · Regenerative brake (software / control)</div>
+      <p>On braking, the motor acts as a generator and returns electricity to the battery. But the existing system used a <strong>pressure sensor with a digital / step signal</strong>, and regeneration only triggered <strong>on release of the hand accelerator</strong>, not on the brake pedal. The result: an <strong>uncomfortable braking feel</strong> and <strong>low energy-recovery efficiency</strong>.</p>
+    </div>
 
+    <div class="callout">
+      <div class="callout-title">Problem 2 · Driver ergonomics (hardware)</div>
+      <p>The brake pedal sat <strong>too steep</strong>, uncomfortable across an all-day shift. Measured joint angles fell short of the preferred values (preferred angles referenced from a published anthropometry source):</p>
+    </div>
+
+    <table class="process-table">
+      <thead><tr><th>Joint</th><th>Current angle</th><th>Preferred angle</th><th>Gap</th></tr></thead>
+      <tbody>
+        <tr><td>Knee</td><td><code>100°</code></td><td>110°</td><td><code>+10°</code></td></tr>
+        <tr><td>Ankle</td><td><code>75°</code></td><td>85°</td><td><code>+10°</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-title">Objectives &amp; scope</div>
+      <p><strong>Ergonomics:</strong> design a solution to the ergonomics problem that works with the current car model.</p>
+      <p><strong>Regen brake:</strong> select a sensor to use with the VCU, design where to install it, and design the regenerative function. <strong>Sensor budget objective: 200 ฿.</strong></p>
+    </div>
+
+    <!-- ===================== CONCEPTUAL DESIGN ===================== -->
+    <div class="mv-phase">Conceptual Design <span>· phase 2 of 4</span></div>
+    <h3 class="content-h3">Concept &amp; <em>Sensor Choice</em></h3>
     <p class="content-p">
-      <strong>Architecture choice.</strong> A <strong>Parallel</strong> regeneration scheme was chosen over Serial through an evaluation table:
+      <strong>Ergonomics concept:</strong> the pedal is too steep, so redesign the brake lever to reduce the pedal angle, and add a rest pedal so the foot has a resting position while waiting.
+    </p>
+    <p class="content-p">
+      <strong>Regen concept:</strong> change the sensor to an <strong>analog output</strong> (so regeneration responds continuously to how hard the driver brakes), design a mounting for it, and design the regenerative function. The sensor choice was made on a clear trade-off against the 200 ฿ budget:
     </p>
 
     <table class="process-table">
-      <thead>
-        <tr><th>Architecture</th><th>Efficiency (of input power)</th><th>Trade-offs</th><th>Decision</th></tr>
-      </thead>
+      <thead><tr><th>Sensor option</th><th>Measures</th><th>Price</th><th>Integration</th><th>Decision</th></tr></thead>
       <tbody>
-        <tr><td><strong>Parallel</strong></td><td><code>~0.09 – 0.18</code></td><td>Simpler mechanism, shorter braking duration, adaptable to the current design, cheaper</td><td><code>✓ Chosen</code></td></tr>
-        <tr><td>Serial</td><td><code>~0.15 – 0.30</code></td><td>Higher efficiency, but complex, expensive, needs a new design</td><td>Not chosen</td></tr>
+        <tr><td><strong>Angular position sensor</strong></td><td>Angle of brake lever</td><td><code>Lower (105 ฿)</code></td><td>Needs a mounting solution</td><td><span class="tagwin">✓ Chosen</span></td></tr>
+        <tr><td>Pressure sensor</td><td>Pressure of brake cylinder</td><td><code>Higher</code></td><td>Easy to adapt to previous sensor</td><td>Not chosen</td></tr>
+      </tbody>
+    </table>
+
+    <div class="mv-figs">
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Angular%20Position%20Sensor.png" alt="Angular position sensor selected for the regenerative brake" loading="lazy">
+        <figcaption><b>Angular position sensor</b> · chosen · 105 ฿, analog output</figcaption>
+      </figure>
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Pressure%20Sensor.png" alt="Pressure sensor option that was not chosen" loading="lazy">
+        <figcaption><b>Pressure sensor</b> · higher price, digital, not chosen</figcaption>
+      </figure>
+    </div>
+
+    <!-- ===================== DETAIL DESIGN ===================== -->
+    <div class="mv-phase">Detail Design <span>· phase 3 of 4</span></div>
+
+    <h3 class="content-h3">Hardware · <em>Final Designs</em></h3>
+    <p class="content-p">
+      Each hardware part went through <strong>pass/fail screening</strong> of four alternatives in <strong>Fusion 360</strong> before the final design. My teammates led the design; I worked the build and installation with them.
+    </p>
+
+    <div class="mv-figs">
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Brake%20Lever%20Final%20Design.png" alt="Brake lever final design, CAD and installed on the vehicle" loading="lazy">
+        <figcaption><b>Brake lever</b> · final design (reduced pedal angle)</figcaption>
+      </figure>
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Rest%20Pedal%20Final%20Design.png" alt="Rest pedal final design, CAD and fabricated part" loading="lazy">
+        <figcaption><b>Rest pedal</b> · final design (adjustable angle)</figcaption>
+      </figure>
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Sensor%20Mounting%20Final%20Design%201.png" alt="Sensor mounting bracket final design installed on the brake linkage" loading="lazy">
+        <figcaption><b>Sensor mount</b> · final bracket (cost-reduced from design 3)</figcaption>
+      </figure>
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/My%20Group%20is%20working%20Picture.jpg" alt="The team working on the vehicle in the workshop" loading="lazy">
+        <figcaption><b>Build &amp; install</b> · hands-on with the team</figcaption>
+      </figure>
+    </div>
+
+    <p class="content-p">Design screening picked alternative 4 in every case (the fourth iteration resolved earlier fail reasons):</p>
+
+    <table class="process-table">
+      <thead><tr><th>Part</th><th>Alternatives</th><th>Final</th><th>Why it passed</th></tr></thead>
+      <tbody>
+        <tr><td>Brake lever</td><td>4 screened · <span class="pf fail">3 fail</span></td><td><span class="pf pass">design 4</span></td><td>Added pivot range, clears the frame and front body</td></tr>
+        <tr><td>Rest pedal</td><td>4 screened · <span class="pf fail">3 fail</span></td><td><span class="pf pass">design 4</span></td><td>Compact, easy to install, small adjustable angle</td></tr>
+        <tr><td>Sensor mount</td><td>4 screened · <span class="pf fail">3 fail</span></td><td><span class="pf pass">design 4</span></td><td>Enough travel for sensor resolution, lower cost</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="content-h3">Software · <em>Regen Control Logic</em></h3>
+    <p class="content-p">
+      With an analog signal available, the regenerative function could be shaped properly. The braking case of interest is <strong>Partial</strong> and <strong>Full</strong> braking (the team excluded the slow "small brake" case), and regeneration is allowed only when battery <strong>state of charge is below 90%</strong>.
+    </p>
+
+    <table class="process-table">
+      <thead><tr><th>Brake type</th><th>Brake duration</th><th>Use case</th><th>In scope</th></tr></thead>
+      <tbody>
+        <tr><td>Small brake</td><td><code>10 – 15 s</code></td><td>Remove hand accelerator only</td><td>Out of scope</td></tr>
+        <tr><td><strong>Partial brake</strong></td><td><code>5 – 10 s</code></td><td>Normal urban driving</td><td><span class="tagwin">✓</span></td></tr>
+        <tr><td><strong>Full brake</strong></td><td><code>3 – 5 s</code></td><td>Emergency</td><td><span class="tagwin">✓</span></td></tr>
       </tbody>
     </table>
 
     <p class="content-p">
-      <strong>Speed-banded regen functions.</strong> The control logic bands the regeneration response by vehicle speed, each band offering a <strong>Comfort</strong> and an <strong>Efficiency</strong> mode:
+      <strong>Serial vs Parallel regeneration.</strong> A <strong>Parallel</strong> scheme was chosen via an evaluation table: it is simpler, brakes for a shorter duration, adapts to the current design, and is cheaper, at the cost of slightly lower peak efficiency.
     </p>
 
     <table class="process-table">
-      <thead>
-        <tr><th>Speed band</th><th>Regen function</th><th>Modes</th></tr>
-      </thead>
+      <thead><tr><th>Criterion</th><th>Serial regeneration</th><th>Parallel regeneration</th></tr></thead>
       <tbody>
-        <tr><td>0 – 15 km/h</td><td><code>Step</code></td><td>Comfort / Efficiency</td></tr>
-        <tr><td>15 – 35 km/h</td><td><code>Curve</code></td><td>Comfort / Efficiency</td></tr>
-        <tr><td>35 – 50 km/h</td><td><code>Ramp</code></td><td>Comfort / Efficiency</td></tr>
+        <tr><td>Efficiency (of input power)</td><td><code>0.15 – 0.30</code></td><td><code>0.09 – 0.18</code></td></tr>
+        <tr><td>Mechanism</td><td>Complex</td><td><span class="tagwin">Simple</span></td></tr>
+        <tr><td>Braking duration</td><td>Longer</td><td><span class="tagwin">Shorter</span></td></tr>
+        <tr><td>Modify time</td><td>New design required</td><td><span class="tagwin">Adapts to current design</span></td></tr>
+        <tr><td>Cost</td><td>Expensive</td><td><span class="tagwin">Cheap</span></td></tr>
+        <tr><td></td><td>✗</td><td><span class="pf pass">✓ Chosen</span></td></tr>
       </tbody>
     </table>
 
     <p class="content-p">
-      To keep braking safe, we built a <strong>vehicle-dynamics model</strong> and a <strong>braking-ratio analysis</strong> of front/rear wheel-lock limits. We then built a physical prototype and <strong>tested it live on the vehicle at the I'm Park underground lot (Suan Luang)</strong>, logging battery voltage from real regeneration on site to decide which functional graph and technique recovered the most energy, and to derive a calibration function for the angular sensor.
+      The regenerative response is then <strong>banded by speed</strong>, and each band has a <strong>Comfort</strong> and an <strong>Efficiency</strong> mode (Comfort caps regen at 90% of max, Efficiency at 100%). These are the control functions I designed and plotted in MATLAB:
     </p>
 
-    <div class="muvmi-imgph"><b>[TODO: image]</b>Sensor-mount on-vehicle prototype / live voltage-logging at I'm Park</div>
+    <div class="mv-chart">
+      <div class="mv-chart-t">
+        <span>Regen function vs brake-lever angle &middot; %F<sub>br,regen</sub></span>
+        <span class="legend"><span><i style="background:var(--accent-soft,#60a5fa)"></i>Comfort (90%)</span><span><i style="background:var(--accent,#2563eb)"></i>Efficiency (100%)</span></span>
+      </div>
+      <div class="mv-fns">
+        <div class="mv-fn"><h6>Step</h6><small>0 – 15 km/h</small><div id="mvFnStep"></div></div>
+        <div class="mv-fn"><h6>Curve</h6><small>15 – 35 km/h</small><div id="mvFnCurve"></div></div>
+        <div class="mv-fn"><h6>Ramp</h6><small>35 – 50 km/h</small><div id="mvFnRamp"></div></div>
+      </div>
+    </div>
 
-    <h4 class="content-h3" style="font-size:1.15rem;">Result · <em>Energy Recovered</em></h4>
     <p class="content-p">
-      Regenerative energy recovered before vs after, averaged over 3 tests:
+      Safety was checked with a <strong>vehicle-dynamics model</strong> and a <strong>braking-ratio / wheel-lock analysis</strong>. The front/rear split was fixed at <strong>K<sub>bf</sub> = 0.25</strong> so the required braking force never crosses the wheel-lock limit, and the maximum regenerative force (<strong>2,850 N</strong>) is sufficient at every operating point.
     </p>
+
+    <figure class="mv-fig">
+      <img src="MUVMI%20Photos/Vehicle%20Model%20%26%20Parameter.png" alt="Free body diagram of the tuk-tuk vehicle model with constant parameters" loading="lazy">
+      <figcaption><b>Vehicle dynamics model</b> · free-body diagram used for the braking-ratio analysis</figcaption>
+    </figure>
+
+    <div class="mv-params">
+      <div class="mv-param"><div class="k">Total mass M<sub>t</sub></div><div class="v">1,140 kg</div></div>
+      <div class="mv-param"><div class="k">Max regen torque</div><div class="v">75 N·m</div></div>
+      <div class="mv-param"><div class="k">Max regen force</div><div class="v">2,850 N</div></div>
+      <div class="mv-param"><div class="k">Wheelbase L</div><div class="v">3.45 m</div></div>
+      <div class="mv-param"><div class="k">CG height h</div><div class="v">0.5 m</div></div>
+      <div class="mv-param"><div class="k">Front split K<sub>bf</sub></div><div class="v">0.25</div></div>
+      <div class="mv-param"><div class="k">μ dry / wet</div><div class="v">0.7 / 0.4</div></div>
+      <div class="mv-param"><div class="k">Rear radius R<sub>r</sub></div><div class="v">0.270 m</div></div>
+    </div>
+
+    <h3 class="content-h3">On-Vehicle <em>Test &amp; Calibration</em></h3>
+    <p class="content-p">
+      We built the prototype, mounted the angular sensor, and <strong>tested live on the vehicle at the I'm Park underground lot (Suan Luang)</strong>, logging battery voltage from real regeneration at 10 and 20 km/h, with regen open (90%) and closed (5%). From the logged data I derived a <strong>calibration function</strong> mapping the raw sensor reading to brake angle:
+    </p>
+
+    <div class="mv-figs">
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Sensor%20%26%20Regenerative%20Energy%20Test%201.png" alt="Live on-vehicle test, logging regenerative energy and battery voltage" loading="lazy">
+        <figcaption><b>On-vehicle test</b> · live voltage logging at I'm Park</figcaption>
+      </figure>
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/Parallel%20Simulation%20Diagram.png" alt="Parallel regeneration simulation block diagram connecting brake input to the vehicle model" loading="lazy">
+        <figcaption><b>Simulink block model</b> · parallel regen connected to the vehicle model</figcaption>
+      </figure>
+    </div>
+
+    <div class="mv-chart">
+      <div class="mv-chart-t"><span>Angular-sensor calibration · fitted curve</span><span class="legend">y = 0.0004x³ + 0.0029x² + 17.977x − 533.03</span></div>
+      <div id="mvCal"></div>
+    </div>
+
+    <!-- ===================== RESULT ===================== -->
+    <div class="mv-phase">Result <span>· phase 4 of 4</span></div>
+
+    <h3 class="content-h3">Regen Result · <em>Energy Recovered</em></h3>
+    <p class="content-p">
+      With the analog sensor and the speed-banded functions, the recovered regenerative energy rose sharply, averaged over 3 tests at each speed:
+    </p>
+
+    <div class="mv-chart">
+      <div class="mv-chart-t">
+        <span>Average regenerative energy (J) · before vs after</span>
+        <span class="legend"><span><i style="background:color-mix(in srgb,var(--text-subtle) 55%,transparent)"></i>Before</span><span><i style="background:var(--accent,#2563eb)"></i>After</span></span>
+      </div>
+      <div id="mvBars"></div>
+    </div>
 
     <table class="process-table">
-      <thead>
-        <tr><th>Speed</th><th>Before</th><th>After</th><th>Change</th></tr>
-      </thead>
+      <thead><tr><th>Speed</th><th>Before (avg)</th><th>After (avg)</th><th>Change</th></tr></thead>
       <tbody>
         <tr><td>10 km/h</td><td><code>522.23 J</code></td><td><code>1,674.90 J</code></td><td><code>+220.72%</code></td></tr>
         <tr><td>20 km/h</td><td><code>4,085.24 J</code></td><td><code>5,452.77 J</code></td><td><code>+33.48%</code></td></tr>
       </tbody>
     </table>
 
+    <h3 class="content-h3">Ergonomics Result · <em>Validated On the Road</em></h3>
     <p class="content-p">
-      <span class="muvmi-cost">Software-side cost · Bracket <b>110 ฿</b> + Angular sensor <b>105 ฿</b> = <b>215 ฿ total</b></span>
-    </p>
-
-    <div class="callout">
-      <div class="callout-title">Future work</div>
-      <p>Build a <strong>MATLAB / Simulink</strong> model of the regen algorithm, then implement it on MUVMI's <strong>Vehicle Control Unit (VCU)</strong>.</p>
-    </div>
-
-    <h3 class="content-h3">Hardware Track · <em>Driver Ergonomics</em></h3>
-    <p class="content-p">
-      My teammates owned the physical build; I integrated it into the combined design and the weekly submission. The team redesigned the <strong>brake lever</strong> to reduce the pedal angle and added a <strong>rest pedal</strong> giving the foot a resting position. Multiple design alternatives were screened pass/fail before the final design.
-    </p>
-
-    <div class="muvmi-imgph"><b>[TODO: image]</b>Brake-lever and rest-pedal CAD renders / before-after ergonomics photos</div>
-
-    <p class="content-p">
-      The final design was <strong>validated by two weeks of real driver use</strong>:
+      The new lever and rest pedal were installed and driven for <strong>two weeks by a real MUVMI driver</strong>. The measured angles landed on target:
     </p>
 
     <table class="process-table">
-      <thead>
-        <tr><th>Joint</th><th>Current</th><th>Preferred (target)</th><th>Achieved</th></tr>
-      </thead>
+      <thead><tr><th>Joint</th><th>Current</th><th>Preferred (target)</th><th>New</th></tr></thead>
       <tbody>
         <tr><td>Knee angle</td><td><code>100°</code></td><td>110°</td><td><code>108°</code></td></tr>
         <tr><td>Ankle angle</td><td><code>75°</code></td><td>85°</td><td><code>86°</code></td></tr>
@@ -302,14 +478,77 @@
     </table>
 
     <div class="callout">
-      <div class="callout-title">What the drivers reported</div>
-      <p>Lighter and easier braking · the brake was easier to reach · less foot fatigue · and a usable resting position while waiting.</p>
+      <div class="callout-title">Driver feedback (2 weeks of real use)</div>
+      <p>The new brake pedal is softer to press and needs less force, less fatigue · the brake is easier to reach with the foot · the rest pedal cuts fatigue versus resting on the floor · and the driver uses the rest pedal often while the vehicle is stopped in traffic.</p>
     </div>
 
+    <figure class="mv-fig">
+      <video src="MUVMI%20Photos/Result%20of%20Ergonomic%20Design%201.mp4" controls muted playsinline preload="metadata"></video>
+      <figcaption><b>Ergonomics result</b> · the new rest pedal and lever in use</figcaption>
+    </figure>
+
+    <h3 class="content-h3">Cost &amp; <em>Value</em></h3>
     <p class="content-p">
-      <span class="muvmi-cost">Hardware-side cost · Brake lever <b>180 ฿</b> + Pedal <b>95 ฿</b> + Rest pad <b>170 ฿</b> = <b>445 ฿ total</b></span>
+      The standout of the project is how little the hardware cost. Both upgrades were delivered with cheap, off-the-shelf parts rather than expensive proprietary EV modules, and the sensor came in <strong>under the 200 ฿ objective</strong>.
     </p>
 
+    <div class="mv-bom">
+      <div class="mv-bom-h">&#9671; Bill of materials · cost-effectiveness</div>
+      <div class="mv-bom-rows">
+        <div class="mv-bom-cell"><div class="l">Software track · regen</div><div class="v">215 ฿</div><div class="s">angular sensor 105 + bracket 110</div></div>
+        <div class="mv-bom-cell"><div class="l">Hardware track · ergonomics</div><div class="v">445 ฿</div><div class="s">lever 180 + pedal 95 + rest pad 170</div></div>
+        <div class="mv-bom-cell tot"><div class="l">Total · both tracks</div><div class="v">660 ฿</div><div class="s">complete two-track upgrade</div></div>
+      </div>
+      <p>Both upgrades together came to a <b>660 ฿ bill of materials</b>, built from <b>low-cost commodity parts</b> (an analog angular sensor, a fabricated bracket, and standard ergonomic hardware) rather than proprietary EV modules. The value sits in the engineering, the <b>+220% energy recovery</b> and the validated ergonomics, not in expensive components.</p>
+    </div>
+
+    <h3 class="content-h3">Summary of <em>Improvement</em></h3>
+    <table class="process-table">
+      <thead><tr><th>Aspect</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr><td>Regen efficiency</td><td>Only on release of hand accelerator</td><td>On release of accelerator <strong>and</strong> brake pedal</td></tr>
+        <tr><td>Sensor signal</td><td>Digital output</td><td>Analog output</td></tr>
+        <tr><td>Driving position</td><td>Not optimized</td><td>Optimized ergonomics</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ===================== TOOLING ===================== -->
+    <h3 class="content-h3">Tooling · <em>Software Stack</em></h3>
+    <div class="mv-tools">
+      <div class="mv-tool">
+        <span class="badge">Hardware</span>
+        <h5>Autodesk Fusion 360</h5>
+        <p>All hardware was modelled in Fusion 360: the <b>brake lever</b>, the <b>rest pedal</b>, and the <b>sensor mounting bracket</b>, with the four-alternative pass/fail screening done as CAD iterations before fabrication.</p>
+      </div>
+      <div class="mv-tool">
+        <span class="badge">Software</span>
+        <h5>MATLAB Simulink</h5>
+        <p>The control side ran in Simulink: <b>connecting the systems by control blocks</b> (brake input, mechanical brake, regenerative brake system, vehicle model), and <b>computing and plotting the graphs</b> for the EV control parameters, the regen functions, the braking-ratio limits, and the calibration fit.</p>
+      </div>
+    </div>
+
+    <h3 class="content-h3">Future <em>Work</em></h3>
+    <div class="mv-sched" style="background:var(--surface-2)">
+      <p class="mv-sched-h">Regen brake flow chart → VCU</p>
+      <p class="content-p" style="margin:.2rem 0 0">The designed regenerative-brake flow chart (current) feeds a full <strong>MATLAB Simulink model</strong>, which then <strong>implements the algorithm on MUVMI's Vehicle Control Unit (VCU)</strong>, taking the software from a validated design into production firmware.</p>
+    </div>
+
+    <!-- ===================== BUSINESS MODEL ===================== -->
+    <h3 class="content-h3">Business Model <em>Canvas</em></h3>
+    <p class="content-p">Beyond the engineering, the team framed the work as a venture: a consult, design, and maintenance startup for automobile solutions.</p>
+    <div class="bmc">
+      <div class="bmc-cell"><div class="h">Key partners</div><ul><li>Metal part &amp; sensor manufacturers</li><li>Ergonomic consultant</li><li>Assembly outsource</li></ul></div>
+      <div class="bmc-cell"><div class="h">Key activities</div><ul><li>Consult · Design</li><li>Installation · Maintenance</li></ul></div>
+      <div class="bmc-cell span2"><div class="h">Value propositions</div><ul><li>Sustainable ergonomic solution for car drivers</li><li>Quality product with 2-year insurance (inspection + maintenance)</li></ul></div>
+      <div class="bmc-cell"><div class="h">Key resources</div><ul><li>Design &amp; software engineers</li><li>Sales · Finance · Procurement</li></ul></div>
+      <div class="bmc-cell"><div class="h">Channels</div><ul><li>Online · face-to-face consult</li><li>Delivery &amp; installation</li></ul></div>
+      <div class="bmc-cell"><div class="h">Customer relationships</div><ul><li>Promotion · after-sale</li><li>Feedback-driven improvement</li></ul></div>
+      <div class="bmc-cell"><div class="h">Customer segments</div><ul><li>Electric car manufacturers</li><li>Public car providers</li></ul></div>
+      <div class="bmc-cell span2"><div class="h">Cost structure</div><ul><li>Fixed: sensor, metal part, specific parts</li><li>Variable: wages</li></ul></div>
+      <div class="bmc-cell span2"><div class="h">Revenue streams</div><ul><li>Product · installation · maintenance · consult</li></ul></div>
+    </div>
+
+    <!-- ===================== SCHEDULE ===================== -->
     <h3 class="content-h3">Project Workflow &amp; <em>Schedule</em></h3>
     <p class="content-p">
       How the eight months (August 2020 to March 2021) were organised so the software and hardware tracks could run in parallel, while I kept a dedicated lane every week to consolidate both tracks into one deliverable and own the weekly submission.
@@ -339,44 +578,31 @@
       <p class="mv-note"><b>Lead responsibility:</b> as team lead I was the single point of accountability for the weekly submission. When a teammate's part ran late, I absorbed it, consolidated everyone's work (and all the Functional Specifications) into one package, and took responsibility for the on-time delivery to the course and to MUVMI, engaging directly with the company's <b>CEO and senior engineers</b> throughout.</p>
     </div>
 
-    <h3 class="content-h3">Before → <em>After</em></h3>
-    <table class="process-table">
-      <thead>
-        <tr><th>Aspect</th><th>Before</th><th>After</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Regen trigger</td><td>Only on hand-accelerator release</td><td>Accelerator release <strong>and</strong> brake pedal</td></tr>
-        <tr><td>Sensor signal</td><td>Digital output</td><td>Analog output</td></tr>
-        <tr><td>Driving position</td><td>Not optimized</td><td>Optimized ergonomics</td></tr>
-      </tbody>
-    </table>
-
     <h3 class="content-h3">Team Lead <em>&amp; My Contribution</em></h3>
-    <p class="content-p">
-      This was a <strong>university engineering design project done in collaboration with MUVMI</strong>, not employment at MUVMI, delivered by a <strong>5-person team ("5 Inw Group")</strong> that also produced a Business Model Canvas alongside the engineering work.
-    </p>
-
+    <figure class="mv-fig">
+      <img src="MUVMI%20Photos/My%20Group%20(Main%20Picture).png" alt="The 5 Inw Group team beside the MUVMI electric tuk-tuk" loading="lazy">
+      <figcaption><b>"5 Inw Group"</b> · the five-person team with the MUVMI vehicle</figcaption>
+    </figure>
     <div class="callout">
       <div class="callout-title">What I owned</div>
       <p><strong>Team lead.</strong> I led the five-person team, set the weekly plan, and was the single point of accountability for every weekly submission, taking responsibility (and absorbing the work) when a teammate's part ran late.</p>
-      <p><strong>Software, hands-on.</strong> I co-owned the <strong>regenerative-brake software</strong> with one teammate: the analog-sensor control logic, the speed-banded regen functions, the on-vehicle testing at I'm Park, and the voltage-logging that chose the best functional graph.</p>
+      <p><strong>Software, lead.</strong> I co-owned the <strong>regenerative-brake software</strong> with one teammate: the analog-sensor control logic, the speed-banded regen functions, the Simulink model, the on-vehicle testing at I'm Park, and the voltage-logging that chose the best functional graph.</p>
+      <p><strong>Hardware, hands-on.</strong> I was not the lead designer of the ergonomics parts, but I worked on the build and installation alongside the team, not only reviewing it.</p>
       <p><strong>Integration.</strong> I consolidated both tracks and every subsystem's Functional Specification into a single document to hand over to MUVMI.</p>
       <p><strong>Stakeholders.</strong> A real, large-scale brief: the team worked directly with MUVMI's <strong>CEO and senior engineers</strong> on an in-service vehicle, not a classroom mock-up.</p>
     </div>
-
-    <div class="muvmi-imgph"><b>[TODO: image]</b>Team photo · "5 Inw Group"</div>
 
     <h3 class="content-h3">Skills <em>&amp; Tools</em></h3>
     <div class="module-tags">
       <span class="module-tag">Team Leadership</span>
       <span class="module-tag">EV Regen Control Design</span>
+      <span class="module-tag">MATLAB Simulink</span>
+      <span class="module-tag">Fusion 360 (CAD)</span>
       <span class="module-tag">Analog Sensor Integration</span>
       <span class="module-tag">Vehicle Dynamics &amp; Braking Analysis</span>
       <span class="module-tag">Software / Hardware Integration</span>
-      <span class="module-tag">Mechanical Design &amp; CAD</span>
       <span class="module-tag">Ergonomics / Anthropometry</span>
-      <span class="module-tag">Physical Prototyping &amp; On-Vehicle Testing</span>
-      <span class="module-tag">Data Collection &amp; Analysis</span>
+      <span class="module-tag">On-Vehicle Testing &amp; Data Analysis</span>
       <span class="module-tag">Functional Spec Authoring</span>
       <span class="module-tag">Business Model Canvas</span>
     </div>
@@ -404,5 +630,72 @@
   <p>Bangkok · Thailand</p>
 </footer>
 
+<!-- MUVMI :: native charts (Claude) -->
+<script>
+(function(){
+  function svg(W,H,inner,aria){return '<svg class="mv-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+aria+'">'+inner+'</svg>';}
+
+  /* ---- Regen energy before/after grouped bars ---- */
+  (function(){
+    var host=document.getElementById('mvBars'); if(!host) return;
+    var W=340,H=180,padL=14,padR=10,padT=14,padB=30,plotH=H-padT-padB,baseY=H-padB,yMax=6000;
+    var groups=[{n:'10 km/h',b:522.23,a:1674.90,d:'+220.72%'},{n:'20 km/h',b:4085.24,a:5452.77,d:'+33.48%'}];
+    function py(v){return baseY-(v/yMax)*plotH;}
+    var s='';
+    // gridlines
+    for(var g=0;g<=6000;g+=2000){var y=py(g).toFixed(1);s+='<line class="grid" x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'"/>';s+='<text class="lbl" x="'+(padL-2)+'" y="'+(parseFloat(y)+3)+'" text-anchor="end">'+(g/1000)+'k</text>';}
+    s+='<line class="axis" x1="'+padL+'" y1="'+baseY+'" x2="'+(W-padR)+'" y2="'+baseY+'"/>';
+    var gw=(W-padL-padR)/groups.length, bw=26;
+    groups.forEach(function(gr,i){
+      var cx=padL+gw*i+gw/2;
+      var x1=cx-bw-3, x2=cx+3;
+      var hb=(gr.b/yMax)*plotH, ha=(gr.a/yMax)*plotH;
+      s+='<rect class="bar-b" x="'+x1.toFixed(1)+'" y="'+(baseY-hb).toFixed(1)+'" width="'+bw+'" height="'+hb.toFixed(1)+'" rx="2"/>';
+      s+='<rect class="bar-a" x="'+x2.toFixed(1)+'" y="'+(baseY-ha).toFixed(1)+'" width="'+bw+'" height="'+ha.toFixed(1)+'" rx="2"/>';
+      s+='<text class="val" x="'+(x1+bw/2).toFixed(1)+'" y="'+(baseY-hb-3).toFixed(1)+'" text-anchor="middle">'+Math.round(gr.b)+'</text>';
+      s+='<text class="val" x="'+(x2+bw/2).toFixed(1)+'" y="'+(baseY-ha-3).toFixed(1)+'" text-anchor="middle">'+Math.round(gr.a)+'</text>';
+      s+='<text class="lbl" x="'+cx.toFixed(1)+'" y="'+(baseY+12)+'" text-anchor="middle">'+gr.n+'</text>';
+      s+='<text class="delta" x="'+cx.toFixed(1)+'" y="'+(baseY+25)+'" text-anchor="middle">'+gr.d+'</text>';
+    });
+    host.innerHTML=svg(W,H,s,'Average regenerative energy before vs after at 10 and 20 km per hour, rising 220.72 percent and 33.48 percent.');
+  })();
+
+  /* ---- Regen functions: Step / Curve / Ramp ---- */
+  (function(){
+    var W=130,H=110,padL=14,padR=8,padT=10,padB=18,plotW=W-padL-padR,plotH=H-padT-padB,baseY=H-padB;
+    function px(a){return padL+((a-20)/80)*plotW;}            // angle 20..100
+    function py(p){return baseY-(p/100)*plotH;}                // percent 0..100
+    function poly(pts,cls){var s='';pts.forEach(function(p){s+=px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)+' ';});return '<polyline class="'+cls+'" points="'+s+'"/>';}
+    function frame(){var s='';s+='<line class="axis" x1="'+padL+'" y1="'+baseY+'" x2="'+(W-padR)+'" y2="'+baseY+'"/>';s+='<line class="axis" x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+baseY+'"/>';s+='<text class="lbl" x="'+padL+'" y="'+(baseY+11)+'" text-anchor="middle">20</text>';s+='<text class="lbl" x="'+(W-padR)+'" y="'+(baseY+11)+'" text-anchor="end">100</text>';return s;}
+    var defs={
+      Step:{c:[[20,0],[20,90],[100,90]],e:[[20,0],[20,100],[100,100]]},
+      Curve:{c:[[20,0],[30,48],[45,78],[65,90],[100,90]],e:[[20,0],[32,55],[52,88],[70,100],[100,100]]},
+      Ramp:{c:[[20,0],[100,90]],e:[[20,0],[100,100]]}
+    };
+    [['Step','mvFnStep'],['Curve','mvFnCurve'],['Ramp','mvFnRamp']].forEach(function(p){
+      var host=document.getElementById(p[1]); if(!host) return; var d=defs[p[0]];
+      host.innerHTML=svg(W,H,frame()+poly(d.c,'ln-c')+poly(d.e,'ln-e'),p[0]+' regenerative function, comfort and efficiency modes versus brake-lever angle.');
+    });
+  })();
+
+  /* ---- Calibration cubic ---- */
+  (function(){
+    var host=document.getElementById('mvCal'); if(!host) return;
+    function f(x){return 0.0004*x*x*x+0.0029*x*x+17.977*x-533.03;}
+    var W=340,H=170,padL=34,padR=10,padT=12,padB=24,plotW=W-padL-padR,plotH=H-padT-padB,baseY=H-padB;
+    var xMin=0,xMax=50,yMin=-600,yMax=480;
+    function px(x){return padL+((x-xMin)/(xMax-xMin))*plotW;}
+    function py(y){return baseY-((y-yMin)/(yMax-yMin))*plotH;}
+    var s='';
+    for(var gy=-600;gy<=480;gy+=240){var Y=py(gy).toFixed(1);s+='<line class="grid" x1="'+padL+'" y1="'+Y+'" x2="'+(W-padR)+'" y2="'+Y+'"/>';s+='<text class="lbl" x="'+(padL-3)+'" y="'+(parseFloat(Y)+3)+'" text-anchor="end">'+gy+'</text>';}
+    s+='<line class="axis" x1="'+padL+'" y1="'+py(0).toFixed(1)+'" x2="'+(W-padR)+'" y2="'+py(0).toFixed(1)+'"/>';
+    var pts='';for(var x=xMin;x<=xMax;x+=2){pts+=px(x).toFixed(1)+','+py(f(x)).toFixed(1)+' ';}
+    s+='<polyline class="cal" points="'+pts+'"/>';
+    s+='<text class="lbl" x="'+padL+'" y="'+(baseY+12)+'" text-anchor="middle">0</text>';
+    s+='<text class="lbl" x="'+(W-padR)+'" y="'+(baseY+12)+'" text-anchor="end">time (s)</text>';
+    host.innerHTML=svg(W,H,s,'Angular sensor calibration, a cubic fit rising from about minus 533 to plus 423 over the test window.');
+  })();
+})();
+</script>
 </body>
 </html>
