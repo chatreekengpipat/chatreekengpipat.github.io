@@ -1539,55 +1539,112 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     </div>
 
     <style id="p1-poi">
-    .poi{border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:var(--radius-md);background:color-mix(in srgb,var(--accent) 4%,var(--bg));padding:1.4rem 1.5rem;margin:1.4rem 0}
-    .poi-h{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.95rem}
-    .poi-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:1.6rem;align-items:center}
-    .poi-text p{font-size:.9rem;color:var(--text-muted);line-height:1.7;margin:0 0 .75rem}
-    .poi-text p strong,.poi-text b{color:var(--text);font-weight:600}
-    .poi-list{list-style:none;padding:0;margin:.2rem 0 .85rem;display:flex;flex-direction:column;gap:.5rem}
-    .poi-list li{font-size:.84rem;color:var(--text-muted);line-height:1.55;padding-left:1.15rem;position:relative}
+    .poi{border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:var(--radius-md);background:color-mix(in srgb,var(--accent) 4%,var(--bg));padding:1.5rem 1.6rem;margin:1.4rem 0}
+    .poi-h{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.9rem}
+    .poi-lead{font-size:.92rem;color:var(--text-muted);line-height:1.7;margin:0 0 .85rem;max-width:74ch}
+    .poi-lead strong{color:var(--text);font-weight:600}
+    .poi-list{list-style:none;padding:0;margin:0 0 1.3rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem 1.1rem}
+    .poi-list li{font-size:.82rem;color:var(--text-muted);line-height:1.5;padding-left:1.1rem;position:relative}
     .poi-list li::before{content:"\25b8";position:absolute;left:0;color:var(--accent)}
-    .poi-foot{font-size:.82rem;color:var(--text-subtle);border-top:1px dashed var(--border);padding-top:.7rem;margin-top:.1rem}
-    .poi-chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem 1.1rem .9rem}
-    .poi-chart-t{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.04em;color:var(--text-muted);text-align:center;margin-bottom:.75rem}
-    .poi-chart{display:flex;align-items:flex-end;gap:.3rem;height:130px}
-    .poi-bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
-    .poi-bar i{display:block;width:100%;height:var(--h);min-height:2px;background:color-mix(in srgb,var(--accent) 28%,var(--surface-3));border-radius:3px 3px 0 0}
-    .poi-bar.pk i{background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 65%,var(--bg)))}
-    .poi-bar span{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-subtle);margin-top:.35rem}
-    .poi-chart-x{font-size:.62rem;color:var(--text-subtle);text-align:center;margin-top:.55rem;font-style:italic}
-    @media(max-width:680px){.poi-grid{grid-template-columns:1fr;gap:1.15rem}}
+    .poi-list b{color:var(--text)}
+    .poi-spec{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.1rem 1.2rem 1rem}
+    .poi-legend{display:flex;flex-wrap:wrap;gap:.7rem 1.3rem;font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);margin-bottom:1.1rem}
+    .poi-legend span{display:inline-flex;align-items:center;gap:.45rem}
+    .poi-legend .sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+    .poi-legend .sw.soft{background:var(--accent-soft,#60a5fa)}
+    .poi-legend .sw.acc{background:var(--accent,#2563eb)}
+    .poi-legend .ln{width:18px;border-top:2px dashed var(--warning,#d97706);display:inline-block}
+    .poi-panels{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+    .poi-plab{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text);margin-bottom:.5rem}
+    .poi-plab small{color:var(--text-subtle);font-size:.62rem;margin-left:.35rem}
+    .poi-svg{width:100%;height:auto;display:block;overflow:visible}
+    .poi-svg .bar{fill:var(--accent-soft,#60a5fa)}
+    .poi-svg .bar.star{fill:var(--accent,#2563eb)}
+    .poi-svg .norm{fill:none;stroke:var(--warning,#d97706);stroke-width:1.6;stroke-dasharray:4 3;stroke-linejoin:round}
+    .poi-svg .norm.neg{stroke:var(--danger,#dc2626);stroke-dasharray:2 2}
+    .poi-svg .axis{stroke:var(--border-strong,#cbd5e1);stroke-width:1}
+    .poi-svg .mark{stroke:var(--accent,#2563eb);stroke-width:1;stroke-dasharray:2 2;opacity:.55}
+    .poi-svg .xlab{fill:var(--text-subtle);font-family:'JetBrains Mono',monospace;font-size:9px}
+    .poi-svg .mklab{fill:var(--accent,#2563eb);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700}
+    .poi-read{font-size:.72rem;color:var(--text-muted);margin-top:.6rem;line-height:1.5}
+    .poi-read b{color:var(--text);font-variant-numeric:tabular-nums}
+    .poi-read b.bad{color:var(--danger,#dc2626)}
+    .poi-xaxis{font-size:.62rem;color:var(--text-subtle);text-align:center;margin-top:.8rem;font-style:italic}
+    .poi-cap{font-size:.85rem;color:var(--text-muted);line-height:1.65;margin:1.15rem 0 0;padding-top:.95rem;border-top:1px dashed var(--border)}
+    .poi-cap strong{color:var(--text);font-weight:600}
+    @media(max-width:680px){.poi-list,.poi-panels{grid-template-columns:1fr}}
     </style>
     <div class="poi">
       <div class="poi-h">&#9670; Why Poisson Distribution?</div>
-      <div class="poi-grid">
-        <div class="poi-text">
-          <p>An XS or XXL shirt doesn't sell in a steady stream. It sells as a few separate, countable events a week: zero on most days, one or two on a good one. That is exactly what Poisson describes, <strong>the number of rare, independent arrivals in a fixed window</strong>.</p>
-          <ul class="poi-list">
-            <li><b>Countable and low</b>: whole units, averaging about 3 a week (&lambda; = 3), never 200.</li>
-            <li><b>Right-skewed, not symmetric</b>: demand can spike to 7 or 8 but never drops below 0, so a Normal curve (symmetric, allows negatives) misfits the tail.</li>
-            <li><b>One parameter</b>: mean = variance = &lambda;, so a single number fixes both the reorder point and the safety stock, SS = &lceil;Z&middot;&radic;&lambda;&rceil;.</li>
-          </ul>
-          <p class="poi-foot">High-volume sizes (S&ndash;L, about 13 a week) are smooth enough for the Normal approximation, which is why only the low-volume tails use Poisson.</p>
+      <p class="poi-lead">An XS or XXL shirt doesn't sell in a steady stream. It sells as a few separate, countable events over a season: rare, independent arrivals that Poisson is built to describe. The choice between Poisson and the Normal model comes down to one thing, <strong>how much the size sells</strong>.</p>
+      <ul class="poi-list">
+        <li><b>Countable and low</b>: whole units, never fractional, never negative.</li>
+        <li><b>Right-skewed at low volume</b>: a symmetric Normal curve misfits the tail and can even imply negative demand.</li>
+        <li><b>One parameter</b>: mean = variance = &lambda;, so a single number sets the reorder point, SS = &lceil;Z&middot;&radic;&lambda;&rceil;. No long history needed.</li>
+      </ul>
+
+      <div class="poi-spec">
+        <div class="poi-legend">
+          <span><i class="sw soft"></i>Poisson (uses mean only)</span>
+          <span><i class="ln"></i>Normal approximation</span>
+          <span><i class="sw acc"></i>97% reorder point</span>
         </div>
-        <div class="poi-chart-wrap">
-          <div class="poi-chart-t">Weekly demand &middot; P(X = k) &middot; &lambda; = 3</div>
-          <div class="poi-chart">
-            <div class="poi-bar"><i style="--h:22%" title="P(0) = 5%"></i><span>0</span></div>
-            <div class="poi-bar"><i style="--h:67%" title="P(1) = 15%"></i><span>1</span></div>
-            <div class="poi-bar pk"><i style="--h:100%" title="P(2) = 22%"></i><span>2</span></div>
-            <div class="poi-bar pk"><i style="--h:100%" title="P(3) = 22%"></i><span>3</span></div>
-            <div class="poi-bar"><i style="--h:75%" title="P(4) = 17%"></i><span>4</span></div>
-            <div class="poi-bar"><i style="--h:45%" title="P(5) = 10%"></i><span>5</span></div>
-            <div class="poi-bar"><i style="--h:23%" title="P(6) = 5%"></i><span>6</span></div>
-            <div class="poi-bar"><i style="--h:10%" title="P(7) = 2%"></i><span>7</span></div>
-            <div class="poi-bar"><i style="--h:4%" title="P(8) = 1%"></i><span>8</span></div>
-            <div class="poi-bar"><i style="--h:1%" title="P(9) = 0.3%"></i><span>9</span></div>
+        <div class="poi-panels">
+          <div>
+            <div class="poi-plab">&lambda; = 4 <small>very low volume · illustrative</small></div>
+            <div id="poiP0"></div>
+            <div class="poi-read">Normal assigns <b class="bad">2.3% to demand &lt; 0</b> (impossible)</div>
           </div>
-          <div class="poi-chart-x">units sold in a week &middot; &lambda; = 3/wk compounds to &lambda; = 21 over the ~7-wk lead time</div>
+          <div>
+            <div class="poi-plab">&lambda; = 21 <small>PE Shirt XS · real SKU</small></div>
+            <div id="poiP1"></div>
+            <div class="poi-read">97% reorder: Poisson <b>30</b> &middot; Normal <b>30</b> (nearly equal)</div>
+          </div>
+          <div>
+            <div class="poi-plab">&lambda; = 78 <small>PE Shirt M · real SKU</small></div>
+            <div id="poiP2"></div>
+            <div class="poi-read">97% reorder: Poisson <b>95</b> &middot; Normal <b>95</b> (identical)</div>
+          </div>
         </div>
+        <div class="poi-xaxis">units of demand over the lead time &middot; bars = Poisson, dashed = Normal approximation</div>
       </div>
+
+      <p class="poi-cap"><strong>The model is chosen by demand volume, not by product.</strong> At very low volume the Normal curve even predicts impossible negative demand, so the low-volume tails (XS, XXL) use Poisson: safety stock from the mean alone, robust when there is too little sales history to estimate &sigma; reliably. As volume rises the two converge, so high-volume sizes (S&ndash;L) use the simpler Normal-Z. The &lambda; = 21 and &lambda; = 78 panels are the same XS and M SKUs from the worked example below (reorder 30 and 95).</p>
     </div>
+    <script>
+    (function(){
+      function pois(l,k){var p=Math.exp(-l);for(var i=1;i<=k;i++)p=p*l/i;return p;}
+      function norm(mu,s,x){return Math.exp(-0.5*Math.pow((x-mu)/s,2))/(s*Math.sqrt(2*Math.PI));}
+      var W=240,H=148,padL=8,padR=8,padT=10,padB=22,plotW=W-padL-padR,plotH=H-padT-padB,baseY=H-padB;
+      var PANELS=[
+        {id:'poiP0',l:4,lo:-3,hi:13,star:8},
+        {id:'poiP1',l:21,lo:7,hi:37,star:30},
+        {id:'poiP2',l:78,lo:56,hi:100,star:95}
+      ];
+      function build(cfg){
+        var s=Math.sqrt(cfg.l),span=cfg.hi-cfg.lo,x,t;
+        function px(v){return padL+((v-cfg.lo)/span)*plotW;}
+        var yMax=0;
+        for(x=cfg.lo;x<=cfg.hi;x++){if(x>=0)yMax=Math.max(yMax,pois(cfg.l,x));yMax=Math.max(yMax,norm(cfg.l,s,x));}
+        function py(v){return baseY-(v/yMax)*plotH;}
+        var barW=Math.min(14,(plotW/(span+1))*0.78),svg='';
+        svg+='<line class="axis" x1="'+padL+'" y1="'+baseY+'" x2="'+(W-padR)+'" y2="'+baseY+'"/>';
+        svg+='<line class="mark" x1="'+px(cfg.star).toFixed(1)+'" y1="'+padT+'" x2="'+px(cfg.star).toFixed(1)+'" y2="'+baseY+'"/>';
+        for(x=cfg.lo;x<=cfg.hi;x++){if(x<0)continue;var h=(pois(cfg.l,x)/yMax)*plotH,cx=px(x);
+          svg+='<rect class="bar'+(x===cfg.star?' star':'')+'" x="'+(cx-barW/2).toFixed(1)+'" y="'+(baseY-h).toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+(h<0?0:h).toFixed(1)+'" rx="1"/>';}
+        var neg='',pos='';
+        for(t=cfg.lo;t<=cfg.hi+1e-6;t+=0.3){var X=px(t).toFixed(1),Y=py(norm(cfg.l,s,t)).toFixed(1);if(t<0)neg+=X+','+Y+' ';else pos+=X+','+Y+' ';}
+        if(neg)svg+='<polyline class="norm neg" points="'+neg+px(0).toFixed(1)+','+py(norm(cfg.l,s,0)).toFixed(1)+'"/>';
+        svg+='<polyline class="norm" points="'+pos+'"/>';
+        var mean=Math.round(cfg.l);
+        if(cfg.lo<=0&&cfg.hi>=0)svg+='<text class="xlab" x="'+px(0).toFixed(1)+'" y="'+(baseY+12)+'" text-anchor="middle">0</text>';
+        if(Math.abs(mean-cfg.star)>2)svg+='<text class="xlab" x="'+px(mean).toFixed(1)+'" y="'+(baseY+12)+'" text-anchor="middle">'+mean+'</text>';
+        svg+='<text class="mklab" x="'+px(cfg.star).toFixed(1)+'" y="'+(baseY+12)+'" text-anchor="middle">'+cfg.star+'</text>';
+        return '<svg class="poi-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Poisson distribution at lambda '+cfg.l+' with Normal approximation overlaid; reorder point at '+cfg.star+'.">'+svg+'</svg>';
+      }
+      PANELS.forEach(function(cfg){var el=document.getElementById(cfg.id);if(el)el.innerHTML=build(cfg);});
+    })();
+    </script>
 
     <h3 class="content-h3">Reorder Point &amp; EOQ · <em>Worked Example</em></h3>
     <p class="content-p">
