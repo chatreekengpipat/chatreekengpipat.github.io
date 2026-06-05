@@ -93,33 +93,83 @@
     }, { passive: true });
   }
 
-  // ===== 3. Magnetic hover effect on key cards =====
-  function initMagneticEffect() {
+  // ===== 3. Card FX — cursor spotlight (+ 3D tilt on big cards) =====
+  // Pointer-tracked premium hover: a soft accent spotlight follows the cursor
+  // inside the card (CSS reads --mx/--my), and the large feature cards add a
+  // subtle 3D tilt toward the pointer. Replaces the old magnetic pull.
+  // Pointer-only + motion-aware, so touch / reduced-motion get the calm card.
+  function initCardFX() {
     if (prefersReducedMotion()) return;
-    const magneticTargets = document.querySelectorAll(
-      '.award-feature, .academic-feature, .hero-card, .impact-cell'
-    );
+    if (window.matchMedia('(hover: none)').matches) return;
 
-    magneticTargets.forEach(el => {
-      el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
+    // Cards that get the cursor spotlight.
+    const SPOT = '.project-card, .award-feature, .academic-feature, .focus-card,' +
+      '.method-card, .tool-group, .edu-card, .impact-cell, .result-cell,' +
+      '.algo-card, .task-section, .arch-mod, .trk-card, .hero-card';
+    // The big feature cards also tilt.
+    const TILT = '.award-feature, .academic-feature, .project-card';
 
-        // Subtle magnetic pull
-        const maxOffset = 6;
-        const offsetX = (x / rect.width) * maxOffset;
-        const offsetY = (y / rect.height) * maxOffset;
+    document.querySelectorAll(SPOT).forEach(card => {
+      // Inject the spotlight layer (a child, so it never clobbers existing
+      // ::before/::after used by the card).
+      const glow = document.createElement('span');
+      glow.className = 'fx-glow';
+      glow.setAttribute('aria-hidden', 'true');
+      card.appendChild(glow);
+      card.classList.add('fx-spot');
 
-        el.style.setProperty('--magnetic-x', `${offsetX}px`);
-        el.style.setProperty('--magnetic-y', `${offsetY}px`);
-        el.style.transform = `translate(${offsetX}px, ${offsetY - 4}px) scale(1.02)`;
+      const tilt = card.matches(TILT);
+      if (tilt) card.classList.add('fx-tilt');
+      let raf = null;
+
+      card.addEventListener('pointermove', (e) => {
+        if (raf) return;
+        raf = window.requestAnimationFrame(() => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+          card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+          card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+          if (tilt) {
+            // Inline transform wins over every CSS hover rule cleanly; includes
+            // the lift so the card still rises while it tilts.
+            const ry = (px - 0.5) * 6;   // rotateY from horizontal position
+            const rx = (0.5 - py) * 6;   // rotateX from vertical position
+            card.style.transform =
+              `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-6px)`;
+          }
+          raf = null;
+        });
       });
 
-      el.addEventListener('mouseleave', () => {
-        el.style.transform = '';
+      card.addEventListener('pointerleave', () => {
+        if (tilt) card.style.transform = '';
       });
     });
+  }
+
+  // ===== 3b. Slim scroll-progress bar (index only) =====
+  // Project pages already ship their own #fx-progress; only add ours when none
+  // exists, so a page never gets two bars.
+  function initScrollProgress() {
+    if (document.getElementById('fx-progress') || document.getElementById('ck-progress')) return;
+    const bar = document.createElement('div');
+    bar.id = 'ck-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+
+    let ticking = false;
+    function update() {
+      const root = document.documentElement;
+      const max = (root.scrollHeight - root.clientHeight) || 1;
+      const p = Math.min((root.scrollTop || window.scrollY) / max, 1);
+      bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
   }
 
   // ===== 4. Smooth anchor scrolling =====
@@ -406,7 +456,8 @@
   function init() {
     initScrollReveal();
     initNavScroll();
-    initMagneticEffect(); // เพิ่มกลับเข้ามาให้สมบูรณ์
+    initCardFX();          // cursor spotlight + 3D tilt
+    initScrollProgress();  // slim top progress bar (index)
     initSmoothScroll();
     initHeroParallax();
     initCounters();

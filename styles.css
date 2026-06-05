@@ -5966,3 +5966,113 @@ nav.scrolled {
     font-size: clamp(2.35rem, 12.5vw, 4rem) !important;
   }
 }
+
+/* =====================================================
+   COOL FX LAYER · v11
+   Cursor spotlight · 3D tilt · hero entrance ·
+   scroll progress · section-title underline draw.
+   Every effect is opt-in via pointer or
+   (prefers-reduced-motion: no-preference); the page is
+   fully visible and usable with none of it running.
+   ===================================================== */
+
+/* ---- 1. Cursor spotlight on cards ----
+   JS injects a .fx-glow child and tracks --mx/--my. The glow sits at z-index -1
+   inside an isolated stacking context, so it paints over the card surface but
+   behind the card's own content and ::before/::after — no clobbering. */
+.fx-spot { position: relative; isolation: isolate; }
+.fx-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-smooth);
+  background: radial-gradient(
+    460px circle at var(--mx, 50%) var(--my, 50%),
+    var(--glow-color), transparent 60%
+  );
+}
+.fx-spot:hover .fx-glow { opacity: 1; }
+
+/* ---- 2. 3D tilt on big feature cards (transform set inline by JS) ---- */
+.fx-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
+}
+.fx-tilt:hover { transition-duration: 0.1s; } /* track the pointer crisply */
+
+/* ---- 3. Hero v7 choreographed entrance (page load) ----
+   The signature (.ck-signature) keeps its own per-letter reveal; everything
+   else rises in sequence. Load animation only (immediate, never scroll-gated),
+   so content is never trapped invisible. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-v7-left > *:not(.ck-signature) {
+    animation: heroRise 0.85s var(--ease-smooth) backwards;
+  }
+  .hero-v7-left > .hero-v7-tag  { animation-delay: 0.15s; }
+  .hero-v7-left > .hero-v7-desc { animation-delay: 0.30s; }
+  .hero-v7-left > .hero-v7-meta { animation-delay: 0.45s; }
+  .hero-v7-left > .hero-v7-cta  { animation-delay: 0.60s; }
+  .hero-v7-right {
+    animation: heroPhotoIn 1.05s var(--ease-smooth) 0.2s backwards;
+  }
+  @keyframes heroRise {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes heroPhotoIn {
+    from { opacity: 0; transform: translateY(26px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+/* ---- 4. Slim scroll-progress bar (index; JS adds #ck-progress) ---- */
+#ck-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  z-index: 1000;                 /* above the fixed nav (z-index 100) */
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  box-shadow: 0 0 14px var(--glow-color);
+  will-change: transform;
+  transition: transform 0.1s linear;
+  pointer-events: none;
+}
+
+/* ---- 5. Section-title emphasis: underline draws as it scrolls in ----
+   Scroll-driven (view timeline). No support / reduced motion → no underline,
+   heading still perfect. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .section-title em { position: relative; }
+    .section-title em::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.12em;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: emUnderline linear both;
+      animation-timeline: view();
+      animation-range: entry 12% entry 55%;
+    }
+    @keyframes emUnderline { to { transform: scaleX(1); } }
+  }
+}
+
+/* ---- Reduced motion: hard-off for all of the above ---- */
+@media (prefers-reduced-motion: reduce) {
+  .fx-glow { display: none; }
+  .fx-tilt { transform: none !important; }
+  #ck-progress { display: none; }
+}
