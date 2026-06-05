@@ -412,6 +412,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 .pr-tag.poisson{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);background:var(--accent-bg)}
 .pr-tag.reorder{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 42%,transparent);background:color-mix(in srgb,var(--warning) 13%,transparent)}
 .pr-tag.ok{color:var(--success);border-color:color-mix(in srgb,var(--success) 35%,transparent);background:color-mix(in srgb,var(--success) 10%,transparent)}
+.pr-tag.eoq{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);background:var(--accent-bg)}
+.pr-tag.cap{color:var(--text);border-color:var(--border-strong);background:var(--surface-2);font-weight:600}
 .pr-it-side{display:flex;flex-direction:column;align-items:flex-end;gap:.45rem}
 .pr-price{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text);font-variant-numeric:tabular-nums}
 .pr-add-row{display:flex;align-items:center;gap:.35rem}
@@ -740,6 +742,15 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 <section style="padding-top: 2rem;">
   <div class="content-section">
 
+    <style id="p1-hook-style">
+      .p1-hook{font-size:clamp(1.15rem,2.2vw,1.5rem);line-height:1.5;font-weight:600;color:var(--text-strong);
+        letter-spacing:-.01em;max-width:62ch;margin:.5rem 0 2.5rem;text-wrap:balance}
+      .p1-hook b{color:var(--accent);font-weight:700}
+    </style>
+    <p class="p1-hook">
+      Newton's uniform and textbook procurement ran on intuition &mdash; <b>22% of intake seasons hit XS/XXL stockouts</b>. I rebuilt it as a statistically-planned, approval-controlled procure-to-pay system on XeerSoft Cloud ERP.
+    </p>
+
     <h3 class="content-h3">The <em>Problem</em></h3>
     <p class="content-p">
       Newton Sixth Form managed procurement for school uniforms (~180 SKUs) and textbooks (~40 titles) <strong>without a structured system</strong>: purchase requests were uncontrolled, approval was informal, and uniform stockouts occurred every intake season due to intuition-based ordering.
@@ -825,6 +836,118 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     <p class="p1-dna-map">
       <b>Read the rest of this page as proof of the spine above:</b> the <b>Procurement Simulation</b> runs the methodology live, the <b>Order Entry</b> catalog is the configured tooling, and the <b>FSD logic</b> is what the developers received.
     </p>
+
+    <!-- CORE INSIGHT · why two demand models (analytical centrepiece) -->
+    <style id="whyp-style">
+      .whyp{margin:1.5rem 0 .4rem}
+      .whyp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+      @media(max-width:760px){.whyp-grid{grid-template-columns:1fr}}
+      .whyp-panel{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:.9rem .9rem .65rem}
+      .whyp-panel h5{font-size:.82rem;color:var(--text-strong);margin:0;font-weight:700;letter-spacing:-.01em;font-family:'JetBrains Mono',monospace}
+      .whyp-panel .sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-muted);display:block;margin:.15rem 0 .5rem}
+      .whyp-svg{width:100%;height:auto;display:block;overflow:visible}
+      .whyp-bar{fill:var(--accent);opacity:.42}
+      .whyp-bar.rop{opacity:1}
+      .whyp-norm{fill:none;stroke:var(--warning);stroke-width:1.6;stroke-dasharray:4 3}
+      .whyp-neg{fill:var(--danger);opacity:.13}
+      .whyp-negline{stroke:var(--danger);stroke-width:1;stroke-dasharray:2 2;fill:none}
+      .whyp-axis{stroke:var(--border-strong);stroke-width:1}
+      .whyp-t{font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--text-muted)}
+      .whyp-t.rop{fill:var(--accent);font-weight:700}
+      .whyp-t.neg{fill:var(--danger);font-weight:700}
+      .whyp-legend{display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;margin-top:.75rem;
+        font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--text-muted)}
+      .whyp-legend span{display:inline-flex;align-items:center;gap:.42rem}
+      .whyp-legend i{width:14px;height:10px;border-radius:2px;display:inline-block;flex:0 0 auto}
+      .whyp-legend i.po{background:var(--accent);opacity:.42}
+      .whyp-legend i.rop{background:var(--accent)}
+      .whyp-legend i.no{height:0;border-radius:0;border-top:2px dashed var(--warning)}
+      .whyp-legend i.neg{background:var(--danger);opacity:.3}
+      .whyp-cap{font-size:.84rem;color:var(--text-muted);line-height:1.7;margin:.85rem 0 0}
+      .whyp-cap b{color:var(--text)}
+    </style>
+
+    <h3 class="content-h3">The core insight · <em>Why two demand models?</em></h3>
+    <p class="content-p">
+      Every stock item asks the same question: how much safety stock guards against a stockout at a 97% service level? The honest answer depends on <strong>how much the item actually sells</strong> &mdash; so I chose the demand model by volume, not by product type. The three panels show why.
+    </p>
+
+    <div class="whyp"><div class="whyp-grid" id="whypGrid"></div>
+      <div class="whyp-legend">
+        <span><i class="po"></i> Poisson PMF</span>
+        <span><i class="rop"></i> 97% reorder point</span>
+        <span><i class="no"></i> Normal approximation</span>
+        <span><i class="neg"></i> impossible (demand &lt; 0)</span>
+      </div>
+    </div>
+    <p class="whyp-cap">
+      The model is chosen by <b>demand volume, not by product</b>. At very low volume a Normal curve even predicts impossible negative demand (the red 2.3% at &lambda;=4), so low-volume SKUs use <b>Poisson</b> &mdash; safety stock from the mean alone, which is robust when there's too little sales history to estimate &sigma; reliably. As volume rises the two converge (&lambda;=19.5 &rarr; reorder 28 vs 27.8; &lambda;=63 &rarr; 78 vs 77.9), so high-volume sizes use the simpler <b>Normal-Z</b>.
+    </p>
+
+    <script>
+    (function(){
+      var host=document.getElementById('whypGrid'); if(!host) return;
+      var panels=[
+        {lam:4,    title:'λ = 4',    sub:'very low volume (illustrative)', kmin:-4, kmax:13, rop:8,  neg:true},
+        {lam:19.5, title:'λ = 19.5', sub:'PE Shirt · XS (real SKU)',       kmin:6,  kmax:34, rop:28, neg:false},
+        {lam:63,   title:'λ = 63',   sub:'PE Shirt · M (real SKU)',        kmin:40, kmax:88, rop:78, neg:false}
+      ];
+      var W=270,H=168,padL=8,padR=8,padT=14,padB=20;
+      var plotW=W-padL-padR, plotH=H-padT-padB, baseY=padT+plotH;
+      function poisson(lam,kmax){var p=Math.exp(-lam),a=[p];for(var k=1;k<=kmax;k++){p=p*lam/k;a[k]=p;}return a;}
+      function npdf(x,mu,sd){return Math.exp(-0.5*Math.pow((x-mu)/sd,2))/(sd*Math.sqrt(2*Math.PI));}
+      function svgFor(P){
+        var lam=P.lam, sd=Math.sqrt(lam), pmf=poisson(lam,P.kmax);
+        var maxP=0,k; for(k=Math.max(0,P.kmin);k<=P.kmax;k++){ if(pmf[k]>maxP)maxP=pmf[k]; }
+        var yMax=Math.max(maxP,npdf(lam,lam,sd))*1.12, span=P.kmax-P.kmin;
+        function X(v){return padL+(v-P.kmin)/span*plotW;}
+        function Y(p){return padT+plotH-(p/yMax)*plotH;}
+        var s='<svg class="whyp-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Poisson distribution at '+P.title+' with a Normal approximation overlaid; 97% reorder point at '+P.rop+'">';
+        if(P.neg){
+          var x0=X(P.kmin), xz=X(0);
+          s+='<rect class="whyp-neg" x="'+x0.toFixed(1)+'" y="'+padT+'" width="'+(xz-x0).toFixed(1)+'" height="'+plotH+'"/>';
+          s+='<line class="whyp-negline" x1="'+xz.toFixed(1)+'" y1="'+padT+'" x2="'+xz.toFixed(1)+'" y2="'+baseY+'"/>';
+          s+='<text class="whyp-t neg" x="'+(x0+1).toFixed(1)+'" y="'+(padT+7)+'">2.3% &lt; 0</text>';
+        }
+        var bw=plotW/span*0.72;
+        for(k=Math.max(0,Math.ceil(P.kmin));k<=P.kmax;k++){
+          var by=Y(pmf[k]), bh=baseY-by; if(bh<0.4) continue;
+          var isRop=(k===Math.round(P.rop));
+          s+='<rect class="whyp-bar'+(isRop?' rop':'')+'" x="'+(X(k)-bw/2).toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="1"/>';
+        }
+        var d='',first=true;
+        for(var xi=0;xi<=120;xi++){var kx=P.kmin+span*xi/120; d+=(first?'M':'L')+X(kx).toFixed(1)+' '+Y(npdf(kx,lam,sd)).toFixed(1)+' '; first=false;}
+        s+='<path class="whyp-norm" d="'+d+'"/>';
+        s+='<line class="whyp-axis" x1="'+padL+'" y1="'+baseY+'" x2="'+(W-padR)+'" y2="'+baseY+'"/>';
+        var rx=X(Math.round(P.rop));
+        s+='<line class="whyp-axis" x1="'+rx.toFixed(1)+'" y1="'+baseY+'" x2="'+rx.toFixed(1)+'" y2="'+(baseY+3)+'"/>';
+        s+='<text class="whyp-t rop" x="'+rx.toFixed(1)+'" y="'+(baseY+13)+'" text-anchor="middle">97% ROP = '+P.rop+'</text>';
+        s+='<text class="whyp-t" x="'+(W-padR)+'" y="'+(padT+7)+'" text-anchor="end">demand →</text>';
+        s+='</svg>';
+        return s;
+      }
+      host.innerHTML=panels.map(function(P){
+        return '<div class="whyp-panel"><h5>'+P.title+'</h5><span class="sub">'+P.sub+'</span>'+svgFor(P)+'</div>';
+      }).join('');
+    })();
+    </script>
+
+    <h3 class="content-h3">The solution · <em>model-selection logic</em></h3>
+    <p class="content-p">Three planning rules, each matched to how its items behave. The Purchase Requisition catalog below tags every line with the rule that governs it.</p>
+    <table class="process-table">
+      <thead><tr><th>Planning model</th><th>Applied to</th><th>Why this model</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Poisson</strong></td><td>Low-volume SKUs &mdash; XS/XXL sizes, minority subjects, subject-kit specialty</td><td>Safety stock from the mean alone; robust when sales history is too thin to estimate &sigma;</td></tr>
+        <tr><td><strong>Normal-Z</strong></td><td>Mid / high-volume sizes &amp; steady consumables</td><td>Enough history to estimate &sigma;; a service-level Z gives a tighter reorder point</td></tr>
+        <tr><td><strong>Modified EOQ</strong></td><td>Textbooks (~40 titles)</td><td>Order size balances holding vs ordering cost, with an edition-risk penalty to curb obsolete-edition write-off</td></tr>
+      </tbody>
+    </table>
+    <p class="content-p">Capital equipment (laptops, tablets, scanners) is deliberately <strong>not</strong> demand-planned &mdash; it's irregular and high-value, so it's controlled by the value-based approval routing instead. Alongside this: a 2-level approval workflow (<code>&le; &#3647;50K &rarr; Dept Head</code>, <code>&gt; &#3647;50K &rarr; Director</code>), ABC stock flagging, ~180 uniform SKUs and ~40 textbook titles configured, a vendor master for 10+ suppliers, and the full P2P cycle (PR &rarr; PO &rarr; GR &rarr; Invoice, 3-way match).</p>
+
+    <div class="callout">
+      <div class="callout-title">How I'd defend this in interview</div>
+      <p>"We only run statistical planning on recurring stock items, and we match the distribution to each SKU's demand volume &mdash; Poisson where data is too sparse to estimate &sigma;, Normal-Z where it isn't. Capital equipment isn't forecast at all; it's irregular and high-value, so it's controlled by value-based approval routing."</p>
+    </div>
 
     <!-- DRAW.IO STYLE FLOW DIAGRAM -->
     <div class="diagram-container">
@@ -922,7 +1045,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">Purchase Requisition · <em>Order Entry</em></h3>
     <p class="content-p">
-      How a procurement officer raises a requisition in the configured system. The catalog is the full <strong>item master I set up</strong> &mdash; <strong>Uniforms, Textbooks, Stationery, Devices and Equipment</strong> &mdash; the same five classes the MRP simulation below explodes from headcount. Every line carries its <strong>planning class</strong> (Poisson for low-volume sizes, minority subjects and lumpy high-value devices; Normal-Z for steady consumables) plus a live stock signal against its reorder point. Each unit is tracked by a <strong>9-character serial</strong>, with a <strong>Learn Balance Code</strong> (e.g. <code>LB######</code>) engraved to the owning student at issue. Submitting applies the <strong>2-level approval rule</strong> from FSD-P1-01 (&le; &#3647;50,000 &rarr; Dept Head; &gt; &#3647;50,000 &rarr; Director) &mdash; add a device line and watch the routing escalate.
+      Build a requisition from the configured catalog and watch the <strong>planning class</strong> and <strong>approval routing</strong> respond &mdash; the specified behaviour I designed, not the proprietary XeerSoft UI. The catalog is the item master I set up across six classes (<strong>Uniforms, PE Kit, Subject Kit, Stationery, Textbooks, Equipment</strong>). Each stocked line is tagged by its planning model (Poisson for low-volume sizes &amp; minority specialty; Normal-Z for steady consumables; Modified EOQ for textbooks) with a live stock signal against its reorder point; capital equipment is value-routed, not demand-planned. Every unit carries a <strong>9-character serial</strong> and a <strong>Learn Balance Code</strong> (<code>LB######</code>) engraved to the owning student at issue. Submitting applies the <strong>2-level approval rule</strong> (FSD-P1-01: &le; &#3647;50,000 &rarr; Dept Head; &gt; &#3647;50,000 &rarr; Director) &mdash; add an Equipment line and watch routing escalate to Director.
     </p>
 
     <div class="pr xnative-section" id="pr1">
@@ -933,10 +1056,11 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <div class="pr-body">
         <div class="pr-catalog">
           <div class="pr-cats">
-            <button class="pr-cat on" data-cat="uni">Uniforms <span class="ct">5</span></button>
-            <button class="pr-cat" data-cat="txt">Textbooks <span class="ct">10</span></button>
-            <button class="pr-cat" data-cat="sta">Stationery <span class="ct">18</span></button>
-            <button class="pr-cat" data-cat="dev">Devices <span class="ct">3</span></button>
+            <button class="pr-cat on" data-cat="uni">Uniforms <span class="ct">18</span></button>
+            <button class="pr-cat" data-cat="pe">PE Kit <span class="ct">16</span></button>
+            <button class="pr-cat" data-cat="sub">Subject Kit <span class="ct">7</span></button>
+            <button class="pr-cat" data-cat="sta">Stationery <span class="ct">14</span></button>
+            <button class="pr-cat" data-cat="txt">Textbooks <span class="ct">30</span></button>
             <button class="pr-cat" data-cat="eqp">Equipment <span class="ct">6</span></button>
           </div>
           <div class="pr-bands" id="prBands" hidden></div>
@@ -959,50 +1083,69 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     (function(){
       var root=document.getElementById('pr1'); if(!root) return;
       var THB=function(n){return '฿'+Math.round(n).toLocaleString('en-US');};
-      // master data (reconstructed) · ~300 students · uniform ฿500 · textbook priced by year band
-      var uni=[
-        {sn:'UNI240101', name:'PE Shirt · XS', price:500, demand:'poisson', onhand:22,  rop:30},
-        {sn:'UNI240102', name:'PE Shirt · S',  price:500, demand:'normal',  onhand:96,  rop:75},
-        {sn:'UNI240103', name:'PE Shirt · M',  price:500, demand:'normal',  onhand:120, rop:95},
-        {sn:'UNI240104', name:'PE Shirt · XL', price:500, demand:'normal',  onhand:71,  rop:60},
-        {sn:'UNI240105', name:'PE Shirt · XXL',price:500, demand:'poisson', onhand:14,  rop:30}
+      // ---- master data · illustrative reconstruction ----
+      // [TODO] confirm the exact stocked-item list with Newton Sixth Form. The
+      // CATEGORIES are real school-stock classes; serials, on-hand and reorder
+      // points are illustrative and consistent with each item's planning class.
+      // Size mix is the real logic: XS/XXL are low-volume → Poisson; the body
+      // sizes S/M/L/XL are steady → Normal-Z.
+      var SIZES=[
+        {sz:'XS', demand:'poisson', onhand:22,  rop:30, dq:24},
+        {sz:'S',  demand:'normal',  onhand:96,  rop:75, dq:80},
+        {sz:'M',  demand:'normal',  onhand:120, rop:95, dq:100},
+        {sz:'L',  demand:'normal',  onhand:104, rop:88, dq:90},
+        {sz:'XL', demand:'normal',  onhand:71,  rop:60, dq:60},
+        {sz:'XXL',demand:'poisson', onhand:14,  rop:30, dq:24}
       ];
-      // Stationery (เครื่องเขียน) — the pooled common-component class from the MRP run.
-      // High-volume consumables plan Normal-Z; low-volume / high-value specialty items plan Poisson.
+      // Uniforms — non-PE garments, selected by garment then shown across sizes.
+      var uniG=[
+        {id:'shirt', label:'Shirt / Blouse',   sub:'× XS–XXL', price:450,  pre:'USH'},
+        {id:'trews', label:'Trousers / Skirt', sub:'× XS–XXL', price:550,  pre:'UTR'},
+        {id:'blz',   label:'Blazer',           sub:'× XS–XXL', price:1200, pre:'UBL'}
+      ];
+      // PE Kit — same size-mix logic.
+      var peG=[
+        {id:'pesh', label:'PE Shirt',     sub:'× XS–XXL', price:500, pre:'PES'},
+        {id:'pesr', label:'PE Shorts',    sub:'× XS–XXL', price:350, pre:'PSH'},
+        {id:'sock', label:'Sports Socks', sub:'× S–XL',   price:120, pre:'SOK'}
+      ];
+      // Subject Kit — minority-share, low-volume specialty → Poisson.
+      var subk=[
+        {sn:'SBK240101', name:'Lab coat · S',            price:350, demand:'poisson', onhand:18, rop:24, dq:24},
+        {sn:'SBK240102', name:'Lab coat · M',            price:350, demand:'poisson', onhand:22, rop:24, dq:24},
+        {sn:'SBK240103', name:'Lab coat · L',            price:350, demand:'poisson', onhand:16, rop:24, dq:24},
+        {sn:'SBK240104', name:'Safety goggles',          price:290, demand:'poisson', onhand:28, rop:30, dq:40},
+        {sn:'SBK240105', name:'Compass / protractor set',price:100, demand:'poisson', onhand:36, rop:40, dq:40},
+        {sn:'SBK240106', name:'Art kit',                 price:450, demand:'poisson', onhand:16, rop:20, dq:24},
+        {sn:'SBK240107', name:'A3 sketchbook',           price:120, demand:'poisson', onhand:30, rop:36, dq:40}
+      ];
+      // Stationery — steady, high-volume consumables → Normal-Z. The calculator
+      // carries an intake-season spike (the Jun–Jul planning calendar).
       var sta=[
-        {sn:'STA240101', name:'Notebook · A5 80-sheet',     price:30,  demand:'normal',  onhand:640, rop:400, dq:300},
-        {sn:'STA240102', name:'3-colour pen set',           price:40,  demand:'normal',  onhand:210, rop:150, dq:100},
-        {sn:'STA240103', name:'Mechanical pencil · 0.5mm',  price:30,  demand:'normal',  onhand:180, rop:120, dq:100},
-        {sn:'STA240104', name:'Eraser',                     price:10,  demand:'normal',  onhand:160, rop:120, dq:100},
-        {sn:'STA240105', name:'Ruler · 30cm',               price:20,  demand:'normal',  onhand:140, rop:100, dq:100},
-        {sn:'STA240106', name:'Highlighter',                price:25,  demand:'normal',  onhand:88,  rop:100, dq:100},
-        {sn:'STA240107', name:'Document folder',            price:30,  demand:'normal',  onhand:220, rop:150, dq:100},
-        {sn:'STA240108', name:'Post-it notes',              price:50,  demand:'normal',  onhand:130, rop:100, dq:100},
-        {sn:'STA240109', name:'A4 copy paper · ream 500',   price:120, demand:'normal',  onhand:46,  rop:60,  dq:40},
-        {sn:'STA240110', name:'Whiteboard marker · 4-pack', price:80,  demand:'normal',  onhand:54,  rop:40,  dq:30},
-        {sn:'STA240111', name:'Scissors',                   price:45,  demand:'normal',  onhand:72,  rop:50,  dq:40},
-        {sn:'STA240112', name:'Glue stick',                 price:25,  demand:'normal',  onhand:90,  rop:80,  dq:60},
-        {sn:'STA240113', name:'Correction tape',            price:35,  demand:'normal',  onhand:66,  rop:60,  dq:50},
-        {sn:'STA240114', name:'Stapler + staples',          price:120, demand:'poisson', onhand:18,  rop:20,  dq:10},
-        {sn:'STA240115', name:'Casio FX-991 · sci calc',    price:850, demand:'poisson', onhand:24,  rop:40,  dq:60},
-        {sn:'STA240116', name:'Compass / protractor set',   price:100, demand:'poisson', onhand:36,  rop:40,  dq:60},
-        {sn:'STA240117', name:'Lab coat',                   price:350, demand:'poisson', onhand:22,  rop:30,  dq:40},
-        {sn:'STA240118', name:'Safety goggles',             price:290, demand:'poisson', onhand:28,  rop:30,  dq:40}
+        {sn:'STA240101', name:'Exercise book · A4 lined', price:18,  demand:'normal', onhand:920, rop:600, dq:500},
+        {sn:'STA240102', name:'Notebook · A5 80-sheet',   price:30,  demand:'normal', onhand:640, rop:400, dq:300},
+        {sn:'STA240103', name:'3-colour pen set',         price:40,  demand:'normal', onhand:210, rop:150, dq:100},
+        {sn:'STA240104', name:'Mechanical pencil · 0.5mm',price:30,  demand:'normal', onhand:180, rop:120, dq:100},
+        {sn:'STA240105', name:'Eraser',                   price:10,  demand:'normal', onhand:160, rop:120, dq:100},
+        {sn:'STA240106', name:'Ruler · 30cm',             price:20,  demand:'normal', onhand:140, rop:100, dq:100},
+        {sn:'STA240107', name:'Highlighter',              price:25,  demand:'normal', onhand:88,  rop:100, dq:100},
+        {sn:'STA240108', name:'Document folder',          price:30,  demand:'normal', onhand:220, rop:150, dq:100},
+        {sn:'STA240109', name:'A4 copy paper · ream 500', price:120, demand:'normal', onhand:46,  rop:60,  dq:40},
+        {sn:'STA240110', name:'Whiteboard marker · 4-pack',price:80, demand:'normal', onhand:54,  rop:40,  dq:30},
+        {sn:'STA240111', name:'Casio FX-991 · sci calc',  price:850, demand:'normal', onhand:120, rop:90,  dq:80, note:'intake-season spike'},
+        {sn:'STA240112', name:'Teacher plan book',        price:100, demand:'normal', onhand:42,  rop:30,  dq:20},
+        {sn:'STA240113', name:'Teacher stationery set',   price:400, demand:'normal', onhand:28,  rop:24,  dq:20},
+        {sn:'STA240114', name:'Answer sheets · pack 500', price:1000,demand:'normal', onhand:34,  rop:30,  dq:20}
       ];
-      // Devices — long-lead (LT5), high-value, lumpy demand → Poisson. Low order qty.
-      var dev=[
-        {sn:'DEV240101', name:'iPad (A16) 11"',             price:12900, demand:'poisson', onhand:3, rop:6,  dq:10},
-        {sn:'DEV240102', name:'Lenovo IdeaPad Slim 5',      price:22900, demand:'poisson', onhand:4, rop:6,  dq:10},
-        {sn:'DEV240103', name:'MacBook Air 13"',            price:36900, demand:'poisson', onhand:2, rop:5,  dq:5}
-      ];
-      // Classroom & teacher equipment — low volume; consumables (answer sheets) plan Normal-Z.
+      // Equipment — capital / high-value, NOT demand-planned. Irregular and
+      // expensive, so controlled by value-based approval routing, not a model.
       var eqp=[
-        {sn:'EQP240101', name:'Teacher plan book',          price:100,   demand:'normal',  onhand:12, rop:10, dq:10},
-        {sn:'EQP240102', name:'Teacher stationery set',     price:400,   demand:'normal',  onhand:9,  rop:10, dq:10},
-        {sn:'EQP240103', name:'Storage locker',             price:5000,  demand:'poisson', onhand:3,  rop:5,  dq:5},
-        {sn:'EQP240104', name:'Paper cutter · A3',          price:3000,  demand:'poisson', onhand:2,  rop:3,  dq:5},
-        {sn:'EQP240105', name:'Document scanner',           price:12000, demand:'poisson', onhand:1,  rop:3,  dq:5},
-        {sn:'EQP240106', name:'Answer sheets · pack 500',   price:1000,  demand:'normal',  onhand:34, rop:30, dq:20}
+        {sn:'CAP240101', name:'iPad (A16) 11"',        price:12900, onhand:3, dq:2},
+        {sn:'CAP240102', name:'Lenovo IdeaPad Slim 5', price:22900, onhand:4, dq:2},
+        {sn:'CAP240103', name:'MacBook Air 13"',       price:36900, onhand:2, dq:2},
+        {sn:'CAP240104', name:'Storage locker',        price:5000,  onhand:3, dq:2},
+        {sn:'CAP240105', name:'Paper cutter · A3',     price:3000,  onhand:2, dq:1},
+        {sn:'CAP240106', name:'Document scanner',      price:12000, onhand:1, dq:1}
       ];
       var subjects=[
         {ab:'MATH', name:'Mathematics',         demand:'normal'},
@@ -1022,11 +1165,14 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         {id:'IG', label:'IGCSE',           sub:'Year 10–11', ed:'2024', price:2245},
         {id:'AL', label:'Int. AS/A-Level', sub:'Year 11–12', ed:'2024', price:2345}
       ];
-      var cat='uni', band='IG', cart={};
+      var cat='uni', band='IG', garment='shirt', cart={};
       var list=root.querySelector('#prList'), bandsEl=root.querySelector('#prBands');
-      function dtag(d){return d==='poisson'
+      function planTag(d){return d==='poisson'
         ? '<span class="pr-tag poisson">λ Poisson · low-vol</span>'
         : '<span class="pr-tag">Normal-Z</span>';}
+      function stockTag(it){return it.onhand<it.rop
+        ? '<span class="pr-tag reorder">Reorder · '+it.onhand+'/'+it.rop+'</span>'
+        : '<span class="pr-tag ok">Stock '+it.onhand+'</span>';}
       function esc(s){return s.replace(/"/g,'&quot;');}
       function row(sn,name,price,meta,dq){
         return '<div class="pr-item"><div class="pr-it-main">'
@@ -1041,32 +1187,63 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           +'<button class="pr-add" data-code="'+sn+'" data-name="'+esc(name)+'" data-price="'+price+'" aria-label="Add '+esc(name)+' to requisition">+</button>'
           +'</div></div></div>';
       }
-      function uniRow(it){
-        var low=it.onhand<it.rop;
-        var stock=low?'<span class="pr-tag reorder">Reorder · '+it.onhand+'/'+it.rop+'</span>'
-                     :'<span class="pr-tag ok">Stock '+it.onhand+'</span>';
-        return row(it.sn,it.name,it.price,dtag(it.demand)+stock,it.dq);
+      function planRow(it){
+        return row(it.sn,it.name,it.price,
+          planTag(it.demand)+stockTag(it)+(it.note?'<span class="pr-tag">'+it.note+'</span>':''),
+          it.dq);
+      }
+      function capRow(it){
+        return row(it.sn,it.name,it.price,
+          '<span class="pr-tag cap">Capital · value-routed</span>'
+          +'<span class="pr-tag">Asset · serialized</span>'
+          +'<span class="pr-tag ok">On-hand '+it.onhand+'</span>',
+          it.dq||1);
+      }
+      function sizeRows(g){
+        var arr=(g.id==='sock')?SIZES.slice(1,5):SIZES;
+        return arr.map(function(s,idx){
+          return planRow({sn:g.pre+'2401'+('0'+(idx+1)).slice(-2),
+            name:g.label+' · '+s.sz, price:g.price,
+            demand:s.demand, onhand:s.onhand, rop:s.rop, dq:s.dq});
+        }).join('');
       }
       function txtRow(s,i){
         var bi=0; for(var k=0;k<bands.length;k++){ if(bands[k].id===band) bi=k; }
         var b=bands[bi];
         var sn='TXB24'+('000'+(i*3+bi+1)).slice(-4);
-        var meta=dtag(s.demand)+'<span class="pr-tag">Edition '+b.ed+'</span><span class="pr-tag">EOQ-managed · 1/level</span>';
+        var meta='<span class="pr-tag eoq">Modified EOQ · edition-risk</span>'
+          +'<span class="pr-tag">Edition '+b.ed+'</span><span class="pr-tag">1 / level</span>';
         return row(sn,s.name+' · '+b.label,b.price,meta);
       }
-      var flatCats={uni:uni, sta:sta, dev:dev, eqp:eqp};
+      function bandBar(items,active){
+        return items.map(function(b){return '<button class="pr-band'+(b.id===active?' on':'')+'" data-band="'+b.id+'">'+b.label+(b.sub?'<small>'+b.sub+'</small>':'')+'</button>';}).join('');
+      }
       function render(){
-        if(cat==='txt'){ bandsEl.hidden=false;
-          bandsEl.innerHTML=bands.map(function(b){return '<button class="pr-band'+(b.id===band?' on':'')+'" data-band="'+b.id+'">'+b.label+'<small>'+b.sub+'</small></button>';}).join('');
-          list.innerHTML=subjects.map(txtRow).join(''); }
-        else{ bandsEl.hidden=true; bandsEl.innerHTML='';
-          list.innerHTML=(flatCats[cat]||uni).map(uniRow).join(''); }
+        if(cat==='uni'||cat==='pe'){
+          var G=(cat==='uni')?uniG:peG;
+          if(!G.some(function(g){return g.id===garment;})) garment=G[0].id;
+          bandsEl.hidden=false; bandsEl.innerHTML=bandBar(G,garment);
+          var g=G.filter(function(x){return x.id===garment;})[0];
+          list.innerHTML=sizeRows(g);
+        } else if(cat==='txt'){
+          bandsEl.hidden=false; bandsEl.innerHTML=bandBar(bands,band);
+          list.innerHTML=subjects.map(txtRow).join('');
+        } else if(cat==='eqp'){
+          bandsEl.hidden=true; bandsEl.innerHTML='';
+          list.innerHTML=eqp.map(capRow).join('');
+        } else {
+          bandsEl.hidden=true; bandsEl.innerHTML='';
+          list.innerHTML=(cat==='sub'?subk:sta).map(planRow).join('');
+        }
       }
       render();
       root.querySelectorAll('.pr-cat').forEach(function(b){b.addEventListener('click',function(){
         root.querySelectorAll('.pr-cat').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
         cat=b.getAttribute('data-cat'); render();});});
-      bandsEl.addEventListener('click',function(e){var b=e.target.closest('.pr-band'); if(!b)return; band=b.getAttribute('data-band'); render();});
+      bandsEl.addEventListener('click',function(e){var b=e.target.closest('.pr-band'); if(!b)return;
+        var v=b.getAttribute('data-band');
+        if(cat==='uni'||cat==='pe') garment=v; else band=v;
+        render();});
       list.addEventListener('click',function(e){
         var step=e.target.closest('.pr-step button');
         if(step){var i=step.parentNode.querySelector('input'); i.value=Math.max(0,(parseInt(i.value,10)||0)+parseInt(step.getAttribute('data-d'),10)); return;}
