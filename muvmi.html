@@ -76,6 +76,25 @@
 .mv-svg .ln-c{fill:none;stroke:var(--accent-soft,#60a5fa);stroke-width:2;stroke-linejoin:round}
 .mv-svg .ln-e{fill:none;stroke:var(--accent,#2563eb);stroke-width:2;stroke-linejoin:round}
 .mv-svg .cal{fill:none;stroke:var(--accent,#2563eb);stroke-width:2;stroke-linejoin:round}
+.mv-axis-wrap{display:grid;grid-template-columns:1.5rem 1fr;align-items:center;gap:.4rem}
+.mv-axis-y{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.04em;color:var(--text-muted);text-align:center;white-space:nowrap}
+.mv-axis-x{grid-column:2;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.04em;color:var(--text-muted);margin-top:.5rem}
+.mv-cal-img{width:100%;height:auto;display:block;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface-2)}
+.mv-eq{font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.95;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1.1rem;margin:.8rem 0;overflow-x:auto}
+.mv-eq .lbl{color:var(--accent);font-weight:700}
+.mv-eq .c{color:var(--text-subtle)}
+.mv-eq b{color:var(--accent)}
+.mv-deriv{border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:var(--radius-md);background:color-mix(in srgb,var(--accent) 3%,var(--bg));margin:1.4rem 0;overflow:hidden}
+.mv-deriv>summary{cursor:pointer;list-style:none;padding:1rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:.6rem}
+.mv-deriv>summary::-webkit-details-marker{display:none}
+.mv-deriv>summary::before{content:"+";font-size:1.05rem;line-height:1}
+.mv-deriv[open]>summary::before{content:"\2212"}
+.mv-deriv[open]>summary{border-bottom:1px solid var(--border)}
+.mv-deriv-body{padding:1.1rem 1.3rem}
+.mv-deriv-body h6{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text);margin:1.5rem 0 .3rem;font-weight:700}
+.mv-deriv-body h6:first-of-type{margin-top:0}
+.mv-deriv-body>p{font-size:.84rem;color:var(--text-muted);line-height:1.6;margin:.3rem 0}
+.mv-vchk{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--success,#059669);background:color-mix(in srgb,var(--success) 12%,transparent);border:1px solid color-mix(in srgb,var(--success) 35%,transparent);border-radius:100px;padding:.05rem .45rem;margin-left:.3rem;letter-spacing:.03em;text-transform:none}
 .mv-fns{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 @media(max-width:680px){.mv-fns{grid-template-columns:1fr}}
 .mv-fn h6{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text);margin:0 0 .1rem}
@@ -439,6 +458,77 @@
       <div class="mv-param"><div class="k">Rear radius R<sub>r</sub></div><div class="v">0.270 m</div></div>
     </div>
 
+    <details class="mv-deriv">
+      <summary>Full braking-dynamics derivation · equations of motion</summary>
+      <div class="mv-deriv-body">
+        <p>The full set of equations behind the load transfer, wheel-lock limits and braking-ratio graph, transcribed from the team's MATLAB derivation. Symbols: M<sub>t</sub> total mass, &#8467; wheelbase, h CG height, x<sub>1</sub>/x<sub>2</sub> CG-to-front/rear axle, x<sub>3</sub> aero height, &mu; tyre friction, V speed. a<sub>x</sub> is the signed acceleration (negative while braking); the deceleration magnitude is D<sub>x</sub> = &minus;a<sub>x</sub> = U/t<sub>brake</sub>.</p>
+
+        <h6>A · Load transfer (normal forces)</h6>
+        <p>Moments about the front contact (&Sigma;M<sub>f</sub> = 0) and the rear contact (&Sigma;M<sub>r</sub> = 0):</p>
+        <div class="mv-eq">
+          N<sub>r</sub> = ( F<sub>R,Air</sub>&middot;x<sub>3</sub> + M<sub>t</sub>&middot;g&middot;x<sub>1</sub> + M<sub>t</sub>&middot;a<sub>x</sub>&middot;h ) / &#8467;<br>
+          N<sub>f</sub> = ( M<sub>t</sub>&middot;g&middot;x<sub>2</sub> &minus; F<sub>R,Air</sub>&middot;x<sub>3</sub> &minus; M<sub>t</sub>&middot;a<sub>x</sub>&middot;h ) / &#8467;<br>
+          <span class="c">&rArr;</span> N<sub>f</sub> = W<sub>fs</sub> + W<sub>d</sub> , &nbsp; N<sub>r</sub> = W<sub>rs</sub> &minus; W<sub>d</sub><br>
+          W<sub>d</sub> = M<sub>t</sub>&middot;D<sub>x</sub>&middot;h/&#8467; &minus; F<sub>R,Air</sub>&middot;x<sub>3</sub>/&#8467; &nbsp; <span class="c">(forward load transfer)</span>
+        </div>
+        <p>While braking D<sub>x</sub> &gt; 0, so W<sub>d</sub> &gt; 0: load shifts to the front, N<sub>f</sub> rises and N<sub>r</sub> falls, which is physically correct.</p>
+
+        <h6>B · Longitudinal equation (total brake force)</h6>
+        <div class="mv-eq">
+          F<sub>b</sub> + F<sub>Roll</sub> + F<sub>R,Air</sub> = M<sub>t</sub>&middot;D<sub>x</sub> , &nbsp; D<sub>x</sub> = U / t<sub>brake</sub><br>
+          <span class="c">&rArr;</span> F<sub>b</sub> = M<sub>t</sub>&middot;D<sub>x</sub> &minus; C<sub>roll</sub>&middot;M<sub>t</sub>&middot;g &minus; &#189;&middot;&rho;<sub>air</sub>&middot;C<sub>w</sub>&middot;A<sub>f</sub>&middot;V<sup>2</sup>
+        </div>
+
+        <h6>C · Wheel-lock limits (max tyre force = &mu;N)</h6>
+        <div class="mv-eq">
+          Front lock: F<sub>xm,f</sub> = &mu;( W<sub>fs</sub> + (h/&#8467;)F<sub>Roll</sub> + ((h&minus;x<sub>3</sub>)/&#8467;)F<sub>R,Air</sub> + (h/&#8467;)F<sub>xr</sub> ) / ( 1 &minus; &mu;h/&#8467; )<br>
+          Rear lock: &nbsp; F<sub>xm,r</sub> = &mu;( W<sub>rs</sub> &minus; (h/&#8467;)F<sub>Roll</sub> + ((x<sub>3</sub>&minus;h)/&#8467;)F<sub>R,Air</sub> &minus; (h/&#8467;)F<sub>xf</sub> ) / ( 1 + &mu;h/&#8467; )
+        </div>
+
+        <h6>D · Braking ratio</h6>
+        <div class="mv-eq">
+          D<sub>x</sub> = ( F<sub>xf</sub> + F<sub>xr</sub> ) / M<sub>t</sub> &nbsp; <span class="c">(aero &amp; rolling neglected for the graph)</span><br>
+          F<sub>xf</sub> / F<sub>xr</sub> = k<sub>bf</sub> / (1&minus;k<sub>bf</sub>) = 1/3 &nbsp; <span class="c">&rArr;</span> <b>k<sub>bf</sub> = 0.25, k<sub>br</sub> = 0.75</b> <span class="mv-vchk">checked</span>
+        </div>
+
+        <h6>E · The six plotted braking lines (F<sub>xf</sub> vs F<sub>xr</sub>, N)</h6>
+        <div class="mv-eq">
+          <span class="lbl">1</span> F<sub>xf</sub> = &minus;F<sub>xr</sub> + 2,000.16 &nbsp; <span class="c">max D<sub>x</sub> &middot; partial brake</span><br>
+          <span class="lbl">2</span> F<sub>xf</sub> = &minus;F<sub>xr</sub> + 3,333.60 &nbsp; <span class="c">max D<sub>x</sub> &middot; full brake</span><br>
+          <span class="lbl">3</span> F<sub>xf</sub> = &minus;F<sub>xr</sub> + 2,856.96 &nbsp; <span class="c">general case</span><br>
+          <span class="lbl">4</span> F<sub>xm,f</sub> = 0.1427&middot;F<sub>xr</sub> + 1,687.5 &nbsp; <span class="c">front wheel lock</span><br>
+          <span class="lbl">5</span> F<sub>xf</sub> = &minus;7.01&middot;F<sub>xm,r</sub> + 21,055 &nbsp; <span class="c">rear wheel lock</span><br>
+          <span class="lbl">6</span> F<sub>xf</sub> = (1/3)&middot;F<sub>xr</sub> &nbsp; <span class="c">current ratio &middot; k<sub>bf</sub> 0.25</span>
+        </div>
+
+        <h6>F · Decelerations at 50 km/h <span class="mv-vchk">verified</span></h6>
+        <div class="mv-eq">
+          U = 50 km/h = 50&middot;5/18 = 13.889 m/s , &nbsp; D<sub>x</sub> = U / t<br>
+          Partial: t &asymp; 5 s &rArr; D<sub>x</sub> = <b>2.778</b> m/s<sup>2</sup><br>
+          Full: &nbsp;&nbsp;&nbsp; t &asymp; 3 s &rArr; D<sub>x</sub> = <b>4.63</b> m/s<sup>2</sup><br>
+          General: t &asymp; 4 s &rArr; D<sub>x</sub> = <b>3.472</b> m/s<sup>2</sup><br>
+          Comfort time: 24 = (U/2)&middot;t &rArr; t = <b>3.456</b> s
+        </div>
+
+        <h6>G · Max regenerative force <span class="mv-vchk">verified</span></h6>
+        <div class="mv-eq">
+          F<sub>max,regen</sub> = (Gear Ratio &middot; T<sub>max,regen</sub>) / R<sub>r</sub> = (10.26 &times; 75) / 0.270 = <b>2,850 N</b><br>
+          <span class="c">sufficient at every operating point</span>
+        </div>
+
+        <div class="callout" style="margin-top:1.3rem">
+          <div class="callout-title">My verification</div>
+          <p>I re-derived and confirmed the kinematic results: the decelerations D<sub>x</sub> = U/t (2.778 / 4.63 / 3.472 m/s&sup2;), the comfort brake time (3.456 s), the split k<sub>bf</sub> = 0.25 / k<sub>br</sub> = 0.75 from the 1:3 ratio, the max regen force 2,850 N, and the geometry x<sub>1</sub> + x<sub>2</sub> = &#8467; (1.95 + 1.5 = 3.45 m). The load-transfer and wheel-lock equations are physically consistent: braking shifts load forward, N<sub>f</sub> up and N<sub>r</sub> down.</p>
+          <p>The specific intercepts and slopes of the six plotted lines (2,000.16 ; 0.1427 ; &minus;7.01 ; &hellip;) come from substituting the full parameter set into the coupled equations in MATLAB, so I transcribed them as computed rather than re-deriving each constant by hand. Share the MATLAB script and I can reproduce every line value step by step.</p>
+        </div>
+
+        <div class="mv-figs">
+          <figure class="mv-fig"><img src="MUVMI%20Photos/Funtional%20Braking%20Ratio%20Graph.png" alt="Braking-ratio graph: front vs rear brake force with the wheel-lock and deceleration lines" loading="lazy"><figcaption><b>Braking-ratio graph</b> &middot; the six lines plotted</figcaption></figure>
+          <figure class="mv-fig"><img src="MUVMI%20Photos/Braking%20Requirement%20%26%20Limitation%20Graph.png" alt="Braking requirement and limitation graph showing the critical point at the front wheel brake" loading="lazy"><figcaption><b>Limitation graph</b> &middot; F<sub>max,regen</sub> sufficient, K<sub>bf</sub> = 0.25</figcaption></figure>
+        </div>
+      </div>
+    </details>
+
     <h3 class="content-h3">On-Vehicle <em>Test &amp; Calibration</em></h3>
     <p class="content-p">
       We built the prototype, mounted the angular sensor, and <strong>tested live on the vehicle at the I'm Park underground lot (Suan Luang)</strong>, logging battery voltage from real regeneration at 10 and 20 km/h, with regen open (90%) and closed (5%). From the logged data I derived a <strong>calibration function</strong> mapping the raw sensor reading to brake angle:
@@ -456,8 +546,12 @@
     </div>
 
     <div class="mv-chart">
-      <div class="mv-chart-t"><span>Angular-sensor calibration · fitted curve</span><span class="legend">y = 0.0004x³ + 0.0029x² + 17.977x − 533.03</span></div>
-      <div id="mvCal"></div>
+      <div class="mv-chart-t"><span>Angular-sensor calibration · averaged data + fitted curve</span><span class="legend">y = 0.0004x³ + 0.0029x² + 17.977x − 533.03</span></div>
+      <div class="mv-axis-wrap">
+        <div class="mv-axis-y">Sensor value difference (raw)</div>
+        <img class="mv-cal-img" src="MUVMI%20Photos/Calibration%20Function%20of%20Angular%20Sensor.png" alt="Angular-sensor calibration: averaged sensor readings over time with the cubic trendline and the fitted equation">
+        <div class="mv-axis-x">Time (s)</div>
+      </div>
     </div>
 
     <!-- ===================== RESULT ===================== -->
