@@ -1035,6 +1035,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <div class="xsim-tabs">
         <button class="xsim-tab on" data-t="a">Approval Routing</button>
         <button class="xsim-tab" data-t="b">Inventory Size-Mix</button>
+        <button class="xsim-tab" data-t="c">Equipment PR</button>
       </div>
       <div class="xsim-body">
         <div data-p="a">
@@ -1069,6 +1070,31 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <p class="content-p" style="margin:.1rem 0 .8rem;font-size:.8rem">Drag on-hand to watch status recompute: <b>STOCKOUT</b> if below safety stock, <b>OVERSTOCK</b> if above target &times; 1.2.</p>
           <table class="xsim-tbl" id="p1tbl"><thead><tr><th>SKU</th><th>On-hand</th><th>Safety</th><th>Target</th><th>Status</th></tr></thead><tbody></tbody></table>
         </div>
+        <div data-p="c" hidden>
+          <div class="xsim-grid">
+            <div class="xsim-panel">
+              <p class="xsim-h">Equipment catalogue &middot; pick &amp; quantity</p>
+              <div id="p1eqList"></div>
+              <p class="content-p" style="margin:.7rem 0 0;font-size:.76rem">Capital / equipment items at Thai-market reference prices; the PR total auto-routes by the &#3647;50K rule (FSD-P1-01).</p>
+            </div>
+            <div class="xsim-panel">
+              <p class="xsim-h">Purchase Requisition &middot; auto-routed</p>
+              <div class="xsim-kpi" id="p1eqTotal">&#3647;0</div>
+              <div id="p1eqChip" style="margin:.55rem 0"></div>
+              <div class="xsim-flow">
+                <span class="xsim-node active">Requester</span><span class="xsim-arr">&rarr;</span>
+                <span class="xsim-node" id="p1eqD1">Dept Head<br><small>&le; &#3647;50K</small></span><span class="xsim-arr">&rarr;</span>
+                <span class="xsim-node" id="p1eqD2">Director<br><small>&gt; &#3647;50K</small></span><span class="xsim-arr">&rarr;</span>
+                <span class="xsim-node" id="p1eqPo">PO</span>
+              </div>
+              <div class="xsim-kvs">
+                <div class="xsim-kv"><span>Lines</span><span id="p1eqLines">0</span></div>
+                <div class="xsim-kv"><span>Required approver</span><span id="p1eqReq">&ndash;</span></div>
+                <div class="xsim-kv"><span>Result</span><span id="p1eqRes">&ndash;</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="xsim-cap">Interactive simulation of the specified logic &middot; not the proprietary XeerSoft interface.</div>
     </div>
@@ -1101,6 +1127,66 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         root.querySelector('td[data-st="'+i+'"]').innerHTML='<span class="xsim-chip '+r[1]+'">'+r[0]+'</span>';}
       root.querySelectorAll('input[data-i]').forEach(function(inp){inp.addEventListener('input',function(){inv(parseInt(inp.getAttribute('data-i'),10))});});
       skus.forEach(function(_,i){inv(i)});
+    })();
+    </script>
+
+    <style id="p1-eq">
+    .p1eq-row{display:flex;align-items:center;gap:.7rem;padding:.55rem .1rem;border-bottom:1px solid var(--border)}
+    .p1eq-row:last-child{border-bottom:0}
+    .p1eq-name{flex:1;min-width:0;font-size:.84rem;color:var(--text)}
+    .p1eq-name small{font-family:'JetBrains Mono',monospace;color:var(--text-muted);font-size:.7rem;margin-left:.35rem}
+    .p1eq-step{display:flex;align-items:center;gap:.35rem;flex:0 0 auto}
+    .p1eq-step button{width:26px;height:26px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:6px;font:inherit;font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s,background .2s}
+    .p1eq-step button:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+    .p1eq-q{min-width:1.7rem;text-align:center;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600}
+    .p1eq-line{flex:0 0 auto;min-width:5rem;text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600;font-size:.82rem}
+    @media(max-width:520px){.p1eq-name{font-size:.8rem}.p1eq-line{min-width:4.2rem}}
+    </style>
+    <script>
+    (function(){
+      var root=document.getElementById('sim1'); if(!root) return;
+      var list=root.querySelector('#p1eqList'); if(!list) return;
+      var EQ=[
+        {n:'Lenovo IdeaPad Slim 5',p:22900},
+        {n:'iPad (A16)',p:12900},
+        {n:'iPad Pro 11" 256GB',p:35900},
+        {n:'MacBook Air 13"',p:36900},
+        {n:'Document scanner',p:12000},
+        {n:'Locker',p:5000},
+        {n:'Teacher stationery set',p:400}
+      ];
+      var qty=EQ.map(function(){return 0;});
+      var THB=function(n){return '฿'+Math.round(n).toLocaleString('en-US');};
+      EQ.forEach(function(it,i){
+        var row=document.createElement('div'); row.className='p1eq-row';
+        row.innerHTML='<div class="p1eq-name">'+it.n+' <small>'+THB(it.p)+'</small></div>'+
+          '<div class="p1eq-step"><button type="button" data-d="-1" aria-label="decrease">&minus;</button>'+
+          '<span class="p1eq-q" data-q="'+i+'">0</span>'+
+          '<button type="button" data-d="1" aria-label="increase">+</button></div>'+
+          '<div class="p1eq-line" data-l="'+i+'">฿0</div>';
+        row.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+          qty[i]=Math.max(0,qty[i]+parseInt(b.getAttribute('data-d'),10)); render();});});
+        list.appendChild(row);
+      });
+      function render(){
+        var total=0,lines=0;
+        EQ.forEach(function(it,i){var line=qty[i]*it.p; total+=line; if(qty[i]>0)lines++;
+          root.querySelector('span[data-q="'+i+'"]').textContent=qty[i];
+          root.querySelector('div[data-l="'+i+'"]').textContent=THB(line);});
+        root.querySelector('#p1eqTotal').textContent=THB(total);
+        root.querySelector('#p1eqLines').textContent=lines;
+        var d1=root.querySelector('#p1eqD1'),d2=root.querySelector('#p1eqD2');
+        var chip=root.querySelector('#p1eqChip'),req=root.querySelector('#p1eqReq'),res=root.querySelector('#p1eqRes');
+        d1.classList.remove('active','skip'); d2.classList.remove('active','skip');
+        if(total<=0){chip.innerHTML='<span class="xsim-chip info">NO LINES YET</span>';req.textContent='–';res.textContent='Add equipment to route';return;}
+        if(total<=50000){d1.classList.add('active');d2.classList.add('skip');
+          chip.innerHTML='<span class="xsim-chip ok">ROUTE · DEPT HEAD</span>';
+          req.textContent='Dept Head (or Director)';res.textContent='Approved at Level 1';}
+        else{d1.classList.add('skip');d2.classList.add('active');
+          chip.innerHTML='<span class="xsim-chip warn">ROUTE · DIRECTOR REQUIRED</span>';
+          req.textContent='Director only';res.textContent='Dept-Head-only release blocked';}
+      }
+      render();
     })();
     </script>
 
@@ -1167,6 +1253,57 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <p><strong>· Poisson Distribution</strong> for low-volume SKUs (λ &lt; 25): XS and XXL uniform sizes at 97% service level</p>
       <p><strong>· Normal Z-score</strong> for mid-range sizes (S–L) with stable demand patterns</p>
       <p><strong>· Modified EOQ with Edition-Risk Penalty</strong> for textbooks subject to edition obsolescence</p>
+    </div>
+
+    <style id="p1-poi">
+    .poi{border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:var(--radius-md);background:color-mix(in srgb,var(--accent) 4%,var(--bg));padding:1.4rem 1.5rem;margin:1.4rem 0}
+    .poi-h{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.95rem}
+    .poi-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:1.6rem;align-items:center}
+    .poi-text p{font-size:.9rem;color:var(--text-muted);line-height:1.7;margin:0 0 .75rem}
+    .poi-text p strong,.poi-text b{color:var(--text);font-weight:600}
+    .poi-list{list-style:none;padding:0;margin:.2rem 0 .85rem;display:flex;flex-direction:column;gap:.5rem}
+    .poi-list li{font-size:.84rem;color:var(--text-muted);line-height:1.55;padding-left:1.15rem;position:relative}
+    .poi-list li::before{content:"\25b8";position:absolute;left:0;color:var(--accent)}
+    .poi-foot{font-size:.82rem;color:var(--text-subtle);border-top:1px dashed var(--border);padding-top:.7rem;margin-top:.1rem}
+    .poi-chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem 1.1rem .9rem}
+    .poi-chart-t{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.04em;color:var(--text-muted);text-align:center;margin-bottom:.75rem}
+    .poi-chart{display:flex;align-items:flex-end;gap:.3rem;height:130px}
+    .poi-bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+    .poi-bar i{display:block;width:100%;height:var(--h);min-height:2px;background:color-mix(in srgb,var(--accent) 28%,var(--surface-3));border-radius:3px 3px 0 0}
+    .poi-bar.pk i{background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 65%,var(--bg)))}
+    .poi-bar span{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-subtle);margin-top:.35rem}
+    .poi-chart-x{font-size:.62rem;color:var(--text-subtle);text-align:center;margin-top:.55rem;font-style:italic}
+    @media(max-width:680px){.poi-grid{grid-template-columns:1fr;gap:1.15rem}}
+    </style>
+    <div class="poi">
+      <div class="poi-h">&#9670; Why Poisson Distribution?</div>
+      <div class="poi-grid">
+        <div class="poi-text">
+          <p>An XS or XXL shirt doesn't sell in a steady stream. It sells as a few separate, countable events a week: zero on most days, one or two on a good one. That is exactly what Poisson describes, <strong>the number of rare, independent arrivals in a fixed window</strong>.</p>
+          <ul class="poi-list">
+            <li><b>Countable and low</b>: whole units, averaging about 3 a week (&lambda; = 3), never 200.</li>
+            <li><b>Right-skewed, not symmetric</b>: demand can spike to 7 or 8 but never drops below 0, so a Normal curve (symmetric, allows negatives) misfits the tail.</li>
+            <li><b>One parameter</b>: mean = variance = &lambda;, so a single number fixes both the reorder point and the safety stock, SS = &lceil;Z&middot;&radic;&lambda;&rceil;.</li>
+          </ul>
+          <p class="poi-foot">High-volume sizes (S&ndash;L, about 13 a week) are smooth enough for the Normal approximation, which is why only the low-volume tails use Poisson.</p>
+        </div>
+        <div class="poi-chart-wrap">
+          <div class="poi-chart-t">Weekly demand &middot; P(X = k) &middot; &lambda; = 3</div>
+          <div class="poi-chart">
+            <div class="poi-bar"><i style="--h:22%" title="P(0) = 5%"></i><span>0</span></div>
+            <div class="poi-bar"><i style="--h:67%" title="P(1) = 15%"></i><span>1</span></div>
+            <div class="poi-bar pk"><i style="--h:100%" title="P(2) = 22%"></i><span>2</span></div>
+            <div class="poi-bar pk"><i style="--h:100%" title="P(3) = 22%"></i><span>3</span></div>
+            <div class="poi-bar"><i style="--h:75%" title="P(4) = 17%"></i><span>4</span></div>
+            <div class="poi-bar"><i style="--h:45%" title="P(5) = 10%"></i><span>5</span></div>
+            <div class="poi-bar"><i style="--h:23%" title="P(6) = 5%"></i><span>6</span></div>
+            <div class="poi-bar"><i style="--h:10%" title="P(7) = 2%"></i><span>7</span></div>
+            <div class="poi-bar"><i style="--h:4%" title="P(8) = 1%"></i><span>8</span></div>
+            <div class="poi-bar"><i style="--h:1%" title="P(9) = 0.3%"></i><span>9</span></div>
+          </div>
+          <div class="poi-chart-x">units sold in a week &middot; &lambda; = 3/wk compounds to &lambda; = 21 over the ~7-wk lead time</div>
+        </div>
+      </div>
     </div>
 
     <h3 class="content-h3">Reorder Point &amp; EOQ · <em>Worked Example</em></h3>
