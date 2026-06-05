@@ -1387,6 +1387,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
             <option value="mini">iPad mini (A17 Pro) &middot; ฿18,900</option>
             <option value="air11">iPad Air (M4) 11" &middot; ฿21,900</option>
             <option value="air13">iPad Air (M4) 13" &middot; ฿28,900</option>
+            <option value="pro11_256">iPad Pro (M5) 11" 256GB &middot; ฿35,900</option>
+            <option value="pro11_512">iPad Pro (M5) 11" 512GB &middot; ฿42,900</option>
           </select></div>
         <div class="ps-field"><label>Teacher laptop (Lenovo)</label>
           <select class="ps-sel" id="psLaptop">
@@ -1394,6 +1396,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
             <option value="slim3">IdeaPad Slim 3 &middot; ฿13,900</option>
             <option value="slim5" selected>IdeaPad Slim 5 &middot; ฿22,900</option>
             <option value="thinkbook">ThinkBook 14/16 &middot; ฿21,900</option>
+            <option value="thinkpadE">ThinkPad E14 / E16 &middot; ฿25,900</option>
           </select></div>
         <div class="ps-field"><label>Classroom MacBook</label>
           <select class="ps-sel" id="psMac">
@@ -1462,8 +1465,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     (function(){
       var root=document.getElementById('ps1'); if(!root) return;
       var THB=function(n){return '฿'+Math.round(n).toLocaleString('en-US');};
-      var P={ ipad:{A16:12900,mini:18900,air11:21900,air13:28900},
-        laptop:{v:12900,slim3:13900,slim5:22900,thinkbook:21900},
+      var P={ ipad:{A16:12900,mini:18900,air11:21900,air13:28900,pro11_256:35900,pro11_512:42900},
+        laptop:{v:12900,slim3:13900,slim5:22900,thinkbook:21900,thinkpadE:25900},
         macbook:{neo:19900,air13:36900,air15:44900,pro14:54900,pro16:80900} };
       var BASE=[
         {n:'Notebook (×3)',q:3,price:30,lt:1},
