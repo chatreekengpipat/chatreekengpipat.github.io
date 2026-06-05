@@ -751,9 +751,31 @@
     <span class="section-subtitle">★ Senior Project · Deep Learning · Python · 2022</span>
   </div>
 
-  <p style="color: var(--text-muted); max-width: 700px; margin-bottom: 1.5rem; line-height: 1.8;">
-    Before ERP consulting and before the Mitsubishi internship, this is where the discipline began: a rigorous AI/ML system built in Python. The structured testing, iterative refinement, and acceptance-criteria design I learned here is exactly what powers my UAT and BA work today.
-  </p>
+  <style id="acad-intro-style">
+    .acad-intro{display:grid;grid-template-columns:1fr 0.82fr;gap:2.25rem;align-items:center;margin-bottom:2rem;max-width:1000px}
+    @media(max-width:768px){.acad-intro{grid-template-columns:1fr;gap:1.4rem}}
+    .acad-intro-text{color:var(--text-muted);line-height:1.85;font-size:1rem;margin:0}
+    .acad-photo{position:relative;margin:0;border-radius:var(--radius-lg);overflow:hidden;
+      border:1px solid var(--border);box-shadow:var(--shadow-md);aspect-ratio:4/3;background:var(--surface);
+      transition:transform .45s var(--ease-smooth),box-shadow .45s var(--ease-smooth),border-color .3s var(--ease-smooth)}
+    .acad-photo:hover{transform:translateY(-4px);border-color:var(--accent);
+      box-shadow:0 22px 46px -20px var(--glow-color),var(--shadow-lg)}
+    .acad-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease-smooth)}
+    .acad-photo:hover img{transform:scale(1.045)}
+    .acad-photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:1.6rem .95rem .75rem;
+      background:linear-gradient(to top,rgba(15,23,42,.88),transparent);color:#fff;
+      font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:600;letter-spacing:.03em}
+  </style>
+
+  <div class="acad-intro">
+    <p class="acad-intro-text">
+      Before ERP consulting and before the Mitsubishi internship, this is where the discipline began: a rigorous AI/ML system built in Python. The structured testing, iterative refinement, and acceptance-criteria design I learned here is exactly what powers my UAT and BA work today.
+    </p>
+    <figure class="acad-photo">
+      <img src="photos/Engineering%20Chula.jpg" alt="Chatree Kengpipat at Chulalongkorn University, Faculty of Engineering" loading="lazy">
+      <figcaption>Chulalongkorn University · Faculty of Engineering · 2019–2022</figcaption>
+    </figure>
+  </div>
 
   <a href="senior-project.html" class="academic-feature">
     <div>
