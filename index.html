@@ -707,12 +707,30 @@
   </div>
 
   <style id="acad-intro-style">
-    .acad-intro{display:grid;grid-template-columns:1fr 0.82fr;gap:2.25rem;align-items:center;margin-bottom:2rem;max-width:1000px}
-    @media(max-width:768px){.acad-intro{grid-template-columns:1fr;gap:1.4rem}}
+    .acad-intro{display:grid;grid-template-columns:1fr 0.72fr;gap:2.75rem;align-items:center;margin-bottom:2.25rem}
+    @media(max-width:860px){.acad-intro{grid-template-columns:1fr;gap:1.6rem}}
+    .acad-intro-left{display:flex;flex-direction:column;gap:1.5rem}
     .acad-intro-text{color:var(--text-muted);line-height:1.85;font-size:1rem;margin:0}
-    .acad-photo{position:relative;margin:0;border-radius:var(--radius-lg);overflow:hidden;
+    .acad-intro-text strong{color:var(--text);font-weight:600}
+    /* technical stack panel — fills the column beside the photo */
+    .acad-skills{border-top:1px solid var(--border);padding-top:1.4rem}
+    .acad-skills-h{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--accent);font-weight:700;display:flex;align-items:center;gap:.55rem;margin-bottom:1.1rem}
+    .acad-skills-h::before{content:"";width:16px;height:2px;background:var(--accent);border-radius:2px;flex:0 0 auto}
+    .acad-skill-rows{display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.25rem}
+    .acad-skill{display:flex;flex-direction:column;gap:.18rem;padding-left:1rem;position:relative}
+    .acad-skill::before{content:"";position:absolute;left:0;top:.45rem;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+    .acad-skill b{font-size:.94rem;color:var(--text-strong);font-weight:700;letter-spacing:-.01em}
+    .acad-skill span{font-size:.82rem;color:var(--text-muted);line-height:1.5}
+    .acad-tools{display:flex;flex-wrap:wrap;gap:.45rem}
+    .acad-tool{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);background:var(--accent-bg);
+      border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:100px;padding:.36rem .8rem;font-weight:600;
+      transition:transform .3s var(--ease-smooth),background .3s var(--ease-smooth),color .3s var(--ease-smooth),box-shadow .3s var(--ease-smooth);cursor:default}
+    .acad-tool:hover{background:var(--accent);color:#fff;transform:translateY(-2px);box-shadow:0 6px 16px -3px var(--glow-color)}
+    .acad-photo{position:relative;margin:0;justify-self:end;width:100%;max-width:480px;border-radius:var(--radius-lg);overflow:hidden;
       border:1px solid var(--border);box-shadow:var(--shadow-md);aspect-ratio:1/1;background:var(--surface);
       transition:transform .45s var(--ease-smooth),box-shadow .45s var(--ease-smooth),border-color .3s var(--ease-smooth)}
+    @media(max-width:860px){.acad-photo{justify-self:stretch;max-width:none}}
     .acad-photo:hover{transform:translateY(-4px);border-color:var(--accent);
       box-shadow:0 22px 46px -20px var(--glow-color),var(--shadow-lg)}
     .acad-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 26%;display:block;transition:transform .6s var(--ease-smooth)}
@@ -723,9 +741,26 @@
   </style>
 
   <div class="acad-intro">
-    <p class="acad-intro-text">
-      Before ERP consulting and before the Mitsubishi internship, this is where the discipline began: a rigorous AI/ML system built in Python. The structured testing, iterative refinement, and acceptance-criteria design I learned here is exactly what powers my UAT and BA work today.
-    </p>
+    <div class="acad-intro-left">
+      <p class="acad-intro-text">
+        Built in my <strong>final year</strong>, after the Mitsubishi internship in year three, these capstone engineering projects are where the technical discipline behind my consulting took shape. The structured testing, iterative refinement, and acceptance-criteria design I practised here is exactly what powers my UAT and BA work today.
+      </p>
+      <div class="acad-skills">
+        <div class="acad-skills-h">Engineering technical stack</div>
+        <div class="acad-skill-rows">
+          <div class="acad-skill"><b>Technical Programming &amp; Software</b><span>Scripting, simulation and automation to solve engineering problems in code.</span></div>
+          <div class="acad-skill"><b>Structural &amp; System Design</b><span>Mechanical modelling, load analysis and part / system design from requirements.</span></div>
+          <div class="acad-skill"><b>Complex &amp; Advanced Calculations</b><span>Numerical methods, control logic and data-driven analysis on large problem spaces.</span></div>
+        </div>
+        <div class="acad-tools">
+          <span class="acad-tool">Python</span>
+          <span class="acad-tool">MATLAB</span>
+          <span class="acad-tool">Fusion 360</span>
+          <span class="acad-tool">NumPy</span>
+          <span class="acad-tool">TensorFlow</span>
+        </div>
+      </div>
+    </div>
     <figure class="acad-photo">
       <img src="photos/Engineering%20Chula.jpg" alt="Chatree Kengpipat at Chulalongkorn University, Faculty of Engineering" loading="lazy">
       <figcaption>Chulalongkorn University · Faculty of Engineering · 2019–2022</figcaption>
