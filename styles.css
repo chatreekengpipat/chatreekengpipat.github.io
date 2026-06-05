@@ -2987,6 +2987,47 @@ footer p {
 .stagger > *:nth-child(7) { animation-delay: 0.47s; }
 .stagger > *:nth-child(8) { animation-delay: 0.54s; }
 
+/* ============================================================
+   SMART SCROLL REVEAL  ·  v10  — pure CSS scroll-driven animation
+   BULLETPROOF BY CONSTRUCTION. The only thing that ever hides an
+   element is a scroll-timeline animation guarded by BOTH @supports
+   and (prefers-reduced-motion: no-preference). No browser support,
+   reduced motion, or JS that never runs → the element renders fully
+   visible. A view() timeline is evaluated from the element's scroll
+   POSITION at paint time, so it can never get "stuck" invisible the
+   way a JS/observer reveal can (the bug that ate this page twice).
+   JS only tags WHICH blocks animate (animation.js → initScrollReveal).
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    [data-reveal] {
+      animation-name: revealRise;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+    [data-reveal="media"] { animation-name: revealRiseMedia; }
+
+    /* Grid items cascade — stagger each child's entry range. */
+    [data-reveal="grid"]:nth-child(1)  { animation-range: entry 0%  entry 55%; }
+    [data-reveal="grid"]:nth-child(2)  { animation-range: entry 6%  entry 61%; }
+    [data-reveal="grid"]:nth-child(3)  { animation-range: entry 12% entry 67%; }
+    [data-reveal="grid"]:nth-child(4)  { animation-range: entry 18% entry 73%; }
+    [data-reveal="grid"]:nth-child(5)  { animation-range: entry 24% entry 79%; }
+    [data-reveal="grid"]:nth-child(6)  { animation-range: entry 30% entry 85%; }
+    [data-reveal="grid"]:nth-child(n+7){ animation-range: entry 36% entry 91%; }
+
+    @keyframes revealRise {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes revealRiseMedia {
+      from { opacity: 0; transform: translateY(28px) scale(0.985); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+}
+
 /* ========== HERO ENTRANCE ========== */
 .hero-left > * {
   animation: fadeUp 0.9s var(--ease-smooth) backwards;

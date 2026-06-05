@@ -13,42 +13,56 @@
   const reduceMotionMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
   const prefersReducedMotion = () => reduceMotionMQ.matches;
 
-  // ===== 1. Scroll Reveal with Intersection Observer =====
+  // ===== 1. Smart Scroll Reveal (v10) =====
+  // This function ONLY tags which blocks should animate (sets [data-reveal]).
+  // ALL motion + visibility is handled by a pure CSS scroll-driven animation
+  // (styles.css "SMART SCROLL REVEAL"). There is deliberately NO observer and
+  // NO opacity toggling here: a JS/observer reveal can get stuck and trap
+  // content invisible (it did, twice). A CSS view() timeline is derived from
+  // scroll position at paint, so content can never be stuck — and if the
+  // browser lacks support, or this script never runs, every block is visible.
   function initScrollReveal() {
-    const reveals = document.querySelectorAll('section');
+    // Reduced-motion → don't even tag; CSS keeps everything calm and visible.
+    if (prefersReducedMotion()) return;
 
-    const observerOpts = {
-      root: null,
-      rootMargin: '0px 0px -80px 0px',
-      threshold: 0.08
-    };
+    // Card/stat grids whose CHILDREN should cascade rather than the grid block.
+    var GRID = '.impact-strip, .methodology-grid, .focus-grid, .projects-grid,' +
+      '.tools-grid, .process-flow, .photo-grid, .ideas-grid, .coaches-grid,' +
+      '.subjects-grid, .hyperparam-grid, .skill-cat-grid, .contact-grid,' +
+      '.results-banner, .module-tags';
+    // Cohesive blocks that should reveal as ONE unit (never descended into).
+    var MEDIA = 'img, figure, table, svg, canvas, .dashboard-section,' +
+      '.diagram-container, .code-window';
+    var COHESIVE = GRID + ',' + MEDIA + ', .callout, .card, [class*="card"], blockquote';
 
-    // Auto-tag sections as reveals
-    reveals.forEach((section, idx) => {
-      if (idx === 0) return; // Skip hero (has its own animation)
-      section.classList.add('reveal');
-    });
+    // Walk down single-wrapper chains (e.g. <section> → .content-section) to the
+    // real content container, but stop at any self-contained block.
+    function scopeOf(section) {
+      var n = section;
+      while (n.children.length === 1) {
+        var c = n.firstElementChild;
+        if (c.children.length <= 1 || c.matches(COHESIVE)) break;
+        n = c;
+      }
+      return n;
+    }
 
-    // Auto-tag grid containers as stagger
-    const staggerTargets = document.querySelectorAll(
-      '.impact-strip, .methodology-grid, .focus-grid, .projects-grid, ' +
-      '.tools-grid, .process-flow, .photo-grid, .ideas-grid, ' +
-      '.coaches-grid, .subjects-grid, .hyperparam-grid, .skill-cat-grid, ' +
-      '.contact-grid, .results-banner'
-    );
-    staggerTargets.forEach(el => el.classList.add('stagger'));
+    function tag(el, kind) {
+      if (!el || el.hasAttribute('data-reveal') || el.closest('[data-reveal]')) return;
+      el.setAttribute('data-reveal', kind || (el.matches(MEDIA) ? 'media' : 'rise'));
+    }
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+    document.querySelectorAll('section').forEach(function (section, idx) {
+      if (idx === 0) return; // hero owns its own entrance
+      var scope = scopeOf(section);
+      Array.prototype.forEach.call(scope.children, function (child) {
+        if (child.matches(GRID)) {
+          // cascade grid items (CSS staggers them by nth-child)
+          Array.prototype.forEach.call(child.children, function (c) { tag(c, 'grid'); });
+        } else {
+          tag(child);
         }
       });
-    }, observerOpts);
-
-    document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .stagger').forEach(el => {
-      observer.observe(el);
     });
   }
 
