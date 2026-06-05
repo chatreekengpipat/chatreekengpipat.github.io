@@ -2952,70 +2952,40 @@ footer p {
 }
 
 /* ========== SCROLL REVEAL CLASSES ========== */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
-}
+/* Scroll-reveal — VISIBLE BY DEFAULT.
+   The resting state is opacity:1 so content can never be trapped invisible if
+   the IntersectionObserver never fires (e.g. a section taller than ~12× the
+   viewport never reaches the old 0.08 threshold → never got `.visible`). The
+   entrance is now a self-contained on-load CSS animation: it plays when the
+   class is present and ALWAYS settles at opacity:1, and if animations/JS are
+   unavailable the element simply renders fully visible. */
+.reveal       { animation: revealUp    0.8s var(--ease-smooth) both; }
+.reveal-scale { animation: revealScale 0.8s var(--ease-smooth) both; }
+.reveal-left  { animation: revealLeft  0.8s var(--ease-smooth) both; }
+.reveal-right { animation: revealRight 0.8s var(--ease-smooth) both; }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* `.visible` (added by the observer) is now a harmless no-op that just pins the
+   settled state, kept so any other CSS keyed off it still resolves. */
+.reveal.visible,
+.reveal-scale.visible,
+.reveal-left.visible,
+.reveal-right.visible { opacity: 1; transform: none; }
 
-.reveal-scale {
-  opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
-}
+@keyframes revealUp    { from { opacity: 0; transform: translateY(30px); }  to { opacity: 1; transform: none; } }
+@keyframes revealScale { from { opacity: 0; transform: scale(0.95); }       to { opacity: 1; transform: none; } }
+@keyframes revealLeft  { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
+@keyframes revealRight { from { opacity: 0; transform: translateX(40px); }  to { opacity: 1; transform: none; } }
 
-.reveal-scale.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-40px);
-  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
-}
-
-.reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.reveal-right {
-  opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
-}
-
-.reveal-right.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Stagger children */
-.stagger > * {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s var(--ease-smooth), transform 0.6s var(--ease-smooth);
-}
-
-.stagger.visible > * {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.stagger.visible > *:nth-child(1) { transition-delay: 0.05s; }
-.stagger.visible > *:nth-child(2) { transition-delay: 0.12s; }
-.stagger.visible > *:nth-child(3) { transition-delay: 0.19s; }
-.stagger.visible > *:nth-child(4) { transition-delay: 0.26s; }
-.stagger.visible > *:nth-child(5) { transition-delay: 0.33s; }
-.stagger.visible > *:nth-child(6) { transition-delay: 0.40s; }
-.stagger.visible > *:nth-child(7) { transition-delay: 0.47s; }
-.stagger.visible > *:nth-child(8) { transition-delay: 0.54s; }
+/* Stagger children — same visible-by-default guarantee, with a cascade delay. */
+.stagger > * { animation: revealUp 0.6s var(--ease-smooth) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger > *:nth-child(2) { animation-delay: 0.12s; }
+.stagger > *:nth-child(3) { animation-delay: 0.19s; }
+.stagger > *:nth-child(4) { animation-delay: 0.26s; }
+.stagger > *:nth-child(5) { animation-delay: 0.33s; }
+.stagger > *:nth-child(6) { animation-delay: 0.40s; }
+.stagger > *:nth-child(7) { animation-delay: 0.47s; }
+.stagger > *:nth-child(8) { animation-delay: 0.54s; }
 
 /* ========== HERO ENTRANCE ========== */
 .hero-left > * {
