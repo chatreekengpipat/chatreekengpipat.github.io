@@ -529,6 +529,32 @@
       </div>
     </details>
 
+    <h4 class="content-h3" style="font-size:1.15rem;">MATLAB Simulink · <em>Simulation Results</em></h4>
+    <p class="content-p">
+      The braking-ratio analysis and the regenerative-torque sizing were built and plotted in <strong>MATLAB Simulink</strong>. These outputs set the front/rear split, sized the regenerative force, and confirmed the wheel-lock margins across speeds before the on-vehicle test.
+    </p>
+
+    <figure class="mv-fig">
+      <img src="MUVMI%20Photos/MATLAB%20Braking%20Ratio%20Graph.png" alt="MATLAB braking-ratio graph: front vs rear brake force with the wheel-lock, deceleration and current-ratio lines and the operating-point intersections" loading="lazy" onerror="this.closest('figure').style.display='none'">
+      <figcaption><b>Braking-ratio graph</b> &middot; front vs rear brake force; the operating point sits inside the front/rear wheel-lock limits (K<sub>bf</sub> = 0.25)</figcaption>
+    </figure>
+
+    <div class="mv-figs">
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/MATLAB%20Braking%20Force%2050kmh.png" alt="MATLAB braking force versus time at 50 km/h to stop, brake demand against the max regen and wet wheel-lock limits" loading="lazy" onerror="this.closest('figure').style.display='none'">
+        <figcaption><b>Braking force vs time</b> &middot; 50 km/h to stop; F<sub>brake</sub> vs F<sub>max,regen</sub> and wet lock limits</figcaption>
+      </figure>
+      <figure class="mv-fig">
+        <img src="MUVMI%20Photos/MATLAB%20Braking%20Torque%20Per%20Wheel.png" alt="MATLAB braking torque per wheel versus time with dry and wet wheel-lock limit lines" loading="lazy" onerror="this.closest('figure').style.display='none'">
+        <figcaption><b>Braking torque per wheel</b> &middot; with dry / wet wheel-lock limit lines</figcaption>
+      </figure>
+    </div>
+
+    <figure class="mv-fig">
+      <img src="MUVMI%20Photos/MATLAB%20Wheel%20Alpha%2060kmh.png" alt="MATLAB wheel angular deceleration, front and rear, versus braking time at 60 km/h" loading="lazy" onerror="this.closest('figure').style.display='none'">
+      <figcaption><b>Wheel angular deceleration</b> &middot; front (&alpha;<sub>f</sub>) vs rear (&alpha;<sub>r</sub>) at 60 km/h</figcaption>
+    </figure>
+
     <h3 class="content-h3">On-Vehicle <em>Test &amp; Calibration</em></h3>
     <p class="content-p">
       We built the prototype, mounted the angular sensor, and <strong>tested live on the vehicle at the I'm Park underground lot (Suan Luang)</strong>, logging battery voltage from real regeneration at 10 and 20 km/h, with regen open (90%) and closed (5%). From the logged data I derived a <strong>calibration function</strong> mapping the raw sensor reading to brake angle:
@@ -577,6 +603,39 @@
         <tr><td>20 km/h</td><td><code>4,085.24 J</code></td><td><code>5,452.77 J</code></td><td><code>+33.48%</code></td></tr>
       </tbody>
     </table>
+
+    <h4 class="content-h3" style="font-size:1.15rem;">Field Test · <em>Regen Energy by Braking Style</em></h4>
+    <p class="content-p">
+      We then ran a structured on-vehicle study varying <strong>speed, regen level, brake rate, and braking style</strong> (with 2 and 3 passengers), logging the energy, the recovered regenerative energy, and the brake distance for each run. Representative runs (3 passengers):
+    </p>
+
+    <table class="process-table">
+      <thead><tr><th>Speed</th><th>Braking style</th><th>Regen energy (Ws)</th><th>Brake distance (m)</th></tr></thead>
+      <tbody>
+        <tr><td>25 km/h</td><td><strong>Release accelerator</strong> (no brake pedal)</td><td><code>13,682</code></td><td>29.8</td></tr>
+        <tr><td>25 km/h</td><td>Brake + 60% regen</td><td><code>3,879</code></td><td>5.9</td></tr>
+        <tr><td>25 km/h</td><td>Full-force brake (no regen)</td><td><code>2,059</code></td><td>6.0</td></tr>
+        <tr><td>50 km/h</td><td><strong>Release accelerator</strong> (no brake pedal)</td><td><code>64,683</code></td><td>48.6</td></tr>
+        <tr><td>50 km/h</td><td>Brake + 90% regen</td><td><code>36,644</code></td><td>33.2</td></tr>
+        <tr><td>50 km/h</td><td>Brake + 60% regen · rate 0.5</td><td><code>14,484</code></td><td>17.6</td></tr>
+        <tr><td>50 km/h</td><td>Brake + 60% regen · rate 1.5</td><td><code>8,716</code></td><td>16.7</td></tr>
+      </tbody>
+    </table>
+    <p class="content-p" style="font-size:.8rem;color:var(--text-subtle);margin-top:.4rem">Ws = watt-seconds (joules) of recovered energy. Higher numbers recover more energy.</p>
+
+    <div class="callout">
+      <div class="callout-title">What the field data showed</div>
+      <p><strong>1 ·</strong> At 25 km/h, the regen level (%) had little effect on the energy recovered when braking on the pedal.</p>
+      <p><strong>2 ·</strong> Releasing the accelerator without touching the brake recovered the <strong>most energy</strong> (over the longest coast distance).</p>
+      <p><strong>3 ·</strong> The physical (mechanical) brake had a large effect on the braking.</p>
+      <p><strong>4 ·</strong> A higher brake rate recovered less energy and gave a shorter braking distance.</p>
+      <p><strong>Design takeaway:</strong> to maximise recovered energy, set the physical-brake threshold below the regen-brake threshold so the regenerative brake does more of the work.</p>
+    </div>
+
+    <figure class="mv-fig">
+      <img src="MUVMI%20Photos/Front%20vs%20Rear%20Brake%20Pressure%20Ratio.png" alt="Front versus rear brake pressure: MUVMI's measured brake ratio compared with the original and the expected brake ratio" loading="lazy" onerror="this.closest('figure').style.display='none'">
+      <figcaption><b>Front vs rear brake pressure</b> · MUVMI's measured brake ratio against the original and the expected ratio</figcaption>
+    </figure>
 
     <h3 class="content-h3">Ergonomics Result · <em>Validated On the Road</em></h3>
     <p class="content-p">
