@@ -385,7 +385,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
   font-size:.6rem;letter-spacing:.12em;background:var(--accent-bg)}
 .pr-body{display:grid;grid-template-columns:1fr 322px;gap:0}
 .pr-catalog{padding:1rem 1.1rem;min-width:0;border-right:1px solid var(--border)}
-.pr-cats{display:flex;gap:.4rem;margin-bottom:.9rem}
+.pr-cats{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.9rem}
 .pr-cat{flex:0 0 auto;background:var(--bg);border:1px solid var(--border);color:var(--text-muted);
   border-radius:8px;padding:.5rem .9rem;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;
   display:inline-flex;align-items:center;gap:.45rem;transition:color .2s,border-color .2s,background .2s}
@@ -761,6 +761,71 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       I split the work into three streams running in parallel: <strong>(1) Master Data Configuration</strong> for 180+ materials and 10+ vendors on XeerSoft, <strong>(2) Statistical Modelling</strong> to calculate scientifically-grounded reorder parameters, and <strong>(3) Workflow Design</strong> for 2-level purchase approval authorization.
     </p>
 
+    <!-- DESIGN APPROACH · methodology / tools / logic (storytelling spine) -->
+    <style id="p1-dna">
+      .p1-dna{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1.6rem 0 0.5rem}
+      @media(max-width:760px){.p1-dna{grid-template-columns:1fr}}
+      .p1-dna-card{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);
+        padding:1.2rem 1.25rem;display:flex;flex-direction:column;
+        transition:border-color .25s,box-shadow .25s,transform .25s}
+      .p1-dna-card:hover{border-color:color-mix(in srgb,var(--accent) 42%,var(--border));transform:translateY(-3px);
+        box-shadow:0 18px 40px -28px color-mix(in srgb,var(--accent) 70%,transparent)}
+      .p1-dna-k{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+        color:var(--accent);font-weight:700;display:flex;align-items:center;gap:.5rem}
+      .p1-dna-k::before{content:"";width:16px;height:2px;background:var(--accent);border-radius:2px;flex:0 0 auto}
+      .p1-dna-card h4{font-size:1.02rem;color:var(--text-strong);margin:.55rem 0 .45rem;letter-spacing:-.01em;line-height:1.25}
+      .p1-dna-card>p{font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0 0 .8rem}
+      .p1-dna-card ul{list-style:none;margin:auto 0 0;padding:0;display:flex;flex-direction:column;gap:.32rem}
+      .p1-dna-card li{font-size:.78rem;color:var(--text);padding-left:1.05rem;position:relative;line-height:1.5}
+      .p1-dna-card li::before{content:"\203A";position:absolute;left:0;color:var(--accent);font-weight:700}
+      .p1-dna-card li b{color:var(--text-strong);font-weight:600}
+      .p1-dna-map{font-size:.78rem;color:var(--text-muted);line-height:1.65;margin:.4rem 0 0;
+        border-top:1px dashed var(--border);padding-top:.85rem}
+      .p1-dna-map b{color:var(--text)}
+    </style>
+
+    <h3 class="content-h3">Design <em>Approach</em></h3>
+    <p class="content-p">
+      Before configuring a single screen I fixed the consulting spine of the build: the <strong>method</strong> that decides the numbers, the <strong>tools</strong> that hold them, and the <strong>logic</strong> the developers implement. Every interactive exhibit further down is an artifact of one of these three.
+    </p>
+
+    <div class="p1-dna">
+      <article class="p1-dna-card">
+        <span class="p1-dna-k">Methodology</span>
+        <h4>Plan by statistics, not intuition</h4>
+        <p>The root cause was intuition-based ordering. I matched a demand model to how each SKU actually behaves, then sized and timed every order from it.</p>
+        <ul>
+          <li><b>Poisson</b> for low-volume, lumpy demand &mdash; XS/XXL sizes, minority subjects, devices</li>
+          <li><b>Normal-Z</b> service level for steady, high-volume consumables</li>
+          <li><b>EOQ</b> for order size; <b>reorder point</b> = lead-time demand + safety stock</li>
+          <li><b>MRP</b> explosion + cumulative lead-time offset for the term plan</li>
+        </ul>
+      </article>
+      <article class="p1-dna-card">
+        <span class="p1-dna-k">Tools</span>
+        <h4>One configured system, one source of truth</h4>
+        <p>The numbers live in the XeerSoft master data I configured and are read back for decisions &mdash; no parallel spreadsheets drifting out of sync.</p>
+        <ul>
+          <li><b>XeerSoft</b> &mdash; Item/Vendor Master, Purchase Requisition, Workflow Authorization, Goods Receipt</li>
+          <li><b>Item master</b> structured category &rarr; class &rarr; size/subject, each with its planning class + ROP</li>
+          <li><b>Power BI</b> for KPI read-back; a Poisson/EOQ workbook to set parameters</li>
+        </ul>
+      </article>
+      <article class="p1-dna-card">
+        <span class="p1-dna-k">Logic</span>
+        <h4>Rules a developer can build to</h4>
+        <p>I wrote the system's behaviour as decision rules in the FSD &mdash; not prose &mdash; so the build is traceable and testable line by line.</p>
+        <ul>
+          <li><b>Approval:</b> &le;&#3647;50K &rarr; Dept Head, &gt;&#3647;50K &rarr; Director (FSD-P1-01)</li>
+          <li><b>Traceability:</b> 9-char serial + Learn Balance Code per unit, set at issue</li>
+          <li><b>Control:</b> reorder fires when on-hand &lt; ROP; 3-way match on receipt</li>
+        </ul>
+      </article>
+    </div>
+    <p class="p1-dna-map">
+      <b>Read the rest of this page as proof of the spine above:</b> the <b>Procurement Simulation</b> runs the methodology live, the <b>Order Entry</b> catalog is the configured tooling, and the <b>FSD logic</b> is what the developers received.
+    </p>
+
     <!-- DRAW.IO STYLE FLOW DIAGRAM -->
     <div class="diagram-container">
       <div class="diagram-title">P2P Process Flow · Designed for XeerSoft</div>
@@ -857,7 +922,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">Purchase Requisition · <em>Order Entry</em></h3>
     <p class="content-p">
-      How a procurement officer raises a requisition in the configured system. The catalog is driven by the <strong>item master I set up</strong>, grouped category &rarr; class &rarr; size / subject &times; year band, and every line carries its <strong>planning class</strong> (Poisson for low-volume sizes and minority subjects, Normal-Z for the rest) plus a live stock signal. Each unit is tracked by a <strong>9-character serial</strong> on the item, with a <strong>Learn Balance Code</strong> (e.g. <code>LB######</code>) engraved to the owning student at issue. Submitting applies the <strong>2-level approval rule</strong> from FSD-P1-01 (&le; &#3647;50,000 &rarr; Dept Head; &gt; &#3647;50,000 &rarr; Director).
+      How a procurement officer raises a requisition in the configured system. The catalog is the full <strong>item master I set up</strong> &mdash; <strong>Uniforms, Textbooks, Stationery, Devices and Equipment</strong> &mdash; the same five classes the MRP simulation below explodes from headcount. Every line carries its <strong>planning class</strong> (Poisson for low-volume sizes, minority subjects and lumpy high-value devices; Normal-Z for steady consumables) plus a live stock signal against its reorder point. Each unit is tracked by a <strong>9-character serial</strong>, with a <strong>Learn Balance Code</strong> (e.g. <code>LB######</code>) engraved to the owning student at issue. Submitting applies the <strong>2-level approval rule</strong> from FSD-P1-01 (&le; &#3647;50,000 &rarr; Dept Head; &gt; &#3647;50,000 &rarr; Director) &mdash; add a device line and watch the routing escalate.
     </p>
 
     <div class="pr xnative-section" id="pr1">
@@ -870,6 +935,9 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <div class="pr-cats">
             <button class="pr-cat on" data-cat="uni">Uniforms <span class="ct">5</span></button>
             <button class="pr-cat" data-cat="txt">Textbooks <span class="ct">10</span></button>
+            <button class="pr-cat" data-cat="sta">Stationery <span class="ct">18</span></button>
+            <button class="pr-cat" data-cat="dev">Devices <span class="ct">3</span></button>
+            <button class="pr-cat" data-cat="eqp">Equipment <span class="ct">6</span></button>
           </div>
           <div class="pr-bands" id="prBands" hidden></div>
           <div class="pr-list" id="prList"></div>
@@ -899,6 +967,43 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         {sn:'UNI240104', name:'PE Shirt · XL', price:500, demand:'normal',  onhand:71,  rop:60},
         {sn:'UNI240105', name:'PE Shirt · XXL',price:500, demand:'poisson', onhand:14,  rop:30}
       ];
+      // Stationery (เครื่องเขียน) — the pooled common-component class from the MRP run.
+      // High-volume consumables plan Normal-Z; low-volume / high-value specialty items plan Poisson.
+      var sta=[
+        {sn:'STA240101', name:'Notebook · A5 80-sheet',     price:30,  demand:'normal',  onhand:640, rop:400, dq:300},
+        {sn:'STA240102', name:'3-colour pen set',           price:40,  demand:'normal',  onhand:210, rop:150, dq:100},
+        {sn:'STA240103', name:'Mechanical pencil · 0.5mm',  price:30,  demand:'normal',  onhand:180, rop:120, dq:100},
+        {sn:'STA240104', name:'Eraser',                     price:10,  demand:'normal',  onhand:160, rop:120, dq:100},
+        {sn:'STA240105', name:'Ruler · 30cm',               price:20,  demand:'normal',  onhand:140, rop:100, dq:100},
+        {sn:'STA240106', name:'Highlighter',                price:25,  demand:'normal',  onhand:88,  rop:100, dq:100},
+        {sn:'STA240107', name:'Document folder',            price:30,  demand:'normal',  onhand:220, rop:150, dq:100},
+        {sn:'STA240108', name:'Post-it notes',              price:50,  demand:'normal',  onhand:130, rop:100, dq:100},
+        {sn:'STA240109', name:'A4 copy paper · ream 500',   price:120, demand:'normal',  onhand:46,  rop:60,  dq:40},
+        {sn:'STA240110', name:'Whiteboard marker · 4-pack', price:80,  demand:'normal',  onhand:54,  rop:40,  dq:30},
+        {sn:'STA240111', name:'Scissors',                   price:45,  demand:'normal',  onhand:72,  rop:50,  dq:40},
+        {sn:'STA240112', name:'Glue stick',                 price:25,  demand:'normal',  onhand:90,  rop:80,  dq:60},
+        {sn:'STA240113', name:'Correction tape',            price:35,  demand:'normal',  onhand:66,  rop:60,  dq:50},
+        {sn:'STA240114', name:'Stapler + staples',          price:120, demand:'poisson', onhand:18,  rop:20,  dq:10},
+        {sn:'STA240115', name:'Casio FX-991 · sci calc',    price:850, demand:'poisson', onhand:24,  rop:40,  dq:60},
+        {sn:'STA240116', name:'Compass / protractor set',   price:100, demand:'poisson', onhand:36,  rop:40,  dq:60},
+        {sn:'STA240117', name:'Lab coat',                   price:350, demand:'poisson', onhand:22,  rop:30,  dq:40},
+        {sn:'STA240118', name:'Safety goggles',             price:290, demand:'poisson', onhand:28,  rop:30,  dq:40}
+      ];
+      // Devices — long-lead (LT5), high-value, lumpy demand → Poisson. Low order qty.
+      var dev=[
+        {sn:'DEV240101', name:'iPad (A16) 11"',             price:12900, demand:'poisson', onhand:3, rop:6,  dq:10},
+        {sn:'DEV240102', name:'Lenovo IdeaPad Slim 5',      price:22900, demand:'poisson', onhand:4, rop:6,  dq:10},
+        {sn:'DEV240103', name:'MacBook Air 13"',            price:36900, demand:'poisson', onhand:2, rop:5,  dq:5}
+      ];
+      // Classroom & teacher equipment — low volume; consumables (answer sheets) plan Normal-Z.
+      var eqp=[
+        {sn:'EQP240101', name:'Teacher plan book',          price:100,   demand:'normal',  onhand:12, rop:10, dq:10},
+        {sn:'EQP240102', name:'Teacher stationery set',     price:400,   demand:'normal',  onhand:9,  rop:10, dq:10},
+        {sn:'EQP240103', name:'Storage locker',             price:5000,  demand:'poisson', onhand:3,  rop:5,  dq:5},
+        {sn:'EQP240104', name:'Paper cutter · A3',          price:3000,  demand:'poisson', onhand:2,  rop:3,  dq:5},
+        {sn:'EQP240105', name:'Document scanner',           price:12000, demand:'poisson', onhand:1,  rop:3,  dq:5},
+        {sn:'EQP240106', name:'Answer sheets · pack 500',   price:1000,  demand:'normal',  onhand:34, rop:30, dq:20}
+      ];
       var subjects=[
         {ab:'MATH', name:'Mathematics',         demand:'normal'},
         {ab:'BIO',  name:'Biology',             demand:'normal'},
@@ -923,7 +1028,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         ? '<span class="pr-tag poisson">λ Poisson · low-vol</span>'
         : '<span class="pr-tag">Normal-Z</span>';}
       function esc(s){return s.replace(/"/g,'&quot;');}
-      function row(sn,name,price,meta){
+      function row(sn,name,price,meta,dq){
         return '<div class="pr-item"><div class="pr-it-main">'
           +'<span class="pr-code">S/N '+sn+' · LBC@issue</span>'
           +'<span class="pr-name" title="'+esc(name)+'">'+name+'</span>'
@@ -931,7 +1036,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           +'<div class="pr-it-side"><span class="pr-price">'+THB(price)+'</span>'
           +'<div class="pr-add-row"><span class="pr-step">'
           +'<button data-d="-1" aria-label="decrease quantity">−</button>'
-          +'<input type="text" value="10" inputmode="numeric" aria-label="quantity">'
+          +'<input type="text" value="'+(dq||10)+'" inputmode="numeric" aria-label="quantity">'
           +'<button data-d="1" aria-label="increase quantity">+</button></span>'
           +'<button class="pr-add" data-code="'+sn+'" data-name="'+esc(name)+'" data-price="'+price+'" aria-label="Add '+esc(name)+' to requisition">+</button>'
           +'</div></div></div>';
@@ -940,7 +1045,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         var low=it.onhand<it.rop;
         var stock=low?'<span class="pr-tag reorder">Reorder · '+it.onhand+'/'+it.rop+'</span>'
                      :'<span class="pr-tag ok">Stock '+it.onhand+'</span>';
-        return row(it.sn,it.name,it.price,dtag(it.demand)+stock);
+        return row(it.sn,it.name,it.price,dtag(it.demand)+stock,it.dq);
       }
       function txtRow(s,i){
         var bi=0; for(var k=0;k<bands.length;k++){ if(bands[k].id===band) bi=k; }
@@ -949,12 +1054,13 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         var meta=dtag(s.demand)+'<span class="pr-tag">Edition '+b.ed+'</span><span class="pr-tag">EOQ-managed · 1/level</span>';
         return row(sn,s.name+' · '+b.label,b.price,meta);
       }
+      var flatCats={uni:uni, sta:sta, dev:dev, eqp:eqp};
       function render(){
-        if(cat==='uni'){ bandsEl.hidden=true; bandsEl.innerHTML='';
-          list.innerHTML=uni.map(uniRow).join(''); }
-        else{ bandsEl.hidden=false;
+        if(cat==='txt'){ bandsEl.hidden=false;
           bandsEl.innerHTML=bands.map(function(b){return '<button class="pr-band'+(b.id===band?' on':'')+'" data-band="'+b.id+'">'+b.label+'<small>'+b.sub+'</small></button>';}).join('');
           list.innerHTML=subjects.map(txtRow).join(''); }
+        else{ bandsEl.hidden=true; bandsEl.innerHTML='';
+          list.innerHTML=(flatCats[cat]||uni).map(uniRow).join(''); }
       }
       render();
       root.querySelectorAll('.pr-cat').forEach(function(b){b.addEventListener('click',function(){

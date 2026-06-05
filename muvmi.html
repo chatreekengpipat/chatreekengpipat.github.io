@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUVMI Regenerative Brake &amp; Driver Ergonomics Design · Chatree Kengpipat</title>
+<meta name="description" content="Chulalongkorn University Mechanical Engineering design project in collaboration with MUVMI (electric tuk-tuk ride-sharing, Bangkok): a 5-person team redesigned brake-pedal ergonomics and an analog-sensor regenerative-brake system. 2020.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5">
+<script src="theme.js"></script>
+<script src="animation.js?v=4" defer></script>
+<!-- MUVMI :: page-scoped helpers reusing existing tokens (Claude) -->
+<style id="muvmi-style">
+.muvmi-imgph{border:1px dashed var(--border-strong);border-radius:var(--radius-md);background:var(--surface);
+  padding:2.2rem 1.5rem;text-align:center;color:var(--text-muted);margin:1.4rem 0;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.02em;line-height:1.6}
+.muvmi-imgph b{display:block;color:var(--accent);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.4rem}
+.muvmi-cost{display:inline-flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;
+  font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text-muted);
+  background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);
+  border-radius:100px;padding:.4rem .9rem;margin:.4rem 0}
+.muvmi-cost b{color:var(--accent);font-weight:700}
+.muvmi-todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  color:var(--warning);background:color-mix(in srgb,var(--warning) 10%,transparent);
+  border:1px solid color-mix(in srgb,var(--warning) 40%,transparent);border-radius:6px;padding:.15rem .55rem}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Workspace of Chatree Kengpipat (Cee)
+  </a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head">
+      <span class="nav-drawer-title">Menu</span>
+      <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
+    </li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#projects" class="active">Projects</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- PROJECT HERO -->
+<section class="project-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="index.html#projects">Projects</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>MUVMI Project</span>
+  </div>
+
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Chulalongkorn University · Mechanical Engineering Design Project · 2020</div>
+      <div class="project-meta">In collaboration with MUVMI · electric tuk-tuk ride-sharing · Bangkok · 5-person team</div>
+      <h1>MUVMI <em>Regenerative Brake</em><br>&amp; Driver Ergonomics Design</h1>
+      <p class="project-hero-desc">
+        A <strong>5-person Mechanical Engineering design project</strong> at Chulalongkorn University, carried out in collaboration with <strong>MUVMI</strong>, an electric tuk-tuk ride-sharing service in Bangkok. The team tackled two threads on the same vehicle: an all-day brake pedal that sat too steep for comfortable driving, and a regenerative-brake system whose pressure sensor produced a coarse digital signal and only recovered energy on accelerator release. Final presentation 12 March 2020.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-pill primary">Mechanical Design</span>
+        <span class="tech-pill primary">CAD</span>
+        <span class="tech-pill primary">Ergonomics / Anthropometry</span>
+        <span class="tech-pill">Sensor Integration</span>
+        <span class="tech-pill">Vehicle Dynamics</span>
+        <span class="tech-pill">Regen Control Logic</span>
+        <span class="tech-pill">Prototyping</span>
+        <span class="tech-pill">Data Analysis</span>
+      </div>
+    </div>
+
+    <div class="project-info-card">
+      <div class="project-info-row">
+        <span class="project-info-label">Institution</span>
+        <span class="project-info-val">Chulalongkorn University</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Faculty</span>
+        <span class="project-info-val">Engineering · Mechanical</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Partner</span>
+        <span class="project-info-val">MUVMI · electric tuk-tuk</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Team</span>
+        <span class="project-info-val">5 people · "5 Inw Group"</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">My Role</span>
+        <span class="project-info-val"><span class="muvmi-todo">[TODO: individual role]</span></span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Year</span>
+        <span class="project-info-val">2020</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Presented</span>
+        <span class="project-info-val">12 Mar 2020</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS BANNER -->
+<section style="padding: 4rem 4rem 2rem;">
+  <div class="results-banner">
+    <div class="result-cell">
+      <div class="result-val">+220.72%</div>
+      <div class="result-label">Braking Energy Recovered</div>
+      <div class="result-change">10 km/h · 522.23 → 1,674.90 J · avg of 3</div>
+    </div>
+    <div class="result-cell">
+      <div class="result-val">+33.48%</div>
+      <div class="result-label">Braking Energy Recovered</div>
+      <div class="result-change">20 km/h · 4,085.24 → 5,452.77 J · avg of 3</div>
+    </div>
+    <div class="result-cell">
+      <div class="result-val">108° / 86°</div>
+      <div class="result-label">Knee / Ankle Angle</div>
+      <div class="result-change">targets 110° / 85° · validated 2 weeks</div>
+    </div>
+    <div class="result-cell">
+      <div class="result-val">2 wks</div>
+      <div class="result-label">On-Road Driver Test</div>
+      <div class="result-change">real MUVMI drivers · ergonomics</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section style="padding-top: 2rem;">
+  <div class="content-section">
+
+    <h3 class="content-h3">The <em>Problem</em></h3>
+    <p class="content-p">
+      Information was gathered from <strong>MUVMI staff, MUVMI drivers, and literature research</strong>, and pointed to two separate problems on the same vehicle.
+    </p>
+
+    <div class="callout">
+      <div class="callout-title">Two problems, one vehicle</div>
+      <p><strong>1. Driver ergonomics.</strong> The brake pedal sat too steep, uncomfortable across an all-day shift. Measured joint angles fell short of the preferred values: knee <strong>100°</strong> (preferred 110°) and ankle <strong>75°</strong> (preferred 85°). Preferred angles were referenced from a published anthropometry source.</p>
+      <p><strong>2. Regenerative brake.</strong> The existing system used a <strong>pressure sensor</strong> producing a <strong>digital / step</strong> signal, and regeneration only triggered on accelerator release. The result was an uncomfortable braking feel and low energy-recovery efficiency.</p>
+    </div>
+
+    <h3 class="content-h3">Solution A · <em>Ergonomics</em></h3>
+    <p class="content-p">
+      The team redesigned the <strong>brake lever</strong> to reduce the pedal angle and added a <strong>rest pedal</strong> giving the foot a resting position. Multiple design alternatives were screened pass/fail before settling on the final design.
+    </p>
+
+    <div class="muvmi-imgph"><b>[TODO: image]</b>Brake-lever and rest-pedal CAD renders / before-after ergonomics photos</div>
+
+    <p class="content-p">
+      The final design was <strong>validated by two weeks of real driver use</strong>:
+    </p>
+
+    <table class="process-table">
+      <thead>
+        <tr><th>Joint</th><th>Current</th><th>Preferred (target)</th><th>Achieved</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Knee angle</td><td><code>100°</code></td><td>110°</td><td><code>108°</code></td></tr>
+        <tr><td>Ankle angle</td><td><code>75°</code></td><td>85°</td><td><code>86°</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-title">What the drivers reported</div>
+      <p>Lighter and easier braking · the brake was easier to reach · less foot fatigue · and a usable resting position while waiting.</p>
+    </div>
+
+    <p class="content-p">
+      <span class="muvmi-cost">Cost · Brake lever <b>180 ฿</b> + Pedal <b>95 ฿</b> + Rest pad <b>170 ฿</b> = <b>445 ฿ total</b></span>
+    </p>
+
+    <h3 class="content-h3">Solution B · <em>Regenerative Brake</em></h3>
+    <p class="content-p">
+      The pressure sensor was replaced with an <strong>analog angular-position sensor</strong> that reads the brake-lever angle, producing a smooth analog signal instead of a digital step. A <strong>sensor mounting bracket</strong> was designed, again screening multiple alternatives before the final mount.
+    </p>
+
+    <div class="muvmi-imgph"><b>[TODO: image]</b>Sensor-mount CAD render / on-vehicle prototype photo</div>
+
+    <p class="content-p">
+      <strong>Architecture choice.</strong> A <strong>Parallel</strong> regeneration scheme was chosen over Serial through an evaluation table:
+    </p>
+
+    <table class="process-table">
+      <thead>
+        <tr><th>Architecture</th><th>Efficiency (of input power)</th><th>Trade-offs</th><th>Decision</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Parallel</strong></td><td><code>~0.09 – 0.18</code></td><td>Simpler mechanism, shorter braking duration, adaptable to the current design, cheaper</td><td><code>✓ Chosen</code></td></tr>
+        <tr><td>Serial</td><td><code>~0.15 – 0.30</code></td><td>Higher efficiency, but complex, expensive, needs a new design</td><td>Not chosen</td></tr>
+      </tbody>
+    </table>
+
+    <p class="content-p">
+      <strong>Speed-banded regen functions.</strong> The regeneration response was banded by vehicle speed, each band offering a <strong>Comfort</strong> and an <strong>Efficiency</strong> mode:
+    </p>
+
+    <table class="process-table">
+      <thead>
+        <tr><th>Speed band</th><th>Regen function</th><th>Modes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0 – 15 km/h</td><td><code>Step</code></td><td>Comfort / Efficiency</td></tr>
+        <tr><td>15 – 35 km/h</td><td><code>Curve</code></td><td>Comfort / Efficiency</td></tr>
+        <tr><td>35 – 50 km/h</td><td><code>Ramp</code></td><td>Comfort / Efficiency</td></tr>
+      </tbody>
+    </table>
+
+    <p class="content-p">
+      To keep braking safe, the team built a <strong>vehicle-dynamics model</strong> and a <strong>braking-ratio analysis</strong> of front/rear wheel-lock limits. A physical prototype was built and <strong>tested on the vehicle</strong>, and a calibration function was derived for the angular sensor.
+    </p>
+
+    <h3 class="content-h3">Regen Result · <em>Energy Recovered</em></h3>
+    <p class="content-p">
+      Regenerative energy recovered before vs after, averaged over 3 tests:
+    </p>
+
+    <table class="process-table">
+      <thead>
+        <tr><th>Speed</th><th>Before</th><th>After</th><th>Change</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>10 km/h</td><td><code>522.23 J</code></td><td><code>1,674.90 J</code></td><td><code>+220.72%</code></td></tr>
+        <tr><td>20 km/h</td><td><code>4,085.24 J</code></td><td><code>5,452.77 J</code></td><td><code>+33.48%</code></td></tr>
+      </tbody>
+    </table>
+
+    <p class="content-p">
+      <span class="muvmi-cost">Cost · Bracket <b>110 ฿</b> + Angular sensor <b>105 ฿</b> = <b>215 ฿ total</b></span>
+    </p>
+
+    <div class="callout">
+      <div class="callout-title">Future work</div>
+      <p>Build a <strong>MATLAB / Simulink</strong> model of the regen algorithm, then implement it on MUVMI's <strong>Vehicle Control Unit (VCU)</strong>.</p>
+    </div>
+
+    <h3 class="content-h3">Before → <em>After</em></h3>
+    <table class="process-table">
+      <thead>
+        <tr><th>Aspect</th><th>Before</th><th>After</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Regen trigger</td><td>Only on hand-accelerator release</td><td>Accelerator release <strong>and</strong> brake pedal</td></tr>
+        <tr><td>Sensor signal</td><td>Digital output</td><td>Analog output</td></tr>
+        <tr><td>Driving position</td><td>Not optimized</td><td>Optimized ergonomics</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="content-h3">Team <em>&amp; My Contribution</em></h3>
+    <p class="content-p">
+      This was a <strong>university Mechanical Engineering design project done in collaboration with MUVMI</strong>, not employment at MUVMI. It was delivered by a <strong>5-person team ("5 Inw Group")</strong>, which also produced a Business Model Canvas alongside the engineering work.
+    </p>
+
+    <div class="callout">
+      <div class="callout-title">My individual contribution</div>
+      <p><span class="muvmi-todo">[TODO: individual role]</span> &nbsp; Which subsystem(s) did you personally own? e.g. brake-lever redesign · rest pedal · sensor selection &amp; mounting · regen control-function design · vehicle-dynamics &amp; braking analysis · physical testing &amp; data analysis. Fill this so the page states your real contribution, not just the team's.</p>
+    </div>
+
+    <div class="muvmi-imgph"><b>[TODO: image]</b>Team photo · "5 Inw Group"</div>
+
+    <h3 class="content-h3">Skills <em>&amp; Tools</em></h3>
+    <div class="module-tags">
+      <span class="module-tag">Mechanical Design &amp; CAD</span>
+      <span class="module-tag">Ergonomics / Anthropometry</span>
+      <span class="module-tag">Sensor Selection &amp; Integration</span>
+      <span class="module-tag">Vehicle Dynamics</span>
+      <span class="module-tag">Braking Analysis</span>
+      <span class="module-tag">Regen Control-Logic Design</span>
+      <span class="module-tag">Physical Prototyping</span>
+      <span class="module-tag">Data Collection &amp; Analysis</span>
+      <span class="module-tag">Pass/Fail Design Screening</span>
+      <span class="module-tag">Business Model Canvas</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECT NAVIGATION -->
+<section style="padding: 2rem 4rem 4rem;">
+  <div class="project-nav">
+    <a href="project5.html" class="project-nav-link">
+      <span class="project-nav-direction">← Mitsubishi Award Project</span>
+      <span class="project-nav-title">FPDU Assist Device Engineering</span>
+    </a>
+    <a href="senior-project.html" class="project-nav-link next">
+      <span class="project-nav-direction">Senior Project →</span>
+      <span class="project-nav-title">LiDAR Autonomous Driving (DDPG)</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Chatree Kengpipat · ERP Business Analyst &amp; Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+</body>
+</html>
