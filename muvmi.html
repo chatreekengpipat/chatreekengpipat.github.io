@@ -34,11 +34,12 @@
 .mv-fig:hover{transform:translateY(-3px);box-shadow:0 18px 40px -28px var(--glow-strong)}
 .mv-fig img,.mv-fig video{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;background:var(--surface-2)}
 .mv-figs .mv-fig img,.mv-figs .mv-fig video{height:230px}
-.project-hero-grid{align-items:start}
+.project-hero-grid{grid-template-columns:1.4fr 1fr;align-items:start}
 .mv-hero-side{display:flex;flex-direction:column;gap:1.25rem}
 .mv-hero-main{align-self:stretch;display:flex;flex-direction:column;justify-content:space-between;gap:clamp(1rem,2.2vw,1.7rem)}
 .mv-hero-main h1,.mv-hero-main .project-hero-desc,.mv-hero-main .tech-stack{margin:0}
-.mv-hero-main .project-hero-desc{line-height:2.3}
+.mv-hero-main h1{text-wrap:balance}
+.mv-hero-main .project-hero-desc{max-width:700px;line-height:2.05}
 .mv-hero-eyebrow{display:flex;flex-direction:column;gap:.6rem}
 .mv-hero-eyebrow>*{margin:0}
 .mv-hero-photo{margin:0;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-2);box-shadow:0 22px 50px -30px var(--glow-strong),var(--shadow-md)}
@@ -182,7 +183,7 @@
         <div class="platform-badge">Chulalongkorn University · Mechanical Engineering Design Course · 2020</div>
         <div class="project-meta">EV Software (Regen Brake) + Hardware Integration (Ergonomics) · with MUVMI · 5-person team</div>
       </div>
-      <h1>MUVMI Regen-Brake <em>Software</em><br>&amp; Ergonomics Hardware Integration</h1>
+      <h1>MUVMI Regen-Brake <em>Software</em> &amp; Ergonomics Hardware Integration</h1>
       <p class="project-hero-desc">
         A <strong>5-person engineering design project</strong> with <strong>MUVMI</strong>, an electric tuk-tuk ride-sharing service in Bangkok, split across two tracks: an <strong>EV software / control</strong> side that redesigned the regenerative-brake sensing and control logic, and a <strong>hardware</strong> side that redesigned and installed the driver-ergonomics parts. I led the team as <strong>Project Manager</strong>, personally led the regenerative-brake software with one teammate, also worked hands-on on the hardware build, and consolidated everyone's work into the weekly deliverable. Implemented over eight months, August 2020 to March 2021, working directly with MUVMI's CEO and senior engineers on the live vehicle. Voted by the course mentors into the <strong>Top 3 of 16+ Mechanical Engineering Design projects</strong> across all groups (Chulalongkorn, cohort 101).
       </p>
