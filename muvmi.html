@@ -32,7 +32,12 @@
 /* figures */
 .mv-fig{margin:1.4rem 0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--surface);transition:transform .35s var(--ease-smooth),box-shadow .35s var(--ease-smooth)}
 .mv-fig:hover{transform:translateY(-3px);box-shadow:0 18px 40px -28px var(--glow-strong)}
-.mv-fig img,.mv-fig video{display:block;width:100%;height:auto;background:var(--surface-2)}
+.mv-fig img,.mv-fig video{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;background:var(--surface-2)}
+.mv-figs .mv-fig img,.mv-figs .mv-fig video{height:230px}
+.mv-hero-side{display:flex;flex-direction:column;gap:1.25rem;align-self:start}
+.mv-hero-photo{margin:0;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-2);box-shadow:0 22px 50px -30px var(--glow-strong),var(--shadow-md)}
+.mv-hero-photo img{display:block;width:100%;aspect-ratio:16/11;object-fit:cover}
+.mv-hero-photo figcaption{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);padding:.5rem .8rem;border-top:1px solid var(--border);background:var(--surface)}
 .mv-fig figcaption{font-size:.74rem;color:var(--text-muted);padding:.6rem .9rem;border-top:1px solid var(--border);background:var(--surface-2);font-family:'JetBrains Mono',monospace;line-height:1.5}
 .mv-fig figcaption b{color:var(--text)}
 .mv-figs{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
@@ -183,7 +188,12 @@
       </div>
     </div>
 
-    <div class="project-info-card">
+    <div class="mv-hero-side">
+      <figure class="mv-hero-photo">
+        <img src="MUVMI%20Photos/My%20Group%20(Main%20Picture).png" alt="The 5 Inw Group team of five beside the MUVMI electric tuk-tuk">
+        <figcaption>★ "5 Inw Group" · the team with the MUVMI tuk-tuk</figcaption>
+      </figure>
+      <div class="project-info-card">
       <div class="project-info-row"><span class="project-info-label">Institution</span><span class="project-info-val">Chulalongkorn University</span></div>
       <div class="project-info-row"><span class="project-info-label">Course</span><span class="project-info-val">Mechanical Engineering Design</span></div>
       <div class="project-info-row"><span class="project-info-label">Partner</span><span class="project-info-val">MUVMI · electric tuk-tuk</span></div>
@@ -192,6 +202,7 @@
       <div class="project-info-row"><span class="project-info-label">Tooling</span><span class="project-info-val">Fusion 360 · MATLAB Simulink</span></div>
       <div class="project-info-row"><span class="project-info-label">Duration</span><span class="project-info-val">8 months · Aug 2020 – Mar 2021</span></div>
       <div class="project-info-row"><span class="project-info-label">Recognition</span><span class="project-info-val" style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600;">★ Top 3 / 16+ · mentor-voted</span></div>
+    </div>
     </div>
   </div>
 </section>
