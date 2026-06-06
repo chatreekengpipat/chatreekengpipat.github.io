@@ -306,6 +306,96 @@
       </figure>
     </div>
 
+    <style id="p5-eng">
+      .p5-flow{display:grid;gap:.5rem;margin:1.4rem 0}
+      .p5-flow-step{display:grid;grid-template-columns:auto 1fr;gap:.95rem;align-items:flex-start;
+        border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:.8rem 1rem;
+        transition:border-color .25s var(--ease-smooth),transform .25s var(--ease-smooth)}
+      .p5-flow-step:hover{border-color:color-mix(in srgb,var(--accent) 42%,var(--border));transform:translateX(3px)}
+      .p5-flow-step .n{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--accent);
+        background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:8px;
+        width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+      .p5-flow-step b{color:var(--text-strong);font-size:.9rem;display:block;letter-spacing:-.01em}
+      .p5-flow-step span{color:var(--text-muted);font-size:.82rem;line-height:1.5}
+      .p5-specgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin:1.4rem 0}
+      .p5-speccell{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.05rem 1.15rem;
+        transition:border-color .25s var(--ease-smooth),transform .25s var(--ease-smooth),box-shadow .25s var(--ease-smooth)}
+      .p5-speccell:hover{border-color:color-mix(in srgb,var(--accent) 42%,var(--border));transform:translateY(-2px);box-shadow:0 14px 32px -22px var(--glow-color)}
+      .p5-speccell .v{font-size:1.55rem;font-weight:800;color:var(--text-strong);letter-spacing:-.02em;line-height:1.05;font-variant-numeric:tabular-nums}
+      .p5-speccell .v small{font-size:.82rem;color:var(--text-muted);font-weight:600}
+      .p5-speccell .l{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-top:.4rem}
+      .p5-speccell .d{font-size:.76rem;color:var(--text-muted);line-height:1.45;margin-top:.3rem}
+      .p5-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0}
+      .p5-gallery .p5-slide{margin:0}
+    </style>
+
+    <h3 class="content-h3">Engineering <em>Design &amp; Analysis</em></h3>
+    <p class="content-p">
+      Idea 3 still had to become a real, safe, buildable machine. I carried the mechanical design from the ergonomic root cause through kinematics, structure and a layered safety system, then specified all of it for the maker in the formal MMTh tooling sheet.
+    </p>
+
+    <p class="content-p">
+      The trigger was an <strong>ergonomic limit</strong>: the FPDU weighs <strong>16.5 kg</strong>, above MMC's <strong>15 kg</strong> single-person manual-lifting recommendation. I verified the manual-handling risk against the standard before committing to a powered assist device.
+    </p>
+    <span class="p5-src">◆ Engineering documents · MMTh 2020</span>
+    <div class="p5-slides2">
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/FPDU%20Drawing.png" alt="Engineering drawing of the FPDU (Front Power Drive Unit), the 16.5 kg part assembled at the F01 station" loading="lazy">
+        <figcaption><b>FPDU</b> · Front Power Drive Unit · the 16.5 kg part lifted at F01</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/wisha-lifting-calculator-1.png" alt="WISHA lifting-risk calculator showing the manual-handling assessment for the 16.5 kg FPDU against the recommended limit" loading="lazy">
+        <figcaption><b>Manual-handling check</b> · 16.5 kg vs the 15 kg lifting limit</figcaption>
+      </figure>
+    </div>
+
+    <p class="content-p">The device I specified, sized from the production basis and a structural safety factor:</p>
+    <div class="p5-specgrid">
+      <div class="p5-speccell"><div class="v">16.5 <small>kg</small></div><div class="l">FPDU payload</div><div class="d">over the 15 kg manual limit</div></div>
+      <div class="p5-speccell"><div class="v">~80 <small>kg</small></div><div class="l">device mass</div><div class="d">floor-mobile structure</div></div>
+      <div class="p5-speccell"><div class="v">3.0</div><div class="l">design safety factor</div><div class="d">on structural load</div></div>
+      <div class="p5-speccell"><div class="v">1.5 <small>JPH</small></div><div class="l">equipment capacity</div><div class="d">&gt; 99% machine up-ratio</div></div>
+      <div class="p5-speccell"><div class="v">7,269<small>/yr</small></div><div class="l">max production volume</div><div class="d">units · 4,846 hr/yr basis</div></div>
+      <div class="p5-speccell"><div class="v">35.2 <small>min</small></div><div class="l">net F01 cycle time</div><div class="d">FPDU assembly 15–20 min</div></div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">What the CGM Assembly manager asked for</div>
+      <p>· The <strong>centre-of-gravity of the FPDU</strong> (from the SolidWorks model) so the hooks balance the load cleanly</p>
+      <p>· A <strong>pure-mechanics system</strong> that raises and lowers the FPDU by <strong>balance load</strong> (air balance), not a powered actuator</p>
+      <p>· A device whose <strong>base slides under the existing FPDU rack</strong>, adding zero floor footprint at the busy F01 station</p>
+    </div>
+
+    <p class="content-p">I specified the operation as an <strong>8-step concept flow</strong> in the tooling sheet, so the maker and the line operators built and worked to the same sequence:</p>
+    <div class="p5-flow">
+      <div class="p5-flow-step"><span class="n">01</span><div><b>Move to the line-side mark</b><span>Wheel the device to the marked park position beside the FPDU rack.</span></div></div>
+      <div class="p5-flow-step"><span class="n">02</span><div><b>Slide under the rack until the barrier detects</b><span>The base runs under the rack; a barrier switch confirms position.</span></div></div>
+      <div class="p5-flow-step"><span class="n">03</span><div><b>Lock the FPDU at two points</b><span>Short- and long-hook hanging plate engages the FPDU.</span></div></div>
+      <div class="p5-flow-step"><span class="n">04</span><div><b>Lift the FPDU</b><span>Pneumatic air-balance raises the load — no operator strain.</span></div></div>
+      <div class="p5-flow-step"><span class="n">05</span><div><b>Move to the front of the vehicle</b><span>Travel along the dedicated assist-device way to the PHEV.</span></div></div>
+      <div class="p5-flow-step"><span class="n">06</span><div><b>Insert the base under the PHEV hood</b><span>The base gives the structure equilibrium while laying the part.</span></div></div>
+      <div class="p5-flow-step"><span class="n">07</span><div><b>Lay the FPDU onto its shelf</b><span>Lower under balance control into the engine bay.</span></div></div>
+      <div class="p5-flow-step"><span class="n">08</span><div><b>Unlock the two hook points</b><span>Release; the device returns to the line-side mark.</span></div></div>
+    </div>
+
+    <p class="content-p">
+      The lifting interface is a <strong>balance-load hanging plate</strong> with short and long hooks that lock the FPDU at two points and lift it on a pneumatic system — the pure-mechanics solution the CGM asked for. The whole device runs on a dedicated, taped <strong>assist-device way</strong> with floor stoppers and a part-detect barrier.
+    </p>
+    <div class="p5-slides2">
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Glipper%20FPDU.png" alt="Hanging-plate gripper that locks the FPDU at two points for balanced lifting" loading="lazy">
+        <figcaption><b>Hanging / gripper</b> · two-point balance-load lock on the FPDU</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/gripper.jpg" alt="Detail of the short and long hooks of the FPDU assist-device gripper" loading="lazy">
+        <figcaption><b>Gripper detail</b> · short &amp; long hooks engineered to the FPDU's CG</figcaption>
+      </figure>
+    </div>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/Overall%20Layout%20PHEV%20Line.png" alt="Overall layout of the PHEV manual line showing the F01 station and the FPDU assist-device travel way" loading="lazy">
+      <figcaption><b>PHEV line layout</b> · F01 station, the FPDU rack, and the assist-device way</figcaption>
+    </figure>
+
     <h3 class="content-h3">SAP <em>Procurement Workflow</em></h3>
     <p class="content-p">
       Once the design was approved, I coordinated the procurement and vendor selection process. <strong>This is where I had hands-on SAP exposure</strong>: observing and operating within the live SAP environment used for PR/PO submission, monitoring approval workflows, and tracking the asset from request through deployment.
@@ -441,8 +531,25 @@
 
     <h3 class="content-h3">Vendor <em>Selection & Cost Breakdown</em></h3>
     <p class="content-p">
-      Vendor: <strong>Mar-Dec Engineering Co., Ltd.</strong> (Chonburi, Thailand), selected via RFQ comparison. Product: <strong>Manipulator Mar-Dec "Omega Buddy"</strong> for FPDU handling, max load 18 kg, max vertical stroke 400 mm, pneumatic gripper with anti-fall safety system.
+      Vendor: <strong>Mar-Dec Engineering Co., Ltd.</strong> (Chonburi, Thailand), selected via RFQ comparison against the spec I wrote. The chosen unit was the <strong>Mar-Dec "Omega Buddy" manipulator</strong>, a floor-mobile air-balance lifter purpose-fitted to the FPDU.
     </p>
+    <table class="process-table">
+      <thead><tr><th>Attribute</th><th>Specification</th></tr></thead>
+      <tbody>
+        <tr><td>Model</td><td><strong>Mar-Dec "Omega Buddy"</strong> manipulator</td></tr>
+        <tr><td>Max load</td><td>18 kg <span style="color:var(--text-muted)">(FPDU 16.5 kg + margin)</span></td></tr>
+        <tr><td>Max vertical stroke</td><td>400 mm</td></tr>
+        <tr><td>Installation</td><td>Floor-mobile type, swivel casters + foot brake</td></tr>
+        <tr><td>Balancing</td><td>Up-down manual control, built-in air-supply rotary joint</td></tr>
+        <tr><td>Gripper</td><td>Pneumatic gripper + 360° tooling rotary joint</td></tr>
+        <tr><td>Safety devices</td><td>Part-detecting sensor · grip-complete indicator · anti-part-fall system</td></tr>
+      </tbody>
+    </table>
+    <span class="p5-src">◆ Maker drawing &amp; quotation · Mar-Dec Engineering · Jul 2020</span>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/362282_145516_Omega%20buddy%20for%20FPDU%20-%20MMTh.png" alt="Manufacturer engineering drawing of the Mar-Dec Omega Buddy manipulator for FPDU handling, with dimensions, control console and sensors" loading="lazy">
+      <figcaption><b>Mar-Dec Omega Buddy</b> · the selected manipulator, fitted with the FPDU hanging plate</figcaption>
+    </figure>
 
     <div class="cost-breakdown">
       <div class="cost-row">
@@ -471,6 +578,21 @@
       </div>
     </div>
 
+    <p class="content-p">The quotation tied payment to <strong>delivery milestones</strong>, so MMTh only paid as the maker proved progress &mdash; the same milestone discipline I now use on ERP go-lives:</p>
+    <table class="process-table">
+      <thead><tr><th>Milestone</th><th>Payment</th></tr></thead>
+      <tbody>
+        <tr><td>PO received &amp; contract signed</td><td>20%</td></tr>
+        <tr><td>Work 50% complete</td><td>30%</td></tr>
+        <tr><td>Work 100% complete</td><td>40%</td></tr>
+        <tr><td>Hand-over &amp; all documents submitted</td><td>10%</td></tr>
+      </tbody>
+    </table>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/M605-1ST%20QUOTATION_OMEGA.png" alt="Mar-Dec Engineering quotation QT2007/092-1 for the Omega Buddy FPDU manipulator: line items, special discount, VAT 7% and the grand total of 460,314 baht" loading="lazy">
+      <figcaption><b>Maker quotation</b> · QT2007/092-1 · grand total ฿460,314 incl. VAT</figcaption>
+    </figure>
+
     <h3 class="content-h3">Asset <em>Management</em></h3>
     <p class="content-p">
       Once delivered and commissioned, the assist device was registered as a <strong>fixed asset</strong> in the MMTh SAP system with a 5-year support coverage from Mar-Dec Engineering. I authored the <strong>Standard Operating Procedure (SOP)</strong> document for operators, covering 5 main check steps: safety plug verification, dolly engagement, pickup confirmation, transport-and-mount, and return to home position.
@@ -495,6 +617,32 @@
       <img src="MMTh%20Photos/Timeline.png" alt="Project overall schedule Gantt chart from June to September 2020: tooling sheet, MSR/RFQ, e-AR, PR and PO, design approval, fabrication, installation, problem follow-up and goods receipt, with the internship ending in July and the payment period split 10/20/30/40 percent" loading="lazy">
       <figcaption><b>Overall schedule</b> · Jun–Sep 2020 · on plan at end of internship (payment 10/20/30/40%)</figcaption>
     </figure>
+
+    <div class="callout">
+      <div class="callout-title">Governed by a formal MMTh engineering document</div>
+      <p>The whole project ran under <strong>Tooling / Facility Planning Sheet TS-PE-A-20-006</strong>, the controlled MMTh document I authored and routed for approval. It fixed the <strong>production basis</strong> (8.5 hr/shift, 4,846 hr/yr, max 7,269 units/yr, 1.5 JPH, &gt;99% up-ratio), the construction scope, the <strong>hot-work / fire-safety permits</strong>, the electrical &amp; equipment brand standards, the 9-line project schedule, and the deliverables on completion (As-built 2D CAD + 3D CATIA, bilingual operation &amp; maintenance manuals, training docs, one week of supervisor stand-by).</p>
+    </div>
+
+    <p class="content-p">I also tracked procurement readiness and quality assurance as living artifacts &mdash; preparation status, QA items, and the cost assessment I sent to purchasing:</p>
+    <span class="p5-src">◆ Project-management artifacts · MMTh 2020</span>
+    <div class="p5-gallery">
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Preparation%20Status.png" alt="Preparation-status tracker for the FPDU assist-device project items" loading="lazy">
+        <figcaption><b>Preparation status</b> · readiness tracker</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Quality%20Assurance%20Item.png" alt="Quality-assurance item checklist for the assist device" loading="lazy">
+        <figcaption><b>Quality assurance</b> · QA item checklist</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Accounting%20Assesment.png" alt="Cost / accounting assessment prepared for the purchasing team" loading="lazy">
+        <figcaption><b>Cost assessment</b> · sent to purchasing</figcaption>
+      </figure>
+      <figure class="p5-slide">
+        <img src="MMTh%20Photos/Delay%20Preparation%20Item.png" alt="Delay-risk tracking of preparation items in the project" loading="lazy">
+        <figcaption><b>Delay watch</b> · at-risk preparation items</figcaption>
+      </figure>
+    </div>
 
     <h3 class="content-h3">Biweekly <em>Internship Log</em></h3>
     <p class="content-p">
@@ -584,6 +732,34 @@
       <span class="module-tag">Cost Breakdown Analysis</span>
     </div>
 
+    <h3 class="content-h3">Time-Motion Study · <em>the 29.6-second proof</em></h3>
+    <p class="content-p">
+      The headline cycle-time saving wasn't an estimate &mdash; I measured it. Using a <strong>Standardized Work time study</strong> (the same lean method behind SWCT, Yamazumi and Takt-time balancing), I timed every operation at the F01 station and split each into <strong>walk · work · self-check</strong> time.
+    </p>
+    <p class="content-p">
+      The insight: the old process forced the operator to <strong>repeatedly walk to fetch and return a wheel-tool dolly</strong> carrying sub-parts to the FPDU. Because the new assist device <strong>travels together with the FPDU</strong>, those sub-assemblies ride along on the device &mdash; so the walking simply disappears on the affected operations.
+    </p>
+    <span class="p5-src">◆ Standardized-work time study · MMTh 2020</span>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/Overall%20Time%20in%20Assembling%20FPDU.png" alt="Standardized-work time analysis of the FPDU assembly operations, comparing total operation time before and after the assist device with the 29.6-second reduction" loading="lazy">
+      <figcaption><b>Standardized-work analysis</b> · per-operation walk / work / self-check time · 2,118 → 2,088.4 s</figcaption>
+    </figure>
+    <p class="content-p">The walk time removed, traced operation by operation. Two steps cost a little extra device-handling time &mdash; shown honestly &mdash; but the net is the <strong>29.6 s</strong> I claimed:</p>
+    <table class="process-table">
+      <thead><tr><th>Op</th><th>Operation at F01</th><th>Walk before</th><th>Walk after</th><th>Saved</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td>Take first sub-assembly to the FPDU</td><td>3.2 s</td><td>5.0 s</td><td style="color:var(--danger)">−1.8 s</td></tr>
+        <tr><td>07</td><td>Assemble Electronic Control Unit + 2 bolts <span style="color:var(--text-muted)">(on the dolly)</span></td><td>6.4 s</td><td>0 s</td><td style="color:var(--success)">+6.4 s</td></tr>
+        <tr><td>12</td><td>Assemble FR-PDU upper bracket <span style="color:var(--text-muted)">(on the dolly)</span></td><td>6.4 s</td><td>0 s</td><td style="color:var(--success)">+6.4 s</td></tr>
+        <tr><td>16</td><td>Mount Power Drive Unit to bracket <span style="color:var(--text-muted)">(device-assisted lift)</span></td><td>4.0 s</td><td>8.0 s</td><td style="color:var(--danger)">−4.0 s</td></tr>
+        <tr><td>28</td><td>Assemble HV cable / compressor to FPDU <span style="color:var(--text-muted)">(DC tool on dolly)</span></td><td>6.4 s</td><td>0 s</td><td style="color:var(--success)">+6.4 s</td></tr>
+        <tr><td>29</td><td>Assemble generator assembly to FPDU <span style="color:var(--text-muted)">(DC tool on dolly)</span></td><td>6.4 s</td><td>0 s</td><td style="color:var(--success)">+6.4 s</td></tr>
+        <tr><td>38</td><td>Lift battery from rack into battery box <span style="color:var(--text-muted)">(device returns, no wheel-tool)</span></td><td>8.0 s</td><td>6.2 s</td><td style="color:var(--success)">+1.8 s</td></tr>
+        <tr><td>46</td><td>Assemble FR-deck garnish, 3 clips <span style="color:var(--text-muted)">(no wheel-tool return trip)</span></td><td>8.0 s</td><td>0 s</td><td style="color:var(--success)">+8.0 s</td></tr>
+        <tr class="sel"><td colspan="2"><strong>Net walk time removed from the F01 cycle</strong></td><td><strong>48.8 s</strong></td><td><strong>19.2 s</strong></td><td><span class="win">+29.6 s</span></td></tr>
+      </tbody>
+    </table>
+
     <h3 class="content-h3">Productivity · <em>Before → After</em></h3>
     <p class="content-p">The consolidated productivity summary the project was judged on: every line moved from a manual baseline to an assist-device outcome.</p>
     <table class="process-table">
@@ -634,6 +810,12 @@
     <p class="content-p">
       This project planted the foundation for everything I do now in ERP consulting: <strong>cross-functional requirements gathering, vendor RFQ management, structured evaluation frameworks (SQCDE → today's gap analysis), and rigorous quality verification (FMEA → today's UAT defect management)</strong>. The SAP exposure (even as end-user) gave me real intuition for how procurement workflows operate in a production environment, which directly informs my current SAP S/4HANA learning path.
     </p>
+
+    <span class="p5-src">◆ One-page recap · MMTh final presentation 2020</span>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/Project%20Summary.png" alt="One-page summary of the FPDU Assist Device project: background, productivity before and after, learning adoption and the Best Achievement Award" loading="lazy">
+      <figcaption><b>Project on one page</b> · background → design → procurement → result · Best Achievement Award, MMTh 2020</figcaption>
+    </figure>
 
   </div>
 </section>
