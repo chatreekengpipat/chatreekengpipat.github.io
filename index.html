@@ -147,7 +147,20 @@
     .jp-node:hover .jp-dot{transform:translateX(-50%) scale(1.18)}
     .jp-node.is-now .jp-body{margin-top:0}
   }
-  @media (prefers-reduced-motion: reduce){.jp-dot{transition:none}}
+  /* journey logos + clickable cards */
+  .jp-logo{width:58px;height:58px;border-radius:15px;object-fit:contain;background:#fff;
+    border:1px solid var(--border);padding:7px;margin:0 auto .7rem;display:block;
+    box-shadow:var(--shadow-sm);transition:transform .3s var(--ease-smooth),box-shadow .3s var(--ease-smooth),border-color .3s var(--ease-smooth)}
+  a.jp-node{text-decoration:none;color:inherit;cursor:pointer;display:block}
+  a.jp-node:hover .jp-logo{transform:translateY(-4px) scale(1.05);box-shadow:0 12px 26px -8px var(--glow-color);border-color:var(--accent)}
+  a.jp-node:hover .jp-org{color:var(--accent)}
+  .jp-org{transition:color .25s var(--ease-smooth)}
+  .jp-go{display:block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;letter-spacing:.05em;
+    color:var(--accent);margin-top:.5rem;opacity:.78;transition:opacity .25s var(--ease-smooth),transform .25s var(--ease-smooth)}
+  a.jp-node:hover .jp-go{opacity:1;transform:translateX(2px)}
+  a.jp-node:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:12px}
+  @media(max-width:860px){ .jp-logo{margin-left:0;margin-right:0} .jp-go{opacity:1;transform:none} }
+  @media (prefers-reduced-motion: reduce){.jp-dot{transition:none} a.jp-node:hover .jp-logo{transform:none}}
 </style>
 <section class="journey" aria-label="Career journey">
   <div class="section-header">
@@ -156,49 +169,60 @@
   </div>
   <div class="jp">
     <div class="jp-rail"></div>
-    <div class="jp-node">
+    <a class="jp-node" href="#education">
       <span class="jp-dot"></span>
       <div class="jp-body">
+        <img class="jp-logo" src="Workplace/ChulaEngineering.png" alt="Chulalongkorn University Faculty of Engineering logo" loading="lazy">
         <span class="jp-kind">B.Eng · Honors</span>
         <h3 class="jp-org">Chulalongkorn</h3>
         <p class="jp-ctx">Mechanical Engineering · GPA 3.40</p>
+        <span class="jp-go">View education →</span>
       </div>
-    </div>
-    <div class="jp-node">
+    </a>
+    <a class="jp-node" href="project5.html">
       <span class="jp-dot"></span>
       <div class="jp-body">
+        <img class="jp-logo" src="Workplace/MMTh.jpg" alt="Mitsubishi Motors Thailand logo" loading="lazy">
         <span class="jp-kind">Internship · 2020</span>
         <h3 class="jp-org">Mitsubishi Motors</h3>
         <p class="jp-ctx">FPDU assist device · PHEV line · Best Achievement Award</p>
+        <span class="jp-go">View project →</span>
       </div>
-    </div>
-    <div class="jp-node">
+    </a>
+    <a class="jp-node" href="muvmi.html">
       <span class="jp-dot"></span>
       <div class="jp-body">
+        <img class="jp-logo" src="Workplace/MUVMI.jpg" alt="MUVMI electric tuk-tuk logo" loading="lazy">
         <span class="jp-kind">Extra Project</span>
         <h3 class="jp-org">MUVMI</h3>
         <p class="jp-ctx">EV regen-brake software &amp; ergonomics</p>
+        <span class="jp-go">View project →</span>
       </div>
-    </div>
-    <div class="jp-node">
+    </a>
+    <a class="jp-node" href="senior-project.html">
       <span class="jp-dot"></span>
       <div class="jp-body">
+        <img class="jp-logo" src="Workplace/ChulaSmartMobility.png" alt="CU Smart Mobility research centre logo" loading="lazy">
         <span class="jp-kind">Senior Project · AI</span>
         <h3 class="jp-org">CU Smart Mobility</h3>
         <p class="jp-ctx">LiDAR autonomous driving (DDPG) research center</p>
+        <span class="jp-go">View project →</span>
       </div>
-    </div>
-    <div class="jp-node">
+    </a>
+    <a class="jp-node" href="#projects">
       <span class="jp-dot"></span>
       <div class="jp-body">
+        <img class="jp-logo" src="Workplace/Learn%20Balance.jpg" alt="Learn Balance Group logo" loading="lazy">
         <span class="jp-kind">ERP Consultant · 2023–26</span>
         <h3 class="jp-org">Learn Balance</h3>
         <p class="jp-ctx">4 live XeerSoft go-lives · a top-3 largest education group in Thailand</p>
+        <span class="jp-go">View 4 projects →</span>
       </div>
-    </div>
+    </a>
     <div class="jp-node is-now">
       <span class="jp-dot"></span>
       <div class="jp-body">
+        <img class="jp-logo" src="Workplace/Accenture.png" alt="Accenture logo" loading="lazy">
         <span class="jp-badge">Incoming</span>
         <span class="jp-kind">SAP Consultant</span>
         <h3 class="jp-org">Accenture</h3>
