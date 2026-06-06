@@ -293,15 +293,15 @@
     </table>
 
     <span class="p5-src">◆ From my MMTh final presentation · 2020</span>
-    <figure class="p5-slide">
+    <figure class="p5-slide p5-wide">
       <img src="MMTh%20Photos/Design%20Phase%20Assist%20Device.png" alt="Design phase slide showing all eight assist-device concepts: air pulley dolly, mechanical arm dolly, air cylinder dolly, hydraulic dolly, KBK rail two I-beam, KBK rail cantilever beam, mechanical arm KBK rail, and spring balancer" loading="lazy">
       <figcaption><b>Design phase</b> · 8 assist-device concepts generated, then evaluated by SQCDE</figcaption>
     </figure>
-    <figure class="p5-slide">
+    <figure class="p5-slide p5-wide">
       <img src="MMTh%20Photos/SQCDE_Choosing%20Design%20for%20FPDU%20Assist%20Device.png" alt="SQCDE compare sheet with keep-comments from PE Assembly, VP Assembly, Maintenance and Safety; Idea 3 (C-Shape Air Cylinder Lifting Dolly) selected with the top total score of 17" loading="lazy">
       <figcaption><b>SQCDE compare sheet</b> · cross-functional comments from PE Assembly, VP Assembly, Maintenance &amp; Safety → Idea 3 wins (17)</figcaption>
     </figure>
-    <figure class="p5-slide">
+    <figure class="p5-slide p5-wide">
       <img src="MMTh%20Photos/Transforming%20Design.png" alt="My MMTh concept design transformed into a 3D-maker concept of the FPDU assist device, with the procurement next-action steps and overall schedule" loading="lazy">
       <figcaption><b>Concept → maker design</b> · my MMTh concept handed to the 3D-design maker</figcaption>
     </figure>
@@ -325,8 +325,15 @@
       .p5-speccell .v small{font-size:.82rem;color:var(--text-muted);font-weight:600}
       .p5-speccell .l{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-top:.4rem}
       .p5-speccell .d{font-size:.76rem;color:var(--text-muted);line-height:1.45;margin-top:.3rem}
-      .p5-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0}
+      /* breakout: let document/detail images sit wider than the text column so they read clearly */
+      .p5-wide{width:min(1180px,94vw);margin-left:50%;transform:translateX(-50%)}
+      .p5-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin:1.6rem 0;
+        width:min(1180px,94vw);margin-left:50%;transform:translateX(-50%)}
       .p5-gallery .p5-slide{margin:0}
+      @media(max-width:760px){
+        .p5-wide{width:auto;margin-left:0;transform:none}
+        .p5-gallery{grid-template-columns:1fr;width:auto;margin-left:0;transform:none}
+      }
     </style>
 
     <h3 class="content-h3">Engineering <em>Design &amp; Analysis</em></h3>
