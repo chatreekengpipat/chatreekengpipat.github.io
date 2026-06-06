@@ -78,13 +78,13 @@
 </h1>
     <div class="hero-v7-tag-row" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.9rem;">
       <div class="hero-v7-tag" style="margin:0;"><span>Learn Balance (XeerSoft Cloud ERP)</span></div>
-      <div class="hero-v7-tag" style="margin:0;"><span>↗ Accenture (SAP)</span></div>
+      <div class="hero-v7-tag" style="margin:0;"><span>↗ Accenture (SAP FI/CO)</span></div>
     </div>
     <p class="hero-v7-desc balanced-text" lang="en">
-    Mechanical Engineer turned ERP Implementation Consultant, now an SAP Consultant at Accenture. 3+ years owning end-to-end implementations on XeerSoft Cloud ERP across 4 live projects: configuration, master data, UAT, and Go-live, while serving as embedded Business Analyst (FSD · Use Case · User Story). Prior hands-on SAP procurement experience at Mitsubishi Motors Thailand. Best Achievement Award winner.
+    Mechanical Engineer turned ERP Implementation Consultant, now an SAP Functional Consultant (FI/CO) at Accenture. 3+ years owning end-to-end implementations on XeerSoft Cloud ERP across 4 live projects: configuration, master data, UAT, and Go-live, while serving as embedded Business Analyst (FSD · Use Case · User Story). Prior hands-on SAP procurement experience at Mitsubishi Motors Thailand. Best Achievement Award winner.
     </p>
     <div class="hero-v7-meta">
-      <span class="hero-v7-meta-pill"><span class="icon">★</span> Accenture · SAP Consultant</span>
+      <span class="hero-v7-meta-pill"><span class="icon">★</span> Accenture · SAP FI/CO Consultant</span>
       <span class="hero-v7-meta-pill"><span class="icon">◧</span> 4 Cloud ERP Go-lives · Learn Balance · 3+ yrs</span>
       <span class="hero-v7-meta-pill"><span class="icon">⚡</span> MMTh · Best Achievement Internship Project Award</span>
       <span class="hero-v7-meta-pill"><span class="icon">✦</span> AI Deep Learning · LiDAR Autonomous Driving</span>
@@ -104,7 +104,7 @@
       <div class="hero-photo-badge">
         <div>
           <div class="hero-photo-badge-name">Chatree Kengpipat</div>
-          <div class="hero-photo-badge-role">SAP Consultant · Accenture</div>
+          <div class="hero-photo-badge-role">SAP Functional Consultant (FI/CO) · Accenture</div>
         </div>
         <div class="hero-photo-badge-icon">CK</div>
       </div>
@@ -128,7 +128,7 @@
   .jp-node:hover .jp-dot{transform:translateX(-50%) scale(1.18)}
   .jp-kind{display:block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.05em;
     text-transform:uppercase;color:var(--text-muted);line-height:1.3}
-  .jp-org{font-size:1.02rem;font-weight:800;letter-spacing:-.01em;color:var(--text);margin:.32rem 0 .25rem;line-height:1.15;text-wrap:balance}
+  .jp-org{font-size:1.02rem;font-weight:800;letter-spacing:-.01em;color:var(--text);margin:.32rem 0 .25rem;line-height:1.15;text-wrap:balance;transition:color .25s var(--ease-smooth)}
   .jp-ctx{font-size:.77rem;color:var(--text-muted);line-height:1.45;margin:0;text-wrap:pretty}
   /* destination node */
   .jp-node.is-now .jp-dot{width:16px;height:16px;top:1px;background:var(--accent);border-color:var(--accent);
@@ -138,6 +138,13 @@
   .jp-node.is-now .jp-kind{color:var(--accent)}
   .jp-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;letter-spacing:.08em;
     text-transform:uppercase;color:var(--bg);background:var(--accent);border-radius:100px;padding:.18rem .55rem;margin-bottom:.45rem}
+  @media (prefers-reduced-motion: no-preference){
+    .jp-node.is-now .jp-dot{animation:jpPulse 2.6s ease-in-out infinite}
+    @keyframes jpPulse{
+      0%,100%{box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 20%,transparent),0 0 16px var(--glow-color)}
+      50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--accent) 8%,transparent),0 0 28px var(--glow-color)}
+    }
+  }
   @media(max-width:860px){
     .journey{padding:3rem 1.4rem .5rem}
     .jp{grid-template-columns:1fr;gap:0;margin-top:1.6rem;padding-left:.4rem}
@@ -166,7 +173,7 @@
 <section class="journey" aria-label="Career journey">
   <div class="section-header">
     <h2 class="section-title">My tech <em>journey</em></h2>
-    <span class="section-subtitle">Mechanical engineering → Cloud ERP Implementing → SAP consulting</span>
+    <span class="section-subtitle">Mechanical engineering → Cloud ERP implementation → SAP FI/CO consulting</span>
   </div>
   <div class="jp">
     <div class="jp-rail"></div>
@@ -225,9 +232,9 @@
       <div class="jp-body">
         <img class="jp-logo" src="Workplace/Accenture.png" alt="Accenture logo" loading="lazy">
         <span class="jp-badge">Now</span>
-        <span class="jp-kind">SAP Consultant</span>
+        <span class="jp-kind">SAP Functional · FI/CO</span>
         <h3 class="jp-org">Accenture</h3>
-        <p class="jp-ctx">SAP S/4HANA delivery · the world's #1 technology &amp; consulting company</p>
+        <p class="jp-ctx">SAP S/4HANA FI/CO delivery · the world's #1 technology &amp; consulting company</p>
       </div>
     </div>
   </div>
@@ -455,7 +462,7 @@
         Prior hands-on exposure to <strong>SAP in a live automotive manufacturing environment</strong> at Mitsubishi Motors Thailand, where I operated SAP as an end-user for procurement and asset management of my <strong>FPDU Assist Device engineering project</strong>, which won the <strong>Best Achievement Award</strong> from the full intern cohort.
       </p>
       <p>
-        That SAP track is now my current chapter: I am an <strong>SAP Consultant at Accenture</strong>, working with the delivery team on a <strong>SAP S/4HANA</strong> programme for <strong>one of Thailand's largest national energy enterprises</strong>, while completing my S/4HANA certifications (C_TS460 SD · C_TS462 MM).
+        That SAP track is now my current chapter: I am an <strong>SAP Functional Consultant (FI/CO)</strong> at Accenture, working with the delivery team on a <strong>SAP S/4HANA</strong> programme for <strong>one of Thailand's largest national energy enterprises</strong> &mdash; configuring the <strong>Finance &amp; Controlling (FI/CO)</strong> modules on a foundation of hands-on <strong>MM / procurement</strong> experience &mdash; while completing my S/4HANA <strong>FI/CO certifications (C_TS4FI · C_TS4CO)</strong>.
       </p>
 
       <div class="about-quote-v7">
@@ -469,7 +476,7 @@
         <span class="focus-tag-v7">UAT Leadership</span>
         <span class="focus-tag-v7">Go-Live Cutover</span>
         <span class="focus-tag-v7">SAP Procurement (End-User)</span>
-        <span class="focus-tag-v7">SAP S/4HANA · Accenture</span>
+        <span class="focus-tag-v7">SAP S/4HANA FI/CO · Accenture</span>
       </div>
     </div>
 
@@ -480,7 +487,7 @@
         <img src="photos/newton-1.jpg" alt="Chatree Kengpipat at Newton Sixth Form">
         <div class="about-photo-badge-v7">
           <div class="name">Chatree Kengpipat</div>
-          <div class="role">SAP Consultant · Accenture</div>
+          <div class="role">SAP Functional Consultant (FI/CO) · Accenture</div>
         </div>
       </div>
     </div>
@@ -1109,6 +1116,15 @@
 <section id="education">
   <div class="section-header">
     <h2 class="section-title">Education <em>& certifications</em></h2>
+  </div>
+
+  <div class="edu-card">
+    <div>
+      <div class="edu-school">Accenture · SAP Delivery</div>
+      <div class="edu-degree">SAP Functional Consultant · FI/CO</div>
+      <div class="edu-detail">Cleared the technical interview for the SAP <strong>Finance &amp; Controlling (FI/CO)</strong> track. Currently studying the <strong>S/4HANA FI/CO certifications</strong> (C_TS4FI · C_TS4CO), building on a hands-on <strong>MM / procurement</strong> foundation from my ERP and manufacturing work.</div>
+    </div>
+    <div class="edu-badge">SAP<br>FI/CO</div>
   </div>
 
   <a href="senior-project.html" class="edu-card" style="text-decoration: none; color: inherit;">

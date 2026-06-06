@@ -156,6 +156,16 @@
 .mv-tool p b{color:var(--text)}
 @media(max-width:680px){.mv-tools{grid-template-columns:1fr}}
 @media(max-width:640px){.mv-week{grid-template-columns:1fr 1fr}.mv-row{grid-template-columns:120px 1fr}.mv-bom-rows{grid-template-columns:1fr}}
+/* closing summary film */
+.mv-film{margin:1.6rem 0 .4rem;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);box-shadow:0 30px 60px -42px var(--glow-strong),var(--shadow-md);transition:transform .4s var(--ease-smooth),box-shadow .4s var(--ease-smooth)}
+.mv-film:hover{transform:translateY(-3px);box-shadow:0 42px 84px -46px var(--glow-strong)}
+.mv-film-stage{position:relative;aspect-ratio:16/9;background:radial-gradient(circle at center,#0b1220 0%,#05080f 100%)}
+.mv-film-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;background:transparent}
+.mv-film figcaption{display:flex;flex-direction:column;gap:.18rem;padding:.85rem 1.15rem;border-top:1px solid var(--border);background:var(--surface-2)}
+.mv-film-cap-t{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--text-strong);font-weight:700;letter-spacing:.02em}
+.mv-film-cap-s{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text-muted);line-height:1.5}
+.mv-film-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin:.95rem 0 .2rem}
+.mv-film-tags span{font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--accent);background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:100px;padding:.32rem .8rem;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -803,6 +813,39 @@
       <span class="module-tag">Business Model Canvas</span>
     </div>
 
+  </div>
+</section>
+
+<!-- PROJECT SUMMARY · FILM -->
+<section style="padding: 1rem 4rem 3.5rem;">
+  <div class="content-section">
+    <div class="mv-phase">Project Summary <span>· the full story on film</span></div>
+    <h3 class="content-h3">MUVMI, <em>in Motion</em></h3>
+    <p class="content-p">
+      Eight months, two engineering tracks, one in-service electric tuk-tuk. This closing film walks through the whole project: the <strong>regenerative-brake software</strong> I co-led (analog angular sensor, speed-banded regen functions, MATLAB Simulink), the <strong>driver-ergonomics hardware</strong> the team built and installed, and the <strong>live on-vehicle testing at I'm Park</strong> that logged the voltage and proved the energy recovery. A roughly 660 THB build, delivered by a five-person team I led, and mentor-voted Top 3 of 16+ mechanical-design projects.
+    </p>
+
+    <figure class="mv-film">
+      <div class="mv-film-stage">
+        <video class="mv-film-video" controls preload="metadata" playsinline
+               poster="MUVMI%20Photos/My%20Group%20(Main%20Picture).png">
+          <source src="MUVMI%20Photos/Video/Video%20MUVMI%20Project.mp4" type="video/mp4">
+          Your browser does not support embedded video.
+          <a href="MUVMI%20Photos/Video/Video%20MUVMI%20Project.mp4">Download the MUVMI project film</a>.
+        </video>
+      </div>
+      <figcaption>
+        <span class="mv-film-cap-t">MUVMI Project · Summary Film</span>
+        <span class="mv-film-cap-s">Regen-brake software · ergonomics hardware · on-vehicle test at I'm Park · 5 Inw Group</span>
+      </figcaption>
+    </figure>
+
+    <div class="mv-film-tags">
+      <span>+220.72% regen energy @ 10 km/h</span>
+      <span>~660 THB build</span>
+      <span>Top 3 of 16+ projects</span>
+      <span>5-person team · I led</span>
+    </div>
   </div>
 </section>
 
