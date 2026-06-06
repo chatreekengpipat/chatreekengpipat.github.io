@@ -325,14 +325,16 @@
       .p5-speccell .v small{font-size:.82rem;color:var(--text-muted);font-weight:600}
       .p5-speccell .l{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-top:.4rem}
       .p5-speccell .d{font-size:.76rem;color:var(--text-muted);line-height:1.45;margin-top:.3rem}
-      /* breakout: let document/detail images sit wider than the text column so they read clearly */
-      .p5-wide{width:min(1180px,94vw);margin-left:50%;transform:translateX(-50%)}
-      .p5-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin:1.6rem 0;
-        width:min(1180px,94vw);margin-left:50%;transform:translateX(-50%)}
+      /* breakout: let document/detail images sit wider than the text column, centred via a
+         negative margin (robust — no transform tricks that can drift off-centre). */
+      .p5-wide{width:min(1180px,94vw);margin-left:calc((100% - min(1180px,94vw)) / 2);margin-right:0}
+      .p5-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;
+        margin-top:1.6rem;margin-bottom:1.6rem;
+        width:min(1180px,94vw);margin-left:calc((100% - min(1180px,94vw)) / 2)}
       .p5-gallery .p5-slide{margin:0}
       @media(max-width:760px){
-        .p5-wide{width:auto;margin-left:0;transform:none}
-        .p5-gallery{grid-template-columns:1fr;width:auto;margin-left:0;transform:none}
+        .p5-wide{width:auto;margin-left:0}
+        .p5-gallery{grid-template-columns:1fr;width:auto;margin-left:0}
       }
     </style>
 
@@ -745,10 +747,15 @@
       The insight: the old process forced the operator to <strong>repeatedly walk to fetch and return a wheel-tool dolly</strong> carrying sub-parts to the FPDU. Because the new assist device <strong>travels together with the FPDU</strong>, those sub-assemblies ride along on the device &mdash; so the walking simply disappears on the affected operations.
     </p>
     <span class="p5-src">◆ Standardized-work time study · MMTh 2020</span>
-    <figure class="p5-slide">
-      <img src="MMTh%20Photos/Overall%20Time%20in%20Assembling%20FPDU.png" alt="Standardized-work time analysis of the FPDU assembly operations, comparing total operation time before and after the assist device with the 29.6-second reduction" loading="lazy">
-      <figcaption><b>Standardized-work analysis</b> · per-operation walk / work / self-check time · 2,118 → 2,088.4 s</figcaption>
-    </figure>
+    <p class="content-p">At the cycle level the result is clean: <strong>every second of the saving came from walk time</strong>. The work and self-check time were unchanged, so the total fell by exactly the walk time removed.</p>
+    <table class="process-table">
+      <thead><tr><th>Time component · F01 cycle</th><th>Before</th><th>After</th><th>Saved</th></tr></thead>
+      <tbody>
+        <tr><td>Walk time · affected operations</td><td>48.8 s</td><td>19.2 s</td><td style="color:var(--success)">+29.6 s</td></tr>
+        <tr><td>Work + self-check time</td><td colspan="2" style="text-align:center;color:var(--text-muted)">unchanged</td><td style="color:var(--text-muted)">0 s</td></tr>
+        <tr class="sel"><td><strong>Total cycle time · F01</strong></td><td><strong>2,118 s</strong></td><td><strong>2,088.4 s</strong></td><td><span class="win">+29.6 s</span></td></tr>
+      </tbody>
+    </table>
     <p class="content-p">The walk time removed, traced operation by operation. Two steps cost a little extra device-handling time &mdash; shown honestly &mdash; but the net is the <strong>29.6 s</strong> I claimed:</p>
     <table class="process-table">
       <thead><tr><th>Op</th><th>Operation at F01</th><th>Walk before</th><th>Walk after</th><th>Saved</th></tr></thead>
