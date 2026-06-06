@@ -151,9 +151,11 @@
       .p5-slide img{width:100%;height:auto;display:block;background:#fff}
       .p5-slide figcaption{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);padding:.7rem .95rem;border-top:1px solid var(--border);background:var(--surface-2);letter-spacing:.02em;line-height:1.5}
       .p5-slide figcaption b{color:var(--text)}
-      .p5-slides2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+      .p5-slides2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;align-items:start}
       @media(max-width:760px){.p5-slides2{grid-template-columns:1fr}}
       .p5-slides2 .p5-slide{margin:0}
+      /* portrait / tall reference images: cap width and centre so they don't dominate */
+      .p5-slide.tall{max-width:580px;margin-left:auto;margin-right:auto}
       .p5-src{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;
         letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);
         border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:100px;padding:.3rem .75rem;font-weight:700}
@@ -295,16 +297,14 @@
       <img src="MMTh%20Photos/Design%20Phase%20Assist%20Device.png" alt="Design phase slide showing all eight assist-device concepts: air pulley dolly, mechanical arm dolly, air cylinder dolly, hydraulic dolly, KBK rail two I-beam, KBK rail cantilever beam, mechanical arm KBK rail, and spring balancer" loading="lazy">
       <figcaption><b>Design phase</b> · 8 assist-device concepts generated, then evaluated by SQCDE</figcaption>
     </figure>
-    <div class="p5-slides2">
-      <figure class="p5-slide">
-        <img src="MMTh%20Photos/SQCDE_Choosing%20Design%20for%20FPDU%20Assist%20Device.png" alt="SQCDE compare sheet with keep-comments from PE Assembly, VP Assembly, Maintenance and Safety; Idea 3 (C-Shape Air Cylinder Lifting Dolly) selected with the top total score of 17" loading="lazy">
-        <figcaption><b>SQCDE compare sheet</b> · cross-functional comments → Idea 3 wins (17)</figcaption>
-      </figure>
-      <figure class="p5-slide">
-        <img src="MMTh%20Photos/Transforming%20Design.png" alt="My MMTh concept design transformed into a 3D-maker concept of the FPDU assist device, with the procurement next-action steps and overall schedule" loading="lazy">
-        <figcaption><b>Concept → maker design</b> · my MMTh concept handed to the 3D-design maker</figcaption>
-      </figure>
-    </div>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/SQCDE_Choosing%20Design%20for%20FPDU%20Assist%20Device.png" alt="SQCDE compare sheet with keep-comments from PE Assembly, VP Assembly, Maintenance and Safety; Idea 3 (C-Shape Air Cylinder Lifting Dolly) selected with the top total score of 17" loading="lazy">
+      <figcaption><b>SQCDE compare sheet</b> · cross-functional comments from PE Assembly, VP Assembly, Maintenance &amp; Safety → Idea 3 wins (17)</figcaption>
+    </figure>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/Transforming%20Design.png" alt="My MMTh concept design transformed into a 3D-maker concept of the FPDU assist device, with the procurement next-action steps and overall schedule" loading="lazy">
+      <figcaption><b>Concept → maker design</b> · my MMTh concept handed to the 3D-design maker</figcaption>
+    </figure>
 
     <style id="p5-eng">
       .p5-flow{display:grid;gap:.5rem;margin:1.4rem 0}
@@ -338,16 +338,14 @@
       The trigger was an <strong>ergonomic limit</strong>: the FPDU weighs <strong>16.5 kg</strong>, above MMC's <strong>15 kg</strong> single-person manual-lifting recommendation. I verified the manual-handling risk against the standard before committing to a powered assist device.
     </p>
     <span class="p5-src">◆ Engineering documents · MMTh 2020</span>
-    <div class="p5-slides2">
-      <figure class="p5-slide">
-        <img src="MMTh%20Photos/FPDU%20Drawing.png" alt="Engineering drawing of the FPDU (Front Power Drive Unit), the 16.5 kg part assembled at the F01 station" loading="lazy">
-        <figcaption><b>FPDU</b> · Front Power Drive Unit · the 16.5 kg part lifted at F01</figcaption>
-      </figure>
-      <figure class="p5-slide">
-        <img src="MMTh%20Photos/wisha-lifting-calculator-1.png" alt="WISHA lifting-risk calculator showing the manual-handling assessment for the 16.5 kg FPDU against the recommended limit" loading="lazy">
-        <figcaption><b>Manual-handling check</b> · 16.5 kg vs the 15 kg lifting limit</figcaption>
-      </figure>
-    </div>
+    <figure class="p5-slide">
+      <img src="MMTh%20Photos/FPDU%20Drawing.png" alt="Engineering drawing of the FPDU (Front Power Drive Unit), the 16.5 kg part assembled at the F01 station" loading="lazy">
+      <figcaption><b>FPDU</b> · Front Power Drive Unit · the 16.5 kg part lifted at the F01 station</figcaption>
+    </figure>
+    <figure class="p5-slide tall">
+      <img src="MMTh%20Photos/wisha-lifting-calculator-1.png" alt="WISHA lifting-risk calculator showing the manual-handling assessment for the 16.5 kg FPDU against the recommended limit" loading="lazy">
+      <figcaption><b>Manual-handling check</b> · the 16.5 kg FPDU against the 15 kg lifting limit (WISHA calculator)</figcaption>
+    </figure>
 
     <p class="content-p">The device I specified, sized from the production basis and a structural safety factor:</p>
     <div class="p5-specgrid">
