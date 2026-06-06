@@ -429,6 +429,17 @@
 </section>
 
 <!-- ★ FEATURED AWARD PROJECT (Mitsubishi) -->
+<style id="award-styles">
+  .award-gallery{display:grid;grid-template-columns:1.5fr 1fr;gap:1rem;margin-top:1.1rem;align-items:start}
+  @media(max-width:680px){.award-gallery{grid-template-columns:1fr}}
+  .award-shot{margin:0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--surface);
+    transition:transform .35s var(--ease-smooth),box-shadow .35s var(--ease-smooth),border-color .35s var(--ease-smooth)}
+  .award-shot:hover{transform:translateY(-4px);box-shadow:0 22px 46px -28px var(--glow-color);border-color:var(--accent)}
+  .award-shot img{width:100%;height:auto;display:block}
+  .award-shot figcaption{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);
+    padding:.65rem .9rem;border-top:1px solid var(--border);background:var(--surface-2);letter-spacing:.02em;line-height:1.5}
+  .award-shot figcaption b{color:var(--text)}
+</style>
 <section id="featured-award" style="background: var(--surface-2);">
   <div class="section-header">
     <h2 class="section-title">Featured <em>achievement</em></h2>
@@ -446,6 +457,17 @@
     </div>
     <div class="award-arrow">→</div>
   </a>
+
+  <div class="award-gallery">
+    <figure class="award-shot">
+      <img src="MMTh%20Photos/award-ceremony.jpg" alt="Chatree Kengpipat receiving the MMTh Best Achievement Award, standing between the Mitsubishi Motors Thailand CEO and Chulalongkorn's Director of Engineering, 30 July 2020" loading="lazy">
+      <figcaption><b>Award ceremony</b> · with the Mitsubishi Motors CEO &amp; Chula's Director of Engineering · 30 Jul 2020</figcaption>
+    </figure>
+    <figure class="award-shot">
+      <img src="MMTh%20Photos/award-trophy.jpg" alt="The Best Achievement Award glass trophy: MMTh Talent Internship Program 2020, &quot;Ambition to Rise&quot;, awarded to Mr. Chatree Kengpipat" loading="lazy">
+      <figcaption><b>The trophy</b> · &ldquo;Ambition to Rise&rdquo; · Best Achievement Award</figcaption>
+    </figure>
+  </div>
 </section>
 
 <!-- ABOUT -->
