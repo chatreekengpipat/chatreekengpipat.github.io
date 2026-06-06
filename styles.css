@@ -160,6 +160,80 @@ nav {
 .nav-links a.nav-cta:hover,
 .nav-links a.nav-cta.active { background: var(--accent-hover); color: #fff; }
 
+/* ===== Projects dropdown (branched project menu, all pages) ===== */
+.nav-dd { position: relative; }
+.nav-dd-btn {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s;
+}
+.nav-dd:hover .nav-dd-btn,
+.nav-dd:focus-within .nav-dd-btn { color: var(--accent); background: var(--accent-bg); }
+.nav-dd-caret { font-size: 0.6em; transition: transform 0.25s var(--ease-smooth); }
+.nav-dd:hover .nav-dd-caret,
+.nav-dd:focus-within .nav-dd-caret { transform: rotate(180deg); }
+.nav-dd-panel {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  min-width: 340px;
+  max-width: 90vw;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth), visibility 0.2s;
+  z-index: 210;
+}
+.nav-dd:hover .nav-dd-panel,
+.nav-dd:focus-within .nav-dd-panel { opacity: 1; visibility: visible; transform: none; }
+.nav-dd-group { padding: 0.25rem 0; }
+.nav-dd-group + .nav-dd-group { border-top: 1px solid var(--border); margin-top: 0.2rem; padding-top: 0.45rem; }
+.nav-dd-head {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  padding: 0.15rem 0.7rem 0.3rem;
+}
+.nav-dd-panel a {
+  display: block;
+  padding: 0.42rem 0.7rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: background 0.15s, color 0.15s;
+}
+.nav-dd-panel a:hover { background: var(--accent-bg); color: var(--accent); }
+@media (max-width: 768px) {
+  .nav-dd { width: 100%; }
+  .nav-dd-btn { width: 100%; justify-content: space-between; font-size: 0.98rem; padding: 0.8rem 0.85rem; }
+  .nav-dd-panel {
+    position: static; opacity: 1; visibility: visible; transform: none;
+    min-width: 0; box-shadow: none; border: 0; background: transparent;
+    padding: 0.1rem 0 0.3rem 0.6rem; transition: none;
+  }
+  .nav-dd-panel a { font-size: 0.92rem; padding: 0.55rem 0.7rem; }
+}
+
 /* Hamburger is a real <button>, desktop-hidden; drawer chrome only exists on mobile. */
 .nav-hamburger { display: none; }
 .nav-drawer-head { display: none; }

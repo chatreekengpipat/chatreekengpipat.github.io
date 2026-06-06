@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=6">
 <script src="theme.js"></script>
 <script src="animation.js?v=4" defer></script>
 </head>
@@ -28,7 +28,30 @@
       <span class="nav-drawer-title">Menu</span>
       <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
     </li>
-    <li><a href="#projects">Projects</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel" role="menu">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
     <li><a href="#featured-award">Award</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#methodology">Method</a></li>
@@ -54,15 +77,15 @@
   <span class="ck-signature__line ck-signature__line--blue" data-text="KENGPIPAT">KENGPIPAT</span>
 </h1>
     <div class="hero-v7-tag">
-      <span>XeerSoft Cloud ERP</span>
+      <span>↗ Incoming · Accenture (SAP)</span>
     </div>
     <p class="hero-v7-desc balanced-text" lang="en">
-    Mechanical Engineer turned ERP Implementation Consultant. 3+ years owning end-to-end implementations on XeerSoft Cloud ERP across 4 live projects: configuration, master data, UAT, and Go-live, while serving as embedded Business Analyst (FSD · Use Case · User Story). Prior hands-on SAP procurement experience at Mitsubishi Motors Thailand. Best Achievement Award winner.
+    Mechanical Engineer turned ERP Implementation Consultant, joining Accenture as an SAP Consultant in July 2026. 3+ years owning end-to-end implementations on XeerSoft Cloud ERP across 4 live projects: configuration, master data, UAT, and Go-live, while serving as embedded Business Analyst (FSD · Use Case · User Story). Prior hands-on SAP procurement experience at Mitsubishi Motors Thailand. Best Achievement Award winner.
     </p>
     <div class="hero-v7-meta">
-      <span class="hero-v7-meta-pill"><span class="icon">★</span> 4 Live Projects</span>
-      <span class="hero-v7-meta-pill"><span class="icon">◧</span> SAP & XeerSoft</span>
-      <span class="hero-v7-meta-pill"><span class="icon">⚡</span> Award Winner</span>
+      <span class="hero-v7-meta-pill"><span class="icon">★</span> Joining Accenture · 2026</span>
+      <span class="hero-v7-meta-pill"><span class="icon">◧</span> 4 Live ERP Go-lives</span>
+      <span class="hero-v7-meta-pill"><span class="icon">⚡</span> Best Achievement Award</span>
     </div>
     <div class="hero-v7-cta">
       <a href="#projects" class="btn btn-primary">View Implementation Projects</a>
@@ -79,7 +102,7 @@
       <div class="hero-photo-badge">
         <div>
           <div class="hero-photo-badge-name">Chatree Kengpipat</div>
-          <div class="hero-photo-badge-role">ERP Consultant · LearnBalance Group · Bangkok</div>
+          <div class="hero-photo-badge-role">ERP Consultant · joining Accenture · 2026</div>
         </div>
         <div class="hero-photo-badge-icon">CK</div>
       </div>
@@ -88,6 +111,99 @@
   <div class="scroll-hint">
     Scroll
     <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- JOURNEY PATH -->
+<style id="journey-styles">
+  .journey{padding:4rem 2rem 1rem;max-width:1280px;margin:0 auto}
+  .jp{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:.4rem;align-items:start;margin-top:2.4rem}
+  .jp-rail{position:absolute;top:8px;left:calc(100%/12);right:calc(100%/12);height:2px;z-index:0;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 28%,var(--border)),var(--accent))}
+  .jp-node{position:relative;z-index:1;text-align:center;padding:2.15rem .55rem 0}
+  .jp-dot{position:absolute;top:3px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--accent);z-index:2;transition:transform .3s var(--ease-smooth)}
+  .jp-node:hover .jp-dot{transform:translateX(-50%) scale(1.18)}
+  .jp-kind{display:block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--text-muted);line-height:1.3}
+  .jp-org{font-size:1.02rem;font-weight:800;letter-spacing:-.01em;color:var(--text);margin:.32rem 0 .25rem;line-height:1.15;text-wrap:balance}
+  .jp-ctx{font-size:.77rem;color:var(--text-muted);line-height:1.45;margin:0;text-wrap:pretty}
+  /* destination node */
+  .jp-node.is-now .jp-dot{width:16px;height:16px;top:1px;background:var(--accent);border-color:var(--accent);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 20%,transparent),0 0 18px var(--glow-color)}
+  .jp-node.is-now .jp-body{background:color-mix(in srgb,var(--accent) 7%,transparent);
+    border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:12px;padding:.85rem .7rem;margin-top:-.35rem}
+  .jp-node.is-now .jp-kind{color:var(--accent)}
+  .jp-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--bg);background:var(--accent);border-radius:100px;padding:.18rem .55rem;margin-bottom:.45rem}
+  @media(max-width:860px){
+    .journey{padding:3rem 1.4rem .5rem}
+    .jp{grid-template-columns:1fr;gap:0;margin-top:1.6rem;padding-left:.4rem}
+    .jp-rail{top:.6rem;bottom:1.6rem;left:9px;right:auto;width:2px;height:auto;
+      background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 28%,var(--border)),var(--accent))}
+    .jp-node{text-align:left;padding:.35rem 0 1.5rem 2.3rem}
+    .jp-dot{top:.55rem;left:9px}
+    .jp-node:hover .jp-dot{transform:translateX(-50%) scale(1.18)}
+    .jp-node.is-now .jp-body{margin-top:0}
+  }
+  @media (prefers-reduced-motion: reduce){.jp-dot{transition:none}}
+</style>
+<section class="journey" aria-label="Career journey">
+  <div class="section-header">
+    <h2 class="section-title">The <em>path</em> here</h2>
+    <span class="section-subtitle">Mechanical engineering → ERP delivery → SAP consulting</span>
+  </div>
+  <div class="jp">
+    <div class="jp-rail"></div>
+    <div class="jp-node">
+      <span class="jp-dot"></span>
+      <div class="jp-body">
+        <span class="jp-kind">B.Eng · Honors</span>
+        <h3 class="jp-org">Chulalongkorn</h3>
+        <p class="jp-ctx">Mechanical Engineering · GPA 3.40</p>
+      </div>
+    </div>
+    <div class="jp-node">
+      <span class="jp-dot"></span>
+      <div class="jp-body">
+        <span class="jp-kind">Internship · 2020</span>
+        <h3 class="jp-org">Mitsubishi Motors</h3>
+        <p class="jp-ctx">FPDU assist device · PHEV line · Best Achievement Award</p>
+      </div>
+    </div>
+    <div class="jp-node">
+      <span class="jp-dot"></span>
+      <div class="jp-body">
+        <span class="jp-kind">Extra Project</span>
+        <h3 class="jp-org">MUVMI</h3>
+        <p class="jp-ctx">EV regen-brake software &amp; ergonomics</p>
+      </div>
+    </div>
+    <div class="jp-node">
+      <span class="jp-dot"></span>
+      <div class="jp-body">
+        <span class="jp-kind">Senior Project · AI</span>
+        <h3 class="jp-org">CU Smart Mobility</h3>
+        <p class="jp-ctx">LiDAR autonomous driving (DDPG) research center</p>
+      </div>
+    </div>
+    <div class="jp-node">
+      <span class="jp-dot"></span>
+      <div class="jp-body">
+        <span class="jp-kind">ERP Consultant · 2023–26</span>
+        <h3 class="jp-org">Learn Balance</h3>
+        <p class="jp-ctx">4 live XeerSoft go-lives · a top-3 largest education group in Thailand</p>
+      </div>
+    </div>
+    <div class="jp-node is-now">
+      <span class="jp-dot"></span>
+      <div class="jp-body">
+        <span class="jp-badge">Incoming</span>
+        <span class="jp-kind">SAP Consultant</span>
+        <h3 class="jp-org">Accenture</h3>
+        <p class="jp-ctx">Joining July 2026 · global technology &amp; consulting leader</p>
+      </div>
+    </div>
   </div>
 </section>
 
