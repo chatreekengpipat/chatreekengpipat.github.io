@@ -138,6 +138,9 @@
   .jp-node.is-now .jp-kind{color:var(--accent)}
   .jp-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;letter-spacing:.08em;
     text-transform:uppercase;color:var(--bg);background:var(--accent);border-radius:100px;padding:.18rem .55rem;margin-bottom:.45rem}
+  /* NOW badge floating above the destination dot on the rail */
+  .jp-badge-top{position:absolute;top:-1.5rem;left:50%;transform:translateX(-50%);margin:0;z-index:3;
+    white-space:nowrap;box-shadow:0 5px 14px -5px var(--glow-color)}
   @media (prefers-reduced-motion: no-preference){
     .jp-node.is-now .jp-dot{animation:jpPulse 2.6s ease-in-out infinite}
     @keyframes jpPulse{
@@ -154,6 +157,7 @@
     .jp-dot{top:.55rem;left:9px}
     .jp-node:hover .jp-dot{transform:translateX(-50%) scale(1.18)}
     .jp-node.is-now .jp-body{margin-top:0}
+    .jp-badge-top{position:static;transform:none;margin:0 0 .35rem;box-shadow:none}
   }
   /* journey logos + clickable cards */
   .jp-logo{width:58px;height:58px;border-radius:15px;object-fit:contain;background:#fff;
@@ -173,7 +177,7 @@
 <section class="journey" aria-label="Career journey">
   <div class="section-header">
     <h2 class="section-title">My tech <em>journey</em></h2>
-    <span class="section-subtitle">Mechanical engineering → Cloud ERP implementation → SAP FI/CO consulting</span>
+    <span class="section-subtitle">Mechanical Engineering → Cloud ERP Implementation → SAP Functional (FI/CO) Consulting</span>
   </div>
   <div class="jp">
     <div class="jp-rail"></div>
@@ -228,10 +232,10 @@
       </div>
     </a>
     <div class="jp-node is-now">
+      <span class="jp-badge jp-badge-top">Now</span>
       <span class="jp-dot"></span>
       <div class="jp-body">
         <img class="jp-logo" src="workplace/Accenture.png" alt="Accenture logo" loading="lazy">
-        <span class="jp-badge">Now</span>
         <span class="jp-kind">SAP Functional · FI/CO</span>
         <h3 class="jp-org">Accenture</h3>
         <p class="jp-ctx">Full-time · SAP S/4HANA FI/CO delivery · the world's #1 technology &amp; consulting company</p>
