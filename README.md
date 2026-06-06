@@ -71,8 +71,8 @@ configuration design, UAT, and Power BI dashboards).
 ## Contact
 
 - **Live portfolio:** https://chatreekengpipat.github.io
-- **Email:** _add your email_
-- **LinkedIn:** _add your LinkedIn URL_
+- **Email:** _chatree.kengpipat@gmail.com_
+- **LinkedIn:** _https://www.linkedin.com/in/chatree-kengpipat-3929771a0/_
 
 ---
 

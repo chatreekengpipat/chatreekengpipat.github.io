@@ -1,0 +1,19 @@
+# --- AI / build tooling: internal scaffolding, not part of the published site ---
+.claude/
+.impeccable/
+PRODUCT.md
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.swp
+*~
+
+# --- Node (only if you ever add a build step) ---
+node_modules/
+npm-debug.log*
