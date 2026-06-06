@@ -170,6 +170,102 @@
       .p5-eval-4 .sc{color:var(--accent)}
       .p5-eval-quote{font-style:italic;color:var(--text);border-top:1px solid var(--border);padding-top:1.1rem;margin-top:.7rem;line-height:1.7}
       .p5-eval-quote .by{display:block;font-family:'JetBrains Mono',monospace;font-style:normal;font-size:.68rem;color:var(--text-muted);margin-top:.6rem;letter-spacing:.02em}
+
+      /* ============================================================
+         Built PM artifacts (recreated from MMTh 2020 presentation):
+         overall-schedule gantt, preparation-status tracker, cost
+         assessment — all real numbers, no raster screenshots.
+         ============================================================ */
+      .p5art{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:1.3rem 1.4rem;margin:1.6rem 0}
+      .p5art-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem 1rem;flex-wrap:wrap;margin-bottom:1.15rem}
+      .p5art-h{font-family:'JetBrains Mono',monospace;font-size:.69rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin:0;display:flex;align-items:center;gap:.55rem}
+      .p5art-h::before{content:"";width:6px;height:15px;border-radius:2px;background:var(--accent);flex:none}
+      .p5art-flag{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:100px;padding:.32rem .8rem;white-space:nowrap}
+      .p5art-flag.ok{color:var(--success);background:color-mix(in srgb,var(--success) 13%,transparent);border:1px solid color-mix(in srgb,var(--success) 34%,transparent)}
+      .p5art-flag.warn{color:var(--warning);background:color-mix(in srgb,var(--warning) 14%,transparent);border:1px solid color-mix(in srgb,var(--warning) 36%,transparent)}
+      .p5art-note{font-size:.82rem;color:var(--text-muted);line-height:1.65;margin:1.05rem 0 0;padding-top:.95rem;border-top:1px solid var(--border)}
+      .p5art-note b{color:var(--text)}
+
+      /* ---- Gantt ---- */
+      .p5gt-scroll{overflow-x:auto;margin:0 -.2rem}
+      .p5gt{min-width:680px;padding:0 .2rem}
+      .p5gt-months{display:grid;grid-template-columns:190px 1fr;gap:.6rem;align-items:end}
+      .p5gt-mhead{display:grid;grid-template-columns:repeat(4,1fr)}
+      .p5gt-mhead span{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text-muted);letter-spacing:.04em;border-left:1px solid var(--border);padding:.25rem 0}
+      .p5gt-mhead span:first-child{border-left:0}
+      .p5gt-body{position:relative;margin-top:.15rem}
+      .p5gt-row{display:grid;grid-template-columns:190px 1fr;gap:.6rem;align-items:center;margin:.32rem 0}
+      .p5gt-label{font-size:.79rem;color:var(--text);line-height:1.25}
+      .p5gt-label .n{font-family:'JetBrains Mono',monospace;color:var(--text-muted);font-size:.72rem;margin-right:.45rem}
+      .p5gt-track{position:relative;height:30px;border-radius:6px;background:repeating-linear-gradient(90deg,transparent,transparent calc(100%/var(--cols) - 1px),var(--border) calc(100%/var(--cols)))}
+      .p5gt-bar{position:absolute;top:5px;bottom:5px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+        font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;white-space:nowrap;overflow:hidden;
+        left:calc((var(--s) - 1)/var(--cols)*100%);width:calc(var(--l)/var(--cols)*100%);min-width:14px;transition:filter .3s var(--ease-smooth)}
+      .p5gt-bar:hover{filter:brightness(1.08)}
+      .p5gt-bar.done{background:var(--accent);color:#fff}
+      .p5gt-bar.plan{background:var(--accent-bg);border:1px dashed color-mix(in srgb,var(--accent) 55%,transparent);color:var(--accent)}
+      .p5gt-bar.mile{background:var(--success);color:#fff}
+      .p5gt-div{position:absolute;top:-.1rem;bottom:-.1rem;width:2px;background:var(--warning);z-index:3;
+        left:calc(190px + .6rem + (var(--at)/var(--cols))*(100% - 190px - .6rem))}
+      .p5gt-div span{position:absolute;top:-1.25rem;left:50%;transform:translateX(-50%);white-space:nowrap;
+        font-family:'JetBrains Mono',monospace;font-size:.57rem;font-weight:700;letter-spacing:.02em;color:var(--warning)}
+      .p5gt-pay{display:grid;grid-template-columns:190px 1fr;gap:.6rem;align-items:center;margin-top:.7rem}
+      .p5gt-pay-l{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);text-align:right;padding-right:.1rem}
+      .p5gt-pay-t{position:relative;height:24px}
+      .p5gt-chip{position:absolute;top:0;transform:translateX(-50%);left:calc((var(--at) - .5)/var(--cols)*100%);
+        font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7a4a00;background:var(--warning);border-radius:5px;padding:.22rem .5rem}
+      .p5gt-legend{display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;margin-top:1.05rem;font-size:.71rem;color:var(--text-muted)}
+      .p5gt-legend span{display:inline-flex;align-items:center;gap:.45rem}
+      .p5gt-legend i{width:16px;height:10px;border-radius:3px;flex:none}
+      .p5gt-legend i.done{background:var(--accent)}
+      .p5gt-legend i.plan{background:var(--accent-bg);border:1px dashed color-mix(in srgb,var(--accent) 55%,transparent)}
+      .p5gt-legend i.mile{background:var(--success)}
+      .p5gt-legend i.div{width:2px;height:13px;border-radius:0;background:var(--warning)}
+
+      /* ---- Preparation-status tracker ---- */
+      .p5pt-roll{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1.15rem}
+      @media(max-width:560px){.p5pt-roll{grid-template-columns:repeat(2,1fr)}}
+      .p5pt-stat{border:1px solid var(--border);border-radius:10px;background:var(--surface-2);padding:.7rem .8rem}
+      .p5pt-stat .v{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;line-height:1;color:var(--text)}
+      .p5pt-stat .l{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;letter-spacing:.01em}
+      .p5pt-stat.done .v{color:var(--success)}
+      .p5pt-stat.prog .v{color:var(--accent)}
+      .p5pt-stat.delay .v{color:var(--warning)}
+      .p5pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+      @media(max-width:720px){.p5pt-grid{grid-template-columns:1fr;gap:.6rem}}
+      .p5pt-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+      .p5pt-tbl th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);padding:.3rem .5rem;border-bottom:1px solid var(--border-strong,var(--border))}
+      .p5pt-tbl td{padding:.42rem .5rem;border-bottom:1px solid var(--border);vertical-align:middle}
+      .p5pt-tbl tr:last-child td{border-bottom:0}
+      .p5pt-tbl .ix{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-muted);width:1.6rem}
+      .p5pt-tbl .jd{color:var(--text);line-height:1.25}
+      .p5pt-tbl tr.is-delay td{background:color-mix(in srgb,var(--warning) 8%,transparent)}
+      .p5pt-bdg{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.56rem;font-weight:700;letter-spacing:.04em;padding:.16rem .4rem;border-radius:4px;white-space:nowrap}
+      .p5pt-bdg.done{color:var(--success);background:color-mix(in srgb,var(--success) 14%,transparent)}
+      .p5pt-bdg.plan{color:var(--accent);background:var(--accent-bg)}
+      .p5pt-bdg.delay{color:var(--warning);background:color-mix(in srgb,var(--warning) 16%,transparent)}
+      .p5pt-rd{display:flex;align-items:center;gap:.5rem;min-width:96px}
+      .p5pt-bar{position:relative;flex:1;height:6px;border-radius:3px;background:var(--surface-3,var(--surface-2));overflow:hidden}
+      .p5pt-bar i{position:absolute;inset:0 auto 0 0;width:calc(var(--p)*1%);border-radius:3px;background:var(--accent)}
+      .p5pt-bar.done i{background:var(--success)}
+      .p5pt-bar.delay i{background:var(--warning)}
+      .p5pt-pct{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+      /* ---- Cost assessment ---- */
+      .p5co-tbl{width:100%;border-collapse:collapse;font-size:.84rem}
+      .p5co-tbl th{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);padding:.45rem .6rem;border-bottom:1px solid var(--border-strong,var(--border));text-align:right}
+      .p5co-tbl th:first-child{text-align:left}
+      .p5co-tbl td{padding:.46rem .6rem;border-bottom:1px solid var(--border);text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;color:var(--text)}
+      .p5co-tbl td:first-child{text-align:left;font-family:inherit;color:var(--text)}
+      .p5co-tbl .grp td{background:var(--surface-2);font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted)}
+      .p5co-tbl .grp td:first-child{font-family:'JetBrains Mono',monospace}
+      .p5co-tbl .sub td:first-child{padding-left:1.4rem;color:var(--text-muted);font-size:.82rem}
+      .p5co-tbl tr.subt td{border-top:1px solid var(--border);font-weight:600;color:var(--text)}
+      .p5co-tbl tr.subt td:first-child{padding-left:.6rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;color:var(--text-muted)}
+      .p5co-tbl .mut{color:var(--text-muted)}
+      .p5co-tbl tr.total td{border-top:2px solid var(--border-strong,var(--border));border-bottom:0;font-weight:700;color:var(--text);padding-top:.6rem}
+      .p5co-tbl tr.total td:first-child{font-family:'JetBrains Mono',monospace;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem}
+      .p5co-tbl tr.total .grand{font-size:1.05rem;color:var(--accent)}
     </style>
 
     <h3 class="content-h3">The <em>Challenge</em></h3>
@@ -619,31 +715,135 @@
       </tbody>
     </table>
 
-    <span class="p5-src">◆ From my MMTh final presentation · 2020</span>
-    <figure class="p5-slide">
-      <img src="MMTh%20Photos/Timeline.png" alt="Project overall schedule Gantt chart from June to September 2020: tooling sheet, MSR/RFQ, e-AR, PR and PO, design approval, fabrication, installation, problem follow-up and goods receipt, with the internship ending in July and the payment period split 10/20/30/40 percent" loading="lazy">
-      <figcaption><b>Overall schedule</b> · Jun–Sep 2020 · on plan at end of internship (payment 10/20/30/40%)</figcaption>
-    </figure>
+    <span class="p5-src">◆ Recreated from my MMTh 2020 final presentation</span>
+    <div class="p5art">
+      <div class="p5art-top">
+        <p class="p5art-h">Overall schedule · Jun–Sep 2020</p>
+        <span class="p5art-flag ok">● On plan at handover</span>
+      </div>
+      <div class="p5gt-scroll"><div class="p5gt" style="--cols:16">
+        <div class="p5gt-months"><span></span><div class="p5gt-mhead"><span>June</span><span>July</span><span>August</span><span>September</span></div></div>
+        <div class="p5gt-body">
+          <div class="p5gt-div" style="--at:8"><span>Internship ends</span></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">1</span>Tooling sheet · approval</div><div class="p5gt-track"><span class="p5gt-bar done" style="--s:2;--l:2" title="Tooling sheet, approval — June"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">2</span>MSR · RFQ · maker selection</div><div class="p5gt-track"><span class="p5gt-bar done" style="--s:3;--l:6" title="MSR / RFQ — Jun to 29 Jul"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">3</span>e-AR</div><div class="p5gt-track"><span class="p5gt-bar done" style="--s:8;--l:1" title="e-AR — late July"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">4</span>PR &amp; PO</div><div class="p5gt-track"><span class="p5gt-bar plan" style="--s:9;--l:1" title="PR and PO — ~4 Aug (PE Assembly)"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">5</span>Design approval</div><div class="p5gt-track"><span class="p5gt-bar plan" style="--s:10;--l:1" title="Approved drawing — ~12 Aug"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">6</span>Fabrication &amp; preparation</div><div class="p5gt-track"><span class="p5gt-bar plan" style="--s:11;--l:2" title="Fabrication and preparation — Aug"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">7</span>Installation &amp; trial confirm</div><div class="p5gt-track"><span class="p5gt-bar plan" style="--s:12;--l:1" title="Installation and trial — ~30 Aug"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">8</span>Problem follow-up · transfer</div><div class="p5gt-track"><span class="p5gt-bar plan" style="--s:14;--l:3" title="Problem follow-up, transfer job — Sep"></span></div></div>
+          <div class="p5gt-row"><div class="p5gt-label"><span class="n">9</span>Goods receipt</div><div class="p5gt-track"><span class="p5gt-bar mile" style="--s:15;--l:2" title="Goods receipt — Sep"></span></div></div>
+        </div>
+        <div class="p5gt-pay">
+          <div class="p5gt-pay-l">Payment</div>
+          <div class="p5gt-pay-t">
+            <span class="p5gt-chip" style="--at:9">10%</span>
+            <span class="p5gt-chip" style="--at:12">20%</span>
+            <span class="p5gt-chip" style="--at:14">30%</span>
+            <span class="p5gt-chip" style="--at:16">40%</span>
+          </div>
+        </div>
+      </div></div>
+      <div class="p5gt-legend">
+        <span><i class="done"></i>Completed in internship</span>
+        <span><i class="plan"></i>Handover · scheduled</span>
+        <span><i class="mile"></i>Goods receipt</span>
+        <span><i class="div"></i>Internship end (Jul)</span>
+      </div>
+      <p class="p5art-note">Tasks 1–3 (tooling sheet, maker selection, e-AR) were my deliverables, finished inside the internship. Procurement and build (4–9) were handed to PE Assembly on a fixed schedule tied to a <b>10 / 20 / 30 / 40%</b> payment release — all <b>on plan</b> at handover. The whole project ran under tooling sheet <b>TS-PE-A-20-006</b>.</p>
+    </div>
 
     <div class="callout">
       <div class="callout-title">Governed by a formal MMTh engineering document</div>
       <p>The whole project ran under <strong>Tooling / Facility Planning Sheet TS-PE-A-20-006</strong>, the controlled MMTh document I authored and routed for approval. It fixed the <strong>production basis</strong> (8.5 hr/shift, 4,846 hr/yr, max 7,269 units/yr, 1.5 JPH, &gt;99% up-ratio), the construction scope, the <strong>hot-work / fire-safety permits</strong>, the electrical &amp; equipment brand standards, the 9-line project schedule, and the deliverables on completion (As-built 2D CAD + 3D CATIA, bilingual operation &amp; maintenance manuals, training docs, one week of supervisor stand-by).</p>
     </div>
 
-    <p class="content-p">I also tracked procurement readiness and quality assurance as living artifacts &mdash; preparation status, QA items, and the cost assessment I sent to purchasing:</p>
-    <span class="p5-src">◆ Project-management artifacts · MMTh 2020</span>
-    <div class="p5-gallery">
-      <figure class="p5-slide">
-        <img src="MMTh%20Photos/Preparation%20Status.png" alt="Preparation-status tracker for the FPDU assist-device project items" loading="lazy">
-        <figcaption><b>Preparation status</b> · readiness tracker</figcaption>
-      </figure>
+    <p class="content-p">I also tracked procurement readiness and the build budget as living artifacts &mdash; a preparation-status tracker I reviewed against the PJL build stage, and the cost assessment I sent to purchasing.</p>
+    <span class="p5-src">◆ Recreated from my MMTh 2020 project-management artifacts</span>
+
+    <div class="p5art">
+      <div class="p5art-top">
+        <p class="p5art-h">Preparation status · ASSY shop readiness</p>
+        <span class="p5art-flag warn">▲ Yellow · 3 items at risk</span>
+      </div>
+      <div class="p5pt-roll">
+        <div class="p5pt-stat"><div class="v">26</div><div class="l">Items tracked</div></div>
+        <div class="p5pt-stat done"><div class="v">17</div><div class="l">Done</div></div>
+        <div class="p5pt-stat prog"><div class="v">6</div><div class="l">On process</div></div>
+        <div class="p5pt-stat delay"><div class="v">3</div><div class="l">Delay</div></div>
+      </div>
+      <div class="p5pt-grid">
+        <table class="p5pt-tbl">
+          <thead><tr><th>#</th><th>Job detail</th><th>Status</th><th>Readiness</th></tr></thead>
+          <tbody>
+            <tr><td class="ix">1</td><td class="jd">Preparation area · PHEV line</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">2</td><td class="jd">ALC system · LAN / network</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">3</td><td class="jd">Remove cable transfer</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">4</td><td class="jd">Bird &amp; dolly cable transfer</td><td><span class="p5pt-bdg plan">ON PLAN</span></td><td><div class="p5pt-rd"><div class="p5pt-bar"><i style="--p:80"></i></div><span class="p5pt-pct">80%</span></div></td></tr>
+            <tr><td class="ix">5</td><td class="jd">Pinka-yoke system</td><td><span class="p5pt-bdg plan">ON PLAN</span></td><td><div class="p5pt-rd"><div class="p5pt-bar"><i style="--p:80"></i></div><span class="p5pt-pct">80%</span></div></td></tr>
+            <tr><td class="ix">6</td><td class="jd">DC-tool system</td><td><span class="p5pt-bdg plan">ON PLAN</span></td><td><div class="p5pt-rd"><div class="p5pt-bar"><i style="--p:80"></i></div><span class="p5pt-pct">80%</span></div></td></tr>
+            <tr><td class="ix">7</td><td class="jd">Glass-sealing M/C modify</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">8</td><td class="jd">CPM asset device</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">9</td><td class="jd">Door asset device</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">10</td><td class="jd">Lifter cabin · C-1, C-2, F-3</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr class="is-delay"><td class="ix">11</td><td class="jd">Lifter docking · FR &amp; RR SUS</td><td><span class="p5pt-bdg delay">DELAY</span></td><td><div class="p5pt-rd"><div class="p5pt-bar delay"><i style="--p:30"></i></div><span class="p5pt-pct">30 → 90%</span></div></td></tr>
+            <tr class="is-delay"><td class="ix">12</td><td class="jd">M/C sub-assy · FR &amp; RR strut</td><td><span class="p5pt-bdg delay">DELAY</span></td><td><div class="p5pt-rd"><div class="p5pt-bar delay"><i style="--p:30"></i></div><span class="p5pt-pct">30 → 90%</span></div></td></tr>
+            <tr class="is-delay"><td class="ix">13</td><td class="jd">Battery-pack asset device</td><td><span class="p5pt-bdg delay">DELAY</span></td><td><div class="p5pt-rd"><div class="p5pt-bar delay"><i style="--p:30"></i></div><span class="p5pt-pct">30%</span></div></td></tr>
+          </tbody>
+        </table>
+        <table class="p5pt-tbl">
+          <thead><tr><th>#</th><th>Job detail</th><th>Status</th><th>Readiness</th></tr></thead>
+          <tbody>
+            <tr><td class="ix">14</td><td class="jd">Hoist hanger · picking part</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">15</td><td class="jd">Brake filling M/C</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">16</td><td class="jd">LLC filling M/C</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">17</td><td class="jd">Standard blocker</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">18</td><td class="jd">Tool &amp; torque</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">19</td><td class="jd">Sub-assy table · trim/OS/final</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">20</td><td class="jd">Tester-line modification</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">21</td><td class="jd">Exhaust adaptor · tester line</td><td><span class="p5pt-bdg plan">ON PLAN</span></td><td><div class="p5pt-rd"><div class="p5pt-bar"><i style="--p:88"></i></div><span class="p5pt-pct">88%</span></div></td></tr>
+            <tr><td class="ix">22</td><td class="jd">Pre-MET preparation</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">23</td><td class="jd">e-Check preparation</td><td><span class="p5pt-bdg plan">ON PLAN</span></td><td><div class="p5pt-rd"><div class="p5pt-bar"><i style="--p:50"></i></div><span class="p5pt-pct">50%</span></div></td></tr>
+            <tr><td class="ix">24</td><td class="jd">Traceability preparation</td><td><span class="p5pt-bdg plan">ON PLAN</span></td><td><div class="p5pt-rd"><div class="p5pt-bar"><i style="--p:50"></i></div><span class="p5pt-pct">50%</span></div></td></tr>
+            <tr><td class="ix">25</td><td class="jd">Quick &amp; normal change M/C</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+            <tr><td class="ix">26</td><td class="jd">Traffic control · tester line</td><td><span class="p5pt-bdg done">DONE</span></td><td><div class="p5pt-rd"><div class="p5pt-bar done"><i style="--p:100"></i></div><span class="p5pt-pct">100%</span></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="p5art-note">Three machine-preparation items &mdash; <b>lifter docking</b> (FR/RR SUS), <b>M/C sub-assy</b> (FR/RR strut) and the <b>battery-pack asset device</b> &mdash; slipped on the PJL 1st unit. A back-up plan was set and all three complete from the PJL 2nd unit.</p>
+    </div>
+
+    <div class="p5art">
+      <div class="p5art-top">
+        <p class="p5art-h">Cost assessment · sent to purchasing</p>
+        <span class="p5art-flag ok">฿456,200 estimate</span>
+      </div>
+      <table class="p5co-tbl">
+        <thead><tr><th>Cost item</th><th>Material</th><th>Labour</th><th>Total ฿</th></tr></thead>
+        <tbody>
+          <tr class="grp"><td colspan="4">Direct cost</td></tr>
+          <tr class="sub"><td>Manipulator · Mar-Dec Omega Buddy</td><td>226,700</td><td>117,500</td><td>344,200</td></tr>
+          <tr class="sub"><td>Safety function · floor rail &amp; stopper</td><td>17,500</td><td>12,500</td><td>30,000</td></tr>
+          <tr class="sub"><td>Air-treatment unit</td><td>20,000</td><td>5,000</td><td>25,000</td></tr>
+          <tr class="sub"><td>Design · mechanical doc &amp; licence</td><td class="mut">&mdash;</td><td>10,000</td><td>10,000</td></tr>
+          <tr class="subt"><td>Direct subtotal</td><td>264,200</td><td>145,000</td><td>409,200</td></tr>
+          <tr class="grp"><td colspan="4">Indirect cost</td></tr>
+          <tr class="sub"><td>Labour · fabrication, install, stand-by</td><td class="mut">&mdash;</td><td>13,600</td><td>13,600</td></tr>
+          <tr class="sub"><td>Transportation · material, EQ, manpower</td><td>8,400</td><td class="mut">&mdash;</td><td>8,400</td></tr>
+          <tr class="sub"><td>Overhead &amp; profit</td><td class="mut">&mdash;</td><td>25,000</td><td>25,000</td></tr>
+          <tr class="subt"><td>Indirect subtotal</td><td>8,400</td><td>38,600</td><td>47,000</td></tr>
+          <tr class="total"><td>Grand total</td><td>272,600</td><td>183,600</td><td class="grand">456,200</td></tr>
+        </tbody>
+      </table>
+      <p class="p5art-note">The build-up estimate I prepared for purchasing on the FPDU assist device (maker: <b>Mar-Dec Engineering</b>). The maker's actual quotation (<b>QT2007/092-1</b>) came in at <b>฿460,314</b> incl. VAT &mdash; within <b>0.9%</b> of this estimate.</p>
+    </div>
+
+    <span class="p5-src">◆ Supporting artifacts · MMTh 2020</span>
+    <div class="p5-slides2">
       <figure class="p5-slide">
         <img src="MMTh%20Photos/Quality%20Assurance%20Item.png" alt="Quality-assurance item checklist for the assist device" loading="lazy">
         <figcaption><b>Quality assurance</b> · QA item checklist</figcaption>
-      </figure>
-      <figure class="p5-slide">
-        <img src="MMTh%20Photos/Accounting%20Assesment.png" alt="Cost / accounting assessment prepared for the purchasing team" loading="lazy">
-        <figcaption><b>Cost assessment</b> · sent to purchasing</figcaption>
       </figure>
       <figure class="p5-slide">
         <img src="MMTh%20Photos/Delay%20Preparation%20Item.png" alt="Delay-risk tracking of preparation items in the project" loading="lazy">
