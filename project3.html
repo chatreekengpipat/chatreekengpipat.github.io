@@ -702,7 +702,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <div class="p3b-tier"><div class="badge">🏆</div><b>Platinum</b><div class="th">100 ★ +</div><div class="ds">Top tier · certificate &amp; prize</div></div>
     </div>
     <p class="content-p" style="font-size:.82rem;color:var(--text-muted)">
-      <strong>Note:</strong> the four-tier ladder mirrors the Bronze and Platinum ranks shown in the live system; the exact star thresholds above are illustrative. <em>[CONFIRM: real tier thresholds if you'd like them exact.]</em>
+      <strong>Note:</strong> Bronze → Silver → Gold → Platinum is the live rank ladder; lifetime stars roll a student up the tiers, and the school recognises each tier with certificates and prizes.
     </p>
 
     <!-- ================= BULK STAR IMPORT ================= -->
@@ -731,17 +731,19 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="p3b-xls">
       <table>
         <thead>
-        <tr class="cl"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td></tr>
-        <tr><th></th><th>Student&nbsp;ID&nbsp;<span class="req">*</span></th><th>Student&nbsp;Email&nbsp;<span class="req">*</span></th><th>Stars&nbsp;<span class="req">*</span></th><th>Reason / Comment&nbsp;<span class="req">*</span></th><th>Supervisor&nbsp;<span class="req">*</span></th><th>Date&nbsp;<span class="opt">(opt)</span></th></tr></thead>
+        <tr class="cl"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td></tr>
+        <tr><th></th><th>Reason&nbsp;<span class="req">*</span></th><th>Year&nbsp;<span class="req">*</span></th><th>Class&nbsp;<span class="req">*</span></th><th>Email&nbsp;<span class="req">*</span></th><th>Sender&nbsp;<span class="req">*</span></th></tr></thead>
         <tbody>
-          <tr><td class="rn">1</td><td>S-1042</td><td>aom@school.ac.th</td><td>3</td><td>Science fair — 1st place</td><td>Kao</td><td>2025-05-27</td></tr>
-          <tr><td class="rn">2</td><td>S-2087</td><td>tao@school.ac.th</td><td>2</td><td>Helped run the open house</td><td>Kao</td><td>2025-05-27</td></tr>
-          <tr><td class="rn">3</td><td>S-1190</td><td>mint@school.ac.th</td><td>5</td><td>Perfect attendance, full term</td><td>Benz</td><td>2025-05-27</td></tr>
-          <tr><td class="rn">4</td><td>S-3055</td><td>ploy@school.ac.th</td><td>1</td><td>Volunteered for clean-up</td><td>Benz</td><td>2025-05-27</td></tr>
+          <tr><td class="rn">1</td><td>Assignment</td><td>9</td><td>Pre-IGCSE Physics</td><td>student.a@newton.ac.th</td><td>supervisor@newton.ac.th</td></tr>
+          <tr><td class="rn">2</td><td>Assignment</td><td>9</td><td>Pre-IGCSE Physics</td><td>student.a@newton.ac.th</td><td>supervisor@newton.ac.th</td></tr>
+          <tr><td class="rn">3</td><td>Q&amp;A</td><td>9</td><td>Pre-IGCSE Math</td><td>student.b@newton.ac.th</td><td>supervisor@newton.ac.th</td></tr>
+          <tr><td class="rn">4</td><td>Activity</td><td>11</td><td>IGCSE Further Math</td><td>student.c@newton.ac.th</td><td>supervisor@newton.ac.th</td></tr>
+          <tr><td class="rn">5</td><td>Activity</td><td>11</td><td>IGCSE Further Math</td><td>student.c@newton.ac.th</td><td>supervisor@newton.ac.th</td></tr>
+          <tr><td class="rn">6</td><td>Engagement</td><td>12</td><td>International AS-Level Physics</td><td>student.d@newton.ac.th</td><td>supervisor@newton.ac.th</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="content-p" style="font-size:.82rem;color:var(--text-muted)"><span class="req" style="color:var(--danger);font-weight:700">*</span> required · <strong>Date</strong> defaults to the import day if left blank. Sample rows are illustrative; the column standard is what every staff member follows. <em>[CONFIRM: exact column set / header names if you want them matched 1:1.]</em></p>
+    <p class="content-p" style="font-size:.82rem;color:var(--text-muted)"><strong>One row = one star.</strong> A student's star total is the number of rows carrying their <strong>Email</strong> (the match key); <strong>Reason</strong> categorises each star (Assignment · Q&amp;A · Engagement · Activity) while <strong>Year</strong> and <strong>Class</strong> carry the curriculum context. Above, <code>student.a</code> earns 2 stars (2 rows) and <code>student.c</code> earns 2 Activity stars. Every field is required; emails anonymised here.</p>
 
     <p class="content-p">How the import runs end-to-end once the file is uploaded:</p>
     <div class="p3b-pipe">
@@ -749,7 +751,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <div class="ar">→</div>
       <div class="stg"><div class="k">02 · UPLOAD</div><b>Import</b><span>Upload from the Commendation List.</span></div>
       <div class="ar">→</div>
-      <div class="stg"><div class="k">03 · VALIDATE</div><b>Match &amp; check</b><span>Match ID / e-mail, check types, flag bad rows.</span></div>
+      <div class="stg"><div class="k">03 · VALIDATE</div><b>Match &amp; count</b><span>Match each row by email, count rows per student, flag unknown emails.</span></div>
       <div class="ar">→</div>
       <div class="stg"><div class="k">04 · WRITE</div><b>Bulk upsert</b><span>Balances + transaction log, atomically.</span></div>
       <div class="ar">→</div>
@@ -757,7 +759,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </div>
 
     <h3 class="content-h3">Live Import <em>Simulation</em></h3>
-    <p class="content-p">An interactive model of the bulk import: edit the rows, run <strong>Validate &amp; Import</strong>, and watch the validation and the resulting writes — the <em>specified behaviour I designed</em>, not the proprietary XeerSoft UI.</p>
+    <p class="content-p">An interactive model of the bulk import in the real format (<strong>one row per star</strong>): edit the rows, run <strong>Validate &amp; Import</strong>, and watch each student's stars add up as rows are grouped by email — the <em>specified behaviour I designed</em>, not the proprietary XeerSoft UI.</p>
 
     <div class="xsim xnative-section" id="sim3imp">
       <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
@@ -766,13 +768,13 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <div class="xsim-body">
         <div class="xsim-grid">
           <div class="xsim-panel">
-            <p class="xsim-h">Paste / edit import rows <small style="color:var(--text-muted)">— ID, Stars, Reason</small></p>
-            <textarea id="improws" rows="7" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.76rem;border:1px solid var(--xs-border,var(--border));border-radius:8px;padding:.6rem;background:var(--xs-bg,var(--bg));color:var(--xs-text,var(--text));resize:vertical">S-1042, 3, Science fair 1st place
-S-2087, 2, Helped run open house
-S-1190, 5, Perfect attendance
-S-3055, 1, Volunteered for clean-up
-S-9999, 4, Unknown student id
-S-2210, x, Bad star value</textarea>
+            <p class="xsim-h">Paste / edit rows <small style="color:var(--text-muted)">— Reason, Year, Class, Email</small></p>
+            <textarea id="improws" rows="7" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.74rem;border:1px solid var(--xs-border,var(--border));border-radius:8px;padding:.6rem;background:var(--xs-bg,var(--bg));color:var(--xs-text,var(--text));resize:vertical">Assignment, 9, Pre-IGCSE Physics, anya@newton.ac.th
+Assignment, 9, Pre-IGCSE Physics, anya@newton.ac.th
+Q&A, 9, Pre-IGCSE Math, boon@newton.ac.th
+Activity, 11, IGCSE Further Math, chai@newton.ac.th
+Activity, 11, IGCSE Further Math, chai@newton.ac.th
+Engagement, 12, International AS Physics, ghost@newton.ac.th</textarea>
             <button class="xsim-btn" id="imprun">Validate &amp; Import</button>
             <button class="xsim-btn ghost" id="impreset">Reset</button>
           </div>
@@ -784,32 +786,44 @@ S-2210, x, Bad star value</textarea>
           </div>
         </div>
       </div>
-      <div class="xsim-cap">Valid rows are upserted to known students; unknown IDs and bad values are rejected (not silently skipped). Demonstrates the specified validation, not the proprietary interface.</div>
+      <div class="xsim-cap">Rows are grouped by email and each row counts as one star; emails that match a student are upserted, unknown emails are rejected (not silently skipped). Demonstrates the specified validation, not the proprietary interface.</div>
     </div>
     <script>
     (function(){
       var root=document.getElementById('sim3imp');
-      var known={'S-1042':124,'S-2087':86,'S-1190':41,'S-3055':19,'S-2210':6};
+      function clone(o){var c={};for(var k in o)c[k]=o[k];return c;}
+      var baseKnown={'anya@newton.ac.th':124,'boon@newton.ac.th':86,'chai@newton.ac.th':41};
+      var known=clone(baseKnown);
       var ta=root.querySelector('#improws'), def=ta.value;
       var log=root.querySelector('#implog'), chip=root.querySelector('#impchip');
       function line(txt,cls){var d=document.createElement('div');d.textContent=txt;if(cls)d.style.color=cls;log.insertBefore(d,log.firstChild);}
       root.querySelector('#imprun').addEventListener('click',function(){
         log.innerHTML='';chip.innerHTML='';
         var rows=ta.value.split('\n').map(function(r){return r.trim();}).filter(Boolean);
-        var ok=0,err=0,stars=0;
-        rows.slice().reverse().forEach(function(r){
+        var groups={}, order=[];
+        rows.forEach(function(r){
           var p=r.split(',').map(function(x){return x.trim();});
-          var id=p[0], qty=parseInt(p[1],10), reason=p[2]||'(no reason)';
-          if(!(id in known)){err++;line('REJECT  '+id+'  →  unknown student id','var(--xs-bad,#d2553f)');return;}
-          if(isNaN(qty)||qty<=0){err++;line('REJECT  '+id+'  →  invalid star value','var(--xs-bad,#d2553f)');return;}
-          known[id]+=qty;stars+=qty;ok++;
-          line('UPSERT  '+id+'  +'+qty+'★  →  '+known[id]+'★  ·  '+reason,'var(--xs-ok,#3a9d6b)');
+          var reason=p[0]||'(reason?)', email=(p[3]||'').toLowerCase()||'(missing email)';
+          if(!groups[email]){groups[email]={n:0,reasons:{}};order.push(email);}
+          groups[email].n++; groups[email].reasons[reason]=(groups[email].reasons[reason]||0)+1;
         });
-        var cls=err? 'warn':'ok';
-        chip.innerHTML='<span class="xsim-chip '+cls+'">IMPORTED '+ok+' / '+rows.length+' rows · +'+stars+'★ · '+err+' rejected</span>';
+        var okRows=0,rejRows=0,stars=0,students=0;
+        order.slice().reverse().forEach(function(email){
+          var g=groups[email];
+          var rs=Object.keys(g.reasons).map(function(k){return k+'×'+g.reasons[k];}).join(', ');
+          if(email in known){
+            known[email]+=g.n; stars+=g.n; okRows+=g.n; students++;
+            line('UPSERT  '+email+'  +'+g.n+'★  ('+rs+')  →  '+known[email]+'★','var(--xs-ok,#3a9d6b)');
+          } else {
+            rejRows+=g.n;
+            line('REJECT  '+email+'  →  unknown student email  ('+g.n+' row'+(g.n>1?'s':'')+')','var(--xs-bad,#d2553f)');
+          }
+        });
+        var cls=rejRows? 'warn':'ok';
+        chip.innerHTML='<span class="xsim-chip '+cls+'">IMPORTED '+okRows+' rows · '+students+' students · +'+stars+'★ · '+rejRows+' rejected</span>';
       });
       root.querySelector('#impreset').addEventListener('click',function(){
-        ta.value=def;known={'S-1042':124,'S-2087':86,'S-1190':41,'S-3055':19,'S-2210':6};log.innerHTML='';chip.innerHTML='';});
+        ta.value=def;known=clone(baseKnown);log.innerHTML='';chip.innerHTML='';});
     })();
     </script>
 
