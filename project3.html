@@ -784,14 +784,14 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </div>
 
     <h3 class="content-h3">Live Import <em>Simulation</em></h3>
-    <p class="content-p">An interactive model wired to a <strong>representative class roster (anonymised)</strong>. For each row pick a <strong>Track → Year → Class → Student</strong> and the student's <strong>e-mail auto-fills</strong>; set the <strong>star count</strong> and the <strong>reason</strong>, then run <strong>Validate &amp; Import</strong>. Rows are grouped by student e-mail and each balance &amp; rank updates live (saved in your browser) — the <em>specified behaviour I designed</em>, not the proprietary XeerSoft UI.</p>
+    <p class="content-p">An interactive model wired to a <strong>representative class roster (anonymised)</strong>. For each row pick a <strong>Year → Track → Class → Student</strong> (Year 8–9 have no track; Year 10 splits Science / Business; Year 11–13 split into the five tracks) and the student's <strong>e-mail auto-fills</strong>; set the <strong>star count</strong> and the <strong>reason</strong>, then run <strong>Validate &amp; Import</strong>. Rows are grouped by student e-mail and each balance &amp; rank updates live (saved in your browser) — the <em>specified behaviour I designed</em>, not the proprietary XeerSoft UI.</p>
 
     <div class="xsim xnative-section" id="sim3imp">
       <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
         <span class="xsim-crumb">XeerSoft Cloud ERP &middot; <b>CRM &middot; Loyalty</b> &rsaquo; Bulk Import Simulation</span>
         <span class="xsim-live">SIMULATION</span></div>
       <div class="xsim-body">
-        <p class="xsim-h">Build the import <small style="color:var(--xs-muted,var(--text-muted));font-weight:400;text-transform:none;letter-spacing:0">— pick Track → Year → Class → Student · e-mail auto-fills · set ★ &amp; reason</small></p>
+        <p class="xsim-h">Build the import <small style="color:var(--xs-muted,var(--text-muted));font-weight:400;text-transform:none;letter-spacing:0">— pick Year → Track → Class → Student · e-mail auto-fills · set ★ &amp; reason</small></p>
         <style>
         .p3imp-mail{font-family:'JetBrains Mono','DM Mono',monospace;font-size:.7rem;color:var(--xs-text,var(--text));word-break:break-all}
         .p3imp-mail.empty{color:var(--xs-muted,var(--text-muted))}
@@ -805,7 +805,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         </style>
         <div class="p3imp-wrap">
           <table class="p3imp-tbl">
-            <thead><tr><th>#</th><th>Reason</th><th>Track</th><th>Year</th><th>Class</th><th>Student</th><th>E-mail (auto)</th><th>★</th><th></th></tr></thead>
+            <thead><tr><th>#</th><th>Reason</th><th>Year</th><th>Track</th><th>Class</th><th>Student</th><th>E-mail (auto)</th><th>★</th><th></th></tr></thead>
             <tbody id="impbody"></tbody>
           </table>
         </div>
@@ -826,9 +826,9 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           </div>
         </div>
       </div>
-      <div class="xsim-cap">Pick Track → Year → Class → Student; the e-mail auto-fills, then set how many stars and the reason. On import, rows are grouped by student e-mail and written as a single batch &mdash; balances and ranks update live and persist in your browser. Public demo uses an anonymised roster; on the school's machine a local data file supplies the live roster. Demonstrates the specified behaviour, not the proprietary interface.</div>
+      <div class="xsim-cap">Pick Year → Track → Class → Student; the e-mail auto-fills, then set how many stars and the reason. On import, rows are grouped by student e-mail and written as a single batch &mdash; balances and ranks update live and persist in your browser. Public demo uses an anonymised roster; on the school's machine a local data file supplies the live roster. Demonstrates the specified behaviour, not the proprietary interface.</div>
     </div>
-    <script src="newton-students.js?v=1"></script>
+    <script src="newton-students.js?v=2"></script>
     <script src="newton-students.local.js?v=1"></script>
     <script>
     (function(){
@@ -841,9 +841,14 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       var bal=loadBal();
       var byEmail={}; DATA.forEach(function(s){byEmail[s.e]=s;});
       function uniq(a){var o=[];a.forEach(function(v){if(o.indexOf(v)<0)o.push(v);});return o;}
-      var TRACKS=uniq(DATA.map(function(s){return s.t;})).sort();
-      function yearsFor(t){return uniq(DATA.filter(function(s){return s.t===t;}).map(function(s){return s.y;})).sort(function(a,b){return a-b;});}
-      function classesFor(t,y){return uniq(DATA.filter(function(s){return s.t===t&&String(s.y)===String(y);}).map(function(s){return s.c;})).sort();}
+      function isNoTrack(t){return !t||t==='General'||t==='GEN'||t==='-';}   // Year 8–9 have no track
+      var YEARS=uniq(DATA.map(function(s){return s.y;})).sort(function(a,b){return a-b;});
+      function tracksFor(y){return uniq(DATA.filter(function(s){return String(s.y)===String(y)&&!isNoTrack(s.t);}).map(function(s){return s.t;})).sort();}
+      function classesFor(y,t){return uniq(DATA.filter(function(s){
+          if(String(s.y)!==String(y))return false;
+          if(tracksFor(y).length===0)return true;       // no-track year: classes sit straight under the year
+          return s.t===t;
+        }).map(function(s){return s.c;})).sort();}
       function studentsFor(c){return DATA.filter(function(s){return s.c===c;}).sort(function(a,b){return a.nm.localeCompare(b.nm);});}
       function rank(n){ if(n>=100)return['platinum','Platinum']; if(n>=60)return['gold','Gold']; if(n>=25)return['silver','Silver']; return['bronze','Bronze']; }
       function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
@@ -860,16 +865,21 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       }
       function renderRow(row,i){
         var tr=document.createElement('tr');
+        var trkList=row.year?tracksFor(row.year):[];
+        var hasTrk=trkList.length>0;
         var reasonSel=selectHTML('reason','— reason —',REASONS.map(function(r){return {v:r,l:r};}),row.reason,false);
-        var trackSel=selectHTML('track','— track —',TRACKS.map(function(t){return {v:t,l:t};}),row.track,false);
-        var ySel=selectHTML('year','— year —',(row.track?yearsFor(row.track):[]).map(function(y){return {v:y,l:'Year '+y};}),row.year,!row.track);
-        var cSel=selectHTML('cls','— class —',(row.track&&row.year?classesFor(row.track,row.year):[]).map(function(c){return {v:c,l:c};}),row.cls,!(row.track&&row.year));
+        var ySel=selectHTML('year','— year —',YEARS.map(function(y){return {v:y,l:'Year '+y};}),row.year,false);
+        var trackSel=hasTrk
+          ? selectHTML('track','— track —',trkList.map(function(t){return {v:t,l:t};}),row.track,false)
+          : '<select class="p3imp-sel" data-k="track" disabled><option>'+(row.year?'— no track —':'—')+'</option></select>';
+        var classReady=row.year&&(hasTrk?!!row.track:true);    // no-track years skip straight to class
+        var cSel=selectHTML('cls','— class —',(classReady?classesFor(row.year,row.track):[]).map(function(c){return {v:c,l:c};}),row.cls,!classReady);
         var sList=row.cls?studentsFor(row.cls):[];
         var sSel=selectHTML('email','— student —',sList.map(function(s){return {v:s.e,l:(s.k?s.k+' · ':'')+s.nm};}),row.email,!row.cls);
         var mail=row.email?('<span class="p3imp-mail">'+esc(row.email)+'</span>'):'<span class="p3imp-mail empty">—</span>';
         var stars='<input class="p3imp-stars" type="number" min="1" max="20" value="'+(row.stars||1)+'" data-k="stars" aria-label="stars">';
         tr.innerHTML='<td class="rn">'+(i+1)+'</td>'+
-          '<td>'+reasonSel+'</td><td>'+trackSel+'</td><td>'+ySel+'</td><td>'+cSel+'</td><td>'+sSel+'</td>'+
+          '<td>'+reasonSel+'</td><td>'+ySel+'</td><td>'+trackSel+'</td><td>'+cSel+'</td><td>'+sSel+'</td>'+
           '<td>'+mail+'</td><td class="stcell">'+stars+'</td>'+
           '<td><button class="p3imp-del" title="Remove row">✕</button></td>';
         tr.querySelectorAll('.p3imp-sel,.p3imp-stars').forEach(function(el){
@@ -877,8 +887,8 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
             var k=el.getAttribute('data-k'), v=el.value;
             if(k==='stars'){row.stars=Math.max(1,Math.min(20,parseInt(v||'1',10)||1));return;}
             row[k]=v;
-            if(k==='track'){row.year='';row.cls='';row.email='';}
-            if(k==='year'){row.cls='';row.email='';}
+            if(k==='year'){row.track='';row.cls='';row.email='';}
+            if(k==='track'){row.cls='';row.email='';}
             if(k==='cls'){row.email='';}
             renderBuilder();
           });
@@ -894,7 +904,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           .sort(function(a,b){return bal[b.e]-bal[a.e]||a.nm.localeCompare(b.nm);});
         var head=document.createElement('div'); head.className='p3imp-rost-head';
         head.innerHTML=awarded.length? (awarded.length+' student'+(awarded.length>1?'s':'')+' with stars · '+DATA.length+' in roster')
-          : ('No stars awarded yet · '+DATA.length+' students loaded — pick Track → Class → Student, then Validate &amp; Import.');
+          : ('No stars awarded yet · '+DATA.length+' students loaded — pick Year → Track → Class → Student, then Validate &amp; Import.');
         roster.appendChild(head);
         awarded.slice(0,40).forEach(function(s){
           var n=bal[s.e], rk=rank(n);
