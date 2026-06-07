@@ -1,3 +1,7 @@
+# --- PRIVATE student data: real roster used locally by the Star Reward sim. NEVER publish. ---
+newton-students.local.js
+StudentData_StarReward/
+
 # --- AI / build tooling: internal scaffolding, not part of the published site ---
 .claude/
 .impeccable/
