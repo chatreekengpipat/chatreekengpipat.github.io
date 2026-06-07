@@ -383,7 +383,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <div class="project-meta">Project 03 · Jun 2024 – Jan 2025 · Go-Live Jan 2025</div>
       <h1>CRM Star <em>Reward</em><br>Loyalty System</h1>
       <p class="project-hero-desc">
-        BA + UAT Lead role for a points-based student recognition system built on <strong>XeerSoft CRM module</strong>. Detected critical entry defect on first test cycle, led 5 iterative UAT build cycles managing 60 defects with structured reproduction steps to achieve zero critical post-launch incidents across 50+ members.
+        BA / Implementation Consultant who helped <strong>design, build, harden and roll out</strong> a Star Reward loyalty system on <strong>XeerSoft Cloud ERP</strong>: the commendation workflow, LINE notifications to students &amp; parents, rank tiers, and a <strong>bulk Excel import</strong> for awarding stars at scale. Led 5 iterative UAT cycles that caught a critical silent-failure defect, hitting zero critical post-launch incidents. <strong>Live since Jan 2025, rolled out to 100+ staff school-wide.</strong>
       </p>
     </div>
 
@@ -395,7 +395,11 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Role</span>
-        <span class="project-info-val">BA + UAT Lead</span>
+        <span class="project-info-val">BA · Build · UAT Lead</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Rollout</span>
+        <span class="project-info-val">100+ staff · school-wide</span>
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Duration</span>
@@ -431,7 +435,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="result-cell lx-stat">
       <div class="lx-stat-head"><div class="result-val">0</div><span class="lx-stat-dir">✓ zero</span></div>
       <div class="result-label">Critical post-launch</div>
-      <div class="lx-stat-note">across 50+ members<br>live since Jan 2025</div>
+      <div class="lx-stat-note">100+ staff school-wide<br>live since Jan 2025</div>
     </div>
     <div class="result-cell lx-stat">
       <div class="lx-stat-head"><div class="result-val">60</div></div>
@@ -467,14 +471,347 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 <section style="padding-top: 2rem;">
   <div class="content-section">
 
+    <style id="p3b-styles">
+      /* ===== Project 3 · build / import / recognition exhibits ===== */
+      .p3b-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.9rem;margin:1.3rem 0}
+      .p3b-mod{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:1rem 1.1rem}
+      .p3b-mod .ic{font-size:1.15rem;line-height:1}
+      .p3b-mod b{display:block;margin:.45rem 0 .2rem;font-size:.95rem;color:var(--text)}
+      .p3b-mod span{font-size:.8rem;color:var(--text-muted);line-height:1.45}
+      .p3b-mod.lead{border-color:color-mix(in srgb,var(--accent) 45%,transparent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+      .p3b-mtag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.56rem;font-weight:700;letter-spacing:.04em;color:var(--accent);background:var(--accent-bg);border-radius:5px;padding:.13rem .42rem;margin-top:.5rem}
+      /* commendation roster UI recreation */
+      .p3b-ui{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);margin:1.2rem 0}
+      .p3b-ui-bar{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;padding:.7rem .95rem;border-bottom:1px solid var(--border);background:var(--surface-2)}
+      .p3b-ui-bar .t{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--text);letter-spacing:.02em;margin-right:auto}
+      .p3b-ui-pill{font-size:.72rem;color:var(--text-muted);border:1px solid var(--border);border-radius:6px;padding:.3rem .6rem;background:var(--bg)}
+      .p3b-ui-btn{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#fff;background:var(--accent);border-radius:6px;padding:.34rem .65rem}
+      .p3b-ui-btn.ghost{color:var(--accent);background:var(--accent-bg)}
+      .p3b-rost{width:100%;border-collapse:collapse;font-size:.82rem}
+      .p3b-rost th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:.57rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);padding:.45rem .7rem;border-bottom:1px solid var(--border);white-space:nowrap}
+      .p3b-rost td{padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text)}
+      .p3b-rost tr:last-child td{border-bottom:0}
+      .p3b-rost .who{display:flex;align-items:center;gap:.6rem}
+      .p3b-rost .av{width:30px;height:30px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700}
+      .p3b-rost .id{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-muted)}
+      .p3b-rost .nm{font-weight:600}
+      .p3b-rost .nk{font-size:.74rem;color:var(--text-muted)}
+      .p3b-rost .star{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--text);white-space:nowrap}
+      .p3b-rost .star::after{content:" ★";color:#e0a526}
+      .p3b-act{display:inline-flex;gap:.3rem}
+      .p3b-act i{width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-style:normal;color:var(--accent);background:var(--accent-bg)}
+      /* rank badges + tiers */
+      .p3b-rank{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:.16rem .45rem;border-radius:100px;border:1px solid;white-space:nowrap}
+      .p3b-rank.bronze{color:#a96a2c;background:color-mix(in srgb,#cd7f32 14%,transparent);border-color:color-mix(in srgb,#cd7f32 40%,transparent)}
+      .p3b-rank.silver{color:#6f7d8a;background:color-mix(in srgb,#9aa7b4 18%,transparent);border-color:color-mix(in srgb,#9aa7b4 44%,transparent)}
+      .p3b-rank.gold{color:#a9790a;background:color-mix(in srgb,#e0a526 18%,transparent);border-color:color-mix(in srgb,#e0a526 46%,transparent)}
+      .p3b-rank.platinum{color:#2f7fa3;background:color-mix(in srgb,#5aa0c0 16%,transparent);border-color:color-mix(in srgb,#5aa0c0 44%,transparent)}
+      .p3b-tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:.8rem;margin:1.2rem 0}
+      .p3b-tier{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:1rem .9rem;text-align:center}
+      .p3b-tier .badge{font-size:1.5rem;line-height:1}
+      .p3b-tier b{display:block;font-family:'JetBrains Mono',monospace;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;margin:.45rem 0 .2rem;color:var(--text)}
+      .p3b-tier .th{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);font-weight:700}
+      .p3b-tier .ds{font-size:.74rem;color:var(--text-muted);margin-top:.35rem;line-height:1.4}
+      /* recognition loop steps */
+      .p3b-loop{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem;margin:1.2rem 0}
+      .p3b-step{border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:.85rem .9rem}
+      .p3b-step .n{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--accent);letter-spacing:.04em}
+      .p3b-step b{display:block;font-size:.86rem;margin:.25rem 0 .2rem;color:var(--text)}
+      .p3b-step span{font-size:.76rem;color:var(--text-muted);line-height:1.42}
+      .p3b-line{display:inline-flex;align-items:center;gap:.28rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;border-radius:5px;padding:.13rem .4rem;white-space:nowrap}
+      .p3b-line.ok{color:var(--success);background:color-mix(in srgb,var(--success) 14%,transparent)}
+      .p3b-line.exp{color:var(--danger);background:color-mix(in srgb,var(--danger) 13%,transparent)}
+      /* excel standard template */
+      .p3b-xls{overflow-x:auto;border:1px solid var(--border);border-radius:8px;margin:1.1rem 0;box-shadow:var(--shadow-sm)}
+      .p3b-xls table{border-collapse:collapse;min-width:660px;width:100%;font-family:'JetBrains Mono','DM Mono',monospace;font-size:.74rem}
+      .p3b-xls .cl td{background:#217346;color:#fff;text-align:center;font-size:.6rem;font-weight:700;border:1px solid #1a5c38;padding:.22rem}
+      .p3b-xls thead th{background:#e8f0ea;color:#0f5132;border:1px solid #cfe0d5;padding:.42rem .6rem;text-align:left;font-weight:700;white-space:nowrap}
+      .p3b-xls tbody td{border:1px solid var(--border);padding:.4rem .6rem;color:var(--text);background:var(--bg)}
+      .p3b-xls tbody td.rn{background:var(--surface-2);color:var(--text-muted);text-align:center;font-size:.6rem;width:26px}
+      .p3b-xls .req{color:var(--danger);font-weight:700}
+      .p3b-xls .opt{color:var(--text-muted)}
+      /* import pipeline */
+      .p3b-pipe{display:flex;flex-wrap:wrap;align-items:stretch;gap:.5rem;margin:1.2rem 0}
+      .p3b-pipe .stg{flex:1;min-width:140px;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:.8rem .85rem}
+      .p3b-pipe .stg .k{font-family:'JetBrains Mono',monospace;font-size:.57rem;font-weight:700;color:var(--accent);letter-spacing:.05em}
+      .p3b-pipe .stg b{display:block;font-size:.84rem;margin:.28rem 0 .2rem;color:var(--text)}
+      .p3b-pipe .stg span{font-size:.74rem;color:var(--text-muted);line-height:1.4}
+      .p3b-pipe .ar{align-self:center;color:var(--accent);font-weight:700;font-size:1.1rem}
+      @media(max-width:680px){.p3b-pipe .ar{display:none}}
+      /* efficiency compare */
+      .p3b-eff{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0}
+      @media(max-width:560px){.p3b-eff{grid-template-columns:1fr}}
+      .p3b-eff-card{border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.15rem;background:var(--surface)}
+      .p3b-eff-card.after{border-color:color-mix(in srgb,var(--success) 40%,transparent);background:color-mix(in srgb,var(--success) 6%,transparent)}
+      .p3b-eff-card .lab{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+      .p3b-eff-card.after .lab{color:var(--success)}
+      .p3b-eff-card .big{font-size:1.5rem;font-weight:800;color:var(--text);margin:.35rem 0 .25rem;line-height:1.15}
+      .p3b-eff-card p{font-size:.78rem;color:var(--text-muted);line-height:1.5;margin:0}
+    </style>
+
     <h3 class="content-h3">The <em>Brief</em></h3>
     <p class="content-p">
-      The school required a <strong>points-based student recognition system</strong>: teachers assign 'stars' to students for behaviour and achievement; students redeem accumulated stars for certificates and rewards (comparable to a Starbucks loyalty model).
+      The school runs a <strong>Star Reward loyalty programme</strong>: supervisors award <strong>stars</strong> to students for behaviour, participation and achievement, and the school turns accumulated stars into <strong>certificates and prizes</strong> that keep students motivated to learn (a Starbucks-style loyalty loop, applied to education). My remit on <strong>XeerSoft Cloud ERP</strong> was to help <strong>design, build, harden and roll out</strong> the system that runs it: the Commendation workflow, rank tiers, parent notifications over LINE, and a <strong>bulk Excel import</strong> so staff can award stars at school scale.
     </p>
 
     <p class="content-p">
-      I joined the project <strong>mid-implementation</strong>, with XeerSoft development already in progress on the custom CRM logic. Within the first UAT cycle, I identified a critical defect that would have blocked Go-Live, and proceeded to lead 5 iterative test cycles through to deployment.
+      I worked as the <strong>Business Analyst / Implementation Consultant</strong>: shaping requirements and the functional spec with the XeerSoft development team, designing the import standard every staff member now uses, then leading <strong>5 iterative UAT cycles</strong> that caught a critical silent-failure defect before launch. The system went <strong>live for the January term and rolled out to 100+ staff school-wide</strong>.
     </p>
+
+    <!-- ================= WHAT I HELPED BUILD ================= -->
+    <h3 class="content-h3">What I Helped <em>Build</em></h3>
+    <p class="content-p">
+      The programme lives inside a <strong>School Management</strong> workspace on XeerSoft Cloud ERP. I worked across two modules: <strong>Activity</strong> (the Star Reward / Commendation engine) and a companion <strong>Leave &amp; Online&nbsp;Learning</strong> module, with the Commendation list as the daily driver for every supervisor.
+    </p>
+
+    <div class="p3b-map">
+      <div class="p3b-mod lead">
+        <div class="ic">★</div>
+        <b>Activity · Commendation</b>
+        <span>Award stars, write the reason, fire LINE notifications, and track each student's running balance &amp; rank. The screen 100+ staff use every day.</span>
+        <span class="p3b-mtag">primary module</span>
+      </div>
+      <div class="p3b-mod">
+        <div class="ic">⬆</div>
+        <b>Bulk Star Import</b>
+        <span>One standard Excel file → many students, many stars, in a single upload. Validated and written straight into the Cloud ERP.</span>
+        <span class="p3b-mtag">my design</span>
+      </div>
+      <div class="p3b-mod">
+        <div class="ic">🏅</div>
+        <b>Rank &amp; Rewards</b>
+        <span>Lifetime stars roll up into Bronze → Platinum ranks; the school issues certificates and prizes off the same data.</span>
+        <span class="p3b-mtag">gamification</span>
+      </div>
+      <div class="p3b-mod">
+        <div class="ic">🗓</div>
+        <b>Leave &amp; Online Learning</b>
+        <span>Companion module in the same workspace: student leave / online-learning requests with supervisor, track and status filters.</span>
+        <span class="p3b-mtag">companion</span>
+      </div>
+    </div>
+
+    <p class="content-p">
+      The <strong>Commendation List</strong> is the heart of it: a searchable student roster where any supervisor finds a student, opens the commendation panel, and awards stars in seconds. Below is a faithful recreation of that screen (student data anonymised):
+    </p>
+
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; the real screen on XeerSoft Cloud ERP &middot; student names, IDs, emails &amp; photos anonymised &middot; star counts illustrative.</div>
+      <div class="p3b-ui">
+        <div class="p3b-ui-bar">
+          <span class="t">★ Commendation List</span>
+          <span class="p3b-ui-pill">🔎 Find student: ID · name · e-mail</span>
+          <span class="p3b-ui-pill">Supervisor ▾</span>
+          <span class="p3b-ui-btn ghost">⬆ Import</span>
+        </div>
+        <table class="p3b-rost">
+          <thead><tr><th></th><th>Student ID</th><th>Student</th><th>Level</th><th>Stars</th><th>Rank</th><th></th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="av">AP</div></td>
+              <td class="id">S-1042</td>
+              <td><div class="who"><div><span class="nm">Anya P.</span> &middot; <span class="nk">"Aom"</span></div></div></td>
+              <td>Year 12</td>
+              <td class="star">124</td>
+              <td><span class="p3b-rank platinum">Platinum</span></td>
+              <td><span class="p3b-act"><i title="Give stars">＋</i><i title="History">≣</i></span></td>
+            </tr>
+            <tr>
+              <td><div class="av">BT</div></td>
+              <td class="id">S-2087</td>
+              <td><div class="who"><div><span class="nm">Boon T.</span> &middot; <span class="nk">"Tao"</span></div></div></td>
+              <td>Year 11</td>
+              <td class="star">86</td>
+              <td><span class="p3b-rank gold">Gold</span></td>
+              <td><span class="p3b-act"><i title="Give stars">＋</i><i title="History">≣</i></span></td>
+            </tr>
+            <tr>
+              <td><div class="av">CM</div></td>
+              <td class="id">S-1190</td>
+              <td><div class="who"><div><span class="nm">Chai M.</span> &middot; <span class="nk">"Mint"</span></div></div></td>
+              <td>Year 10</td>
+              <td class="star">41</td>
+              <td><span class="p3b-rank silver">Silver</span></td>
+              <td><span class="p3b-act"><i title="Give stars">＋</i><i title="History">≣</i></span></td>
+            </tr>
+            <tr>
+              <td><div class="av">DR</div></td>
+              <td class="id">S-3055</td>
+              <td><div class="who"><div><span class="nm">Dao R.</span> &middot; <span class="nk">"Ploy"</span></div></div></td>
+              <td>Year 12</td>
+              <td class="star">19</td>
+              <td><span class="p3b-rank bronze">Bronze</span></td>
+              <td><span class="p3b-act"><i title="Give stars">＋</i><i title="History">≣</i></span></td>
+            </tr>
+            <tr>
+              <td><div class="av">EK</div></td>
+              <td class="id">S-2210</td>
+              <td><div class="who"><div><span class="nm">Eak K.</span> &middot; <span class="nk">"Gun"</span></div></div></td>
+              <td>Year 9</td>
+              <td class="star">6</td>
+              <td><span class="p3b-rank bronze">Bronze</span></td>
+              <td><span class="p3b-act"><i title="Give stars">＋</i><i title="History">≣</i></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot"><b>＋</b> opens the commendation panel (give stars + reason) &middot; <b>≣</b> opens that student's message history &middot; <b>⬆ Import</b> is the bulk path I designed. Live programme rolled out to <b>100+ staff</b>.</div>
+    </div>
+
+    <!-- ================= THE RECOGNITION LOOP ================= -->
+    <h3 class="content-h3">The Recognition <em>Loop</em></h3>
+    <p class="content-p">
+      A commendation is never just a number. Awarding stars also <strong>writes the reason, notifies the student and their parent over LINE, and re-computes the rank</strong> — closing the loop between the classroom and home. Each message has <strong>two LINE targets</strong> (student + parent), and delivery is tracked per target.
+    </p>
+
+    <div class="p3b-loop">
+      <div class="p3b-step"><div class="n">STEP 1</div><b>Find &amp; open</b><span>Supervisor searches the roster, opens the commendation panel for one student.</span></div>
+      <div class="p3b-step"><div class="n">STEP 2</div><b>Award + reason</b><span>Set the star count (＋ / −), write the required comment, or pick a message template.</span></div>
+      <div class="p3b-step"><div class="n">STEP 3</div><b>Notify over LINE</b><span>Sends to <b>2 targets</b> — the student and a parent — and logs the delivery status of each.</span></div>
+      <div class="p3b-step"><div class="n">STEP 4</div><b>Balance &amp; rank</b><span>Balance increments, the transaction is logged, and the rank tier recalculates automatically.</span></div>
+    </div>
+
+    <p class="content-p">
+      Every commendation is auditable as a message record: who sent it, how many stars, the message, and whether each LINE target was delivered. Recreation below:
+    </p>
+
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; the Student Commendation Message List &middot; senders, students &amp; messages anonymised &middot; LINE delivery status mirrors the real two-target model.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Sender</th><th>Stars</th><th>Message</th><th>LINE targets</th><th>Student</th><th>Parent</th><th>Date</th></tr></thead>
+          <tbody>
+            <tr><td>Kao</td><td class="sku">3 ★</td><td>Excellent work on your assignment.</td><td>Total: 2</td><td><span class="p3b-line ok">Success</span></td><td><span class="p3b-line ok">Success</span></td><td>2025-05-27</td></tr>
+            <tr><td>Benz</td><td class="sku">2 ★</td><td>You nailed it — keep it up.</td><td>Total: 2</td><td><span class="p3b-line ok">Success</span></td><td><span class="p3b-line ok">Success</span></td><td>2025-05-26</td></tr>
+            <tr><td>Jay</td><td class="sku">1 ★</td><td>Great class participation today.</td><td>Total: 2</td><td><span class="p3b-line exp">Expired</span></td><td><span class="p3b-line ok">Success</span></td><td>2025-05-30</td></tr>
+            <tr><td>Pim</td><td class="sku">5 ★</td><td>Top of the cohort this term.</td><td>Total: 2</td><td><span class="p3b-line ok">Success</span></td><td><span class="p3b-line ok">Success</span></td><td>2025-03-11</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">Two LINE targets per commendation (student + parent). <b>Expired</b> = the recipient never linked / the push window lapsed — surfaced so staff can follow up, exactly as in the live system.</div>
+    </div>
+
+    <p class="content-p">
+      Lifetime stars roll up into <strong>rank tiers</strong>. Ranks are what the school recognises at assembly and converts into certificates and prizes, so the tier ladder is the motivation engine of the whole programme:
+    </p>
+
+    <div class="p3b-tiers">
+      <div class="p3b-tier"><div class="badge">🥉</div><b>Bronze</b><div class="th">1 – 24 ★</div><div class="ds">Getting started · first commendations</div></div>
+      <div class="p3b-tier"><div class="badge">🥈</div><b>Silver</b><div class="th">25 – 59 ★</div><div class="ds">Consistent contributor</div></div>
+      <div class="p3b-tier"><div class="badge">🥇</div><b>Gold</b><div class="th">60 – 99 ★</div><div class="ds">Standout across the term</div></div>
+      <div class="p3b-tier"><div class="badge">🏆</div><b>Platinum</b><div class="th">100 ★ +</div><div class="ds">Top tier · certificate &amp; prize</div></div>
+    </div>
+    <p class="content-p" style="font-size:.82rem;color:var(--text-muted)">
+      <strong>Note:</strong> the four-tier ladder mirrors the Bronze and Platinum ranks shown in the live system; the exact star thresholds above are illustrative. <em>[CONFIRM: real tier thresholds if you'd like them exact.]</em>
+    </p>
+
+    <!-- ================= BULK STAR IMPORT ================= -->
+    <h3 class="content-h3">Bulk Star <em>Import</em></h3>
+    <p class="content-p">
+      The feature I'm most proud of designing. Awarding stars one student at a time is fine for a single class, but at school scale a supervisor might log <strong>hundreds of stars after an event, a term, or a competition</strong>. Clicking ＋ on each student, one by one, doesn't scale. So I designed a <strong>single standard Excel format</strong> that every staff member uses to import stars in bulk — straight into the Cloud ERP.
+    </p>
+
+    <div class="p3b-eff">
+      <div class="p3b-eff-card">
+        <div class="lab">Before · manual entry</div>
+        <div class="big">1 student / click</div>
+        <p>Open each student, set stars, write a reason, send. Repeated hundreds of times for a single event — slow and error-prone.</p>
+      </div>
+      <div class="p3b-eff-card after">
+        <div class="lab">After · bulk import</div>
+        <div class="big">1 file → many students</div>
+        <p>Fill the standard template once, upload, and every row is validated and written in a single pass — with the same audit trail and LINE notifications.</p>
+      </div>
+    </div>
+
+    <p class="content-p">
+      The win of a <strong>single standard format</strong> is consistency: every supervisor across the organisation prepares the file the same way, so imports are predictable and validatable. Columns, types and which fields are required:
+    </p>
+
+    <div class="p3b-xls">
+      <table>
+        <thead>
+        <tr class="cl"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td></tr>
+        <tr><th></th><th>Student&nbsp;ID&nbsp;<span class="req">*</span></th><th>Student&nbsp;Email&nbsp;<span class="req">*</span></th><th>Stars&nbsp;<span class="req">*</span></th><th>Reason / Comment&nbsp;<span class="req">*</span></th><th>Supervisor&nbsp;<span class="req">*</span></th><th>Date&nbsp;<span class="opt">(opt)</span></th></tr></thead>
+        <tbody>
+          <tr><td class="rn">1</td><td>S-1042</td><td>aom@school.ac.th</td><td>3</td><td>Science fair — 1st place</td><td>Kao</td><td>2025-05-27</td></tr>
+          <tr><td class="rn">2</td><td>S-2087</td><td>tao@school.ac.th</td><td>2</td><td>Helped run the open house</td><td>Kao</td><td>2025-05-27</td></tr>
+          <tr><td class="rn">3</td><td>S-1190</td><td>mint@school.ac.th</td><td>5</td><td>Perfect attendance, full term</td><td>Benz</td><td>2025-05-27</td></tr>
+          <tr><td class="rn">4</td><td>S-3055</td><td>ploy@school.ac.th</td><td>1</td><td>Volunteered for clean-up</td><td>Benz</td><td>2025-05-27</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="content-p" style="font-size:.82rem;color:var(--text-muted)"><span class="req" style="color:var(--danger);font-weight:700">*</span> required · <strong>Date</strong> defaults to the import day if left blank. Sample rows are illustrative; the column standard is what every staff member follows. <em>[CONFIRM: exact column set / header names if you want them matched 1:1.]</em></p>
+
+    <p class="content-p">How the import runs end-to-end once the file is uploaded:</p>
+    <div class="p3b-pipe">
+      <div class="stg"><div class="k">01 · PREPARE</div><b>Standard template</b><span>Staff fill the one approved Excel format.</span></div>
+      <div class="ar">→</div>
+      <div class="stg"><div class="k">02 · UPLOAD</div><b>Import</b><span>Upload from the Commendation List.</span></div>
+      <div class="ar">→</div>
+      <div class="stg"><div class="k">03 · VALIDATE</div><b>Match &amp; check</b><span>Match ID / e-mail, check types, flag bad rows.</span></div>
+      <div class="ar">→</div>
+      <div class="stg"><div class="k">04 · WRITE</div><b>Bulk upsert</b><span>Balances + transaction log, atomically.</span></div>
+      <div class="ar">→</div>
+      <div class="stg"><div class="k">05 · NOTIFY</div><b>LINE + rank</b><span>Push to student &amp; parent; recompute rank.</span></div>
+    </div>
+
+    <h3 class="content-h3">Live Import <em>Simulation</em></h3>
+    <p class="content-p">An interactive model of the bulk import: edit the rows, run <strong>Validate &amp; Import</strong>, and watch the validation and the resulting writes — the <em>specified behaviour I designed</em>, not the proprietary XeerSoft UI.</p>
+
+    <div class="xsim xnative-section" id="sim3imp">
+      <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
+        <span class="xsim-crumb">XeerSoft Cloud ERP &middot; <b>CRM &middot; Loyalty</b> &rsaquo; Bulk Import Simulation</span>
+        <span class="xsim-live">SIMULATION</span></div>
+      <div class="xsim-body">
+        <div class="xsim-grid">
+          <div class="xsim-panel">
+            <p class="xsim-h">Paste / edit import rows <small style="color:var(--text-muted)">— ID, Stars, Reason</small></p>
+            <textarea id="improws" rows="7" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.76rem;border:1px solid var(--xs-border,var(--border));border-radius:8px;padding:.6rem;background:var(--xs-bg,var(--bg));color:var(--xs-text,var(--text));resize:vertical">S-1042, 3, Science fair 1st place
+S-2087, 2, Helped run open house
+S-1190, 5, Perfect attendance
+S-3055, 1, Volunteered for clean-up
+S-9999, 4, Unknown student id
+S-2210, x, Bad star value</textarea>
+            <button class="xsim-btn" id="imprun">Validate &amp; Import</button>
+            <button class="xsim-btn ghost" id="impreset">Reset</button>
+          </div>
+          <div class="xsim-panel">
+            <p class="xsim-h">Result</p>
+            <div id="impchip"></div>
+            <p class="xsim-h" style="margin-top:.9rem">Row validation &amp; writes</p>
+            <div class="xsim-log" id="implog"></div>
+          </div>
+        </div>
+      </div>
+      <div class="xsim-cap">Valid rows are upserted to known students; unknown IDs and bad values are rejected (not silently skipped). Demonstrates the specified validation, not the proprietary interface.</div>
+    </div>
+    <script>
+    (function(){
+      var root=document.getElementById('sim3imp');
+      var known={'S-1042':124,'S-2087':86,'S-1190':41,'S-3055':19,'S-2210':6};
+      var ta=root.querySelector('#improws'), def=ta.value;
+      var log=root.querySelector('#implog'), chip=root.querySelector('#impchip');
+      function line(txt,cls){var d=document.createElement('div');d.textContent=txt;if(cls)d.style.color=cls;log.insertBefore(d,log.firstChild);}
+      root.querySelector('#imprun').addEventListener('click',function(){
+        log.innerHTML='';chip.innerHTML='';
+        var rows=ta.value.split('\n').map(function(r){return r.trim();}).filter(Boolean);
+        var ok=0,err=0,stars=0;
+        rows.slice().reverse().forEach(function(r){
+          var p=r.split(',').map(function(x){return x.trim();});
+          var id=p[0], qty=parseInt(p[1],10), reason=p[2]||'(no reason)';
+          if(!(id in known)){err++;line('REJECT  '+id+'  →  unknown student id','var(--xs-bad,#d2553f)');return;}
+          if(isNaN(qty)||qty<=0){err++;line('REJECT  '+id+'  →  invalid star value','var(--xs-bad,#d2553f)');return;}
+          known[id]+=qty;stars+=qty;ok++;
+          line('UPSERT  '+id+'  +'+qty+'★  →  '+known[id]+'★  ·  '+reason,'var(--xs-ok,#3a9d6b)');
+        });
+        var cls=err? 'warn':'ok';
+        chip.innerHTML='<span class="xsim-chip '+cls+'">IMPORTED '+ok+' / '+rows.length+' rows · +'+stars+'★ · '+err+' rejected</span>';
+      });
+      root.querySelector('#impreset').addEventListener('click',function(){
+        ta.value=def;known={'S-1042':124,'S-2087':86,'S-1190':41,'S-3055':19,'S-2210':6};log.innerHTML='';chip.innerHTML='';});
+    })();
+    </script>
 
     <h3 class="content-h3">The <em>Critical Defect</em></h3>
     <div class="callout">
@@ -859,6 +1196,9 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="module-tags">
       <span class="module-tag">XeerSoft CRM Module</span>
       <span class="module-tag">Custom Loyalty Logic</span>
+      <span class="module-tag">Bulk Excel Import (Standard Template)</span>
+      <span class="module-tag">LINE Notification (Student + Parent)</span>
+      <span class="module-tag">Rank &amp; Rewards Logic</span>
       <span class="module-tag">UAT Test Case Authoring</span>
       <span class="module-tag">Defect Log (Excel + Jira)</span>
       <span class="module-tag">Power BI Dashboard</span>
@@ -870,6 +1210,9 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <h3 class="content-h3">Key <em>Insight</em></h3>
     <p class="content-p">
       The biggest takeaway: <strong>UAT isn't just confirming what works: it's hunting for what fails silently</strong>. The bulk-assignment bug would have been invisible in production for months because there was no error message. Finding it required deliberately testing the <em>edge case</em> (multi-student selection) rather than the happy path (single student). Every UAT plan I write now starts with "what could fail without anyone noticing?"
+    </p>
+    <p class="content-p">
+      The second lesson was about <strong>design for scale</strong>: a feature that works for one user can still fail an organisation. Awarding stars one click at a time was correct but unusable at 100+ staff, so the real win was the <strong>one standard import format</strong> everyone follows — turning a per-click chore into a single, validated, auditable upload. Good ERP work is as much about the <em>standard you set</em> as the screen you build.
     </p>
 
   </div>
