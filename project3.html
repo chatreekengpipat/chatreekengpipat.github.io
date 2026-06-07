@@ -547,6 +547,31 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       .p3b-eff-card.after .lab{color:var(--success)}
       .p3b-eff-card .big{font-size:1.5rem;font-weight:800;color:var(--text);margin:.35rem 0 .25rem;line-height:1.15}
       .p3b-eff-card p{font-size:.78rem;color:var(--text-muted);line-height:1.5;margin:0}
+      /* interactive import builder (inside #sim3imp) */
+      .p3imp-wrap{overflow-x:auto;border:1px solid var(--xs-border,var(--border));border-radius:10px;background:var(--xs-surface,var(--surface))}
+      .p3imp-tbl{width:100%;border-collapse:collapse;min-width:600px;font-size:.78rem}
+      .p3imp-tbl thead th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--xs-muted,var(--text-muted));padding:.5rem .55rem;border-bottom:1px solid var(--xs-border,var(--border))}
+      .p3imp-tbl td{padding:.3rem .4rem;border-bottom:1px solid var(--xs-border,var(--border));vertical-align:middle}
+      .p3imp-tbl tr:last-child td{border-bottom:0}
+      .p3imp-tbl td.rn{font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--xs-muted,var(--text-muted));text-align:center;width:24px}
+      .p3imp-sel{width:100%;font-family:inherit;font-size:.76rem;color:var(--xs-text,var(--text));background:var(--xs-bg,var(--bg));border:1px solid var(--xs-border,var(--border));border-radius:6px;padding:.36rem .5rem;cursor:pointer;
+        appearance:none;-webkit-appearance:none;padding-right:1.5rem;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2390929c' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .5rem center}
+      .p3imp-sel:focus{outline:none;border-color:var(--xs-accent,var(--accent));box-shadow:0 0 0 2px color-mix(in srgb,var(--xs-accent,var(--accent)) 22%,transparent)}
+      .p3imp-del{cursor:pointer;color:var(--xs-muted,var(--text-muted));border:1px solid var(--xs-border,var(--border));border-radius:6px;width:26px;height:26px;line-height:1;display:inline-flex;align-items:center;justify-content:center;background:transparent;font-size:.7rem;transition:.2s}
+      .p3imp-del:hover{color:#fff;background:var(--xs-bad,#d2553f);border-color:var(--xs-bad,#d2553f)}
+      .p3imp-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin:.85rem 0 .3rem}
+      .p3imp-chip{margin:.3rem 0 .2rem;min-height:1.2rem}
+      .p3imp-rost-row{display:flex;align-items:center;gap:.55rem;padding:.45rem .3rem;border-bottom:1px solid var(--xs-border,var(--border));border-radius:6px}
+      .p3imp-rost-row:last-child{border-bottom:0}
+      .p3imp-rost-row .av{width:28px;height:28px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--xs-accent,var(--accent)),#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700}
+      .p3imp-rost-row .nm{flex:1;font-size:.8rem;color:var(--xs-text,var(--text));line-height:1.2}
+      .p3imp-rost-row .nm small{color:var(--xs-muted,var(--text-muted))}
+      .p3imp-rost-row .bal{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--xs-text,var(--text));white-space:nowrap}
+      .p3imp-rost-row .bal::after{content:" ★";color:#e0a526}
+      .p3imp-rost-row.bumped{animation:p3bump 1s ease}
+      @keyframes p3bump{0%{background:color-mix(in srgb,var(--xs-ok,#3a9d6b) 26%,transparent)}100%{background:transparent}}
+      @media (prefers-reduced-motion: reduce){.p3imp-rost-row.bumped{animation:none}}
     </style>
 
     <h3 class="content-h3">The <em>Brief</em></h3>
@@ -766,64 +791,132 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <span class="xsim-crumb">XeerSoft Cloud ERP &middot; <b>CRM &middot; Loyalty</b> &rsaquo; Bulk Import Simulation</span>
         <span class="xsim-live">SIMULATION</span></div>
       <div class="xsim-body">
-        <div class="xsim-grid">
+        <p class="xsim-h">Build the import <small style="color:var(--xs-muted,var(--text-muted));font-weight:400;text-transform:none;letter-spacing:0">— one row = one star · choose each field</small></p>
+        <div class="p3imp-wrap">
+          <table class="p3imp-tbl">
+            <thead><tr><th>#</th><th>Reason</th><th>Year</th><th>Class</th><th>Student</th><th></th></tr></thead>
+            <tbody id="impbody"></tbody>
+          </table>
+        </div>
+        <div class="p3imp-actions">
+          <button class="xsim-btn ghost" id="impadd">＋ Add star row</button>
+          <button class="xsim-btn" id="imprun">Validate &amp; Import</button>
+          <button class="xsim-btn ghost" id="impreset">Reset</button>
+        </div>
+        <div class="p3imp-chip" id="impchip"></div>
+        <div class="xsim-grid" style="margin-top:.4rem">
           <div class="xsim-panel">
-            <p class="xsim-h">Paste / edit rows <small style="color:var(--text-muted)">— Reason, Year, Class, Email</small></p>
-            <textarea id="improws" rows="7" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.74rem;border:1px solid var(--xs-border,var(--border));border-radius:8px;padding:.6rem;background:var(--xs-bg,var(--bg));color:var(--xs-text,var(--text));resize:vertical">Assignment, 9, Pre-IGCSE Physics, anya@newton.ac.th
-Assignment, 9, Pre-IGCSE Physics, anya@newton.ac.th
-Q&A, 9, Pre-IGCSE Math, boon@newton.ac.th
-Activity, 11, IGCSE Further Math, chai@newton.ac.th
-Activity, 11, IGCSE Further Math, chai@newton.ac.th
-Engagement, 12, International AS Physics, ghost@newton.ac.th</textarea>
-            <button class="xsim-btn" id="imprun">Validate &amp; Import</button>
-            <button class="xsim-btn ghost" id="impreset">Reset</button>
+            <p class="xsim-h">Validation &amp; writes</p>
+            <div class="xsim-log" id="implog"></div>
           </div>
           <div class="xsim-panel">
-            <p class="xsim-h">Result</p>
-            <div id="impchip"></div>
-            <p class="xsim-h" style="margin-top:.9rem">Row validation &amp; writes</p>
-            <div class="xsim-log" id="implog"></div>
+            <p class="xsim-h">Live student balances <small style="color:var(--xs-muted,var(--text-muted));font-weight:400;text-transform:none;letter-spacing:0">— updates on import</small></p>
+            <div id="improster"></div>
           </div>
         </div>
       </div>
-      <div class="xsim-cap">Rows are grouped by email and each row counts as one star; emails that match a student are upserted, unknown emails are rejected (not silently skipped). Demonstrates the specified validation, not the proprietary interface.</div>
+      <div class="xsim-cap">Pick each field from the standard columns; every row is one star. On import, rows are grouped by student and written as a single batch &mdash; balances and ranks update live. Demonstrates the specified behaviour, not the proprietary interface.</div>
     </div>
     <script>
     (function(){
       var root=document.getElementById('sim3imp');
-      function clone(o){var c={};for(var k in o)c[k]=o[k];return c;}
-      var baseKnown={'anya@newton.ac.th':124,'boon@newton.ac.th':86,'chai@newton.ac.th':41};
-      var known=clone(baseKnown);
-      var ta=root.querySelector('#improws'), def=ta.value;
-      var log=root.querySelector('#implog'), chip=root.querySelector('#impchip');
+      var REASONS=['Assignment','Q&A','Engagement','Activity'];
+      var YEARS=['9','10','11','12','13'];
+      var CLASSES=['Pre-IGCSE Physics','Pre-IGCSE Math','IGCSE Physics','IGCSE Further Math',
+        'International AS-Level Physics','International AS-Level Math','International A2-Level Math','International A2-Level Further Math'];
+      var STUDENTS=[
+        {email:'anya@newton.ac.th',name:'Anya P.',nick:'Aom',base:124},
+        {email:'boon@newton.ac.th',name:'Boon T.',nick:'Tao',base:86},
+        {email:'chai@newton.ac.th',name:'Chai M.',nick:'Mint',base:41},
+        {email:'dao@newton.ac.th', name:'Dao R.', nick:'Ploy',base:19},
+        {email:'eak@newton.ac.th', name:'Eak K.', nick:'Gun', base:6}
+      ];
+      var bal={}; STUDENTS.forEach(function(s){bal[s.email]=s.base;});
+      function rank(n){ if(n>=100)return['platinum','Platinum']; if(n>=60)return['gold','Gold']; if(n>=25)return['silver','Silver']; return['bronze','Bronze']; }
+      function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+      var defs=[
+        {r:'Assignment',y:'9',c:'Pre-IGCSE Physics',e:'anya@newton.ac.th'},
+        {r:'Assignment',y:'9',c:'Pre-IGCSE Physics',e:'anya@newton.ac.th'},
+        {r:'Q&A',y:'9',c:'Pre-IGCSE Math',e:'boon@newton.ac.th'},
+        {r:'Activity',y:'11',c:'IGCSE Further Math',e:'chai@newton.ac.th'},
+        {r:'Activity',y:'11',c:'IGCSE Further Math',e:'chai@newton.ac.th'}
+      ];
+      function freshRows(){return defs.map(function(d){return {r:d.r,y:d.y,c:d.c,e:d.e};});}
+      var rows=freshRows();
+      var body=root.querySelector('#impbody'), log=root.querySelector('#implog'),
+          chip=root.querySelector('#impchip'), roster=root.querySelector('#improster');
+
+      function sel(kind,val){
+        var h='<select class="p3imp-sel" data-k="'+kind+'">';
+        if(kind==='e'){
+          h+='<option value=""'+(val?'':' selected')+'>— student —</option>';
+          STUDENTS.forEach(function(s){h+='<option value="'+s.email+'"'+(s.email===val?' selected':'')+'>'+esc(s.nick+' · '+s.name)+'</option>';});
+        } else {
+          var list = kind==='r'?REASONS : kind==='y'?YEARS : CLASSES;
+          list.forEach(function(v){h+='<option'+(v===val?' selected':'')+'>'+esc(v)+'</option>';});
+        }
+        return h+'</select>';
+      }
+      function renderBuilder(){
+        body.innerHTML='';
+        rows.forEach(function(row,i){
+          var tr=document.createElement('tr');
+          tr.innerHTML='<td class="rn">'+(i+1)+'</td>'+
+            '<td>'+sel('r',row.r)+'</td><td>'+sel('y',row.y)+'</td><td>'+sel('c',row.c)+'</td><td>'+sel('e',row.e)+'</td>'+
+            '<td><button class="p3imp-del" title="Remove row">✕</button></td>';
+          tr.querySelectorAll('.p3imp-sel').forEach(function(s){
+            s.addEventListener('change',function(){row[s.getAttribute('data-k')]=s.value;});
+          });
+          tr.querySelector('.p3imp-del').addEventListener('click',function(){rows.splice(i,1);renderBuilder();});
+          body.appendChild(tr);
+        });
+      }
+      function renderRoster(bump){
+        roster.innerHTML='';
+        STUDENTS.forEach(function(s){
+          var n=bal[s.email], rk=rank(n);
+          var d=document.createElement('div');
+          d.className='p3imp-rost-row'+(bump&&bump[s.email]?' bumped':'');
+          d.innerHTML='<div class="av">'+esc(s.nick.slice(0,2).toUpperCase())+'</div>'+
+            '<div class="nm">'+esc(s.name)+' <small>"'+esc(s.nick)+'"</small></div>'+
+            '<span class="p3b-rank '+rk[0]+'">'+rk[1]+'</span>'+
+            '<span class="bal">'+n+'</span>';
+          roster.appendChild(d);
+        });
+      }
       function line(txt,cls){var d=document.createElement('div');d.textContent=txt;if(cls)d.style.color=cls;log.insertBefore(d,log.firstChild);}
+
+      root.querySelector('#impadd').addEventListener('click',function(){
+        rows.push({r:'Activity',y:'9',c:'Pre-IGCSE Physics',e:''});renderBuilder();});
+
       root.querySelector('#imprun').addEventListener('click',function(){
         log.innerHTML='';chip.innerHTML='';
-        var rows=ta.value.split('\n').map(function(r){return r.trim();}).filter(Boolean);
-        var groups={}, order=[];
-        rows.forEach(function(r){
-          var p=r.split(',').map(function(x){return x.trim();});
-          var reason=p[0]||'(reason?)', email=(p[3]||'').toLowerCase()||'(missing email)';
-          if(!groups[email]){groups[email]={n:0,reasons:{}};order.push(email);}
-          groups[email].n++; groups[email].reasons[reason]=(groups[email].reasons[reason]||0)+1;
+        var groups={},order=[],skip=0;
+        rows.forEach(function(row){
+          if(!row.e){skip++;return;}
+          if(!groups[row.e]){groups[row.e]={n:0,reasons:{}};order.push(row.e);}
+          groups[row.e].n++; groups[row.e].reasons[row.r]=(groups[row.e].reasons[row.r]||0)+1;
         });
-        var okRows=0,rejRows=0,stars=0,students=0;
-        order.slice().reverse().forEach(function(email){
-          var g=groups[email];
+        var stars=0,students=0,bump={};
+        order.slice().reverse().forEach(function(e){
+          var g=groups[e]; var before=bal[e]; bal[e]+=g.n; stars+=g.n; students++; bump[e]=true;
           var rs=Object.keys(g.reasons).map(function(k){return k+'×'+g.reasons[k];}).join(', ');
-          if(email in known){
-            known[email]+=g.n; stars+=g.n; okRows+=g.n; students++;
-            line('UPSERT  '+email+'  +'+g.n+'★  ('+rs+')  →  '+known[email]+'★','var(--xs-ok,#3a9d6b)');
-          } else {
-            rejRows+=g.n;
-            line('REJECT  '+email+'  →  unknown student email  ('+g.n+' row'+(g.n>1?'s':'')+')','var(--xs-bad,#d2553f)');
-          }
+          var st=STUDENTS.filter(function(x){return x.email===e;})[0];
+          var rkB=rank(before)[1], rkA=rank(bal[e])[1];
+          var promo = rkA!==rkB ? '  ↑ '+rkA : '';
+          line('UPSERT  '+(st?st.nick:e)+'  +'+g.n+'★  ('+rs+')  →  '+bal[e]+'★'+promo,'var(--xs-ok,#3a9d6b)');
         });
-        var cls=rejRows? 'warn':'ok';
-        chip.innerHTML='<span class="xsim-chip '+cls+'">IMPORTED '+okRows+' rows · '+students+' students · +'+stars+'★ · '+rejRows+' rejected</span>';
+        if(skip)line(skip+' incomplete row'+(skip>1?'s':'')+' skipped (no student selected)','var(--xs-warn,#d8973a)');
+        var cls=skip?'warn':'ok';
+        chip.innerHTML='<span class="xsim-chip '+cls+'">IMPORTED +'+stars+'★ · '+students+' student'+(students===1?'':'s')+(skip?' · '+skip+' skipped':'')+'</span>';
+        renderRoster(bump);
       });
+
       root.querySelector('#impreset').addEventListener('click',function(){
-        ta.value=def;known=clone(baseKnown);log.innerHTML='';chip.innerHTML='';});
+        STUDENTS.forEach(function(s){bal[s.email]=s.base;});
+        rows=freshRows();log.innerHTML='';chip.innerHTML='';renderBuilder();renderRoster();});
+
+      renderBuilder();renderRoster();
     })();
     </script>
 
