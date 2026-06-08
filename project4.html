@@ -264,10 +264,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-subtle);
   padding-bottom:.85rem; margin-bottom:.5rem; border-bottom:1px solid var(--border); }
 .lx-spec-head span:last-child{ color:var(--accent); }
-.project-info-val.lx-prog{ display:inline-flex; align-items:center; justify-content:flex-end; gap:.45rem;
-  color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; }
-.project-info-val.lx-prog::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); animation:lxPulseA 2.2s infinite; }
-@keyframes lxPulseA{ 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent);} 70%{box-shadow:0 0 0 7px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
+.project-info-val.lx-live{ display:inline-flex; align-items:center; justify-content:flex-end; gap:.45rem;
+  color:var(--success); font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; }
+.project-info-val.lx-live::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--success); animation:lxPulseA 2.2s infinite; }
+@keyframes lxPulseA{ 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--success) 55%,transparent);} 70%{box-shadow:0 0 0 7px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
 .results-banner .result-cell::before{ display:none; }
 .lx-stat{ background: linear-gradient(180deg, color-mix(in srgb,var(--accent) 4%, var(--surface)), var(--surface)); padding:1.55rem 1.45rem; }
 .lx-stat:hover{ border-color: color-mix(in srgb,var(--accent) 45%, var(--border)); box-shadow: 0 24px 52px -32px color-mix(in srgb,var(--accent) 70%, transparent); }
@@ -296,7 +296,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .dashboard-image{ border-top:1px solid var(--border); }
 .trk-flag .ic{ color:var(--t-warn); }
 .trk-flag.ok .ic{ color:var(--t-ok); }
-@media (prefers-reduced-motion: reduce){ .project-info-val.lx-prog::before{ animation:none; } }
+@media (prefers-reduced-motion: reduce){ .project-info-val.lx-live::before{ animation:none; } }
 </style>
 </head>
 <body>
@@ -363,10 +363,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   <div class="project-hero-grid">
     <div>
       <div class="platform-badge">XeerSoft Financial Accounting · AR + Cost Allocation</div>
-      <div class="project-meta">Project 04 · Jan 2025 – May 2026 · Completed</div>
+      <div class="project-meta">Project 04 · Jan 2025 – June 2026 · Go-Live June 2026</div>
       <h1>STEM <em>Portfolio</em><br>Financial Tracking</h1>
       <p class="project-hero-desc">
-        Implementation Consultant + BA for the financial tracking of Newton Sixth Form's STEM enrichment programme on <strong>XeerSoft Financial Accounting</strong> — lab and competition activities run with partner universities (Chulalongkorn · Mahidol). Designed AR billing structure, configured collection tracking, set up cost allocation, and produced per-activity P&L with margin analysis. <strong>Closed May 2026</strong> — every invoice cleared, nothing outstanding.
+        Implementation Consultant + BA for the financial tracking of Newton Sixth Form's STEM enrichment programme on <strong>XeerSoft Financial Accounting</strong> — lab and competition activities run with partner universities (Chulalongkorn · Mahidol). Designed AR billing structure, configured collection tracking, set up cost allocation, and produced per-activity P&L with margin analysis. <strong>Go-Live completed in June 2026</strong> — billing, collection tracking, cost allocation, and P&L reporting are now running in production.
       </p>
     </div>
 
@@ -382,7 +382,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Duration</span>
-        <span class="project-info-val">Jan 2025 → May 2026</span>
+        <span class="project-info-val">Jan 2025 → June 2026</span>
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Modules</span>
@@ -394,7 +394,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Status</span>
-        <span class="project-info-val" style="color:var(--success);font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;letter-spacing:.04em;">COMPLETED ✓ · closed May 2026</span>
+        <span class="project-info-val lx-live">LIVE · June 2026</span>
       </div>
     </div>
   </div>
@@ -404,14 +404,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 <section style="padding: 4rem 4rem 2rem;">
   <div class="results-banner">
     <div class="result-cell lx-stat">
-      <div class="lx-stat-head"><div class="result-val">฿2.13M</div></div>
+      <div class="lx-stat-head"><div class="result-val">฿2.14M</div></div>
       <div class="result-label">Revenue tracked</div>
       <div class="lx-stat-note">3 partner-university activities<br>Chulalongkorn · Mahidol · Newton</div>
     </div>
     <div class="result-cell lx-stat">
-      <div class="lx-stat-head"><div class="result-val">100%</div><span class="lx-stat-dir">✓ closed</span></div>
+      <div class="lx-stat-head"><div class="result-val">100%</div><span class="lx-stat-dir">✓ live</span></div>
       <div class="result-label">Collection rate</div>
-      <div class="lx-stat-note">฿2.13M of ฿2.13M<br>fully cleared · nothing outstanding</div>
+      <div class="lx-stat-note">฿2.14M of ฿2.14M<br>reconciled for Go-Live</div>
     </div>
     <div class="result-cell lx-stat">
       <div class="lx-stat-head"><div class="result-val">฿679K</div></div>
@@ -438,7 +438,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     </div>
     <img src="dashboards/dashboard-p4.png" alt="Power BI dashboard showing STEM portfolio financial tracking per subject" class="dashboard-image">
     <div class="dashboard-footer">
-      <strong>Source:</strong> AR billing + cost allocation data from XeerSoft FI, analyzed in Power BI (tiles illustrative). Shows ฿2.13M total revenue across 3 partner-university activities, 100% final collection (project closed), ฿679K gross profit, and per-activity margin breakdown: Chemistry Lab · Chulalongkorn (highest absolute), Microbiology Camp · Mahidol (comparable margin).
+      <strong>Source:</strong> AR billing + cost allocation data from XeerSoft FI, analyzed in Power BI (tiles illustrative). Shows ฿2.14M total revenue across 3 partner-university activities, 100% collection reconciled for Go-Live, ฿679K gross profit, and per-activity margin breakdown: Chemistry Lab · Chulalongkorn (highest absolute), Microbiology Camp · Mahidol (comparable margin).
     </div>
   </div>
 </section>
@@ -449,7 +449,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
     <h3 class="content-h3">The <em>Business Context</em></h3>
     <p class="content-p">
-      Newton Sixth Form ran a recurring <strong>STEM enrichment programme</strong> (Jan 2025 – May 2026): students attended hands-on university lab sessions and academic competitions, billed per family. I owned the full financial lifecycle on XeerSoft: invoicing each family, tracking payment collection, investigating discrepancies, allocating cost, and reporting per-activity P&L to management.
+      Newton Sixth Form ran a recurring <strong>STEM enrichment programme</strong> (Jan 2025 – June 2026): students attended hands-on university lab sessions and academic competitions, billed per family. I owned the full financial lifecycle on XeerSoft: invoicing each family, tracking payment collection, investigating discrepancies, allocating cost, and reporting per-activity P&L to management.
     </p>
 
     <p class="content-p">
@@ -474,7 +474,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
     <h3 class="content-h3">P&L <em>by Activity</em></h3>
     <div class="exh">
-      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-activity P&amp;L across all programme intakes (Jan 2025 – May 2026) &middot; figures author-provided &middot; original XeerSoft FI data under NDA.</div>
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-activity P&amp;L across all programme intakes (Jan 2025 – June 2026) &middot; figures author-provided &middot; original XeerSoft FI data under NDA.</div>
       <div class="exh-body" style="padding:0">
       <table class="process-table">
       <thead>
@@ -515,7 +515,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       </tbody>
     </table>
       </div>
-      <div class="exh-foot">Totals: revenue <b>฿2.136M</b> · collected <b>฿2.136M</b> (100% · fully cleared at closeout) · gross profit <b>฿679,000</b>. Margin = gross profit ÷ revenue per activity; the Math Challenge is a free, non-revenue event. Figures author-provided, masked for confidentiality.</div>
+      <div class="exh-foot">Totals: revenue <b>฿2.136M</b> · collected <b>฿2.136M</b> (100% · reconciled for Go-Live) · gross profit <b>฿679,000</b>. Margin = gross profit ÷ revenue per activity; the Math Challenge is a free, non-revenue event. Figures author-provided, masked for confidentiality.</div>
     </div>
 
     <h3 class="content-h3">Cost <em>Allocation</em></h3>
@@ -582,11 +582,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
         <text class="label" x="540" y="424" text-anchor="middle">CLEARED ✓</text>
 
         <!-- Branch: Partial -->
-        <text class="label-accent" x="380" y="430" text-anchor="middle">PARTIAL</text>
-        <line class="arrow" x1="380" y1="405" x2="380" y2="430" stroke="#888880" stroke-width="1.5"/>
+        <text class="label-accent" x="380" y="418" text-anchor="middle">PARTIAL</text>
+        <line class="arrow" x1="380" y1="405" x2="380" y2="421" stroke="#888880" stroke-width="1.5"/>
 
-        <rect class="node-box" x="310" y="435" width="140" height="40" rx="4"/>
-        <text class="label" x="380" y="459" text-anchor="middle">PARTIAL Status</text>
+        <rect class="node-box" x="310" y="423" width="140" height="32" rx="4"/>
+        <text class="label" x="380" y="444" text-anchor="middle">PARTIAL Status</text>
 
         <!-- Branch: Disputed -->
         <text class="label-accent" x="220" y="320" text-anchor="middle">DISPUTED</text>
@@ -730,21 +730,21 @@ margin %     = gross_profit / collected × 100</div>
 
     <div class="callout">
       <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
-      <p>This was a <b>recurring revenue cycle</b>, not a one-off: every STEM intake billed each family ฿3,500–4,500. Late or inaccurate billing directly delayed cash collection, so the schedule pressure repeated every intake until the programme reached Go-Live and closed in May 2026.</p>
+      <p>This was a <b>recurring revenue cycle</b>, not a one-off: every STEM intake billed each family ฿3,500–4,500. Late or inaccurate billing directly delayed cash collection, so the schedule pressure repeated every intake until the programme reached Go-Live in June 2026.</p>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Project timeline &middot; month-by-month</p>
       <div class="trk-scroll"><div class="trk-gantt" style="--cols:6">
         <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
-        <div class="trk-row"><div class="trk-label">Billing structure design</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Billing structure design">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Cost allocation model</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:1" title="Cost allocation model">1 mo</span></div></div><div class="trk-row"><div class="trk-label">AR tracking + P&L report</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="AR tracking + P&L report">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Collection ops + reconciliation</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:3" title="Collection ops + reconciliation">3 mo</span></div></div><div class="trk-row"><div class="trk-label">Margin reporting + optimisation</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="Margin reporting + optimisation">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Go-Live + programme closeout</div><div class="trk-track"><span class="trk-bar live" style="--s:5;--l:2" title="Go-Live + closeout">closed May 2026</span></div></div>
+        <div class="trk-row"><div class="trk-label">Billing structure design</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Billing structure design">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Cost allocation model</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:1" title="Cost allocation model">1 mo</span></div></div><div class="trk-row"><div class="trk-label">AR tracking + P&L report</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="AR tracking + P&L report">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Collection ops + reconciliation</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:3" title="Collection ops + reconciliation">3 mo</span></div></div><div class="trk-row"><div class="trk-label">Margin reporting + optimisation</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="Margin reporting + optimisation">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:6;--l:1" title="Go-Live">LIVE</span></div></div>
       </div></div>
       <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>Collection closed at 100%</b><p>Mid-programme, collection sat around 82% with outstanding AR carried per family — cash tied up in OPEN/DISPUTED items.<span class="res"> Resolved → AR aging per family plus DISPUTED reconciliation against bank receipts and earlier dunning cleared every item; the programme closed in May 2026 at 100% collection with nothing outstanding.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Per-session margin visibility</b><p>Without per-session P&L, management couldn’t see which subjects actually earned money.<span class="res"> Resolved → I built session-level revenue-vs-cost reporting so pricing and session planning are now driven by margin data.</span></p></div></div>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>Collection ready for Go-Live</b><p>Mid-programme, collection sat around 82% with outstanding AR carried per family — cash tied up in OPEN/DISPUTED items.<span class="res"> Resolved → AR aging per family plus DISPUTED reconciliation against bank receipts and earlier dunning brought the collection workflow into a clean Go-Live state in June 2026.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Per-session margin visibility</b><p>Without per-session P&L, management couldn’t see which subjects actually earned money.<span class="res"> Resolved → I built session-level revenue-vs-cost reporting so pricing and session planning are now driven by margin data.</span></p></div></div>
     </div>
 
     <div class="trk-card xnative-section">
@@ -759,21 +759,21 @@ margin %     = gross_profit / collected × 100</div>
     <div class="trk-card xnative-section">
       <p class="trk-h">Weekly Agile cadence</p>
       <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>AR aging review + DISPUTED follow-up</p></div><div class="trk-day"><div class="d">TUE</div><p>Bank reconciliation matching</p></div><div class="trk-day"><div class="d">WED</div><p>Cost allocation / session orders</p></div><div class="trk-day"><div class="d">THU</div><p>P&L + margin report refresh</p></div><div class="trk-day"><div class="d">FRI</div><p>Management update + dev sync</p></div></div>
-      <div class="trk-kpis"><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">AR aging review<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">per intake</div><div class="l">Billing & cost cycle</div></div><div class="trk-kpi"><div class="v">100%</div><div class="l">Final collection (closed)</div></div></div>
+      <div class="trk-kpis"><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">AR aging review<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">per intake</div><div class="l">Billing & cost cycle</div></div><div class="trk-kpi"><div class="v">June 2026</div><div class="l">Go-Live completed</div></div></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Stakeholder network &amp; RACI</p>
       <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>enrolled families (payers) &middot; management (P&amp;L) &middot; CU lab partner &middot; remote XeerSoft dev team</b></div>
       <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA + Implementation</b></td><td class="cnt">1</td><td>Billing design, AR ops, P&amp;L reporting</td><td class="raci">A / R</td></tr><tr><td><b>Management</b></td><td class="cnt">few</td><td>Consume P&amp;L; pricing decisions</td><td class="raci">C / I</td></tr><tr><td><b>Families</b></td><td class="cnt">per intake</td><td>Billed; payment collection</td><td class="raci">I</td></tr><tr><td><b>CU lab partner</b></td><td class="cnt">1</td><td>Lab fee / cost input</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built AR posting + report from FSD</td><td class="raci">R</td></tr></tbody></table>
-      <p class="trk-note">A financial operation I ran single-handedly end-to-end — sole owner of billing, collection, reconciliation and the P&L management used to plan sessions. Closed in May 2026 with all AR cleared and a clean handover to BAU.</p>
+      <p class="trk-note">A financial operation I ran single-handedly end-to-end — sole owner of billing, collection, reconciliation and the P&L management used to plan sessions. The build went live in June 2026 with billing, AR tracking, reconciliation, and P&L reporting ready for production use.</p>
     </div>
     </div>
 
     <h3 class="content-h3">Configuration <em>Parameters</em></h3>
     <figure class="lx-code">
     <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft FI · programme &amp; GL config</span><span class="lx-code-lang">parameters</span></figcaption>
-    <div class="code-block"><span class="comment">// PROGRAMME · Jan 2025 – May 2026 · CLOSED</span>
+    <div class="code-block"><span class="comment">// PROGRAMME · Jan 2025 – June 2026 · GO-LIVE</span>
 Activity 1 · Chemistry Lab     : Chulalongkorn Univ. · THB 3,500 / student
 Activity 2 · Microbiology Camp : Mahidol Univ.       · THB 4,500 / student
 Activity 3 · Math Challenge    : Newton (in-house)   · free entry
@@ -787,10 +787,10 @@ Cost Centre: branch-specific (1100/1200/1300 + dept 110 Academic)
 <span class="comment">// COST CATEGORIES per session</span>
 Lab Fee (fixed)     · Materials (variable)  · Transport
 
-<span class="comment">// AR STATUS CODES  (all items CLEARED at closeout · May 2026)</span>
+<span class="comment">// AR STATUS CODES  (live after Go-Live · June 2026)</span>
 <span class="keyword">OPEN</span>     : Invoice sent, payment not received
 <span class="keyword">PARTIAL</span>  : Partial payment received, balance outstanding
-<span class="keyword">CLEARED</span>  : Full payment confirmed and reconciled  ← all items at close
+<span class="keyword">CLEARED</span>  : Full payment confirmed and reconciled
 <span class="keyword">DISPUTED</span> : Amount discrepancy under investigation</div>
     </figure>
 
@@ -800,15 +800,15 @@ Lab Fee (fixed)     · Materials (variable)  · Transport
     </p>
 
     <div class="callout">
-      <div class="callout-title">Final AR Position (Project Closed · May 2026)</div>
-      <p><strong>· Total Collected: ฿2.13M (100%)</strong>, across all three activities</p>
-      <p><strong>· Total Outstanding: ฿0</strong>, every invoice cleared and reconciled at closeout</p>
-      <p><strong>· DISPUTED items: all resolved</strong>, bank receipts matched before the programme closed</p>
+      <div class="callout-title">Post-Go-Live AR Position (June 2026)</div>
+      <p><strong>· Total Collected: ฿2.14M (100%)</strong>, across all three activities</p>
+      <p><strong>· Total Outstanding: ฿0</strong>, every invoice reconciled for Go-Live</p>
+      <p><strong>· DISPUTED items: all resolved</strong>, bank receipts matched before production handover</p>
     </div>
 
     <h3 class="content-h3">Margin <em>Analysis</em></h3>
     <p class="content-p">
-      The per-activity margin showed where the programme generated the most economic value. <strong>Chemistry Lab · Chulalongkorn produced the highest absolute profit</strong> (฿389K) on the largest invoiced base, while the <strong>Microbiology Camp · Mahidol held a comparable ~32% margin</strong> at a higher per-student fee. The free Math Challenge ran at cost (no fee revenue). This data informed pricing and session planning right up to programme close.
+      The per-activity margin showed where the programme generated the most economic value. <strong>Chemistry Lab · Chulalongkorn produced the highest absolute profit</strong> (฿389K) on the largest invoiced base, while the <strong>Microbiology Camp · Mahidol held a comparable ~32% margin</strong> at a higher per-student fee. The free Math Challenge ran at cost (no fee revenue). This data informed pricing and session planning through Go-Live and post-live monitoring.
     </p>
 
     <h3 class="content-h3">Tools <em>& Technologies</em></h3>
@@ -823,9 +823,9 @@ Lab Fee (fixed)     · Materials (variable)  · Transport
       <span class="module-tag">Word (FSD)</span>
     </div>
 
-    <h3 class="content-h3">Project <em>Closeout</em></h3>
+    <h3 class="content-h3">Go-Live <em>Status</em></h3>
     <p class="content-p">
-      <strong>The programme went live and closed in May 2026 — nothing outstanding.</strong> Collection reached 100% with all DISPUTED items reconciled, AR fully cleared, and the final per-activity P&L handed to management. Billing, cost allocation, and margin reporting all ran in production through the last intake, and the operation was handed over clean to BAU. No open items remain.
+      <strong>The programme went live successfully in June 2026.</strong> Billing, collection tracking, cost allocation, and per-activity P&L reporting are now running in production. The Go-Live scope was completed cleanly, with AR reconciliation and management reporting ready for post-live operation.
     </p>
 
   </div>
