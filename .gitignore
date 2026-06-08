@@ -24,3 +24,8 @@ npm-debug.log*
 
 # --- Local development files ---
 *.local.js
+# Internal build/planning docs — local only, do NOT publish
+AGENTS.md
+PROMPT-PLAYBOOK.md
+METRIC-AUDIT.md
+MMTH_FOLDER_AUDIT_REPORT*
