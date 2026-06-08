@@ -1391,6 +1391,10 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
   var sel='.content-h3,.content-p,.callout,.code-block,.diagram-container,.results-banner,.process-table,.xnative-section,.dashboard-section,.project-info-card,.module-tags,.disclaimer,.project-nav';
   var els=[].slice.call(d.querySelectorAll(sel));
   els.forEach(function(el){el.classList.add('fx-reveal'); if(el.matches('.results-banner,.module-tags'))el.classList.add('fx-stagger');});
+  // Pre-claim result-val nodes so the global animation.js counter (which checks dataset.counted) skips them.
+  // Otherwise two count-up animations fight on the same node and the slower one latches a mid-animation
+  // number as the final value. The inline FX below is the sole animator for these values.
+  [].forEach.call(d.querySelectorAll('.result-val'), function(n){ n.dataset.counted='1'; });
 
   function countUp(scope){
     scope.querySelectorAll('.result-val').forEach(function(node){
