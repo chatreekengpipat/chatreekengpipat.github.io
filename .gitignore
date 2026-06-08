@@ -21,3 +21,6 @@ desktop.ini
 # --- Node (only if you ever add a build step) ---
 node_modules/
 npm-debug.log*
+
+# --- Local development files ---
+*.local.js
