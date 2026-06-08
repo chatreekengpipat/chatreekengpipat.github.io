@@ -29,7 +29,7 @@ functional consulting.
 | 01 | [Inventory & Procurement (P2P)](https://chatreekengpipat.github.io/project1.html) | Procurement · Stock management | Jan – Jun 2023 |
 | 02 | [Strategic Pricing & AR Configuration](https://chatreekengpipat.github.io/project2.html) | Pricing · Accounts receivable | Jun 2023 – Jun 2024 |
 | 03 | [CRM Star Reward Loyalty System](https://chatreekengpipat.github.io/project3.html) | CRM · Loyalty · UAT | Jun 2024 – Jan 2025 |
-| 04 | [STEM Portfolio Financial Tracking](https://chatreekengpipat.github.io/project4.html) | Finance · Profitability | Jan 2025 – present |
+| 04 | [STEM Portfolio Financial Tracking](https://chatreekengpipat.github.io/project4.html) | Finance · Profitability | Jan 2025 – May 2026 |
 | ★ | [FPDU Assist Device](https://chatreekengpipat.github.io/project5.html) — *award project* | Mechanical / process (Mitsubishi Motors Thailand) | 2020 |
 | 🛠 | [MUVMI Regenerative Brake & Ergonomics](https://chatreekengpipat.github.io/muvmi.html) | Mechanical design · vehicle dynamics (MUVMI collaboration) | 2020 |
 | 🎓 | [LiDAR-based Autonomous Driving (DDPG)](https://chatreekengpipat.github.io/senior-project.html) | Senior project · reinforcement learning | Academic |
