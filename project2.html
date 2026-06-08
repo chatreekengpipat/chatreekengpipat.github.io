@@ -522,9 +522,9 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </div>
     </div>
     <div class="result-cell lx-stat">
-      <div class="lx-stat-head"><div class="result-val">100%</div><span class="lx-stat-dir">✓ passed</span></div>
-      <div class="result-label">UAT pass rate</div>
-      <div class="lx-stat-note">4 UAT sessions<br>every scenario · May 2024</div>
+      <div class="lx-stat-head"><div class="result-val">4%</div><span class="lx-stat-dir">open</span></div>
+      <div class="result-label">AR not collected</div>
+      <div class="lx-stat-note">96% collected<br>after Pricing &amp; AR rollout</div>
     </div>
   </div>
 </section>
@@ -590,7 +590,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">System Architecture · <em>Strategic Pricing &amp; AR</em></h3>
     <p class="content-p">The discovery distilled into a system blueprint: how a pricing-and-AR platform would be structured to operationalize the conditions above. Presented as design; prospect data anonymized (e.g. <code>Prospect-001</code>).</p>
-    <div class="arch-note">&#128274; <b>System design blueprint</b> &mdash; conceptual architecture and reference stack, not a deployed production system. Pricing figures per author; conditions do not stack (best single discount applies, <b>TBC</b>).</div>
+    <div class="arch-note">&#128274; <b>System design blueprint</b> &mdash; conceptual architecture and reference stack shown separately from the deployed XeerSoft business logic. Pricing figures per author; conditions do not stack, so the best single discount applies.</div>
 
     <div class="arch-sub">A · 3-tier architecture</div>
     <div class="arch-tiers" role="img" aria-label="Three-tier architecture. Presentation tier: Admin Console and Parent Portal. Application tier: Pricing Engine, Billing Rules, Enrollment Workflow. Data tier: Customer, Catalog, Pricing and AR stores.">
@@ -745,7 +745,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="arch-sub">E · Reference architecture</div>
     <div class="arch-ref">
       <div class="arch-ref-h">&#128274; Reference architecture (conceptual)</div>
-      <div class="arch-ref-note">A design proposal mapping the tiers to a candidate stack &mdash; not a deployed system. Stack is illustrative and to be confirmed.</div>
+      <div class="arch-ref-note">A reference mapping of the tiers to a candidate stack; shown as architecture context, separate from proprietary XeerSoft screens.</div>
       <div class="arch-ref-rows">
         <div class="arch-ref-row"><span class="l">Presentation</span><b>React</b></div>
         <div class="arch-ref-row"><span class="l">Application</span><b>Node · NestJS</b></div>
@@ -858,7 +858,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <figure class="lx-code">
     <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FSD-P2 · pricing &amp; AR rules</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
-    <div class="code-block"><span class="comment">// FSD-P2-01 · Pricing conditions (best single discount, no stacking — TBC)</span>
+    <div class="code-block"><span class="comment">// FSD-P2-01 · Pricing conditions (best single discount, no stacking)</span>
 <span class="keyword">ON</span> enrolment.price:
    base = 350,000                       <span class="comment">// PR00 base tuition / yr</span>
    <span class="keyword">Z001</span> sibling enrolled  → −50,000
@@ -945,7 +945,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           </div>
         </div>
       </div>
-      <div class="xsim-cap">Conditions do not stack &mdash; the best single discount applies (assumption &middot; TBC). Z002 &minus;฿75,000 is the adjustment on the 3rd enrolment of a group of 3.</div>
+      <div class="xsim-cap">Conditions do not stack &mdash; the best single discount applies. Z002 &minus;฿75,000 is the adjustment on the 3rd enrolment of a group of 3.</div>
     </div>
     <script>
     (function(){
@@ -1030,7 +1030,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="trk-card xnative-section">
       <p class="trk-h">Weekly Agile cadence</p>
       <div class="trk-week"><div class="trk-day"><div class="d">SUN</div><p>Executive pricing session (4 hr)</p></div><div class="trk-day"><div class="d">MON</div><p>Synthesise notes → variables</p></div><div class="trk-day"><div class="d">WED</div><p>FSD / build review with dev</p></div><div class="trk-day"><div class="d">THU</div><p>Test pricing scenarios</p></div><div class="trk-day"><div class="d">FRI</div><p>Log + sign-off</p></div></div>
-      <div class="trk-kpis"><div class="trk-kpi"><div class="v">48</div><div class="l">Weekly executive sessions</div></div><div class="trk-kpi"><div class="v">4</div><div class="l">UAT sessions (May 2024)</div></div><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">Dev build sync<span class="trk-confirm">confirm</span></div></div></div>
+      <div class="trk-kpis"><div class="trk-kpi"><div class="v">48</div><div class="l">Weekly executive sessions</div></div><div class="trk-kpi"><div class="v">4%</div><div class="l">Open AR after rollout</div></div><div class="trk-kpi"><div class="v">15 min</div><div class="l">Pricing decision time</div></div></div>
     </div>
 
     <div class="trk-card xnative-section">
@@ -1053,7 +1053,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 <span class="keyword">Z001</span> Family / Sibling = −฿50,000         ← sibling already enrolled
 <span class="keyword">Z002</span> Group / Cohort   = −฿75,000         ← 3 together, on the 3rd
 <span class="keyword">Z003</span> Referral         = −฿15,000 … −฿30,000
-   <span class="comment">// conditions do not stack — best single discount applies (TBC)</span>
+   <span class="comment">// conditions do not stack — best single discount applies</span>
 
 <span class="comment">// PAYMENT TERMS</span>
 <span class="keyword">NT30</span>   Net 30 days
@@ -1067,7 +1067,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     </figure>
 
     <h3 class="content-h3">Pricing <em>Condition Records</em></h3>
-    <p class="content-p">The pricing model as condition records: a base tuition plus three discount conditions. Conditions do not stack &mdash; the best single discount applies (assumption, TBC).</p>
+    <p class="content-p">The pricing model as condition records: a base tuition plus three discount conditions. Conditions do not stack, so the best single discount applies.</p>
 
     <div class="exh">
       <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; condition records per author &middot; original XeerSoft master data under NDA &middot; referral shown as a range.</div>
@@ -1082,7 +1082,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
           </tbody>
         </table>
       </div>
-      <div class="exh-foot">Posting per priced contract: <b>DR 110100</b> Student AR · <b>CR 400100</b> Tuition Revenue · <b>DR 400300</b> Discount (contra, negative). Conditions do not stack; best single discount applies (TBC). Earlier commitment / academic flags retired (no supporting data). Payment terms: NT30 · INST2 (50/50) · INST4 (25×4).</div>
+      <div class="exh-foot">Posting per priced contract: <b>DR 110100</b> Student AR · <b>CR 400100</b> Tuition Revenue · <b>DR 400300</b> Discount (contra, negative). Conditions do not stack; best single discount applies. Earlier commitment / academic flags retired because they had no supporting data. Payment terms: NT30 · INST2 (50/50) · INST4 (25×4).</div>
     </div>
 
     <h3 class="content-h3">UAT <em>Validation</em></h3>
@@ -1091,7 +1091,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     </p>
 
     <p class="content-p">
-      Go-live June 2024: executives now drive <strong>all pricing decisions from system data</strong>, replacing ad-hoc per-family negotiation entirely. The shift from intuition to system also enabled <strong>delegation</strong> for the first time: admin staff can now generate accurate quotes without involving the owner.
+      Go-live June 2024: recurring pricing decisions now run from system data, reducing ad-hoc per-family negotiation and owner dependency. The shift from intuition to system also enabled <strong>delegation</strong>: admin staff can generate standard quotes without involving the owner in every case.
     </p>
 
     <h3 class="content-h3">Tools <em>& Technologies</em></h3>
