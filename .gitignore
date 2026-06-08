@@ -21,3 +21,9 @@ desktop.ini
 # --- Node (only if you ever add a build step) ---
 node_modules/
 npm-debug.log*
+
+# Internal build/planning docs — local only, do NOT publish
+AGENTS.md
+PROMPT-PLAYBOOK.md
+METRIC-AUDIT.md
+MMTH_FOLDER_AUDIT_REPORT*
