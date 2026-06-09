@@ -431,6 +431,46 @@
     </a>
 
   </div>
+
+  <!-- SAP DESIGN BRIDGE — re-scope of the 4 delivered systems into SAP proposals -->
+  <style id="sapcta-styles">
+    .sapcta-card{display:grid;grid-template-columns:1fr auto;gap:1.4rem 2rem;align-items:center;margin-top:1.5rem;
+      background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 8%,var(--surface)),var(--surface));
+      border:1px solid color-mix(in srgb,var(--accent) 34%,var(--border));border-radius:var(--radius-lg);
+      padding:1.8rem 2rem;text-decoration:none;color:inherit;
+      transition:transform .35s var(--ease-smooth),box-shadow .35s var(--ease-smooth),border-color .35s var(--ease-smooth)}
+    .sapcta-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 22px 46px -24px var(--glow-color)}
+    .sapcta-tag{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.12em;font-weight:700;
+      color:var(--accent);text-transform:uppercase;margin-bottom:.55rem;display:inline-flex;align-items:center;gap:.5rem}
+    .sapcta-tag::before{content:'';width:7px;height:7px;background:var(--accent);border-radius:1px;transform:rotate(45deg)}
+    .sapcta-title{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;line-height:1.22;margin:0 0 .5rem}
+    .sapcta-title em{color:var(--accent);font-style:normal}
+    .sapcta-desc{font-size:.9rem;color:var(--text-muted);line-height:1.6;max-width:62ch;margin:0 0 .95rem}
+    .sapcta-mods{display:flex;flex-wrap:wrap;gap:.4rem}
+    .sapcta-mod{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text);background:var(--surface-2);
+      border:1px solid var(--border);border-radius:var(--radius-sm);padding:.25rem .55rem}
+    .sapcta-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:#fff;
+      font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;letter-spacing:.02em;
+      border-radius:100px;padding:.8rem 1.5rem;white-space:nowrap;box-shadow:var(--shadow);
+      transition:transform .25s var(--ease-smooth)}
+    .sapcta-card:hover .sapcta-btn{transform:translateX(3px)}
+    @media(max-width:680px){.sapcta-card{grid-template-columns:1fr;padding:1.4rem 1.3rem}}
+  </style>
+  <a href="sap-design.html" class="sapcta-card" aria-label="View my SAP specification design proposals">
+    <div>
+      <div class="sapcta-tag">My SAP Specification Design · Proposal</div>
+      <h3 class="sapcta-title">The same 4 systems, <em>re-designed in SAP</em></h3>
+      <p class="sapcta-desc">A tech-consultant exercise: each delivered XeerSoft system above, re-scoped as a proposed SAP design &mdash; business flow, technical/configuration design, a sub-unit test plan (10-step manual criteria), a development pipeline, team shape, and effort estimate.</p>
+      <div class="sapcta-mods">
+        <span class="sapcta-mod">SAP MM</span>
+        <span class="sapcta-mod">SD</span>
+        <span class="sapcta-mod">FI-AR</span>
+        <span class="sapcta-mod">CO-PA</span>
+        <span class="sapcta-mod">Test Mgmt</span>
+      </div>
+    </div>
+    <span class="sapcta-btn">View SAP design &rarr;</span>
+  </a>
 </section>
 
 <!-- ★ FEATURED AWARD PROJECT (Mitsubishi) -->
@@ -1149,27 +1189,36 @@
     <h2 class="section-title">Education <em>& certifications</em></h2>
   </div>
 
-  <div class="edu-card">
+  <a href="sap-design.html" class="edu-card" style="text-decoration: none; color: inherit;" aria-label="View SAP specification design page">
     <div>
-      <div class="edu-school">Accenture · SAP Delivery</div>
+      <div class="edu-school">Accenture · SAP Delivery · 2026</div>
       <div class="edu-degree">SAP Functional Consultant · FI/CO</div>
-      <div class="edu-detail">Cleared the technical interview for the SAP <strong>Finance &amp; Controlling (FI/CO)</strong> track. Currently studying the <strong>S/4HANA FI/CO certifications</strong> (C_TS4FI · C_TS4CO), building on a hands-on <strong>MM / procurement</strong> foundation from my ERP and manufacturing work.</div>
+      <div class="edu-detail">Cleared the technical interview for the SAP <strong>Finance &amp; Controlling (FI/CO)</strong> track. Currently studying the <strong>S/4HANA FI/CO certifications</strong> (C_TS4FI · C_TS4CO), building on a hands-on <strong>MM / procurement</strong> foundation from my ERP and manufacturing work. <strong style="color: var(--accent);">View SAP specification design →</strong></div>
     </div>
     <div class="edu-badge">SAP<br>FI/CO</div>
-  </div>
+  </a>
 
-  <a href="senior-project.html" class="edu-card" style="text-decoration: none; color: inherit;">
+  <a href="#education" class="edu-card" style="text-decoration: none; color: inherit;" aria-label="B.Eng Mechanical Engineering Honors">
     <div>
       <div class="edu-school">Chulalongkorn University · 2019 – 2022</div>
-      <div class="edu-degree">B.Eng Mechanical Engineering</div>
-      <div class="edu-detail">Advanced Statistics & Probability · Python · Manufacturing Processes · Autonomous Systems. Senior Project: LiDAR-based autonomous driving with DDPG reinforcement learning across 5,000+ training episodes. <strong style="color: var(--accent);">View project details →</strong></div>
+      <div class="edu-degree">B.Eng Mechanical Engineering (Honors)</div>
+      <div class="edu-detail">Advanced Statistics & Probability · Python · Manufacturing Processes · Autonomous Systems.</div>
     </div>
     <div class="edu-badge">Class Honors<br>GPAX 3.40</div>
   </a>
 
+  <a href="senior-project.html" class="edu-card" style="text-decoration: none; color: inherit;">
+    <div>
+      <div class="edu-school">Chulalongkorn University · Senior Project · 2021 – 2022</div>
+      <div class="edu-degree">LiDAR-based Autonomous Driving via Deep RL</div>
+      <div class="edu-detail">Developed LiDAR-based autonomous driving with DDPG reinforcement learning across 5,000+ training episodes, combining Python, deep learning, and autonomous-systems simulation. <strong style="color: var(--accent);">View project details →</strong></div>
+    </div>
+    <div class="edu-badge">Senior<br>Project</div>
+  </a>
+
   <a href="muvmi.html" class="edu-card" style="text-decoration: none; color: inherit;">
     <div>
-      <div class="edu-school">Chulalongkorn University · MUVMI · 2020</div>
+      <div class="edu-school">Chulalongkorn University · MUVMI · 2020 – 2021</div>
       <div class="edu-degree">EV Regen-Brake Software &amp; Hardware Integration</div>
       <div class="edu-detail">I led a 5-person team for MUVMI (electric tuk-tuk): co-owned the EV regenerative-brake software (analog sensor, speed-banded regen, +220% energy recovered on-vehicle at I'm Park) and worked hands-on with the team on the driver-ergonomics hardware. Voted Top 3 of 16+ ME Design projects by course mentors. <strong style="color: var(--accent);">View project details →</strong></div>
     </div>
