@@ -470,7 +470,7 @@
   <div class="sap-deck">
 
     <!-- 1 · Procurement & Inventory → SAP MM -->
-    <article class="sap-card fx-spot">
+    <article class="sap-card">
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>Procurement &amp; Inventory</b></div>
         <h2 class="sap-card-title">Procurement &amp; Inventory <span aria-hidden="true">&rarr;</span> <em>SAP MM</em></h2>
@@ -480,15 +480,15 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <ol class="sap-flow">
-            <li>Purchase Requisition</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>PO release</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Goods Receipt</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Invoice Verification</li>
-          </ol>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">Purchase Requisition</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">PO release</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Goods Receipt</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Invoice Verification</span>
+          </div>
         </div>
 
         <div class="sap-block sap-block--design">
@@ -526,7 +526,7 @@
     </article>
 
     <!-- 2 · Strategic Pricing & AR → SAP SD pricing + FI-AR -->
-    <article class="sap-card fx-spot">
+    <article class="sap-card">
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>Strategic Pricing &amp; AR</b></div>
         <h2 class="sap-card-title">Strategic Pricing &amp; AR <span aria-hidden="true">&rarr;</span> <em>SAP SD pricing + FI-AR</em></h2>
@@ -536,15 +536,15 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <ol class="sap-flow">
-            <li>Pricing <span style="opacity:.7;margin-left:.25rem;font-size:.74rem;">(condition technique)</span></li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Billing</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>AR</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Dunning</li>
-          </ol>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">Pricing <span style="opacity:.7;margin-left:.25rem;font-size:.74rem;">(condition technique)</span></span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Billing</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">AR</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Dunning</span>
+          </div>
         </div>
 
         <div class="sap-block sap-block--design">
@@ -581,7 +581,7 @@
     </article>
 
     <!-- 3 · Loyalty / Star Reward (UAT) → SAP Test Management & Cutover -->
-    <article class="sap-card fx-spot">
+    <article class="sap-card">
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>Loyalty / Star Reward (UAT)</b></div>
         <h2 class="sap-card-title">Loyalty / Star Reward <span aria-hidden="true">&rarr;</span> <em>SAP Test Management &amp; Cutover</em></h2>
@@ -591,15 +591,15 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <ol class="sap-flow">
-            <li>UAT cycles</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Defect tracking</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Go-live readiness</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Cutover</li>
-          </ol>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">UAT cycles</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Defect tracking</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Go-live readiness</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Cutover</span>
+          </div>
           <p class="sap-flow-note">The loyalty logic itself would be a custom <span class="ricefw">RICEFW</span> enhancement; this card scopes the test &amp; cutover discipline around it.</p>
         </div>
 
@@ -639,7 +639,7 @@
     </article>
 
     <!-- 4 · STEM Billing & Profitability → SAP SD billing + FI-AR + CO-PA -->
-    <article class="sap-card fx-spot">
+    <article class="sap-card">
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>STEM Billing &amp; Profitability</b></div>
         <h2 class="sap-card-title">STEM Billing &amp; Profitability <span aria-hidden="true">&rarr;</span> <em>SAP SD billing + FI-AR + CO-PA</em></h2>
@@ -649,13 +649,13 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <ol class="sap-flow">
-            <li>Billing</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>AR</li>
-            <li class="sap-flow-sep" aria-hidden="true">&rarr;</li>
-            <li>Profitability analysis by segment</li>
-          </ol>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">Billing</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">AR</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Profitability analysis by segment</span>
+          </div>
         </div>
 
         <div class="sap-block sap-block--design">
