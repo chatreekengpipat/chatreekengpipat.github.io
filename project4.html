@@ -382,7 +382,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Duration</span>
-        <span class="project-info-val">17 months</span>
+        <span class="project-info-val">17 months <span style="color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;">&middot; planned 12</span></span>
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Modules</span>
@@ -746,6 +746,75 @@ margin %     = gross_profit / collected × 100</div>
       <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
     </div>
 
+    <!-- FI/CO DEPTH :: complexity, scale, the defect that moved Go-Live (Claude) -->
+    <h3 class="content-h3">Why this was an <em>FI/CO</em> build, not a billing job</h3>
+    <p class="content-p">
+      Per-student invoicing is the visible surface. Underneath, this was a Financial Accounting and Controlling (FI/CO) implementation: seven subjects had to stay separated as <strong>profit centers</strong>, costs had to derive to the right <strong>branch cost centers</strong>, the AR sub-ledger had to reconcile to the GL control account every period, and revenue recognised on a <strong>billed (accrual)</strong> basis had to be tracked apart from <strong>cash collected</strong>. Each of those is a place the books can silently go wrong, and together they are why the build took the time it did.
+    </p>
+    <div class="exh">
+      <div class="exh-ribbon">&#9881; <b>The FI/CO hard parts</b> &middot; the dimensions that made this a controlling build, not a billing form &middot; representative of the delivered design.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>FI/CO dimension</th><th>Why it is hard</th><th>How I handled it</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Profit-center separation</td><td>7 subjects, one revenue stream; pool them and per-subject P&amp;L becomes fiction</td><td>Profit center per subject, derived on every revenue posting</td></tr>
+            <tr><td class="nm">Cost-center derivation</td><td>Lab, materials and transport split across 3 branches (1100/1200/1300)</td><td>Substitution rules map each cost to its branch CC + dept 110 Academic</td></tr>
+            <tr><td class="nm">Sub-ledger &harr; GL tie-out</td><td>AR sub-ledger must equal GL 110100 control at every close, to the baht</td><td>Nightly reconciliation routine plus an exception report on any variance</td></tr>
+            <tr><td class="nm">Accrual vs cash</td><td>Margin is billed-basis; collection is a separate cash metric; mixing them misstates both</td><td>Revenue booked on invoice; collection tracked on a parallel AR status model</td></tr>
+            <tr><td class="nm">Period-end close</td><td>17 monthly closes, each blocked if the books do not tie out</td><td>Close checklist: post &rarr; reconcile &rarr; clear disputes &rarr; sign-off</td></tr>
+            <tr><td class="nm">Dunning &amp; recovery</td><td>฿375K outstanding across families with partial and disputed balances</td><td>AR-aging-driven dunning recovered ฿267K, lifting collection 82.4% &rarr; 95.0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">These six dimensions are the difference between a system that prints invoices and one that produces auditable per-subject P&amp;L. The first dev build got the invoice right and the controlling wrong, which is exactly what moved Go-Live.</div>
+    </div>
+
+    <h3 class="content-h3">Programme <em>Scale</em></h3>
+    <p class="content-p">
+      A financial build runs long because of volume across dimensions, not one large task. Over the engagement the programme moved roughly ฿2.18M across seven subjects and three branches, and every baht of it was invoiced, reconciled and closed.
+    </p>
+    <div class="exh">
+      <div class="exh-ribbon">&#128202; <b>Programme scale</b> &middot; magnitude across the engagement &middot; counts representative, masked from XeerSoft FI under NDA.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Dimension</th><th class="r">Count</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Per-student AR invoices</td><td class="v">802</td><td>712 lab + 90 Math Competition, across multiple intakes</td></tr>
+            <tr><td class="nm">Subjects as profit centers</td><td class="v">7</td><td>6 labs @ ฿3,000 + 1 competition @ ฿500</td></tr>
+            <tr><td class="nm">Branch cost centers</td><td class="v">3</td><td>1100 / 1200 / 1300 + dept 110 Academic</td></tr>
+            <tr><td class="nm">GL accounts in scope</td><td class="v">14</td><td>AR, revenue, cost, contra, dunning, tax &amp; bank clearing</td></tr>
+            <tr><td class="nm">Monthly period closes</td><td class="v">17</td><td>each gated on a clean sub-ledger &harr; GL tie-out</td></tr>
+            <tr><td class="nm">FSD iterations</td><td class="v">v1 &rarr; v3</td><td>two re-specs after the GL-separation defect</td></tr>
+            <tr><td class="nm">UAT cycles</td><td class="v">5</td><td>1 pre-defect + 3 regression + 1 cutover dress run</td></tr>
+            <tr><td class="nm">AR recovered via dunning</td><td class="v">฿267K</td><td>of ฿375K outstanding, lifting collection to 95.0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">802 invoices &times; many status transitions &times; 17 monthly closes is the volume a per-subject P&amp;L has to stay correct across. Counts are representative; the ฿2.18M revenue, ฿1.08M gross profit and 95.0% collection are the real programme totals.</div>
+    </div>
+
+    <h3 class="content-h3">The Defect That Moved <em>Go-Live</em></h3>
+    <p class="content-p">
+      At UAT Cycle 1 the build looked right on a single invoice and failed at the books. Every subject posted to the same AR and revenue control account with no profit-center or cost-center derivation, so two things broke at once: the AR sub-ledger stopped tying to the GL, and per-subject P&amp;L could not be produced. In FI terms that is a go-live blocker, not a cosmetic bug: you cannot close a period whose sub-ledger does not reconcile. Closing it meant re-specifying the posting model and re-testing it across three regression cycles.
+    </p>
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>GL posting model &middot; before vs after re-spec</b> &middot; representative recreation of the defect and the fix &middot; account numbers illustrative.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Posting dimension</th><th>FSD v1 (defect)</th><th>FSD v3 (re-spec)</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Revenue account</td><td>400150, all subjects pooled</td><td>400150 + profit center per subject (PC01&ndash;PC07)</td></tr>
+            <tr><td class="nm">AR control</td><td>110100, no family sub-ledger key</td><td>110100 with per-family sub-ledger, tied nightly</td></tr>
+            <tr><td class="nm">Cost derivation</td><td>single cost bucket, no branch</td><td>cost-center substitution &rarr; 1100/1200/1300 + dept 110</td></tr>
+            <tr><td class="nm">Sub-ledger &harr; GL</td><td>out of balance at close</td><td>reconciles to the baht; variance report on exception</td></tr>
+            <tr><td class="nm">Per-subject P&amp;L</td><td>not derivable</td><td>7 profit centers, margin per subject</td></tr>
+            <tr><td class="nm">Period close</td><td>blocked</td><td>passes the close checklist</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot"><b>Root cause:</b> the dev spec implemented invoicing without the controlling dimensions, so the financial picture was right in total and wrong in every breakdown management actually needed. <b>The fix</b> re-architected derivation at posting time: correct, but invasive enough to touch every transaction and force a full regression. That work is the +5 months between the planned and the actual Go-Live.</div>
+    </div>
+
     <!-- DELIVERY & SCHEDULE -->
     <div class="trk">
     <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
@@ -758,16 +827,32 @@ margin %     = gross_profit / collected × 100</div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Project timeline &middot; month-by-month</p>
-      <div class="trk-scroll"><div class="trk-gantt" style="--cols:6">
-        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
-        <div class="trk-row"><div class="trk-label">Billing structure design</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Billing structure design">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Cost allocation model</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:1" title="Cost allocation model">1 mo</span></div></div><div class="trk-row"><div class="trk-label">AR tracking + P&L report</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="AR tracking + P&L report">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Collection ops + reconciliation</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:3" title="Collection ops + reconciliation">3 mo</span></div></div><div class="trk-row"><div class="trk-label">Margin reporting + optimisation</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="Margin reporting + optimisation">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Go-Live (June 2026)</div><div class="trk-track"><span class="trk-bar live" style="--s:6;--l:1" title="Go-Live June 2026">go-live</span></div></div>
+      <div class="trk-scroll"><div class="trk-gantt" style="--cols:18;min-width:850px">
+        <div class="trk-row" style="margin-bottom:.15rem"><div class="trk-label"></div><div style="display:flex;gap:.3rem">
+          <span style="flex:12;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.05em;color:var(--t-muted);background:var(--t-bg);border:1px solid var(--t-border);border-radius:5px;padding:.16rem 0">2025 &middot; planned delivery year</span>
+          <span style="flex:6;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.05em;color:var(--t-muted);background:var(--t-bg);border:1px solid var(--t-border);border-radius:5px;padding:.16rem 0">2026 &middot; slip &amp; Go-Live</span>
+        </div></div>
+        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
+        <div class="trk-row"><div class="trk-label">Discovery &amp; As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Discovery and As-Is requirements">2 mo</span></div></div>
+        <div class="trk-row"><div class="trk-label">AR + GL design (FSD v1)</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:3" title="AR billing and GL account design, FSD v1">FSD v1</span></div></div>
+        <div class="trk-row"><div class="trk-label">Profit/cost-center model</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:3" title="Profit-center and cost-center model">PC/CC</span></div></div>
+        <div class="trk-row"><div class="trk-label">Cost alloc + P&amp;L spec</div><div class="trk-track"><span class="trk-bar done" style="--s:5;--l:2" title="Cost allocation and P&L report spec">2 mo</span></div></div>
+        <div class="trk-row"><div class="trk-label">Build v1 &middot; dev handoff</div><div class="trk-track"><span class="trk-bar done" style="--s:5;--l:4" title="Build v1 and dev handoff">build v1</span></div></div>
+        <div class="trk-row"><div class="trk-label">UAT 1 &middot; GL-split defect</div><div class="trk-track"><span class="trk-bar warn" style="--s:8;--l:2" title="UAT Cycle 1: GL multi-account separation defect found">defect</span></div></div>
+        <div class="trk-row"><div class="trk-label">Re-spec &middot; FSD v2&ndash;v3</div><div class="trk-track"><span class="trk-bar recover" style="--s:9;--l:3" title="Re-specification of the posting model, FSD v2 to v3">re-spec</span></div></div>
+        <div class="trk-row"><div class="trk-label">Rebuild + regression</div><div class="trk-track"><span class="trk-bar recover" style="--s:11;--l:4" title="Rebuild and regression testing">rebuild</span></div></div>
+        <div class="trk-row"><div class="trk-label">UAT 2&ndash;4 &middot; sub-ledger recon</div><div class="trk-track"><span class="trk-bar done" style="--s:13;--l:3" title="UAT Cycles 2 to 4 and sub-ledger reconciliation">UAT &times;3</span></div></div>
+        <div class="trk-row"><div class="trk-label">Parallel run + cutover</div><div class="trk-track"><span class="trk-bar done" style="--s:16;--l:2" title="Parallel run and cutover">cutover</span></div></div>
+        <div class="trk-row"><div class="trk-label">Planned Go-Live &middot; Dec 2025</div><div class="trk-track"><span class="trk-bar plan" style="--s:12;--l:1" title="Originally planned Go-Live: December 2025">plan</span></div></div>
+        <div class="trk-row"><div class="trk-label">Go-Live &middot; June 2026</div><div class="trk-track"><span class="trk-bar live" style="--s:18;--l:1" title="Actual Go-Live: June 2026">go-live</span></div></div>
       </div></div>
+      <p class="trk-note"><b>Planned as a 12-month delivery</b> (Jan&ndash;Dec 2025, the same shape as Project 02). A <b>GL multi-account separation defect</b> in the dev build surfaced at UAT Cycle 1: per-subject revenue and cost postings were collapsing into single control accounts, so the AR sub-ledger would not reconcile to the GL and per-subject P&amp;L could not be trusted. Closing it took an FSD re-spec (v2&ndash;v3) plus three regression cycles, moving Go-Live to <b>June 2026</b>: a <b>+5-month slip, fully recovered</b> to 95% collection.</p>
       <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>Collection recovered to 95% post-go-live</b><p>Mid-programme, collection sat around 82.4% with outstanding AR carried per family — cash tied up in OPEN/DISPUTED items.<span class="res"> Resolved → AR aging per family plus DISPUTED reconciliation against bank receipts and post-go-live dunning recovered ~฿267,000 of ฿375,000 outstanding, raising collection 82.4% → 95.0% (฿110,000 still in run-off).</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Per-session margin visibility</b><p>Without per-session P&L, management couldn’t see which subjects actually earned money.<span class="res"> Resolved → I built session-level revenue-vs-cost reporting so pricing and session planning are now driven by margin data.</span></p></div></div>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>GL multi-account separation defect &middot; the +5-month driver</b><p>The dev build posted all seven subjects to single AR and revenue control accounts with no profit-center or cost-center derivation, so the AR sub-ledger did not tie to the GL and per-subject P&amp;L was unreliable: a hard blocker for period close, and therefore for go-live.<span class="res"> Resolved &rarr; I re-specified the posting model (FSD v2&ndash;v3) with a profit center per subject, branch cost-center substitution, and a nightly sub-ledger &harr; GL reconciliation, then ran three regression cycles to zero blocking defects before cutover.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Collection recovered to 95% post-go-live</b><p>Mid-programme, collection sat around 82.4% with outstanding AR carried per family — cash tied up in OPEN/DISPUTED items.<span class="res"> Resolved → AR aging per family plus DISPUTED reconciliation against bank receipts and post-go-live dunning recovered ~฿267,000 of ฿375,000 outstanding, raising collection 82.4% → 95.0% (฿110,000 still in run-off).</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Per-session margin visibility</b><p>Without per-session P&L, management couldn’t see which subjects actually earned money.<span class="res"> Resolved → I built session-level revenue-vs-cost reporting so pricing and session planning are now driven by margin data.</span></p></div></div>
     </div>
 
     <div class="trk-card xnative-section">
