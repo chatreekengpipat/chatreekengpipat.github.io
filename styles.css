@@ -377,6 +377,21 @@ nav {
   box-shadow: var(--shadow-md);
 }
 
+/* ===== WCAG AA contrast remediation (page audited in dark theme) =====
+   White text on the lighter dark-mode accent (#60a5fa) is only 2.54:1, so
+   filled primary buttons use the deeper accent (#2563eb → 5.2:1) in dark mode.
+   Light mode already passes (its --accent is #2563eb). */
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .sapcta-btn,
+[data-theme="dark"] .edu-badge { background: #2563eb; }
+[data-theme="dark"] .nav-links a.nav-cta { background: #2563eb; }
+[data-theme="dark"] .nav-links a.nav-cta:hover,
+[data-theme="dark"] .nav-links a.nav-cta.active { background: #1d4ed8; }
+[data-theme="dark"] .btn-primary:hover { background: #1d4ed8; }
+/* Priority chips: red/muted text on their tinted chips measured 4.25–4.4:1 — nudge lighter. */
+[data-theme="dark"] .priority-p1 { color: #fca5a5; }
+[data-theme="dark"] .priority-p3 { color: #aeb9c9; }
+
 .btn-outline {
   background: transparent;
   color: var(--text);
@@ -741,7 +756,7 @@ section {
 .doc-level-audience {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
-  color: var(--text-subtle);
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -1383,7 +1398,7 @@ section {
   box-shadow: var(--shadow-md);
 }
 
-.tool-group h4 {
+.tool-group h3 {
   font-size: 0.78rem;
   color: var(--accent);
   font-weight: 700;

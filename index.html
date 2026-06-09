@@ -7,9 +7,56 @@
 <meta name="description" content="Chatree Kengpipat (CEE), ERP Consultant on XeerSoft Cloud ERP. 3+ years end-to-end implementation across Procurement, Financial Accounting, CRM, and HR.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="photos/hero-photo.webp" fetchpriority="high">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"></noscript>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css?v=8">
-<script src="theme.js"></script>
+<!-- theme.js inlined verbatim to remove a render-blocking request (it must run before paint to avoid a theme flash). Identical to theme.js. -->
+<script>
+// Theme toggle with persistence
+(function() {
+  const root = document.documentElement;
+  function getInitialTheme() {
+    try { const saved = localStorage.getItem('theme'); if (saved) return saved; } catch (e) {}
+    return 'dark';
+  }
+  root.setAttribute('data-theme', getInitialTheme());
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+    toggle.addEventListener('click', function() {
+      const current = root.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  });
+})();
+(function () {
+  const headline = document.getElementById('ckSignature');
+  if (!headline || headline.dataset.ckReady === 'true') return;
+  headline.dataset.ckReady = 'true';
+  headline.querySelectorAll('.ck-signature__line').forEach((line, lineIndex) => {
+    const text = line.textContent.trim();
+    line.textContent = '';
+    line.style.setProperty('--ck-line-delay', `${lineIndex * 140}ms`);
+    [...text].forEach((char, index) => {
+      const span = document.createElement('span');
+      if (char === ' ') { span.className = 'ck-signature__space'; span.innerHTML = '&nbsp;'; }
+      else { span.className = 'ck-signature__char'; span.textContent = char; span.style.setProperty('--ck-i', index); }
+      line.appendChild(span);
+    });
+  });
+  headline.addEventListener('mousemove', (event) => {
+    const rect = headline.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    headline.style.setProperty('--ck-ry', `${x * 8}deg`);
+    headline.style.setProperty('--ck-rx', `${y * -6}deg`);
+  });
+})();
+</script>
 <script src="animation.js?v=4" defer></script>
 </head>
 <body>
@@ -30,7 +77,7 @@
     </li>
     <li class="nav-dd">
       <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
-      <div class="nav-dd-panel" role="menu">
+      <div class="nav-dd-panel">
         <div class="nav-dd-group">
           <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
           <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
@@ -104,7 +151,7 @@
     <div class="hero-deco hero-deco-3"></div>
     <div class="hero-deco hero-deco-4"></div>
     <div class="hero-photo-frame">
-      <img src="photos/hero-photo.png" alt="Chatree Kengpipat · SAP Functional Consultant (FI/CO)" onerror="this.src='photos/profile.png'">
+      <img src="photos/hero-photo.webp" alt="Chatree Kengpipat · SAP Functional Consultant (FI/CO)" width="880" height="880" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='photos/hero-photo.png'">
       <div class="hero-photo-badge">
         <div>
           <div class="hero-photo-badge-name">Chatree Kengpipat</div>
@@ -188,7 +235,7 @@
     <a class="jp-node" href="#education">
       <span class="jp-dot"></span>
       <div class="jp-body">
-        <img class="jp-logo" src="workplace/ChulaEngineering.png" alt="Chulalongkorn University Faculty of Engineering logo" loading="lazy">
+        <img class="jp-logo" src="workplace/ChulaEngineering.webp" alt="Chulalongkorn University Faculty of Engineering logo" width="128" height="128" loading="lazy">
         <span class="jp-kind">B.Eng · Honors</span>
         <h3 class="jp-org">Chulalongkorn</h3>
         <p class="jp-ctx">Mechanical Engineering · GPA 3.40</p>
@@ -198,7 +245,7 @@
     <a class="jp-node" href="project5.html">
       <span class="jp-dot"></span>
       <div class="jp-body">
-        <img class="jp-logo" src="workplace/MMTh.jpg" alt="Mitsubishi Motors Thailand logo" loading="lazy">
+        <img class="jp-logo" src="workplace/MMTh.jpg" alt="Mitsubishi Motors Thailand logo" width="64" height="64" loading="lazy">
         <span class="jp-kind">Internship · SAP Functional User · MM/FI · Hardware Design</span>
         <h3 class="jp-org">Mitsubishi Motors</h3>
         <p class="jp-ctx">FPDU assist device · PHEV line · Best Achievement Award</p>
@@ -208,7 +255,7 @@
     <a class="jp-node" href="muvmi.html">
       <span class="jp-dot"></span>
       <div class="jp-body">
-        <img class="jp-logo" src="workplace/MUVMI.jpg" alt="MUVMI electric tuk-tuk logo" loading="lazy">
+        <img class="jp-logo" src="workplace/MUVMI.jpg" alt="MUVMI electric tuk-tuk logo" width="64" height="64" loading="lazy">
         <span class="jp-kind">Project · Software EV Implementation · Hardware Integration</span>
         <h3 class="jp-org">MUVMI</h3>
         <p class="jp-ctx">EV regen-brake software &amp; ergonomics</p>
@@ -218,7 +265,7 @@
     <a class="jp-node" href="senior-project.html">
       <span class="jp-dot"></span>
       <div class="jp-body">
-        <img class="jp-logo" src="workplace/ChulaSmartMobility.png" alt="CU Smart Mobility research centre logo" loading="lazy">
+        <img class="jp-logo" src="workplace/ChulaSmartMobility.png" alt="CU Smart Mobility research centre logo" width="64" height="64" loading="lazy">
         <span class="jp-kind">Senior Project · AI (DDPG) · Coding Python</span>
         <h3 class="jp-org">CU Smart Mobility</h3>
         <p class="jp-ctx">LiDAR autonomous driving (DDPG) research center</p>
@@ -228,18 +275,18 @@
     <a class="jp-node" href="#projects">
       <span class="jp-dot"></span>
       <div class="jp-body">
-        <img class="jp-logo" src="workplace/Learn%20Balance.jpg" alt="Learn Balance Group logo" loading="lazy">
+        <img class="jp-logo" src="workplace/Learn%20Balance.jpg" alt="Learn Balance Group logo" width="64" height="64" loading="lazy">
         <span class="jp-kind">ERP Consultant · 4 Projects (End-to-End) · 2023–2026</span>
         <h3 class="jp-org">Learn Balance</h3>
         <p class="jp-ctx">Full-time · 4 live XeerSoft go-lives · a top-3 largest education group in Thailand</p>
         <span class="jp-go">View 4 projects →</span>
       </div>
     </a>
-    <a class="jp-node is-now" href="sap-design.html" aria-label="View proposed SAP specification design page">
+    <a class="jp-node is-now" href="sap-design.html">
       <span class="jp-badge jp-badge-top">Now</span>
       <span class="jp-dot"></span>
       <div class="jp-body">
-        <img class="jp-logo" src="workplace/Accenture.png" alt="Accenture logo" loading="lazy">
+        <img class="jp-logo" src="workplace/Accenture.webp" alt="Accenture logo" width="128" height="128" loading="lazy">
         <span class="jp-kind">SAP Functional Consultant · FI/CO · 2026</span>
         <h3 class="jp-org">Accenture</h3>
         <p class="jp-ctx">Full-time · SAP S/4HANA FI/CO delivery · the world's #1 technology &amp; consulting company</p>
@@ -287,7 +334,7 @@
       </div>
       <div class="dashboard-source">Power BI</div>
     </div>
-    <img src="dashboards/dashboard-overview.png?v=3" alt="Power BI executive dashboard summarising all 4 ERP projects" class="dashboard-image">
+    <img src="dashboards/dashboard-overview.png?v=3" alt="Power BI executive dashboard summarising all 4 ERP projects" class="dashboard-image" width="2767" height="1600" loading="lazy">
     <div class="dashboard-footer">
       <strong>Source:</strong> Consolidated production data from 4 XeerSoft ERP projects at Learn Balance Group, Jan 2023 – June 2026. 47 staff trained · 219 tickets resolved · 7 KPIs improved across Procurement, Finance, Billing, and UAT domains.
     </div>
@@ -456,7 +503,7 @@
     .sapcta-card:hover .sapcta-btn{transform:translateX(3px)}
     @media(max-width:680px){.sapcta-card{grid-template-columns:1fr;padding:1.4rem 1.3rem}}
   </style>
-  <a href="sap-design.html" class="sapcta-card" aria-label="View my SAP specification design proposals">
+  <a href="sap-design.html" class="sapcta-card">
     <div>
       <div class="sapcta-tag">My SAP Specification Design · Proposal</div>
       <h3 class="sapcta-title">The same 4 systems, <em>re-designed in SAP</em></h3>
@@ -505,11 +552,11 @@
 
   <div class="award-gallery">
     <figure class="award-shot">
-      <img src="MMTh%20Photos/award-ceremony.jpg" alt="Chatree Kengpipat receiving the MMTh Best Achievement Award, standing between the Mitsubishi Motors Thailand CEO and Chulalongkorn's Director of Engineering, 30 July 2020" loading="lazy">
+      <img src="MMTh%20Photos/award-ceremony.webp" alt="Chatree Kengpipat receiving the MMTh Best Achievement Award, standing between the Mitsubishi Motors Thailand CEO and Chulalongkorn's Director of Engineering, 30 July 2020" width="1000" height="662" loading="lazy">
       <figcaption><b>Award ceremony</b> · with the Mitsubishi Motors CEO &amp; Chula's Director of Engineering · 30 Jul 2020</figcaption>
     </figure>
     <figure class="award-shot">
-      <img src="MMTh%20Photos/award-trophy.jpg" alt="The Best Achievement Award glass trophy: MMTh Talent Internship Program 2020, &quot;Ambition to Rise&quot;, awarded to Mr. Chatree Kengpipat" loading="lazy">
+      <img src="MMTh%20Photos/award-trophy.webp" alt="The Best Achievement Award glass trophy: MMTh Talent Internship Program 2020, &quot;Ambition to Rise&quot;, awarded to Mr. Chatree Kengpipat" width="1000" height="1007" loading="lazy">
       <figcaption><b>The trophy</b> · &ldquo;Ambition to Rise&rdquo; · Best Achievement Award</figcaption>
     </figure>
   </div>
@@ -555,7 +602,7 @@
       <div class="about-photo-deco about-photo-deco-1"></div>
       <div class="about-photo-deco about-photo-deco-2"></div>
       <div class="about-photo-card">
-        <img src="photos/newton-1.jpg" alt="Chatree Kengpipat at Newton Sixth Form">
+        <img src="photos/newton-1.webp" alt="Chatree Kengpipat at Newton Sixth Form" width="1200" height="1200" loading="lazy" decoding="async">
         <div class="about-photo-badge-v7">
           <div class="name">Chatree Kengpipat</div>
           <div class="role">SAP Functional Consultant (FI/CO) · Accenture</div>
@@ -914,7 +961,7 @@
 
     <div class="workplace-photos-v8">
       <div class="workplace-photo-single">
-        <img src="photos/newton-2.jpg?v=2" alt="Chatree Kengpipat · ERP Implementation Consultant at Newton Sixth Form">
+        <img src="photos/newton-2.webp" alt="Chatree Kengpipat · ERP Implementation Consultant at Newton Sixth Form" width="1200" height="1371" loading="lazy" decoding="async">
         <div class="workplace-photo-overlay-v8">
           <div class="tag">On site</div>
           <div class="label">ERP Implementation Consultant · Newton Sixth Form</div>
@@ -987,7 +1034,7 @@
       </div>
     </div>
     <figure class="acad-photo">
-      <img src="photos/Engineering%20Chula.jpg" alt="Chatree Kengpipat at Chulalongkorn University, Faculty of Engineering" loading="lazy">
+      <img src="photos/Engineering%20Chula.webp" alt="Chatree Kengpipat at Chulalongkorn University, Faculty of Engineering" width="1200" height="981" loading="lazy">
       <figcaption>Chulalongkorn University · Faculty of Engineering · 2019–2022</figcaption>
     </figure>
   </div>
@@ -1147,7 +1194,7 @@
   </div>
   <div class="tools-grid">
     <div class="tool-group">
-      <h4>Documentation</h4>
+      <h3>Documentation</h3>
       <div class="tool-list">
         <div class="tool-item">Word · Google Docs</div>
         <div class="tool-item">PowerPoint</div>
@@ -1156,7 +1203,7 @@
       </div>
     </div>
     <div class="tool-group">
-      <h4>Project Tracking</h4>
+      <h3>Project Tracking</h3>
       <div class="tool-list">
         <div class="tool-item">Jira</div>
         <div class="tool-item">Defect Log (Excel)</div>
@@ -1164,7 +1211,7 @@
       </div>
     </div>
     <div class="tool-group">
-      <h4>Data & Reporting</h4>
+      <h3>Data & Reporting</h3>
       <div class="tool-list">
         <div class="tool-item">SQL</div>
         <div class="tool-item">Excel (Advanced)</div>
@@ -1174,7 +1221,7 @@
       </div>
     </div>
     <div class="tool-group">
-      <h4>ERP Platforms</h4>
+      <h3>ERP Platforms</h3>
       <div class="tool-list">
         <div class="tool-item">XeerSoft Cloud ERP <em style="color: var(--success); font-size: 0.7rem;">· Implementation</em></div>
         <div class="tool-item">SAP S/4HANA <em style="color: var(--text-muted); font-size: 0.7rem;">· End-User + Learning</em></div>
@@ -1189,7 +1236,7 @@
     <h2 class="section-title">Education <em>& certifications</em></h2>
   </div>
 
-  <a href="sap-design.html" class="edu-card" style="text-decoration: none; color: inherit;" aria-label="View SAP specification design page">
+  <a href="sap-design.html" class="edu-card" style="text-decoration: none; color: inherit;">
     <div>
       <div class="edu-school">Accenture · SAP Delivery · 2026</div>
       <div class="edu-degree">SAP Functional Consultant · FI/CO</div>
@@ -1198,7 +1245,7 @@
     <div class="edu-badge">SAP<br>FI/CO</div>
   </a>
 
-  <a href="#projects" class="edu-card" style="text-decoration: none; color: inherit;" aria-label="View the 4 Cloud ERP projects at Learn Balance">
+  <a href="#projects" class="edu-card" style="text-decoration: none; color: inherit;">
     <div>
       <div class="edu-school">Learn Balance Group · XeerSoft Cloud ERP · 2023 – 2026</div>
       <div class="edu-degree">ERP Implementation Consultant · 4 End-to-End Go-Lives</div>
@@ -1207,7 +1254,7 @@
     <div class="edu-badge">4 ERP<br>Go-Lives</div>
   </a>
 
-  <a href="#education" class="edu-card" style="text-decoration: none; color: inherit;" aria-label="B.Eng Mechanical Engineering Honors">
+  <a href="#education" class="edu-card" style="text-decoration: none; color: inherit;">
     <div>
       <div class="edu-school">Chulalongkorn University · 2019 – 2022</div>
       <div class="edu-degree">B.Eng Mechanical Engineering (Honors)</div>
