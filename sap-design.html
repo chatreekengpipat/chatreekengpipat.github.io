@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Coding &amp; Business Flow · SAP Design Proposals · Chatree Kengpipat</title>
+<meta name="description" content="Proposed SAP design specifications — business flow, SAP technical design, a development pipeline, and a rough effort estimate — for four ERP systems Chatree Kengpipat built on XeerSoft Cloud ERP. Design proposals, not implemented systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=7">
+<script src="theme.js"></script>
+<script src="animation.js?v=4" defer></script>
+<style>
+  /* ============================================================
+     SAP DESIGN PAGE — page-scoped components.
+     Built only from existing tokens (--accent, --surface, --border,
+     --radius-*, JetBrains Mono labels). No new colors, no libraries.
+     ============================================================ */
+
+  /* Persistent honest banner — sticks just below the fixed nav so the
+     "these are design proposals" framing is always on screen. Solid
+     surface + blur keeps it legible over content scrolling beneath it.
+     It lives outside any <section>, so the scroll-reveal never touches
+     it — it is visible from first paint and never animates away. */
+  .sap-banner {
+    position: sticky;
+    top: 72px;
+    z-index: 60;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+  .sap-banner-inner {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: blur(14px) saturate(160%);
+    border: 1px dashed var(--accent);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.2rem;
+    box-shadow: var(--shadow-md);
+  }
+  .sap-banner-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 0.1rem;
+  }
+  .sap-banner-text {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .sap-banner-text strong { color: var(--text); font-weight: 600; }
+  .sap-banner-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 0.15rem;
+  }
+
+  /* Deck of project cards */
+  .sap-deck {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .sap-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: border-color 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
+  }
+  .sap-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 18px 38px -12px var(--glow-color), 0 0 22px var(--glow-color);
+  }
+
+  /* Card header: XeerSoft source system → proposed SAP module */
+  .sap-card-head { margin-bottom: 1.6rem; }
+  .sap-card-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0.55rem;
+  }
+  .sap-card-source b { color: var(--accent); font-weight: 600; }
+  .sap-card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .sap-card-title em { color: var(--accent); font-style: normal; }
+  .sap-card-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .sap-card-sub .sap-card-link {
+    color: var(--text-muted);
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .sap-card-sub .sap-card-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* Body: bento grid — flow + design side by side, pipeline + effort full width */
+  .sap-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .sap-block--flow     { grid-column: 1; }
+  .sap-block--design   { grid-column: 2; }
+  .sap-block--pipeline { grid-column: 1 / -1; }
+  .sap-block--effort   { grid-column: 1 / -1; }
+
+  .sap-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+  }
+  .sap-block-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .sap-block-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 1px;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  /* Business-flow chips */
+  .sap-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.35rem;
+  }
+  .sap-flow-step {
+    display: inline-flex;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.65rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .sap-flow-sep {
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    user-select: none;
+  }
+  .sap-flow-note {
+    margin-top: 0.75rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  /* SAP technical-design list */
+  .sap-design-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .sap-design-list li {
+    position: relative;
+    padding-left: 1.05rem;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .sap-design-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .sap-design-list b { color: var(--text-strong); font-weight: 600; }
+  /* T-codes / module readouts in mono */
+  .tcode {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: var(--radius-sm);
+    padding: 0.05rem 0.4rem;
+    white-space: nowrap;
+  }
+  .ricefw {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--warning);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* Development pipeline — horizontal phase bar, segments sized by weeks */
+  .sap-phasebar {
+    display: flex;
+    gap: 5px;
+    list-style: none;
+    align-items: stretch;
+  }
+  .sap-phase {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .sap-phase--golive {
+    background: var(--accent-bg);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .sap-phase-name {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .sap-phase-dur {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  /* Parallel track shown beneath the sequential bar */
+  .sap-parallel {
+    margin-top: 6px;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--surface-2),
+      var(--surface-2) 7px,
+      var(--surface) 7px,
+      var(--surface) 14px
+    );
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+  }
+  .sap-parallel .sap-phase-dur { color: var(--text-muted); }
+  .sap-pipe-total {
+    margin-top: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .sap-pipe-total b { color: var(--text); font-weight: 600; }
+
+  /* Estimated-effort row + month badge */
+  .sap-effort-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .sap-month-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 100px;
+    padding: 0.55rem 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .sap-month-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .sap-month-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+  .sap-effort-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 28rem;
+  }
+
+  /* Closing reiteration */
+  .sap-closing {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px) {
+    .sap-banner { top: 62px; padding: 0 1rem; }
+    .sap-banner-inner { padding: 0.75rem 0.9rem; }
+    .sap-card { padding: 1.4rem; }
+    .sap-card-body { grid-template-columns: 1fr; gap: 1.1rem; }
+    .sap-block--flow, .sap-block--design { grid-column: 1; }
+    /* Phase bar stacks vertically so each phase stays readable */
+    .sap-phasebar { flex-direction: column; }
+    .sap-phase { flex-direction: row; justify-content: space-between; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Workspace of Chatree Kengpipat (Cee)
+  </a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head">
+      <span class="nav-drawer-title">Menu</span>
+      <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
+    </li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel" role="menu">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html" class="active" aria-current="page">Technical Coding &amp; Business Flow</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- DYNAMIC TECH BACKGROUND -->
+<canvas id="techCanvas"></canvas>
+
+<!-- PERSISTENT HONEST BANNER — always visible (sticky), outside any section -->
+<div class="sap-banner" role="note" aria-label="Honesty disclaimer">
+  <div class="sap-banner-inner">
+    <span class="sap-banner-icon" aria-hidden="true">!</span>
+    <div class="sap-banner-text">
+      <span class="sap-banner-tag">DESIGN PROPOSALS · NOT IMPLEMENTED</span><br>
+      These are my own SAP design specifications &mdash; <strong>proposed implementations</strong> of systems I actually built on XeerSoft, with business flow, technical design, a development pipeline, and a rough effort estimate. They are <strong>design proposals: not yet implemented, tested, or verified.</strong> They show how I scope and approach SAP delivery.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<section class="project-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>SAP Design</span>
+  </div>
+
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Proposed SAP Design · Scoping Exercise</div>
+      <div class="project-meta">4 delivered ERP systems · re-scoped as SAP design proposals</div>
+      <h1>Technical Coding &amp; <em>Business Flow</em></h1>
+      <p class="project-hero-desc">
+        A tech-consultant exercise: each of the <strong>four ERP systems I built end-to-end on XeerSoft Cloud ERP</strong> translated into a <strong>proposed SAP design</strong> &mdash; the business flow, the SAP technical/configuration design, a phased development pipeline, and a rough effort estimate. The intent is to show how I scope SAP delivery and reason about modules, configuration, and RICEFW. Every estimate below is a planning figure, not a quote or a track record.
+      </p>
+    </div>
+
+    <div class="project-info-card">
+      <div class="project-info-row">
+        <span class="project-info-label">Source</span>
+        <span class="project-info-val">XeerSoft Cloud ERP · 4 live systems</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Target</span>
+        <span class="project-info-val">SAP MM · SD · FI-AR · CO-PA · Test Mgmt</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Artifacts</span>
+        <span class="project-info-val">Business flow · technical design · pipeline · estimate</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Status</span>
+        <span class="project-info-val">Design proposals · not implemented</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE FOUR SAP DESIGN CARDS -->
+<section style="padding: 3rem 2.5rem 1rem;">
+  <div class="sap-deck">
+
+    <!-- 1 · Procurement & Inventory → SAP MM -->
+    <article class="sap-card">
+      <header class="sap-card-head">
+        <div class="sap-card-source">Built on XeerSoft &middot; <b>Procurement &amp; Inventory</b></div>
+        <h2 class="sap-card-title">Procurement &amp; Inventory <span aria-hidden="true">&rarr;</span> <em>SAP MM</em></h2>
+        <div class="sap-card-sub">Procure-to-Pay &middot; <a href="project1.html" class="sap-card-link">view the delivered system &rarr;</a></div>
+      </header>
+      <div class="sap-card-body">
+
+        <div class="sap-block sap-block--flow">
+          <div class="sap-block-label">Business Flow</div>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">Purchase Requisition</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">PO release</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Goods Receipt</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Invoice Verification</span>
+          </div>
+        </div>
+
+        <div class="sap-block sap-block--design">
+          <div class="sap-block-label">SAP Technical Design</div>
+          <ul class="sap-design-list">
+            <li><b>MM org structure</b> &mdash; purchasing org / group</li>
+            <li><b>PO release strategy</b> &amp; <b>reorder-point / MRP</b></li>
+            <li><b>Vendor master</b> data</li>
+            <li>Transactions <span class="tcode">ME51N</span> <span class="tcode">ME21N</span> <span class="tcode">MIGO</span> <span class="tcode">MIRO</span></li>
+            <li>Custom PR-approval report <span class="ricefw">(RICEFW)</span></li>
+          </ul>
+        </div>
+
+        <div class="sap-block sap-block--pipeline">
+          <div class="sap-block-label">Development Pipeline</div>
+          <ol class="sap-phasebar">
+            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:3"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">3w</span></li>
+            <li class="sap-phase" style="flex-grow:1"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
+          </ol>
+          <div class="sap-pipe-total">Sequential span <b>~9 weeks</b></div>
+        </div>
+
+        <div class="sap-block sap-block--effort">
+          <div class="sap-block-label">Estimated Effort</div>
+          <div class="sap-effort-row">
+            <span class="sap-month-badge"><span class="sap-month-num">~2.5</span><span class="sap-month-unit">months</span></span>
+            <span class="sap-effort-note">Rough planning estimate for a single functional consultant &mdash; not a quote, and not a measured delivery.</span>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- 2 · Strategic Pricing & AR → SAP SD pricing + FI-AR -->
+    <article class="sap-card">
+      <header class="sap-card-head">
+        <div class="sap-card-source">Built on XeerSoft &middot; <b>Strategic Pricing &amp; AR</b></div>
+        <h2 class="sap-card-title">Strategic Pricing &amp; AR <span aria-hidden="true">&rarr;</span> <em>SAP SD pricing + FI-AR</em></h2>
+        <div class="sap-card-sub">Order-to-Cash pricing &amp; receivables &middot; <a href="project2.html" class="sap-card-link">view the delivered system &rarr;</a></div>
+      </header>
+      <div class="sap-card-body">
+
+        <div class="sap-block sap-block--flow">
+          <div class="sap-block-label">Business Flow</div>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">Pricing <span style="opacity:.7;margin-left:.25rem;font-size:.74rem;">(condition technique)</span></span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Billing</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">AR</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Dunning</span>
+          </div>
+        </div>
+
+        <div class="sap-block sap-block--design">
+          <div class="sap-block-label">SAP Technical Design</div>
+          <ul class="sap-design-list">
+            <li><b>Pricing procedure</b> &amp; condition records <span class="tcode">VK11</span></li>
+            <li><b>Dunning procedure</b> <span class="tcode">F150</span></li>
+            <li><b>Credit control</b> <span class="tcode">FD32</span></li>
+            <li><b>AR aging</b> <span class="tcode">FBL5N</span></li>
+          </ul>
+        </div>
+
+        <div class="sap-block sap-block--pipeline">
+          <div class="sap-block-label">Development Pipeline</div>
+          <ol class="sap-phasebar">
+            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:4"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">4w</span></li>
+            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:3"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">3w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
+          </ol>
+          <div class="sap-pipe-total">Sequential span <b>~12 weeks</b></div>
+        </div>
+
+        <div class="sap-block sap-block--effort">
+          <div class="sap-block-label">Estimated Effort</div>
+          <div class="sap-effort-row">
+            <span class="sap-month-badge"><span class="sap-month-num">~3.5</span><span class="sap-month-unit">months</span></span>
+            <span class="sap-effort-note">Rough planning estimate for a single functional consultant &mdash; not a quote, and not a measured delivery.</span>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- 3 · Loyalty / Star Reward (UAT) → SAP Test Management & Cutover -->
+    <article class="sap-card">
+      <header class="sap-card-head">
+        <div class="sap-card-source">Built on XeerSoft &middot; <b>Loyalty / Star Reward (UAT)</b></div>
+        <h2 class="sap-card-title">Loyalty / Star Reward <span aria-hidden="true">&rarr;</span> <em>SAP Test Management &amp; Cutover</em></h2>
+        <div class="sap-card-sub">Realize / Deploy workstream &middot; <a href="project3.html" class="sap-card-link">view the delivered system &rarr;</a></div>
+      </header>
+      <div class="sap-card-body">
+
+        <div class="sap-block sap-block--flow">
+          <div class="sap-block-label">Business Flow</div>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">UAT cycles</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Defect tracking</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Go-live readiness</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Cutover</span>
+          </div>
+          <p class="sap-flow-note">The loyalty logic itself would be a custom <span class="ricefw">RICEFW</span> enhancement; this card scopes the test &amp; cutover discipline around it.</p>
+        </div>
+
+        <div class="sap-block sap-block--design">
+          <div class="sap-block-label">SAP Technical Design</div>
+          <ul class="sap-design-list">
+            <li><b>SAP Activate</b> Realize / Deploy test discipline</li>
+            <li>Solution Manager / Cloud ALM <b>test suite</b></li>
+            <li><b>Defect management</b></li>
+            <li><b>Cutover plan</b></li>
+          </ul>
+        </div>
+
+        <div class="sap-block sap-block--pipeline">
+          <div class="sap-block-label">Development Pipeline</div>
+          <ol class="sap-phasebar">
+            <li class="sap-phase" style="flex-grow:1"><span class="sap-phase-name">Test strategy</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:4"><span class="sap-phase-name">Test cycles</span><span class="sap-phase-dur">4w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover readiness</span><span class="sap-phase-dur">1w</span></li>
+          </ol>
+          <div class="sap-parallel">
+            <span aria-hidden="true" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--text-subtle);">&#8741;</span>
+            <span><b>Defect resolution</b> &mdash; runs in <span class="sap-phase-dur">parallel</span> across the test cycles</span>
+          </div>
+          <div class="sap-pipe-total">Sequential span <b>~6 weeks</b> + parallel defect resolution</div>
+        </div>
+
+        <div class="sap-block sap-block--effort">
+          <div class="sap-block-label">Estimated Effort</div>
+          <div class="sap-effort-row">
+            <span class="sap-month-badge"><span class="sap-month-num">~2</span><span class="sap-month-unit">months</span></span>
+            <span class="sap-effort-note">Rough planning estimate for the test &amp; cutover workstream &mdash; not a quote, and not a measured delivery.</span>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- 4 · STEM Billing & Profitability → SAP SD billing + FI-AR + CO-PA -->
+    <article class="sap-card">
+      <header class="sap-card-head">
+        <div class="sap-card-source">Built on XeerSoft &middot; <b>STEM Billing &amp; Profitability</b></div>
+        <h2 class="sap-card-title">STEM Billing &amp; Profitability <span aria-hidden="true">&rarr;</span> <em>SAP SD billing + FI-AR + CO-PA</em></h2>
+        <div class="sap-card-sub">Billing to profitability analysis &middot; <a href="project4.html" class="sap-card-link">view the delivered system &rarr;</a></div>
+      </header>
+      <div class="sap-card-body">
+
+        <div class="sap-block sap-block--flow">
+          <div class="sap-block-label">Business Flow</div>
+          <div class="sap-flow" role="list" aria-label="Business flow">
+            <span class="sap-flow-step" role="listitem">Billing</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">AR</span>
+            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
+            <span class="sap-flow-step" role="listitem">Profitability analysis by segment</span>
+          </div>
+        </div>
+
+        <div class="sap-block sap-block--design">
+          <div class="sap-block-label">SAP Technical Design</div>
+          <ul class="sap-design-list">
+            <li><b>Billing doc types</b> <span class="tcode">VF01</span></li>
+            <li><b>Revenue account determination</b></li>
+            <li><b>CO-PA</b> characteristics / value fields <span style="opacity:.8;">(segment = subject)</span></li>
+            <li><b>Profitability reports</b> <span class="tcode">KE30</span></li>
+          </ul>
+        </div>
+
+        <div class="sap-block sap-block--pipeline">
+          <div class="sap-block-label">Development Pipeline</div>
+          <ol class="sap-phasebar">
+            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:5"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">5w</span></li>
+            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:3"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">3w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
+          </ol>
+          <div class="sap-pipe-total">Sequential span <b>~13 weeks</b></div>
+        </div>
+
+        <div class="sap-block sap-block--effort">
+          <div class="sap-block-label">Estimated Effort</div>
+          <div class="sap-effort-row">
+            <span class="sap-month-badge"><span class="sap-month-num">~4</span><span class="sap-month-unit">months</span></span>
+            <span class="sap-effort-note">Rough planning estimate for a single functional consultant &mdash; not a quote, and not a measured delivery.</span>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- CLOSING REITERATION -->
+<section style="padding: 1rem 2.5rem 4rem;">
+  <div class="sap-closing">
+    <div class="callout">
+      <div class="callout-title">A NOTE ON HONESTY</div>
+      <p>Everything on this page is a <strong>design proposal</strong>. The four source systems are real &mdash; I built and went live with them on XeerSoft Cloud ERP &mdash; but the SAP modules, configuration, T-codes, pipelines, and month estimates here are <strong>my own proposed designs</strong>. They have <strong>not been implemented, tested, or verified</strong> in SAP. They exist to show how I scope and approach SAP delivery: how I read a business flow, map it onto SAP modules and RICEFW, sequence the work, and estimate effort.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Chatree Kengpipat · ERP Business Analyst & Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+</body>
+</html>
