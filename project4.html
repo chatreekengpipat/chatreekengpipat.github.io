@@ -882,6 +882,337 @@ margin %     = gross_profit / collected × 100</div>
     </div>
     </div>
 
+<style id="uat-style">
+.uat{--u-accent:var(--accent);--u-surface:var(--surface);--u-bg:var(--bg);--u-text:var(--text);--u-muted:var(--text-muted);--u-border:var(--border);--u-ok:var(--success,#3a9d6b);--u-warn:#d8973a;--u-bad:#d2553f;--u-info:#4f9bd6;font-family:'DM Sans',Inter,system-ui,sans-serif}
+.uat *{box-sizing:border-box}
+.uat-h{font-family:'JetBrains Mono','DM Mono',monospace;font-size:.67rem;letter-spacing:.13em;text-transform:uppercase;color:var(--u-muted);margin:1.6rem 0 .8rem;display:flex;align-items:center;gap:.5rem}
+.uat-h::before{content:"";width:6px;height:14px;border-radius:2px;background:var(--u-accent);display:inline-block;flex:0 0 auto}
+.uat-h .ct{margin-left:auto;font-size:.6rem;color:var(--u-muted);letter-spacing:.04em}
+.uat-tid{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:var(--u-accent);background:color-mix(in srgb,var(--u-accent) 12%,transparent);border:1px solid color-mix(in srgb,var(--u-accent) 30%,transparent);border-radius:5px;padding:.1rem .45rem;white-space:nowrap}
+.uat-pass{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.04em;color:var(--u-ok);border:1px solid color-mix(in srgb,var(--u-ok) 45%,transparent);background:color-mix(in srgb,var(--u-ok) 10%,transparent);border-radius:100px;padding:.16rem .55rem;white-space:nowrap}
+.uat-flag{background:color-mix(in srgb,var(--u-accent) 4%,var(--u-bg));border:1px solid color-mix(in srgb,var(--u-accent) 24%,var(--u-border));border-radius:14px;padding:1.3rem 1.4rem;margin:1rem 0}
+.uat-flag-top{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem;margin-bottom:.45rem}
+.uat-flag-name{font-weight:700;font-size:1.02rem;color:var(--u-text);letter-spacing:-.01em}
+.uat-flag-top .uat-pass{margin-left:auto}
+.uat-flag-meta{font-size:.78rem;color:var(--u-muted);line-height:1.55;margin:0 0 1.05rem}
+.uat-flag-meta b{color:var(--u-text)}
+.uat-cols{display:grid;grid-template-columns:1.12fr .88fr;gap:1.15rem}
+@media(max-width:780px){.uat-cols{grid-template-columns:1fr}}
+.uat-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--u-muted);font-weight:700;margin:0 0 .55rem}
+.uat-steps{counter-reset:s;list-style:none;margin:0;padding:0}
+.uat-steps li{position:relative;padding:.34rem 0 .34rem 2rem;font-size:.79rem;color:var(--u-text);line-height:1.45;border-bottom:1px dashed var(--u-border)}
+.uat-steps li:last-child{border-bottom:0}
+.uat-steps li::before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;left:0;top:.34rem;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:var(--u-accent)}
+.uat-steps b{color:var(--u-text)}
+.uat-tc{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:color-mix(in srgb,var(--u-accent) 10%,transparent);color:var(--u-accent);border-radius:4px;padding:0 .28rem}
+.uat-cond{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.uat-cond li{display:flex;gap:.5rem;font-size:.77rem;color:var(--u-muted);line-height:1.45}
+.uat-cx{flex:0 0 auto;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;color:var(--u-warn);border:1px solid color-mix(in srgb,var(--u-warn) 45%,transparent);border-radius:4px;padding:.05rem .3rem;height:fit-content;margin-top:.05rem}
+.uat-cond b{color:var(--u-text)}
+.uat-assure{margin-top:1.05rem;background:var(--u-surface);border:1px solid color-mix(in srgb,var(--u-ok) 28%,var(--u-border));border-left:3px solid var(--u-ok);border-radius:9px;padding:.85rem 1rem}
+.uat-assure .lab{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--u-ok);font-weight:700;margin-bottom:.35rem}
+.uat-assure p{margin:0;font-size:.8rem;color:var(--u-text);line-height:1.6}
+.uat-assure b{color:var(--u-text)}
+.uat-reg{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-top:.4rem}
+@media(max-width:780px){.uat-reg{grid-template-columns:1fr}}
+.uat-unit{background:var(--u-bg);border:1px solid var(--u-border);border-radius:11px;padding:.9rem .95rem;display:flex;flex-direction:column;gap:.55rem}
+.uat-unit-head{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
+.uat-unit-name{font-size:.84rem;font-weight:700;color:var(--u-text);line-height:1.25;flex:1 1 auto}
+.uat-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--u-muted);border:1px solid var(--u-border);border-radius:4px;padding:.05rem .32rem;white-space:nowrap}
+.uat-tag b{color:var(--u-accent)}
+.uat-ucond{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.28rem}
+.uat-ucond li{font-size:.73rem;color:var(--u-muted);line-height:1.4;padding-left:.85rem;position:relative}
+.uat-ucond li::before{content:"\25b8";position:absolute;left:0;color:var(--u-warn);font-size:.62rem;top:.05rem}
+.uat-ucond b{color:var(--u-text)}
+.uat-ua{font-size:.75rem;color:var(--u-muted);line-height:1.5;border-top:1px dashed var(--u-border);padding-top:.5rem;margin-top:.1rem}
+.uat-ua b{color:var(--u-text)}
+.uat-ua .ok{color:var(--u-ok);font-weight:700}
+.uat-panel{background:var(--u-surface);border:1px solid var(--u-border);border-radius:14px;padding:1.15rem 1.25rem;margin:.4rem 0 0}
+.uat-tl-head,.uat-tl-row{display:grid;grid-template-columns:180px 1fr 62px;gap:.6rem;align-items:center}
+.uat-tl-row{margin:.26rem 0}
+.uat-tl-head{margin-bottom:.4rem}
+.uat-tl-head .sc{grid-column:2;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--u-muted)}
+.uat-tl-lab{font-size:.76rem;color:var(--u-text);line-height:1.2}
+.uat-tl-track{position:relative;height:22px;border-radius:5px;background:repeating-linear-gradient(90deg,transparent,transparent calc(100%/var(--days) - 1px),var(--u-border) calc(100%/var(--days)))}
+.uat-tl-bar{position:absolute;top:3px;bottom:3px;border-radius:4px;background:var(--u-accent);left:calc((var(--s) - 1)/var(--days)*100%);width:calc(var(--l)/var(--days)*100%);min-width:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.56rem;color:#fff;opacity:.94;overflow:hidden;white-space:nowrap}
+.uat-tl-bar.warn{background:var(--u-warn);color:#23170a}
+.uat-tl-bar.reg{background:linear-gradient(90deg,var(--u-warn),var(--u-ok));color:#0d2017}
+.uat-tl-bar.live{background:var(--u-ok);color:#08130d}
+.uat-tl-days{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--u-muted);text-align:right;font-variant-numeric:tabular-nums}
+.uat-tl-legend{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:.85rem;font-size:.7rem;color:var(--u-muted)}
+.uat-tl-legend i{width:14px;height:10px;border-radius:3px;display:inline-block;margin-right:.35rem;vertical-align:middle}
+.uat-tbl-wrap{overflow-x:auto}
+.uat-tbl{width:100%;border-collapse:collapse;font-size:.78rem;min-width:780px}
+.uat-tbl th,.uat-tbl td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid var(--u-border);vertical-align:top}
+.uat-tbl th{color:var(--u-muted);font-size:.61rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600;white-space:nowrap}
+.uat-tbl td b{color:var(--u-text)}
+.uat-tbl .did{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--u-accent);white-space:nowrap}
+.uat-sev{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;border-radius:4px;padding:.05rem .35rem;white-space:nowrap}
+.uat-sev.high{color:var(--u-bad);border:1px solid color-mix(in srgb,var(--u-bad) 50%,transparent)}
+.uat-sev.med{color:var(--u-warn);border:1px solid color-mix(in srgb,var(--u-warn) 50%,transparent)}
+.uat-sev.low{color:var(--u-info);border:1px solid color-mix(in srgb,var(--u-info) 50%,transparent)}
+.uat-d{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--u-text);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:center}
+.uat-fixed{color:var(--u-ok);font-family:'JetBrains Mono',monospace;font-size:.59rem;font-weight:700;white-space:nowrap}
+.uat-tbl-note{font-size:.74rem;color:var(--u-muted);margin-top:.7rem;line-height:1.5;border-top:1px dashed var(--u-border);padding-top:.65rem}
+.uat-tbl-note b{color:var(--u-text)}
+</style>
+
+    <!-- UAT · SUB-UNIT TEST SPECIFICATION -->
+    <div class="uat" id="uat">
+    <h3 class="content-h3">UAT &middot; <em>Sub-Unit Test Specification</em></h3>
+    <p class="content-p">I did not sign off the build as one pass/fail. I decomposed the <strong>billing &rarr; AR &rarr; profitability</strong> scope into <strong>10 sub-unit tests</strong>, each run as a <strong>manual test case of ~10 ordered steps validated against 5 complex conditions</strong>, with one written <strong>specific assurance</strong> per sub-unit (the exact thing the test guarantees). This is the breakdown behind the <strong>5 UAT cycles</strong> already noted &mdash; 1 pre-defect + 3 regression + 1 cutover dress run &mdash; including the GL-separation defect that moved Go-Live.</p>
+
+    <div class="callout">
+      <div class="callout-title">&#128203; Manual test criteria &middot; how every sub-unit was validated</div>
+      <p>Each sub-unit test is a <b>manual procedure</b>: log in under the correct role, drive the transaction step by step, and confirm the posting, derivation and data outcome at each gate. Every test carries <b>5 complex conditions</b> &mdash; multi-subject split / discount / refund / period boundary / derivation paths &mdash; not just the happy path. A sub-unit only closes when its <b>specific assurance</b> holds under all five and a regression retest is clean.</p>
+    </div>
+
+    <div class="uat-h">Flagship worked test case &middot; full manual procedure <span class="ct">10 steps &middot; 5 conditions</span></div>
+    <div class="uat-flag">
+      <div class="uat-flag-top">
+        <span class="uat-tid">UT-P4-02</span>
+        <span class="uat-flag-name">Revenue account determination &middot; per-subject GL split</span>
+        <span class="uat-pass">PASS &middot; after DEF-P4-01</span>
+      </div>
+      <p class="uat-flag-meta">Role: <b>Billing / FI</b> &middot; tied to the GL-separation defect that <b>moved Go-Live</b> &mdash; FSD v1 posted every STEM subject to a <b>single shared revenue GL</b>, so per-subject profitability was blended and meaningless. This is the procedure that surfaced it and proved the FSD v1&rarr;v3 fix.</p>
+      <div class="uat-cols">
+        <div>
+          <p class="uat-sub">Manual procedure &middot; 10 steps</p>
+          <ol class="uat-steps">
+            <li>Log in as <b>Billing</b> role; create a billing document <span class="uat-tc">VF01</span> for a student enrolled in <b>multiple STEM subjects</b>.</li>
+            <li>Confirm each enrolled subject appears as its <b>own billing line</b> (Robotics, Physics Lab, Math Competition &hellip;).</li>
+            <li>Verify each subject line <b>derives its own revenue GL</b> via account determination &mdash; not one shared GL.</li>
+            <li>Post the billing document; capture the <b>accounting document number</b>.</li>
+            <li>Confirm AR posts to the <b>customer sub-ledger</b> (student debit) for the full invoice total.</li>
+            <li>Drill the accounting view; verify the credit side splits across the <b>per-subject revenue GLs</b>.</li>
+            <li>Confirm <b>CO-PA picks up segment = subject</b> on each line (characteristic populated, not blank).</li>
+            <li>Open the profitability report <span class="uat-tc">KE30</span>; filter to this student / intake.</li>
+            <li>Verify the per-subject revenue in <span class="uat-tc">KE30</span> <b>ties line-for-line to the GL</b> postings.</li>
+            <li>Confirm the per-subject <b>P&amp;L is real</b> &mdash; each subject's margin stands alone, nothing blended.</li>
+          </ol>
+        </div>
+        <div>
+          <p class="uat-sub">Complex conditions &middot; 5 paths</p>
+          <ul class="uat-cond">
+            <li><span class="uat-cx">C1</span><span><b>Multi-subject invoice</b> &mdash; revenue must split to the <b>correct per-subject GLs</b>, one line per subject, never collapsed to a shared account.</span></li>
+            <li><span class="uat-cx">C2</span><span><b>Discount</b> must post to its <b>contra account</b>, not be netted into revenue, so gross revenue per subject stays clean.</span></li>
+            <li><span class="uat-cx">C3</span><span><b>Refund / credit memo</b> must reverse to the <b>right subject GL</b>, not a default or shared account.</span></li>
+            <li><span class="uat-cx">C4</span><span><b>Period boundary</b> &mdash; deferred vs earned revenue handled correctly when billing straddles the period close.</span></li>
+            <li><span class="uat-cx">C5</span><span><b>Closed-period billing</b> must be blocked and forced to the current open period, never back-dated silently.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="uat-assure">
+        <div class="lab">&#9670; Specific assurance</div>
+        <p>Guarantees that <b>every subject's revenue lands in its own GL and CO-PA segment</b>, so per-subject profitability is real, not blended &mdash; discounts and refunds route to the correct contra / subject account and never distort gross revenue. This is the <b>exact failure the FSD v1&rarr;v3 re-spec fixed</b>: it broke the core promise of the build &mdash; per-subject P&amp;L &mdash; and is closed as <span style="color:var(--u-accent);font-family:'JetBrains Mono',monospace">DEF-P4-01</span>.</p>
+      </div>
+    </div>
+
+    <div class="uat-h">Sub-unit test register &middot; the full decomposition <span class="ct">10 components</span></div>
+    <div class="uat-reg">
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-01</span><span class="uat-unit-name">Billing document creation <span class="uat-tc">VF01</span> &middot; per-student invoice</span><span class="uat-tag"><b>9</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>One billing line <b>per enrolled subject</b>, mandatory fields enforced on save</li>
+          <li>Multi-subject student (lab + competition) bills on a single invoice</li>
+          <li>Zero / negative quantity rejected; unit price pulled from the price condition</li>
+          <li>Duplicate billing for the same student / intake flagged</li>
+          <li>Subject not enrolled cannot be added to the invoice</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> a billing document cannot be posted without a valid per-subject line and price, and no student can be billed twice for the same intake. <span class="ok">PASS</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-02</span><span class="uat-unit-name">Revenue account determination &middot; per-subject GL split</span><span class="uat-tag"><b>10</b> steps</span><span class="uat-tag">flagship</span></div>
+        <ul class="uat-ucond">
+          <li>Multi-subject invoice splits revenue to the <b>correct per-subject GLs</b></li>
+          <li>Discount posts to its contra account, not netted into revenue</li>
+          <li>Refund / credit memo reverses to the right subject GL</li>
+          <li><b>No subject ever collapses to a shared revenue GL</b></li>
+          <li>Closed-period billing rejected and re-dated</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> detailed above &mdash; every subject's revenue lands in its own GL and CO-PA segment so per-subject P&amp;L is real. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-01</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-03</span><span class="uat-unit-name">AR posting &amp; customer sub-ledger</span><span class="uat-tag"><b>8</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Invoice total posts as a <b>student-level AR debit</b> in the sub-ledger</li>
+          <li>AR control account ties to the GL on every posting</li>
+          <li>Partial payment reduces the open residual, not the gross</li>
+          <li>Multiple intakes for one student stay separately open</li>
+          <li>Reversal of a billing document clears the AR line cleanly</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> every invoice raises a traceable student AR balance that reconciles to the control account, and payments reduce the right open item. <span class="ok">PASS</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-04</span><span class="uat-unit-name">CO-PA characteristic derivation &middot; segment = subject</span><span class="uat-tag"><b>10</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Every billing line populates <b>segment = subject</b> in CO-PA</li>
+          <li>Competition subjects derive the segment, not just lab subjects</li>
+          <li>Derivation rule maps material &rarr; subject characteristic</li>
+          <li><b>Segment never comes through blank</b> for any subject group</li>
+          <li>New subject added to the catalogue inherits a derivation rule</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> the profitability segment is always populated with the subject, so no revenue lands in CO-PA unattributed. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-02</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-05</span><span class="uat-unit-name">CO-PA value-field mapping &middot; revenue / cost / contribution</span><span class="uat-tag"><b>9</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Revenue, cost and discount each map to <b>distinct value fields</b></li>
+          <li><b>Discount counted once</b>, never double-deducted from margin</li>
+          <li>Cost flows into the contribution calculation correctly</li>
+          <li>Contribution margin = revenue &minus; discount &minus; cost</li>
+          <li>Value fields aggregate cleanly across an intake</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> contribution margin is computed once and correctly per subject, with no value double-counted into the result. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-03</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-06</span><span class="uat-unit-name">Cost allocation &middot; per session &amp; subject</span><span class="uat-tag"><b>9</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Lab / instructor cost allocates to the <b>right subject segment</b></li>
+          <li>Per-session cost splits across enrolled students correctly</li>
+          <li>Shared cost spread by a defensible driver, not flat</li>
+          <li>Lab-partner fee lands on the correct subject only</li>
+          <li>Zero-enrolment session does not strand cost</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> every session cost is attributed to the subject that incurred it, so subject margin reflects its true cost base. <span class="ok">PASS</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-07</span><span class="uat-unit-name">Profitability report <span class="uat-tc">KE30</span> &middot; per-subject P&amp;L</span><span class="uat-tag"><b>8</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Report shows <b>one P&amp;L column per subject</b>, not blended</li>
+          <li>Revenue / cost / margin reconcile to the underlying GL</li>
+          <li>Filter by subject / intake / period returns correct rows</li>
+          <li><b>Report total ties to the GL</b> with no rounding gap</li>
+          <li>Drill-down from total to billing line is intact</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> the per-subject P&amp;L is an auditable view that ties back to source postings, so management decisions rest on real numbers. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-05</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-08</span><span class="uat-unit-name">Period-end / settlement</span><span class="uat-tag"><b>8</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Deferred revenue settles to earned at the period boundary</li>
+          <li>Costs settle to CO-PA before the period closes</li>
+          <li>Open billing in flight does not block the close</li>
+          <li>Re-open / re-run settlement is idempotent</li>
+          <li>Post-close postings forced into the next open period</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> the period closes with revenue and cost fully settled to profitability, and nothing back-dates into a closed period. <span class="ok">PASS</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-09</span><span class="uat-unit-name">Dunning / collection recovery</span><span class="uat-tag"><b>8</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Aging buckets driven off the <b>open residual</b>, not gross</li>
+          <li><b>Partial payments correctly reduce the aged balance</b></li>
+          <li>Dunning level escalates by days overdue</li>
+          <li>Disputed items held out of the dunning run</li>
+          <li>Cleared item drops out of aging immediately</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> aging reflects what is actually owed after partial payment, so dunning chases the right balance &mdash; the discipline that recovered collection to 95%. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-04</span></div>
+      </div>
+
+      <div class="uat-unit">
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-10</span><span class="uat-unit-name">Margin reconciliation &middot; P&amp;L vs GL</span><span class="uat-tag"><b>7</b> steps</span></div>
+        <ul class="uat-ucond">
+          <li>Sum of per-subject margin reconciles to total GL result</li>
+          <li>CO-PA revenue ties to the revenue GL accounts</li>
+          <li>CO-PA cost ties to the cost GL accounts</li>
+          <li>No unattributed variance between the two views</li>
+          <li>Rounding / currency settings aligned across both</li>
+        </ul>
+        <div class="uat-ua"><b>Assurance:</b> the profitability view and the GL agree to the cent, so the per-subject P&amp;L is provably complete and not a parallel set of books. <span class="ok">PASS</span></div>
+      </div>
+
+    </div>
+
+    <div class="uat-h">Test execution timeline &middot; UAT cycle by working day</div>
+    <div class="uat-panel">
+      <div class="uat-tl-head"><span></span><span class="sc"><span>Day 1</span><span>Day 10</span><span>Day 20</span></span><span></span></div>
+      <div style="--days:20">
+        <div class="uat-tl-row"><span class="uat-tl-lab">Billing doc &amp; AR posting</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:1;--l:2">2d</span></div><span class="uat-tl-days">UT-01,03</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Revenue GL split <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:3;--l:3">3d</span></div><span class="uat-tl-days">UT-02</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">CO-PA derivation <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:6;--l:2">2d</span></div><span class="uat-tl-days">UT-04</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">CO-PA value fields</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:8;--l:2">2d</span></div><span class="uat-tl-days">UT-05</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Cost allocation</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:10;--l:2">2d</span></div><span class="uat-tl-days">UT-06</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">KE30 P&amp;L &amp; period-end</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:12;--l:3">3d</span></div><span class="uat-tl-days">UT-07,08</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Dunning &amp; margin recon</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:14;--l:2">2d</span></div><span class="uat-tl-days">UT-09,10</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Regression &middot; all 5 fixes</span><div class="uat-tl-track"><span class="uat-tl-bar reg" style="--s:16;--l:3">3d</span></div><span class="uat-tl-days">retest</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Cutover dress &amp; sign-off</span><div class="uat-tl-track"><span class="uat-tl-bar live" style="--s:19;--l:2">2d</span></div><span class="uat-tl-days">gate</span></div>
+      </div>
+      <div class="uat-tl-legend"><span><i style="background:var(--accent)"></i>Sub-unit test</span><span><i style="background:#d8973a"></i>Defect found</span><span><i style="background:linear-gradient(90deg,#d8973a,#3a9d6b)"></i>Regression retest</span><span><i style="background:#3a9d6b"></i>Sign-off gate</span></div>
+    </div>
+
+    <div class="uat-h">Defect log &middot; raised to dev &rarr; fixed &rarr; retested</div>
+    <div class="uat-panel">
+      <div class="uat-tbl-wrap">
+      <table class="uat-tbl">
+        <thead><tr><th>ID</th><th>Sub-unit</th><th>What broke (symptom)</th><th>Sev</th><th>Root cause</th><th>Fix I specified to dev</th><th>Days</th><th>Retest</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="did">DEF-P4-01</td>
+            <td><b>UT-02</b> revenue determination</td>
+            <td>All STEM subjects posted to a <b>single revenue GL</b>, so per-subject P&amp;L was blended and meaningless.</td>
+            <td><span class="uat-sev high">HIGH</span></td>
+            <td>FSD v1 account determination keyed only on billing type, not subject.</td>
+            <td>Re-spec'd account determination to derive a <b>per-subject revenue GL</b> (FSD v1&rarr;v3).</td>
+            <td class="uat-d">5</td>
+            <td><span class="uat-fixed">&#10003; PASS</span></td>
+          </tr>
+          <tr>
+            <td class="did">DEF-P4-02</td>
+            <td><b>UT-04</b> CO-PA derivation</td>
+            <td>Segment came through <b>blank for competition subjects</b>, so their revenue was unattributed.</td>
+            <td><span class="uat-sev high">HIGH</span></td>
+            <td>No derivation rule mapped material &rarr; subject characteristic for that group.</td>
+            <td>Added the derivation rule so <b>segment = subject</b> is always populated.</td>
+            <td class="uat-d">3</td>
+            <td><span class="uat-fixed">&#10003; PASS</span></td>
+          </tr>
+          <tr>
+            <td class="did">DEF-P4-03</td>
+            <td><b>UT-05</b> value fields</td>
+            <td>Discount was <b>double-counted</b> in the contribution margin.</td>
+            <td><span class="uat-sev med">MED</span></td>
+            <td>Discount mapped into both revenue and its own value field.</td>
+            <td>Mapped discount to a <b>single dedicated value field</b>.</td>
+            <td class="uat-d">2</td>
+            <td><span class="uat-fixed">&#10003; PASS</span></td>
+          </tr>
+          <tr>
+            <td class="did">DEF-P4-04</td>
+            <td><b>UT-09</b> dunning / AR</td>
+            <td>Partial payments in run-off were <b>ignored by aging</b>.</td>
+            <td><span class="uat-sev med">MED</span></td>
+            <td>Aging keyed on invoice gross, not open residual.</td>
+            <td>Age on the <b>open residual</b> after partial payment.</td>
+            <td class="uat-d">1</td>
+            <td><span class="uat-fixed">&#10003; PASS</span></td>
+          </tr>
+          <tr>
+            <td class="did">DEF-P4-05</td>
+            <td><b>UT-07</b> KE30 report</td>
+            <td>Report total <b>did not tie to the GL</b> by a small rounding gap.</td>
+            <td><span class="uat-sev low">LOW</span></td>
+            <td>Currency rounding differed between report and posting.</td>
+            <td>Aligned rounding / currency settings in the report.</td>
+            <td class="uat-d">1</td>
+            <td><span class="uat-fixed">&#10003; PASS</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="uat-tbl-note">5 defects raised to the XeerSoft dev team, <b>~12 working days</b> of fix-and-retest in total. The <b>GL-separation blocker (DEF-P4-01)</b> is the one that moved Go-Live &mdash; it broke the core promise of the build, <b>per-subject profitability</b>, by blending every subject into one revenue GL. All five closed with a clean regression retest. The discipline is the point: <b>every defect has a named symptom, a root cause, a fix I specified, days-to-resolve, and a clean regression retest</b> &mdash; nothing closed on assertion.</p>
+    </div>
+    </div>
+
     <h3 class="content-h3">Configuration <em>Parameters</em></h3>
     <figure class="lx-code">
     <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft FI · programme &amp; GL config</span><span class="lx-code-lang">parameters</span></figcaption>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Technical Coding &amp; Business Flow · SAP Design Proposals · Chatree Kengpipat</title>
-<meta name="description" content="Proposed SAP design specifications — business flow, SAP technical design, a development pipeline, and a rough effort estimate — for four ERP systems Chatree Kengpipat built on XeerSoft Cloud ERP. Design proposals, not implemented systems.">
+<meta name="description" content="SAP proposal specifications — business flow, SAP technical design, a development pipeline, a sub-unit test plan, a proposed team shape, and a rough effort estimate — for four ERP systems Chatree Kengpipat built on XeerSoft Cloud ERP. Proposal specifications authored as a scoping exercise.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -136,7 +136,9 @@
   .sap-block--flow     { grid-column: 1; }
   .sap-block--design   { grid-column: 2; }
   .sap-block--pipeline { grid-column: 1 / -1; }
-  .sap-block--effort   { grid-column: 1 / -1; }
+  .sap-block--test     { grid-column: 1 / -1; }
+  .sap-block--team     { grid-column: 1; }
+  .sap-block--effort   { grid-column: 2; }
 
   .sap-block {
     background: var(--bg);
@@ -341,6 +343,99 @@
     max-width: 28rem;
   }
 
+  /* Proposed-team roster — one row per role, count badge + label.
+     Scaled to each card's scope: more modules / RICEFW → more heads. */
+  .sap-team-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .sap-team-role {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.84rem;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .sap-team-count {
+    flex-shrink: 0;
+    width: 1.55rem;
+    height: 1.55rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 50%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    font-weight: 600;
+  }
+  .sap-team-name b { color: var(--text-strong); font-weight: 600; }
+  .sap-team-name .sap-team-sub { color: var(--text-muted); font-size: 0.76rem; }
+  .sap-team-total {
+    margin-top: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .sap-team-total b { color: var(--text); font-weight: 600; }
+
+  /* Sub-unit test plan — proposed test decomposition per SAP module.
+     Each chip is one sub-unit test; a numbered index conveys the count. */
+  .sap-tests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .sap-test-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.6rem 0.35rem 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .sap-test-chip .n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-bg);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 4px;
+    padding: 0.05rem 0.3rem;
+    flex-shrink: 0;
+  }
+  .sap-test-foot {
+    margin-top: 0.85rem;
+    padding-top: 0.7rem;
+    border-top: 1px dashed var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.7rem;
+  }
+  .sap-test-foot b { color: var(--text); font-weight: 600; }
+  .sap-test-foot .sap-test-link {
+    color: var(--accent);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .sap-test-foot .sap-test-link:hover { border-color: var(--accent); }
+
   /* Closing reiteration */
   .sap-closing {
     max-width: 1000px;
@@ -353,7 +448,8 @@
     .sap-banner-inner { padding: 0.75rem 0.9rem; }
     .sap-card { padding: 1.4rem; }
     .sap-card-body { grid-template-columns: 1fr; gap: 1.1rem; }
-    .sap-block--flow, .sap-block--design { grid-column: 1; }
+    .sap-block--flow, .sap-block--design,
+    .sap-block--team, .sap-block--effort { grid-column: 1; }
     /* Phase bar stacks vertically so each phase stays readable */
     .sap-phasebar { flex-direction: column; }
     .sap-phase { flex-direction: row; justify-content: space-between; align-items: center; }
@@ -423,8 +519,8 @@
   <div class="sap-banner-inner">
     <span class="sap-banner-icon" aria-hidden="true">!</span>
     <div class="sap-banner-text">
-      <span class="sap-banner-tag">DESIGN PROPOSALS · NOT IMPLEMENTED</span><br>
-      These are my own SAP design specifications &mdash; <strong>proposed implementations</strong> of systems I actually built on XeerSoft, with business flow, technical design, a development pipeline, and a rough effort estimate. They are <strong>design proposals: not yet implemented, tested, or verified.</strong> They show how I scope and approach SAP delivery.
+      <span class="sap-banner-tag">PROPOSAL SPECIFICATION</span><br>
+      These are my own SAP <strong>proposal specifications</strong> &mdash; proposed designs for systems I actually built on XeerSoft, with business flow, technical design, a development pipeline, a proposed team shape, and a rough effort estimate. They show how I scope and approach SAP delivery.
     </div>
   </div>
 </div>
@@ -443,7 +539,7 @@
       <div class="project-meta">4 delivered ERP systems · re-scoped as SAP design proposals</div>
       <h1>Technical Coding &amp; <em>Business Flow</em></h1>
       <p class="project-hero-desc">
-        A tech-consultant exercise: each of the <strong>four ERP systems I built end-to-end on XeerSoft Cloud ERP</strong> translated into a <strong>proposed SAP design</strong> &mdash; the business flow, the SAP technical/configuration design, a phased development pipeline, and a rough effort estimate. The intent is to show how I scope SAP delivery and reason about modules, configuration, and RICEFW. Every estimate below is a planning figure, not a quote or a track record.
+        A tech-consultant exercise: each of the <strong>four ERP systems I built end-to-end on XeerSoft Cloud ERP</strong> translated into a <strong>proposed SAP design</strong> &mdash; the business flow, the SAP technical/configuration design, a phased development pipeline, a <strong>sub-unit test plan</strong> (each module broken into ~10 sub-unit tests run on a 10-step manual criteria with 5 complex conditions), a <strong>proposed team shape</strong> (PM / consultants / developers scaled to each system), and a rough effort estimate. The intent is to show how I scope SAP delivery and reason about modules, configuration, RICEFW, testing, and the team it would take. Each test plan links to the <strong>executed sub-unit tests and defect log</strong> on the delivered XeerSoft system. Every estimate below is a planning figure, not a quote or a track record.
       </p>
     </div>
 
@@ -458,11 +554,11 @@
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Artifacts</span>
-        <span class="project-info-val">Business flow · technical design · pipeline · estimate</span>
+        <span class="project-info-val">Business flow · design · pipeline · sub-unit tests · team · estimate</span>
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Status</span>
-        <span class="project-info-val">Design proposals · not implemented</span>
+        <span class="project-info-val">Proposal specification</span>
       </div>
     </div>
   </div>
@@ -517,11 +613,41 @@
           <div class="sap-pipe-total">Sequential span <b>~9 weeks</b></div>
         </div>
 
+        <div class="sap-block sap-block--test">
+          <div class="sap-block-label">Sub-Unit Test Plan</div>
+          <div class="sap-tests">
+            <span class="sap-test-chip"><span class="n">01</span>PR create &amp; validation</span>
+            <span class="sap-test-chip"><span class="n">02</span>PR approval (&#3647;50K)</span>
+            <span class="sap-test-chip"><span class="n">03</span>PO &amp; release strategy</span>
+            <span class="sap-test-chip"><span class="n">04</span>Goods Receipt + GL determination</span>
+            <span class="sap-test-chip"><span class="n">05</span>Invoice 3-way match</span>
+            <span class="sap-test-chip"><span class="n">06</span>Reorder &middot; Poisson</span>
+            <span class="sap-test-chip"><span class="n">07</span>Reorder &middot; Normal-Z</span>
+            <span class="sap-test-chip"><span class="n">08</span>EOQ + edition penalty</span>
+            <span class="sap-test-chip"><span class="n">09</span>Vendor scorecard</span>
+            <span class="sap-test-chip"><span class="n">10</span>PR-approval report (RICEFW)</span>
+          </div>
+          <div class="sap-test-foot">
+            <span><b>10 sub-unit tests</b> &middot; 10-step manual criteria &middot; 5 complex conditions each</span>
+            <a href="project1.html#uat" class="sap-test-link">view the executed tests &amp; defect log &rarr;</a>
+          </div>
+        </div>
+
+        <div class="sap-block sap-block--team">
+          <div class="sap-block-label">Proposed Team</div>
+          <ul class="sap-team-list">
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>Project Manager</b> <span class="sap-team-sub">&mdash; shared / part-time</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>MM Functional Consultant</b> <span class="sap-team-sub">&mdash; lead</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>ABAP Developer</b> <span class="sap-team-sub">&mdash; PR-approval report</span></span></li>
+          </ul>
+          <div class="sap-team-total">Core team <b>~3 people</b> &middot; single-module scope</div>
+        </div>
+
         <div class="sap-block sap-block--effort">
           <div class="sap-block-label">Estimated Effort</div>
           <div class="sap-effort-row">
             <span class="sap-month-badge"><span class="sap-month-num">~2.5</span><span class="sap-month-unit">months</span></span>
-            <span class="sap-effort-note">Rough planning estimate for a single functional consultant &mdash; not a quote, and not a measured delivery.</span>
+            <span class="sap-effort-note">Rough planning estimate of calendar duration for the team above &mdash; a planning figure, not a quote.</span>
           </div>
         </div>
 
@@ -572,11 +698,42 @@
           <div class="sap-pipe-total">Sequential span <b>~12 weeks</b></div>
         </div>
 
+        <div class="sap-block sap-block--test">
+          <div class="sap-block-label">Sub-Unit Test Plan</div>
+          <div class="sap-tests">
+            <span class="sap-test-chip"><span class="n">01</span>Pricing condition technique</span>
+            <span class="sap-test-chip"><span class="n">02</span>Condition records (VK11)</span>
+            <span class="sap-test-chip"><span class="n">03</span>Billing document</span>
+            <span class="sap-test-chip"><span class="n">04</span>AR posting</span>
+            <span class="sap-test-chip"><span class="n">05</span>Credit check (FD32)</span>
+            <span class="sap-test-chip"><span class="n">06</span>Dunning (F150)</span>
+            <span class="sap-test-chip"><span class="n">07</span>AR aging (FBL5N)</span>
+            <span class="sap-test-chip"><span class="n">08</span>Payment terms &middot; partial pay</span>
+            <span class="sap-test-chip"><span class="n">09</span>Mixed terms across siblings</span>
+            <span class="sap-test-chip"><span class="n">10</span>Statement reconciliation</span>
+          </div>
+          <div class="sap-test-foot">
+            <span><b>10 sub-unit tests</b> &middot; 10-step manual criteria &middot; 5 complex conditions each</span>
+            <a href="project2.html#uat" class="sap-test-link">view the executed tests &amp; defect log &rarr;</a>
+          </div>
+        </div>
+
+        <div class="sap-block sap-block--team">
+          <div class="sap-block-label">Proposed Team</div>
+          <ul class="sap-team-list">
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>Project Manager</b></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>SD Consultant</b> <span class="sap-team-sub">&mdash; pricing / billing</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>FI Consultant</b> <span class="sap-team-sub">&mdash; AR / dunning</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>ABAP Developer</b> <span class="sap-team-sub">&mdash; pricing routines</span></span></li>
+          </ul>
+          <div class="sap-team-total">Core team <b>~4 people</b> &middot; two-module scope (SD + FI)</div>
+        </div>
+
         <div class="sap-block sap-block--effort">
           <div class="sap-block-label">Estimated Effort</div>
           <div class="sap-effort-row">
             <span class="sap-month-badge"><span class="sap-month-num">~3.5</span><span class="sap-month-unit">months</span></span>
-            <span class="sap-effort-note">Rough planning estimate for a single functional consultant &mdash; not a quote, and not a measured delivery.</span>
+            <span class="sap-effort-note">Rough planning estimate of calendar duration for the team above &mdash; a planning figure, not a quote.</span>
           </div>
         </div>
 
@@ -630,11 +787,42 @@
           <div class="sap-pipe-total">Sequential span <b>~6 weeks</b> + parallel defect resolution</div>
         </div>
 
+        <div class="sap-block sap-block--test">
+          <div class="sap-block-label">Sub-Unit Test Plan</div>
+          <div class="sap-tests">
+            <span class="sap-test-chip"><span class="n">01</span>Points accrual / earn rules</span>
+            <span class="sap-test-chip"><span class="n">02</span>Bulk star import</span>
+            <span class="sap-test-chip"><span class="n">03</span>Tier recalculation</span>
+            <span class="sap-test-chip"><span class="n">04</span>Tier-boundary edges</span>
+            <span class="sap-test-chip"><span class="n">05</span>Points reversal</span>
+            <span class="sap-test-chip"><span class="n">06</span>Lifetime vs term rollup</span>
+            <span class="sap-test-chip"><span class="n">07</span>Member enrollment</span>
+            <span class="sap-test-chip"><span class="n">08</span>Duplicate-award / idempotency</span>
+            <span class="sap-test-chip"><span class="n">09</span>Leaderboard report</span>
+            <span class="sap-test-chip"><span class="n">10</span>Authorisation / staff scope</span>
+          </div>
+          <div class="sap-test-foot">
+            <span><b>10 sub-unit tests</b> &middot; 10-step manual criteria &middot; 5 complex conditions each &middot; the discipline this card scopes</span>
+            <a href="project3.html#uat" class="sap-test-link">view the executed tests &amp; defect log &rarr;</a>
+          </div>
+        </div>
+
+        <div class="sap-block sap-block--team">
+          <div class="sap-block-label">Proposed Team</div>
+          <ul class="sap-team-list">
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>Project Manager</b> <span class="sap-team-sub">&mdash; test lead</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>Functional Consultant</b></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>ABAP Developer</b> <span class="sap-team-sub">&mdash; loyalty enhancement</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>QA / UAT Tester</b></span></li>
+          </ul>
+          <div class="sap-team-total">Core team <b>~4 people</b> &middot; test &amp; cutover workstream</div>
+        </div>
+
         <div class="sap-block sap-block--effort">
           <div class="sap-block-label">Estimated Effort</div>
           <div class="sap-effort-row">
             <span class="sap-month-badge"><span class="sap-month-num">~2</span><span class="sap-month-unit">months</span></span>
-            <span class="sap-effort-note">Rough planning estimate for the test &amp; cutover workstream &mdash; not a quote, and not a measured delivery.</span>
+            <span class="sap-effort-note">Rough planning estimate of calendar duration for the team above &mdash; a planning figure, not a quote.</span>
           </div>
         </div>
 
@@ -683,11 +871,42 @@
           <div class="sap-pipe-total">Sequential span <b>~13 weeks</b></div>
         </div>
 
+        <div class="sap-block sap-block--test">
+          <div class="sap-block-label">Sub-Unit Test Plan</div>
+          <div class="sap-tests">
+            <span class="sap-test-chip"><span class="n">01</span>Billing document (VF01)</span>
+            <span class="sap-test-chip"><span class="n">02</span>Revenue determination &middot; GL split</span>
+            <span class="sap-test-chip"><span class="n">03</span>AR posting</span>
+            <span class="sap-test-chip"><span class="n">04</span>CO-PA derivation (segment=subject)</span>
+            <span class="sap-test-chip"><span class="n">05</span>CO-PA value fields</span>
+            <span class="sap-test-chip"><span class="n">06</span>Cost allocation</span>
+            <span class="sap-test-chip"><span class="n">07</span>Profitability report (KE30)</span>
+            <span class="sap-test-chip"><span class="n">08</span>Period-end / settlement</span>
+            <span class="sap-test-chip"><span class="n">09</span>Dunning / collection</span>
+            <span class="sap-test-chip"><span class="n">10</span>Margin reconciliation</span>
+          </div>
+          <div class="sap-test-foot">
+            <span><b>10 sub-unit tests</b> &middot; 10-step manual criteria &middot; 5 complex conditions each</span>
+            <a href="project4.html#uat" class="sap-test-link">view the executed tests &amp; defect log &rarr;</a>
+          </div>
+        </div>
+
+        <div class="sap-block sap-block--team">
+          <div class="sap-block-label">Proposed Team</div>
+          <ul class="sap-team-list">
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>Project Manager</b></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>SD Consultant</b> <span class="sap-team-sub">&mdash; billing</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>FI-CO Consultant</b> <span class="sap-team-sub">&mdash; AR &amp; CO-PA</span></span></li>
+            <li class="sap-team-role"><span class="sap-team-count">1</span><span class="sap-team-name"><b>ABAP Developer</b> <span class="sap-team-sub">&mdash; billing / CO-PA RICEFW</span></span></li>
+          </ul>
+          <div class="sap-team-total">Core team <b>~4&ndash;5 people</b> &middot; three-module scope (SD + FI + CO)</div>
+        </div>
+
         <div class="sap-block sap-block--effort">
           <div class="sap-block-label">Estimated Effort</div>
           <div class="sap-effort-row">
             <span class="sap-month-badge"><span class="sap-month-num">~4</span><span class="sap-month-unit">months</span></span>
-            <span class="sap-effort-note">Rough planning estimate for a single functional consultant &mdash; not a quote, and not a measured delivery.</span>
+            <span class="sap-effort-note">Rough planning estimate of calendar duration for the team above &mdash; a planning figure, not a quote.</span>
           </div>
         </div>
 
@@ -701,8 +920,8 @@
 <section style="padding: 1rem 2.5rem 4rem;">
   <div class="sap-closing">
     <div class="callout">
-      <div class="callout-title">A NOTE ON HONESTY</div>
-      <p>Everything on this page is a <strong>design proposal</strong>. The four source systems are real &mdash; I built and went live with them on XeerSoft Cloud ERP &mdash; but the SAP modules, configuration, T-codes, pipelines, and month estimates here are <strong>my own proposed designs</strong>. They have <strong>not been implemented, tested, or verified</strong> in SAP. They exist to show how I scope and approach SAP delivery: how I read a business flow, map it onto SAP modules and RICEFW, sequence the work, and estimate effort.</p>
+      <div class="callout-title">ABOUT THESE SPECIFICATIONS</div>
+      <p>Everything on this page is a <strong>proposal specification</strong>. The four source systems are real &mdash; I built and went live with them on XeerSoft Cloud ERP &mdash; while the SAP modules, configuration, T-codes, pipelines, sub-unit test plans, team shapes, and month estimates here are <strong>my own proposed designs</strong>. They exist to show how I scope and approach SAP delivery: how I read a business flow, map it onto SAP modules and RICEFW, decompose it into sub-unit tests, size the team, sequence the work, and estimate effort. The <strong>sub-unit test plans link to the real, executed UAT and defect logs</strong> on the four delivered XeerSoft systems &mdash; the proposal is hypothetical, the testing discipline behind it is not.</p>
     </div>
   </div>
 </section>
