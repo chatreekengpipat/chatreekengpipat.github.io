@@ -3106,6 +3106,22 @@ footer p {
   }
 }
 
+/* Mobile fix — the view() reveal is scroll-LINKED, so it is reversible: scrolling
+   back up moves a stacked card down into its `entry` range and animates its
+   opacity back toward 0. On short touch viewports with tall, full-width cards
+   that transparent band covers much of the screen, so cards appear to "disappear"
+   while scrubbing up and down. On mobile we therefore drop the scroll-driven
+   reveal entirely and render every block statically visible (content first).
+   Desktop keeps the entrance. This preserves the "never trapped invisible"
+   guarantee — here it is simply always visible. */
+@media (max-width: 768px) {
+  [data-reveal] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ========== HERO ENTRANCE ========== */
 .hero-left > * {
   animation: fadeUp 0.9s var(--ease-smooth) backwards;
