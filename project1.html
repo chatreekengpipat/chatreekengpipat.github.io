@@ -634,7 +634,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <a href="project4.html">STEM Portfolio Financial Tracking</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">My SAP Specification Design</div>
+          <div class="nav-dd-head">My ERP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
         </div>
         <div class="nav-dd-group">
@@ -646,7 +646,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <div class="nav-dd-head">Engineering Design &amp; ERP · MMTh</div>
           <a href="project5.html">FPDU Assist Device · PHEV</a>
         </div>
       </div>
@@ -779,7 +779,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       Newton's uniform and textbook procurement ran on intuition &mdash; <b>22% of intake seasons hit XS/XXL stockouts</b>. I rebuilt it as a statistically-planned, approval-controlled procure-to-pay system on XeerSoft Cloud ERP.
     </p>
 
-    <h3 class="content-h3">The <em>Problem</em></h3>
+    <h3 class="content-h3">Business Context &amp; <em>Problem</em></h3>
     <p class="content-p">
       Newton Sixth Form managed procurement for school uniforms (~180 SKUs) and textbooks (~40 titles) <strong>without a structured system</strong>: purchase requests were uncontrolled, approval was informal, and uniform stockouts occurred every intake season due to intuition-based ordering.
     </p>
@@ -791,7 +791,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <p>· No approval threshold: <strong>any staff could raise unlimited purchase requests</strong></p>
     </div>
 
-    <h3 class="content-h3">My <em>Approach</em></h3>
+    <h3 class="content-h3">My Role &amp; <em>Accountability</em></h3>
     <p class="content-p">
       I joined as <strong>sole Implementation Consultant</strong>. The challenge wasn't simply to configure an ERP module: it was to diagnose <em>why</em> the existing process was failing, design a system that solved root causes, and ensure adoption across 15+ procurement staff.
     </p>
@@ -823,7 +823,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       .p1-dna-map b{color:var(--text)}
     </style>
 
-    <h3 class="content-h3">Design <em>Approach</em></h3>
+    <h3 class="content-h3">Consulting <em>Approach</em></h3>
     <p class="content-p">
       Before configuring a single screen I fixed the consulting spine of the build: the <strong>method</strong> that decides the numbers, the <strong>tools</strong> that hold them, and the <strong>logic</strong> the developers implement. Every interactive exhibit further down is an artifact of one of these three.
     </p>
@@ -895,7 +895,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       .whyp-cap b{color:var(--text)}
     </style>
 
-    <h3 class="content-h3">The core insight · <em>Why two demand models?</em></h3>
+    <h3 class="content-h3">Solution Design · <em>Demand Model Selection</em></h3>
     <p class="content-p">
       Every stock item asks the same question: how much safety stock guards against a stockout at a 97% service level? The honest answer depends on <strong>how much the item actually sells</strong> &mdash; so I chose the demand model by volume, not by product type. The three panels show why.
     </p>
@@ -960,7 +960,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     })();
     </script>
 
-    <h3 class="content-h3">The solution · <em>model-selection logic</em></h3>
+    <h3 class="content-h3">Planning Rules · <em>Model-Selection Logic</em></h3>
     <p class="content-p">Three planning rules, each matched to how its items behave. The Purchase Requisition catalog below tags every line with the rule that governs it.</p>
     <table class="process-table">
       <thead><tr><th>Planning model</th><th>Applied to</th><th>Why this model</th></tr></thead>
@@ -970,7 +970,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         <tr><td><strong>Modified EOQ</strong></td><td>Textbooks (~40 titles)</td><td>Order size balances holding vs ordering cost, with an edition-risk penalty to curb obsolete-edition write-off</td></tr>
       </tbody>
     </table>
-    <p class="content-p">Capital equipment (laptops, tablets, scanners) is deliberately <strong>not</strong> demand-planned &mdash; it's irregular and high-value, so it's controlled by the value-based approval routing instead. Alongside this: a 2-level approval workflow (<code>&le; &#3647;50K &rarr; Dept Head</code>, <code>&gt; &#3647;50K &rarr; Director</code>), ABC stock flagging, ~180 uniform SKUs and ~40 textbook titles configured, a vendor master for 10+ suppliers, and the full P2P cycle (PR &rarr; PO &rarr; GR &rarr; Invoice, 3-way match).</p>
+    <p class="content-p">Capital equipment (laptops, tablets, scanners) is deliberately <strong>not</strong> demand-planned &mdash; it's irregular and high-value, so it's controlled by the value-based approval routing instead. Alongside this: a 2-level approval workflow (<code>&le; &#3647;50K &rarr; Dept Head</code>, <code>&gt;&#3647;50K &rarr; Director</code>), ABC stock flagging, ~180 uniform SKUs and ~40 textbook titles configured, a vendor master for 10+ suppliers, and the full P2P cycle (Purchase Requisition &rarr; Purchase Order &rarr; Goods Receipt &rarr; Invoice, 3-way match).</p>
 
     <div class="callout">
       <div class="callout-title">How I'd defend this in interview</div>
@@ -1061,10 +1061,10 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       </thead>
       <tbody>
         <tr><td>1</td><td>Create Purchase Requisition</td><td><span class="xn-fn">Procurement › Purchase Requisition › Create</span></td></tr>
-        <tr><td>2</td><td>PR Approval · 2-level</td><td><span class="xn-fn">Workflow Authorization › Release Rule</span></td></tr>
+        <tr><td>2</td><td>PR Approval · 2-level</td><td><span class="xn-fn">Workflow Authorization › Approval Rule</span></td></tr>
         <tr><td>3</td><td>Create Purchase Order</td><td><span class="xn-fn">Procurement › Purchase Order › Create</span></td></tr>
         <tr><td>4</td><td>Goods Receipt</td><td><span class="xn-fn">Inventory › Goods Receipt</span></td></tr>
-        <tr><td>5</td><td>Invoice Verification · 3-way match</td><td><span class="xn-fn">Procurement › Invoice Matching</span></td></tr>
+        <tr><td>5</td><td>Invoice Matching · 3-way match</td><td><span class="xn-fn">Procurement › Invoice Matching</span></td></tr>
         <tr><td>6</td><td>Stock Monitoring</td><td><span class="xn-fn">Inventory › Stock Balance / Reorder Report</span></td></tr>
         <tr><td>7</td><td>Vendor Evaluation</td><td><span class="xn-fn">Procurement › Vendor Scorecard</span></td></tr>
         <tr><td>8</td><td>Master Data</td><td><span class="xn-fn">Inventory › Item &amp; Vendor Master</span></td></tr>
@@ -1099,7 +1099,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <div class="pr-lines" id="prLines"><div class="pr-empty">No lines yet.<br>Pick items from the catalog to build the PR.</div></div>
           <div class="pr-foot">
             <div class="pr-sub"><span class="l">Estimated total</span><span class="v" id="prTotal">&#3647;0</span></div>
-            <div class="pr-route"><span class="rl">Approval routing &middot; FSD-P1-01</span><div id="prRoute"><span class="pr-chip l1">&le; &#3647;50K &middot; DEPT HEAD (L1)</span><span class="hint">single-level release</span></div></div>
+            <div class="pr-route"><span class="rl">Approval routing &middot; FSD-P1-01</span><div id="prRoute"><span class="pr-chip l1">&le; &#3647;50K &middot; DEPT HEAD (L1)</span><span class="hint">single-level approval</span></div></div>
             <button class="pr-submit" id="prSubmit">Submit requisition</button>
             <div id="prOk"></div>
           </div>
@@ -1294,8 +1294,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         root.querySelector('#prTotal').textContent=THB(total);
         root.querySelector('#prCount').textContent=keys.length;
         var route=root.querySelector('#prRoute');
-        if(total<=50000) route.innerHTML='<span class="pr-chip l1">≤ ฿50K · DEPT HEAD (L1)</span><span class="hint">single-level release</span>';
-        else route.innerHTML='<span class="pr-chip l2">&gt; ฿50K · DIRECTOR (L2)</span><span class="hint">Dept-Head-only release blocked</span>';
+        if(total<=50000) route.innerHTML='<span class="pr-chip l1">≤ ฿50K · DEPT HEAD (L1)</span><span class="hint">single-level approval</span>';
+        else route.innerHTML='<span class="pr-chip l2">&gt; ฿50K · DIRECTOR (L2)</span><span class="hint">Dept-Head-only approval blocked</span>';
         root.querySelector('#prOk').innerHTML='';
       }
       var seq=141;
@@ -1305,12 +1305,12 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         var total=keys.reduce(function(s,c){return s+cart[c].qty*cart[c].price;},0);
         var appr=total<=50000?'Dept Head':'Director';
         seq++; var id='PR-NSF-'+('000'+seq).slice(-4);
-        ok.innerHTML='<div class="pr-ok" style="color:var(--success)">✓ <b>'+id+'</b> created · '+keys.length+' lines · '+THB(total)+'<br>routed to <b>'+appr+'</b> for release</div>';
+        ok.innerHTML='<div class="pr-ok" style="color:var(--success)">✓ <b>'+id+'</b> created · '+keys.length+' lines · '+THB(total)+'<br>routed to <b>'+appr+'</b> for approval</div>';
       });
     })();
     </script>
 
-    <h3 class="content-h3">Functional Specification <em>Logic</em></h3>
+    <h3 class="content-h3">Functional Spec &amp; <em>Build Evidence</em></h3>
     <p class="content-p">
       The business logic I authored in the Functional Specification Document (FSD) and handed to the XeerSoft development team to implement.
     </p>
@@ -1321,7 +1321,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 <span class="keyword">ON</span> purchase_requisition.submit:
    total = SUM(pr.line_items.amount)
    <span class="keyword">IF</span> total ≤ 50,000  → approver ∈ { Dept Head, Director }
-   <span class="keyword">ELSE</span>            → approver = Director only   <span class="comment">// block Dept-Head-only release</span>
+   <span class="keyword">ELSE</span>            → approver = Director only   <span class="comment">// block Dept-Head-only approval</span>
 
 <span class="comment">// FSD-P1-02 · Goods-Receipt GL mapping fix (IT-asset category)</span>
 <span class="keyword">ON</span> goods_receipt.post:
@@ -1425,7 +1425,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           req.textContent='Dept Head (or Director)';res.textContent='Approved at Level 1';}
         else{d1.classList.add('skip');d2.classList.add('active');
           chip.innerHTML='<span class="xsim-chip warn">ROUTE &middot; DIRECTOR REQUIRED</span>';
-          req.textContent='Director only';res.textContent='Dept-Head-only release blocked';}}
+          req.textContent='Director only';res.textContent='Dept-Head-only approval blocked';}}
       amt.addEventListener('input',route);root.querySelector('#p1submit').addEventListener('click',route);route();
       var skus=[{n:'PE Shirt XS',s:9,t:55,o:22},{n:'PE Shirt M',s:17,t:160,o:120},{n:'PE Shirt XXL',s:9,t:55,o:14}];
       var tb=root.querySelector('#p1tbl tbody');
@@ -1495,7 +1495,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           req.textContent='Dept Head (or Director)';res.textContent='Approved at Level 1';}
         else{d1.classList.add('skip');d2.classList.add('active');
           chip.innerHTML='<span class="xsim-chip warn">ROUTE · DIRECTOR REQUIRED</span>';
-          req.textContent='Director only';res.textContent='Dept-Head-only release blocked';}
+          req.textContent='Director only';res.textContent='Dept-Head-only approval blocked';}
       }
       render();
     })();
@@ -1504,54 +1504,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
       <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
-    </div>
-
-    <!-- DELIVERY & SCHEDULE -->
-    <div class="trk">
-    <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
-    <p class="content-p">How the project was actually run end-to-end: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
-
-    <div class="callout">
-      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
-      <p>Go-Live was gated to the <b>June intake season</b>: uniforms and textbooks had to be on shelf before the Jun–Jul intake. Slipping the date meant <b>another full season at the old 22% stockout rate</b> plus ฿28–45K of textbook write-off. The schedule was not flexible: the intake calendar set a hard, externally-fixed deadline.</p>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Project timeline &middot; month-by-month</p>
-      <div class="trk-scroll"><div class="trk-gantt" style="--cols:6">
-        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
-        <div class="trk-row"><div class="trk-label">Requirements & As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Requirements & As-Is">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Master data (~180 items)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Master data (~180 items)">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Statistical modelling</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="Statistical modelling">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Config + workflow + FSD</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:2" title="Config + workflow + FSD">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT & defect fixes</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="UAT & defect fixes">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Training + Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:6;--l:1" title="Training + Go-Live">LIVE</span></div></div>
-      </div></div>
-      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>UAT blocker · Goods-Receipt could not post</b><p>During UAT, GR posting was blocked for the IT-asset item category because no GL account determination existed (FSD-P1-02), a silent stopper that would have frozen receiving.<span class="res"> Resolved → I traced it to a missing mapping, specified the fix to dev (category → GL 160000), retested, and kept Go-Live on the intake date.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Adoption risk · staff trusting the system over intuition</b><p>The statistical reorder points were correct, but procurement staff were used to ordering by gut feel: the real risk to the result was non-adoption, not configuration.<span class="res"> Resolved → I ran weekly adoption reviews for the first 3 months post Go-Live until system-driven reorder points became the default.</span></p></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
-      <div class="trk-two">
-        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
-      </div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Weekly Agile cadence</p>
-      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>Backlog & defect triage by severity</p></div><div class="trk-day"><div class="d">TUE</div><p>Spec clarification with dev</p></div><div class="trk-day"><div class="d">WED</div><p>Build structure review vs FSD</p></div><div class="trk-day"><div class="d">THU</div><p>Test / retest fixed items</p></div><div class="trk-day"><div class="d">FRI</div><p>Demo + stakeholder sign-off</p></div></div>
-      <div class="trk-kpis"><div class="trk-kpi"><div class="v">2× / wk</div><div class="l">Dev structure reviews<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">12 wk</div><div class="l">Weekly post-live adoption reviews</div></div><div class="trk-kpi"><div class="v">0</div><div class="l">Unauthorised POs since Go-Live</div></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Stakeholder network &amp; RACI</p>
-      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>~15 procurement staff &middot; dept heads + director &middot; 10+ vendors &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · Consultant/BA</b></td><td class="cnt">1</td><td>Requirements, config, FSD, UAT, training</td><td class="raci">A / R</td></tr><tr><td><b>Director & Dept Heads</b></td><td class="cnt">2+</td><td>Approval workflow authority (฿50K rule)</td><td class="raci">C / A</td></tr><tr><td><b>Procurement staff</b></td><td class="cnt">~15</td><td>Day-to-day users; trained &amp; on-boarded</td><td class="raci">I / R</td></tr><tr><td><b>Vendors</b></td><td class="cnt">10+</td><td>Master data, lead-time, scorecard</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built config logic from my FSD</td><td class="raci">R</td></tr></tbody></table>
-      <p class="trk-note">I was the only consultant, but not working alone. I was the single node connecting approvers, ~15 users and the vendor dev team, and the only person with end-to-end visibility of requirements, build and adoption.</p>
-    </div>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
     </div>
 
 <!-- UAT :: Sub-Unit Test Specification styles (Claude) — built on existing tokens -->
@@ -1632,8 +1585,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 
     <!-- UAT · SUB-UNIT TEST SPECIFICATION -->
     <div class="uat" id="uat">
-    <h3 class="content-h3">UAT &middot; <em>Sub-Unit Test Specification</em></h3>
-    <p class="content-p">I did not sign off the build as one pass/fail. I decomposed the P2P scope into <strong>10 sub-unit tests</strong>, each run as a <strong>manual test case of ~10 ordered steps validated against 5 complex conditions</strong>, with one written <strong>specific assurance</strong> per sub-unit (the exact thing the test guarantees). This is the breakdown behind the UAT &amp; defect-fix window in the schedule above &mdash; the part that is easy to claim and hard to show.</p>
+    <h3 class="content-h3">Validation, UAT &amp; <em>Defect Control</em></h3>
+    <p class="content-p">I did not sign off the build as one pass/fail. I decomposed the P2P scope into <strong>10 sub-unit tests</strong>, each run as a <strong>manual test case of ~10 ordered steps validated against 5 complex conditions</strong>, with one written <strong>specific assurance</strong> per sub-unit (the exact thing the test guarantees). This is the breakdown behind the UAT &amp; defect-fix window in the delivery timeline below &mdash; the part that is easy to claim and hard to show.</p>
 
     <div class="callout">
       <div class="callout-title">&#128203; Manual test criteria &middot; how every sub-unit was validated</div>
@@ -1647,37 +1600,37 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         <span class="uat-flag-name">Goods Receipt posting &amp; GL account determination</span>
         <span class="uat-pass">PASS &middot; cycle 2 (after fix)</span>
       </div>
-      <p class="uat-flag-meta">Role: <b>Warehouse / Receiving</b> &middot; tied to the live UAT blocker in the schedule above &mdash; a Goods Receipt that <b>silently failed to post</b> for a non-stock item category. This is the procedure that surfaced it.</p>
+      <p class="uat-flag-meta">Role: <b>Warehouse / Receiving</b> &middot; tied to the live UAT blocker in the delivery timeline below &mdash; a Goods Receipt that <b>silently failed to post</b> for a non-stock item category. This is the procedure that surfaced it.</p>
       <div class="uat-cols">
         <div>
           <p class="uat-sub">Manual procedure &middot; 10 steps</p>
           <ol class="uat-steps">
-            <li>Log in as <b>Warehouse</b> role; open Goods Receipt against open PO <b>#PO-2024-0117</b> <span class="uat-tc">MIGO</span>.</li>
+            <li>Log in as <b>Warehouse</b> role; open the XeerSoft Goods Receipt screen against open PO <b>#PO-2024-0117</b> <span class="uat-tc">Receipt screen</span>.</li>
             <li>Confirm PO line items, ordered qty <b>(120 units)</b> and the default storage location.</li>
-            <li>Enter received qty <b>= 100</b> (partial delivery); set movement type <span class="uat-tc">101</span>.</li>
+            <li>Enter received qty <b>= 100</b> (partial delivery); set the standard goods-receipt posting type <span class="uat-tc">Std receipt</span>.</li>
             <li>Attach delivery-note reference; set posting date to the <b>current open period</b>.</li>
             <li>Set stock type <b>unrestricted</b>; verify batch / serial not required for this item.</li>
-            <li>Post the GR; capture the <b>material document number</b>.</li>
-            <li>Verify the inventory GL (debit) and <b>GR/IR clearing</b> (credit) postings were generated.</li>
-            <li>Open Invoice Verification <span class="uat-tc">MIRO</span>; enter the vendor invoice for 100 units.</li>
-            <li>Run the <b>3-way match</b> (PO price &times; GR qty &times; invoice qty/price); confirm within tolerance.</li>
-            <li>Post the invoice; confirm <b>GR/IR clearing nets to zero</b> and AP liability is raised.</li>
+            <li>Post the receipt; capture the <b>goods-receipt document number</b>.</li>
+            <li>Verify the inventory GL (debit) and <b>receipt/invoice clearing</b> (credit) postings were generated.</li>
+            <li>Open the XeerSoft Invoice Matching screen <span class="uat-tc">Invoice review</span>; enter the vendor invoice for 100 units.</li>
+            <li>Run the <b>3-way match</b> (PO price &times; receipt qty &times; invoice qty/price); confirm within tolerance.</li>
+            <li>Post the invoice; confirm <b>receipt/invoice clearing nets to zero</b> and AP liability is raised.</li>
           </ol>
         </div>
         <div>
           <p class="uat-sub">Complex conditions &middot; 5 paths</p>
           <ul class="uat-cond">
-            <li><span class="uat-cx">C1</span><span><b>Split delivery</b> &mdash; second GR for the remaining 20 units; the running GR/IR balance must reconcile across both receipts.</span></li>
+            <li><span class="uat-cx">C1</span><span><b>Split delivery</b> &mdash; second receipt for the remaining 20 units; the running receipt/invoice clearing balance must reconcile across both receipts.</span></li>
             <li><span class="uat-cx">C2</span><span><b>Over-delivery</b> beyond tolerance (125 of 120) must be blocked or warned per the tolerance key, never posted silently.</span></li>
             <li><span class="uat-cx">C3</span><span><b>Price variance</b> &gt; 5% on the invoice vs PO must raise a price-variance block and route to the buyer.</span></li>
             <li><span class="uat-cx">C4</span><span><b>Non-stock / IT-asset category</b> with no account determination &mdash; the silent stopper this test was built to catch.</span></li>
-            <li><span class="uat-cx">C5</span><span><b>Closed-period posting</b> &mdash; a back-dated GR into a closed period must be rejected and forced to the current period.</span></li>
+            <li><span class="uat-cx">C5</span><span><b>Closed-period posting</b> &mdash; a back-dated receipt into a closed period must be rejected and forced to the current period.</span></li>
           </ul>
         </div>
       </div>
       <div class="uat-assure">
         <div class="lab">&#9670; Specific assurance</div>
-        <p>Guarantees that <b>no goods movement posts without a valid inventory + GR/IR account pair</b>, that the 3-way match holds quantity and price within the configured tolerance key, and that GR/IR clearing nets to zero after invoice posting. A receipt that cannot derive a GL account is <b>hard-stopped with an error, not silently skipped</b> &mdash; the exact failure mode caught in UAT cycle 1 and closed as <span style="color:var(--u-accent);font-family:'JetBrains Mono',monospace">DEF-P1-01</span>.</p>
+        <p>Guarantees that <b>no goods movement posts without a valid inventory + receipt/invoice clearing account pair</b>, that the 3-way match holds quantity and price within the configured tolerance key, and that receipt/invoice clearing nets to zero after invoice posting. A receipt that cannot derive a GL account is <b>hard-stopped with an error, not silently skipped</b> &mdash; the exact failure mode caught in UAT cycle 1 and closed as <span style="color:var(--u-accent);font-family:'JetBrains Mono',monospace">DEF-P1-01</span>.</p>
       </div>
     </div>
 
@@ -1705,43 +1658,43 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <li>Approver-on-leave delegate path routes correctly</li>
           <li>Reject &rarr; rework &rarr; resubmit re-enters at level 1</li>
         </ul>
-        <div class="uat-ua"><b>Assurance:</b> no PO can be released above &#3647;50K without a recorded director approval, and any value change re-evaluates the release strategy from scratch. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P1-02</span></div>
+        <div class="uat-ua"><b>Assurance:</b> no PO can be approved above &#3647;50K without a recorded director approval, and any value change re-evaluates the approval route from scratch. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P1-02</span></div>
       </div>
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P1-03</span><span class="uat-unit-name">Purchase Order &middot; create &amp; release strategy</span><span class="uat-tag"><b>9</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P1-03</span><span class="uat-unit-name">Purchase Order &middot; create &amp; approval route</span><span class="uat-tag"><b>9</b> steps</span></div>
         <ul class="uat-ucond">
           <li>PR &rarr; PO conversion carries account assignment intact</li>
           <li>PO price from contract / info record vs manual override</li>
-          <li>Release blocked until strategy fully green</li>
+          <li>Approval blocked until route is fully approved</li>
           <li>Partial PR-to-PO (split across vendors)</li>
-          <li>Changing a released PO re-opens the release strategy</li>
+          <li>Changing an approved PO re-opens the approval route</li>
         </ul>
-        <div class="uat-ua"><b>Assurance:</b> a PO cannot be sent to a vendor until its release strategy is complete, and edits to a released PO revoke that release rather than silently shipping. <span class="ok">PASS</span></div>
+        <div class="uat-ua"><b>Assurance:</b> a PO cannot be sent to a vendor until its approval route is complete, and edits to an approved PO revoke that approval rather than silently shipping. <span class="ok">PASS</span></div>
       </div>
 
       <div class="uat-unit">
         <div class="uat-unit-head"><span class="uat-tid">UT-P1-04</span><span class="uat-unit-name">Goods Receipt &middot; posting &amp; GL determination</span><span class="uat-tag"><b>10</b> steps</span><span class="uat-tag">flagship</span></div>
         <ul class="uat-ucond">
-          <li>Partial / split GR reconciles the running GR/IR balance</li>
+          <li>Partial / split receipt reconciles the running receipt/invoice clearing balance</li>
           <li>Over-delivery beyond tolerance blocked, not posted</li>
-          <li>Movement type drives correct stock type</li>
+          <li>Posting type drives correct stock treatment</li>
           <li><b>Missing account determination hard-stops</b> (no silent skip)</li>
-          <li>Closed-period GR rejected and re-dated</li>
+          <li>Closed-period receipt rejected and re-dated</li>
         </ul>
-        <div class="uat-ua"><b>Assurance:</b> detailed above &mdash; no movement posts without a valid inventory + GR/IR account pair. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P1-01</span></div>
+        <div class="uat-ua"><b>Assurance:</b> detailed above &mdash; no movement posts without a valid inventory + receipt/invoice clearing account pair. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P1-01</span></div>
       </div>
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P1-05</span><span class="uat-unit-name">Invoice Verification &middot; 3-way match</span><span class="uat-tag"><b>10</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P1-05</span><span class="uat-unit-name">Invoice Matching &middot; 3-way match</span><span class="uat-tag"><b>10</b> steps</span></div>
         <ul class="uat-ucond">
           <li>Qty + price both within tolerance &rarr; auto-post</li>
           <li><b>Price variance &gt; 5%</b> &rarr; block + route to buyer</li>
           <li>Qty variance &rarr; match to received, not ordered</li>
-          <li>Invoice before GR &rarr; parked, not posted</li>
+          <li>Invoice before receipt &rarr; parked, not posted</li>
           <li>Duplicate invoice number on same vendor blocked</li>
         </ul>
-        <div class="uat-ua"><b>Assurance:</b> nothing pays out unless PO, GR and invoice agree on both quantity and price within tolerance; everything outside tolerance lands on a human worklist. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P1-03</span></div>
+        <div class="uat-ua"><b>Assurance:</b> nothing pays out unless PO, receipt and invoice agree on both quantity and price within tolerance; everything outside tolerance lands on a human worklist. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P1-03</span></div>
       </div>
 
       <div class="uat-unit">
@@ -1812,7 +1765,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <div style="--days:20">
         <div class="uat-tl-row"><span class="uat-tl-lab">PR create &amp; validation</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:1;--l:2">2d</span></div><span class="uat-tl-days">UT-01</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">PR approval workflow</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:2;--l:3">3d</span></div><span class="uat-tl-days">UT-02</span></div>
-        <div class="uat-tl-row"><span class="uat-tl-lab">PO &amp; release strategy</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:4;--l:2">2d</span></div><span class="uat-tl-days">UT-03</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">PO &amp; approval route</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:4;--l:2">2d</span></div><span class="uat-tl-days">UT-03</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Goods Receipt + GL <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:5;--l:3">3d</span></div><span class="uat-tl-days">UT-04</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Invoice 3-way match</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:7;--l:3">3d</span></div><span class="uat-tl-days">UT-05</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Reorder models &times;3</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:9;--l:4">4d</span></div><span class="uat-tl-days">UT-06&#8211;08</span></div>
@@ -1832,11 +1785,11 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         <tbody>
           <tr>
             <td class="did">DEF-P1-01</td>
-            <td><b>UT-04</b> GR posting</td>
-            <td>GR for the IT-asset item category <b>silently failed to post</b> &mdash; no error, no material document.</td>
+            <td><b>UT-04</b> receipt posting</td>
+            <td>Goods receipt for the IT-asset item category <b>silently failed to post</b> &mdash; no error, no receipt document.</td>
             <td><span class="uat-sev high">HIGH</span></td>
-            <td>No GL account determination for that valuation class &mdash; posting had no inventory / offset account.</td>
-            <td>Mapped the asset category &rarr; inventory GL <b>160000</b> + GR/IR clearing, and added a hard-stop error when determination is missing.</td>
+            <td>No GL account determination for that item accounting category &mdash; posting had no inventory / offset account.</td>
+            <td>Mapped the asset category &rarr; inventory GL <b>160000</b> + receipt/invoice clearing, and added a hard-stop error when determination is missing.</td>
             <td class="uat-d">2</td>
             <td><span class="uat-fixed">&#10003; PASS</span></td>
           </tr>
@@ -1845,8 +1798,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
             <td><b>UT-02</b> PR approval</td>
             <td>Editing a PR amount above &#3647;50K <b>after</b> first submit did not re-trigger director approval.</td>
             <td><span class="uat-sev high">HIGH</span></td>
-            <td>Release strategy was evaluated only on create, not on value change.</td>
-            <td>Re-evaluate the release strategy on any value edit and reset prior approvals before re-routing.</td>
+            <td>Approval route was evaluated only on create, not on value change.</td>
+            <td>Re-evaluate the approval route on any value edit and reset prior approvals before re-routing.</td>
             <td class="uat-d">3</td>
             <td><span class="uat-fixed">&#10003; PASS</span></td>
           </tr>
@@ -1875,7 +1828,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
             <td><b>UT-09</b> vendor scorecard</td>
             <td>Late-delivery count <b>double-counted</b> across partial GRs of one PO line.</td>
             <td><span class="uat-sev low">LOW</span></td>
-            <td>Scorecard counted each partial GR as a separate late event.</td>
+            <td>Scorecard counted each partial receipt as a separate late event.</td>
             <td>Dedupe on the PO line; count only the first late event per line.</td>
             <td class="uat-d">1</td>
             <td><span class="uat-fixed">&#10003; PASS</span></td>
@@ -1883,7 +1836,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
         </tbody>
       </table>
       </div>
-      <p class="uat-tbl-note">5 defects raised to the XeerSoft dev team across the UAT window, <b>~12 working days</b> of fix-and-retest in total. Two were go-live blockers (silent GR failure, approval bypass); all five closed with a clean regression retest before the intake-season Go-Live. The discipline is the point: <b>every defect has a named symptom, a root cause, a fix I specified, and a retest result</b> &mdash; nothing closed on assertion.</p>
+      <p class="uat-tbl-note">5 defects raised to the XeerSoft dev team across the UAT window, <b>~12 working days</b> of fix-and-retest in total. Two were go-live blockers (silent goods-receipt failure, approval bypass); all five closed with a clean regression retest before the intake-season Go-Live. The discipline is the point: <b>every defect has a named symptom, a root cause, a fix I specified, and a retest result</b> &mdash; nothing closed on assertion.</p>
     </div>
     </div>
 
@@ -2395,7 +2348,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 <span class="comment">// Approval Matrix (Workflow Authorization)</span>
 <span class="keyword">Level 1:</span>          Dept Head         ≤ THB 50,000
 <span class="keyword">Level 2:</span>          Director          &gt; THB 50,000
-<span class="keyword">Release:</span>          Sequential, L1 approves before L2</div>
+<span class="keyword">Approval:</span>         Sequential, L1 approves before L2</div>
     </figure>
 
     <h3 class="content-h3">Master <em>Data Volume</em></h3>
@@ -2448,7 +2401,12 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <div class="vs-foot">Weighted score = on-time 35% &middot; quality 30% &middot; price 20% &middot; lead-time 15%. Cohort on-time delivery improved <b>68% &rarr; 87%</b> after the scorecard rollout (real result); per-vendor values illustrative. Average on-time across the five = 87%.</div>
     </div>
 
-    <h3 class="content-h3">Tools <em>& Technologies</em></h3>
+    <h3 class="content-h3">Measured <em>Results</em></h3>
+    <p class="content-p">
+      The measurable outcome was not one isolated KPI; it was a controlled P2P operating model. Uniform stockouts moved from <strong>22% to 3%</strong>, unauthorised POs from <strong>30% to 0%</strong>, textbook write-off from <strong>฿45K to ฿8K</strong>, and vendor on-time delivery from <strong>68% to 87%</strong>. Those are the same audited results shown in the executive KPI cards and Power BI exhibit above.
+    </p>
+
+    <h3 class="content-h3">Tools &amp; <em>Deliverables</em></h3>
     <div class="module-tags">
       <span class="module-tag">XeerSoft Inventory Module</span>
       <span class="module-tag">XeerSoft Procurement Module</span>
@@ -2461,7 +2419,54 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <span class="module-tag">Word (FSD/BRD)</span>
     </div>
 
-    <h3 class="content-h3">Lessons <em>Learned</em></h3>
+    <!-- DELIVERY & SCHEDULE -->
+    <div class="trk">
+    <h3 class="content-h3">Delivery <em>Timeline</em></h3>
+    <p class="content-p">How the project was actually run end-to-end after the consulting work above: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
+
+    <div class="callout">
+      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
+      <p>Go-Live was gated to the <b>June intake season</b>: uniforms and textbooks had to be on shelf before the Jun–Jul intake. Slipping the date meant <b>another full season at the old 22% stockout rate</b> plus ฿28–45K of textbook write-off. The schedule was not flexible: the intake calendar set a hard, externally-fixed deadline.</p>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Project timeline &middot; month-by-month</p>
+      <div class="trk-scroll"><div class="trk-gantt" style="--cols:6">
+        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
+        <div class="trk-row"><div class="trk-label">Requirements & As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Requirements & As-Is">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Master data (~180 items)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Master data (~180 items)">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Statistical modelling</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="Statistical modelling">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Config + workflow + FSD</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:2" title="Config + workflow + FSD">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT & defect fixes</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="UAT & defect fixes">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Training + Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:6;--l:1" title="Training + Go-Live">LIVE</span></div></div>
+      </div></div>
+      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Schedule risk &amp; recovery</p>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>UAT blocker · Goods receipt could not post</b><p>During UAT, goods-receipt posting was blocked for the IT-asset item category because no GL account determination existed (FSD-P1-02), a silent stopper that would have frozen receiving.<span class="res"> Resolved → I traced it to a missing mapping, specified the fix to dev (category → GL 160000), retested, and kept Go-Live on the intake date.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Adoption risk · staff trusting the system over intuition</b><p>The statistical reorder points were correct, but procurement staff were used to ordering by gut feel: the real risk to the result was non-adoption, not configuration.<span class="res"> Resolved → I ran weekly adoption reviews for the first 3 months post Go-Live until system-driven reorder points became the default.</span></p></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Spec design → developer handoff → build verification</p>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-two">
+        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Weekly Agile cadence</p>
+      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>Backlog & defect triage by severity</p></div><div class="trk-day"><div class="d">TUE</div><p>Spec clarification with dev</p></div><div class="trk-day"><div class="d">WED</div><p>Build structure review vs FSD</p></div><div class="trk-day"><div class="d">THU</div><p>Test / retest fixed items</p></div><div class="trk-day"><div class="d">FRI</div><p>Demo + stakeholder sign-off</p></div></div>
+      <div class="trk-kpis"><div class="trk-kpi"><div class="v">2× / wk</div><div class="l">Dev structure reviews<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">12 wk</div><div class="l">Weekly post-live adoption reviews</div></div><div class="trk-kpi"><div class="v">0</div><div class="l">Unauthorised POs since Go-Live</div></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Stakeholder network &amp; RACI</p>
+      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>~15 procurement staff &middot; dept heads + director &middot; 10+ vendors &middot; remote XeerSoft dev team</b></div>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · Consultant/BA</b></td><td class="cnt">1</td><td>Requirements, config, FSD, UAT, training</td><td class="raci">A / R</td></tr><tr><td><b>Director & Dept Heads</b></td><td class="cnt">2+</td><td>Approval workflow authority (฿50K rule)</td><td class="raci">C / A</td></tr><tr><td><b>Procurement staff</b></td><td class="cnt">~15</td><td>Day-to-day users; trained &amp; on-boarded</td><td class="raci">I / R</td></tr><tr><td><b>Vendors</b></td><td class="cnt">10+</td><td>Master data, lead-time, scorecard</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built config logic from my FSD</td><td class="raci">R</td></tr></tbody></table>
+      <p class="trk-note">I was the only consultant, but not working alone. I was the single node connecting approvers, ~15 users and the vendor dev team, and the only person with end-to-end visibility of requirements, build and adoption.</p>
+    </div>
+    </div>
+
+    <h3 class="content-h3">Consultant <em>Takeaway</em></h3>
     <p class="content-p">
       The biggest learning was that <strong>ERP success is 30% configuration and 70% adoption</strong>. The statistical models were rigorous, the workflow was clean, but the real win came from training procurement staff to trust system-driven reorder points instead of intuition. Weekly review sessions for the first 3 months post Go-Live were critical to making the change stick.
     </p>

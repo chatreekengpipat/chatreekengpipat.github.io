@@ -328,7 +328,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
           <a href="project4.html">STEM Portfolio Financial Tracking</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">My SAP Specification Design</div>
+          <div class="nav-dd-head">My ERP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
         </div>
         <div class="nav-dd-group">
@@ -340,7 +340,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
           <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <div class="nav-dd-head">Engineering Design &amp; ERP · MMTh</div>
           <a href="project5.html">FPDU Assist Device · PHEV</a>
         </div>
       </div>
@@ -391,7 +391,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Modules</span>
-        <span class="project-info-val">FI (AR/GL) · Cost Allocation</span>
+        <span class="project-info-val">Financial Accounting (AR/GL) · Cost Allocation</span>
       </div>
       <div class="project-info-row">
         <span class="project-info-label">Programme</span>
@@ -443,7 +443,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     </div>
     <img src="dashboards/dashboard-p4.png?v=2" alt="Power BI dashboard showing STEM portfolio financial tracking per subject" class="dashboard-image">
     <div class="dashboard-footer">
-      <strong>Source:</strong> AR billing + cost allocation data from XeerSoft FI, analyzed in Power BI. Shows ฿2.18M total revenue across 7 STEM subjects, 95.0% collection (go-live June 2026), ฿1.08M gross profit (49.6% margin, billed basis), and per-subject breakdown: Biology Lab (highest absolute GP), Math Competition (highest margin %).
+      <strong>Source:</strong> AR billing + cost allocation data from XeerSoft Financial Accounting, analyzed in Power BI. Shows ฿2.18M total revenue across 7 STEM subjects, 95.0% collection (go-live June 2026), ฿1.08M gross profit (49.6% margin, billed basis), and per-subject breakdown: Biology Lab (highest absolute GP), Math Competition (highest margin %).
     </div>
   </div>
 </section>
@@ -452,7 +452,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 <section style="padding-top: 2rem;">
   <div class="content-section">
 
-    <h3 class="content-h3">The <em>Business Context</em></h3>
+    <h3 class="content-h3">Business Context &amp; <em>Problem</em></h3>
     <p class="content-p">
       Newton Sixth Form ran a recurring <strong>STEM enrichment programme</strong> (Jan 2025 – Go-Live June 2026): students attended hands-on university lab sessions and academic competitions, billed per family. I owned the full financial lifecycle on XeerSoft: invoicing each family, tracking payment collection, investigating discrepancies, allocating cost, and reporting per-subject P&L to management.
     </p>
@@ -461,112 +461,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       The programme spanned seven subjects, billed per student: six hands-on lab subjects (Robotics, Biology Lab, Math Camp, Physics Lab, Chemistry Lab, Engineering Design) at <strong>฿3,000/student</strong>, and an in-house <strong>Math Competition</strong> at <strong>฿500/student</strong>. Each carried a different attendance and cost profile.
     </p>
 
-    <h3 class="content-h3">Fee <em>Structure</em></h3>
-    <div class="exh">
-      <div class="exh-ribbon">&#128203; <b>Per-student fees by subject</b> &middot; the per-subject financials below are a representative recreation, masked for confidentiality.</div>
-      <div class="exh-body">
-        <table class="exh-table">
-          <thead><tr><th>Subject</th><th class="r">Fee / student</th><th>Direct cost</th></tr></thead>
-          <tbody>
-            <tr><td class="nm">Six lab subjects</td><td class="v">฿3,000</td><td>lab + transport + materials</td></tr>
-            <tr><td class="nm">Math Competition</td><td class="v">฿500</td><td>staffing (in-house, no venue)</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="exh-foot">The six lab subjects (Robotics, Biology Lab, Math Camp, Physics Lab, Chemistry Lab, Engineering Design) bill ฿3,000/student; the in-house Math Competition bills ฿500/student (฿500 &times; 90 = ฿45,000). Fees are collected per family and reconciled before settlement, feeding the per-subject P&amp;L below.</div>
-    </div>
-
-    <h3 class="content-h3">P&L <em>by Subject</em></h3>
-    <div class="exh">
-      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-subject P&amp;L &middot; gross profit on billed (accrual) basis &middot; collection is a separate AR metric &middot; figures author-provided &middot; original XeerSoft FI data under NDA.</div>
-      <div class="exh-body" style="padding:0">
-      <table class="process-table">
-      <thead>
-        <tr>
-          <th>Subject</th>
-          <th>Revenue</th>
-          <th>Gross Profit</th>
-          <th>Margin</th>
-          <th>Collection</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Biology Lab</td>
-          <td>฿555,000</td>
-          <td>฿268,374</td>
-          <td><code>48%</code></td>
-          <td><code>91%</code></td>
-        </tr>
-        <tr>
-          <td>Robotics</td>
-          <td>฿534,000</td>
-          <td>฿267,020</td>
-          <td><code>50%</code></td>
-          <td><code>94%</code></td>
-        </tr>
-        <tr>
-          <td>Math Camp</td>
-          <td>฿390,000</td>
-          <td>฿185,302</td>
-          <td><code>48%</code></td>
-          <td><code>100%</code></td>
-        </tr>
-        <tr>
-          <td>Physics Lab</td>
-          <td>฿267,000</td>
-          <td>฿138,504</td>
-          <td><code>52%</code></td>
-          <td><code>100%</code></td>
-        </tr>
-        <tr>
-          <td>Chemistry Lab</td>
-          <td>฿264,000</td>
-          <td>฿140,094</td>
-          <td><code>53%</code></td>
-          <td><code>98%</code></td>
-        </tr>
-        <tr>
-          <td>Engineering Design</td>
-          <td>฿126,000</td>
-          <td>฿54,575</td>
-          <td><code>43%</code></td>
-          <td><code>86%</code></td>
-        </tr>
-        <tr>
-          <td>Math Competition</td>
-          <td>฿45,000</td>
-          <td>฿27,000</td>
-          <td><code>60%</code></td>
-          <td><code>96%</code></td>
-        </tr>
-      </tbody>
-    </table>
-      </div>
-      <div class="exh-foot">Totals (7 subjects): revenue <b>฿2,181,000</b> · gross profit <b>฿1,080,869</b> · overall margin <b>49.6%</b> · collection <b>95.0%</b> (฿2,071,000 collected · ฿110,000 outstanding). Gross profit is billed (accrual) basis; collection is a separate AR metric. Figures author-provided, masked for confidentiality.</div>
-    </div>
-
-    <h3 class="content-h3">Cost <em>Allocation</em></h3>
-    <p class="content-p">Each session's cost splits across three categories &mdash; one variable (materials, per student), two fixed (lab fee, transport) &mdash; producing the cost side of the P&amp;L.</p>
-    <div class="exh">
-      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-session cost model &middot; figures illustrative &middot; actual costs vary by session.</div>
-      <div class="exh-body">
-        <table class="exh-table">
-          <thead><tr><th>Cost category</th><th>Type</th><th>Basis</th><th class="r">Per session</th></tr></thead>
-          <tbody>
-            <tr><td class="nm">Lab fee</td><td>Fixed</td><td>per session (lab)</td><td class="v">฿40,000</td></tr>
-            <tr><td class="nm">Materials</td><td>Variable</td><td>฿900 × 50 students</td><td class="v">฿45,000</td></tr>
-            <tr><td class="nm">Transport</td><td>Fixed</td><td>per session</td><td class="v">฿12,000</td></tr>
-            <tr class="sub"><td colspan="3">Total cost / session</td><td class="v">฿97,000</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="exh-foot">Illustrative per-session model (Chemistry intake): revenue ฿150,000 (50 × ฿3,000) &minus; cost ฿97,000 = gross profit ฿53,000 (~35%). Blended programme margin across all seven subjects is ~49.6% on a billed (accrual) basis (฿1.08M gross profit on ฿2.18M revenue, before staff &amp; overhead). This is the allocation method, not a specific session.</div>
-    </div>
-
-    <h3 class="content-h3">My <em>Approach</em></h3>
+    <h3 class="content-h3">My Role &amp; <em>Accountability</em></h3>
     <p class="content-p">
-      Three streams running concurrently on XeerSoft FI: <strong>(1) AR Billing Design</strong> for per-student invoicing, <strong>(2) Cost Allocation</strong> per session and subject, and <strong>(3) Management Reporting</strong> with session-level P&L.
+      Three streams running concurrently on XeerSoft Financial Accounting: <strong>(1) AR Billing Design</strong> for per-student invoicing, <strong>(2) Cost Allocation</strong> per session and subject, and <strong>(3) Management Reporting</strong> with session-level P&L.
     </p>
 
     <!-- AR LIFECYCLE FLOW DIAGRAM -->
@@ -642,6 +539,109 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       </svg>
     </div>
 
+    <h3 class="content-h3">Financial Baseline · <em>Fee Structure</em></h3>
+    <div class="exh">
+      <div class="exh-ribbon">&#128203; <b>Per-student fees by subject</b> &middot; the per-subject financials below are a representative recreation, masked for confidentiality.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Subject</th><th class="r">Fee / student</th><th>Direct cost</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Six lab subjects</td><td class="v">฿3,000</td><td>lab + transport + materials</td></tr>
+            <tr><td class="nm">Math Competition</td><td class="v">฿500</td><td>staffing (in-house, no venue)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">The six lab subjects (Robotics, Biology Lab, Math Camp, Physics Lab, Chemistry Lab, Engineering Design) bill ฿3,000/student; the in-house Math Competition bills ฿500/student (฿500 &times; 90 = ฿45,000). Fees are collected per family and reconciled before settlement, feeding the per-subject P&amp;L below.</div>
+    </div>
+
+    <h3 class="content-h3">P&L <em>by Subject</em></h3>
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-subject P&amp;L &middot; gross profit on billed (accrual) basis &middot; collection is a separate AR metric &middot; figures author-provided &middot; original XeerSoft Financial Accounting data under NDA.</div>
+      <div class="exh-body" style="padding:0">
+      <table class="process-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Revenue</th>
+          <th>Gross Profit</th>
+          <th>Margin</th>
+          <th>Collection</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Biology Lab</td>
+          <td>฿555,000</td>
+          <td>฿268,374</td>
+          <td><code>48%</code></td>
+          <td><code>91%</code></td>
+        </tr>
+        <tr>
+          <td>Robotics</td>
+          <td>฿534,000</td>
+          <td>฿267,020</td>
+          <td><code>50%</code></td>
+          <td><code>94%</code></td>
+        </tr>
+        <tr>
+          <td>Math Camp</td>
+          <td>฿390,000</td>
+          <td>฿185,302</td>
+          <td><code>48%</code></td>
+          <td><code>100%</code></td>
+        </tr>
+        <tr>
+          <td>Physics Lab</td>
+          <td>฿267,000</td>
+          <td>฿138,504</td>
+          <td><code>52%</code></td>
+          <td><code>100%</code></td>
+        </tr>
+        <tr>
+          <td>Chemistry Lab</td>
+          <td>฿264,000</td>
+          <td>฿140,094</td>
+          <td><code>53%</code></td>
+          <td><code>98%</code></td>
+        </tr>
+        <tr>
+          <td>Engineering Design</td>
+          <td>฿126,000</td>
+          <td>฿54,575</td>
+          <td><code>43%</code></td>
+          <td><code>86%</code></td>
+        </tr>
+        <tr>
+          <td>Math Competition</td>
+          <td>฿45,000</td>
+          <td>฿27,000</td>
+          <td><code>60%</code></td>
+          <td><code>96%</code></td>
+        </tr>
+      </tbody>
+    </table>
+      </div>
+      <div class="exh-foot">Totals (7 subjects): revenue <b>฿2,181,000</b> · gross profit <b>฿1,080,869</b> · overall margin <b>49.6%</b> · collection <b>95.0%</b> (฿2,071,000 collected · ฿110,000 outstanding). Gross profit is billed (accrual) basis; collection is a separate AR metric. Figures author-provided, masked for confidentiality.</div>
+    </div>
+
+    <h3 class="content-h3">Solution Design · <em>Cost Allocation</em></h3>
+    <p class="content-p">Each session's cost splits across three categories &mdash; one variable (materials, per student), two fixed (lab fee, transport) &mdash; producing the cost side of the P&amp;L.</p>
+    <div class="exh">
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; per-session cost model &middot; figures illustrative &middot; actual costs vary by session.</div>
+      <div class="exh-body">
+        <table class="exh-table">
+          <thead><tr><th>Cost category</th><th>Type</th><th>Basis</th><th class="r">Per session</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Lab fee</td><td>Fixed</td><td>per session (lab)</td><td class="v">฿40,000</td></tr>
+            <tr><td class="nm">Materials</td><td>Variable</td><td>฿900 × 50 students</td><td class="v">฿45,000</td></tr>
+            <tr><td class="nm">Transport</td><td>Fixed</td><td>per session</td><td class="v">฿12,000</td></tr>
+            <tr class="sub"><td colspan="3">Total cost / session</td><td class="v">฿97,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="exh-foot">Illustrative per-session model (Chemistry intake): revenue ฿150,000 (50 × ฿3,000) &minus; cost ฿97,000 = gross profit ฿53,000 (~35%). Blended programme margin across all seven subjects is ~49.6% on a billed (accrual) basis (฿1.08M gross profit on ฿2.18M revenue, before staff &amp; overhead). This is the allocation method, not a specific session.</div>
+    </div>
+
     <!-- XEERSOFT-NATIVE: MODULE FLOW + FSD -->
     <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
@@ -662,7 +662,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
       </tbody>
     </table>
 
-    <h3 class="content-h3">Functional Specification <em>Logic</em></h3>
+    <h3 class="content-h3">Functional Spec &amp; <em>Build Evidence</em></h3>
     <p class="content-p">
       The AR posting and reporting logic I authored in the FSD and submitted to the XeerSoft development team.
     </p>
@@ -748,19 +748,19 @@ margin %     = gross_profit / collected × 100</div>
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
       <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
     </div>
 
-    <!-- FI/CO DEPTH :: complexity, scale, the defect that moved Go-Live (Claude) -->
-    <h3 class="content-h3">Why this was an <em>FI/CO</em> build, not a billing job</h3>
+    <!-- FINANCIAL CONTROL DEPTH :: complexity, scale, the defect that moved Go-Live (Claude) -->
+    <h3 class="content-h3">Solution Depth · <em>Financial Accounting &amp; Controlling</em></h3>
     <p class="content-p">
-      Per-student invoicing is the visible surface. Underneath, this was a Financial Accounting and Controlling (FI/CO) implementation: seven subjects had to stay separated as <strong>profit centers</strong>, costs had to derive to the right <strong>branch cost centers</strong>, the AR sub-ledger had to reconcile to the GL control account every period, and revenue recognised on a <strong>billed (accrual)</strong> basis had to be tracked apart from <strong>cash collected</strong>. Each of those is a place the books can silently go wrong, and together they are why the build took the time it did.
+      Per-student invoicing is the visible surface. Underneath, this was a financial accounting and management controlling implementation: seven subjects had to stay separated as <strong>profit centers</strong>, costs had to derive to the right <strong>branch cost centers</strong>, the AR sub-ledger had to reconcile to the GL control account every period, and revenue recognised on a <strong>billed (accrual)</strong> basis had to be tracked apart from <strong>cash collected</strong>. Each of those is a place the books can silently go wrong, and together they are why the build took the time it did.
     </p>
     <div class="exh">
-      <div class="exh-ribbon">&#9881; <b>The FI/CO hard parts</b> &middot; the dimensions that made this a controlling build, not a billing form &middot; representative of the delivered design.</div>
+      <div class="exh-ribbon">&#9881; <b>The financial-control hard parts</b> &middot; the dimensions that made this a controlling build, not a billing form &middot; representative of the delivered design.</div>
       <div class="exh-body">
         <table class="exh-table">
-          <thead><tr><th>FI/CO dimension</th><th>Why it is hard</th><th>How I handled it</th></tr></thead>
+          <thead><tr><th>Financial-control dimension</th><th>Why it is hard</th><th>How I handled it</th></tr></thead>
           <tbody>
             <tr><td class="nm">Profit-center separation</td><td>7 subjects, one revenue stream; pool them and per-subject P&amp;L becomes fiction</td><td>Profit center per subject, derived on every revenue posting</td></tr>
             <tr><td class="nm">Cost-center derivation</td><td>Lab, materials and transport split across 3 branches (1100/1200/1300)</td><td>Substitution rules map each cost to its branch CC + dept 110 Academic</td></tr>
@@ -779,7 +779,7 @@ margin %     = gross_profit / collected × 100</div>
       A financial build runs long because of volume across dimensions, not one large task. Over the engagement the programme moved roughly ฿2.18M across seven subjects and three branches, and every baht of it was invoiced, reconciled and closed.
     </p>
     <div class="exh">
-      <div class="exh-ribbon">&#128202; <b>Programme scale</b> &middot; magnitude across the engagement &middot; counts representative, masked from XeerSoft FI under NDA.</div>
+      <div class="exh-ribbon">&#128202; <b>Programme scale</b> &middot; magnitude across the engagement &middot; counts representative, masked from XeerSoft Financial Accounting under NDA.</div>
       <div class="exh-body">
         <table class="exh-table">
           <thead><tr><th>Dimension</th><th class="r">Count</th><th>Note</th></tr></thead>
@@ -798,9 +798,9 @@ margin %     = gross_profit / collected × 100</div>
       <div class="exh-foot">802 invoices &times; many status transitions &times; 17 monthly closes is the volume a per-subject P&amp;L has to stay correct across. Counts are representative; the ฿2.18M revenue, ฿1.08M gross profit and 95.0% collection are the real programme totals.</div>
     </div>
 
-    <h3 class="content-h3">The Defect That Moved <em>Go-Live</em></h3>
+    <h3 class="content-h3">Validation Risk · <em>Go-Live Defect</em></h3>
     <p class="content-p">
-      At UAT Cycle 1 the build looked right on a single invoice and failed at the books. Every subject posted to the same AR and revenue control account with no profit-center or cost-center derivation, so two things broke at once: the AR sub-ledger stopped tying to the GL, and per-subject P&amp;L could not be produced. In FI terms that is a go-live blocker, not a cosmetic bug: you cannot close a period whose sub-ledger does not reconcile. Closing it meant re-specifying the posting model and re-testing it across three regression cycles.
+      At UAT Cycle 1 the build looked right on a single invoice and failed at the books. Every subject posted to the same AR and revenue control account with no profit-center or cost-center derivation, so two things broke at once: the AR sub-ledger stopped tying to the GL, and per-subject P&amp;L could not be produced. In financial-control terms that is a go-live blocker, not a cosmetic bug: you cannot close a period whose sub-ledger does not reconcile. Closing it meant re-specifying the posting model and re-testing it across three regression cycles.
     </p>
     <div class="exh">
       <div class="exh-ribbon">&#128274; <b>GL posting model &middot; before vs after re-spec</b> &middot; representative recreation of the defect and the fix &middot; account numbers illustrative.</div>
@@ -818,69 +818,6 @@ margin %     = gross_profit / collected × 100</div>
         </table>
       </div>
       <div class="exh-foot"><b>Root cause:</b> the dev spec implemented invoicing without the controlling dimensions, so the financial picture was right in total and wrong in every breakdown management actually needed. <b>The fix</b> re-architected derivation at posting time: correct, but invasive enough to touch every transaction and force a full regression. That work is the +5 months between the planned and the actual Go-Live.</div>
-    </div>
-
-    <!-- DELIVERY & SCHEDULE -->
-    <div class="trk">
-    <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
-    <p class="content-p">How the project was actually run end-to-end: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
-
-    <div class="callout">
-      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
-      <p>This was a <b>recurring revenue cycle</b>, not a one-off: every STEM intake billed each family ฿500–3,000. Late or inaccurate billing directly delayed cash collection, so the schedule pressure repeated every intake until the programme reached Go-Live in June 2026.</p>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Project timeline &middot; month-by-month</p>
-      <div class="trk-scroll"><div class="trk-gantt" style="--cols:18;min-width:850px">
-        <div class="trk-row" style="margin-bottom:.15rem"><div class="trk-label"></div><div style="display:flex;gap:.3rem">
-          <span style="flex:12;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.05em;color:var(--t-muted);background:var(--t-bg);border:1px solid var(--t-border);border-radius:5px;padding:.16rem 0">2025 &middot; planned delivery year</span>
-          <span style="flex:6;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.05em;color:var(--t-muted);background:var(--t-bg);border:1px solid var(--t-border);border-radius:5px;padding:.16rem 0">2026 &middot; slip &amp; Go-Live</span>
-        </div></div>
-        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
-        <div class="trk-row"><div class="trk-label">Discovery &amp; As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Discovery and As-Is requirements">2 mo</span></div></div>
-        <div class="trk-row"><div class="trk-label">AR + GL design (FSD v1)</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:3" title="AR billing and GL account design, FSD v1">FSD v1</span></div></div>
-        <div class="trk-row"><div class="trk-label">Profit/cost-center model</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:3" title="Profit-center and cost-center model">PC/CC</span></div></div>
-        <div class="trk-row"><div class="trk-label">Cost alloc + P&amp;L spec</div><div class="trk-track"><span class="trk-bar done" style="--s:5;--l:2" title="Cost allocation and P&L report spec">2 mo</span></div></div>
-        <div class="trk-row"><div class="trk-label">Build v1 &middot; dev handoff</div><div class="trk-track"><span class="trk-bar done" style="--s:5;--l:4" title="Build v1 and dev handoff">build v1</span></div></div>
-        <div class="trk-row"><div class="trk-label">UAT 1 &middot; GL-split defect</div><div class="trk-track"><span class="trk-bar warn" style="--s:8;--l:2" title="UAT Cycle 1: GL multi-account separation defect found">defect</span></div></div>
-        <div class="trk-row"><div class="trk-label">Re-spec &middot; FSD v2&ndash;v3</div><div class="trk-track"><span class="trk-bar recover" style="--s:9;--l:3" title="Re-specification of the posting model, FSD v2 to v3">re-spec</span></div></div>
-        <div class="trk-row"><div class="trk-label">Rebuild + regression</div><div class="trk-track"><span class="trk-bar recover" style="--s:11;--l:4" title="Rebuild and regression testing">rebuild</span></div></div>
-        <div class="trk-row"><div class="trk-label">UAT 2&ndash;4 &middot; sub-ledger recon</div><div class="trk-track"><span class="trk-bar done" style="--s:13;--l:3" title="UAT Cycles 2 to 4 and sub-ledger reconciliation">UAT &times;3</span></div></div>
-        <div class="trk-row"><div class="trk-label">Parallel run + cutover</div><div class="trk-track"><span class="trk-bar done" style="--s:16;--l:2" title="Parallel run and cutover">cutover</span></div></div>
-        <div class="trk-row"><div class="trk-label">Planned Go-Live &middot; Dec 2025</div><div class="trk-track"><span class="trk-bar plan" style="--s:12;--l:1" title="Originally planned Go-Live: December 2025">plan</span></div></div>
-        <div class="trk-row"><div class="trk-label">Go-Live &middot; June 2026</div><div class="trk-track"><span class="trk-bar live" style="--s:18;--l:1" title="Actual Go-Live: June 2026">go-live</span></div></div>
-      </div></div>
-      <p class="trk-note"><b>Planned as a 12-month delivery</b> (Jan&ndash;Dec 2025, the same shape as Project 02). A <b>GL multi-account separation defect</b> in the dev build surfaced at UAT Cycle 1: per-subject revenue and cost postings were collapsing into single control accounts, so the AR sub-ledger would not reconcile to the GL and per-subject P&amp;L could not be trusted. Closing it took an FSD re-spec (v2&ndash;v3) plus three regression cycles, moving Go-Live to <b>June 2026</b>: a <b>+5-month slip, fully recovered</b> to 95% collection.</p>
-      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>GL multi-account separation defect &middot; the +5-month driver</b><p>The dev build posted all seven subjects to single AR and revenue control accounts with no profit-center or cost-center derivation, so the AR sub-ledger did not tie to the GL and per-subject P&amp;L was unreliable: a hard blocker for period close, and therefore for go-live.<span class="res"> Resolved &rarr; I re-specified the posting model (FSD v2&ndash;v3) with a profit center per subject, branch cost-center substitution, and a nightly sub-ledger &harr; GL reconciliation, then ran three regression cycles to zero blocking defects before cutover.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Collection recovered to 95% post-go-live</b><p>Mid-programme, collection sat around 82.4% with outstanding AR carried per family — cash tied up in OPEN/DISPUTED items.<span class="res"> Resolved → AR aging per family plus DISPUTED reconciliation against bank receipts and post-go-live dunning recovered ~฿267,000 of ฿375,000 outstanding, raising collection 82.4% → 95.0% (฿110,000 still in run-off).</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Per-session margin visibility</b><p>Without per-session P&L, management couldn’t see which subjects actually earned money.<span class="res"> Resolved → I built session-level revenue-vs-cost reporting so pricing and session planning are now driven by margin data.</span></p></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
-      <div class="trk-two">
-        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
-      </div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Weekly Agile cadence</p>
-      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>AR aging review + DISPUTED follow-up</p></div><div class="trk-day"><div class="d">TUE</div><p>Bank reconciliation matching</p></div><div class="trk-day"><div class="d">WED</div><p>Cost allocation / session orders</p></div><div class="trk-day"><div class="d">THU</div><p>P&L + margin report refresh</p></div><div class="trk-day"><div class="d">FRI</div><p>Management update + dev sync</p></div></div>
-      <div class="trk-kpis"><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">AR aging review<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">per intake</div><div class="l">Billing & cost cycle</div></div><div class="trk-kpi"><div class="v">95.0%</div><div class="l">Collection (post-go-live)</div></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Stakeholder network &amp; RACI</p>
-      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>enrolled families (payers) &middot; management (P&amp;L) &middot; lab partner &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA + Implementation</b></td><td class="cnt">1</td><td>Billing design, AR ops, P&amp;L reporting</td><td class="raci">A / R</td></tr><tr><td><b>Management</b></td><td class="cnt">few</td><td>Consume P&amp;L; pricing decisions</td><td class="raci">C / I</td></tr><tr><td><b>Families</b></td><td class="cnt">per intake</td><td>Billed; payment collection</td><td class="raci">I</td></tr><tr><td><b>Lab partner</b></td><td class="cnt">1</td><td>Lab fee / cost input</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built AR posting + report from FSD</td><td class="raci">R</td></tr></tbody></table>
-      <p class="trk-note">A financial operation I ran single-handedly end-to-end — sole owner of billing, collection, reconciliation and the P&L management used to plan sessions. Went Go-Live in June 2026; AR recovered to 95% via dunning, with a clean handover to BAU.</p>
-    </div>
     </div>
 
 <style id="uat-style">
@@ -960,7 +897,7 @@ margin %     = gross_profit / collected × 100</div>
 
     <!-- UAT · SUB-UNIT TEST SPECIFICATION -->
     <div class="uat" id="uat">
-    <h3 class="content-h3">UAT &middot; <em>Sub-Unit Test Specification</em></h3>
+    <h3 class="content-h3">Validation, UAT &amp; <em>Defect Control</em></h3>
     <p class="content-p">I did not sign off the build as one pass/fail. I decomposed the <strong>billing &rarr; AR &rarr; profitability</strong> scope into <strong>10 sub-unit tests</strong>, each run as a <strong>manual test case of ~10 ordered steps validated against 5 complex conditions</strong>, with one written <strong>specific assurance</strong> per sub-unit (the exact thing the test guarantees). This is the breakdown behind the <strong>5 UAT cycles</strong> already noted &mdash; 1 pre-defect + 3 regression + 1 cutover dress run &mdash; including the GL-separation defect that moved Go-Live.</p>
 
     <div class="callout">
@@ -975,20 +912,20 @@ margin %     = gross_profit / collected × 100</div>
         <span class="uat-flag-name">Revenue account determination &middot; per-subject GL split</span>
         <span class="uat-pass">PASS &middot; after DEF-P4-01</span>
       </div>
-      <p class="uat-flag-meta">Role: <b>Billing / FI</b> &middot; tied to the GL-separation defect that <b>moved Go-Live</b> &mdash; FSD v1 posted every STEM subject to a <b>single shared revenue GL</b>, so per-subject profitability was blended and meaningless. This is the procedure that surfaced it and proved the FSD v1&rarr;v3 fix.</p>
+      <p class="uat-flag-meta">Role: <b>Billing / Financial Accounting</b> &middot; tied to the GL-separation defect that <b>moved Go-Live</b> &mdash; FSD v1 posted every STEM subject to a <b>single shared revenue GL</b>, so per-subject profitability was blended and meaningless. This is the procedure that surfaced it and proved the FSD v1&rarr;v3 fix.</p>
       <div class="uat-cols">
         <div>
           <p class="uat-sub">Manual procedure &middot; 10 steps</p>
           <ol class="uat-steps">
-            <li>Log in as <b>Billing</b> role; create a billing document <span class="uat-tc">VF01</span> for a student enrolled in <b>multiple STEM subjects</b>.</li>
+            <li>Log in as <b>Billing</b> role; create a billing document in the XeerSoft Billing screen <span class="uat-tc">Billing screen</span> for a student enrolled in <b>multiple STEM subjects</b>.</li>
             <li>Confirm each enrolled subject appears as its <b>own billing line</b> (Robotics, Physics Lab, Math Competition &hellip;).</li>
             <li>Verify each subject line <b>derives its own revenue GL</b> via account determination &mdash; not one shared GL.</li>
             <li>Post the billing document; capture the <b>accounting document number</b>.</li>
             <li>Confirm AR posts to the <b>customer sub-ledger</b> (student debit) for the full invoice total.</li>
             <li>Drill the accounting view; verify the credit side splits across the <b>per-subject revenue GLs</b>.</li>
-            <li>Confirm <b>CO-PA picks up segment = subject</b> on each line (characteristic populated, not blank).</li>
-            <li>Open the profitability report <span class="uat-tc">KE30</span>; filter to this student / intake.</li>
-            <li>Verify the per-subject revenue in <span class="uat-tc">KE30</span> <b>ties line-for-line to the GL</b> postings.</li>
+            <li>Confirm the <b>profitability segment captures subject</b> on each line (segment populated, not blank).</li>
+            <li>Open the XeerSoft profitability report <span class="uat-tc">P&amp;L report</span>; filter to this student / intake.</li>
+            <li>Verify the per-subject revenue in the profitability report <b>ties line-for-line to the GL</b> postings.</li>
             <li>Confirm the per-subject <b>P&amp;L is real</b> &mdash; each subject's margin stands alone, nothing blended.</li>
           </ol>
         </div>
@@ -1005,7 +942,7 @@ margin %     = gross_profit / collected × 100</div>
       </div>
       <div class="uat-assure">
         <div class="lab">&#9670; Specific assurance</div>
-        <p>Guarantees that <b>every subject's revenue lands in its own GL and CO-PA segment</b>, so per-subject profitability is real, not blended &mdash; discounts and refunds route to the correct contra / subject account and never distort gross revenue. This is the <b>exact failure the FSD v1&rarr;v3 re-spec fixed</b>: it broke the core promise of the build &mdash; per-subject P&amp;L &mdash; and is closed as <span style="color:var(--u-accent);font-family:'JetBrains Mono',monospace">DEF-P4-01</span>.</p>
+        <p>Guarantees that <b>every subject's revenue lands in its own GL and profitability segment</b>, so per-subject profitability is real, not blended &mdash; discounts and refunds route to the correct contra / subject account and never distort gross revenue. This is the <b>exact failure the FSD v1&rarr;v3 re-spec fixed</b>: it broke the core promise of the build &mdash; per-subject P&amp;L &mdash; and is closed as <span style="color:var(--u-accent);font-family:'JetBrains Mono',monospace">DEF-P4-01</span>.</p>
       </div>
     </div>
 
@@ -1013,7 +950,7 @@ margin %     = gross_profit / collected × 100</div>
     <div class="uat-reg">
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P4-01</span><span class="uat-unit-name">Billing document creation <span class="uat-tc">VF01</span> &middot; per-student invoice</span><span class="uat-tag"><b>9</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-01</span><span class="uat-unit-name">Billing document creation <span class="uat-tc">Billing screen</span> &middot; per-student invoice</span><span class="uat-tag"><b>9</b> steps</span></div>
         <ul class="uat-ucond">
           <li>One billing line <b>per enrolled subject</b>, mandatory fields enforced on save</li>
           <li>Multi-subject student (lab + competition) bills on a single invoice</li>
@@ -1033,7 +970,7 @@ margin %     = gross_profit / collected × 100</div>
           <li><b>No subject ever collapses to a shared revenue GL</b></li>
           <li>Closed-period billing rejected and re-dated</li>
         </ul>
-        <div class="uat-ua"><b>Assurance:</b> detailed above &mdash; every subject's revenue lands in its own GL and CO-PA segment so per-subject P&amp;L is real. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-01</span></div>
+        <div class="uat-ua"><b>Assurance:</b> detailed above &mdash; every subject's revenue lands in its own GL and profitability segment so per-subject P&amp;L is real. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-01</span></div>
       </div>
 
       <div class="uat-unit">
@@ -1049,19 +986,19 @@ margin %     = gross_profit / collected × 100</div>
       </div>
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P4-04</span><span class="uat-unit-name">CO-PA characteristic derivation &middot; segment = subject</span><span class="uat-tag"><b>10</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-04</span><span class="uat-unit-name">Profitability segment derivation &middot; segment = subject</span><span class="uat-tag"><b>10</b> steps</span></div>
         <ul class="uat-ucond">
-          <li>Every billing line populates <b>segment = subject</b> in CO-PA</li>
+          <li>Every billing line populates <b>segment = subject</b> in the profitability model</li>
           <li>Competition subjects derive the segment, not just lab subjects</li>
           <li>Derivation rule maps material &rarr; subject characteristic</li>
           <li><b>Segment never comes through blank</b> for any subject group</li>
           <li>New subject added to the catalogue inherits a derivation rule</li>
         </ul>
-        <div class="uat-ua"><b>Assurance:</b> the profitability segment is always populated with the subject, so no revenue lands in CO-PA unattributed. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-02</span></div>
+        <div class="uat-ua"><b>Assurance:</b> the profitability segment is always populated with the subject, so no revenue lands in reporting unattributed. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P4-02</span></div>
       </div>
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P4-05</span><span class="uat-unit-name">CO-PA value-field mapping &middot; revenue / cost / contribution</span><span class="uat-tag"><b>9</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-05</span><span class="uat-unit-name">Profitability value-field mapping &middot; revenue / cost / contribution</span><span class="uat-tag"><b>9</b> steps</span></div>
         <ul class="uat-ucond">
           <li>Revenue, cost and discount each map to <b>distinct value fields</b></li>
           <li><b>Discount counted once</b>, never double-deducted from margin</li>
@@ -1085,7 +1022,7 @@ margin %     = gross_profit / collected × 100</div>
       </div>
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P4-07</span><span class="uat-unit-name">Profitability report <span class="uat-tc">KE30</span> &middot; per-subject P&amp;L</span><span class="uat-tag"><b>8</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P4-07</span><span class="uat-unit-name">Profitability report <span class="uat-tc">P&amp;L report</span> &middot; per-subject P&amp;L</span><span class="uat-tag"><b>8</b> steps</span></div>
         <ul class="uat-ucond">
           <li>Report shows <b>one P&amp;L column per subject</b>, not blended</li>
           <li>Revenue / cost / margin reconcile to the underlying GL</li>
@@ -1100,7 +1037,7 @@ margin %     = gross_profit / collected × 100</div>
         <div class="uat-unit-head"><span class="uat-tid">UT-P4-08</span><span class="uat-unit-name">Period-end / settlement</span><span class="uat-tag"><b>8</b> steps</span></div>
         <ul class="uat-ucond">
           <li>Deferred revenue settles to earned at the period boundary</li>
-          <li>Costs settle to CO-PA before the period closes</li>
+          <li>Costs settle to profitability reporting before the period closes</li>
           <li>Open billing in flight does not block the close</li>
           <li>Re-open / re-run settlement is idempotent</li>
           <li>Post-close postings forced into the next open period</li>
@@ -1124,8 +1061,8 @@ margin %     = gross_profit / collected × 100</div>
         <div class="uat-unit-head"><span class="uat-tid">UT-P4-10</span><span class="uat-unit-name">Margin reconciliation &middot; P&amp;L vs GL</span><span class="uat-tag"><b>7</b> steps</span></div>
         <ul class="uat-ucond">
           <li>Sum of per-subject margin reconciles to total GL result</li>
-          <li>CO-PA revenue ties to the revenue GL accounts</li>
-          <li>CO-PA cost ties to the cost GL accounts</li>
+          <li>Profitability revenue ties to the revenue GL accounts</li>
+          <li>Profitability cost ties to the cost GL accounts</li>
           <li>No unattributed variance between the two views</li>
           <li>Rounding / currency settings aligned across both</li>
         </ul>
@@ -1140,10 +1077,10 @@ margin %     = gross_profit / collected × 100</div>
       <div style="--days:20">
         <div class="uat-tl-row"><span class="uat-tl-lab">Billing doc &amp; AR posting</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:1;--l:2">2d</span></div><span class="uat-tl-days">UT-01,03</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Revenue GL split <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:3;--l:3">3d</span></div><span class="uat-tl-days">UT-02</span></div>
-        <div class="uat-tl-row"><span class="uat-tl-lab">CO-PA derivation <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:6;--l:2">2d</span></div><span class="uat-tl-days">UT-04</span></div>
-        <div class="uat-tl-row"><span class="uat-tl-lab">CO-PA value fields</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:8;--l:2">2d</span></div><span class="uat-tl-days">UT-05</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Segment derivation <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:6;--l:2">2d</span></div><span class="uat-tl-days">UT-04</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Profitability value fields</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:8;--l:2">2d</span></div><span class="uat-tl-days">UT-05</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Cost allocation</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:10;--l:2">2d</span></div><span class="uat-tl-days">UT-06</span></div>
-        <div class="uat-tl-row"><span class="uat-tl-lab">KE30 P&amp;L &amp; period-end</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:12;--l:3">3d</span></div><span class="uat-tl-days">UT-07,08</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">P&amp;L report &amp; period-end</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:12;--l:3">3d</span></div><span class="uat-tl-days">UT-07,08</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Dunning &amp; margin recon</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:14;--l:2">2d</span></div><span class="uat-tl-days">UT-09,10</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Regression &middot; all 5 fixes</span><div class="uat-tl-track"><span class="uat-tl-bar reg" style="--s:16;--l:3">3d</span></div><span class="uat-tl-days">retest</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Cutover dress &amp; sign-off</span><div class="uat-tl-track"><span class="uat-tl-bar live" style="--s:19;--l:2">2d</span></div><span class="uat-tl-days">gate</span></div>
@@ -1169,7 +1106,7 @@ margin %     = gross_profit / collected × 100</div>
           </tr>
           <tr>
             <td class="did">DEF-P4-02</td>
-            <td><b>UT-04</b> CO-PA derivation</td>
+            <td><b>UT-04</b> segment derivation</td>
             <td>Segment came through <b>blank for competition subjects</b>, so their revenue was unattributed.</td>
             <td><span class="uat-sev high">HIGH</span></td>
             <td>No derivation rule mapped material &rarr; subject characteristic for that group.</td>
@@ -1199,7 +1136,7 @@ margin %     = gross_profit / collected × 100</div>
           </tr>
           <tr>
             <td class="did">DEF-P4-05</td>
-            <td><b>UT-07</b> KE30 report</td>
+            <td><b>UT-07</b> P&amp;L report</td>
             <td>Report total <b>did not tie to the GL</b> by a small rounding gap.</td>
             <td><span class="uat-sev low">LOW</span></td>
             <td>Currency rounding differed between report and posting.</td>
@@ -1216,13 +1153,13 @@ margin %     = gross_profit / collected × 100</div>
 
     <h3 class="content-h3">Configuration <em>Parameters</em></h3>
     <figure class="lx-code">
-    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft FI · programme &amp; GL config</span><span class="lx-code-lang">parameters</span></figcaption>
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft Financial Accounting · programme &amp; GL config</span><span class="lx-code-lang">parameters</span></figcaption>
     <div class="code-block"><span class="comment">// PROGRAMME · Jan 2025 – Go-Live June 2026 · LIVE</span>
 Lab subjects (×6)  : THB 3,000 / student
    Robotics · Biology Lab · Math Camp · Physics Lab · Chemistry Lab · Engineering Design
 Math Competition   : THB 500 / student   (in-house · 90 students · THB 45,000)
 
-<span class="comment">// GL ACCOUNT MAPPING (XeerSoft FI)</span>
+<span class="comment">// GL ACCOUNT MAPPING (XeerSoft Financial Accounting)</span>
 <span class="keyword">110100</span>  Student AR        → Debit  (customer invoice)
 <span class="keyword">400150</span>  STEM Lab Revenue  → Credit (revenue posting)
 
@@ -1255,9 +1192,14 @@ Lab Fee (fixed)     · Materials (variable)  · Transport
       The per-subject margin showed where the programme generated the most economic value. <strong>Math Competition led at 60% margin</strong> on a small revenue base, while <strong>Biology Lab produced the highest absolute gross profit</strong> (฿268K). Overall programme margin is 49.6%, gross and on a billed (accrual) basis — before staff and overhead. This data informed pricing and session planning.
     </p>
 
-    <h3 class="content-h3">Tools <em>& Technologies</em></h3>
+    <h3 class="content-h3">Measured <em>Results</em></h3>
+    <p class="content-p">
+      The measurable outcome was a reconciled STEM financial model across <strong>802 transactions</strong> and <strong>7 subjects</strong>: <strong>฿2,181,000</strong> revenue tracked, <strong>฿2,071,000</strong> collected, <strong>95.0%</strong> collection rate, <strong>฿110,000</strong> outstanding AR, <strong>฿1,080,869</strong> gross profit, and <strong>49.6%</strong> overall margin on a billed accrual basis.
+    </p>
+
+    <h3 class="content-h3">Tools &amp; <em>Deliverables</em></h3>
     <div class="module-tags">
-      <span class="module-tag">XeerSoft FI Module</span>
+      <span class="module-tag">XeerSoft Financial Accounting Module</span>
       <span class="module-tag">XeerSoft AR Billing</span>
       <span class="module-tag">Cost Allocation Engine</span>
       <span class="module-tag">Power BI Dashboard</span>
@@ -1267,7 +1209,70 @@ Lab Fee (fixed)     · Materials (variable)  · Transport
       <span class="module-tag">Word (FSD)</span>
     </div>
 
-    <h3 class="content-h3">Project <em>Go-Live</em></h3>
+    <!-- DELIVERY & SCHEDULE -->
+    <div class="trk">
+    <h3 class="content-h3">Delivery <em>Timeline</em></h3>
+    <p class="content-p">How the project was actually run end-to-end after the consulting work above: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
+
+    <div class="callout">
+      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
+      <p>This was a <b>recurring revenue cycle</b>, not a one-off: every STEM intake billed each family ฿500–3,000. Late or inaccurate billing directly delayed cash collection, so the schedule pressure repeated every intake until the programme reached Go-Live in June 2026.</p>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Project timeline &middot; month-by-month</p>
+      <div class="trk-scroll"><div class="trk-gantt" style="--cols:18;min-width:850px">
+        <div class="trk-row" style="margin-bottom:.15rem"><div class="trk-label"></div><div style="display:flex;gap:.3rem">
+          <span style="flex:12;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.05em;color:var(--t-muted);background:var(--t-bg);border:1px solid var(--t-border);border-radius:5px;padding:.16rem 0">2025 &middot; planned delivery year</span>
+          <span style="flex:6;text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.05em;color:var(--t-muted);background:var(--t-bg);border:1px solid var(--t-border);border-radius:5px;padding:.16rem 0">2026 &middot; slip &amp; Go-Live</span>
+        </div></div>
+        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
+        <div class="trk-row"><div class="trk-label">Discovery &amp; As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Discovery and As-Is requirements">2 mo</span></div></div>
+        <div class="trk-row"><div class="trk-label">AR + GL design (FSD v1)</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:3" title="AR billing and GL account design, FSD v1">FSD v1</span></div></div>
+        <div class="trk-row"><div class="trk-label">Profit/cost-center model</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:3" title="Profit-center and cost-center model">PC/CC</span></div></div>
+        <div class="trk-row"><div class="trk-label">Cost alloc + P&amp;L spec</div><div class="trk-track"><span class="trk-bar done" style="--s:5;--l:2" title="Cost allocation and P&L report spec">2 mo</span></div></div>
+        <div class="trk-row"><div class="trk-label">Build v1 &middot; dev handoff</div><div class="trk-track"><span class="trk-bar done" style="--s:5;--l:4" title="Build v1 and dev handoff">build v1</span></div></div>
+        <div class="trk-row"><div class="trk-label">UAT 1 &middot; GL-split defect</div><div class="trk-track"><span class="trk-bar warn" style="--s:8;--l:2" title="UAT Cycle 1: GL multi-account separation defect found">defect</span></div></div>
+        <div class="trk-row"><div class="trk-label">Re-spec &middot; FSD v2&ndash;v3</div><div class="trk-track"><span class="trk-bar recover" style="--s:9;--l:3" title="Re-specification of the posting model, FSD v2 to v3">re-spec</span></div></div>
+        <div class="trk-row"><div class="trk-label">Rebuild + regression</div><div class="trk-track"><span class="trk-bar recover" style="--s:11;--l:4" title="Rebuild and regression testing">rebuild</span></div></div>
+        <div class="trk-row"><div class="trk-label">UAT 2&ndash;4 &middot; sub-ledger recon</div><div class="trk-track"><span class="trk-bar done" style="--s:13;--l:3" title="UAT Cycles 2 to 4 and sub-ledger reconciliation">UAT &times;3</span></div></div>
+        <div class="trk-row"><div class="trk-label">Parallel run + cutover</div><div class="trk-track"><span class="trk-bar done" style="--s:16;--l:2" title="Parallel run and cutover">cutover</span></div></div>
+        <div class="trk-row"><div class="trk-label">Planned Go-Live &middot; Dec 2025</div><div class="trk-track"><span class="trk-bar plan" style="--s:12;--l:1" title="Originally planned Go-Live: December 2025">plan</span></div></div>
+        <div class="trk-row"><div class="trk-label">Go-Live &middot; June 2026</div><div class="trk-track"><span class="trk-bar live" style="--s:18;--l:1" title="Actual Go-Live: June 2026">go-live</span></div></div>
+      </div></div>
+      <p class="trk-note"><b>Planned as a 12-month delivery</b> (Jan&ndash;Dec 2025, the same shape as Project 02). A <b>GL multi-account separation defect</b> in the dev build surfaced at UAT Cycle 1: per-subject revenue and cost postings were collapsing into single control accounts, so the AR sub-ledger would not reconcile to the GL and per-subject P&amp;L could not be trusted. Closing it took an FSD re-spec (v2&ndash;v3) plus three regression cycles, moving Go-Live to <b>June 2026</b>: a <b>+5-month slip, fully recovered</b> to 95% collection.</p>
+      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Schedule risk &amp; recovery</p>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>GL multi-account separation defect &middot; the +5-month driver</b><p>The dev build posted all seven subjects to single AR and revenue control accounts with no profit-center or cost-center derivation, so the AR sub-ledger did not tie to the GL and per-subject P&amp;L was unreliable: a hard blocker for period close, and therefore for go-live.<span class="res"> Resolved &rarr; I re-specified the posting model (FSD v2&ndash;v3) with a profit center per subject, branch cost-center substitution, and a nightly sub-ledger &harr; GL reconciliation, then ran three regression cycles to zero blocking defects before cutover.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Collection recovered to 95% post-go-live</b><p>Mid-programme, collection sat around 82.4% with outstanding AR carried per family — cash tied up in OPEN/DISPUTED items.<span class="res"> Resolved → AR aging per family plus DISPUTED reconciliation against bank receipts and post-go-live dunning recovered ~฿267,000 of ฿375,000 outstanding, raising collection 82.4% → 95.0% (฿110,000 still in run-off).</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Per-session margin visibility</b><p>Without per-session P&L, management couldn’t see which subjects actually earned money.<span class="res"> Resolved → I built session-level revenue-vs-cost reporting so pricing and session planning are now driven by margin data.</span></p></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Spec design → developer handoff → build verification</p>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-two">
+        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Weekly Agile cadence</p>
+      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>AR aging review + DISPUTED follow-up</p></div><div class="trk-day"><div class="d">TUE</div><p>Bank reconciliation matching</p></div><div class="trk-day"><div class="d">WED</div><p>Cost allocation / session orders</p></div><div class="trk-day"><div class="d">THU</div><p>P&L + margin report refresh</p></div><div class="trk-day"><div class="d">FRI</div><p>Management update + dev sync</p></div></div>
+      <div class="trk-kpis"><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">AR aging review<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">per intake</div><div class="l">Billing & cost cycle</div></div><div class="trk-kpi"><div class="v">95.0%</div><div class="l">Collection (post-go-live)</div></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Stakeholder network &amp; RACI</p>
+      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>enrolled families (payers) &middot; management (P&amp;L) &middot; lab partner &middot; remote XeerSoft dev team</b></div>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA + Implementation</b></td><td class="cnt">1</td><td>Billing design, AR ops, P&amp;L reporting</td><td class="raci">A / R</td></tr><tr><td><b>Management</b></td><td class="cnt">few</td><td>Consume P&amp;L; pricing decisions</td><td class="raci">C / I</td></tr><tr><td><b>Families</b></td><td class="cnt">per intake</td><td>Billed; payment collection</td><td class="raci">I</td></tr><tr><td><b>Lab partner</b></td><td class="cnt">1</td><td>Lab fee / cost input</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built AR posting + report from FSD</td><td class="raci">R</td></tr></tbody></table>
+      <p class="trk-note">A financial operation I ran single-handedly end-to-end — sole owner of billing, collection, reconciliation and the P&L management used to plan sessions. Went Go-Live in June 2026; AR recovered to 95% via dunning, with a clean handover to BAU.</p>
+    </div>
+    </div>
+
+    <h3 class="content-h3">Consultant <em>Takeaway</em></h3>
     <p class="content-p">
       <strong>The programme went Go-Live in June 2026.</strong> Post-go-live dunning recovered ~฿267,000 of ฿375,000 outstanding AR, raising collection 82.4% → 95.0% (฿110,000 still in run-off). The final per-subject P&L — gross profit ฿1,080,869 at a 49.6% overall margin on a billed (accrual) basis — is handed to management; billing, cost allocation and margin reporting run live in production, with a clean handover to BAU.
     </p>

@@ -418,7 +418,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           <a href="project4.html">STEM Portfolio Financial Tracking</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">My SAP Specification Design</div>
+          <div class="nav-dd-head">My ERP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
         </div>
         <div class="nav-dd-group">
@@ -430,7 +430,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <div class="nav-dd-head">Engineering Design &amp; ERP · MMTh</div>
           <a href="project5.html">FPDU Assist Device · PHEV</a>
         </div>
       </div>
@@ -555,7 +555,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 <section style="padding-top: 2rem;">
   <div class="content-section">
 
-    <h3 class="content-h3">The <em>Problem</em></h3>
+    <h3 class="content-h3">Business Context &amp; <em>Problem</em></h3>
     <p class="content-p">
       Tuition fee pricing was managed <strong>ad-hoc per family by the school owner</strong>. No structured pricing model existed in the system: discounts varied by sibling enrolment, group/cohort intake, and referral but were only held in the owner's knowledge.
     </p>
@@ -577,7 +577,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <p class="mbasis-note"><b>Basis:</b> elapsed senior-decision time per new pricing case, before vs after Go-Live. Figures are <b>approximate</b> (owner-reported): the point is the order-of-magnitude shift from manual derivation to system-generated pricing, not a stopwatch measurement.</p>
     </div>
 
-    <h3 class="content-h3">My <em>Approach</em></h3>
+    <h3 class="content-h3">My Role &amp; <em>Accountability</em></h3>
     <p class="content-p">
       The hardest part wasn't building the system: it was <strong>extracting tacit pricing knowledge</strong> from the owner's head. I volunteered to attend <strong>weekly Executive Sessions every Sunday for 12 months (4 hours each, 48 sessions total)</strong> as the sole consultant to do so consistently.
     </p>
@@ -588,14 +588,14 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <div class="callout">
       <div class="callout-title">The pricing conditions identified</div>
-      <p><strong>1. Family / sibling (Z001)</strong>: a sibling already enrolled &rarr; &minus;฿50,000</p>
-      <p><strong>2. Group / cohort (Z002)</strong>: three enrolling together &rarr; &minus;฿75,000 on the third</p>
-      <p><strong>3. Referral (Z003)</strong>: referred by an existing family &rarr; &minus;฿15,000 to &minus;฿30,000</p>
+      <p><strong>1. Family / sibling (SIBLING)</strong>: a sibling already enrolled &rarr; &minus;฿50,000</p>
+      <p><strong>2. Group / cohort (GROUP)</strong>: three enrolling together &rarr; &minus;฿75,000 on the third</p>
+      <p><strong>3. Referral (REFERRAL)</strong>: referred by an existing family &rarr; &minus;฿15,000 to &minus;฿30,000</p>
     </div>
 
-    <h3 class="content-h3">System Architecture · <em>Strategic Pricing &amp; AR</em></h3>
+    <h3 class="content-h3">Solution Design · <em>Strategic Pricing &amp; AR</em></h3>
     <p class="content-p">The discovery distilled into a system blueprint: how a pricing-and-AR platform would be structured to operationalize the conditions above. Presented as design; prospect data anonymized (e.g. <code>Prospect-001</code>).</p>
-    <div class="arch-note">&#128274; <b>System design blueprint</b> &mdash; conceptual architecture and reference stack, not a deployed production system. Pricing figures per author; conditions do not stack (best single discount applies, <b>TBC</b>).</div>
+    <div class="arch-note">&#128274; <b>System design blueprint</b> &mdash; conceptual architecture and reference stack, not a deployed production system. Pricing figures per author; pricing rules do not stack (best single discount applies, <b>[TODO: Chatree to confirm]</b>).</div>
 
     <div class="arch-sub">A · 3-tier architecture</div>
     <div class="arch-tiers" role="img" aria-label="Three-tier architecture. Presentation tier: Admin Console and Parent Portal. Application tier: Pricing Engine, Billing Rules, Enrollment Workflow. Data tier: Customer, Catalog, Pricing and AR stores.">
@@ -610,7 +610,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <div class="arch-tier app">
         <div class="arch-tier-l">Tier 2<b>Application</b></div>
         <div class="arch-boxes">
-          <div class="arch-box"><b>Pricing Engine</b><span>rate card + conditions</span></div>
+          <div class="arch-box"><b>Pricing Engine</b><span>rate card + pricing rules</span></div>
           <div class="arch-box"><b>Billing Rules</b><span>invoice · terms · dunning</span></div>
           <div class="arch-box"><b>Enrollment Workflow</b><span>prospect &rarr; enrolled</span></div>
         </div>
@@ -621,7 +621,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <div class="arch-boxes">
           <div class="arch-box"><b>Customer</b><span>prospects · families</span></div>
           <div class="arch-box"><b>Catalog</b><span>programmes · tracks</span></div>
-          <div class="arch-box"><b>Pricing</b><span>price list · conditions</span></div>
+          <div class="arch-box"><b>Pricing</b><span>price list · pricing rules</span></div>
           <div class="arch-box"><b>AR</b><span>invoices · payments</span></div>
         </div>
       </div>
@@ -631,7 +631,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="arch-mods">
       <div class="arch-mod"><div class="n">01</div><h5>CRM / Customer Master</h5><p>Prospect &rarr; Lead &rarr; Enrolled, holding the discovery data captured across the executive sessions.</p><div class="arch-chips"><span class="arch-chip">Prospect</span><span class="arch-chip">Family</span><span class="arch-chip">Stage</span></div></div>
       <div class="arch-mod"><div class="n">02</div><h5>Program Catalog</h5><p>Three tracks, each a sellable programme on the rate card.</p><div class="arch-chips"><span class="arch-chip">Medicine</span><span class="arch-chip">Com-AI</span><span class="arch-chip">Business</span></div></div>
-      <div class="arch-mod"><div class="n">03</div><h5>Pricing Engine</h5><p>Rate card (base ฿350,000) plus discount conditions Z001&ndash;Z003, applied as the best single discount.</p><div class="arch-chips"><span class="arch-chip">PR00 base</span><span class="arch-chip">Z001/2/3</span></div></div>
+      <div class="arch-mod"><div class="n">03</div><h5>Pricing Engine</h5><p>Rate card (base ฿350,000) plus discount rules SIBLING / GROUP / REFERRAL, applied as the best single discount.</p><div class="arch-chips"><span class="arch-chip">BASE tuition</span><span class="arch-chip">SIBLING / GROUP / REFERRAL</span></div></div>
       <div class="arch-mod"><div class="n">04</div><h5>Billing &amp; AR</h5><p>Invoice, payment terms, receivable, and the 3-level AR aging / dunning.</p><div class="arch-chips"><span class="arch-chip">Invoice</span><span class="arch-chip">Payment</span><span class="arch-chip">Aging</span></div></div>
       <div class="arch-mod"><div class="n">05</div><h5>Analytics</h5><p>Segmentation, gross-vs-net revenue, and the prospect &rarr; enrolled conversion funnel.</p><div class="arch-chips"><span class="arch-chip">Segments</span><span class="arch-chip">Gross/Net</span><span class="arch-chip">Funnel</span></div></div>
     </div>
@@ -639,7 +639,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="arch-sub">C · Data model · ER diagram</div>
     <div class="diagram-container">
       <div class="diagram-title">Entity-relationship · pricing &amp; AR schema</div>
-      <svg class="diagram-svg" viewBox="0 0 820 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ER diagram. Prospect one-to-many Enrollment. Program one-to-many Enrollment. PriceList one-to-many PricingCondition. Enrollment one-to-many Invoice. Invoice one-to-many Payment. Receivable equals Invoice minus Payment.">
+      <svg class="diagram-svg" viewBox="0 0 820 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ER diagram. Prospect one-to-many Enrollment. Program one-to-many Enrollment. PriceList one-to-many PricingRule. Enrollment one-to-many Invoice. Invoice one-to-many Payment. Receivable equals Invoice minus Payment.">
         <defs>
           <marker id="er-arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#888880"/></marker>
         </defs>
@@ -659,7 +659,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <g class="er-entity">
           <rect x="30" y="356" width="180" height="72" rx="6"/>
           <text class="er-title" x="44" y="380">PriceList</text>
-          <text class="er-field" x="44" y="402">id · PR00 base 350,000</text>
+          <text class="er-field" x="44" y="402">id · BASE tuition 350,000</text>
         </g>
         <g class="er-entity">
           <rect x="330" y="110" width="180" height="104" rx="6"/>
@@ -670,10 +670,10 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         </g>
         <g class="er-entity">
           <rect x="330" y="332" width="180" height="96" rx="6"/>
-          <text class="er-title" x="344" y="356">PricingCondition</text>
-          <text class="er-field" x="344" y="378">Z001 sibling &minus;50,000</text>
-          <text class="er-field" x="344" y="396">Z002 group &minus;75,000</text>
-          <text class="er-field" x="344" y="414">Z003 referral &minus;15..30k</text>
+          <text class="er-title" x="344" y="356">PricingRule</text>
+          <text class="er-field" x="344" y="378">SIBLING sibling &minus;50,000</text>
+          <text class="er-field" x="344" y="396">GROUP group &minus;75,000</text>
+          <text class="er-field" x="344" y="414">REFERRAL referral &minus;15..30k</text>
         </g>
         <g class="er-entity">
           <rect x="620" y="80" width="180" height="100" rx="6"/>
@@ -716,7 +716,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <button data-s="referral">Referral (example)</button>
       </div>
       <div class="arch-pf-flow">
-        <div class="arch-pf-node"><span class="t">Base · PR00</span><span class="v">฿350,000</span></div>
+        <div class="arch-pf-node"><span class="t">Base tuition</span><span class="v">฿350,000</span></div>
         <div class="arch-pf-arrow">&rarr;</div>
         <div class="arch-pf-node"><span class="t">Condition</span><span class="v" id="pfCond">none</span></div>
         <div class="arch-pf-arrow">&rarr;</div>
@@ -732,9 +732,9 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       var THB=function(n){return '฿'+n.toLocaleString('en-US');};
       var S={
         single:{cond:'none',net:350000,title:'Net price',cap:'Single enrolment: full base tuition, no discount.'},
-        group:{cond:'Z002 −฿75,000',net:975000,title:'Package total · 3',cap:'Group of 3 enrolling together: 350,000 + 350,000 + 275,000 = ฿975,000 (package total for 3, not per head). Z002 −฿75,000 lands on the 3rd enrolment.'},
-        sibling:{cond:'Z001 −฿50,000',net:300000,title:'Net price',cap:'Sibling already enrolled: 350,000 − 50,000 = ฿300,000 (Z001).'},
-        referral:{cond:'Z003 −฿20,000',net:330000,title:'Net price',cap:'Referral (example −฿20,000; range ฿15,000–30,000): 350,000 − 20,000 = ฿330,000 (Z003).'}
+        group:{cond:'GROUP −฿75,000',net:975000,title:'Package total · 3',cap:'Group of 3 enrolling together: 350,000 + 350,000 + 275,000 = ฿975,000 (package total for 3, not per head). GROUP −฿75,000 lands on the 3rd enrolment.'},
+        sibling:{cond:'SIBLING −฿50,000',net:300000,title:'Net price',cap:'Sibling already enrolled: 350,000 − 50,000 = ฿300,000 (SIBLING).'},
+        referral:{cond:'REFERRAL −฿20,000',net:330000,title:'Net price',cap:'Referral (example −฿20,000; range ฿15,000–30,000): 350,000 − 20,000 = ฿330,000 (REFERRAL).'}
       };
       r.querySelectorAll('.arch-pf-seg button').forEach(function(b){b.addEventListener('click',function(){
         r.querySelectorAll('.arch-pf-seg button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
@@ -847,7 +847,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <tr><th>#</th><th>Process Step</th><th>XeerSoft Module → Function</th></tr>
       </thead>
       <tbody>
-        <tr><td>1</td><td>Define multi-tier condition types</td><td><span class="xn-fn">Pricing › Condition Setup</span></td></tr>
+        <tr><td>1</td><td>Define multi-tier pricing rule types</td><td><span class="xn-fn">Pricing › Pricing Rule Setup</span></td></tr>
         <tr><td>2</td><td>Enter discount records per tier</td><td><span class="xn-fn">Pricing › Price / Discount List</span></td></tr>
         <tr><td>3</td><td>Pricing &rarr; Accounting integration</td><td><span class="xn-fn">Financial Accounting › Revenue Account Mapping</span></td></tr>
         <tr><td>4</td><td>Monitor AR open items per family</td><td><span class="xn-fn">Financial Accounting › AR Open Items</span></td></tr>
@@ -856,20 +856,20 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </tbody>
     </table>
 
-    <h3 class="content-h3">Functional Specification <em>Logic</em></h3>
+    <h3 class="content-h3">Functional Spec &amp; <em>Build Evidence</em></h3>
     <p class="content-p">
       The pricing and AR business rules I authored in the FSD and submitted to the XeerSoft development team.
     </p>
 
     <figure class="lx-code">
     <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FSD-P2 · pricing &amp; AR rules</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
-    <div class="code-block"><span class="comment">// FSD-P2-01 · Pricing conditions (best single discount, no stacking — TBC)</span>
+    <div class="code-block"><span class="comment">// FSD-P2-01 · Pricing rules (best single discount, no stacking — [TODO: Chatree to confirm])</span>
 <span class="keyword">ON</span> enrolment.price:
-   base = 350,000                       <span class="comment">// PR00 base tuition / yr</span>
-   <span class="keyword">Z001</span> sibling enrolled  → −50,000
-   <span class="keyword">Z002</span> cohort of 3      → −75,000     <span class="comment">// on the 3rd enrolment</span>
-   <span class="keyword">Z003</span> referral         → −15,000 … −30,000
-   discount = best_applicable           <span class="comment">// conditions do not stack</span>
+   base = 350,000                       <span class="comment">// BASE tuition / yr</span>
+   <span class="keyword">SIBLING</span> sibling enrolled  → −50,000
+   <span class="keyword">GROUP</span> cohort of 3      → −75,000     <span class="comment">// on the 3rd enrolment</span>
+   <span class="keyword">REFERRAL</span> referral         → −15,000 … −30,000
+   discount = best_applicable           <span class="comment">// pricing rules do not stack</span>
    net = base − discount                <span class="comment">// → Invoice + AR · GL 400300 contra</span>
 
 <span class="comment">// FSD-P2-02 · AR aging → dunning trigger</span>
@@ -915,10 +915,10 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
         <div data-p="a">
           <div class="xsim-grid">
             <div class="xsim-panel">
-              <p class="xsim-h">Applicable conditions</p>
-              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2sib"><span>Sibling already enrolled <small>Z001 &minus;฿50,000</small></span></label>
-              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2grp"><span>3rd of a group of 3 <small>Z002 &minus;฿75,000</small></span></label>
-              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2ref"><span>Referred by a family <small>Z003 &minus;฿15&ndash;30k</small></span></label>
+              <p class="xsim-h">Applicable pricing rules</p>
+              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2sib"><span>Sibling already enrolled <small>SIBLING &minus;฿50,000</small></span></label>
+              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2grp"><span>3rd of a group of 3 <small>GROUP &minus;฿75,000</small></span></label>
+              <label class="xsim-row" style="cursor:pointer"><input type="checkbox" id="p2ref"><span>Referred by a family <small>REFERRAL &minus;฿15&ndash;30k</small></span></label>
               <label>Referral amount</label>
               <select id="p2refamt"><option value="15000">฿15,000</option><option value="20000" selected>฿20,000</option><option value="25000">฿25,000</option><option value="30000">฿30,000</option></select>
             </div>
@@ -950,7 +950,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           </div>
         </div>
       </div>
-      <div class="xsim-cap">Conditions do not stack &mdash; the best single discount applies (assumption &middot; TBC). Z002 &minus;฿75,000 is the adjustment on the 3rd enrolment of a group of 3.</div>
+      <div class="xsim-cap">Pricing rules do not stack &mdash; the best single discount applies (assumption &middot; [TODO: Chatree to confirm]). GROUP &minus;฿75,000 is the adjustment on the 3rd enrolment of a group of 3.</div>
     </div>
     <script>
     (function(){
@@ -962,9 +962,9 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       var p2sib=root.querySelector('#p2sib'),p2grp=root.querySelector('#p2grp'),p2ref=root.querySelector('#p2ref'),p2refamt=root.querySelector('#p2refamt');
       function price(){
         var base=350000,cands=[];
-        if(p2sib.checked) cands.push({c:'Z001 sibling',d:50000});
-        if(p2grp.checked) cands.push({c:'Z002 group',d:75000});
-        if(p2ref.checked) cands.push({c:'Z003 referral',d:parseInt(p2refamt.value,10)});
+        if(p2sib.checked) cands.push({c:'SIBLING sibling',d:50000});
+        if(p2grp.checked) cands.push({c:'GROUP group',d:75000});
+        if(p2ref.checked) cands.push({c:'REFERRAL referral',d:parseInt(p2refamt.value,10)});
         var best={c:'none',d:0};
         cands.forEach(function(x){ if(x.d>best.d) best=x; });
         var net=base-best.d;
@@ -996,54 +996,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
       <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
-    </div>
-
-    <!-- DELIVERY & SCHEDULE -->
-    <div class="trk">
-    <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
-    <p class="content-p">How the project was actually run end-to-end: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
-
-    <div class="callout">
-      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
-      <p>Every month without a pricing system meant the owner re-deriving each family quote from scratch and inconsistent discounts leaking margin. The hardest schedule risk was the <b>open-ended discovery</b> of tacit knowledge (pricing logic that lived only in the owner’s head) which could have run indefinitely.</p>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Project timeline &middot; month-by-month</p>
-      <div class="trk-scroll"><div class="trk-gantt" style="--cols:13">
-        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
-        <div class="trk-row"><div class="trk-label">Discovery (48 exec sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:6" title="Discovery (48 exec sessions)">6 mo</span></div></div><div class="trk-row"><div class="trk-label">Pattern synthesis → 3 vars</div><div class="trk-track"><span class="trk-bar done" style="--s:7;--l:2" title="Pattern synthesis → 3 vars">2 mo</span></div></div><div class="trk-row"><div class="trk-label">FSD authoring</div><div class="trk-track"><span class="trk-bar done" style="--s:9;--l:2" title="FSD authoring">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Dev build + reviews</div><div class="trk-track"><span class="trk-bar done" style="--s:10;--l:2" title="Dev build + reviews">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT (4 sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:12;--l:1" title="UAT (4 sessions)">UAT</span></div></div><div class="trk-row"><div class="trk-label">Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:13;--l:1" title="Go-Live">LIVE</span></div></div>
-      </div></div>
-      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>Open-ended discovery: risk of never converging</b><p>Six months of weekly sessions could have continued forever without ever producing a buildable spec; tacit knowledge resists deadlines.<span class="res"> Resolved → I set a hard synthesis checkpoint at month 6, forced convergence to 3 measurable pricing variables, and only then opened the build phase, turning an infinite discovery into a finite spec.</span></p></div></div><div class="trk-flag warn"><span class="ic">⚠</span><div><b>Single-owner dependency</b><p>All pricing authority sat with one person; that is both the source of the tacit knowledge and a delivery bottleneck.<span class="res"> Resolved → Post Go-Live, admin staff can now generate accurate quotes from the system without the owner: the dependency was designed out.</span></p></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
-      <div class="trk-two">
-        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
-      </div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Weekly Agile cadence</p>
-      <div class="trk-week"><div class="trk-day"><div class="d">SUN</div><p>Executive pricing session (4 hr)</p></div><div class="trk-day"><div class="d">MON</div><p>Synthesise notes → variables</p></div><div class="trk-day"><div class="d">WED</div><p>FSD / build review with dev</p></div><div class="trk-day"><div class="d">THU</div><p>Test pricing scenarios</p></div><div class="trk-day"><div class="d">FRI</div><p>Log + sign-off</p></div></div>
-      <div class="trk-kpis"><div class="trk-kpi"><div class="v">48</div><div class="l">Weekly executive sessions</div></div><div class="trk-kpi"><div class="v">4</div><div class="l">UAT sessions (May 2024)</div></div><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">Dev build sync<span class="trk-confirm">confirm</span></div></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Stakeholder network &amp; RACI</p>
-      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>school owner / executive &middot; admin staff &middot; ~enrolled families &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA/Consultant</b></td><td class="cnt">1</td><td>Discovery, FSD, config, UAT lead</td><td class="raci">A / R</td></tr><tr><td><b>School owner</b></td><td class="cnt">1</td><td>Pricing decision authority; sponsor</td><td class="raci">A / C</td></tr><tr><td><b>Admin staff</b></td><td class="cnt">several</td><td>Generate quotes post Go-Live</td><td class="raci">I / R</td></tr><tr><td><b>Families</b></td><td class="cnt">many</td><td>Subjects of the pricing & AR</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built pricing/dunning logic from FSD</td><td class="raci">R</td></tr></tbody></table>
-      <p class="trk-note">A 12-month project sustained by one consultant volunteering for 48 Sunday sessions: I was the only person translating the owner’s tacit pricing logic into a system the whole admin team could run.</p>
-    </div>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
     </div>
 
     <h3 class="content-h3">Pricing <em>Configuration</em></h3>
@@ -1052,13 +1005,13 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </p>
 
     <figure class="lx-code">
-    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft · pricing condition config</span><span class="lx-code-lang">parameters</span></figcaption>
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">XeerSoft · pricing rule config</span><span class="lx-code-lang">parameters</span></figcaption>
     <div class="code-block"><span class="comment">// PRICING CONDITION TYPES (XeerSoft Pricing Module)</span>
-<span class="keyword">PR00</span> Base Tuition     = ฿350,000 / year
-<span class="keyword">Z001</span> Family / Sibling = −฿50,000         ← sibling already enrolled
-<span class="keyword">Z002</span> Group / Cohort   = −฿75,000         ← 3 together, on the 3rd
-<span class="keyword">Z003</span> Referral         = −฿15,000 … −฿30,000
-   <span class="comment">// conditions do not stack — best single discount applies (TBC)</span>
+<span class="keyword">BASE</span> Base Tuition     = ฿350,000 / year
+<span class="keyword">SIBLING</span> Family / Sibling = −฿50,000         ← sibling already enrolled
+<span class="keyword">GROUP</span> Group / Cohort   = −฿75,000         ← 3 together, on the 3rd
+<span class="keyword">REFERRAL</span> Referral         = −฿15,000 … −฿30,000
+   <span class="comment">// pricing rules do not stack — best single discount applies [TODO: Chatree to confirm]</span>
 
 <span class="comment">// PAYMENT TERMS</span>
 <span class="keyword">NT30</span>   Net 30 days
@@ -1071,26 +1024,26 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     → GL 110100  Student AR (Customer open item)</div>
     </figure>
 
-    <h3 class="content-h3">Pricing <em>Condition Records</em></h3>
-    <p class="content-p">The pricing model as condition records: a base tuition plus three discount conditions. Conditions do not stack &mdash; the best single discount applies (assumption, TBC).</p>
+    <h3 class="content-h3">Pricing <em>Pricing Rule Records</em></h3>
+    <p class="content-p">The pricing model as pricing rule records: a base tuition plus three discount rules. Pricing rules do not stack &mdash; the best single discount applies (assumption, [TODO: Chatree to confirm]).</p>
 
     <div class="exh">
-      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; condition records per author &middot; original XeerSoft master data under NDA &middot; referral shown as a range.</div>
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; pricing rule records per author &middot; original XeerSoft master data under NDA &middot; referral shown as a range.</div>
       <div class="exh-body">
         <table class="exh-table">
           <thead><tr><th>Code</th><th>Condition</th><th>Logic</th><th>Value</th><th>Posts to</th></tr></thead>
           <tbody>
-            <tr><td class="sku">PR00</td><td>Base tuition</td><td>Rate card · per year</td><td class="res">฿350,000</td><td class="res">CR 400100 revenue</td></tr>
-            <tr><td class="sku">Z001</td><td>Family / sibling</td><td>Sibling already enrolled</td><td class="res"><span class="neg">−฿50,000</span></td><td class="res">GL 400300 contra-rev</td></tr>
-            <tr><td class="sku">Z002</td><td>Group / cohort</td><td>3 enrolling together</td><td class="res"><span class="neg">−฿75,000</span> <span class="exh-muted">on the 3rd</span></td><td class="res">GL 400300 contra-rev</td></tr>
-            <tr><td class="sku">Z003</td><td>Referral</td><td>Referred by a family</td><td class="res"><span class="neg">−฿15,000 … −฿30,000</span></td><td class="res">GL 400300 contra-rev</td></tr>
+            <tr><td class="sku">BASE</td><td>Base tuition</td><td>Rate card · per year</td><td class="res">฿350,000</td><td class="res">CR 400100 revenue</td></tr>
+            <tr><td class="sku">SIBLING</td><td>Family / sibling</td><td>Sibling already enrolled</td><td class="res"><span class="neg">−฿50,000</span></td><td class="res">GL 400300 contra-rev</td></tr>
+            <tr><td class="sku">GROUP</td><td>Group / cohort</td><td>3 enrolling together</td><td class="res"><span class="neg">−฿75,000</span> <span class="exh-muted">on the 3rd</span></td><td class="res">GL 400300 contra-rev</td></tr>
+            <tr><td class="sku">REFERRAL</td><td>Referral</td><td>Referred by a family</td><td class="res"><span class="neg">−฿15,000 … −฿30,000</span></td><td class="res">GL 400300 contra-rev</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="exh-foot">Posting per priced contract: <b>DR 110100</b> Student AR · <b>CR 400100</b> Tuition Revenue · <b>DR 400300</b> Discount (contra, negative). Conditions do not stack; best single discount applies (TBC). Earlier commitment / academic flags retired (no supporting data). Payment terms: NT30 · INST2 (50/50) · INST4 (25×4).</div>
+      <div class="exh-foot">Posting per priced contract: <b>DR 110100</b> Student AR · <b>CR 400100</b> Tuition Revenue · <b>DR 400300</b> Discount (contra, negative). Pricing rules do not stack; best single discount applies [TODO: Chatree to confirm]. Earlier commitment / academic flags retired (no supporting data). Payment terms: NT30 · INST2 (50/50) · INST4 (25×4).</div>
     </div>
 
-    <h3 class="content-h3">UAT <em>Validation</em></h3>
+    <h3 class="content-h3">Validation <em>Outcome</em></h3>
     <p class="content-p">
       Conducted <strong>4 UAT sessions in May 2024</strong> across multiple family profiles and edge cases: verified system behaviour against business rules for every scenario from single-child standard to 4-child advanced track with mixed payment terms.
     </p>
@@ -1176,7 +1129,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
 
     <!-- UAT · SUB-UNIT TEST SPECIFICATION -->
     <div class="uat" id="uat">
-    <h3 class="content-h3">UAT &middot; <em>Sub-Unit Test Specification</em></h3>
+    <h3 class="content-h3">Validation, UAT &amp; <em>Defect Control</em></h3>
     <p class="content-p">I did not sign off the build as one pass/fail. I decomposed the <strong>pricing + receivables scope</strong> into <strong>10 sub-unit tests</strong>, each run as a <strong>manual test case of ~10 ordered steps validated against 5 complex conditions</strong>, with one written <strong>specific assurance</strong> per sub-unit (the exact thing the test guarantees). This is the breakdown behind the <strong>4 UAT sessions in May 2024</strong> noted above &mdash; the part that is easy to claim and hard to show.</p>
 
     <div class="callout">
@@ -1188,24 +1141,24 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     <div class="uat-flag">
       <div class="uat-flag-top">
         <span class="uat-tid">UT-P2-01</span>
-        <span class="uat-flag-name">Pricing procedure &middot; condition technique (4-child advanced-track family)</span>
+        <span class="uat-flag-name">Pricing rule set &middot; pricing rule resolution (4-child advanced-track family)</span>
         <span class="uat-pass">PASS &middot; cycle 2 (after fix)</span>
       </div>
-      <p class="uat-flag-meta">Role: <b>Billing / AR</b> &middot; tied to the live UAT blocker above &mdash; a 4-child family where the <b>sibling discount was not applied to the 3rd and 4th child</b>. This is the procedure that surfaced it: resolving the correct net price per child through the condition technique end-to-end into AR.</p>
+      <p class="uat-flag-meta">Role: <b>Billing / AR</b> &middot; tied to the live UAT blocker above &mdash; a 4-child family where the <b>sibling discount was not applied to the 3rd and 4th child</b>. This is the procedure that surfaced it: resolving the correct net price per child through the pricing rule resolution end-to-end into AR.</p>
       <div class="uat-cols">
         <div>
           <p class="uat-sub">Manual procedure &middot; 10 steps</p>
           <ol class="uat-steps">
             <li>Log in as <b>Billing</b> role; open the family (customer) master for a <b>4-child advanced-track</b> household with mixed payment terms.</li>
-            <li>Confirm the <b>pricing procedure</b> is assigned to the sales area / document type for tuition billing.</li>
-            <li>Trace the <b>access sequence</b> &mdash; from most specific (per child / sibling rank) down to the base rate-card record.</li>
-            <li>Verify the condition records <span class="uat-tc">VK11</span> exist for base tuition, sibling tiers and the advanced-track surcharge.</li>
-            <li>Create the billing document; let the procedure resolve <b>one condition record per child</b> via the access sequence.</li>
-            <li>Confirm the <b>base tuition</b> condition is picked for every child before discounts apply.</li>
+            <li>Confirm the <b>pricing rule set</b> is assigned to the tuition-billing context and document profile for tuition billing.</li>
+            <li>Trace the <b>rule priority</b> &mdash; from most specific (per child / sibling rank) down to the base rate-card record.</li>
+            <li>Verify the pricing rule records <span class="uat-tc">Rate card setup</span> exist for base tuition, sibling tiers and the advanced-track surcharge.</li>
+            <li>Create the billing document; let the procedure resolve <b>one pricing rule record per child</b> via the rule priority.</li>
+            <li>Confirm the <b>base tuition</b> rule is picked for every child before discounts apply.</li>
             <li>Confirm the <b>sibling-discount tier</b> steps up correctly for the 1st &rarr; 4th child (not capped at the 2nd).</li>
             <li>Confirm the <b>advanced-track surcharge</b> stacks on top of the discounted base in the right sequence.</li>
             <li>Read the resulting <b>net price per child</b>; reconcile the four line totals to the priced contract.</li>
-            <li>Release to accounting; confirm each line bills to <b>AR</b> <span class="uat-tc">FBL5N</span> with the correct net amount and due date per that child's payment term.</li>
+            <li>Post to accounting; confirm each line bills to <b>AR</b> <span class="uat-tc">AR open-items view</span> with the correct net amount and due date per that child's payment term.</li>
           </ol>
         </div>
         <div>
@@ -1221,7 +1174,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
       </div>
       <div class="uat-assure">
         <div class="lab">&#9670; Specific assurance</div>
-        <p>Guarantees the <b>access sequence resolves the correct condition record per child</b>, that discounts, surcharges and overrides combine in the right priority (override &gt; surcharge &gt; tiered discount &gt; base), and that <b>every line bills to AR with the correct net amount and due date</b>. A sibling tier that fails to step up past the 2nd child is <b>caught at pricing, not after invoicing</b> &mdash; the exact failure mode caught in UAT cycle 1 and closed as <span style="color:var(--u-accent);font-family:'JetBrains Mono',monospace">DEF-P2-01</span>.</p>
+        <p>Guarantees the <b>rule priority resolves the correct pricing rule record per child</b>, that discounts, surcharges and overrides combine in the right priority (override &gt; surcharge &gt; tiered discount &gt; base), and that <b>every line bills to AR with the correct net amount and due date</b>. A sibling tier that fails to step up past the 2nd child is <b>caught at pricing, not after invoicing</b> &mdash; the exact failure mode caught in UAT cycle 1 and closed as <span style="color:var(--u-accent);font-family:'JetBrains Mono',monospace">DEF-P2-01</span>.</p>
       </div>
     </div>
 
@@ -1229,19 +1182,19 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     <div class="uat-reg">
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P2-01</span><span class="uat-unit-name">Pricing procedure &middot; condition technique</span><span class="uat-tag"><b>10</b> steps</span><span class="uat-tag">flagship</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P2-01</span><span class="uat-unit-name">Pricing rule set &middot; pricing rule resolution</span><span class="uat-tag"><b>10</b> steps</span><span class="uat-tag">flagship</span></div>
         <ul class="uat-ucond">
-          <li>Access sequence resolves the right record <b>per child</b></li>
+          <li>Rule priority resolves the right record <b>per child</b></li>
           <li><b>Sibling tier steps up to the 3rd &amp; 4th child</b></li>
           <li>Advanced-track surcharge stacks in correct sequence</li>
           <li>Override / scholarship wins via exclusion group</li>
           <li>Mixed terms post each line to the right due date</li>
         </ul>
-        <div class="uat-ua"><b>Assurance:</b> detailed above &mdash; the condition technique derives the correct net price per child and every line bills to AR with the right amount and due date. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P2-01</span></div>
+        <div class="uat-ua"><b>Assurance:</b> detailed above &mdash; the pricing rule resolution derives the correct net price per child and every line bills to AR with the right amount and due date. <span class="ok">PASS</span> &middot; after <span style="font-family:'JetBrains Mono',monospace;color:var(--u-accent)">DEF-P2-01</span></div>
       </div>
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P2-02</span><span class="uat-unit-name">Condition records <span class="uat-tc">VK11</span> &middot; tiered sibling / volume discount</span><span class="uat-tag"><b>9</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P2-02</span><span class="uat-unit-name">Pricing rule records <span class="uat-tc">Rate card setup</span> &middot; tiered sibling / volume discount</span><span class="uat-tag"><b>9</b> steps</span></div>
         <ul class="uat-ucond">
           <li>Validity dates and scale bands maintained correctly</li>
           <li>1st &rarr; 4th child each pick the right discount tier</li>
@@ -1257,8 +1210,8 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
         <ul class="uat-ucond">
           <li>Billing doc carries the resolved net price intact</li>
           <li>One invoice per family with a line per child</li>
-          <li>Discount / surcharge conditions printed transparently</li>
-          <li>Release to accounting generates the AR posting</li>
+          <li>Discount / surcharge rules printed transparently</li>
+          <li>Post to accounting generates the AR posting</li>
           <li>Cancellation reverses the invoice and the AR line</li>
         </ul>
         <div class="uat-ua"><b>Assurance:</b> the invoice is a faithful render of the pricing result &mdash; no figure changes between procedure and printed document, and a cancellation fully reverses to AR. <span class="ok">PASS</span></div>
@@ -1301,7 +1254,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
       </div>
 
       <div class="uat-unit">
-        <div class="uat-unit-head"><span class="uat-tid">UT-P2-07</span><span class="uat-unit-name">AR aging <span class="uat-tc">FBL5N</span></span><span class="uat-tag"><b>8</b> steps</span></div>
+        <div class="uat-unit-head"><span class="uat-tid">UT-P2-07</span><span class="uat-unit-name">AR aging <span class="uat-tc">AR open-items view</span></span><span class="uat-tag"><b>8</b> steps</span></div>
         <ul class="uat-ucond">
           <li><b>Buckets age on the net due date</b>, not document date</li>
           <li>Mixed-term siblings age into the right buckets</li>
@@ -1354,7 +1307,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     <div class="uat-panel">
       <div class="uat-tl-head"><span></span><span class="sc"><span>Day 1</span><span>Day 8</span><span>Day 16</span></span><span></span></div>
       <div style="--days:16">
-        <div class="uat-tl-row"><span class="uat-tl-lab">Pricing + condition records <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:1;--l:3">3d</span></div><span class="uat-tl-days">UT-01&#8211;02</span></div>
+        <div class="uat-tl-row"><span class="uat-tl-lab">Pricing + pricing rule records <small>(defect)</small></span><div class="uat-tl-track"><span class="uat-tl-bar warn" style="--s:1;--l:3">3d</span></div><span class="uat-tl-days">UT-01&#8211;02</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Billing doc &amp; AR posting</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:3;--l:2">2d</span></div><span class="uat-tl-days">UT-03&#8211;04</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Credit-limit check</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:5;--l:2">2d</span></div><span class="uat-tl-days">UT-05</span></div>
         <div class="uat-tl-row"><span class="uat-tl-lab">Dunning multi-level</span><div class="uat-tl-track"><span class="uat-tl-bar" style="--s:6;--l:2">2d</span></div><span class="uat-tl-days">UT-06</span></div>
@@ -1378,8 +1331,8 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
             <td><b>UT-01</b> pricing</td>
             <td>Sibling discount <b>not applied to the 3rd and 4th child</b> &mdash; only the 2nd child got a tier.</td>
             <td><span class="uat-sev high">HIGH</span></td>
-            <td>Access sequence picked the wrong (2-child) condition tier and never stepped up beyond it.</td>
-            <td>Re-ordered the access sequence and added a dedicated <b>3rd / 4th-child tier key</b> so each sibling resolves its own record.</td>
+            <td>Rule priority picked the wrong (2-child) condition tier and never stepped up beyond it.</td>
+            <td>Re-ordered the rule priority and added a dedicated <b>3rd / 4th-child tier key</b> so each sibling resolves its own record.</td>
             <td class="uat-d">3</td>
             <td><span class="uat-fixed">&#10003; PASS</span></td>
           </tr>
@@ -1430,7 +1383,12 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
     </div>
     </div>
 
-    <h3 class="content-h3">Tools <em>& Technologies</em></h3>
+    <h3 class="content-h3">Measured <em>Results</em></h3>
+    <p class="content-p">
+      The outcome was a pricing and receivables model that turned tacit owner judgment into repeatable system logic. Pricing decision time moved from <strong>480 min to 15 min</strong>, average days overdue from <strong>42 days to 12 days</strong>, and AR collection rate from <strong>78% to 96%</strong>. Those are the same audited results shown in the executive KPI cards and Power BI exhibit above.
+    </p>
+
+    <h3 class="content-h3">Tools &amp; <em>Deliverables</em></h3>
     <div class="module-tags">
       <span class="module-tag">XeerSoft Pricing Module</span>
       <span class="module-tag">XeerSoft AR Module</span>
@@ -1443,7 +1401,54 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
       <span class="module-tag">Excel · Pivot Tables</span>
     </div>
 
-    <h3 class="content-h3">Key <em>Insight</em></h3>
+    <!-- DELIVERY & SCHEDULE -->
+    <div class="trk">
+    <h3 class="content-h3">Delivery <em>Timeline</em></h3>
+    <p class="content-p">How the project was actually run end-to-end after the consulting work above: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
+
+    <div class="callout">
+      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
+      <p>Every month without a pricing system meant the owner re-deriving each family quote from scratch and inconsistent discounts leaking margin. The hardest schedule risk was the <b>open-ended discovery</b> of tacit knowledge (pricing logic that lived only in the owner’s head) which could have run indefinitely.</p>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Project timeline &middot; month-by-month</p>
+      <div class="trk-scroll"><div class="trk-gantt" style="--cols:13">
+        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
+        <div class="trk-row"><div class="trk-label">Discovery (48 exec sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:6" title="Discovery (48 exec sessions)">6 mo</span></div></div><div class="trk-row"><div class="trk-label">Pattern synthesis → 3 vars</div><div class="trk-track"><span class="trk-bar done" style="--s:7;--l:2" title="Pattern synthesis → 3 vars">2 mo</span></div></div><div class="trk-row"><div class="trk-label">FSD authoring</div><div class="trk-track"><span class="trk-bar done" style="--s:9;--l:2" title="FSD authoring">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Dev build + reviews</div><div class="trk-track"><span class="trk-bar done" style="--s:10;--l:2" title="Dev build + reviews">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT (4 sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:12;--l:1" title="UAT (4 sessions)">UAT</span></div></div><div class="trk-row"><div class="trk-label">Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:13;--l:1" title="Go-Live">LIVE</span></div></div>
+      </div></div>
+      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Schedule risk &amp; recovery</p>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>Open-ended discovery: risk of never converging</b><p>Six months of weekly sessions could have continued forever without ever producing a buildable spec; tacit knowledge resists deadlines.<span class="res"> Resolved → I set a hard synthesis checkpoint at month 6, forced convergence to 3 measurable pricing variables, and only then opened the build phase, turning an infinite discovery into a finite spec.</span></p></div></div><div class="trk-flag warn"><span class="ic">⚠</span><div><b>Single-owner dependency</b><p>All pricing authority sat with one person; that is both the source of the tacit knowledge and a delivery bottleneck.<span class="res"> Resolved → Post Go-Live, admin staff can now generate accurate quotes from the system without the owner: the dependency was designed out.</span></p></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Spec design → developer handoff → build verification</p>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-two">
+        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Weekly Agile cadence</p>
+      <div class="trk-week"><div class="trk-day"><div class="d">SUN</div><p>Executive pricing session (4 hr)</p></div><div class="trk-day"><div class="d">MON</div><p>Synthesise notes → variables</p></div><div class="trk-day"><div class="d">WED</div><p>FSD / build review with dev</p></div><div class="trk-day"><div class="d">THU</div><p>Test pricing scenarios</p></div><div class="trk-day"><div class="d">FRI</div><p>Log + sign-off</p></div></div>
+      <div class="trk-kpis"><div class="trk-kpi"><div class="v">48</div><div class="l">Weekly executive sessions</div></div><div class="trk-kpi"><div class="v">4</div><div class="l">UAT sessions (May 2024)</div></div><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">Dev build sync<span class="trk-confirm">confirm</span></div></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Stakeholder network &amp; RACI</p>
+      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>school owner / executive &middot; admin staff &middot; ~enrolled families &middot; remote XeerSoft dev team</b></div>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA/Consultant</b></td><td class="cnt">1</td><td>Discovery, FSD, config, UAT lead</td><td class="raci">A / R</td></tr><tr><td><b>School owner</b></td><td class="cnt">1</td><td>Pricing decision authority; sponsor</td><td class="raci">A / C</td></tr><tr><td><b>Admin staff</b></td><td class="cnt">several</td><td>Generate quotes post Go-Live</td><td class="raci">I / R</td></tr><tr><td><b>Families</b></td><td class="cnt">many</td><td>Subjects of the pricing & AR</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built pricing/dunning logic from FSD</td><td class="raci">R</td></tr></tbody></table>
+      <p class="trk-note">A 12-month project sustained by one consultant volunteering for 48 Sunday sessions: I was the only person translating the owner’s tacit pricing logic into a system the whole admin team could run.</p>
+    </div>
+    </div>
+
+    <h3 class="content-h3">Consultant <em>Takeaway</em></h3>
     <p class="content-p">
       The biggest learning was that <strong>BA work isn't just documenting what people say: it's pattern recognition over time</strong>. The owner couldn't have told me the three pricing variables on day one because she didn't consciously know them. The model emerged from observing 48 sessions and looking for the invariants underneath case-by-case decisions.
     </p>

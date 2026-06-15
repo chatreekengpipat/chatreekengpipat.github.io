@@ -345,7 +345,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           <a href="project4.html">STEM Portfolio Financial Tracking</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">My SAP Specification Design</div>
+          <div class="nav-dd-head">My ERP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
         </div>
         <div class="nav-dd-group">
@@ -357,7 +357,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
         </div>
         <div class="nav-dd-group">
-          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <div class="nav-dd-head">Engineering Design &amp; ERP · MMTh</div>
           <a href="project5.html">FPDU Assist Device · PHEV</a>
         </div>
       </div>
@@ -579,7 +579,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       @media (prefers-reduced-motion: reduce){.p3imp-rost-row.bumped{animation:none}}
     </style>
 
-    <h3 class="content-h3">The <em>Brief</em></h3>
+    <h3 class="content-h3">Business Context &amp; <em>Problem</em></h3>
     <p class="content-p">
       The school runs a <strong>Star Reward loyalty programme</strong>: supervisors award <strong>stars</strong> to students for behaviour, participation and achievement, and the school turns accumulated stars into <strong>certificates and prizes</strong> that keep students motivated to learn (a Starbucks-style loyalty loop, applied to education). My remit on <strong>XeerSoft Cloud ERP</strong> was to help <strong>design, build, harden and roll out</strong> the system that runs it: the Commendation workflow, rank tiers, parent notifications over LINE, and a <strong>bulk Excel import</strong> so staff can award stars at school scale.
     </p>
@@ -589,7 +589,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </p>
 
     <!-- ================= WHAT I HELPED BUILD ================= -->
-    <h3 class="content-h3">What I Helped <em>Build</em></h3>
+    <h3 class="content-h3">My Role &amp; <em>Accountability</em></h3>
     <p class="content-p">
       The programme lives inside a <strong>School Management</strong> workspace on XeerSoft Cloud ERP. I worked across two modules: <strong>Activity</strong> (the Star Reward / Commendation engine) and a companion <strong>Leave &amp; Online&nbsp;Learning</strong> module, with the Commendation list as the daily driver for every supervisor.
     </p>
@@ -689,7 +689,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </div>
 
     <!-- ================= THE RECOGNITION LOOP ================= -->
-    <h3 class="content-h3">The Recognition <em>Loop</em></h3>
+    <h3 class="content-h3">Solution Design · <em>Recognition Loop</em></h3>
     <p class="content-p">
       A commendation is never just a number. Awarding stars also <strong>writes the reason, notifies the student and their parent over LINE, and re-computes the rank</strong> — closing the loop between the classroom and home. Each message has <strong>two LINE targets</strong> (student + parent), and delivery is tracked per target.
     </p>
@@ -736,7 +736,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </p>
 
     <!-- ================= BULK STAR IMPORT ================= -->
-    <h3 class="content-h3">Bulk Star <em>Import</em></h3>
+    <h3 class="content-h3">Solution Design · <em>Bulk Star Import</em></h3>
     <p class="content-p">
       The feature I'm most proud of designing. Awarding stars one student at a time is fine for a single class, but at school scale a supervisor might log <strong>hundreds of stars after an event, a term, or a competition</strong>. Clicking ＋ on each student, one by one, doesn't scale. So I designed a <strong>single standard Excel format</strong> that every staff member uses to import stars in bulk — straight into the Cloud ERP.
     </p>
@@ -959,7 +959,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     })();
     </script>
 
-    <h3 class="content-h3">The <em>Critical Defect</em></h3>
+    <h3 class="content-h3">Validation Risk · <em>Critical Defect</em></h3>
     <div class="callout">
       <div class="callout-title">DEF-001 · Entry-level blocker found Cycle 1</div>
       <p><strong>Symptom:</strong> Bulk star-point assignment to multiple students simultaneously was non-functional: only the first student received points; all others were silently skipped.</p>
@@ -1057,7 +1057,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </svg>
     </div>
 
-    <h3 class="content-h3">UAT <em>Build Cycle Results</em></h3>
+    <h3 class="content-h3">Validation Outcome · <em>Build Cycles</em></h3>
     <p class="content-p">
       I structured UAT into 5 build cycles, each with explicit entry criteria, test scenarios, and exit gates. The defect log was the central artifact: every defect tracked from <strong>OPEN → IN-DEV → RETEST → RESOLVED</strong> with reproduction steps, severity, and regression test status.
     </p>
@@ -1112,7 +1112,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </table>
 
     <!-- XEERSOFT-NATIVE: MODULE FLOW + DATA MODEL + FSD -->
-    <h3 class="content-h3">Defect <em>Log</em></h3>
+    <h3 class="content-h3">Validation Evidence · <em>Defect Log</em></h3>
     <p class="content-p">The central UAT artifact: every defect tracked with ID, area, severity, the cycle it surfaced in, and status. DEF-001 (the silent bulk-assign failure) was the entry blocker; the rest span the validation scope below.</p>
 
     <div class="exh">
@@ -1151,7 +1151,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </tbody>
     </table>
 
-    <h3 class="content-h3">Functional <em>Data Model</em></h3>
+    <h3 class="content-h3">Functional Spec &amp; <em>Data Model</em></h3>
     <p class="content-p">
       The logical entities I specified for the loyalty module in the FSD: field design defined by me, physical implementation by the development team.
     </p>
@@ -1185,7 +1185,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </tbody>
     </table>
 
-    <h3 class="content-h3">Specified <em>Fix Logic</em> · DEF-001</h3>
+    <h3 class="content-h3">Functional Spec &amp; <em>Fix Logic</em> · DEF-001</h3>
     <p class="content-p">
       My defect report specified the corrected expected behaviour for the bulk-assignment routine: it must iterate over <strong>every</strong> selected student, not stop after the first.
     </p>
@@ -1274,54 +1274,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
       <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>: owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or an SAP reviewer.</p>
-    </div>
-
-    <!-- DELIVERY & SCHEDULE -->
-    <div class="trk">
-    <h3 class="content-h3">Delivery &amp; <em>Schedule</em></h3>
-    <p class="content-p">How the project was actually run end-to-end: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
-
-    <div class="callout">
-      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
-      <p>Go-Live was tied to the <b>January academic term</b>: the reward programme had to launch with the term to be meaningful. At Cycle 1 the project carried <b>11 go-live blockers</b> including the critical DEF-001 bulk-assign defect, directly threatening that fixed date.</p>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Project timeline &middot; month-by-month</p>
-      <div class="trk-scroll"><div class="trk-gantt" style="--cols:8">
-        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div></div></div>
-        <div class="trk-row"><div class="trk-label">Onboarding + acceptance criteria</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Onboarding + acceptance criteria">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT Cycle 1 · DEF-001 found</div><div class="trk-track"><span class="trk-bar warn" style="--s:2;--l:1" title="UAT Cycle 1 · DEF-001 found">C1 ⚠</span></div></div><div class="trk-row"><div class="trk-label">Cycles 2–4 · blocker burn-down</div><div class="trk-track"><span class="trk-bar recover" style="--s:3;--l:3" title="Cycles 2–4 · blocker burn-down">C2–4</span></div></div><div class="trk-row"><div class="trk-label">Cycle 5 + regression + sign-off</div><div class="trk-track"><span class="trk-bar done" style="--s:6;--l:2" title="Cycle 5 + regression + sign-off">C5</span></div></div><div class="trk-row"><div class="trk-label">Go-Live (academic term)</div><div class="trk-track"><span class="trk-bar live" style="--s:8;--l:1" title="Go-Live (academic term)">LIVE</span></div></div>
-      </div></div>
-      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>11 go-live blockers threatened the Jan date</b><p>The bulk-assignment defect (DEF-001) failed silently and 11 P1 blockers stood between the build and a usable launch with only months of runway.<span class="res"> Resolved → I severity-triaged every defect, ran 5 iterative UAT cycles, and drove blockers 7 → 2 → 2 → 0, clearing all of them by Cycle 4 and hitting the January Go-Live with <span class="res">zero critical post-launch incidents</span>.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Silent-failure class of bug</b><p>DEF-001 produced no error message, the hardest type to catch and the kind that would have surfaced months into production.<span class="res"> Resolved → I made multi-select / negative-path testing a mandatory entry gate, so the same failure class is caught at Cycle 1, not in production.</span></p></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
-      <div class="trk-two">
-        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
-      </div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Weekly Agile cadence</p>
-      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>Plan cycle scope + entry criteria</p></div><div class="trk-day"><div class="d">TUE</div><p>Execute test cases (incl. edge)</p></div><div class="trk-day"><div class="d">WED</div><p>Log defects: repro + severity</p></div><div class="trk-day"><div class="d">THU</div><p>Dev fixes → retest + regression</p></div><div class="trk-day"><div class="d">FRI</div><p>Cycle exit gate / sign-off</p></div></div>
-      <div class="trk-kpis"><div class="trk-kpi"><div class="v">5</div><div class="l">UAT build cycles</div></div><div class="trk-kpi"><div class="v">60</div><div class="l">Defects tracked</div></div><div class="trk-kpi"><div class="v">11 → 0</div><div class="l">Go-Live blockers cleared</div></div></div>
-    </div>
-
-    <div class="trk-card xnative-section">
-      <p class="trk-h">Stakeholder network &amp; RACI</p>
-      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>50+ UAT participants &middot; teachers (assign) &middot; students (redeem) &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA + UAT Lead</b></td><td class="cnt">1</td><td>Acceptance criteria, defect mgmt, sign-off</td><td class="raci">A / R</td></tr><tr><td><b>UAT participants</b></td><td class="cnt">50+</td><td>Executed test scenarios across branches</td><td class="raci">R</td></tr><tr><td><b>Teachers</b></td><td class="cnt">many</td><td>Assign stars; primary operators</td><td class="raci">I / R</td></tr><tr><td><b>Students</b></td><td class="cnt">50+</td><td>Redeem rewards; end beneficiaries</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Fixed DEF-001 + built custom logic</td><td class="raci">R</td></tr></tbody></table>
-      <p class="trk-note">I joined mid-build and became the single owner of quality, coordinating 50+ testers and the dev team across 5 cycles. The DEF-001 catch alone changed whether this launched working or broken.</p>
-    </div>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
     </div>
 
     <h3 class="content-h3">Validation <em>Scope</em></h3>
@@ -1415,7 +1368,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <!-- UAT · SUB-UNIT TEST SPECIFICATION -->
     <div class="uat" id="uat">
-    <h3 class="content-h3">UAT &middot; <em>Sub-Unit Test Specification</em></h3>
+    <h3 class="content-h3">Validation, UAT &amp; <em>Defect Control</em></h3>
     <p class="content-p">The 5 build cycles and ~60 defects shown above are the summary view. This is the granular decomposition <strong>behind</strong> them: I broke the loyalty scope into <strong>10 sub-unit tests</strong>, each run as a <strong>manual procedure of ~10 ordered steps validated against 5 complex conditions</strong>, with one written <strong>specific assurance</strong> per sub-unit (the exact thing the test guarantees). As UAT Lead I ran these by hand across the cycles; the steps, conditions and defect rows below are representative of the documented Jira log.</p>
 
     <div class="callout">
@@ -1670,7 +1623,12 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </div>
     </div>
 
-    <h3 class="content-h3">Tools <em>& Technologies</em></h3>
+    <h3 class="content-h3">Measured <em>Results</em></h3>
+    <p class="content-p">
+      The measurable result was a controlled UAT burn-down rather than a lucky launch. Across <strong>5 build cycles</strong>, I tracked <strong>60 defects</strong>, drove go-live blockers from <strong>11 to 0</strong>, managed <strong>10 regressions</strong>, and reached <strong>zero critical post-launch incidents</strong>. The blocker trend moved <strong>7 &rarr; 2 &rarr; 2 &rarr; 0 &rarr; 0</strong>, with defect reduction up to <strong>37.5%</strong>.
+    </p>
+
+    <h3 class="content-h3">Tools &amp; <em>Deliverables</em></h3>
     <div class="module-tags">
       <span class="module-tag">XeerSoft CRM Module</span>
       <span class="module-tag">Custom Loyalty Logic</span>
@@ -1685,7 +1643,54 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <span class="module-tag">Regression Test Suite</span>
     </div>
 
-    <h3 class="content-h3">Key <em>Insight</em></h3>
+    <!-- DELIVERY & SCHEDULE -->
+    <div class="trk">
+    <h3 class="content-h3">Delivery <em>Timeline</em></h3>
+    <p class="content-p">How the project was actually run end-to-end after the consulting work above: the timeline and where it was at risk, how I specified the build for the developers and verified it, the weekly Agile cadence, and the stakeholder network I coordinated as the single point of accountability.</p>
+
+    <div class="callout">
+      <div class="callout-title">⏱ Schedule stakes &middot; why the date mattered</div>
+      <p>Go-Live was tied to the <b>January academic term</b>: the reward programme had to launch with the term to be meaningful. At Cycle 1 the project carried <b>11 go-live blockers</b> including the critical DEF-001 bulk-assign defect, directly threatening that fixed date.</p>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Project timeline &middot; month-by-month</p>
+      <div class="trk-scroll"><div class="trk-gantt" style="--cols:8">
+        <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div></div></div>
+        <div class="trk-row"><div class="trk-label">Onboarding + acceptance criteria</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Onboarding + acceptance criteria">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT Cycle 1 · DEF-001 found</div><div class="trk-track"><span class="trk-bar warn" style="--s:2;--l:1" title="UAT Cycle 1 · DEF-001 found">C1 ⚠</span></div></div><div class="trk-row"><div class="trk-label">Cycles 2–4 · blocker burn-down</div><div class="trk-track"><span class="trk-bar recover" style="--s:3;--l:3" title="Cycles 2–4 · blocker burn-down">C2–4</span></div></div><div class="trk-row"><div class="trk-label">Cycle 5 + regression + sign-off</div><div class="trk-track"><span class="trk-bar done" style="--s:6;--l:2" title="Cycle 5 + regression + sign-off">C5</span></div></div><div class="trk-row"><div class="trk-label">Go-Live (academic term)</div><div class="trk-track"><span class="trk-bar live" style="--s:8;--l:1" title="Go-Live (academic term)">LIVE</span></div></div>
+      </div></div>
+      <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Schedule risk &amp; recovery</p>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>11 go-live blockers threatened the Jan date</b><p>The bulk-assignment defect (DEF-001) failed silently and 11 P1 blockers stood between the build and a usable launch with only months of runway.<span class="res"> Resolved → I severity-triaged every defect, ran 5 iterative UAT cycles, and drove blockers 7 → 2 → 2 → 0, clearing all of them by Cycle 4 and hitting the January Go-Live with <span class="res">zero critical post-launch incidents</span>.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Silent-failure class of bug</b><p>DEF-001 produced no error message, the hardest type to catch and the kind that would have surfaced months into production.<span class="res"> Resolved → I made multi-select / negative-path testing a mandatory entry gate, so the same failure class is caught at Cycle 1, not in production.</span></p></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Spec design → developer handoff → build verification</p>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-two">
+        <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Weekly Agile cadence</p>
+      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>Plan cycle scope + entry criteria</p></div><div class="trk-day"><div class="d">TUE</div><p>Execute test cases (incl. edge)</p></div><div class="trk-day"><div class="d">WED</div><p>Log defects: repro + severity</p></div><div class="trk-day"><div class="d">THU</div><p>Dev fixes → retest + regression</p></div><div class="trk-day"><div class="d">FRI</div><p>Cycle exit gate / sign-off</p></div></div>
+      <div class="trk-kpis"><div class="trk-kpi"><div class="v">5</div><div class="l">UAT build cycles</div></div><div class="trk-kpi"><div class="v">60</div><div class="l">Defects tracked</div></div><div class="trk-kpi"><div class="v">11 → 0</div><div class="l">Go-Live blockers cleared</div></div></div>
+    </div>
+
+    <div class="trk-card xnative-section">
+      <p class="trk-h">Stakeholder network &amp; RACI</p>
+      <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>50+ UAT participants &middot; teachers (assign) &middot; students (redeem) &middot; remote XeerSoft dev team</b></div>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA + UAT Lead</b></td><td class="cnt">1</td><td>Acceptance criteria, defect mgmt, sign-off</td><td class="raci">A / R</td></tr><tr><td><b>UAT participants</b></td><td class="cnt">50+</td><td>Executed test scenarios across branches</td><td class="raci">R</td></tr><tr><td><b>Teachers</b></td><td class="cnt">many</td><td>Assign stars; primary operators</td><td class="raci">I / R</td></tr><tr><td><b>Students</b></td><td class="cnt">50+</td><td>Redeem rewards; end beneficiaries</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Fixed DEF-001 + built custom logic</td><td class="raci">R</td></tr></tbody></table>
+      <p class="trk-note">I joined mid-build and became the single owner of quality, coordinating 50+ testers and the dev team across 5 cycles. The DEF-001 catch alone changed whether this launched working or broken.</p>
+    </div>
+    </div>
+
+    <h3 class="content-h3">Consultant <em>Takeaway</em></h3>
     <p class="content-p">
       The biggest takeaway: <strong>UAT isn't just confirming what works: it's hunting for what fails silently</strong>. The bulk-assignment bug would have been invisible in production for months because there was no error message. Finding it required deliberately testing the <em>edge case</em> (multi-student selection) rather than the happy path (single student). Every UAT plan I write now starts with "what could fail without anyone noticing?"
     </p>
