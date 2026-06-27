@@ -6064,16 +6064,33 @@ nav.scrolled {
   }
 }
 
-/* Mobile */
+/* Mobile — size the headline so the longest word ("KENGPIPAT", 9 ultra-black
+   caps) always fits the viewport. The old 14vw/12.5vw preferred value scaled up
+   too fast: at 360px it resolved to ~50px, overflowing the screen and dragging
+   the whole hero column (and the desc paragraph) off the right edge. */
 @media (max-width: 768px) {
+  /* Keep the headline and its column from ever exceeding the viewport, so a
+     wide word can't blow out the flex column and clip the paragraph. */
+  .ck-signature { max-width: 100%; }
+  .hero-v7-left { width: 100%; max-width: 100% !important; min-width: 0; }
+
   .ck-signature__line {
-    font-size: clamp(2.6rem, 14vw, 4.4rem) !important;
-    letter-spacing: -0.052em;
+    font-size: clamp(2.1rem, 11vw, 3.5rem) !important;
+    letter-spacing: -0.05em;
+    max-width: 100%;
   }
 
+  /* "KENGPIPAT" is two chars longer than "CHATREE" — size it a touch smaller so
+     both lines clear the right edge together. */
   .ck-signature__line--blue {
-    font-size: clamp(2.35rem, 12.5vw, 4rem) !important;
+    font-size: clamp(1.85rem, 9.4vw, 3.1rem) !important;
   }
+}
+
+/* Small phones (≤380px): tighten once more so 320–375px devices never clip. */
+@media (max-width: 380px) {
+  .ck-signature__line { font-size: clamp(1.95rem, 10.2vw, 2.9rem) !important; }
+  .ck-signature__line--blue { font-size: clamp(1.7rem, 8.7vw, 2.6rem) !important; }
 }
 
 /* =====================================================
