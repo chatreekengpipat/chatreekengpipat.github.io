@@ -51,6 +51,10 @@
 .mv-figs{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
 .mv-figs .mv-fig{margin:0}
 @media(max-width:680px){.mv-tracks,.mv-figs{grid-template-columns:1fr}}
+/* Collapse the two-column hero (title | photo+spec table) to a single stack on
+   phones/small tablets — the inline 1.4fr/1fr override above otherwise beats the
+   global mobile rule, squeezing the title and spec table into tiny columns. */
+@media(max-width:900px){.project-hero-grid{grid-template-columns:1fr}.mv-hero-main{justify-content:flex-start}}
 /* generic key-value param grid */
 .mv-params{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem;margin:1.2rem 0}
 .mv-param{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:.6rem .8rem}
