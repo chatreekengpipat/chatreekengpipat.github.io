@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functional Module of Finance — SAP FI · Tax · PTTEP</title>
+<meta name="description" content="An interactive study page for an SAP FI Tax consultant role on the Accenture/PTTEP project: SAP FI essentials and the tax engine, where an FI Tax consultant sits, and why PTTEP petroleum tax is special. Personal study aid built for active recall.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --abyss: #0A1A1F;
+    --deep: #0F262B;
+    --steel: #1C3D44;
+    --gas: #2BD9C4;   /* SAP / system / data */
+    --flare: #FF6B35; /* tax flowing to the State */
+    --gold: #E8B04B;  /* value / baht / revenue */
+    --mist: #D7E2DF;  /* body */
+    --haze: #8AA09B;  /* captions */
+    --royalty: #caa23e;
+    --srb: #e8843a;
+    --rail-w: 232px;
+    --display: 'Space Grotesk', system-ui, sans-serif;
+    --body: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--abyss);
+    color: var(--mist);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(43, 217, 196, 0.06), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(255, 107, 53, 0.05), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; }
+  p { margin: 0 0 1rem; }
+  a { color: var(--gas); }
+
+  .mono { font-family: var(--mono); }
+  .tcode {
+    font-family: var(--mono);
+    font-weight: 500;
+    color: var(--gas);
+    background: rgba(43, 217, 196, 0.09);
+    border: 1px solid rgba(43, 217, 196, 0.28);
+    border-radius: 5px;
+    padding: 0.05em 0.42em;
+    font-size: 0.88em;
+    white-space: nowrap;
+  }
+
+  /* ---------- Focus visibility ---------- */
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--gas);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--gas);
+    color: var(--abyss);
+    padding: 0.7rem 1.1rem;
+    z-index: 200;
+    font-family: var(--mono);
+    font-weight: 600;
+    border-radius: 0 0 8px 0;
+  }
+  .skip:focus { left: 0; }
+
+  /* ---------- Left nav rail ---------- */
+  .rail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--rail-w);
+    height: 100vh;
+    background: linear-gradient(180deg, var(--deep), var(--abyss));
+    border-right: 1px solid var(--steel);
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem 1.1rem;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .rail__brand {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--haze);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .rail__title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.04rem;
+    color: var(--mist);
+    margin-bottom: 1.6rem;
+    line-height: 1.25;
+  }
+  .rail__title b { color: var(--gas); font-weight: 700; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+  .rail__link {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--haze);
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border-left: 2px solid transparent;
+    font-size: 0.9rem;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .rail__link .num { font-family: var(--mono); font-size: 0.74rem; color: var(--steel); transition: color 0.2s; }
+  .rail__link:hover { color: var(--mist); background: rgba(43, 217, 196, 0.05); }
+  .rail__link.is-active {
+    color: var(--mist);
+    background: rgba(43, 217, 196, 0.09);
+    border-left-color: var(--gas);
+  }
+  .rail__link.is-active .num { color: var(--gas); }
+  .rail__back {
+    margin-top: auto;
+    padding-top: 1.4rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--haze);
+    text-decoration: none;
+  }
+  .rail__back:hover { color: var(--gas); }
+
+  /* ---------- Main ---------- */
+  main { margin-left: var(--rail-w); }
+  .chapter {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 5.5rem 2.5rem 4rem;
+    border-bottom: 1px solid rgba(28, 61, 68, 0.5);
+  }
+  .chapter:first-child { padding-top: 4rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gas);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gas); box-shadow: 0 0 12px var(--gas); }
+  .chapter h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 0.6rem; }
+  .lede { font-size: 1.12rem; color: var(--mist); max-width: 62ch; }
+  .caption { color: var(--haze); font-size: 0.92rem; }
+
+  .card {
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 14px;
+    padding: 1.3rem 1.4rem;
+  }
+  .grid { display: grid; gap: 1rem; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 720px) { .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ---------- 00 Module map ---------- */
+  .modmap {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.7rem;
+    margin: 1.6rem 0 0.5rem;
+  }
+  @media (max-width: 560px) { .modmap { grid-template-columns: repeat(2, 1fr); } }
+  .mod {
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 11px;
+    padding: 1rem 0.7rem;
+    text-align: center;
+    transition: opacity 0.35s, transform 0.35s, border-color 0.25s, background 0.25s;
+    font: inherit;
+    color: inherit;
+    cursor: default;
+  }
+  .mod .code { font-family: var(--mono); font-weight: 600; font-size: 1.25rem; color: var(--mist); display: block; }
+  .mod .name { font-size: 0.74rem; color: var(--haze); margin-top: 0.2rem; display: block; }
+  .mod--fi {
+    cursor: pointer;
+    border-color: rgba(43, 217, 196, 0.45);
+    background: rgba(43, 217, 196, 0.06);
+  }
+  .mod--fi .code { color: var(--gas); }
+  .mod--fi:hover { transform: translateY(-3px); border-color: var(--gas); }
+  .mod--fi::after {
+    content: 'click ▸';
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--gas);
+    display: block;
+    margin-top: 0.4rem;
+    letter-spacing: 0.1em;
+  }
+  .modmap.is-fi-focus .mod:not(.mod--fi) { opacity: 0.22; transform: scale(0.96); }
+  .modmap.is-fi-focus .mod--fi {
+    transform: scale(1.06);
+    border-color: var(--gas);
+    box-shadow: 0 0 0 1px var(--gas), 0 0 38px rgba(43, 217, 196, 0.3);
+  }
+  .modmap.is-fi-focus .mod--fi::after { content: 'click to close ▾'; }
+
+  .subledgers {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.4s;
+  }
+  .subledgers.is-open { max-height: 420px; opacity: 1; }
+  @media (max-width: 560px) { .subledgers { grid-template-columns: repeat(2, 1fr); } }
+  .sub {
+    background: var(--abyss);
+    border: 1px dashed var(--steel);
+    border-radius: 9px;
+    padding: 0.8rem 0.6rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--haze);
+  }
+  .sub.is-here {
+    border-style: solid;
+    border-color: var(--flare);
+    background: rgba(255, 107, 53, 0.08);
+    color: var(--mist);
+  }
+  .sub.is-here .pin { display: block; color: var(--flare); font-size: 0.72rem; margin-top: 0.35rem; }
+  .sub .pin { display: none; }
+
+  /* ---------- Flip cards ---------- */
+  .flip-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.4rem 0; }
+  @media (max-width: 640px) { .flip-row { grid-template-columns: 1fr; } }
+  .flip {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    perspective: 1200px;
+    min-height: 230px;
+    display: block;
+    width: 100%;
+  }
+  .flip__inner {
+    position: relative;
+    width: 100%;
+    min-height: 230px;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .flip.is-flipped .flip__inner { transform: rotateY(180deg); }
+  .flip__face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 14px;
+    border: 1px solid var(--steel);
+    background: var(--deep);
+    padding: 1.3rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .flip__face--back { transform: rotateY(180deg); background: #0c2024; border-color: rgba(43, 217, 196, 0.4); }
+  .flip__tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); }
+  .flip__big { font-family: var(--display); font-size: 2.4rem; font-weight: 700; color: var(--gold); margin: 0.4rem 0; }
+  .flip__hint { margin-top: auto; font-family: var(--mono); font-size: 0.68rem; color: var(--haze); }
+  .flip ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
+  .flip li { margin-bottom: 0.4rem; font-size: 0.92rem; }
+  .mnemonic {
+    margin-top: 0.5rem;
+    border-left: 3px solid var(--gold);
+    padding: 0.7rem 1rem;
+    background: rgba(232, 176, 75, 0.06);
+    border-radius: 0 8px 8px 0;
+    font-size: 1.02rem;
+  }
+
+  /* ---------- Tabs ---------- */
+  .tablist { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 1.4rem 0 1rem; }
+  .tab {
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: var(--haze);
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 9px;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .tab[aria-selected="true"] { color: var(--abyss); background: var(--gas); border-color: var(--gas); font-weight: 600; }
+  .tabpanel[hidden] { display: none; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--steel); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); font-weight: 500; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .note {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--haze);
+    border-left: 2px solid var(--steel);
+    padding-left: 0.9rem;
+  }
+  .saythis {
+    margin-top: 1rem;
+    border: 1px dashed rgba(43, 217, 196, 0.4);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    background: rgba(43, 217, 196, 0.04);
+    font-style: italic;
+  }
+  .saythis b { font-style: normal; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; margin-bottom: 0.3rem; }
+
+  /* ---------- Value chain selector ---------- */
+  .vc-seg { display: flex; gap: 0; margin: 1.4rem 0 1rem; border: 1px solid var(--steel); border-radius: 11px; overflow: hidden; }
+  .vc-seg button {
+    flex: 1;
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--haze);
+    background: var(--deep);
+    border: 0;
+    border-right: 1px solid var(--steel);
+    padding: 0.8rem 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+  }
+  .vc-seg button:last-child { border-right: 0; }
+  .vc-seg button[aria-pressed="true"] { color: var(--abyss); background: var(--gold); font-weight: 600; }
+  .vc-detail { min-height: 150px; }
+  .vc-detail h3 { color: var(--gold); }
+  .taglist { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    border-radius: 7px;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--steel);
+  }
+  .tag .scope { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; margin-left: 0.4rem; }
+  .tag--up { border-color: rgba(43, 217, 196, 0.5); color: var(--gas); background: rgba(43, 217, 196, 0.07); }
+  .tag--down { border-color: rgba(255, 107, 53, 0.5); color: var(--flare); background: rgba(255, 107, 53, 0.07); }
+  .tag--all { border-color: rgba(232, 176, 75, 0.5); color: var(--gold); background: rgba(232, 176, 75, 0.07); }
+
+  .callout {
+    border: 1px solid var(--flare);
+    border-left-width: 4px;
+    border-radius: 0 12px 12px 0;
+    background: rgba(255, 107, 53, 0.07);
+    padding: 1.1rem 1.3rem;
+    margin: 1.8rem 0;
+  }
+  .callout .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--flare); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+
+  /* ---------- Waterfall ---------- */
+  .waterfall-wrap { margin: 2rem 0 1rem; }
+  .counters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.3rem; }
+  .counter {
+    border: 1px solid var(--steel);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    background: var(--deep);
+  }
+  .counter .clabel { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--haze); }
+  .counter .cval { font-family: var(--display); font-weight: 700; font-size: 2.5rem; line-height: 1.1; margin-top: 0.2rem; }
+  .counter--state .cval { color: var(--flare); }
+  .counter--net .cval { color: var(--gas); }
+
+  .wbar {
+    display: flex;
+    width: 100%;
+    height: 64px;
+    border-radius: 11px;
+    overflow: hidden;
+    border: 1px solid var(--steel);
+    background: var(--abyss);
+  }
+  .wseg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--abyss);
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.7s cubic-bezier(0.45, 0.05, 0.2, 1);
+  }
+  .wseg--royalty { background: var(--royalty); }
+  .wseg--srb { background: var(--srb); }
+  .wseg--pita { background: var(--flare); }
+  .wseg--net { background: var(--gas); }
+  .wseg .wlbl { opacity: 0; transition: opacity 0.4s 0.3s; padding: 0 0.3rem; }
+  .wseg.show .wlbl { opacity: 1; }
+
+  .wcontrols { display: flex; gap: 0.7rem; margin-top: 1.1rem; flex-wrap: wrap; align-items: center; }
+  .btn {
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    padding: 0.6rem 1.2rem;
+    border-radius: 9px;
+    cursor: pointer;
+    border: 1px solid var(--steel);
+    background: var(--deep);
+    color: var(--mist);
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  }
+  .btn:hover { border-color: var(--gas); }
+  .btn:active { transform: translateY(1px); }
+  .btn--primary { background: var(--flare); border-color: var(--flare); color: #1a0a04; font-weight: 600; }
+  .btn--primary:hover { filter: brightness(1.08); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .wstep-label { font-family: var(--mono); font-size: 0.82rem; color: var(--haze); }
+
+  /* ---------- Layer expanders ---------- */
+  .layers { margin-top: 1.8rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .layer { border: 1px solid var(--steel); border-radius: 11px; background: var(--deep); overflow: hidden; }
+  .layer__btn {
+    width: 100%;
+    font: inherit;
+    text-align: left;
+    background: none;
+    border: 0;
+    color: var(--mist);
+    padding: 0.95rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .layer__btn .lname { font-family: var(--display); font-weight: 600; font-size: 1.05rem; }
+  .layer__btn .lname .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 0.6rem; vertical-align: middle; }
+  .layer__btn .chev { font-family: var(--mono); color: var(--gas); transition: transform 0.3s; }
+  .layer__btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .layer__body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .layer__body.is-open { max-height: 320px; }
+  .layer__body-inner { padding: 0 1.2rem 1.1rem; }
+  .layer__body dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0; font-size: 0.92rem; }
+  .layer__body dt { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gas); }
+  .layer__body dd { margin: 0; }
+  @media (max-width: 560px) { .layer__body dl { grid-template-columns: 1fr; gap: 0.1rem 0; } .layer__body dd { margin-bottom: 0.6rem; } }
+
+  .closing {
+    margin-top: 1.8rem;
+    border-top: 1px solid var(--steel);
+    padding-top: 1.2rem;
+    font-size: 1.04rem;
+  }
+  .closing b { color: var(--gold); }
+
+  /* ---------- Flashcards ---------- */
+  .deck { margin-top: 1.5rem; }
+  .fcard {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    cursor: pointer;
+    perspective: 1400px;
+    display: block;
+  }
+  .fcard__inner {
+    position: relative;
+    width: 100%;
+    min-height: 250px;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .fcard.is-flipped .fcard__inner { transform: rotateY(180deg); }
+  .fcard__face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--steel);
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .fcard__face--q { background: var(--deep); }
+  .fcard__face--a { background: linear-gradient(160deg, #0c2024, #0a1c20); border-color: rgba(43, 217, 196, 0.45); transform: rotateY(180deg); }
+  .fcard__kind { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.8rem; }
+  .fcard__face--q .fcard__kind { color: var(--gold); }
+  .fcard__face--a .fcard__kind { color: var(--gas); }
+  .fcard__text { font-family: var(--display); font-size: 1.25rem; font-weight: 500; line-height: 1.4; }
+  .fcard__face--a .fcard__text { font-size: 1.1rem; color: var(--mist); }
+  .fcard__hint { margin-top: 1rem; font-family: var(--mono); font-size: 0.68rem; color: var(--haze); }
+
+  .deck-bar { display: flex; align-items: center; gap: 1rem; margin-top: 1.1rem; }
+  .deck-bar .count { font-family: var(--mono); font-size: 0.85rem; color: var(--haze); min-width: 64px; }
+  .progress { flex: 1; height: 6px; border-radius: 99px; background: var(--steel); overflow: hidden; }
+  .progress span { display: block; height: 100%; background: var(--gas); width: 12.5%; transition: width 0.35s ease; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-left: var(--rail-w);
+    padding: 2.5rem;
+    max-width: 880px;
+    margin-right: auto;
+  }
+  footer .foot-inner { font-size: 0.82rem; color: var(--haze); }
+  footer .sources { font-family: var(--mono); font-size: 0.74rem; margin-top: 0.6rem; line-height: 1.7; }
+
+  /* ---------- Mobile rail → top strip ---------- */
+  @media (max-width: 900px) {
+    .rail {
+      position: sticky;
+      width: auto;
+      height: auto;
+      flex-direction: column;
+      padding: 0.8rem 1rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--steel);
+    }
+    .rail__title { display: none; }
+    .rail__brand { margin-bottom: 0.6rem; }
+    .rail ol {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 0.4rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .rail ol::-webkit-scrollbar { display: none; }
+    .rail__link { border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; padding: 0.4rem 0.6rem; }
+    .rail__link.is-active { border-left: 0; border-bottom-color: var(--gas); }
+    .rail__link .name { display: none; }
+    .rail__link .num { font-size: 0.85rem; }
+    .rail__back { margin-top: 0.5rem; padding-top: 0; }
+    main, footer { margin-left: 0; }
+    .chapter { padding: 3rem 1.3rem 2.5rem; }
+  }
+
+  @media (max-width: 380px) {
+    .chapter { padding: 2.4rem 1rem 2rem; }
+    .counter .cval { font-size: 2rem; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- LEFT NAV RAIL -->
+<nav class="rail" aria-label="Chapter navigation">
+  <a class="rail__brand" href="index.html">← Chatree · Portfolio</a>
+  <div class="rail__title">Functional Module of <b>Finance</b><br>SAP FI · Tax · PTTEP</div>
+  <ol>
+    <li><a class="rail__link" href="#hero" data-spy><span class="num">00</span><span class="name">Where you stand</span></a></li>
+    <li><a class="rail__link" href="#essentials" data-spy><span class="num">01</span><span class="name">FI &amp; tax engine</span></a></li>
+    <li><a class="rail__link" href="#scope" data-spy><span class="num">02</span><span class="name">Your scope</span></a></li>
+    <li><a class="rail__link" href="#pttep" data-spy><span class="num">03</span><span class="name">PTTEP petroleum tax</span></a></li>
+    <li><a class="rail__link" href="#recall" data-spy><span class="num">04</span><span class="name">Lock it in</span></a></li>
+  </ol>
+  <a class="rail__back" href="index.html">Back to portfolio →</a>
+</nav>
+
+<main id="main">
+
+  <!-- 00 HERO -->
+  <section class="chapter" id="hero">
+    <div class="eyebrow"><span class="dot"></span>00 · Where you stand</div>
+    <h2>Every module posts to <span style="color:var(--gas)">FI</span>.</h2>
+    <p class="lede">Materials, sales, production, payroll — whatever happens in SAP, the financial truth lands in <b>FI (Financial Accounting)</b>: the external, statutory, tax-facing ledger. CO is the internal mirror. You are joining the <b>Tax &amp; Special Products</b> area of FI.</p>
+    <p class="caption">Click (or focus + press Enter on) the <span class="tcode">FI</span> card to see where you sit.</p>
+
+    <div class="modmap" id="modmap">
+      <div class="mod"><span class="code">MM</span><span class="name">Materials Mgmt</span></div>
+      <div class="mod"><span class="code">SD</span><span class="name">Sales &amp; Distribution</span></div>
+      <div class="mod"><span class="code">PP</span><span class="name">Production Planning</span></div>
+      <div class="mod"><span class="code">CO</span><span class="name">Controlling (internal)</span></div>
+      <button type="button" class="mod mod--fi" id="fiCard" aria-expanded="false" aria-controls="subledgers">
+        <span class="code">FI</span><span class="name">Financial Accounting</span>
+      </button>
+      <div class="mod"><span class="code">AA</span><span class="name">Asset Accounting</span></div>
+      <div class="mod"><span class="code">HCM</span><span class="name">Human Capital</span></div>
+      <div class="mod"><span class="code">PS</span><span class="name">Project System</span></div>
+    </div>
+
+    <div class="subledgers" id="subledgers" aria-hidden="true">
+      <div class="sub">FI-GL<br><span style="font-size:.62rem">General Ledger</span></div>
+      <div class="sub">FI-AP<br><span style="font-size:.62rem">Payable</span></div>
+      <div class="sub">FI-AR<br><span style="font-size:.62rem">Receivable</span></div>
+      <div class="sub">FI-AA<br><span style="font-size:.62rem">Asset Acct.</span></div>
+      <div class="sub is-here">Tax &amp; Special Products<span class="pin">📍 You are here</span></div>
+    </div>
+  </section>
+
+  <!-- 01 ESSENTIALS -->
+  <section class="chapter" id="essentials">
+    <div class="eyebrow"><span class="dot"></span>01 · FI essentials &amp; the tax engine</div>
+    <h2>The ledger, then the two taxes you configure.</h2>
+    <p class="lede">FI breaks into sub-ledgers that all roll up into the General Ledger. As a Tax consultant you live mostly in <b>FI-GL</b> plus the tax engine that sits on top of postings.</p>
+
+    <div class="grid grid-3" style="margin-top:1.4rem">
+      <div class="card">
+        <div class="flip__tag">FI-GL</div>
+        <h3 style="margin:.4rem 0 .3rem">General Ledger</h3>
+        <p class="caption">The single source of statutory truth. Every sub-ledger and module posts here. GL master records live in <span class="tcode">FS00</span>.</p>
+      </div>
+      <div class="card">
+        <div class="flip__tag">FI-AP</div>
+        <h3 style="margin:.4rem 0 .3rem">Accounts Payable</h3>
+        <p class="caption">What you owe vendors. Vendor invoice = <span class="tcode">FB60</span>; outgoing payment = <span class="tcode">F-53</span>. Input VAT &amp; WHT attach here.</p>
+      </div>
+      <div class="card">
+        <div class="flip__tag">FI-AR</div>
+        <h3 style="margin:.4rem 0 .3rem">Accounts Receivable</h3>
+        <p class="caption">What customers owe you. Customer invoice = <span class="tcode">FB70</span>. Output VAT attaches here; open items &amp; dunning live here.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">The two taxes an FI consultant configures</h3>
+    <p class="caption">Tap a card (or focus + Space/Enter) to flip it.</p>
+    <div class="flip-row">
+      <div class="flip" id="flipVAT" role="button" tabindex="0" aria-pressed="false" aria-label="VAT card, activate to flip">
+        <div class="flip__inner">
+          <div class="flip__face flip__face--front">
+            <div class="flip__tag">VAT · Tax on Sales/Purchases</div>
+            <div class="flip__big">7%</div>
+            <div>Output VAT &minus; Input VAT. A consumption tax you collect on sales and reclaim on purchases; net is remitted to the State.</div>
+            <div class="flip__hint">flip for config ▸</div>
+          </div>
+          <div class="flip__face flip__face--back">
+            <div class="flip__tag">VAT — how it's built</div>
+            <ul>
+              <li>Tax codes defined in <span class="tcode">FTXP</span></li>
+              <li>Account determination in <span class="tcode">OB40</span></li>
+              <li>Thai calculation procedure <span class="tcode">TAXTH</span></li>
+              <li>Filed monthly on <span class="tcode">PP30</span></li>
+            </ul>
+            <div class="flip__hint">◂ flip back</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip" id="flipWHT" role="button" tabindex="0" aria-pressed="false" aria-label="Withholding tax card, activate to flip">
+        <div class="flip__inner">
+          <div class="flip__face flip__face--front">
+            <div class="flip__tag">Extended Withholding Tax</div>
+            <div class="flip__big" style="font-size:1.5rem;line-height:1.2">Tax held back<br>at payment</div>
+            <div>You withhold a slice of a vendor payment and remit it to the Revenue Department on their behalf. Always use <b>Extended</b> WHT.</div>
+            <div class="flip__hint">flip for config ▸</div>
+          </div>
+          <div class="flip__face flip__face--back">
+            <div class="flip__tag">WHT — how it's built</div>
+            <ul>
+              <li>WHT <b>Type</b> + <b>Code</b> (define + link in SPRO)</li>
+              <li>Assigned on the vendor/customer master</li>
+              <li>Filed on <span class="tcode">PND 3</span> / <span class="tcode">53</span> / <span class="tcode">54</span></li>
+              <li>Use <b>Extended</b>, never Classic</li>
+            </ul>
+            <div class="flip__hint">◂ flip back</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <b>Mnemonic —</b> <b style="color:var(--gold)">VAT</b> = price marked <i>up</i> (collect → remit); <b style="color:var(--gold)">WHT</b> = payment held <i>back</i>.
+    </div>
+  </section>
+
+  <!-- 02 SCOPE -->
+  <section class="chapter" id="scope">
+    <div class="eyebrow"><span class="dot"></span>02 · Your scope — FI Tax consultant</div>
+    <h2>What you configure, when you operate, how you frame it.</h2>
+    <p class="lede">Three views of the role: the things you set up, the project phases you support, and the honest bridge from your XeerSoft delivery to SAP language.</p>
+
+    <div class="tablist" role="tablist" aria-label="Scope views">
+      <button type="button" class="tab" role="tab" id="tab-cfg" aria-controls="panel-cfg" aria-selected="true">CONFIGURE</button>
+      <button type="button" class="tab" role="tab" id="tab-ops" aria-controls="panel-ops" aria-selected="false" tabindex="-1">OPERATE</button>
+      <button type="button" class="tab" role="tab" id="tab-bridge" aria-controls="panel-bridge" aria-selected="false" tabindex="-1">XEERSOFT BRIDGE</button>
+    </div>
+
+    <div class="tabpanel" id="panel-cfg" role="tabpanel" aria-labelledby="tab-cfg" tabindex="0">
+      <table>
+        <thead><tr><th>What</th><th>Where</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Tax codes (VAT in/out)</td><td><span class="tcode">FTXP</span></td><td>Rate, type, target accounts under <span class="tcode">TAXTH</span></td></tr>
+          <tr><td>Tax account determination</td><td><span class="tcode">OB40</span></td><td>Which GL account each tax transaction key posts to</td></tr>
+          <tr><td>WHT types &amp; codes</td><td>SPRO</td><td>Extended WHT; assigned on vendor/customer master</td></tr>
+          <tr><td>Special / tax GL master</td><td><span class="tcode">FS00</span></td><td>The GL accounts the tax engine posts into</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tabpanel" id="panel-ops" role="tabpanel" aria-labelledby="tab-ops" tabindex="0" hidden>
+      <table>
+        <thead><tr><th>Phase</th><th>What happens</th><th>Your focus</th></tr></thead>
+        <tbody>
+          <tr><td>Realize / Test</td><td>Config built &amp; unit/integration tested</td><td>You join late-Realize — understand what's configured</td></tr>
+          <tr><td>Cutover</td><td>Master data &amp; open items migrated</td><td>Support tax-relevant cutover &amp; validation</td></tr>
+          <tr><td>Go-live</td><td>System runs in production</td><td>Watch first live tax postings</td></tr>
+          <tr><td>Hypercare</td><td>Intensive post-go-live support</td><td>Triage tax/posting issues with the team</td></tr>
+        </tbody>
+      </table>
+      <p class="note">You arrive late in Realize. The job is to <b>understand what's already configured and support test &amp; cutover</b> — not to redesign the tax solution.</p>
+    </div>
+
+    <div class="tabpanel" id="panel-bridge" role="tabpanel" aria-labelledby="tab-bridge" tabindex="0" hidden>
+      <table>
+        <thead><tr><th>Your XeerSoft delivery</th><th>Maps to SAP concept</th></tr></thead>
+        <tbody>
+          <tr><td>POS-to-accounting auto posting</td><td>Automatic account determination + tax posting (<span class="tcode">OB40</span>)</td></tr>
+          <tr><td>GL mapping</td><td>Tax GL configuration</td></tr>
+          <tr><td>AR open-item &amp; dunning</td><td>FI-AR open items + output VAT</td></tr>
+          <tr><td>Multi-branch consolidation</td><td>Company-code structure</td></tr>
+        </tbody>
+      </table>
+      <div class="saythis">
+        <b>Say it this way</b>
+        XeerSoft isn't SAP — but I've delivered the same <i>concepts</i> end-to-end on a real ERP: automatic tax posting, GL mapping, AR open items, multi-branch structure. I bring concept understanding plus full-lifecycle delivery experience; I haven't configured the Thai tax procedure on SAP, and I won't claim I have.
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 PTTEP -->
+  <section class="chapter" id="pttep">
+    <div class="eyebrow"><span class="dot"></span>03 · PTTEP — why petroleum tax is special</div>
+    <h2>Upstream oil &amp; gas is taxed under its own Act.</h2>
+    <p class="lede">PTTEP is the <b>upstream</b> arm of the PTT group — Exploration &amp; Production. Upstream is not taxed like a normal company; it carries a stack of petroleum-specific levies. Pick a stage of the value chain to see who sits there and which taxes apply.</p>
+
+    <div class="vc-seg" role="group" aria-label="PTT value chain stage">
+      <button type="button" data-vc="up" aria-pressed="true">Upstream</button>
+      <button type="button" data-vc="mid" aria-pressed="false">Midstream</button>
+      <button type="button" data-vc="down" aria-pressed="false">Downstream</button>
+    </div>
+    <div class="card vc-detail" id="vcDetail" aria-live="polite"></div>
+
+    <!-- Excise callout -->
+    <div class="callout">
+      <div class="label">⚠ Critical distinction — do not conflate</div>
+      <p style="margin:0"><b>Excise / สรรพสามิตน้ำมัน</b> applies to <b>downstream</b> refined products (diesel, gasoline) at refineries/retail — GC, Thai Oil, IRPC, OR. It is <b>NOT</b> a PTTEP tax. <b>PITA</b> covers <b>upstream</b> E&amp;P only; downstream companies pay normal <b>CIT 20%</b>. Excise ≠ PTTEP.</p>
+    </div>
+
+    <!-- SIGNATURE WATERFALL -->
+    <h3 style="margin-top:2.2rem">The petroleum tax waterfall</h3>
+    <p class="caption">Start at ฿100 of company net. Press <b>Drain ▸</b> to peel off each layer the State takes.</p>
+
+    <div class="waterfall-wrap">
+      <div class="counters">
+        <div class="counter counter--state">
+          <div class="clabel">State take</div>
+          <div class="cval"><span id="stateVal">0</span><span style="font-size:1.3rem">฿</span></div>
+        </div>
+        <div class="counter counter--net">
+          <div class="clabel">Company net</div>
+          <div class="cval"><span id="netVal">100</span><span style="font-size:1.3rem">฿</span></div>
+        </div>
+      </div>
+
+      <div class="wbar" id="wbar" role="img" aria-label="Petroleum profit split between State take and company net">
+        <div class="wseg wseg--royalty" id="segRoyalty" style="width:0%"><span class="wlbl">Royalty 12</span></div>
+        <div class="wseg wseg--srb" id="segSRB" style="width:0%"><span class="wlbl">SRB 15</span></div>
+        <div class="wseg wseg--pita" id="segPITA" style="width:0%"><span class="wlbl">PITA 40</span></div>
+        <div class="wseg wseg--net" id="segNet" style="width:100%"><span class="wlbl show">Net 100</span></div>
+      </div>
+
+      <div class="wcontrols">
+        <button type="button" class="btn btn--primary" id="drainBtn">Drain ▸</button>
+        <button type="button" class="btn" id="resetBtn">Reset</button>
+        <span class="wstep-label" id="stepLabel">Step 0 / 3 — full company net</span>
+      </div>
+    </div>
+
+    <!-- Layer expanders -->
+    <div class="layers">
+      <div class="layer">
+        <button type="button" class="layer__btn" aria-expanded="false" aria-controls="lb-royalty">
+          <span class="lname"><span class="swatch" style="background:var(--royalty)"></span>Royalty</span>
+          <span class="chev">▸</span>
+        </button>
+        <div class="layer__body" id="lb-royalty">
+          <div class="layer__body-inner"><dl>
+            <dt>Rate &amp; base</dt><dd>5–15% sliding scale on <b>gross</b> revenue by production volume (deepwater discount). Under a PSC: fixed 10% of gross.</dd>
+            <dt>Deductible?</dt><dd>Yes — expensed, which lowers the PITA base.</dd>
+            <dt>Who collects</dt><dd>DMF (Department of Mineral Fuels).</dd>
+            <dt>SAP note</dt><dd>A cost/royalty posting via GL account determination — not a sales/purchase tax code in <span class="tcode">FTXP</span>.</dd>
+          </dl></div>
+        </div>
+      </div>
+
+      <div class="layer">
+        <button type="button" class="layer__btn" aria-expanded="false" aria-controls="lb-srb">
+          <span class="lname"><span class="swatch" style="background:var(--srb)"></span>SRB — Special Remuneratory Benefit</span>
+          <span class="chev">▸</span>
+        </button>
+        <div class="layer__body" id="lb-srb">
+          <div class="layer__body-inner"><dl>
+            <dt>Rate</dt><dd>Windfall tax 0–75% (ceiling 75% of petroleum profit).</dd>
+            <dt>Applies to</dt><dd>Thailand III concessions only — a PSC has no SRB. Paid only in years with petroleum profit.</dd>
+            <dt>Base</dt><dd>Uses "income per metre of well" + a geological factor. Adopted 1989.</dd>
+            <dt>Deductible?</dt><dd>Yes — deductible (expensed).</dd>
+            <dt>SAP note</dt><dd>A specialised periodic computation/posting — provisioned in GL, not a standard tax code.</dd>
+          </dl></div>
+        </div>
+      </div>
+
+      <div class="layer">
+        <button type="button" class="layer__btn" aria-expanded="false" aria-controls="lb-pita">
+          <span class="lname"><span class="swatch" style="background:var(--flare)"></span>PITA — Petroleum Income Tax</span>
+          <span class="chev">▸</span>
+        </button>
+        <div class="layer__body" id="lb-pita">
+          <div class="layer__body-inner"><dl>
+            <dt>Rate</dt><dd>Concession = 50% of net profit; PSC = 20%. (PTTEP's Bongkot/Erawan are PSCs.) Separate Act from normal CIT.</dd>
+            <dt>Interest</dt><dd><b>Not</b> deductible. Loss carry-forward 10 accounting periods; no carry-back.</dd>
+            <dt>Currency / pricing</dt><dd>May adopt USD functional currency. Exports use the higher of realised or "tax reference" price.</dd>
+            <dt>Holdings</dt><dd>PTTEP holds Bongkot (100%) &amp; Erawan (60%) as PSCs since Feb 2019 (production 2022/2023).</dd>
+            <dt>SAP note</dt><dd>An income-tax provision on net profit — period-end posting, not a transactional tax code.</dd>
+          </dl></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="closing">Combined government take ≈ <b>67%</b> of petroleum profit (Wood Mackenzie shallow-water, medium-cost example) vs a global average ≈ <b>58%</b>. The waterfall above is <b>illustrative</b> — actual take varies by field and contract.</p>
+  </section>
+
+  <!-- 04 RECALL -->
+  <section class="chapter" id="recall">
+    <div class="eyebrow"><span class="dot"></span>04 · Lock it in — active recall</div>
+    <h2>Eight cards. Answer before you flip.</h2>
+    <p class="lede">Tap the card (or focus + Space/Enter) to reveal the answer. Use ◂ ▸ or the arrow keys to move through the deck.</p>
+
+    <div class="deck">
+      <div class="fcard" id="fcard" role="button" tabindex="0" aria-pressed="false" aria-label="Flashcard, activate to flip">
+        <div class="fcard__inner">
+          <div class="fcard__face fcard__face--q">
+            <div class="fcard__kind">Question</div>
+            <div class="fcard__text" id="fcardQ"></div>
+            <div class="fcard__hint">tap / Space to flip ▸</div>
+          </div>
+          <div class="fcard__face fcard__face--a">
+            <div class="fcard__kind">Answer</div>
+            <div class="fcard__text" id="fcardA"></div>
+            <div class="fcard__hint">◂ tap to flip back</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="deck-bar">
+        <button type="button" class="btn" id="prevBtn" aria-label="Previous card">◂ Prev</button>
+        <span class="count" id="deckCount">1 / 8</span>
+        <div class="progress" aria-hidden="true"><span id="deckProgress"></span></div>
+        <button type="button" class="btn" id="nextBtn" aria-label="Next card">Next ▸</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    This is a personal study page built to memorise material for an SAP FI Tax consultant role on the Accenture / PTTEP project. Not affiliated with PTTEP, PTT, Accenture, or SAP. Figures are for study only.
+    <div class="sources">Sources: Thai Revenue Department (rd.go.th) · PwC Thailand Tax Summaries · Wood Mackenzie Thailand upstream fiscal summary · DMF annual report · Lexology Thailand petroleum-law briefs.</div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    'use strict';
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- Scroll-spy rail ---------- */
+    var spyLinks = Array.prototype.slice.call(document.querySelectorAll('.rail__link[data-spy]'));
+    var sections = spyLinks.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+    if ('IntersectionObserver' in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var id = '#' + e.target.id;
+            spyLinks.forEach(function (a) {
+              a.classList.toggle('is-active', a.getAttribute('href') === id);
+            });
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      sections.forEach(function (s) { if (s) spy.observe(s); });
+    }
+
+    /* ---------- 00 Module map zoom ---------- */
+    var fiCard = document.getElementById('fiCard');
+    var modmap = document.getElementById('modmap');
+    var subs = document.getElementById('subledgers');
+    fiCard.addEventListener('click', function () {
+      var open = modmap.classList.toggle('is-fi-focus');
+      subs.classList.toggle('is-open', open);
+      subs.setAttribute('aria-hidden', open ? 'false' : 'true');
+      fiCard.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    /* ---------- 01 Flip cards ---------- */
+    ['flipVAT', 'flipWHT'].forEach(function (id) {
+      var el = document.getElementById(id);
+      function toggle() {
+        var f = el.classList.toggle('is-flipped');
+        el.setAttribute('aria-pressed', f ? 'true' : 'false');
+      }
+      el.addEventListener('click', toggle);
+      el.addEventListener('keydown', function (e) {
+        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    /* ---------- 02 Tabs ---------- */
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    function selectTab(tab) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+    }
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { selectTab(tab); });
+      tab.addEventListener('keydown', function (e) {
+        var next;
+        if (e.key === 'ArrowRight') { next = tabs[(i + 1) % tabs.length]; }
+        else if (e.key === 'ArrowLeft') { next = tabs[(i - 1 + tabs.length) % tabs.length]; }
+        if (next) { e.preventDefault(); selectTab(next); next.focus(); }
+      });
+    });
+
+    /* ---------- 03 Value chain selector ---------- */
+    var vcData = {
+      up: {
+        title: 'Upstream — PTTEP',
+        body: 'Exploration &amp; Production (E&amp;P). Lifts crude oil &amp; natural gas. Taxed under the Petroleum Income Tax Act, not normal CIT. PTTEP holds Bongkot (100%) and Erawan (60%) as PSCs since Feb 2019.',
+        taxes: [
+          ['Royalty', 'up'], ['SRB', 'up'], ['PITA', 'up']
+        ]
+      },
+      mid: {
+        title: 'Midstream — PTT Plc',
+        body: 'The parent company: gas transmission, pipelines &amp; transport. Operates as an ordinary corporate taxpayer.',
+        taxes: [
+          ['Corporate Income Tax 20%', 'all'], ['VAT 7%', 'all']
+        ]
+      },
+      down: {
+        title: 'Downstream — GC · Thai Oil · IRPC · OR · GPSC',
+        body: 'Refining &amp; petrochemicals (GC, Thai Oil, IRPC), retail incl. Café Amazon (OR), power (GPSC). This is where excise lives — and it is NOT PTTEP.',
+        taxes: [
+          ['Excise / สรรพสามิตน้ำมัน', 'down'], ['Corporate Income Tax 20%', 'all'], ['VAT 7%', 'all']
+        ]
+      }
+    };
+    var scopeName = { up: 'upstream', down: 'downstream', all: 'all stages' };
+    var vcDetail = document.getElementById('vcDetail');
+    function renderVC(key) {
+      var d = vcData[key];
+      var tags = d.taxes.map(function (t) {
+        return '<span class="tag tag--' + t[1] + '">' + t[0] +
+          '<span class="scope">' + scopeName[t[1]] + '</span></span>';
+      }).join('');
+      vcDetail.innerHTML = '<h3>' + d.title + '</h3><p class="caption">' + d.body +
+        '</p><div class="taglist">' + tags + '</div>';
+    }
+    document.querySelectorAll('.vc-seg button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('.vc-seg button').forEach(function (x) {
+          x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+        });
+        renderVC(b.getAttribute('data-vc'));
+      });
+    });
+    renderVC('up');
+
+    /* ---------- 03 Waterfall ---------- */
+    // steps: cumulative state take and the layer added at each step
+    var steps = [
+      { state: 0,  net: 100, label: 'Step 0 / 3 — full company net' },
+      { state: 12, net: 88,  label: 'Step 1 / 3 — Royalty −12' },
+      { state: 27, net: 73,  label: 'Step 2 / 3 — + SRB −15' },
+      { state: 67, net: 33,  label: 'Step 3 / 3 — + PITA −40 · net 33' }
+    ];
+    var widths = [
+      { r: 0,  s: 0,  p: 0,  n: 100 },
+      { r: 12, s: 0,  p: 0,  n: 88 },
+      { r: 12, s: 15, p: 0,  n: 73 },
+      { r: 12, s: 15, p: 40, n: 33 }
+    ];
+    var segR = document.getElementById('segRoyalty');
+    var segS = document.getElementById('segSRB');
+    var segP = document.getElementById('segPITA');
+    var segN = document.getElementById('segNet');
+    var stateVal = document.getElementById('stateVal');
+    var netVal = document.getElementById('netVal');
+    var stepLabel = document.getElementById('stepLabel');
+    var drainBtn = document.getElementById('drainBtn');
+    var resetBtn = document.getElementById('resetBtn');
+    var wstep = 0;
+
+    function showLbl(seg, on) { seg.querySelector('.wlbl').classList.toggle('show', on); }
+
+    function animateCount(el, from, to) {
+      if (reduceMotion) { el.textContent = to; return; }
+      var start = null, dur = 600;
+      function frame(ts) {
+        if (start === null) { start = ts; }
+        var p = Math.min((ts - start) / dur, 1);
+        el.textContent = Math.round(from + (to - from) * p);
+        if (p < 1) { requestAnimationFrame(frame); }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function renderWaterfall(prevState, prevNet) {
+      var w = widths[wstep];
+      segR.style.width = w.r + '%';
+      segS.style.width = w.s + '%';
+      segP.style.width = w.p + '%';
+      segN.style.width = w.n + '%';
+      showLbl(segR, w.r > 0);
+      showLbl(segS, w.s > 0);
+      showLbl(segP, w.p > 0);
+      showLbl(segN, true);
+      segN.querySelector('.wlbl').textContent = 'Net ' + w.n;
+      var st = steps[wstep];
+      animateCount(stateVal, prevState, st.state);
+      animateCount(netVal, prevNet, st.net);
+      stepLabel.textContent = st.label;
+      drainBtn.disabled = wstep >= 3;
+      drainBtn.textContent = wstep >= 3 ? 'Fully drained' : 'Drain ▸';
+    }
+
+    drainBtn.addEventListener('click', function () {
+      if (wstep >= 3) { return; }
+      var prev = steps[wstep];
+      wstep++;
+      renderWaterfall(prev.state, prev.net);
+    });
+    resetBtn.addEventListener('click', function () {
+      var prev = steps[wstep];
+      wstep = 0;
+      renderWaterfall(prev.state, prev.net);
+    });
+
+    /* ---------- 03 Layer expanders ---------- */
+    document.querySelectorAll('.layer__btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        document.getElementById(btn.getAttribute('aria-controls'))
+          .classList.toggle('is-open', !open);
+      });
+    });
+
+    /* ---------- 04 Flashcards ---------- */
+    var cards = [
+      { q: 'PITA rate — concession vs PSC?', a: 'Concession 50% · PSC 20% of net profit (PTTEP = PSC).' },
+      { q: 'Is interest deductible under PITA?', a: 'No. Royalty and SRB are deductible (expensed).' },
+      { q: 'Royalty rate and base?', a: '5–15% sliding scale on gross revenue by output (PSC fixed 10%).' },
+      { q: 'What is SRB and who pays it?', a: 'Windfall tax 0–75% (ceiling 75%), Thailand III concessions only.' },
+      { q: 'Where does excise sit in the chain?', a: 'Downstream (GC / Thai Oil / OR) — NOT PTTEP.' },
+      { q: 'The two taxes an FI consultant configures?', a: 'VAT (Tax on Sales/Purchases) and Extended WHT.' },
+      { q: 'Where set tax codes / link tax GLs?', a: 'Tax code = FTXP; account determination = OB40.' },
+      { q: 'Government take of petroleum profit?', a: '≈ 67% (vs ~58% global average).' }
+    ];
+    var idx = 0;
+    var fcard = document.getElementById('fcard');
+    var fcardQ = document.getElementById('fcardQ');
+    var fcardA = document.getElementById('fcardA');
+    var deckCount = document.getElementById('deckCount');
+    var deckProgress = document.getElementById('deckProgress');
+
+    function renderCard() {
+      fcard.classList.remove('is-flipped');
+      fcard.setAttribute('aria-pressed', 'false');
+      fcardQ.textContent = cards[idx].q;
+      fcardA.textContent = cards[idx].a;
+      deckCount.textContent = (idx + 1) + ' / ' + cards.length;
+      deckProgress.style.width = ((idx + 1) / cards.length * 100) + '%';
+    }
+    function flipCard() {
+      var f = fcard.classList.toggle('is-flipped');
+      fcard.setAttribute('aria-pressed', f ? 'true' : 'false');
+    }
+    function move(delta) {
+      idx = (idx + delta + cards.length) % cards.length;
+      renderCard();
+    }
+    fcard.addEventListener('click', flipCard);
+    fcard.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1); }
+    });
+    document.getElementById('prevBtn').addEventListener('click', function () { move(-1); });
+    document.getElementById('nextBtn').addEventListener('click', function () { move(1); });
+    renderCard();
+  })();
+</script>
+</body>
+</html>
