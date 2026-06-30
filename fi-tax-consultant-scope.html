@@ -19,13 +19,14 @@
     --mist: #D7E2DF;  /* body */
     --haze: #8AA09B;  /* captions */
     --rail-w: 232px;
+    --bar-h: 56px;
     --display: 'Space Grotesk', system-ui, sans-serif;
     --body: 'IBM Plex Sans', system-ui, sans-serif;
     --mono: 'IBM Plex Mono', ui-monospace, monospace;
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 74px; }
 
   body {
     margin: 0;
@@ -82,13 +83,57 @@
   }
   .skip:focus { left: 0; }
 
+  /* ---------- Site nav bar (links to every page) ---------- */
+  .sitebar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--bar-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.1rem; z-index: 160;
+    background: rgba(10, 26, 31, 0.86);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--steel);
+  }
+  .sitebar__logo { display: flex; align-items: center; gap: 0.55rem; text-decoration: none;
+    font-family: var(--display); font-weight: 700; font-size: 0.92rem; color: var(--mist); }
+  .sitebar__logo .mark { width: 12px; height: 12px; border-radius: 3px; background: var(--gas); box-shadow: 0 0 12px var(--gas); }
+  .sitebar__logo:hover { color: var(--gas); }
+  .sitemenu { display: flex; align-items: center; gap: 0.2rem; }
+  .sitemenu > a, .dd-btn {
+    font-family: var(--body); font-size: 0.9rem; color: var(--haze);
+    text-decoration: none; background: none; border: 0; cursor: pointer;
+    padding: 0.5rem 0.8rem; border-radius: 8px; white-space: nowrap;
+    transition: color 0.2s, background 0.2s;
+  }
+  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(43, 217, 196, 0.07); }
+  .sitemenu > a.cta { color: var(--abyss); background: var(--gas); font-weight: 600; }
+  .sitemenu > a.cta:hover { filter: brightness(1.08); background: var(--gas); }
+  .dd { position: relative; }
+  .dd-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; min-width: 320px;
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 12px;
+    padding: 0.5rem; opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    box-shadow: 0 24px 60px -24px #000; z-index: 5;
+  }
+  .dd:hover .dd-panel, .dd:focus-within .dd-panel { opacity: 1; visibility: visible; transform: none; }
+  .dd-group { padding: 0.3rem; }
+  .dd-group + .dd-group { border-top: 1px solid var(--steel); margin-top: 0.2rem; padding-top: 0.5rem; }
+  .dd-head { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gas); padding: 0.2rem 0.5rem 0.35rem; }
+  .dd-panel a { display: block; padding: 0.45rem 0.6rem; font-size: 0.86rem; color: var(--mist); text-decoration: none; border-radius: 7px; }
+  .dd-panel a:hover { background: rgba(43, 217, 196, 0.08); color: var(--gas); }
+  .dd-panel a.is-current { color: var(--gas); background: rgba(43, 217, 196, 0.06); }
+  .sitebar__burger { display: none; flex-direction: column; gap: 4px; background: none; border: 0; cursor: pointer; padding: 8px; }
+  .sitebar__burger span { width: 22px; height: 2px; background: var(--mist); border-radius: 2px; transition: transform 0.2s, opacity 0.2s; }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
   /* ---------- Left nav rail ---------- */
   .rail {
     position: fixed;
-    top: 0;
+    top: var(--bar-h);
     left: 0;
     width: var(--rail-w);
-    height: 100vh;
+    height: calc(100vh - var(--bar-h));
     background: linear-gradient(180deg, var(--deep), var(--abyss));
     border-right: 1px solid var(--steel);
     display: flex;
@@ -162,7 +207,7 @@
   .rail__back:hover { color: var(--gas); }
 
   /* ---------- Main ---------- */
-  main { margin-left: var(--rail-w); }
+  main { margin-left: var(--rail-w); padding-top: var(--bar-h); }
   .chapter {
     max-width: 900px;
     margin: 0 auto;
@@ -416,6 +461,7 @@
   @media (max-width: 900px) {
     .rail {
       position: sticky;
+      top: var(--bar-h);
       width: auto;
       height: auto;
       flex-direction: column;
@@ -423,8 +469,7 @@
       border-right: 0;
       border-bottom: 1px solid var(--steel);
     }
-    .rail__title, .rail__companion { display: none; }
-    .rail__brand { margin-bottom: 0.6rem; }
+    .rail__title, .rail__companion, .rail__brand, .rail__back { display: none; }
     .rail ol {
       flex-direction: row;
       overflow-x: auto;
@@ -439,6 +484,24 @@
     .rail__link .num { font-size: 0.85rem; }
     .rail__back { margin-top: 0.5rem; padding-top: 0; }
     main, footer { margin-left: 0; }
+    main { padding-top: 0; }
+    body { padding-top: var(--bar-h); }
+    html { scroll-padding-top: 116px; }
+    .sitebar__burger { display: flex; }
+    .sitemenu {
+      position: fixed; top: var(--bar-h); left: 0; right: 0;
+      flex-direction: column; align-items: stretch; gap: 0.15rem;
+      background: var(--deep); border-bottom: 1px solid var(--steel);
+      padding: 0.6rem; max-height: calc(100vh - var(--bar-h)); overflow: auto;
+      transform: translateY(-12px); opacity: 0; visibility: hidden;
+      transition: opacity 0.22s, transform 0.22s, visibility 0.22s;
+    }
+    .sitemenu.is-open { transform: none; opacity: 1; visibility: visible; }
+    .dd { position: static; }
+    .dd-btn { width: 100%; text-align: left; }
+    .dd-panel { position: static; opacity: 1; visibility: visible; transform: none;
+      box-shadow: none; border: 0; min-width: 0; background: none; padding: 0 0 0 0.4rem; }
+    .sitemenu > a { padding: 0.6rem 0.7rem; }
     .chapter { padding: 3rem 1.3rem 2.5rem; }
   }
 
@@ -460,6 +523,54 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+
+<!-- SITE NAV BAR — links to every page, mirrors the main site nav -->
+<header class="sitebar">
+  <a class="sitebar__logo" href="index.html"><span class="mark" aria-hidden="true"></span>Chatree Kengpipat (Cee)</a>
+  <button type="button" class="sitebar__burger" id="siteBurger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="sitemenu" id="siteMenu" aria-label="Site">
+    <div class="dd">
+      <button type="button" class="dd-btn" aria-haspopup="true">Projects <span aria-hidden="true">▾</span></button>
+      <div class="dd-panel">
+        <div class="dd-group">
+          <div class="dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">SAP FI Tax Study · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html" class="is-current" aria-current="page">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </div>
+    <a href="index.html#featured-award">Award</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#methodology">Method</a>
+    <a href="index.html#academic">Academic</a>
+    <a href="index.html#contact" class="cta">Contact</a>
+  </nav>
+</header>
 
 <!-- LEFT NAV RAIL -->
 <nav class="rail" aria-label="Section navigation">
@@ -823,6 +934,26 @@
 <script>
   (function () {
     'use strict';
+
+    /* ---------- Site nav bar (mobile drawer) ---------- */
+    var burger = document.getElementById('siteBurger');
+    var siteMenu = document.getElementById('siteMenu');
+    if (burger && siteMenu) {
+      var closeSiteMenu = function () {
+        siteMenu.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+      };
+      burger.addEventListener('click', function () {
+        var open = siteMenu.classList.toggle('is-open');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      siteMenu.addEventListener('click', function (e) {
+        if (e.target.closest('a')) { closeSiteMenu(); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeSiteMenu(); }
+      });
+    }
 
     /* ---------- Scroll-spy rail ---------- */
     var spyLinks = Array.prototype.slice.call(document.querySelectorAll('.rail__link[data-spy]'));
