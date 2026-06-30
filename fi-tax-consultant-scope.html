@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FI Tax Consultant — Scope of Work · SAP FI · Tax · Accenture × PTTEP</title>
+<meta name="description" content="The proper scope of work for an SAP FI consultant specializing in tax on the Accenture / PTTEP S/4HANA programme: what you own, the lifecycle, in-scope vs out-of-scope boundaries, deliverables, and an honest XeerSoft-to-SAP bridge. A personal study and positioning page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --abyss: #0A1A1F;
+    --deep: #0F262B;
+    --steel: #1C3D44;
+    --gas: #2BD9C4;   /* SAP / system / data / what you own */
+    --flare: #FF6B35; /* tax / the State / boundaries */
+    --gold: #E8B04B;  /* value / deliverables / outcomes */
+    --mist: #D7E2DF;  /* body */
+    --haze: #8AA09B;  /* captions */
+    --rail-w: 232px;
+    --display: 'Space Grotesk', system-ui, sans-serif;
+    --body: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--abyss);
+    color: var(--mist);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(43, 217, 196, 0.06), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(255, 107, 53, 0.05), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; }
+  p { margin: 0 0 1rem; }
+  a { color: var(--gas); }
+
+  .mono { font-family: var(--mono); }
+  .tcode {
+    font-family: var(--mono);
+    font-weight: 500;
+    color: var(--gas);
+    background: rgba(43, 217, 196, 0.09);
+    border: 1px solid rgba(43, 217, 196, 0.28);
+    border-radius: 5px;
+    padding: 0.05em 0.42em;
+    font-size: 0.88em;
+    white-space: nowrap;
+  }
+
+  /* ---------- Focus visibility ---------- */
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--gas);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--gas);
+    color: var(--abyss);
+    padding: 0.7rem 1.1rem;
+    z-index: 200;
+    font-family: var(--mono);
+    font-weight: 600;
+    border-radius: 0 0 8px 0;
+  }
+  .skip:focus { left: 0; }
+
+  /* ---------- Left nav rail ---------- */
+  .rail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--rail-w);
+    height: 100vh;
+    background: linear-gradient(180deg, var(--deep), var(--abyss));
+    border-right: 1px solid var(--steel);
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem 1.1rem;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .rail__brand {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--haze);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .rail__title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.04rem;
+    color: var(--mist);
+    margin-bottom: 1.2rem;
+    line-height: 1.25;
+  }
+  .rail__title b { color: var(--gas); font-weight: 700; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+  .rail__link {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--haze);
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border-left: 2px solid transparent;
+    font-size: 0.9rem;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .rail__link .num { font-family: var(--mono); font-size: 0.74rem; color: var(--steel); transition: color 0.2s; }
+  .rail__link:hover { color: var(--mist); background: rgba(43, 217, 196, 0.05); }
+  .rail__link.is-active {
+    color: var(--mist);
+    background: rgba(43, 217, 196, 0.09);
+    border-left-color: var(--gas);
+  }
+  .rail__link.is-active .num { color: var(--gas); }
+  .rail__companion {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--haze);
+    text-decoration: none;
+    border: 1px dashed var(--steel);
+    border-radius: 9px;
+    padding: 0.6rem 0.7rem;
+    line-height: 1.5;
+    display: block;
+  }
+  .rail__companion b { color: var(--gas); font-weight: 600; }
+  .rail__companion:hover { border-color: var(--gas); color: var(--mist); }
+  .rail__back {
+    margin-top: auto;
+    padding-top: 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--haze);
+    text-decoration: none;
+  }
+  .rail__back:hover { color: var(--gas); }
+
+  /* ---------- Main ---------- */
+  main { margin-left: var(--rail-w); }
+  .chapter {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5.5rem 2.5rem 4rem;
+    border-bottom: 1px solid rgba(28, 61, 68, 0.5);
+  }
+  .chapter:first-child { padding-top: 4rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gas);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gas); box-shadow: 0 0 12px var(--gas); }
+  .chapter h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 0.6rem; }
+  .lede { font-size: 1.12rem; color: var(--mist); max-width: 64ch; }
+  .caption { color: var(--haze); font-size: 0.92rem; }
+
+  .card {
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 14px;
+    padding: 1.3rem 1.4rem;
+  }
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 760px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ---------- Hero role statement ---------- */
+  .rolestate {
+    border-left: 3px solid var(--gas);
+    background: rgba(43, 217, 196, 0.05);
+    border-radius: 0 12px 12px 0;
+    padding: 1.1rem 1.3rem;
+    margin: 1.6rem 0;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.18rem;
+    line-height: 1.45;
+    color: var(--mist);
+  }
+  .rolestate b { color: var(--gas); font-weight: 600; }
+
+  /* ---------- Segmented selectors (interfaces / lifecycle / boundaries) ---------- */
+  .seg { display: flex; gap: 0; margin: 1.3rem 0 1rem; border: 1px solid var(--steel); border-radius: 11px; overflow: hidden; flex-wrap: wrap; }
+  .seg button {
+    flex: 1 1 auto;
+    min-width: 0;
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--haze);
+    background: var(--deep);
+    border: 0;
+    border-right: 1px solid var(--steel);
+    padding: 0.75rem 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { color: var(--abyss); background: var(--gas); font-weight: 600; }
+  .seg--gold button[aria-pressed="true"] { background: var(--gold); }
+  .seg .you-here {
+    display: inline-block;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-left: 0.35rem;
+    color: var(--flare);
+    border: 1px solid var(--flare);
+    border-radius: 5px;
+    padding: 0.05em 0.3em;
+    vertical-align: middle;
+  }
+  .seg button[aria-pressed="true"] .you-here { color: var(--abyss); border-color: var(--abyss); }
+  .detail { min-height: 150px; }
+  .detail h3 { color: var(--gas); margin-bottom: 0.4rem; }
+  .seg-gold-detail h3 { color: var(--gold); }
+  .detail .role-of { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--haze); margin-bottom: 0.5rem; }
+  .detail dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1.1rem; margin: 0.6rem 0 0; font-size: 0.94rem; }
+  .detail dt { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gas); }
+  .detail dd { margin: 0; }
+  @media (max-width: 560px) { .detail dl { grid-template-columns: 1fr; gap: 0.15rem 0; } .detail dd { margin-bottom: 0.6rem; } }
+
+  /* ---------- Pillars (expanders) ---------- */
+  .pillars { margin-top: 1.4rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .pillar { border: 1px solid var(--steel); border-radius: 11px; background: var(--deep); overflow: hidden; }
+  .pillar__btn {
+    width: 100%;
+    font: inherit;
+    text-align: left;
+    background: none;
+    border: 0;
+    color: var(--mist);
+    padding: 0.95rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .pillar__btn .pnum { font-family: var(--mono); font-size: 0.78rem; color: var(--gas); flex-shrink: 0; }
+  .pillar__btn .pname { font-family: var(--display); font-weight: 600; font-size: 1.05rem; flex: 1; }
+  .pillar__btn .ptag { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--haze); }
+  .pillar__btn .chev { font-family: var(--mono); color: var(--gas); transition: transform 0.3s; flex-shrink: 0; }
+  .pillar__btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .pillar__body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .pillar__body.is-open { max-height: 520px; }
+  .pillar__body-inner { padding: 0 1.2rem 1.1rem; }
+  .pillar__body-inner p { margin: 0 0 0.7rem; font-size: 0.94rem; }
+  .pillar__body-inner .tcodes { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  /* ---------- Tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--steel); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); font-weight: 500; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ---------- Scope columns (in / out) ---------- */
+  .scope-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.3rem; }
+  @media (max-width: 720px) { .scope-cols { grid-template-columns: 1fr; } }
+  .scope-col { border: 1px solid var(--steel); border-radius: 13px; padding: 1.2rem 1.3rem; background: var(--deep); }
+  .scope-col--in { border-color: rgba(43, 217, 196, 0.45); }
+  .scope-col--out { border-color: rgba(255, 107, 53, 0.45); }
+  .scope-col h3 { display: flex; align-items: center; gap: 0.55rem; font-size: 1.1rem; }
+  .scope-col--in h3 { color: var(--gas); }
+  .scope-col--out h3 { color: var(--flare); }
+  .scope-col ul { list-style: none; margin: 0.7rem 0 0; padding: 0; }
+  .scope-col li { position: relative; padding-left: 1.5rem; margin-bottom: 0.7rem; font-size: 0.94rem; }
+  .scope-col li::before { position: absolute; left: 0; top: 0; font-family: var(--mono); }
+  .scope-col--in li::before { content: '▸'; color: var(--gas); }
+  .scope-col--out li::before { content: '✕'; color: var(--flare); }
+  .scope-col li .owner { display: block; font-family: var(--mono); font-size: 0.7rem; color: var(--haze); margin-top: 0.15rem; }
+
+  /* ---------- RACI ---------- */
+  .raci td .r { color: var(--gas); font-weight: 600; }
+  .raci td .a { color: var(--gold); font-weight: 600; }
+  .raci td .c { color: var(--mist); }
+  .raci td .i { color: var(--haze); }
+  .raci .who { font-family: var(--mono); font-size: 0.82rem; text-align: center; }
+  .raci th.who { text-align: center; }
+  .raci-legend { font-family: var(--mono); font-size: 0.74rem; color: var(--haze); margin-top: 0.7rem; line-height: 1.7; }
+  .raci-legend b { color: var(--mist); font-weight: 600; }
+
+  /* ---------- Deliverables checklist ---------- */
+  .checklist { margin-top: 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .chk {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 11px;
+    padding: 0.85rem 1.1rem;
+    color: var(--mist);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .chk:hover { border-color: var(--gas); }
+  .chk .box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--steel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--gas);
+    transition: border-color 0.2s, background 0.2s;
+    margin-top: 1px;
+  }
+  .chk[aria-checked="true"] { border-color: rgba(43, 217, 196, 0.5); background: rgba(43, 217, 196, 0.05); }
+  .chk[aria-checked="true"] .box { border-color: var(--gas); background: var(--gas); color: var(--abyss); }
+  .chk .ctext { flex: 1; }
+  .chk .ctext .ctitle { font-weight: 500; }
+  .chk[aria-checked="true"] .ctext .ctitle { color: var(--gas); }
+  .chk .ctext .csub { display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--haze); margin-top: 0.15rem; }
+  .chk-bar { display: flex; align-items: center; gap: 1rem; margin-top: 1.1rem; }
+  .chk-bar .count { font-family: var(--mono); font-size: 0.85rem; color: var(--haze); min-width: 92px; }
+  .progress { flex: 1; height: 6px; border-radius: 99px; background: var(--steel); overflow: hidden; }
+  .progress span { display: block; height: 100%; background: var(--gas); width: 0%; transition: width 0.35s ease; }
+  .chk-reset {
+    font: inherit; font-family: var(--mono); font-size: 0.78rem;
+    background: var(--deep); border: 1px solid var(--steel); color: var(--mist);
+    border-radius: 9px; padding: 0.55rem 1rem; cursor: pointer;
+  }
+  .chk-reset:hover { border-color: var(--gas); }
+
+  /* ---------- Notes / callouts / bridge ---------- */
+  .note {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--haze);
+    border-left: 2px solid var(--steel);
+    padding-left: 0.9rem;
+  }
+  .callout {
+    border: 1px solid var(--flare);
+    border-left-width: 4px;
+    border-radius: 0 12px 12px 0;
+    background: rgba(255, 107, 53, 0.07);
+    padding: 1.1rem 1.3rem;
+    margin: 1.8rem 0;
+  }
+  .callout .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--flare); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .saythis {
+    margin-top: 1.3rem;
+    border: 1px dashed rgba(43, 217, 196, 0.4);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    background: rgba(43, 217, 196, 0.04);
+    font-style: italic;
+    font-size: 1.02rem;
+  }
+  .saythis b { font-style: normal; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; margin-bottom: 0.4rem; }
+  .onerule {
+    margin-top: 1.3rem;
+    border: 1px solid var(--gold);
+    border-left-width: 4px;
+    border-radius: 0 12px 12px 0;
+    background: rgba(232, 176, 75, 0.06);
+    padding: 1.1rem 1.3rem;
+  }
+  .onerule .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .onerule b { color: var(--gold); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-left: var(--rail-w);
+    padding: 2.5rem;
+    max-width: 900px;
+    margin-right: auto;
+  }
+  footer .foot-inner { font-size: 0.82rem; color: var(--haze); }
+  footer .sources { font-family: var(--mono); font-size: 0.74rem; margin-top: 0.6rem; line-height: 1.7; }
+
+  /* ---------- Mobile rail → top strip ---------- */
+  @media (max-width: 900px) {
+    .rail {
+      position: sticky;
+      width: auto;
+      height: auto;
+      flex-direction: column;
+      padding: 0.8rem 1rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--steel);
+    }
+    .rail__title, .rail__companion { display: none; }
+    .rail__brand { margin-bottom: 0.6rem; }
+    .rail ol {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 0.4rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .rail ol::-webkit-scrollbar { display: none; }
+    .rail__link { border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; padding: 0.4rem 0.6rem; }
+    .rail__link.is-active { border-left: 0; border-bottom-color: var(--gas); }
+    .rail__link .name { display: none; }
+    .rail__link .num { font-size: 0.85rem; }
+    .rail__back { margin-top: 0.5rem; padding-top: 0; }
+    main, footer { margin-left: 0; }
+    .chapter { padding: 3rem 1.3rem 2.5rem; }
+  }
+
+  @media (max-width: 380px) {
+    .chapter { padding: 2.4rem 1rem 2rem; }
+    .rolestate { font-size: 1.05rem; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- LEFT NAV RAIL -->
+<nav class="rail" aria-label="Section navigation">
+  <a class="rail__brand" href="index.html">← Chatree · Portfolio</a>
+  <div class="rail__title">FI Tax Consultant<br><b>Scope of Work</b></div>
+  <ol>
+    <li><a class="rail__link" href="#hero" data-spy><span class="num">00</span><span class="name">The role, in one line</span></a></li>
+    <li><a class="rail__link" href="#own" data-spy><span class="num">01</span><span class="name">What you own</span></a></li>
+    <li><a class="rail__link" href="#lifecycle" data-spy><span class="num">02</span><span class="name">Across the lifecycle</span></a></li>
+    <li><a class="rail__link" href="#boundaries" data-spy><span class="num">03</span><span class="name">In / out of scope</span></a></li>
+    <li><a class="rail__link" href="#deliverables" data-spy><span class="num">04</span><span class="name">Deliverables</span></a></li>
+    <li><a class="rail__link" href="#honest" data-spy><span class="num">05</span><span class="name">Say it honestly</span></a></li>
+  </ol>
+  <a class="rail__companion" href="finance-functional-module.html">Companion study page →<br><b>SAP FI · Tax · PTTEP</b> essentials</a>
+  <a class="rail__back" href="index.html">Back to portfolio →</a>
+</nav>
+
+<main id="main">
+
+  <!-- 00 HERO -->
+  <section class="chapter" id="hero">
+    <div class="eyebrow"><span class="dot"></span>00 · The role, in one line</div>
+    <h2>You own the <span style="color:var(--gas)">tax layer</span> of SAP FI — config, test, and support.</h2>
+
+    <div class="rolestate">
+      An <b>SAP FI consultant specializing in tax</b> configures, tests, and supports the
+      <b>tax determination and reporting layer</b> of Financial Accounting — primarily
+      <b>VAT (Tax on Sales/Purchases)</b> and <b>Extended Withholding Tax</b>, plus the GL
+      account determination and statutory reporting that sit on top of every posting. You
+      translate an agreed tax design into working configuration; you do not set the law.
+    </div>
+
+    <p class="lede">On this S/4HANA programme you sit between several people — each one a clear
+      hand-off. Pick a counterpart to see what you exchange with them.</p>
+
+    <div class="seg" role="group" aria-label="Who you interface with">
+      <button type="button" data-if="lead" aria-pressed="true">FI/CO Lead</button>
+      <button type="button" data-if="sme" aria-pressed="false">Client Tax SME</button>
+      <button type="button" data-if="mmsd" aria-pressed="false">MM / SD</button>
+      <button type="button" data-if="abap" aria-pressed="false">ABAP / Tech</button>
+      <button type="button" data-if="test" aria-pressed="false">Test / Cutover</button>
+    </div>
+    <div class="card detail" id="ifDetail" aria-live="polite"></div>
+    <p class="caption" style="margin-top:1rem">Your value is the <b style="color:var(--gas)">join</b> between the
+      legal requirement (from the Tax SME) and the working system (configured by you, built by ABAP, used through MM/SD/FI).</p>
+  </section>
+
+  <!-- 01 WHAT YOU OWN -->
+  <section class="chapter" id="own">
+    <div class="eyebrow"><span class="dot"></span>01 · What you own</div>
+    <h2>Seven responsibility pillars.</h2>
+    <p class="lede">This is the working surface of the role. Expand a pillar (click, or focus + Enter)
+      to see the concrete activities and the T-codes behind them.</p>
+
+    <div class="pillars" id="pillars">
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="p-cfg">
+          <span class="pnum">01</span><span class="pname">Tax configuration</span>
+          <span class="ptag">core</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="p-cfg"><div class="pillar__body-inner">
+          <p>Build the engine that calculates and posts tax: the Thai calculation procedure
+            <span class="tcode">TAXTH</span>, tax codes and their rates/types in <span class="tcode">FTXP</span>,
+            the account determination that routes each tax transaction key to a GL account in
+            <span class="tcode">OB40</span>, and the GL master settings in <span class="tcode">FS00</span>.
+            For withholding, define Extended WHT <b>types</b> and <b>codes</b> in SPRO and link them to master data.</p>
+          <div class="tcodes">
+            <span class="tcode">TAXTH</span><span class="tcode">FTXP</span><span class="tcode">OB40</span>
+            <span class="tcode">FS00</span><span class="tcode">SPRO · Ext. WHT</span>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="p-det">
+          <span class="pnum">02</span><span class="pname">Tax determination</span>
+          <span class="ptag">cross-module</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="p-det"><div class="pillar__body-inner">
+          <p>Make sure the right tax lands on the right document. Tax flows in from
+            <b>MM</b> (the tax code on a purchase order / invoice verification),
+            <b>SD</b> (output tax via condition records), and direct <b>FI</b> postings
+            (<span class="tcode">FB60</span> vendor invoice, <span class="tcode">FB70</span> customer invoice).
+            You verify input vs. output VAT splits and that WHT is withheld at payment.</p>
+          <div class="tcodes">
+            <span class="tcode">FB60</span><span class="tcode">FB70</span><span class="tcode">F-53</span>
+            <span class="tcode">MM tax code</span><span class="tcode">SD MWST</span>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="p-rep">
+          <span class="pnum">03</span><span class="pname">Statutory tax reporting</span>
+          <span class="ptag">compliance</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="p-rep"><div class="pillar__body-inner">
+          <p>Produce what the Revenue Department wants to see. Output VAT − input VAT is filed
+            monthly on <span class="tcode">PP30</span> (data from the VAT report, e.g.
+            <span class="tcode">RFUMSV00</span>); withholding is filed on <span class="tcode">PND 3 / 53 / 54</span>
+            with WHT certificates. On S/4HANA this increasingly runs through
+            <b>DRC / Advanced Compliance Reporting</b> — worth knowing by name.</p>
+          <div class="tcodes">
+            <span class="tcode">PP30</span><span class="tcode">PND 3/53/54</span>
+            <span class="tcode">RFUMSV00</span><span class="tcode">DRC / ACR</span>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="p-md">
+          <span class="pnum">04</span><span class="pname">Tax-relevant master data</span>
+          <span class="ptag">data</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="p-md"><div class="pillar__body-inner">
+          <p>The config only works if the master data carries the right tax attributes: tax
+            classification on customer / vendor / material, the Extended WHT type & code assigned
+            on the vendor master, VAT registration numbers, and the tax category on the GL master.
+            You define the rules; data migration loads the volume.</p>
+          <div class="tcodes">
+            <span class="tcode">Vendor · WHT info</span><span class="tcode">Customer · tax class.</span>
+            <span class="tcode">FS00 · tax category</span>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="p-test">
+          <span class="pnum">05</span><span class="pname">Testing &amp; validation</span>
+          <span class="ptag">quality</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="p-test"><div class="pillar__body-inner">
+          <p>Prove the tax behaves. Unit-test each tax code, integration-test the end-to-end flows
+            that carry tax (<b>P2P</b> with input VAT + WHT, <b>O2C</b> with output VAT, period-end
+            VAT/WHT runs), write and walk test scripts, and support UAT. Log and triage tax defects
+            with clear reproduction steps — the same UAT discipline you ran on XeerSoft.</p>
+        </div></div>
+      </div>
+
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="p-cut">
+          <span class="pnum">06</span><span class="pname">Cutover &amp; migration support</span>
+          <span class="ptag">go-live</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="p-cut"><div class="pillar__body-inner">
+          <p>Get tax right at the switch. Validate open items that carry tax, opening tax balances,
+            and any WHT carry-forward; confirm configuration transports moved correctly; and check
+            the first live postings determine tax as designed. You support the tax slice of the
+            cutover plan — you do not own the whole cutover.</p>
+        </div></div>
+      </div>
+
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="p-hyp">
+          <span class="pnum">07</span><span class="pname">Hypercare &amp; BAU support</span>
+          <span class="ptag">run</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="p-hyp"><div class="pillar__body-inner">
+          <p>Stabilise the first cycles. Support the first month-end VAT filing (<span class="tcode">PP30</span>)
+            and WHT filing (<span class="tcode">PND</span>), reconcile the tax GL accounts, triage incidents
+            on tax postings, and hand over clean knowledge-transfer docs so BAU / AMS can take it.</p>
+        </div></div>
+      </div>
+    </div>
+
+    <p class="note">Petroleum-specific levies on the PTTEP client — <b>Royalty, SRB, PITA</b> —
+      are <b>not</b> standard transactional tax codes. They land as GL provisions / period-end
+      postings. Your job is to make sure the right GL accounts and postings exist — not to own the
+      legal computation. (See the <a href="finance-functional-module.html#pttep">companion page</a> for the petroleum-tax detail.)</p>
+  </section>
+
+  <!-- 02 LIFECYCLE -->
+  <section class="chapter" id="lifecycle">
+    <div class="eyebrow"><span class="dot"></span>02 · Across the lifecycle</div>
+    <h2>What the role does in each SAP Activate phase.</h2>
+    <p class="lede">The tax solution is <i>designed</i> early and <i>built &amp; proven</i> in the middle.
+      You join in <b>late Realize</b> — so your weight is on understanding, testing, cutover, and run,
+      not on the original design. Pick a phase.</p>
+
+    <div class="seg" role="group" aria-label="SAP Activate phase">
+      <button type="button" data-ph="prepare" aria-pressed="false">Prepare</button>
+      <button type="button" data-ph="explore" aria-pressed="false">Explore</button>
+      <button type="button" data-ph="realize" aria-pressed="true">Realize <span class="you-here">you join</span></button>
+      <button type="button" data-ph="deploy" aria-pressed="false">Deploy</button>
+      <button type="button" data-ph="run" aria-pressed="false">Run</button>
+    </div>
+    <div class="card detail" id="phDetail" aria-live="polite"></div>
+  </section>
+
+  <!-- 03 BOUNDARIES -->
+  <section class="chapter" id="boundaries">
+    <div class="eyebrow"><span class="dot"></span>03 · In / out of scope</div>
+    <h2>The boundary is the scope.</h2>
+    <p class="lede">Knowing what is <i>not</i> yours is as important as knowing what is. Toggle the view —
+      what you deliver, what you explicitly hand off, and who is accountable for what.</p>
+
+    <div class="seg seg--gold" role="group" aria-label="Scope view">
+      <button type="button" data-sc="split" aria-pressed="true">In vs Out</button>
+      <button type="button" data-sc="raci" aria-pressed="false">RACI</button>
+    </div>
+
+    <!-- In vs Out -->
+    <div id="sc-split">
+      <div class="scope-cols">
+        <div class="scope-col scope-col--in">
+          <h3>▸ In scope — you deliver</h3>
+          <ul>
+            <li>Configure VAT tax codes (<span class="tcode">FTXP</span>) &amp; account determination (<span class="tcode">OB40</span>) to the agreed design</li>
+            <li>Maintain Extended WHT types/codes and link to master data</li>
+            <li>Set tax-relevant GL master (<span class="tcode">FS00</span>) attributes</li>
+            <li>Validate tax determination on MM, SD &amp; FI documents</li>
+            <li>Prepare &amp; execute tax test scripts; support UAT</li>
+            <li>Author functional specs for tax forms (WHT cert, PND, VAT layout)</li>
+            <li>Support tax data cutover &amp; the first live filings</li>
+          </ul>
+        </div>
+        <div class="scope-col scope-col--out">
+          <h3>✕ Out of scope — hand off</h3>
+          <ul>
+            <li>Legal interpretation &amp; rate-setting<span class="owner">→ Client Tax SME / tax advisor</span></li>
+            <li>Re-designing the overall tax solution (fixed in Explore)<span class="owner">→ FI/CO Lead + Tax SME</span></li>
+            <li>ABAP build of enhancements &amp; form output<span class="owner">→ Technical team (you write the spec)</span></li>
+            <li>Petroleum tax (Royalty / SRB / PITA) computation logic<span class="owner">→ specialist provisioning; you ensure the GL exists</span></li>
+            <li>Corporate income-tax provisioning beyond config<span class="owner">→ client finance / CO</span></li>
+            <li>Non-tax FI areas (treasury, AA policy) unless assigned<span class="owner">→ respective FI streams</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">The honest one-liner: <b>you implement an agreed tax design and prove it works — you don't author the tax law or build the ABAP.</b></p>
+    </div>
+
+    <!-- RACI -->
+    <div id="sc-raci" hidden>
+      <div class="table-wrap">
+        <table class="raci">
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th class="who">You<br><span style="font-weight:400;color:var(--haze)">FI Tax</span></th>
+              <th class="who">FI/CO<br><span style="font-weight:400;color:var(--haze)">Lead</span></th>
+              <th class="who">Tax<br><span style="font-weight:400;color:var(--haze)">SME</span></th>
+              <th class="who">ABAP<br><span style="font-weight:400;color:var(--haze)">Tech</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Tax requirement &amp; rate decision</td><td class="who"><span class="c">C</span></td><td class="who"><span class="c">C</span></td><td class="who"><span class="a">A/R</span></td><td class="who"><span class="i">–</span></td></tr>
+            <tr><td>Tax code &amp; account determination config</td><td class="who"><span class="r">R</span></td><td class="who"><span class="a">A</span></td><td class="who"><span class="c">C</span></td><td class="who"><span class="i">–</span></td></tr>
+            <tr><td>Tax form / report (WHT cert, PND, VAT)</td><td class="who"><span class="r">R</span><span class="i"> spec</span></td><td class="who"><span class="a">A</span></td><td class="who"><span class="c">C</span></td><td class="who"><span class="r">R</span><span class="i"> build</span></td></tr>
+            <tr><td>Tax test execution</td><td class="who"><span class="r">R</span></td><td class="who"><span class="a">A</span></td><td class="who"><span class="c">C</span></td><td class="who"><span class="i">I</span></td></tr>
+            <tr><td>Cutover tax data &amp; first filing</td><td class="who"><span class="r">R</span></td><td class="who"><span class="a">A</span></td><td class="who"><span class="c">C</span></td><td class="who"><span class="i">I</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="raci-legend"><b>R</b> Responsible (does the work) · <b>A</b> Accountable (owns the outcome) ·
+        <b>C</b> Consulted (gives input) · <b>I</b> Informed (kept in the loop).
+        You are <b>Responsible</b> for the build &amp; proof; the <b>Tax SME is Accountable</b> for the law,
+        the <b>FI/CO Lead Accountable</b> for delivery.</p>
+    </div>
+  </section>
+
+  <!-- 04 DELIVERABLES -->
+  <section class="chapter" id="deliverables">
+    <div class="eyebrow"><span class="dot"></span>04 · Deliverables</div>
+    <h2>What lands on the project as your output.</h2>
+    <p class="lede">The artifacts that prove the scope is done. Tick them off as a self-check — the count
+      is held in memory only (nothing is saved).</p>
+
+    <div class="checklist" id="checklist" role="group" aria-label="Deliverables checklist">
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Tax configuration workbook / config rationale</span><span class="csub">why each tax code, type &amp; account exists</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Tax code matrix</span><span class="csub">codes × rate × type × target GL account</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Account determination (OB40) mapping</span><span class="csub">transaction key → GL account</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Extended WHT type / code setup doc</span><span class="csub">types, codes &amp; master-data assignment</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Functional specs for tax forms</span><span class="csub">WHT certificate · PND 3/53/54 · VAT report layout</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Tax test scripts + results</span><span class="csub">P2P · O2C · period-end VAT/WHT</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Cutover tax checklist</span><span class="csub">open items, opening balances, WHT carry-forward</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Month-end tax filing runbook</span><span class="csub">PP30 (VAT) · PND (WHT) step-by-step</span></span>
+      </button>
+      <button type="button" class="chk" role="checkbox" aria-checked="false">
+        <span class="box" aria-hidden="true">✓</span>
+        <span class="ctext"><span class="ctitle">Knowledge-transfer / handover pack</span><span class="csub">to BAU / AMS at end of hypercare</span></span>
+      </button>
+    </div>
+
+    <div class="chk-bar">
+      <span class="count" id="chkCount">0 / 9 ready</span>
+      <div class="progress" aria-hidden="true"><span id="chkProgress"></span></div>
+      <button type="button" class="chk-reset" id="chkReset">Reset</button>
+    </div>
+  </section>
+
+  <!-- 05 HONEST -->
+  <section class="chapter" id="honest">
+    <div class="eyebrow"><span class="dot"></span>05 · Say it honestly</div>
+    <h2>Scope it to what you've really done.</h2>
+    <p class="lede">XeerSoft isn't SAP — but a full-lifecycle ERP delivery maps cleanly onto these SAP
+      concepts. Claim the concept understanding and the real delivery; never claim the SAP-specific config you haven't touched.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Your XeerSoft delivery</th><th>Maps to SAP concept</th></tr></thead>
+        <tbody>
+          <tr><td>POS-to-accounting auto posting</td><td>Automatic account determination + tax posting (<span class="tcode">OB40</span>)</td></tr>
+          <tr><td>GL mapping</td><td>Tax GL configuration</td></tr>
+          <tr><td>AR open-item &amp; dunning</td><td>FI-AR open items + output VAT</td></tr>
+          <tr><td>Multi-branch consolidation</td><td>Company-code structure</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="saythis">
+      <b>Say it this way</b>
+      "XeerSoft isn't SAP — but I've delivered the same <i>concepts</i> end-to-end on a real ERP:
+      automatic tax posting, GL mapping, AR open items, multi-branch structure. I bring concept
+      understanding plus full-lifecycle delivery experience — configuration, master data, UAT and
+      go-live. I haven't configured the Thai tax procedure on SAP, and I won't claim I have; my scope
+      here is to understand what's configured, prove it in test, and support cutover and run."
+    </div>
+
+    <div class="onerule">
+      <div class="label">The one rule</div>
+      <p style="margin:0">Claim <b>concept understanding</b> + <b>real full-lifecycle ERP delivery</b>.
+        Never claim you have configured the Thai tax procedure on SAP.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    A personal study &amp; positioning page defining the scope of an SAP FI consultant specializing in
+    tax, written for the Accenture / PTTEP S/4HANA programme. Not affiliated with PTTEP, PTT, Accenture,
+    or SAP. Lifecycle uses the SAP Activate phase model; figures and T-codes are for study only.
+    <div class="sources">Companion: <a href="finance-functional-module.html">SAP FI · Tax · PTTEP essentials</a>.
+      Sources: SAP Activate methodology · Thai Revenue Department (rd.go.th) · PwC Thailand Tax Summaries.</div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    'use strict';
+
+    /* ---------- Scroll-spy rail ---------- */
+    var spyLinks = Array.prototype.slice.call(document.querySelectorAll('.rail__link[data-spy]'));
+    var sections = spyLinks.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+    if ('IntersectionObserver' in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var id = '#' + e.target.id;
+            spyLinks.forEach(function (a) {
+              a.classList.toggle('is-active', a.getAttribute('href') === id);
+            });
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      sections.forEach(function (s) { if (s) spy.observe(s); });
+    }
+
+    /* ---------- Generic segmented selector + detail renderer ---------- */
+    function wireSeg(attr, data, detailEl, render, initial) {
+      var btns = Array.prototype.slice.call(
+        document.querySelectorAll('.seg button[data-' + attr + ']'));
+      function select(key) {
+        btns.forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-' + attr) === key ? 'true' : 'false');
+        });
+        detailEl.innerHTML = render(data[key]);
+      }
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () { select(b.getAttribute('data-' + attr)); });
+      });
+      select(initial);
+    }
+
+    /* ---------- 00 Interfaces ---------- */
+    var ifData = {
+      lead: { role: 'FI/CO Lead', you: 'Receives from / reports to',
+        get: 'The agreed tax design, config standards, the delivery plan & priorities.',
+        give: 'Built &amp; tested tax configuration, status, risks and defects on the tax stream.' },
+      sme: { role: 'Client Tax SME', you: 'Your source of truth for the law',
+        get: 'Rates, legal interpretation, which taxes apply, filing requirements (PP30, PND).',
+        give: 'How that requirement is realised in SAP, and questions when reality meets config.' },
+      mmsd: { role: 'MM / SD Functional', you: 'Where tax is triggered',
+        get: 'Purchasing &amp; sales document flows that carry tax codes / output tax.',
+        give: 'Correct tax codes &amp; determination so MM/SD documents post the right tax.' },
+      abap: { role: 'ABAP / Technical', you: 'You spec, they build',
+        get: 'Built enhancements and tax form output (WHT certificate, PND, VAT layout).',
+        give: 'Clear functional specs &amp; test feedback — you do not write the ABAP.' },
+      test: { role: 'Test / Cutover Lead', you: 'Prove &amp; switch',
+        get: 'Test cycles, the cutover plan, migration windows.',
+        give: 'Tax test scripts &amp; results, the tax slice of the cutover checklist, sign-off.' }
+    };
+    wireSeg('if', ifData, document.getElementById('ifDetail'), function (d) {
+      return '<div class="role-of">' + d.you + '</div><h3>' + d.role + '</h3>' +
+        '<dl><dt>You get</dt><dd>' + d.get + '</dd>' +
+        '<dt>You give</dt><dd>' + d.give + '</dd></dl>';
+    }, 'lead');
+
+    /* ---------- 01 Pillar expanders ---------- */
+    document.querySelectorAll('.pillar__btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        document.getElementById(btn.getAttribute('aria-controls'))
+          .classList.toggle('is-open', !open);
+      });
+    });
+
+    /* ---------- 02 Lifecycle phases ---------- */
+    var phData = {
+      prepare: { name: 'Prepare', here: false,
+        project: 'Mobilise the team, stand up environments, set project standards &amp; governance.',
+        you: 'Usually before your start — the tax stream is being staffed and scoped.',
+        deliver: 'Project charter, landscape, ways of working. (No tax deliverable from you yet.)' },
+      explore: { name: 'Explore', here: false,
+        project: 'Fit-to-standard workshops; capture tax requirements; decide Thai localization (VAT/WHT); design tax determination.',
+        you: 'Typically before your start — this is where the tax solution is <b>designed</b> (so you inherit it, you don\'t author it).',
+        deliver: 'Tax design / business process docs, requirements backlog, localization decisions.' },
+      realize: { name: 'Realize', here: true,
+        project: 'Build configuration in DEV, run unit / string / integration tests, prepare data migration.',
+        you: '<b>You join here (late Realize).</b> Understand the configured tax codes (<span class="tcode">FTXP</span>), account determination (<span class="tcode">OB40</span>) &amp; WHT setup; execute tax test scripts (P2P, O2C, period-end); log &amp; triage tax defects.',
+        deliver: 'Tax test results, config read-in notes, defect log, draft form specs.' },
+      deploy: { name: 'Deploy', here: false,
+        project: 'Cutover, data migration, go-live readiness, then go-live.',
+        you: 'Support the tax slice of cutover — open items with tax, tax balances, WHT carry-forward; validate the first live tax postings &amp; smoke-test VAT/WHT determination.',
+        deliver: 'Cutover tax checklist sign-off, go-live validation evidence.' },
+      run: { name: 'Run', here: false,
+        project: 'Hypercare, then transition to BAU / AMS.',
+        you: 'Support the first month-end VAT (<span class="tcode">PP30</span>) &amp; WHT (<span class="tcode">PND</span>) filings, reconcile the tax GL, triage incidents, hand over.',
+        deliver: 'Hypercare issue log, month-end filing runbook, knowledge-transfer pack.' }
+    };
+    wireSeg('ph', phData, document.getElementById('phDetail'), function (d) {
+      var badge = d.here
+        ? '<span class="role-of" style="color:var(--flare)">★ You join in this phase</span>'
+        : '<span class="role-of">Phase</span>';
+      return badge + '<h3>' + d.name + '</h3>' +
+        '<dl><dt>Project does</dt><dd>' + d.project + '</dd>' +
+        '<dt>You do</dt><dd>' + d.you + '</dd>' +
+        '<dt>Deliverables</dt><dd>' + d.deliver + '</dd></dl>';
+    }, 'realize');
+
+    /* ---------- 03 Scope view toggle (In/Out vs RACI) ---------- */
+    var scBtns = Array.prototype.slice.call(document.querySelectorAll('.seg button[data-sc]'));
+    var scSplit = document.getElementById('sc-split');
+    var scRaci = document.getElementById('sc-raci');
+    scBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var key = b.getAttribute('data-sc');
+        scBtns.forEach(function (x) {
+          x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+        });
+        scSplit.hidden = key !== 'split';
+        scRaci.hidden = key !== 'raci';
+      });
+    });
+
+    /* ---------- 04 Deliverables checklist (in-memory) ---------- */
+    var chks = Array.prototype.slice.call(document.querySelectorAll('.chk'));
+    var chkCount = document.getElementById('chkCount');
+    var chkProgress = document.getElementById('chkProgress');
+    function refreshChk() {
+      var done = chks.filter(function (c) { return c.getAttribute('aria-checked') === 'true'; }).length;
+      chkCount.textContent = done + ' / ' + chks.length + ' ready';
+      chkProgress.style.width = (done / chks.length * 100) + '%';
+    }
+    chks.forEach(function (c) {
+      c.addEventListener('click', function () {
+        c.setAttribute('aria-checked', c.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+        refreshChk();
+      });
+    });
+    document.getElementById('chkReset').addEventListener('click', function () {
+      chks.forEach(function (c) { c.setAttribute('aria-checked', 'false'); });
+      refreshChk();
+    });
+    refreshChk();
+  })();
+</script>
+</body>
+</html>
