@@ -30,6 +30,7 @@
     --mist: #D7E2DF;  /* body */
     --haze: #8AA09B;  /* captions */
     --rail-w: 232px;
+    --content-w: 800px;
     --bar-h: 56px;
     --display: 'Space Grotesk', system-ui, sans-serif;
     --body: 'IBM Plex Sans', system-ui, sans-serif;
@@ -220,8 +221,9 @@
   /* ---------- Main ---------- */
   main { margin-left: var(--rail-w); padding-top: var(--bar-h); }
   .chapter {
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: var(--content-w);
+    margin-left: max(0px, calc(50vw - var(--content-w) / 2 - var(--rail-w)));
+    margin-right: auto;
     padding: 5.5rem 4rem 4rem;
     border-bottom: 1px solid rgba(28, 61, 68, 0.5);
   }
@@ -590,9 +592,9 @@
 
   /* ---------- Footer ---------- */
   footer {
-    margin-left: var(--rail-w);
-    padding: 2.5rem;
-    max-width: 900px;
+    margin-left: max(0px, calc(50vw - var(--content-w) / 2 - var(--rail-w)));
+    padding: 2.5rem 4rem;
+    max-width: var(--content-w);
     margin-right: auto;
   }
   footer .foot-inner { font-size: 0.82rem; color: var(--haze); }
