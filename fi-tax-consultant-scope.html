@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FI Tax Consultant — Scope of Work · SAP FI · Tax · Accenture × PTTEP</title>
-<meta name="description" content="The proper scope of work for an SAP FI consultant specializing in tax on the Accenture / PTTEP S/4HANA programme: what you own, the lifecycle, in-scope vs out-of-scope boundaries, deliverables, the programme scale, and an honest account of where my depth comes from.">
+<meta name="description" content="The proper scope of work for an SAP FI consultant specializing in tax on the Accenture / PTTEP S/4HANA programme: what I own, the lifecycle, in-scope vs out-of-scope boundaries, deliverables, the programme scale, and an honest account of where my depth comes from.">
 <script>
   /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
   (function () {
@@ -24,7 +24,7 @@
     --abyss: #0A1A1F;
     --deep: #0F262B;
     --steel: #1C3D44;
-    --gas: #2BD9C4;   /* SAP / system / data / what you own */
+    --gas: #2BD9C4;   /* SAP / system / data / what I own */
     --flare: #FF6B35; /* tax / the State / boundaries */
     --gold: #E8B04B;  /* value / deliverables / outcomes */
     --mist: #D7E2DF;  /* body */
@@ -288,7 +288,7 @@
   .seg button:last-child { border-right: 0; }
   .seg button[aria-pressed="true"] { color: var(--abyss); background: var(--gas); font-weight: 600; }
   .seg--gold button[aria-pressed="true"] { background: var(--gold); }
-  .seg .you-here {
+  .seg .im-here {
     display: inline-block;
     font-size: 0.58rem;
     letter-spacing: 0.08em;
@@ -300,7 +300,7 @@
     padding: 0.05em 0.3em;
     vertical-align: middle;
   }
-  .seg button[aria-pressed="true"] .you-here { color: var(--abyss); border-color: var(--abyss); }
+  .seg button[aria-pressed="true"] .im-here { color: var(--abyss); border-color: var(--abyss); }
   .detail { min-height: 150px; }
   .detail h3 { color: var(--gas); margin-bottom: 0.4rem; }
   .seg-gold-detail h3 { color: var(--gold); }
@@ -930,7 +930,7 @@
     <div class="seg" role="group" aria-label="SAP Activate phase">
       <button type="button" data-ph="prepare" aria-pressed="false">Prepare</button>
       <button type="button" data-ph="explore" aria-pressed="false">Explore</button>
-      <button type="button" data-ph="realize" aria-pressed="true">Realize <span class="you-here">I'm here</span></button>
+      <button type="button" data-ph="realize" aria-pressed="true">Realize <span class="im-here">I'm here</span></button>
       <button type="button" data-ph="deploy" aria-pressed="false">Deploy</button>
       <button type="button" data-ph="run" aria-pressed="false">Run</button>
     </div>
@@ -1665,24 +1665,24 @@
 
     /* ---------- 00 Interfaces ---------- */
     var ifData = {
-      lead: { role: 'FI/CO Lead', you: 'Receives from / reports to',
+      lead: { role: 'FI/CO Lead', mine: 'Receives from / reports to',
         get: 'The agreed tax design, config standards, the delivery plan & priorities.',
         give: 'Built &amp; tested tax configuration, status, risks and defects on the tax stream.' },
-      sme: { role: 'Client Tax SME', you: 'My source of truth for the law',
+      sme: { role: 'Client Tax SME', mine: 'My source of truth for the law',
         get: 'Rates, legal interpretation, which taxes apply, filing requirements (PP30, PND).',
         give: 'How that requirement is realised in SAP, and questions when reality meets config.' },
-      mmsd: { role: 'MM / SD Functional', you: 'Where tax is triggered',
+      mmsd: { role: 'MM / SD Functional', mine: 'Where tax is triggered',
         get: 'Purchasing &amp; sales document flows that carry tax codes / output tax.',
         give: 'Correct tax codes &amp; determination so MM/SD documents post the right tax.' },
-      abap: { role: 'ABAP / Technical', you: 'I spec, they build',
+      abap: { role: 'ABAP / Technical', mine: 'I spec, they build',
         get: 'Built enhancements and tax form output (WHT certificate, PND, VAT layout).',
         give: 'Clear functional specs &amp; test feedback — I don\'t write the ABAP.' },
-      test: { role: 'Test / Cutover Lead', you: 'Prove &amp; switch',
+      test: { role: 'Test / Cutover Lead', mine: 'Prove &amp; switch',
         get: 'Test cycles, the cutover plan, migration windows.',
         give: 'Tax test scripts &amp; results, the tax slice of the cutover checklist, sign-off.' }
     };
     wireSeg('if', ifData, document.getElementById('ifDetail'), function (d) {
-      return '<div class="role-of">' + d.you + '</div><h3>' + d.role + '</h3>' +
+      return '<div class="role-of">' + d.mine + '</div><h3>' + d.role + '</h3>' +
         '<dl><dt>I get</dt><dd>' + d.get + '</dd>' +
         '<dt>I give</dt><dd>' + d.give + '</dd></dl>';
     }, 'lead');
@@ -1701,23 +1701,23 @@
     var phData = {
       prepare: { name: 'Prepare', here: false,
         project: 'Mobilise the team, stand up environments, set project standards &amp; governance.',
-        you: 'Before my time on the programme — the tax stream is still being staffed and scoped.',
+        mine: 'Before my time on the programme — the tax stream is still being staffed and scoped.',
         deliver: 'Project charter, landscape, ways of working. (No tax deliverable from me yet.)' },
       explore: { name: 'Explore', here: false,
         project: 'Fit-to-standard workshops; capture tax requirements; decide Thai localization (VAT/WHT); design tax determination.',
-        you: 'Before my time — this is where the tax solution is <b>designed</b>, so I inherit it rather than author it.',
+        mine: 'Before my time — this is where the tax solution is <b>designed</b>, so I inherit it rather than author it.',
         deliver: 'Tax design / business process docs, requirements backlog, localization decisions.' },
       realize: { name: 'Realize', here: true,
         project: 'Build configuration in DEV, run unit / string / integration tests, prepare data migration.',
-        you: '<b>I join here (late Realize).</b> I read the configured tax codes (<span class="tcode">FTXP</span>), account determination (<span class="tcode">OB40</span>) &amp; WHT setup, run tax test scripts (P2P, O2C, period-end), and log &amp; triage tax defects.',
+        mine: '<b>I join here (late Realize).</b> I read the configured tax codes (<span class="tcode">FTXP</span>), account determination (<span class="tcode">OB40</span>) &amp; WHT setup, run tax test scripts (P2P, O2C, period-end), and log &amp; triage tax defects.',
         deliver: 'Tax test results, config read-in notes, defect log, draft form specs.' },
       deploy: { name: 'Deploy', here: false,
         project: 'Cutover, data migration, go-live readiness, then go-live.',
-        you: 'I support the tax slice of cutover — open items with tax, tax balances, WHT carry-forward — and validate the first live tax postings, smoke-testing VAT/WHT determination.',
+        mine: 'I support the tax slice of cutover — open items with tax, tax balances, WHT carry-forward — and validate the first live tax postings, smoke-testing VAT/WHT determination.',
         deliver: 'Cutover tax checklist sign-off, go-live validation evidence.' },
       run: { name: 'Run', here: false,
         project: 'Hypercare, then transition to BAU / AMS.',
-        you: 'I carry the first month-end VAT (<span class="tcode">PP30</span>) &amp; WHT (<span class="tcode">PND</span>) filings, reconcile the tax GL, triage incidents, and hand over.',
+        mine: 'I carry the first month-end VAT (<span class="tcode">PP30</span>) &amp; WHT (<span class="tcode">PND</span>) filings, reconcile the tax GL, triage incidents, and hand over.',
         deliver: 'Hypercare issue log, month-end filing runbook, knowledge-transfer pack.' }
     };
     wireSeg('ph', phData, document.getElementById('phDetail'), function (d) {
@@ -1726,7 +1726,7 @@
         : '<span class="role-of">Phase</span>';
       return badge + '<h3>' + d.name + '</h3>' +
         '<dl><dt>The programme</dt><dd>' + d.project + '</dd>' +
-        '<dt>My role</dt><dd>' + d.you + '</dd>' +
+        '<dt>My role</dt><dd>' + d.mine + '</dd>' +
         '<dt>Deliverables</dt><dd>' + d.deliver + '</dd></dl>';
     }, 'realize');
 
