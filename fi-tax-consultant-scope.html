@@ -498,24 +498,35 @@
   .wf-step .tc { font-family: var(--mono); font-weight: 600; font-size: 0.84rem; color: var(--mist); display: block; margin: 0.18rem 0; }
   .wf-step .d { font-size: 0.74rem; color: var(--haze); line-height: 1.4; }
 
-  /* ---------- 07 Timeline ---------- */
-  .tl-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; }
-  .tl-meta .big { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--gold); }
-  .timeline { margin: 1.4rem 0 1rem; position: relative; padding-left: 1.9rem; }
-  .timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 10px; width: 2px; background: linear-gradient(180deg, var(--gas), var(--gold)); }
-  .tl-item { position: relative; padding: 0 0 1.25rem 0; }
-  .tl-item::before { content: ''; position: absolute; left: -1.9rem; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--abyss); border: 2px solid var(--steel); box-sizing: border-box; }
-  .tl-item.done::before { border-color: var(--gas); background: var(--gas); }
-  .tl-item.now::before { border-color: var(--flare); background: var(--flare); box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.18); }
-  .tl-item.target::before { border-color: var(--gold); background: var(--gold); box-shadow: 0 0 0 4px rgba(232, 176, 75, 0.18); }
-  .tl-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.55rem; }
-  .tl-date { font-family: var(--mono); font-size: 0.72rem; color: var(--gas); }
-  .tl-name { font-family: var(--display); font-weight: 600; font-size: 1.0rem; }
-  .tl-badge { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; border-radius: 5px; padding: 0.12em 0.45em; }
-  .tl-item.now .tl-badge { color: var(--flare); border: 1px solid var(--flare); }
-  .tl-item.target .tl-badge { color: var(--gold); border: 1px solid var(--gold); }
-  .tl-focus { font-size: 0.92rem; color: var(--mist); margin: 0.25rem 0 0; }
-  .tl-focus .you { color: var(--flare); font-weight: 500; }
+  /* ---------- 07 Timeline (Gantt) ---------- */
+  .gantt-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; margin-bottom: 1.1rem; }
+  .gantt-meta .big { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--gold); }
+  .gantt-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .gantt { min-width: 640px; }
+  .g-row { display: grid; grid-template-columns: 188px 1fr; align-items: center; gap: 0.6rem; margin: 0.3rem 0; }
+  .g-label { font-size: 0.82rem; color: var(--mist); padding-right: 0.4rem; line-height: 1.25; }
+  .g-track { position: relative; height: 30px; border-radius: 6px;
+    background: repeating-linear-gradient(90deg, transparent, transparent calc(100% / var(--cols) - 1px), var(--steel) calc(100% / var(--cols))); }
+  .g-track.head { height: auto; background: none; display: flex; }
+  .g-mon { flex: 1; text-align: center; font-family: var(--mono); font-size: 0.6rem; color: var(--haze); letter-spacing: 0.01em; border-left: 1px solid var(--steel); padding: 0.2rem 0; }
+  .g-mon:first-child { border-left: 0; }
+  .g-mon.yr { color: var(--gas); }
+  .g-bar { position: absolute; top: 5px; bottom: 5px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 0.62rem; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden;
+    left: calc((var(--s) - 1) / var(--cols) * 100%); width: calc(var(--l) / var(--cols) * 100%); min-width: 12px; color: var(--abyss); transition: filter 0.2s; }
+  .g-bar:hover { filter: brightness(1.08); }
+  .g-bar.done { background: var(--gas); }
+  .g-bar.now { background: var(--flare); box-shadow: 0 0 0 1px var(--flare), 0 0 16px rgba(255, 107, 53, 0.35); }
+  .g-bar.plan { background: transparent; border: 1px dashed var(--haze); color: var(--haze); }
+  .g-bar.live { background: var(--gold); font-weight: 600; }
+  .g-legend { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1rem; font-size: 0.72rem; color: var(--haze); }
+  .g-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .g-legend i { width: 15px; height: 10px; border-radius: 3px; display: inline-block; }
+  .g-focus { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .g-foc { display: grid; grid-template-columns: 150px 1fr; gap: 0.9rem; align-items: baseline; font-size: 0.9rem; }
+  .g-foc .ph { font-family: var(--mono); font-size: 0.72rem; color: var(--gas); }
+  .g-foc.now .ph { color: var(--flare); }
+  @media (max-width: 680px) { .g-row { grid-template-columns: 120px 1fr; } .g-foc { grid-template-columns: 1fr; gap: 0.15rem; } }
 
   /* ---------- 08 Tax calculator ---------- */
   .calc { border: 1px solid var(--steel); border-radius: 14px; background: var(--deep); padding: 1.3rem 1.4rem; margin: 1.2rem 0; }
@@ -714,13 +725,13 @@
   <div class="rail__title">FI Tax Consultant<br><b>Scope of Work</b></div>
   <ol>
     <li><a class="rail__link" href="#hero" data-spy><span class="num">00</span><span class="name">The role, in one line</span></a></li>
-    <li><a class="rail__link" href="#own" data-spy><span class="num">01</span><span class="name">What you own</span></a></li>
+    <li><a class="rail__link" href="#own" data-spy><span class="num">01</span><span class="name">What I own</span></a></li>
     <li><a class="rail__link" href="#lifecycle" data-spy><span class="num">02</span><span class="name">Across the lifecycle</span></a></li>
     <li><a class="rail__link" href="#boundaries" data-spy><span class="num">03</span><span class="name">In / out of scope</span></a></li>
     <li><a class="rail__link" href="#deliverables" data-spy><span class="num">04</span><span class="name">Deliverables</span></a></li>
-    <li><a class="rail__link" href="#fimap" data-spy><span class="num">05</span><span class="name">Where my SAP FI sits</span></a></li>
+    <li><a class="rail__link" href="#fimap" data-spy><span class="num">05</span><span class="name">Where my work sits</span></a></li>
     <li><a class="rail__link" href="#tcodes" data-spy><span class="num">06</span><span class="name">T-code playbook</span></a></li>
-    <li><a class="rail__link" href="#timeline" data-spy><span class="num">07</span><span class="name">Project timeline</span></a></li>
+    <li><a class="rail__link" href="#timeline" data-spy><span class="num">07</span><span class="name">Road to Go-Live</span></a></li>
     <li><a class="rail__link" href="#taxengine" data-spy><span class="num">08</span><span class="name">PTTEP tax engine</span></a></li>
     <li><a class="rail__link" href="#legal" data-spy><span class="num">09</span><span class="name">Legal watch-list</span></a></li>
     <li><a class="rail__link" href="#honest" data-spy><span class="num">10</span><span class="name">Say it honestly</span></a></li>
@@ -733,19 +744,20 @@
 
   <!-- 00 HERO -->
   <section class="chapter" id="hero">
-    <div class="eyebrow"><span class="dot"></span>00 · The role, in one line</div>
-    <h2>You own the <span style="color:var(--gas)">tax layer</span> of SAP FI — config, test, and support.</h2>
+    <div class="eyebrow"><span class="dot"></span>00 · The mandate</div>
+    <h2>I own the <span style="color:var(--gas)">tax engine</span> inside SAP Financial Accounting.</h2>
 
     <div class="rolestate">
-      An <b>SAP FI consultant specializing in tax</b> configures, tests, and supports the
-      <b>tax determination and reporting layer</b> of Financial Accounting — primarily
-      <b>VAT (Tax on Sales/Purchases)</b> and <b>Extended Withholding Tax</b>, plus the GL
-      account determination and statutory reporting that sit on top of every posting. You
-      translate an agreed tax design into working configuration; you do not set the law.
+      On Accenture's S/4HANA programme for <b>PTTEP</b>, I own the <b>tax determination and
+      reporting layer</b> of Financial Accounting — principally <b>VAT (Tax on Sales/Purchases)</b>
+      and <b>Extended Withholding Tax</b>, with the account determination and statutory reporting
+      that sit beneath every posting. My job is to turn an agreed tax design into configuration that
+      stands up to a national energy company's compliance bar. I don't write the tax law — I make
+      SAP apply it correctly, on every document, every period.
     </div>
 
-    <p class="lede">On this S/4HANA programme you sit between several people — each one a clear
-      hand-off. Pick a counterpart to see what you exchange with them.</p>
+    <p class="lede">A tax consultant is only as strong as the hand-offs around them. On this programme
+      I sit between four parties, each a clean interface — select a counterpart to see what flows each way.</p>
 
     <div class="seg" role="group" aria-label="Who you interface with">
       <button type="button" data-if="lead" aria-pressed="true">FI/CO Lead</button>
@@ -755,16 +767,16 @@
       <button type="button" data-if="test" aria-pressed="false">Test / Cutover</button>
     </div>
     <div class="card detail" id="ifDetail" aria-live="polite"></div>
-    <p class="caption" style="margin-top:1rem">Your value is the <b style="color:var(--gas)">join</b> between the
-      legal requirement (from the Tax SME) and the working system (configured by you, built by ABAP, used through MM/SD/FI).</p>
+    <p class="caption" style="margin-top:1rem">My value is the <b style="color:var(--gas)">join</b> between the
+      legal requirement (from the Tax SME) and the working system — configured by me, built by ABAP, used through MM / SD / FI.</p>
   </section>
 
   <!-- 01 WHAT YOU OWN -->
   <section class="chapter" id="own">
-    <div class="eyebrow"><span class="dot"></span>01 · What you own</div>
-    <h2>Seven responsibility pillars.</h2>
-    <p class="lede">This is the working surface of the role. Expand a pillar (click, or focus + Enter)
-      to see the concrete activities and the T-codes behind them.</p>
+    <div class="eyebrow"><span class="dot"></span>01 · What I own</div>
+    <h2>The seven pillars I carry.</h2>
+    <p class="lede">This is where the hours actually go — the working surface of an FI tax consultant.
+      Open any pillar for the concrete activities and the transactions behind them.</p>
 
     <div class="pillars" id="pillars">
       <div class="pillar">
@@ -773,7 +785,7 @@
           <span class="ptag">core</span><span class="chev">▸</span>
         </button>
         <div class="pillar__body" id="p-cfg"><div class="pillar__body-inner">
-          <p>Build the engine that calculates and posts tax: the Thai calculation procedure
+          <p>I build the engine that calculates and posts tax: the Thai calculation procedure
             <span class="tcode">TAXTH</span>, tax codes and their rates/types in <span class="tcode">FTXP</span>,
             the account determination that routes each tax transaction key to a GL account in
             <span class="tcode">OB40</span>, and the GL master settings in <span class="tcode">FS00</span>.
@@ -791,7 +803,7 @@
           <span class="ptag">cross-module</span><span class="chev">▸</span>
         </button>
         <div class="pillar__body" id="p-det"><div class="pillar__body-inner">
-          <p>Make sure the right tax lands on the right document. Tax flows in from
+          <p>I make sure the right tax lands on the right document. Tax flows in from
             <b>MM</b> (the tax code on a purchase order / invoice verification),
             <b>SD</b> (output tax via condition records), and direct <b>FI</b> postings
             (<span class="tcode">FB60</span> vendor invoice, <span class="tcode">FB70</span> customer invoice).
@@ -809,7 +821,7 @@
           <span class="ptag">compliance</span><span class="chev">▸</span>
         </button>
         <div class="pillar__body" id="p-rep"><div class="pillar__body-inner">
-          <p>Produce what the Revenue Department wants to see. Output VAT − input VAT is filed
+          <p>I produce what the Revenue Department wants to see. Output VAT − input VAT is filed
             monthly on <span class="tcode">PP30</span> (data from the VAT report, e.g.
             <span class="tcode">RFUMSV00</span>); withholding is filed on <span class="tcode">PND 3 / 53 / 54</span>
             with WHT certificates. On S/4HANA this increasingly runs through
@@ -827,10 +839,10 @@
           <span class="ptag">data</span><span class="chev">▸</span>
         </button>
         <div class="pillar__body" id="p-md"><div class="pillar__body-inner">
-          <p>The config only works if the master data carries the right tax attributes: tax
+          <p>The configuration only works if the master data carries the right tax attributes: tax
             classification on customer / vendor / material, the Extended WHT type & code assigned
             on the vendor master, VAT registration numbers, and the tax category on the GL master.
-            You define the rules; data migration loads the volume.</p>
+            I define the rules; data migration loads the volume.</p>
           <div class="tcodes">
             <span class="tcode">Vendor · WHT info</span><span class="tcode">Customer · tax class.</span>
             <span class="tcode">FS00 · tax category</span>
@@ -844,10 +856,10 @@
           <span class="ptag">quality</span><span class="chev">▸</span>
         </button>
         <div class="pillar__body" id="p-test"><div class="pillar__body-inner">
-          <p>Prove the tax behaves. Unit-test each tax code, integration-test the end-to-end flows
+          <p>I prove the tax behaves. I unit-test each tax code, integration-test the end-to-end flows
             that carry tax (<b>P2P</b> with input VAT + WHT, <b>O2C</b> with output VAT, period-end
             VAT/WHT runs), write and walk test scripts, and support UAT. Log and triage tax defects
-            with clear reproduction steps — the same UAT discipline you ran on XeerSoft.</p>
+            with clear reproduction steps — the same UAT discipline I ran across four XeerSoft go-lives.</p>
         </div></div>
       </div>
 
@@ -857,7 +869,7 @@
           <span class="ptag">go-live</span><span class="chev">▸</span>
         </button>
         <div class="pillar__body" id="p-cut"><div class="pillar__body-inner">
-          <p>Get tax right at the switch. Validate open items that carry tax, opening tax balances,
+          <p>I get tax right at the switch. I validate open items that carry tax, opening tax balances,
             and any WHT carry-forward; confirm configuration transports moved correctly; and check
             the first live postings determine tax as designed. You support the tax slice of the
             cutover plan — you do not own the whole cutover.</p>
@@ -870,7 +882,7 @@
           <span class="ptag">run</span><span class="chev">▸</span>
         </button>
         <div class="pillar__body" id="p-hyp"><div class="pillar__body-inner">
-          <p>Stabilise the first cycles. Support the first month-end VAT filing (<span class="tcode">PP30</span>)
+          <p>I stabilise the first cycles. I support the first month-end VAT filing (<span class="tcode">PP30</span>)
             and WHT filing (<span class="tcode">PND</span>), reconcile the tax GL accounts, triage incidents
             on tax postings, and hand over clean knowledge-transfer docs so BAU / AMS can take it.</p>
         </div></div>
@@ -885,16 +897,16 @@
 
   <!-- 02 LIFECYCLE -->
   <section class="chapter" id="lifecycle">
-    <div class="eyebrow"><span class="dot"></span>02 · Across the lifecycle</div>
-    <h2>What the role does in each SAP Activate phase.</h2>
+    <div class="eyebrow"><span class="dot"></span>02 · How the engagement runs</div>
+    <h2>How I add value in each SAP Activate phase.</h2>
     <p class="lede">The tax solution is <i>designed</i> early and <i>built &amp; proven</i> in the middle.
-      You join in <b>late Realize</b> — so your weight is on understanding, testing, cutover, and run,
-      not on the original design. Pick a phase.</p>
+      I came in at <b>late Realize</b>, so my weight is on understanding the build, hardening it in test,
+      and carrying it through cutover and run — not on the original design. Select a phase.</p>
 
     <div class="seg" role="group" aria-label="SAP Activate phase">
       <button type="button" data-ph="prepare" aria-pressed="false">Prepare</button>
       <button type="button" data-ph="explore" aria-pressed="false">Explore</button>
-      <button type="button" data-ph="realize" aria-pressed="true">Realize <span class="you-here">you join</span></button>
+      <button type="button" data-ph="realize" aria-pressed="true">Realize <span class="you-here">I'm here</span></button>
       <button type="button" data-ph="deploy" aria-pressed="false">Deploy</button>
       <button type="button" data-ph="run" aria-pressed="false">Run</button>
     </div>
@@ -905,8 +917,8 @@
   <section class="chapter" id="boundaries">
     <div class="eyebrow"><span class="dot"></span>03 · In / out of scope</div>
     <h2>The boundary is the scope.</h2>
-    <p class="lede">Knowing what is <i>not</i> yours is as important as knowing what is. Toggle the view —
-      what you deliver, what you explicitly hand off, and who is accountable for what.</p>
+    <p class="lede">A consultant who can't name what's out of scope ends up owning everyone's problems.
+      Here's what I deliver, what I deliberately hand off, and who is accountable for each — toggle the view.</p>
 
     <div class="seg seg--gold" role="group" aria-label="Scope view">
       <button type="button" data-sc="split" aria-pressed="true">In vs Out</button>
@@ -917,7 +929,7 @@
     <div id="sc-split">
       <div class="scope-cols">
         <div class="scope-col scope-col--in">
-          <h3>▸ In scope — you deliver</h3>
+          <h3>▸ In scope — I deliver</h3>
           <ul>
             <li>Configure VAT tax codes (<span class="tcode">FTXP</span>) &amp; account determination (<span class="tcode">OB40</span>) to the agreed design</li>
             <li>Maintain Extended WHT types/codes and link to master data</li>
@@ -940,7 +952,7 @@
           </ul>
         </div>
       </div>
-      <p class="note">The honest one-liner: <b>you implement an agreed tax design and prove it works — you don't author the tax law or build the ABAP.</b></p>
+      <p class="note">The honest one-liner: <b>I implement an agreed tax design and prove it works — I don't author the tax law or build the ABAP.</b></p>
     </div>
 
     <!-- RACI -->
@@ -975,9 +987,9 @@
   <!-- 04 DELIVERABLES -->
   <section class="chapter" id="deliverables">
     <div class="eyebrow"><span class="dot"></span>04 · Deliverables</div>
-    <h2>What lands on the project as your output.</h2>
-    <p class="lede">The artifacts that prove the scope is done. Tick them off as a self-check — the count
-      is held in memory only (nothing is saved).</p>
+    <h2>What I put my name on.</h2>
+    <p class="lede">The artefacts that prove the work is done and auditable. Tick them off as a self-check —
+      the count is held in memory only, nothing is saved.</p>
 
     <div class="checklist" id="checklist" role="group" aria-label="Deliverables checklist">
       <button type="button" class="chk" role="checkbox" aria-checked="false">
@@ -1027,11 +1039,11 @@
 
   <!-- 05 SAP FI MAP -->
   <section class="chapter" id="fimap">
-    <div class="eyebrow"><span class="dot"></span>05 · Where my SAP FI sits</div>
-    <h2>SAP FI, broken down — and the branch I own.</h2>
-    <p class="lede">FI is one module with several sub-ledgers. A tax consultant lives in exactly one branch:
-      <b>Tax &amp; Special Products</b>. This is the one-slide answer to "which part of SAP FI do you do?"
-      Click any node to see its role and how it ties back to tax.</p>
+    <div class="eyebrow"><span class="dot"></span>05 · Where my work sits</div>
+    <h2>Where my work lives inside SAP Financial Accounting.</h2>
+    <p class="lede">When people ask which part of SAP FI I work on, this is the one-slide answer.
+      Financial Accounting spans several sub-ledgers; tax is a layer that runs across them, anchored in
+      <b>Tax &amp; Special Products</b>. Select any node to see how it connects back to the tax engine I own.</p>
 
     <div class="fimap">
       <div class="fimap__root">
@@ -1060,9 +1072,9 @@
   <!-- 06 T-CODE PLAYBOOK -->
   <section class="chapter" id="tcodes">
     <div class="eyebrow"><span class="dot"></span>06 · T-code playbook</div>
-    <h2>The transaction codes to recall on muscle memory.</h2>
-    <p class="lede">Every functional command you'll reach for, what it does, and where it sits in the
-      setup flow. Filter by area.</p>
+    <h2>The transactions I live in.</h2>
+    <p class="lede">The transactions I reach for, what each one does, and where it sits in the build
+      sequence. Filter by area.</p>
 
     <div class="filterbar" id="tcFilter" role="group" aria-label="Filter T-codes by area">
       <button type="button" data-cat="all" aria-pressed="true">All</button>
@@ -1123,57 +1135,55 @@
 
   <!-- 07 PROJECT TIMELINE -->
   <section class="chapter" id="timeline">
-    <div class="eyebrow"><span class="dot"></span>07 · Project timeline</div>
-    <h2>Realize now → Go-Live January 2027.</h2>
-    <p class="lede">Where the programme is and where you plug in. You enter mid-stream at <b>Realize</b>;
-      the lock is a <b>Go-Live in Jan 2027</b>, followed by hypercare.</p>
+    <div class="eyebrow"><span class="dot"></span>07 · Road to Go-Live</div>
+    <h2>I joined at Realize. The lock is Go-Live, January 2027.</h2>
+    <p class="lede">I came onto the programme mid-stream — the design settled, the build under way. From
+      here everything bends toward one fixed date: <b>Go-Live in January 2027</b>, with a hypercare tail
+      behind it. Here is the programme month by month, and where I picked it up.</p>
 
-    <div class="tl-meta">
+    <div class="gantt-meta">
       <span class="big">Go-Live · Jan 2027</span>
-      <span class="caption">You enter at Realize (Jul 2026) — ≈ 6 months of runway to cutover.</span>
+      <span class="caption">I enter at Realize (Jul 2026) — roughly six months of runway to cutover.</span>
     </div>
-    <div class="progress" style="margin:0.7rem 0 1.5rem" aria-hidden="true"><span style="width:45%"></span></div>
 
-    <div class="timeline">
-      <div class="tl-item done">
-        <div class="tl-head"><span class="tl-date">Jan – Jun 2026</span><span class="tl-name">Explore / Blueprint</span><span class="tl-badge">done</span></div>
-        <p class="tl-focus">Fit-to-standard; the tax design &amp; Thai localization are decided here. <span class="you">Before you — you inherit this design.</span></p>
-      </div>
-      <div class="tl-item now">
-        <div class="tl-head"><span class="tl-date">Jul – Sep 2026</span><span class="tl-name">Realize — Build &amp; unit test</span><span class="tl-badge">★ you are here</span></div>
-        <p class="tl-focus"><span class="you">You join here.</span> Understand the configured tax codes, OB40 &amp; WHT setup; run unit tests on VAT/WHT.</p>
-      </div>
-      <div class="tl-item">
-        <div class="tl-head"><span class="tl-date">Oct 2026</span><span class="tl-name">Realize — Integration test (SIT)</span></div>
-        <p class="tl-focus">End-to-end P2P / O2C carrying tax; period-end VAT &amp; WHT runs; defect triage.</p>
-      </div>
-      <div class="tl-item">
-        <div class="tl-head"><span class="tl-date">Nov 2026</span><span class="tl-name">User acceptance test (UAT)</span></div>
-        <p class="tl-focus">Business validates tax postings &amp; reports; you support scripts and fixes.</p>
-      </div>
-      <div class="tl-item">
-        <div class="tl-head"><span class="tl-date">Dec 2026</span><span class="tl-name">Deploy — Cutover / Final prep</span></div>
-        <p class="tl-focus">Migrate open items with tax, opening balances, WHT carry-forward; move transports; dry-run.</p>
-      </div>
-      <div class="tl-item target">
-        <div class="tl-head"><span class="tl-date">Jan 2027</span><span class="tl-name">Go-Live</span><span class="tl-badge">🔒 target</span></div>
-        <p class="tl-focus">Production live — validate the first live VAT/WHT postings and tax determination.</p>
-      </div>
-      <div class="tl-item">
-        <div class="tl-head"><span class="tl-date">Jan – Feb 2027</span><span class="tl-name">Hypercare</span></div>
-        <p class="tl-focus">First month-end PP30 + PND filing; reconcile the tax GL; triage; knowledge-transfer to AMS.</p>
+    <div class="gantt-scroll">
+      <div class="gantt" style="--cols:14">
+        <div class="g-row"><div class="g-label"></div><div class="g-track head">
+          <div class="g-mon yr">Jan'26</div><div class="g-mon">Feb</div><div class="g-mon">Mar</div><div class="g-mon">Apr</div><div class="g-mon">May</div><div class="g-mon">Jun</div><div class="g-mon">Jul</div><div class="g-mon">Aug</div><div class="g-mon">Sep</div><div class="g-mon">Oct</div><div class="g-mon">Nov</div><div class="g-mon">Dec</div><div class="g-mon yr">Jan'27</div><div class="g-mon">Feb</div>
+        </div></div>
+        <div class="g-row"><div class="g-label">Explore / Blueprint</div><div class="g-track"><span class="g-bar done" style="--s:1;--l:6" title="Explore / Blueprint — 6 mo (before me)">6 mo</span></div></div>
+        <div class="g-row"><div class="g-label">Realize — build &amp; unit test</div><div class="g-track"><span class="g-bar now" style="--s:7;--l:3" title="Realize — build &amp; unit test (I join here)">I join &middot; 3 mo</span></div></div>
+        <div class="g-row"><div class="g-label">Integration test (SIT)</div><div class="g-track"><span class="g-bar plan" style="--s:10;--l:1" title="Integration test (SIT)">SIT</span></div></div>
+        <div class="g-row"><div class="g-label">User acceptance (UAT)</div><div class="g-track"><span class="g-bar plan" style="--s:11;--l:1" title="User acceptance test">UAT</span></div></div>
+        <div class="g-row"><div class="g-label">Cutover / final prep</div><div class="g-track"><span class="g-bar plan" style="--s:12;--l:1" title="Cutover / final preparation">CUT</span></div></div>
+        <div class="g-row"><div class="g-label">Go-Live</div><div class="g-track"><span class="g-bar live" style="--s:13;--l:1" title="Go-Live · Jan 2027">LIVE</span></div></div>
+        <div class="g-row"><div class="g-label">Hypercare</div><div class="g-track"><span class="g-bar plan" style="--s:13;--l:2" title="Hypercare — 2 mo">2 mo</span></div></div>
       </div>
     </div>
-    <p class="note">Dates are an illustrative study plan — the actual schedule is governed by the Accenture / PTTEP programme.</p>
+    <div class="g-legend">
+      <span><i style="background:var(--gas)"></i>Delivered (before me)</span>
+      <span><i style="background:var(--flare)"></i>In progress &middot; I am here</span>
+      <span><i style="border:1px dashed var(--haze)"></i>Planned</span>
+      <span><i style="background:var(--gold)"></i>Go-Live</span>
+    </div>
+
+    <div class="g-focus">
+      <div class="g-foc"><span class="ph">Explore</span><span>The tax design and Thai localization were settled before me — I inherit and respect it, not redesign it.</span></div>
+      <div class="g-foc now"><span class="ph">Realize · now</span><span>I'm reading the configured tax codes, OB40 determination and Extended WHT, and unit-testing VAT and WHT behaviour.</span></div>
+      <div class="g-foc"><span class="ph">SIT → UAT</span><span>End-to-end P2P / O2C carrying tax, period-end VAT and WHT runs, then business sign-off.</span></div>
+      <div class="g-foc"><span class="ph">Cutover</span><span>Migrate open items with tax, opening balances and WHT carry-forward; move transports; dry-run.</span></div>
+      <div class="g-foc"><span class="ph">Go-Live → Hypercare</span><span>Validate the first live tax postings, then carry the first month-end PP30 and PND filing before handover.</span></div>
+    </div>
+    <p class="note">Dates are an illustrative plan for this study — the live schedule is governed by the Accenture / PTTEP programme.</p>
   </section>
 
   <!-- 08 PTTEP TAX ENGINE -->
   <section class="chapter" id="taxengine">
     <div class="eyebrow"><span class="dot"></span>08 · PTTEP tax engine</div>
-    <h2>The taxes you'll meet — and a live SAP-style calculator.</h2>
-    <p class="lede">Two layers at PTTEP: ordinary <b>transactional taxes</b> (VAT, WHT) that SAP FI computes
-      on every document, and <b>petroleum levies</b> (Royalty, SRB, PITA) that post as GL provisions.
-      Click a row to manage its detail, then try the calculator.</p>
+    <h2>The taxes I'll meet at PTTEP — and how SAP posts them.</h2>
+    <p class="lede">Two layers meet at PTTEP: the ordinary <b>transactional taxes</b> (VAT, WHT) that SAP FI
+      computes on every document, and the <b>petroleum levies</b> (Royalty, SRB, PITA) that post as GL
+      provisions. Open a row for the detail, then run the calculator to see the journal SAP would post.</p>
 
     <div class="pillars" id="taxlist">
       <div class="pillar">
@@ -1357,9 +1367,9 @@
   <!-- 09 LEGAL WATCH-LIST -->
   <section class="chapter" id="legal">
     <div class="eyebrow"><span class="dot"></span>09 · Legal watch-list</div>
-    <h2>Thai tax law to respect when you configure or test.</h2>
-    <p class="lede">The statutes and rules that turn into config decisions and test cases for PTTEP.
-      Expand each — what it governs and the SAP implication to watch.</p>
+    <h2>The Thai tax law I design against.</h2>
+    <p class="lede">The statutes and rules that become configuration decisions and test cases on a
+      petroleum client. Open each for what it governs and the SAP implication I watch for.</p>
 
     <div class="pillars" id="legallist">
       <div class="pillar">
@@ -1459,10 +1469,11 @@
 
   <!-- 10 HONEST -->
   <section class="chapter" id="honest">
-    <div class="eyebrow"><span class="dot"></span>10 · Say it honestly</div>
-    <h2>Scope it to what you've really done.</h2>
-    <p class="lede">XeerSoft isn't SAP — but a full-lifecycle ERP delivery maps cleanly onto these SAP
-      concepts. Claim the concept understanding and the real delivery; never claim the SAP-specific config you haven't touched.</p>
+    <div class="eyebrow"><span class="dot"></span>10 · Where my depth comes from</div>
+    <h2>Where my depth actually comes from.</h2>
+    <p class="lede">XeerSoft isn't SAP — but four full-lifecycle ERP go-lives map cleanly onto these SAP
+      concepts. I bring the concept understanding and the real delivery experience, and I stay precise
+      about the line between the two.</p>
 
     <div class="table-wrap">
       <table>
@@ -1610,32 +1621,32 @@
     var phData = {
       prepare: { name: 'Prepare', here: false,
         project: 'Mobilise the team, stand up environments, set project standards &amp; governance.',
-        you: 'Usually before your start — the tax stream is being staffed and scoped.',
-        deliver: 'Project charter, landscape, ways of working. (No tax deliverable from you yet.)' },
+        you: 'Before my time on the programme — the tax stream is still being staffed and scoped.',
+        deliver: 'Project charter, landscape, ways of working. (No tax deliverable from me yet.)' },
       explore: { name: 'Explore', here: false,
         project: 'Fit-to-standard workshops; capture tax requirements; decide Thai localization (VAT/WHT); design tax determination.',
-        you: 'Typically before your start — this is where the tax solution is <b>designed</b> (so you inherit it, you don\'t author it).',
+        you: 'Before my time — this is where the tax solution is <b>designed</b>, so I inherit it rather than author it.',
         deliver: 'Tax design / business process docs, requirements backlog, localization decisions.' },
       realize: { name: 'Realize', here: true,
         project: 'Build configuration in DEV, run unit / string / integration tests, prepare data migration.',
-        you: '<b>You join here (late Realize).</b> Understand the configured tax codes (<span class="tcode">FTXP</span>), account determination (<span class="tcode">OB40</span>) &amp; WHT setup; execute tax test scripts (P2P, O2C, period-end); log &amp; triage tax defects.',
+        you: '<b>I join here (late Realize).</b> I read the configured tax codes (<span class="tcode">FTXP</span>), account determination (<span class="tcode">OB40</span>) &amp; WHT setup, run tax test scripts (P2P, O2C, period-end), and log &amp; triage tax defects.',
         deliver: 'Tax test results, config read-in notes, defect log, draft form specs.' },
       deploy: { name: 'Deploy', here: false,
         project: 'Cutover, data migration, go-live readiness, then go-live.',
-        you: 'Support the tax slice of cutover — open items with tax, tax balances, WHT carry-forward; validate the first live tax postings &amp; smoke-test VAT/WHT determination.',
+        you: 'I support the tax slice of cutover — open items with tax, tax balances, WHT carry-forward — and validate the first live tax postings, smoke-testing VAT/WHT determination.',
         deliver: 'Cutover tax checklist sign-off, go-live validation evidence.' },
       run: { name: 'Run', here: false,
         project: 'Hypercare, then transition to BAU / AMS.',
-        you: 'Support the first month-end VAT (<span class="tcode">PP30</span>) &amp; WHT (<span class="tcode">PND</span>) filings, reconcile the tax GL, triage incidents, hand over.',
+        you: 'I carry the first month-end VAT (<span class="tcode">PP30</span>) &amp; WHT (<span class="tcode">PND</span>) filings, reconcile the tax GL, triage incidents, and hand over.',
         deliver: 'Hypercare issue log, month-end filing runbook, knowledge-transfer pack.' }
     };
     wireSeg('ph', phData, document.getElementById('phDetail'), function (d) {
       var badge = d.here
-        ? '<span class="role-of" style="color:var(--flare)">★ You join in this phase</span>'
+        ? '<span class="role-of" style="color:var(--flare)">★ I join in this phase</span>'
         : '<span class="role-of">Phase</span>';
       return badge + '<h3>' + d.name + '</h3>' +
-        '<dl><dt>Project does</dt><dd>' + d.project + '</dd>' +
-        '<dt>You do</dt><dd>' + d.you + '</dd>' +
+        '<dl><dt>The programme</dt><dd>' + d.project + '</dd>' +
+        '<dt>My role</dt><dd>' + d.you + '</dd>' +
         '<dt>Deliverables</dt><dd>' + d.deliver + '</dd></dl>';
     }, 'realize');
 
