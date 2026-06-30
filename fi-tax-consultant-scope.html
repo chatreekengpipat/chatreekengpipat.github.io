@@ -584,7 +584,9 @@
   .banner img { width: 100%; height: 230px; object-fit: cover; display: block; filter: saturate(0.96) brightness(0.9); }
   .banner .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 1.2rem 0.9rem; background: linear-gradient(transparent, rgba(10, 26, 31, 0.92)); font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; color: var(--mist); }
   .banner .cap b { color: var(--gas); }
-  @media (max-width: 560px) { .banner img { height: 175px; } }
+  .banner--hero img { height: 300px; filter: saturate(0.95) brightness(0.82); }
+  .banner--hero .cap { padding-top: 2rem; font-size: 0.75rem; letter-spacing: 0.04em; }
+  @media (max-width: 560px) { .banner img { height: 175px; } .banner--hero img { height: 205px; } }
 
   /* ---------- Footer ---------- */
   footer {
@@ -775,6 +777,10 @@
 
   <!-- 00 HERO -->
   <section class="chapter" id="hero">
+    <div class="banner banner--hero">
+      <img src="media/platform-hero.jpg" alt="Offshore oil and gas production platform standing in open sea" loading="eager" width="1600" height="1200">
+      <div class="cap"><b>Accenture × PTTEP</b> · SAP S/4HANA — the Financial Accounting (tax) seat</div>
+    </div>
     <div class="eyebrow"><span class="dot"></span>00 · The mandate</div>
     <h2>I own the <span style="color:var(--gas)">tax engine</span> inside SAP Financial Accounting.</h2>
 
@@ -1604,7 +1610,7 @@
     or SAP. Lifecycle uses the SAP Activate phase model; figures and T-codes are for study only.
     <div class="sources">Companion: <a href="finance-functional-module.html">SAP FI · Tax · PTTEP essentials</a>.
       Sources: SAP Activate methodology · Thai Revenue Department (rd.go.th) · PwC Thailand Tax Summaries.</div>
-    <div class="sources">Image via Wikimedia Commons — offshore platform © W. Bulach (CC BY-SA 4.0).</div>
+    <div class="sources">Images via Wikimedia Commons — open-sea platform © Gary Bembridge (CC BY 2.0) · offshore platform © W. Bulach (CC BY-SA 4.0).</div>
   </div>
 </footer>
 
