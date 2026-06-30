@@ -647,10 +647,10 @@
       flex-direction: column; align-items: stretch; gap: 0.15rem;
       background: var(--deep); border-bottom: 1px solid var(--steel);
       padding: 0.6rem; max-height: calc(100vh - var(--bar-h)); overflow: auto;
-      transform: translateY(-12px); opacity: 0; visibility: hidden;
+      transform: translateY(-12px); opacity: 0; visibility: hidden; pointer-events: none;
       transition: opacity 0.22s, transform 0.22s, visibility 0.22s;
     }
-    .sitemenu.is-open { transform: none; opacity: 1; visibility: visible; }
+    .sitemenu.is-open { transform: none; opacity: 1; visibility: visible; pointer-events: auto; }
     .dd { position: static; }
     .dd-btn { width: 100%; text-align: left; }
     .dd-panel { position: static; opacity: 1; visibility: visible; transform: none;
