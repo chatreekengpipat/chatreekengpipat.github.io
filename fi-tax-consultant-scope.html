@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FI Tax Consultant — Scope of Work · SAP FI · Tax · Accenture × PTTEP</title>
 <meta name="description" content="The proper scope of work for an SAP FI consultant specializing in tax on the Accenture / PTTEP S/4HANA programme: what you own, the lifecycle, in-scope vs out-of-scope boundaries, deliverables, and an honest XeerSoft-to-SAP bridge. A personal study and positioning page.">
+<script>
+  /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -321,7 +332,7 @@
   .pillar__btn .chev { font-family: var(--mono); color: var(--gas); transition: transform 0.3s; flex-shrink: 0; }
   .pillar__btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
   .pillar__body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-  .pillar__body.is-open { max-height: 520px; }
+  .pillar__body.is-open { max-height: 760px; }
   .pillar__body-inner { padding: 0 1.2rem 1.1rem; }
   .pillar__body-inner p { margin: 0 0 0.7rem; font-size: 0.94rem; }
   .pillar__body-inner .tcodes { display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -447,6 +458,93 @@
   .onerule .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
   .onerule b { color: var(--gold); }
 
+  /* ---------- dl inside pillars (tax & legal detail) ---------- */
+  .pillar__body-inner dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0; font-size: 0.9rem; }
+  .pillar__body-inner dt { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gas); }
+  .pillar__body-inner dd { margin: 0; }
+  @media (max-width: 560px) { .pillar__body-inner dl { grid-template-columns: 1fr; gap: 0.1rem 0; } .pillar__body-inner dd { margin-bottom: 0.5rem; } }
+  .pillar__btn .ptag.warn { color: var(--flare); border: 1px solid var(--flare); border-radius: 5px; padding: 0.05em 0.4em; }
+
+  /* ---------- 05 SAP FI map ---------- */
+  .fimap { margin: 1.5rem 0 0.4rem; }
+  .fimap__root { text-align: center; background: var(--deep); border: 1px solid var(--gas); border-radius: 12px; padding: 0.85rem 1rem; max-width: 380px; margin: 0 auto; }
+  .fimap__root .t { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; }
+  .fimap__root .n { font-family: var(--display); font-weight: 700; font-size: 1.08rem; }
+  .fimap__stem { width: 2px; height: 22px; background: var(--steel); margin: 0 auto; }
+  .fimap__row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.55rem; }
+  .fimap__subrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; }
+  @media (max-width: 720px) { .fimap__row { grid-template-columns: repeat(2, 1fr); } .fimap__subrow { grid-template-columns: 1fr; } }
+  .fimap__node { font: inherit; cursor: pointer; text-align: center; background: var(--deep); border: 1px solid var(--steel); border-radius: 10px; padding: 0.65rem 0.5rem; color: var(--mist); transition: transform 0.2s, border-color 0.2s, background 0.2s; }
+  .fimap__node:hover { transform: translateY(-2px); border-color: var(--gas); }
+  .fimap__node .code { font-family: var(--mono); font-weight: 600; font-size: 0.9rem; display: block; color: var(--gas); }
+  .fimap__node .lbl { font-size: 0.64rem; color: var(--haze); display: block; margin-top: 0.18rem; line-height: 1.3; }
+  .fimap__node[aria-pressed="true"] { border-color: var(--gas); background: rgba(43, 217, 196, 0.09); box-shadow: 0 0 0 1px var(--gas); }
+  .fimap__node.is-here { border-color: var(--flare); background: rgba(255, 107, 53, 0.08); }
+  .fimap__node.is-here .code { color: var(--flare); }
+  .fimap__node.is-here[aria-pressed="true"] { box-shadow: 0 0 0 1px var(--flare); }
+  .fimap__node .pin { display: none; font-family: var(--mono); font-size: 0.58rem; color: var(--flare); margin-top: 0.25rem; }
+  .fimap__node.is-here .pin { display: block; }
+
+  /* ---------- 06 T-code filter + workflow ---------- */
+  .filterbar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.2rem 0 0.9rem; }
+  .filterbar button { font: inherit; font-family: var(--mono); font-size: 0.76rem; cursor: pointer; color: var(--haze); background: var(--deep); border: 1px solid var(--steel); border-radius: 8px; padding: 0.4rem 0.85rem; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .filterbar button:hover { color: var(--mist); border-color: var(--gas); }
+  .filterbar button[aria-pressed="true"] { color: var(--abyss); background: var(--gas); border-color: var(--gas); font-weight: 600; }
+  .workflow { margin-top: 1.3rem; }
+  .workflow h4 { font-family: var(--display); font-size: 0.98rem; margin: 0 0 0.6rem; color: var(--gas); }
+  .wf-steps { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .wf-step { flex: 1 1 132px; background: var(--deep); border: 1px solid var(--steel); border-radius: 10px; padding: 0.65rem 0.75rem; }
+  .wf-step .s { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gas); }
+  .wf-step .tc { font-family: var(--mono); font-weight: 600; font-size: 0.84rem; color: var(--mist); display: block; margin: 0.18rem 0; }
+  .wf-step .d { font-size: 0.74rem; color: var(--haze); line-height: 1.4; }
+
+  /* ---------- 07 Timeline ---------- */
+  .tl-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; }
+  .tl-meta .big { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--gold); }
+  .timeline { margin: 1.4rem 0 1rem; position: relative; padding-left: 1.9rem; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 10px; width: 2px; background: linear-gradient(180deg, var(--gas), var(--gold)); }
+  .tl-item { position: relative; padding: 0 0 1.25rem 0; }
+  .tl-item::before { content: ''; position: absolute; left: -1.9rem; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--abyss); border: 2px solid var(--steel); box-sizing: border-box; }
+  .tl-item.done::before { border-color: var(--gas); background: var(--gas); }
+  .tl-item.now::before { border-color: var(--flare); background: var(--flare); box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.18); }
+  .tl-item.target::before { border-color: var(--gold); background: var(--gold); box-shadow: 0 0 0 4px rgba(232, 176, 75, 0.18); }
+  .tl-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.55rem; }
+  .tl-date { font-family: var(--mono); font-size: 0.72rem; color: var(--gas); }
+  .tl-name { font-family: var(--display); font-weight: 600; font-size: 1.0rem; }
+  .tl-badge { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; border-radius: 5px; padding: 0.12em 0.45em; }
+  .tl-item.now .tl-badge { color: var(--flare); border: 1px solid var(--flare); }
+  .tl-item.target .tl-badge { color: var(--gold); border: 1px solid var(--gold); }
+  .tl-focus { font-size: 0.92rem; color: var(--mist); margin: 0.25rem 0 0; }
+  .tl-focus .you { color: var(--flare); font-weight: 500; }
+
+  /* ---------- 08 Tax calculator ---------- */
+  .calc { border: 1px solid var(--steel); border-radius: 14px; background: var(--deep); padding: 1.3rem 1.4rem; margin: 1.2rem 0; }
+  .calc__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media (max-width: 720px) { .calc__grid { grid-template-columns: 1fr; gap: 1.1rem; } }
+  .calc label { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gas); margin: 0 0 0.35rem; }
+  .calc input[type="number"], .calc select { width: 100%; font: inherit; font-family: var(--mono); background: var(--abyss); color: var(--mist); border: 1px solid var(--steel); border-radius: 9px; padding: 0.6rem 0.7rem; }
+  .calc input[type="number"]:focus, .calc select:focus { outline: none; border-color: var(--gas); box-shadow: 0 0 0 2px rgba(43, 217, 196, 0.25); }
+  .calc__field { margin-bottom: 1rem; }
+  .calc__check { display: flex; align-items: center; gap: 0.55rem; font-family: var(--mono); font-size: 0.84rem; color: var(--mist); cursor: pointer; }
+  .calc__check input { width: 18px; height: 18px; accent-color: var(--gas); }
+  .calc__line { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px dashed var(--steel); font-size: 0.92rem; }
+  .calc__line .k { color: var(--haze); }
+  .calc__line .v { font-family: var(--mono); font-weight: 600; }
+  .calc__line.vat .v { color: var(--flare); }
+  .calc__line.wht .v { color: var(--gold); }
+  .calc__line.total { border-bottom: 0; border-top: 2px solid var(--steel); margin-top: 0.3rem; padding-top: 0.6rem; }
+  .calc__line.total .k { color: var(--mist); }
+  .calc__line.total .v { color: var(--gas); font-size: 1.12rem; }
+  .taccount { margin-top: 1.1rem; border: 1px solid var(--steel); border-radius: 10px; overflow: hidden; }
+  .taccount .th { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); background: var(--abyss); padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--steel); }
+  .taccount table { width: 100%; }
+  .taccount td { padding: 0.4rem 0.85rem; font-family: var(--mono); font-size: 0.83rem; border-bottom: 1px solid rgba(28, 61, 68, 0.5); }
+  .taccount tr:last-child td { border-bottom: 0; }
+  .taccount td.amt { text-align: right; color: var(--mist); }
+  .taccount td.dr { color: var(--mist); }
+  .taccount td.cr { color: var(--haze); padding-left: 1.9rem; }
+  .taccount td.sub { color: var(--haze); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; background: rgba(43, 217, 196, 0.04); }
+
   /* ---------- Footer ---------- */
   footer {
     margin-left: var(--rail-w);
@@ -519,6 +617,41 @@
       animation-iteration-count: 1 !important;
     }
   }
+
+  /* ---------- Theme toggle button ---------- */
+  .theme-btn {
+    font-size: 1rem; line-height: 1; cursor: pointer;
+    padding: 0.45rem 0.65rem; border-radius: 8px;
+    background: none; border: 1px solid var(--steel); color: var(--mist);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(43, 217, 196, 0.07); }
+  .theme-btn .icon-moon { display: none; }
+  html[data-theme="light"] .theme-btn .icon-sun { display: none; }
+  html[data-theme="light"] .theme-btn .icon-moon { display: inline; }
+
+  /* ---------- Light (Day) theme ---------- */
+  html[data-theme="light"] {
+    --abyss: #EAF1EF;
+    --deep: #FFFFFF;
+    --steel: #C9D7D3;
+    --gas: #0B8676;
+    --flare: #C9501E;
+    --gold: #95680F;
+    --mist: #14282C;
+    --haze: #566C67;
+    --royalty: #8a6f1d;
+    --srb: #b1591b;
+  }
+  html[data-theme="light"] body {
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(11, 134, 118, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(201, 80, 30, 0.07), transparent 60%);
+  }
+  html[data-theme="light"] .sitebar { background: rgba(255, 255, 255, 0.86); }
+  html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(18, 40, 44, 0.22); }
+  html[data-theme="light"] .tcode { background: rgba(11, 134, 118, 0.08); border-color: rgba(11, 134, 118, 0.30); }
+  html[data-theme="light"] .theme-btn:hover { background: rgba(11, 134, 118, 0.08); }
 </style>
 </head>
 <body>
@@ -569,6 +702,9 @@
     <a href="index.html#methodology">Method</a>
     <a href="index.html#academic">Academic</a>
     <a href="index.html#contact" class="cta">Contact</a>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle day and night theme" title="Toggle day / night">
+      <span class="icon-sun" aria-hidden="true">☀</span><span class="icon-moon" aria-hidden="true">☾</span>
+    </button>
   </nav>
 </header>
 
@@ -582,7 +718,12 @@
     <li><a class="rail__link" href="#lifecycle" data-spy><span class="num">02</span><span class="name">Across the lifecycle</span></a></li>
     <li><a class="rail__link" href="#boundaries" data-spy><span class="num">03</span><span class="name">In / out of scope</span></a></li>
     <li><a class="rail__link" href="#deliverables" data-spy><span class="num">04</span><span class="name">Deliverables</span></a></li>
-    <li><a class="rail__link" href="#honest" data-spy><span class="num">05</span><span class="name">Say it honestly</span></a></li>
+    <li><a class="rail__link" href="#fimap" data-spy><span class="num">05</span><span class="name">Where my SAP FI sits</span></a></li>
+    <li><a class="rail__link" href="#tcodes" data-spy><span class="num">06</span><span class="name">T-code playbook</span></a></li>
+    <li><a class="rail__link" href="#timeline" data-spy><span class="num">07</span><span class="name">Project timeline</span></a></li>
+    <li><a class="rail__link" href="#taxengine" data-spy><span class="num">08</span><span class="name">PTTEP tax engine</span></a></li>
+    <li><a class="rail__link" href="#legal" data-spy><span class="num">09</span><span class="name">Legal watch-list</span></a></li>
+    <li><a class="rail__link" href="#honest" data-spy><span class="num">10</span><span class="name">Say it honestly</span></a></li>
   </ol>
   <a class="rail__companion" href="finance-functional-module.html">Companion study page →<br><b>SAP FI · Tax · PTTEP</b> essentials</a>
   <a class="rail__back" href="index.html">Back to portfolio →</a>
@@ -884,9 +1025,441 @@
     </div>
   </section>
 
-  <!-- 05 HONEST -->
+  <!-- 05 SAP FI MAP -->
+  <section class="chapter" id="fimap">
+    <div class="eyebrow"><span class="dot"></span>05 · Where my SAP FI sits</div>
+    <h2>SAP FI, broken down — and the branch I own.</h2>
+    <p class="lede">FI is one module with several sub-ledgers. A tax consultant lives in exactly one branch:
+      <b>Tax &amp; Special Products</b>. This is the one-slide answer to "which part of SAP FI do you do?"
+      Click any node to see its role and how it ties back to tax.</p>
+
+    <div class="fimap">
+      <div class="fimap__root">
+        <span class="t">Module</span>
+        <span class="n">SAP FI — Financial Accounting</span>
+      </div>
+      <div class="fimap__stem"></div>
+      <div class="fimap__row">
+        <button type="button" class="fimap__node" data-fi="gl"><span class="code">FI-GL</span><span class="lbl">General Ledger</span></button>
+        <button type="button" class="fimap__node" data-fi="ap"><span class="code">FI-AP</span><span class="lbl">Payable</span></button>
+        <button type="button" class="fimap__node" data-fi="ar"><span class="code">FI-AR</span><span class="lbl">Receivable</span></button>
+        <button type="button" class="fimap__node" data-fi="aa"><span class="code">FI-AA</span><span class="lbl">Assets</span></button>
+        <button type="button" class="fimap__node" data-fi="bl"><span class="code">FI-BL</span><span class="lbl">Bank</span></button>
+        <button type="button" class="fimap__node is-here" data-fi="tax"><span class="code">Tax</span><span class="lbl">&amp; Special Products</span><span class="pin">📍 you are here</span></button>
+      </div>
+      <p class="caption" style="text-align:center;margin:0.9rem 0 0.3rem">↳ your branch — <b>Tax &amp; Special Products</b> — expands to:</p>
+      <div class="fimap__subrow">
+        <button type="button" class="fimap__node" data-fi="vat"><span class="code">VAT</span><span class="lbl">Tax on Sales/Purchases</span></button>
+        <button type="button" class="fimap__node" data-fi="wht"><span class="code">WHT</span><span class="lbl">Extended Withholding</span></button>
+        <button type="button" class="fimap__node" data-fi="petro"><span class="code">Petroleum</span><span class="lbl">Royalty · SRB · PITA</span></button>
+      </div>
+    </div>
+    <div class="card detail" id="fiDetail" aria-live="polite"></div>
+  </section>
+
+  <!-- 06 T-CODE PLAYBOOK -->
+  <section class="chapter" id="tcodes">
+    <div class="eyebrow"><span class="dot"></span>06 · T-code playbook</div>
+    <h2>The transaction codes to recall on muscle memory.</h2>
+    <p class="lede">Every functional command you'll reach for, what it does, and where it sits in the
+      setup flow. Filter by area.</p>
+
+    <div class="filterbar" id="tcFilter" role="group" aria-label="Filter T-codes by area">
+      <button type="button" data-cat="all" aria-pressed="true">All</button>
+      <button type="button" data-cat="config" aria-pressed="false">Config</button>
+      <button type="button" data-cat="posting" aria-pressed="false">Postings</button>
+      <button type="button" data-cat="report" aria-pressed="false">Reporting</button>
+      <button type="button" data-cat="wht" aria-pressed="false">WHT</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="tcTable">
+        <thead><tr><th>T-code</th><th>Functional command — what it does</th><th>When</th></tr></thead>
+        <tbody>
+          <tr data-cat="config"><td><span class="tcode">SPRO</span></td><td>Open the IMG — the central customizing tree. Every config path below lives here.</td><td>Config entry</td></tr>
+          <tr data-cat="config"><td><span class="tcode">OBBG</span></td><td>Assign the country (TH) to the tax calculation procedure <span class="tcode">TAXTH</span>.</td><td>1 · foundation</td></tr>
+          <tr data-cat="config"><td><span class="tcode">OBYZ</span></td><td>Maintain the calculation procedure, condition types &amp; account keys behind the tax codes.</td><td>2 · procedure</td></tr>
+          <tr data-cat="config"><td><span class="tcode">FTXP</span></td><td>Create / change tax codes and their % rate (output <span class="mono">V-</span>, input <span class="mono">A-</span>) under TAXTH.</td><td>3 · tax codes</td></tr>
+          <tr data-cat="config"><td><span class="tcode">OB40</span></td><td>Account determination — map each tax transaction key to the GL account it posts to.</td><td>4 · GL routing</td></tr>
+          <tr data-cat="config"><td><span class="tcode">FS00</span></td><td>GL account master — set the tax category &amp; "posting without tax allowed" flags.</td><td>5 · GL master</td></tr>
+          <tr data-cat="posting"><td><span class="tcode">FB60</span></td><td>Post a vendor (AP) invoice with input VAT + WHT — the core P2P tax test.</td><td>Test / run</td></tr>
+          <tr data-cat="posting"><td><span class="tcode">FB70</span></td><td>Post a customer (AR) invoice with output VAT — the core O2C tax test.</td><td>Test / run</td></tr>
+          <tr data-cat="posting"><td><span class="tcode">MIRO</span></td><td>Logistics invoice verification (MM) — input VAT on a PO-based invoice.</td><td>P2P / MM</td></tr>
+          <tr data-cat="posting"><td><span class="tcode">F-53</span></td><td>Post an outgoing payment — where Extended WHT is realised &amp; withheld.</td><td>Payment</td></tr>
+          <tr data-cat="posting"><td><span class="tcode">FB03</span></td><td>Display any document — read the tax &amp; WHT line items to verify a posting.</td><td>Verify</td></tr>
+          <tr data-cat="report"><td><span class="tcode">RFUMSV00</span></td><td>Advance return for tax on sales/purchases — the VAT report feeding <span class="tcode">PP30</span>.</td><td>Month-end</td></tr>
+          <tr data-cat="report"><td><span class="tcode">FBL1N</span> / <span class="tcode">FBL5N</span></td><td>Vendor / customer open &amp; cleared line items — reconcile tax &amp; WHT balances.</td><td>Reconcile</td></tr>
+          <tr data-cat="report"><td><span class="tcode">S_P00_07000134</span></td><td>Generic withholding-tax reporting — feeds the Thai WHT certificate &amp; PND output.</td><td>Month-end</td></tr>
+          <tr data-cat="wht"><td><span class="tcode">SPRO · Ext. WHT</span></td><td>Define WHT <b>types</b> (at invoice / at payment), <b>codes</b> (rates), and assign to the company code.</td><td>WHT config</td></tr>
+          <tr data-cat="wht"><td>Vendor master · WHT</td><td>Assign the WHT type + code on the vendor so postings withhold automatically.</td><td>Master data</td></tr>
+          <tr data-cat="wht"><td><span class="tcode">PND 3/53/54</span></td><td>Withholding returns &amp; certificates — PND 3 (individuals), 53 (companies), 54 (overseas).</td><td>Filing</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="workflow">
+      <h4>Setup workflow — VAT (Tax on Sales/Purchases)</h4>
+      <div class="wf-steps">
+        <div class="wf-step"><span class="s">step 1</span><span class="tc">OBBG</span><span class="d">Assign TH → TAXTH</span></div>
+        <div class="wf-step"><span class="s">step 2</span><span class="tc">FTXP</span><span class="d">Define codes &amp; rates (7%)</span></div>
+        <div class="wf-step"><span class="s">step 3</span><span class="tc">OB40</span><span class="d">Map tax keys → GL accounts</span></div>
+        <div class="wf-step"><span class="s">step 4</span><span class="tc">FS00</span><span class="d">Set tax category on GL</span></div>
+        <div class="wf-step"><span class="s">step 5</span><span class="tc">FB60 / FB70</span><span class="d">Test input &amp; output VAT</span></div>
+        <div class="wf-step"><span class="s">step 6</span><span class="tc">RFUMSV00</span><span class="d">Run VAT report → PP30</span></div>
+      </div>
+    </div>
+    <div class="workflow">
+      <h4>Setup workflow — Extended Withholding Tax</h4>
+      <div class="wf-steps">
+        <div class="wf-step"><span class="s">step 1</span><span class="tc">SPRO</span><span class="d">Activate Extended WHT</span></div>
+        <div class="wf-step"><span class="s">step 2</span><span class="tc">WHT type</span><span class="d">At invoice / at payment</span></div>
+        <div class="wf-step"><span class="s">step 3</span><span class="tc">WHT code</span><span class="d">Rate per income type</span></div>
+        <div class="wf-step"><span class="s">step 4</span><span class="tc">Company code</span><span class="d">Assign types &amp; activate</span></div>
+        <div class="wf-step"><span class="s">step 5</span><span class="tc">Vendor master</span><span class="d">Assign WHT type + code</span></div>
+        <div class="wf-step"><span class="s">step 6</span><span class="tc">F-53 → PND</span><span class="d">Withhold at payment &amp; file</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 PROJECT TIMELINE -->
+  <section class="chapter" id="timeline">
+    <div class="eyebrow"><span class="dot"></span>07 · Project timeline</div>
+    <h2>Realize now → Go-Live January 2027.</h2>
+    <p class="lede">Where the programme is and where you plug in. You enter mid-stream at <b>Realize</b>;
+      the lock is a <b>Go-Live in Jan 2027</b>, followed by hypercare.</p>
+
+    <div class="tl-meta">
+      <span class="big">Go-Live · Jan 2027</span>
+      <span class="caption">You enter at Realize (Jul 2026) — ≈ 6 months of runway to cutover.</span>
+    </div>
+    <div class="progress" style="margin:0.7rem 0 1.5rem" aria-hidden="true"><span style="width:45%"></span></div>
+
+    <div class="timeline">
+      <div class="tl-item done">
+        <div class="tl-head"><span class="tl-date">Jan – Jun 2026</span><span class="tl-name">Explore / Blueprint</span><span class="tl-badge">done</span></div>
+        <p class="tl-focus">Fit-to-standard; the tax design &amp; Thai localization are decided here. <span class="you">Before you — you inherit this design.</span></p>
+      </div>
+      <div class="tl-item now">
+        <div class="tl-head"><span class="tl-date">Jul – Sep 2026</span><span class="tl-name">Realize — Build &amp; unit test</span><span class="tl-badge">★ you are here</span></div>
+        <p class="tl-focus"><span class="you">You join here.</span> Understand the configured tax codes, OB40 &amp; WHT setup; run unit tests on VAT/WHT.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-head"><span class="tl-date">Oct 2026</span><span class="tl-name">Realize — Integration test (SIT)</span></div>
+        <p class="tl-focus">End-to-end P2P / O2C carrying tax; period-end VAT &amp; WHT runs; defect triage.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-head"><span class="tl-date">Nov 2026</span><span class="tl-name">User acceptance test (UAT)</span></div>
+        <p class="tl-focus">Business validates tax postings &amp; reports; you support scripts and fixes.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-head"><span class="tl-date">Dec 2026</span><span class="tl-name">Deploy — Cutover / Final prep</span></div>
+        <p class="tl-focus">Migrate open items with tax, opening balances, WHT carry-forward; move transports; dry-run.</p>
+      </div>
+      <div class="tl-item target">
+        <div class="tl-head"><span class="tl-date">Jan 2027</span><span class="tl-name">Go-Live</span><span class="tl-badge">🔒 target</span></div>
+        <p class="tl-focus">Production live — validate the first live VAT/WHT postings and tax determination.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-head"><span class="tl-date">Jan – Feb 2027</span><span class="tl-name">Hypercare</span></div>
+        <p class="tl-focus">First month-end PP30 + PND filing; reconcile the tax GL; triage; knowledge-transfer to AMS.</p>
+      </div>
+    </div>
+    <p class="note">Dates are an illustrative study plan — the actual schedule is governed by the Accenture / PTTEP programme.</p>
+  </section>
+
+  <!-- 08 PTTEP TAX ENGINE -->
+  <section class="chapter" id="taxengine">
+    <div class="eyebrow"><span class="dot"></span>08 · PTTEP tax engine</div>
+    <h2>The taxes you'll meet — and a live SAP-style calculator.</h2>
+    <p class="lede">Two layers at PTTEP: ordinary <b>transactional taxes</b> (VAT, WHT) that SAP FI computes
+      on every document, and <b>petroleum levies</b> (Royalty, SRB, PITA) that post as GL provisions.
+      Click a row to manage its detail, then try the calculator.</p>
+
+    <div class="pillars" id="taxlist">
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-1">
+          <span class="pnum">▸</span><span class="pname">Output VAT — on sales</span><span class="ptag">7%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-1"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Sale / service value invoiced to the customer.</dd>
+          <dt>SAP mechanism</dt><dd>Output tax code (e.g. <span class="mono">O7</span>) in <span class="tcode">FTXP</span> under TAXTH; routed by <span class="tcode">OB40</span> to the Output VAT GL.</dd>
+          <dt>Posting / form</dt><dd>Attaches on <span class="tcode">FB70</span> (AR); reported on <span class="tcode">PP30</span>.</dd>
+          <dt>Note</dt><dd>Output − Input = VAT payable for the month.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-2">
+          <span class="pnum">▸</span><span class="pname">Input VAT — on purchases</span><span class="ptag">7%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-2"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Purchase / service value billed by the vendor.</dd>
+          <dt>SAP mechanism</dt><dd>Input tax code (e.g. <span class="mono">A7</span>) in <span class="tcode">FTXP</span>; <span class="tcode">OB40</span> → Input VAT GL.</dd>
+          <dt>Posting / form</dt><dd>Attaches on <span class="tcode">FB60</span> / <span class="tcode">MIRO</span>; reclaimed on <span class="tcode">PP30</span>.</dd>
+          <dt>Note</dt><dd>Only claimable with a valid full tax invoice (Revenue Code §86/4).</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-3">
+          <span class="pnum">▸</span><span class="pname">WHT — services / hire of work</span><span class="ptag">3%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-3"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Service fee paid to a company (PND 53) before VAT.</dd>
+          <dt>SAP mechanism</dt><dd>Extended WHT <b>type</b> (at payment) + <b>code</b> (3%) on the vendor master.</dd>
+          <dt>Posting / form</dt><dd>Withheld on <span class="tcode">F-53</span>; certificate + <span class="tcode">PND 53</span>.</dd>
+          <dt>Note</dt><dd>You pay the vendor net; you remit the 3% to the Revenue Department.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-4">
+          <span class="pnum">▸</span><span class="pname">WHT — professional fees</span><span class="ptag">3%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-4"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Professional / consulting fee to a company.</dd>
+          <dt>SAP mechanism</dt><dd>Extended WHT code 3% on the vendor; distinct income type for the PND line.</dd>
+          <dt>Posting / form</dt><dd><span class="tcode">F-53</span> → <span class="tcode">PND 53</span>.</dd>
+          <dt>Note</dt><dd>Individual payees may sit on a different rate / PND 3.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-5">
+          <span class="pnum">▸</span><span class="pname">WHT — rental (property)</span><span class="ptag">5%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-5"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Rent paid for property / equipment hire.</dd>
+          <dt>SAP mechanism</dt><dd>Extended WHT code 5% on the vendor master.</dd>
+          <dt>Posting / form</dt><dd><span class="tcode">F-53</span> → <span class="tcode">PND 53</span>.</dd>
+          <dt>Note</dt><dd>Rental ≠ service — different rate &amp; income type; watch mis-coding.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-6">
+          <span class="pnum">▸</span><span class="pname">WHT — transport</span><span class="ptag">1%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-6"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Domestic transport service fee.</dd>
+          <dt>SAP mechanism</dt><dd>Extended WHT code 1%.</dd>
+          <dt>Posting / form</dt><dd><span class="tcode">F-53</span> → <span class="tcode">PND 53</span>.</dd>
+          <dt>Note</dt><dd>Pure transport only; bundled logistics may be 3% services.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-7">
+          <span class="pnum">▸</span><span class="pname">WHT — advertising</span><span class="ptag">2%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-7"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Advertising fee.</dd>
+          <dt>SAP mechanism</dt><dd>Extended WHT code 2%.</dd>
+          <dt>Posting / form</dt><dd><span class="tcode">F-53</span> → <span class="tcode">PND 53</span>.</dd>
+          <dt>Note</dt><dd>Rare for upstream E&amp;P but configured for completeness.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-8">
+          <span class="pnum">▸</span><span class="pname">WHT — interest</span><span class="ptag">1%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-8"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Interest paid (e.g. on borrowings) to a company.</dd>
+          <dt>SAP mechanism</dt><dd>Extended WHT code 1%.</dd>
+          <dt>Posting / form</dt><dd><span class="tcode">F-53</span> → <span class="tcode">PND 53</span>.</dd>
+          <dt>Note</dt><dd>Cross-border interest may shift to <span class="tcode">PND 54</span> + a DTA rate.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-9">
+          <span class="pnum">▸</span><span class="pname">Reverse-charge VAT — imported services</span><span class="ptag">7% · PP36</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-9"><div class="pillar__body-inner"><dl>
+          <dt>Base</dt><dd>Service paid to an overseas supplier but used in Thailand (e.g. offshore technical / rig services).</dd>
+          <dt>SAP mechanism</dt><dd>Self-assessment tax code that books output &amp; input VAT together; filed on <span class="tcode">PP36</span>.</dd>
+          <dt>Posting / form</dt><dd>Remit output VAT via PP36; reclaim as input on PP30 next period.</dd>
+          <dt>Note</dt><dd>Common &amp; high-value for upstream E&amp;P — a key thing to get right.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-10">
+          <span class="pnum">▸</span><span class="pname">Royalty (PSC)</span><span class="ptag">10% gross</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-10"><div class="pillar__body-inner"><dl>
+          <dt>Rate &amp; base</dt><dd>5–15% sliding scale on <b>gross</b> revenue by output; under a PSC fixed <b>10%</b> of gross.</dd>
+          <dt>Deductible?</dt><dd>Yes — expensed, lowering the PITA base.</dd>
+          <dt>SAP mechanism</dt><dd>A cost / royalty <b>GL provision &amp; posting</b> — <b>not</b> an FTXP tax code. Collected by DMF.</dd>
+          <dt>Note</dt><dd>Petroleum levy — period computation, not transactional VAT/WHT.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-11">
+          <span class="pnum">▸</span><span class="pname">SRB — Special Remuneratory Benefit</span><span class="ptag">0–75%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-11"><div class="pillar__body-inner"><dl>
+          <dt>Rate</dt><dd>Windfall tax 0–75% (ceiling 75% of petroleum profit).</dd>
+          <dt>Applies to</dt><dd>Thailand III concessions only — a PSC has no SRB; paid only in profit years.</dd>
+          <dt>Deductible?</dt><dd>Yes — deductible (expensed).</dd>
+          <dt>SAP mechanism</dt><dd>Specialised periodic computation provisioned in GL — not a standard tax code.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-12">
+          <span class="pnum">▸</span><span class="pname">PITA — Petroleum Income Tax</span><span class="ptag">20% PSC / 50%</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-12"><div class="pillar__body-inner"><dl>
+          <dt>Rate</dt><dd>Concession = 50% of net profit; PSC = 20%. PTTEP's Bongkot/Erawan are PSCs. Separate Act from normal CIT.</dd>
+          <dt>Interest</dt><dd><b>Not</b> deductible. Loss carry-forward 10 accounting periods; no carry-back.</dd>
+          <dt>SAP mechanism</dt><dd>An income-tax provision on net profit — period-end posting, may use USD functional currency.</dd>
+          <dt>Note</dt><dd>Exports priced at the higher of realised or "tax reference" price.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="tax-13">
+          <span class="pnum">⚠</span><span class="pname">Excise / สรรพสามิตน้ำมัน</span><span class="ptag warn">downstream — N/A</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="tax-13"><div class="pillar__body-inner"><dl>
+          <dt>Applies to</dt><dd><b>Downstream</b> refined products (diesel, gasoline) at refineries / retail — GC, Thai Oil, IRPC, OR.</dd>
+          <dt>For PTTEP?</dt><dd><b>No.</b> PTTEP is upstream E&amp;P; PITA covers it. Do not conflate excise with PTTEP.</dd>
+          <dt>SAP mechanism</dt><dd>Not in this project's scope — listed only to mark the boundary clearly.</dd>
+        </dl></div></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">Try it — the SAP FI mechanism</h3>
+    <p class="caption">A vendor (AP) invoice the way <span class="tcode">FB60</span> → <span class="tcode">F-53</span> posts it. Enter a base amount,
+      pick VAT &amp; a WHT type, and watch the tax and the journal compute live.</p>
+
+    <div class="calc">
+      <div class="calc__grid">
+        <div>
+          <div class="calc__field">
+            <label for="calcAmt">Invoice base amount (THB)</label>
+            <input type="number" id="calcAmt" value="100000" min="0" step="1000" inputmode="decimal">
+          </div>
+          <div class="calc__field">
+            <label for="calcWht">Withholding tax (PND 53)</label>
+            <select id="calcWht">
+              <option value="0">None</option>
+              <option value="0.03" selected>Services / hire of work — 3%</option>
+              <option value="0.03">Professional fees — 3%</option>
+              <option value="0.05">Rental — 5%</option>
+              <option value="0.01">Transport — 1%</option>
+              <option value="0.02">Advertising — 2%</option>
+              <option value="0.01">Interest — 1%</option>
+            </select>
+          </div>
+          <label class="calc__check"><input type="checkbox" id="calcVat" checked> Add input VAT 7% (Tax on Purchases)</label>
+        </div>
+        <div class="calc__out" id="calcOut" aria-live="polite"></div>
+      </div>
+      <div class="taccount" id="calcJournal"></div>
+    </div>
+    <p class="note">Standard illustrative rates: VAT 7%; WHT — services / professional 3%, rental 5%, transport 1%,
+      advertising 2%, interest 1% (Thai PND 53 corporate payees). Petroleum levies follow the locked PTTEP figures
+      and post as provisions, not transactional codes.</p>
+  </section>
+
+  <!-- 09 LEGAL WATCH-LIST -->
+  <section class="chapter" id="legal">
+    <div class="eyebrow"><span class="dot"></span>09 · Legal watch-list</div>
+    <h2>Thai tax law to respect when you configure or test.</h2>
+    <p class="lede">The statutes and rules that turn into config decisions and test cases for PTTEP.
+      Expand each — what it governs and the SAP implication to watch.</p>
+
+    <div class="pillars" id="legallist">
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-1">
+          <span class="pnum">§</span><span class="pname">Petroleum Income Tax Act B.E. 2514 (1971)</span><span class="ptag">PITA</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-1"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>Petroleum income tax (20% PSC / 50% concession); interest non-deductible; 10-year loss carry-forward; USD functional currency; export "tax reference" price.</dd>
+          <dt>SAP watch</dt><dd>Model as a <b>period-end GL provision</b> &amp; currency config — never as a transactional FTXP code.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-2">
+          <span class="pnum">§</span><span class="pname">Petroleum Act B.E. 2514</span><span class="ptag">Royalty · SRB</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-2"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>Royalty (5–15%, PSC 10%) to DMF; SRB (0–75%, Thailand III only); concession vs PSC regimes.</dd>
+          <dt>SAP watch</dt><dd>GL provisioning + DMF remittance postings; ensure deductibility flags feed the PITA base correctly.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-3">
+          <span class="pnum">§</span><span class="pname">Revenue Code — VAT (§77/1–90/4)</span><span class="ptag">VAT</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-3"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>7% VAT, the tax point (time of supply), and the mandatory full tax-invoice fields (§86/4).</dd>
+          <dt>SAP watch</dt><dd>FTXP rate, output/input determination, tax-invoice form layout &amp; number ranges.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-4">
+          <span class="pnum">§</span><span class="pname">Revenue Code — Withholding (§3 Tredecim, §50, §69 bis/ter)</span><span class="ptag">WHT</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-4"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>Withholding on domestic &amp; cross-border payments; certificate issuance; PND 3 / 53 / 54.</dd>
+          <dt>SAP watch</dt><dd>Extended WHT types/codes per income type; certificate &amp; PND output programs.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-5">
+          <span class="pnum">§</span><span class="pname">VAT-rate Royal Decree (7% reduction)</span><span class="ptag">VAT rate</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-5"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>The statutory 10% VAT reduced to 7%, renewed periodically by Royal Decree.</dd>
+          <dt>SAP watch</dt><dd>Maintain the tax-code rate with <b>validity dates</b>; plan for a rate-change cutover if the decree lapses.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-6">
+          <span class="pnum">§</span><span class="pname">Reverse-charge VAT — PP36 (§83/6)</span><span class="ptag">PP36</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-6"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>Self-assessed VAT on services paid to overseas suppliers but used in Thailand.</dd>
+          <dt>SAP watch</dt><dd>Dedicated self-assessment tax code + PP36 reporting — critical for E&amp;P importing rig / technical services.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-7">
+          <span class="pnum">§</span><span class="pname">Filing deadlines — PP30 &amp; PND</span><span class="ptag">deadlines</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-7"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>PP30 (VAT) by the 15th of the next month (23rd via e-filing); PND by the 7th (extended for e-WHT).</dd>
+          <dt>SAP watch</dt><dd>Posting periods, the tax reporting date, and report-run timing must line up with these dates.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-8">
+          <span class="pnum">§</span><span class="pname">e-Tax Invoice &amp; e-Withholding Tax</span><span class="ptag">e-Tax</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-8"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>Revenue Department electronic tax invoice / receipt and e-WHT submission.</dd>
+          <dt>SAP watch</dt><dd>DRC / integration, digital signature, document numbering &amp; XML output formats.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-9">
+          <span class="pnum">§</span><span class="pname">Transfer pricing — §71 bis + TP Disclosure</span><span class="ptag">TP</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-9"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>Arm's-length pricing for related parties (PTT group) and the petroleum export reference price.</dd>
+          <dt>SAP watch</dt><dd>Intercompany pricing conditions &amp; documentation extracts to support the TP Disclosure Form.</dd>
+        </dl></div></div>
+      </div>
+      <div class="pillar">
+        <button type="button" class="pillar__btn" aria-expanded="false" aria-controls="law-10">
+          <span class="pnum">§</span><span class="pname">Double Tax Agreements (DTA)</span><span class="ptag">DTA</span><span class="chev">▸</span>
+        </button>
+        <div class="pillar__body" id="law-10"><div class="pillar__body-inner"><dl>
+          <dt>Governs</dt><dd>Reduced / zero WHT on cross-border payments to treaty-country vendors holding a residence certificate.</dd>
+          <dt>SAP watch</dt><dd>A WHT code per treaty rate (PND 54) and a control to require the residence certificate before applying it.</dd>
+        </dl></div></div>
+      </div>
+    </div>
+    <p class="note">Study reference only — not legal or tax advice. Always confirm with the client Tax SME / advisor
+      and current Revenue Department / DMF guidance before configuration.</p>
+  </section>
+
+  <!-- 10 HONEST -->
   <section class="chapter" id="honest">
-    <div class="eyebrow"><span class="dot"></span>05 · Say it honestly</div>
+    <div class="eyebrow"><span class="dot"></span>10 · Say it honestly</div>
     <h2>Scope it to what you've really done.</h2>
     <p class="lede">XeerSoft isn't SAP — but a full-lifecycle ERP delivery maps cleanly onto these SAP
       concepts. Claim the concept understanding and the real delivery; never claim the SAP-specific config you haven't touched.</p>
@@ -952,6 +1525,17 @@
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') { closeSiteMenu(); }
+      });
+    }
+
+    /* ---------- Day / Night theme toggle ---------- */
+    var themeBtn = document.getElementById('themeBtn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme');
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
       });
     }
 
@@ -1090,6 +1674,81 @@
       refreshChk();
     });
     refreshChk();
+
+    /* ---------- 05 SAP FI map selector ---------- */
+    var fiData = {
+      gl: { name: 'FI-GL — General Ledger', tie: 'The statutory book of record; every sub-ledger rolls up here.', rel: 'Your tax postings land in GL accounts you set in FS00 and route via OB40.' },
+      ap: { name: 'FI-AP — Accounts Payable', tie: 'Vendor invoices &amp; payments.', rel: 'Input VAT and Extended WHT attach here (FB60 invoice, F-53 payment).' },
+      ar: { name: 'FI-AR — Accounts Receivable', tie: 'Customer invoices &amp; collections.', rel: 'Output VAT attaches here (FB70); open items &amp; dunning live here.' },
+      aa: { name: 'FI-AA — Asset Accounting', tie: 'Fixed assets &amp; depreciation.', rel: 'Tax link: input VAT on asset purchases must flow to the right GL.' },
+      bl: { name: 'FI-BL — Bank Ledger', tie: 'Bank &amp; cash transactions.', rel: 'WHT is realised at payment, so it settles through the bank posting (F-53).' },
+      tax: { name: 'Tax &amp; Special Products', tie: 'The tax engine sitting on top of every posting — YOUR HOME.', rel: 'VAT determination, Extended WHT, tax account determination (OB40) and statutory reporting (PP30 / PND).' },
+      vat: { name: 'VAT — Tax on Sales/Purchases', tie: 'Consumption tax, output − input, 7%.', rel: 'Built in FTXP / OB40 under TAXTH; filed monthly on PP30.' },
+      wht: { name: 'Extended Withholding Tax', tie: 'A slice of a payment withheld &amp; remitted for the payee.', rel: 'WHT types + codes on master data; filed on PND 3 / 53 / 54. Always Extended.' },
+      petro: { name: 'Petroleum levies — Royalty · SRB · PITA', tie: 'Upstream-only levies under their own Acts.', rel: 'GL provisions / period-end postings — not transactional tax codes. You ensure the GL exists.' }
+    };
+    var fiNodes = Array.prototype.slice.call(document.querySelectorAll('.fimap__node'));
+    var fiDetail = document.getElementById('fiDetail');
+    function selectFi(key) {
+      fiNodes.forEach(function (n) { n.setAttribute('aria-pressed', n.getAttribute('data-fi') === key ? 'true' : 'false'); });
+      var d = fiData[key];
+      fiDetail.innerHTML = '<div class="role-of">Sub-ledger / branch</div><h3>' + d.name + '</h3>' +
+        '<dl><dt>What it is</dt><dd>' + d.tie + '</dd><dt>Tax tie-in</dt><dd>' + d.rel + '</dd></dl>';
+    }
+    fiNodes.forEach(function (n) {
+      n.addEventListener('click', function () { selectFi(n.getAttribute('data-fi')); });
+    });
+    selectFi('tax');
+
+    /* ---------- 06 T-code filter ---------- */
+    var tcBtns = Array.prototype.slice.call(document.querySelectorAll('#tcFilter button'));
+    var tcRows = Array.prototype.slice.call(document.querySelectorAll('#tcTable tbody tr'));
+    tcBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var cat = b.getAttribute('data-cat');
+        tcBtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        tcRows.forEach(function (r) {
+          r.style.display = (cat === 'all' || r.getAttribute('data-cat') === cat) ? '' : 'none';
+        });
+      });
+    });
+
+    /* ---------- 08 Tax calculator (SAP FI mechanism) ---------- */
+    var amtEl = document.getElementById('calcAmt');
+    var vatEl = document.getElementById('calcVat');
+    var whtEl = document.getElementById('calcWht');
+    var outEl = document.getElementById('calcOut');
+    var jEl = document.getElementById('calcJournal');
+    if (amtEl && outEl && jEl) {
+      var fmt = function (n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+      var recalc = function () {
+        var base = parseFloat(amtEl.value) || 0;
+        var vat = vatEl.checked ? base * 0.07 : 0;
+        var whtRate = parseFloat(whtEl.value) || 0;
+        var wht = base * whtRate;
+        var gross = base + vat;
+        var net = gross - wht;
+        outEl.innerHTML =
+          '<div class="calc__line"><span class="k">Base amount</span><span class="v">฿ ' + fmt(base) + '</span></div>' +
+          '<div class="calc__line vat"><span class="k">Input VAT (7%)</span><span class="v">฿ ' + fmt(vat) + '</span></div>' +
+          '<div class="calc__line"><span class="k">Gross invoice (base + VAT)</span><span class="v">฿ ' + fmt(gross) + '</span></div>' +
+          '<div class="calc__line wht"><span class="k">WHT withheld (' + (whtRate * 100).toFixed(0) + '%)</span><span class="v">− ฿ ' + fmt(wht) + '</span></div>' +
+          '<div class="calc__line total"><span class="k">Net paid to vendor</span><span class="v">฿ ' + fmt(net) + '</span></div>';
+        var rows =
+          '<tr><td class="dr">Dr&nbsp;&nbsp;Expense / GR-IR</td><td class="amt">' + fmt(base) + '</td></tr>';
+        if (vat > 0) { rows += '<tr><td class="dr">Dr&nbsp;&nbsp;Input VAT</td><td class="amt">' + fmt(vat) + '</td></tr>'; }
+        rows += '<tr><td class="cr">Cr&nbsp;&nbsp;Vendor (AP)</td><td class="amt">' + fmt(gross) + '</td></tr>';
+        rows += '<tr><td class="sub" colspan="2">— at payment · F-53 —</td></tr>';
+        rows += '<tr><td class="dr">Dr&nbsp;&nbsp;Vendor (AP)</td><td class="amt">' + fmt(gross) + '</td></tr>';
+        if (wht > 0) { rows += '<tr><td class="cr">Cr&nbsp;&nbsp;WHT payable</td><td class="amt">' + fmt(wht) + '</td></tr>'; }
+        rows += '<tr><td class="cr">Cr&nbsp;&nbsp;Bank</td><td class="amt">' + fmt(net) + '</td></tr>';
+        jEl.innerHTML = '<div class="th">Journal — FB60 invoice, then F-53 payment</div><table><tbody>' + rows + '</tbody></table>';
+      };
+      amtEl.addEventListener('input', recalc);
+      vatEl.addEventListener('change', recalc);
+      whtEl.addEventListener('change', recalc);
+      recalc();
+    }
   })();
 </script>
 </body>

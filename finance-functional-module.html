@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Functional Module of Finance — SAP FI · Tax · PTTEP</title>
 <meta name="description" content="An interactive study page for an SAP FI Tax consultant role on the Accenture/PTTEP project: SAP FI essentials and the tax engine, where an FI Tax consultant sits, and why PTTEP petroleum tax is special. Personal study aid built for active recall.">
+<script>
+  /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -659,6 +670,43 @@
       animation-iteration-count: 1 !important;
     }
   }
+
+  /* ---------- Theme toggle button ---------- */
+  .theme-btn {
+    font-size: 1rem; line-height: 1; cursor: pointer;
+    padding: 0.45rem 0.65rem; border-radius: 8px;
+    background: none; border: 1px solid var(--steel); color: var(--mist);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(43, 217, 196, 0.07); }
+  .theme-btn .icon-moon { display: none; }
+  html[data-theme="light"] .theme-btn .icon-sun { display: none; }
+  html[data-theme="light"] .theme-btn .icon-moon { display: inline; }
+
+  /* ---------- Light (Day) theme ---------- */
+  html[data-theme="light"] {
+    --abyss: #EAF1EF;
+    --deep: #FFFFFF;
+    --steel: #C9D7D3;
+    --gas: #0B8676;
+    --flare: #C9501E;
+    --gold: #95680F;
+    --mist: #14282C;
+    --haze: #566C67;
+    --royalty: #8a6f1d;
+    --srb: #b1591b;
+  }
+  html[data-theme="light"] body {
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(11, 134, 118, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(201, 80, 30, 0.07), transparent 60%);
+  }
+  html[data-theme="light"] .sitebar { background: rgba(255, 255, 255, 0.86); }
+  html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(18, 40, 44, 0.22); }
+  html[data-theme="light"] .tcode { background: rgba(11, 134, 118, 0.08); border-color: rgba(11, 134, 118, 0.30); }
+  html[data-theme="light"] .theme-btn:hover { background: rgba(11, 134, 118, 0.08); }
+  html[data-theme="light"] .flip__face--back { background: #EAF5F2; border-color: rgba(11, 134, 118, 0.35); }
+  html[data-theme="light"] .fcard__face--a { background: linear-gradient(160deg, #EFF8F5, #E7F1EE); border-color: rgba(11, 134, 118, 0.35); }
 </style>
 </head>
 <body>
@@ -709,6 +757,9 @@
     <a href="index.html#methodology">Method</a>
     <a href="index.html#academic">Academic</a>
     <a href="index.html#contact" class="cta">Contact</a>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle day and night theme" title="Toggle day / night">
+      <span class="icon-sun" aria-hidden="true">☀</span><span class="icon-moon" aria-hidden="true">☾</span>
+    </button>
   </nav>
 </header>
 
@@ -1050,6 +1101,17 @@
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') { closeSiteMenu(); }
+      });
+    }
+
+    /* ---------- Day / Night theme toggle ---------- */
+    var themeBtn = document.getElementById('themeBtn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme');
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
       });
     }
 
