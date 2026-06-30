@@ -579,6 +579,13 @@
   .impact-row .t { font-size: 0.9rem; color: var(--mist); }
   @media (max-width: 560px) { .impact-row { grid-template-columns: 1fr; gap: 0.2rem; } }
 
+  /* ---------- Image banner ---------- */
+  .banner { position: relative; border-radius: 14px; overflow: hidden; margin: 1.5rem 0; border: 1px solid var(--steel); }
+  .banner img { width: 100%; height: 230px; object-fit: cover; display: block; filter: saturate(0.96) brightness(0.9); }
+  .banner .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 1.2rem 0.9rem; background: linear-gradient(transparent, rgba(10, 26, 31, 0.92)); font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; color: var(--mist); }
+  .banner .cap b { color: var(--gas); }
+  @media (max-width: 560px) { .banner img { height: 175px; } }
+
   /* ---------- Footer ---------- */
   footer {
     margin-left: var(--rail-w);
@@ -1499,6 +1506,11 @@
       transformation that Accenture runs with a blended <b>Thailand–India</b> team across a dozen
       workstreams. Here's the rough shape of it, where I sit, and the value it's built to unlock.</p>
 
+    <div class="banner">
+      <img src="media/upstream.jpg" alt="Offshore oil and gas platform — PTTEP operates upstream exploration and production" loading="lazy" width="1100" height="730">
+      <div class="cap"><b>Upstream E&amp;P</b> — the operations behind the numbers. PTTEP lifts crude &amp; gas from fields like Bongkot and Erawan in the Gulf of Thailand; my job is to make sure the tax on all of it posts correctly in SAP.</div>
+    </div>
+
     <div class="stats">
       <div class="stat"><div class="v">~200<small>+</small></div><div class="l">people on the programme at peak (estimated)</div></div>
       <div class="stat"><div class="v">12<small>+</small></div><div class="l">functional &amp; technical workstreams</div></div>
@@ -1592,6 +1604,7 @@
     or SAP. Lifecycle uses the SAP Activate phase model; figures and T-codes are for study only.
     <div class="sources">Companion: <a href="finance-functional-module.html">SAP FI · Tax · PTTEP essentials</a>.
       Sources: SAP Activate methodology · Thai Revenue Department (rd.go.th) · PwC Thailand Tax Summaries.</div>
+    <div class="sources">Image via Wikimedia Commons — offshore platform © W. Bulach (CC BY-SA 4.0).</div>
   </div>
 </footer>
 

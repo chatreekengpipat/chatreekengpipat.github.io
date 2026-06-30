@@ -426,6 +426,7 @@
   .vc-seg button[aria-pressed="true"] { color: var(--abyss); background: var(--gold); font-weight: 600; }
   .vc-detail { min-height: 150px; }
   .vc-detail h3 { color: var(--gold); }
+  .vc-img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 0.9rem; border: 1px solid var(--steel); filter: saturate(0.96) brightness(0.92); display: block; }
   .taglist { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
   .tag {
     font-family: var(--mono);
@@ -1076,6 +1077,7 @@
   <div class="foot-inner">
     This is a personal study page built to memorise material for an SAP FI Tax consultant role on the Accenture / PTTEP project. Not affiliated with PTTEP, PTT, Accenture, or SAP. Figures are for study only.
     <div class="sources">Sources: Thai Revenue Department (rd.go.th) · PwC Thailand Tax Summaries · Wood Mackenzie Thailand upstream fiscal summary · DMF annual report · Lexology Thailand petroleum-law briefs.</div>
+    <div class="sources">Images via Wikimedia Commons — offshore platform © W. Bulach (CC BY-SA 4.0) · LNG terminal © Σ64 (CC BY 3.0) · refinery © Walter Siegmund (CC BY 2.5).</div>
   </div>
 </footer>
 
@@ -1179,6 +1181,7 @@
     /* ---------- 03 Value chain selector ---------- */
     var vcData = {
       up: {
+        img: 'media/upstream.jpg', alt: 'Offshore oil and gas drilling platform — upstream exploration and production',
         title: 'Upstream — PTTEP',
         body: 'Exploration &amp; Production (E&amp;P). Lifts crude oil &amp; natural gas. Taxed under the Petroleum Income Tax Act, not normal CIT. PTTEP holds Bongkot (100%) and Erawan (60%) as PSCs since Feb 2019.',
         taxes: [
@@ -1186,6 +1189,7 @@
         ]
       },
       mid: {
+        img: 'media/midstream.jpg', alt: 'LNG terminal storage tanks with a docked tanker — midstream gas transport',
         title: 'Midstream — PTT Plc',
         body: 'The parent company: gas transmission, pipelines &amp; transport. Operates as an ordinary corporate taxpayer.',
         taxes: [
@@ -1193,6 +1197,7 @@
         ]
       },
       down: {
+        img: 'media/downstream.jpg', alt: 'Oil refinery with distillation towers and stacks — downstream refining',
         title: 'Downstream — GC · Thai Oil · IRPC · OR · GPSC',
         body: 'Refining &amp; petrochemicals (GC, Thai Oil, IRPC), retail incl. Café Amazon (OR), power (GPSC). This is where excise lives — and it is NOT PTTEP.',
         taxes: [
@@ -1208,7 +1213,8 @@
         return '<span class="tag tag--' + t[1] + '">' + t[0] +
           '<span class="scope">' + scopeName[t[1]] + '</span></span>';
       }).join('');
-      vcDetail.innerHTML = '<h3>' + d.title + '</h3><p class="caption">' + d.body +
+      vcDetail.innerHTML = '<img class="vc-img" src="' + d.img + '" alt="' + d.alt + '" loading="lazy" width="1100" height="730">' +
+        '<h3>' + d.title + '</h3><p class="caption">' + d.body +
         '</p><div class="taglist">' + tags + '</div>';
     }
     document.querySelectorAll('.vc-seg button').forEach(function (b) {
