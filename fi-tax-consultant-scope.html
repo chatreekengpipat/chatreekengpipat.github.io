@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FI Tax Consultant — Scope of Work · SAP FI · Tax · Accenture × PTTEP</title>
-<meta name="description" content="The proper scope of work for an SAP FI consultant specializing in tax on the Accenture / PTTEP S/4HANA programme: what you own, the lifecycle, in-scope vs out-of-scope boundaries, deliverables, and an honest XeerSoft-to-SAP bridge. A personal study and positioning page.">
+<meta name="description" content="The proper scope of work for an SAP FI consultant specializing in tax on the Accenture / PTTEP S/4HANA programme: what you own, the lifecycle, in-scope vs out-of-scope boundaries, deliverables, the programme scale, and an honest account of where my depth comes from.">
 <script>
   /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
   (function () {
@@ -556,6 +556,29 @@
   .taccount td.cr { color: var(--haze); padding-left: 1.9rem; }
   .taccount td.sub { color: var(--haze); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; background: rgba(43, 217, 196, 0.04); }
 
+  /* ---------- 10 Programme scale / team / impact ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin: 1.5rem 0; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--deep); border: 1px solid var(--steel); border-radius: 12px; padding: 1rem 1.1rem; }
+  .stat .v { font-family: var(--display); font-weight: 700; font-size: 1.85rem; line-height: 1; color: var(--gas); }
+  .stat .v small { font-size: 0.9rem; color: var(--haze); font-weight: 500; }
+  .stat .l { font-size: 0.74rem; color: var(--haze); margin-top: 0.45rem; line-height: 1.35; }
+  .team { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.3rem 0; }
+  @media (max-width: 720px) { .team { grid-template-columns: 1fr; } }
+  .team .card h3 { font-size: 1.0rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.2rem; }
+  .team .flag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--steel); border-radius: 5px; padding: 0.12em 0.45em; color: var(--haze); }
+  .team .onshore h3 { color: var(--gas); }
+  .team .offshore h3 { color: var(--gold); }
+  .team ul { margin: 0.5rem 0 0; padding-left: 1.1rem; }
+  .team li { font-size: 0.88rem; margin-bottom: 0.4rem; color: var(--mist); }
+  .myseat { margin-top: 1.2rem; border-left: 3px solid var(--flare); background: rgba(255, 107, 53, 0.06); border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; font-size: 0.96rem; }
+  .myseat b { color: var(--flare); }
+  .impact-list { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 1.2rem; }
+  .impact-row { display: grid; grid-template-columns: 116px 1fr; gap: 0.9rem; align-items: baseline; background: var(--deep); border: 1px solid var(--steel); border-radius: 10px; padding: 0.75rem 0.95rem; }
+  .impact-row .m { font-family: var(--display); font-weight: 700; font-size: 1.05rem; color: var(--gold); line-height: 1.2; }
+  .impact-row .t { font-size: 0.9rem; color: var(--mist); }
+  @media (max-width: 560px) { .impact-row { grid-template-columns: 1fr; gap: 0.2rem; } }
+
   /* ---------- Footer ---------- */
   footer {
     margin-left: var(--rail-w);
@@ -734,7 +757,8 @@
     <li><a class="rail__link" href="#timeline" data-spy><span class="num">07</span><span class="name">Road to Go-Live</span></a></li>
     <li><a class="rail__link" href="#taxengine" data-spy><span class="num">08</span><span class="name">PTTEP tax engine</span></a></li>
     <li><a class="rail__link" href="#legal" data-spy><span class="num">09</span><span class="name">Legal watch-list</span></a></li>
-    <li><a class="rail__link" href="#honest" data-spy><span class="num">10</span><span class="name">Say it honestly</span></a></li>
+    <li><a class="rail__link" href="#programme" data-spy><span class="num">10</span><span class="name">Programme &amp; impact</span></a></li>
+    <li><a class="rail__link" href="#honest" data-spy><span class="num">11</span><span class="name">Where my depth comes from</span></a></li>
   </ol>
   <a class="rail__companion" href="finance-functional-module.html">Companion study page →<br><b>SAP FI · Tax · PTTEP</b> essentials</a>
   <a class="rail__back" href="index.html">Back to portfolio →</a>
@@ -759,7 +783,7 @@
     <p class="lede">A tax consultant is only as strong as the hand-offs around them. On this programme
       I sit between four parties, each a clean interface — select a counterpart to see what flows each way.</p>
 
-    <div class="seg" role="group" aria-label="Who you interface with">
+    <div class="seg" role="group" aria-label="Who I interface with">
       <button type="button" data-if="lead" aria-pressed="true">FI/CO Lead</button>
       <button type="button" data-if="sme" aria-pressed="false">Client Tax SME</button>
       <button type="button" data-if="mmsd" aria-pressed="false">MM / SD</button>
@@ -807,7 +831,7 @@
             <b>MM</b> (the tax code on a purchase order / invoice verification),
             <b>SD</b> (output tax via condition records), and direct <b>FI</b> postings
             (<span class="tcode">FB60</span> vendor invoice, <span class="tcode">FB70</span> customer invoice).
-            You verify input vs. output VAT splits and that WHT is withheld at payment.</p>
+            I verify input vs. output VAT splits and that WHT is withheld at payment.</p>
           <div class="tcodes">
             <span class="tcode">FB60</span><span class="tcode">FB70</span><span class="tcode">F-53</span>
             <span class="tcode">MM tax code</span><span class="tcode">SD MWST</span>
@@ -871,8 +895,8 @@
         <div class="pillar__body" id="p-cut"><div class="pillar__body-inner">
           <p>I get tax right at the switch. I validate open items that carry tax, opening tax balances,
             and any WHT carry-forward; confirm configuration transports moved correctly; and check
-            the first live postings determine tax as designed. You support the tax slice of the
-            cutover plan — you do not own the whole cutover.</p>
+            the first live postings determine tax as designed. I support the tax slice of the
+            cutover plan — I don't own the whole cutover.</p>
         </div></div>
       </div>
 
@@ -891,7 +915,7 @@
 
     <p class="note">Petroleum-specific levies on the PTTEP client — <b>Royalty, SRB, PITA</b> —
       are <b>not</b> standard transactional tax codes. They land as GL provisions / period-end
-      postings. Your job is to make sure the right GL accounts and postings exist — not to own the
+      postings. My job is to make sure the right GL accounts and postings exist — not to own the
       legal computation. (See the <a href="finance-functional-module.html#pttep">companion page</a> for the petroleum-tax detail.)</p>
   </section>
 
@@ -945,8 +969,8 @@
           <ul>
             <li>Legal interpretation &amp; rate-setting<span class="owner">→ Client Tax SME / tax advisor</span></li>
             <li>Re-designing the overall tax solution (fixed in Explore)<span class="owner">→ FI/CO Lead + Tax SME</span></li>
-            <li>ABAP build of enhancements &amp; form output<span class="owner">→ Technical team (you write the spec)</span></li>
-            <li>Petroleum tax (Royalty / SRB / PITA) computation logic<span class="owner">→ specialist provisioning; you ensure the GL exists</span></li>
+            <li>ABAP build of enhancements &amp; form output<span class="owner">→ Technical team (I write the spec)</span></li>
+            <li>Petroleum tax (Royalty / SRB / PITA) computation logic<span class="owner">→ specialist provisioning; I ensure the GL exists</span></li>
             <li>Corporate income-tax provisioning beyond config<span class="owner">→ client finance / CO</span></li>
             <li>Non-tax FI areas (treasury, AA policy) unless assigned<span class="owner">→ respective FI streams</span></li>
           </ul>
@@ -962,7 +986,7 @@
           <thead>
             <tr>
               <th>Activity</th>
-              <th class="who">You<br><span style="font-weight:400;color:var(--haze)">FI Tax</span></th>
+              <th class="who">Me<br><span style="font-weight:400;color:var(--haze)">FI Tax</span></th>
               <th class="who">FI/CO<br><span style="font-weight:400;color:var(--haze)">Lead</span></th>
               <th class="who">Tax<br><span style="font-weight:400;color:var(--haze)">SME</span></th>
               <th class="who">ABAP<br><span style="font-weight:400;color:var(--haze)">Tech</span></th>
@@ -979,7 +1003,7 @@
       </div>
       <p class="raci-legend"><b>R</b> Responsible (does the work) · <b>A</b> Accountable (owns the outcome) ·
         <b>C</b> Consulted (gives input) · <b>I</b> Informed (kept in the loop).
-        You are <b>Responsible</b> for the build &amp; proof; the <b>Tax SME is Accountable</b> for the law,
+        I'm <b>Responsible</b> for the build &amp; proof; the <b>Tax SME is Accountable</b> for the law,
         the <b>FI/CO Lead Accountable</b> for delivery.</p>
     </div>
   </section>
@@ -1057,9 +1081,9 @@
         <button type="button" class="fimap__node" data-fi="ar"><span class="code">FI-AR</span><span class="lbl">Receivable</span></button>
         <button type="button" class="fimap__node" data-fi="aa"><span class="code">FI-AA</span><span class="lbl">Assets</span></button>
         <button type="button" class="fimap__node" data-fi="bl"><span class="code">FI-BL</span><span class="lbl">Bank</span></button>
-        <button type="button" class="fimap__node is-here" data-fi="tax"><span class="code">Tax</span><span class="lbl">&amp; Special Products</span><span class="pin">📍 you are here</span></button>
+        <button type="button" class="fimap__node is-here" data-fi="tax"><span class="code">Tax</span><span class="lbl">&amp; Special Products</span><span class="pin">📍 where I sit</span></button>
       </div>
-      <p class="caption" style="text-align:center;margin:0.9rem 0 0.3rem">↳ your branch — <b>Tax &amp; Special Products</b> — expands to:</p>
+      <p class="caption" style="text-align:center;margin:0.9rem 0 0.3rem">↳ my branch — <b>Tax &amp; Special Products</b> — expands to:</p>
       <div class="fimap__subrow">
         <button type="button" class="fimap__node" data-fi="vat"><span class="code">VAT</span><span class="lbl">Tax on Sales/Purchases</span></button>
         <button type="button" class="fimap__node" data-fi="wht"><span class="code">WHT</span><span class="lbl">Extended Withholding</span></button>
@@ -1216,7 +1240,7 @@
           <dt>Base</dt><dd>Service fee paid to a company (PND 53) before VAT.</dd>
           <dt>SAP mechanism</dt><dd>Extended WHT <b>type</b> (at payment) + <b>code</b> (3%) on the vendor master.</dd>
           <dt>Posting / form</dt><dd>Withheld on <span class="tcode">F-53</span>; certificate + <span class="tcode">PND 53</span>.</dd>
-          <dt>Note</dt><dd>You pay the vendor net; you remit the 3% to the Revenue Department.</dd>
+          <dt>Note</dt><dd>I pay the vendor the net and remit the 3% to the Revenue Department.</dd>
         </dl></div></div>
       </div>
       <div class="pillar">
@@ -1467,9 +1491,65 @@
       and current Revenue Department / DMF guidance before configuration.</p>
   </section>
 
-  <!-- 10 HONEST -->
+  <!-- 10 PROGRAMME & IMPACT -->
+  <section class="chapter" id="programme">
+    <div class="eyebrow"><span class="dot"></span>10 · The programme &amp; the impact</div>
+    <h2>A national-scale S/4HANA transformation — and the slice I own inside it.</h2>
+    <p class="lede">This isn't a one-consultant build. PTTEP's move to S/4HANA is a large, multi-year
+      transformation that Accenture runs with a blended <b>Thailand–India</b> team across a dozen
+      workstreams. Here's the rough shape of it, where I sit, and the value it's built to unlock.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="v">~200<small>+</small></div><div class="l">people on the programme at peak (estimated)</div></div>
+      <div class="stat"><div class="v">12<small>+</small></div><div class="l">functional &amp; technical workstreams</div></div>
+      <div class="stat"><div class="v">2</div><div class="l">delivery shores — Thailand onshore + India offshore</div></div>
+      <div class="stat"><div class="v">1</div><div class="l">tax sub-stream inside FI/CO — the part I own</div></div>
+    </div>
+
+    <h3 style="margin-top:1.8rem">How the team is shaped</h3>
+    <div class="team">
+      <div class="card onshore">
+        <h3>Onshore — Thailand <span class="flag">client-facing</span></h3>
+        <ul>
+          <li>Functional consultants across FI/CO, MM, SD, PM &amp; PS — close to the business</li>
+          <li>Thai-speaking leads for tax localization, statutory reporting &amp; UAT with PTTEP users</li>
+          <li>Business analysts, PMO &amp; organisational change management</li>
+        </ul>
+      </div>
+      <div class="card offshore">
+        <h3>Offshore — India <span class="flag">delivery centre</span></h3>
+        <ul>
+          <li>ABAP development &amp; form/output build (WHT certificate, PND, VAT layouts)</li>
+          <li>Basis / Security / GRC, data migration &amp; integration</li>
+          <li>A testing factory and AMS / hypercare support at scale</li>
+        </ul>
+      </div>
+    </div>
+    <div class="myseat">
+      <b>My seat —</b> inside the <b>FI/CO</b> workstream I own the <b>tax sub-stream</b>: VAT, Extended WHT
+      and the petroleum-levy GL touchpoints. I work between the Thai client &amp; Tax SME and the India build
+      and test teams — one named owner for tax, inside a programme of hundreds.
+    </div>
+
+    <h3 style="margin-top:1.9rem">The impact it's built to unlock <span style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--haze);border:1px solid var(--steel);border-radius:5px;padding:0.14em 0.45em;vertical-align:middle">projected</span></h3>
+    <div class="impact-list">
+      <div class="impact-row"><span class="m">1 source</span><span class="t">A single, real-time book of financial truth across PTTEP entities — replacing reconciled silos and offline spreadsheets.</span></div>
+      <div class="impact-row"><span class="m">Faster close</span><span class="t">A shorter, more automated period-end — finance reporting in hours, not days of manual consolidation.</span></div>
+      <div class="impact-row"><span class="m">Audit-ready tax</span><span class="t">VAT &amp; WHT determined and posted automatically on every document, with statutory output (PP30 / PND) generated from the system — lower compliance risk, fewer manual errors.</span></div>
+      <div class="impact-row"><span class="m">Petroleum-fit</span><span class="t">USD functional currency, "tax reference" export pricing and Royalty / SRB / PITA provisioning handled in-system instead of in spreadsheets.</span></div>
+    </div>
+    <div class="myseat" style="border-left-color:var(--gas);background:rgba(43,217,196,0.06)">
+      <b style="color:var(--gas)">My piece of that number —</b> if the tax engine is right, every invoice posts the
+      correct VAT and WHT, and every month's PP30 and PND filing comes straight out of SAP: on time, traceable
+      and defensible in an audit. That compliance risk is what I'm here to retire.
+    </div>
+    <p class="note">Team size, shore split and impact figures are an informed estimate for a programme of this
+      type — illustrative for this study, not official Accenture / PTTEP numbers.</p>
+  </section>
+
+  <!-- 11 HONEST -->
   <section class="chapter" id="honest">
-    <div class="eyebrow"><span class="dot"></span>10 · Where my depth comes from</div>
+    <div class="eyebrow"><span class="dot"></span>11 · Where my depth comes from</div>
     <h2>Where my depth actually comes from.</h2>
     <p class="lede">XeerSoft isn't SAP — but four full-lifecycle ERP go-lives map cleanly onto these SAP
       concepts. I bring the concept understanding and the real delivery experience, and I stay precise
@@ -1477,7 +1557,7 @@
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Your XeerSoft delivery</th><th>Maps to SAP concept</th></tr></thead>
+        <thead><tr><th>My XeerSoft delivery</th><th>Maps to SAP concept</th></tr></thead>
         <tbody>
           <tr><td>POS-to-accounting auto posting</td><td>Automatic account determination + tax posting (<span class="tcode">OB40</span>)</td></tr>
           <tr><td>GL mapping</td><td>Tax GL configuration</td></tr>
@@ -1498,8 +1578,8 @@
 
     <div class="onerule">
       <div class="label">The one rule</div>
-      <p style="margin:0">Claim <b>concept understanding</b> + <b>real full-lifecycle ERP delivery</b>.
-        Never claim you have configured the Thai tax procedure on SAP.</p>
+      <p style="margin:0">I lead with <b>concept understanding</b> + <b>real full-lifecycle ERP delivery</b> —
+        and I never claim I've configured the Thai tax procedure on SAP.</p>
     </div>
   </section>
 
@@ -1588,23 +1668,23 @@
       lead: { role: 'FI/CO Lead', you: 'Receives from / reports to',
         get: 'The agreed tax design, config standards, the delivery plan & priorities.',
         give: 'Built &amp; tested tax configuration, status, risks and defects on the tax stream.' },
-      sme: { role: 'Client Tax SME', you: 'Your source of truth for the law',
+      sme: { role: 'Client Tax SME', you: 'My source of truth for the law',
         get: 'Rates, legal interpretation, which taxes apply, filing requirements (PP30, PND).',
         give: 'How that requirement is realised in SAP, and questions when reality meets config.' },
       mmsd: { role: 'MM / SD Functional', you: 'Where tax is triggered',
         get: 'Purchasing &amp; sales document flows that carry tax codes / output tax.',
         give: 'Correct tax codes &amp; determination so MM/SD documents post the right tax.' },
-      abap: { role: 'ABAP / Technical', you: 'You spec, they build',
+      abap: { role: 'ABAP / Technical', you: 'I spec, they build',
         get: 'Built enhancements and tax form output (WHT certificate, PND, VAT layout).',
-        give: 'Clear functional specs &amp; test feedback — you do not write the ABAP.' },
+        give: 'Clear functional specs &amp; test feedback — I don\'t write the ABAP.' },
       test: { role: 'Test / Cutover Lead', you: 'Prove &amp; switch',
         get: 'Test cycles, the cutover plan, migration windows.',
         give: 'Tax test scripts &amp; results, the tax slice of the cutover checklist, sign-off.' }
     };
     wireSeg('if', ifData, document.getElementById('ifDetail'), function (d) {
       return '<div class="role-of">' + d.you + '</div><h3>' + d.role + '</h3>' +
-        '<dl><dt>You get</dt><dd>' + d.get + '</dd>' +
-        '<dt>You give</dt><dd>' + d.give + '</dd></dl>';
+        '<dl><dt>I get</dt><dd>' + d.get + '</dd>' +
+        '<dt>I give</dt><dd>' + d.give + '</dd></dl>';
     }, 'lead');
 
     /* ---------- 01 Pillar expanders ---------- */
@@ -1688,7 +1768,7 @@
 
     /* ---------- 05 SAP FI map selector ---------- */
     var fiData = {
-      gl: { name: 'FI-GL — General Ledger', tie: 'The statutory book of record; every sub-ledger rolls up here.', rel: 'Your tax postings land in GL accounts you set in FS00 and route via OB40.' },
+      gl: { name: 'FI-GL — General Ledger', tie: 'The statutory book of record; every sub-ledger rolls up here.', rel: 'My tax postings land in GL accounts I set in FS00 and route via OB40.' },
       ap: { name: 'FI-AP — Accounts Payable', tie: 'Vendor invoices &amp; payments.', rel: 'Input VAT and Extended WHT attach here (FB60 invoice, F-53 payment).' },
       ar: { name: 'FI-AR — Accounts Receivable', tie: 'Customer invoices &amp; collections.', rel: 'Output VAT attaches here (FB70); open items &amp; dunning live here.' },
       aa: { name: 'FI-AA — Asset Accounting', tie: 'Fixed assets &amp; depreciation.', rel: 'Tax link: input VAT on asset purchases must flow to the right GL.' },
@@ -1696,7 +1776,7 @@
       tax: { name: 'Tax &amp; Special Products', tie: 'The tax engine sitting on top of every posting — YOUR HOME.', rel: 'VAT determination, Extended WHT, tax account determination (OB40) and statutory reporting (PP30 / PND).' },
       vat: { name: 'VAT — Tax on Sales/Purchases', tie: 'Consumption tax, output − input, 7%.', rel: 'Built in FTXP / OB40 under TAXTH; filed monthly on PP30.' },
       wht: { name: 'Extended Withholding Tax', tie: 'A slice of a payment withheld &amp; remitted for the payee.', rel: 'WHT types + codes on master data; filed on PND 3 / 53 / 54. Always Extended.' },
-      petro: { name: 'Petroleum levies — Royalty · SRB · PITA', tie: 'Upstream-only levies under their own Acts.', rel: 'GL provisions / period-end postings — not transactional tax codes. You ensure the GL exists.' }
+      petro: { name: 'Petroleum levies — Royalty · SRB · PITA', tie: 'Upstream-only levies under their own Acts.', rel: 'GL provisions / period-end postings — not transactional tax codes. I make sure the GL accounts exist.' }
     };
     var fiNodes = Array.prototype.slice.call(document.querySelectorAll('.fimap__node'));
     var fiDetail = document.getElementById('fiDetail');
