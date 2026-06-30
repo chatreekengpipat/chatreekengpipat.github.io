@@ -6202,3 +6202,22 @@ nav.scrolled {
   .fx-tilt { transform: none !important; }
   #ck-progress { display: none; }
 }
+/* ---- Justified body text (distributed evenly across each line) — site-wide ---- */
+.content-p,
+.hero-v7-desc,
+.balanced-text,
+.balanced-paragraph,
+.project-desc,
+.project-hero-desc,
+.method-card-desc,
+.sapcta-desc,
+.award-desc,
+.academic-desc,
+.algo-card-desc,
+.about-text-v7 p,
+.workplace-content p {
+  text-align: justify;
+  text-justify: inter-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
