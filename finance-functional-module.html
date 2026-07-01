@@ -60,7 +60,7 @@
 
   h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; text-wrap: balance; }
   p { margin: 0 0 1rem; text-wrap: pretty; }
-  .chapter p, .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
+  .chapter p:not(.caption), .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
   a { color: var(--gas); }
 
   .mono { font-family: var(--mono); }
@@ -338,6 +338,7 @@
   }
   .flip__inner {
     position: relative;
+    display: grid;
     width: 100%;
     min-height: 230px;
     transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -345,8 +346,7 @@
   }
   .flip.is-flipped .flip__inner { transform: rotateY(180deg); }
   .flip__face {
-    position: absolute;
-    inset: 0;
+    grid-area: 1 / 1;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border-radius: 14px;
@@ -569,6 +569,7 @@
   }
   .fcard__inner {
     position: relative;
+    display: grid;
     width: 100%;
     min-height: 250px;
     transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -576,8 +577,7 @@
   }
   .fcard.is-flipped .fcard__inner { transform: rotateY(180deg); }
   .fcard__face {
-    position: absolute;
-    inset: 0;
+    grid-area: 1 / 1;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border-radius: 16px;
