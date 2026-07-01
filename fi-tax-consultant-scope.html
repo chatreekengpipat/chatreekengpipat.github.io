@@ -591,6 +591,40 @@
   .banner--hero .cap { padding-top: 2rem; font-size: 0.75rem; letter-spacing: 0.04em; }
   @media (max-width: 560px) { .banner img { height: 175px; } .banner--hero img { height: 205px; } }
 
+  /* ---------- Petroleum layer: two-track + calc ---------- */
+  .tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.3rem 0; }
+  @media (max-width: 720px) { .tracks { grid-template-columns: 1fr; } }
+  .track { border: 1px solid var(--steel); border-radius: 12px; background: var(--deep); padding: 1.1rem 1.2rem; }
+  .track--up { border-color: rgba(59, 130, 246, 0.45); }
+  .track--down { border-color: rgba(255, 107, 53, 0.4); }
+  .track__h { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.6rem; line-height: 1.4; }
+  .track--up .track__h { color: var(--gas); }
+  .track--down .track__h { color: var(--flare); }
+  .track ol { list-style: none; margin: 0; padding: 0; }
+  .track li { font-size: 0.86rem; padding: 0.32rem 0; border-bottom: 1px dashed var(--steel); display: flex; justify-content: space-between; gap: 0.6rem; align-items: center; }
+  .track li:last-child { border-bottom: 0; }
+  .track li span { font-family: var(--mono); font-size: 0.6rem; color: var(--haze); border: 1px solid var(--steel); border-radius: 5px; padding: 0.05em 0.4em; white-space: nowrap; }
+  .track li.sum { font-weight: 600; color: var(--gas); border-bottom-style: solid; }
+  .track--down li.sum { color: var(--flare); }
+  .track__note { font-size: 0.79rem; color: var(--haze); margin: 0.7rem 0 0; line-height: 1.5; }
+  .pf-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.42rem 0; border-bottom: 1px dashed var(--steel); font-size: 0.92rem; }
+  .pf-row .k { color: var(--haze); }
+  .pf-row .v { font-family: var(--mono); font-weight: 600; }
+  .pf-row.ded .v { color: var(--gold); }
+  .pf-row.sub { border-bottom: 2px solid var(--steel); }
+  .pf-row.sub .k, .pf-row.sub .v { color: var(--mist); font-weight: 700; }
+  .pf-row.tax .v { color: var(--flare); }
+  .pf-row.net { border-bottom: 0; border-top: 2px solid var(--steel); margin-top: 0.2rem; padding-top: 0.55rem; }
+  .pf-row.net .k { color: var(--mist); }
+  .pf-row.net .v { color: var(--gas); font-size: 1.12rem; }
+  .petro-take { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.1rem; }
+  .petro-take .box { border: 1px solid var(--steel); border-radius: 11px; padding: 0.85rem 1rem; background: var(--abyss); }
+  .petro-take .box .l { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--haze); }
+  .petro-take .box .n { font-family: var(--display); font-weight: 700; font-size: 1.5rem; line-height: 1.1; margin-top: 0.2rem; }
+  .petro-take .box .pct { font-family: var(--mono); font-size: 0.68rem; color: var(--haze); margin-top: 0.2rem; }
+  .petro-take .box--state .n { color: var(--flare); }
+  .petro-take .box--net .n { color: var(--gas); }
+
   /* ---------- Footer ---------- */
   footer {
     margin-left: max(0px, calc(50vw - var(--content-w) / 2 - var(--rail-w)));
@@ -1402,6 +1436,73 @@
     <p class="note">Standard illustrative rates: VAT 7%; WHT — services / professional 3%, rental 5%, transport 1%,
       advertising 2%, interest 1% (Thai PND 53 corporate payees). Petroleum levies follow the locked PTTEP figures
       and post as provisions, not transactional codes.</p>
+
+    <h3 style="margin-top:2.4rem">Beyond the document — the petroleum layer</h3>
+    <p class="caption">VAT &amp; WHT post on every invoice. But PTTEP's real tax weight is the <b>petroleum layer</b> —
+      <b>Royalty · SRB · PITA</b> — settled at period-end on <b>profit</b>, not per document. And <b>Excise</b> is a
+      different animal entirely: a downstream, per-litre tax on refined products that never touches PTTEP's profit.</p>
+
+    <div class="tracks">
+      <div class="track track--up">
+        <div class="track__h">▲ Upstream · PTTEP — tax on PROFIT</div>
+        <ol>
+          <li>Revenue — gas / crude sold</li>
+          <li>− Operating cost</li>
+          <li>− Capital allowance (depreciation)</li>
+          <li>− Royalty (5–15% gross · PSC 10%) <span>deductible</span></li>
+          <li>− SRB (Thailand III windfall) <span>deductible</span></li>
+          <li class="sum">= Taxable petroleum profit</li>
+          <li>− PITA (PSC 20% / concession 50%)</li>
+          <li class="sum">= Company net profit</li>
+        </ol>
+      </div>
+      <div class="track track--down">
+        <div class="track__h">▼ Downstream · GC · TOP · IRPC · OR — tax on the PRODUCT</div>
+        <ol>
+          <li>Refining &amp; marketing</li>
+          <li>Product sale — diesel, gasoline, jet, LPG</li>
+          <li>+ Excise (฿/litre × volume) <span>indirect</span></li>
+          <li>+ VAT 7%</li>
+          <li class="sum">= Consumer pump price</li>
+        </ol>
+        <p class="track__note">Excise is charged <b>per litre</b> and built into the price — the consumer bears it. It
+          never touches PTTEP's profit. Downstream firms also pay normal <b>CIT 20%</b>.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">Petroleum income tax — run the upstream flow</h3>
+    <p class="caption">The real PTTEP computation: Royalty and SRB are <b>deducted first</b>, then PITA is charged on the
+      remaining petroleum profit. Government take = Royalty + SRB + PITA. (M฿ = million baht.)</p>
+
+    <div class="calc">
+      <div class="calc__grid">
+        <div>
+          <div class="calc__field"><label for="pRev">Revenue — gas / crude sold (M฿)</label>
+            <input type="number" id="pRev" value="10000" min="0" step="500" inputmode="decimal"></div>
+          <div class="calc__field"><label for="pCost">Operating cost (M฿)</label>
+            <input type="number" id="pCost" value="4000" min="0" step="500" inputmode="decimal"></div>
+          <div class="calc__field"><label for="pDep">Capital allowance / depreciation (M฿)</label>
+            <input type="number" id="pDep" value="1000" min="0" step="500" inputmode="decimal"></div>
+          <div class="calc__field"><label for="pRegime">Fiscal regime</label>
+            <select id="pRegime">
+              <option value="psc" selected>PSC (Bongkot / Erawan) — PITA 20%, no SRB</option>
+              <option value="concession">Concession · Thailand III — PITA 50% + SRB</option>
+            </select></div>
+          <div class="calc__field"><label for="pRoy">Royalty rate (% of gross)</label>
+            <input type="number" id="pRoy" value="10" min="0" max="15" step="1" inputmode="decimal"></div>
+          <div class="calc__field" id="pSrbField" hidden><label for="pSrb">SRB — windfall (M฿, Thailand III only)</label>
+            <input type="number" id="pSrb" value="0" min="0" step="100" inputmode="decimal"></div>
+        </div>
+        <div class="calc__out" id="pOut" aria-live="polite"></div>
+      </div>
+      <div class="petro-take">
+        <div class="box box--state"><div class="l">Government take</div><div class="n" id="pStateN">0</div><div class="pct" id="pStatePct">Royalty + SRB + PITA</div></div>
+        <div class="box box--net"><div class="l">Company keeps</div><div class="n" id="pNetN">0</div><div class="pct" id="pNetPct">net profit after tax</div></div>
+      </div>
+    </div>
+    <p class="note">Illustrative figures for learning — the real SRB uses a complex windfall formula (income per metre of
+      well + a geological factor), not a flat rate. Royalty &amp; SRB are deductible before PITA; interest is not.
+      PTTEP's Bongkot / Erawan are PSCs (PITA 20%). In SAP these post as period-end GL provisions, never transactional tax codes.</p>
   </section>
 
   <!-- 09 LEGAL WATCH-LIST -->
@@ -1861,6 +1962,58 @@
       vatEl.addEventListener('change', recalc);
       whtEl.addEventListener('change', recalc);
       recalc();
+    }
+
+    /* ---------- 08b Petroleum income-tax calculator ---------- */
+    var pRev = document.getElementById('pRev');
+    var pOut = document.getElementById('pOut');
+    if (pRev && pOut) {
+      var pCost = document.getElementById('pCost');
+      var pDep = document.getElementById('pDep');
+      var pRegime = document.getElementById('pRegime');
+      var pRoy = document.getElementById('pRoy');
+      var pSrb = document.getElementById('pSrb');
+      var pSrbField = document.getElementById('pSrbField');
+      var pStateN = document.getElementById('pStateN');
+      var pNetN = document.getElementById('pNetN');
+      var pStatePct = document.getElementById('pStatePct');
+      var pNetPct = document.getElementById('pNetPct');
+      var pf = function (n) { return n.toLocaleString('en-US', { maximumFractionDigits: 0 }); };
+      var num = function (el) { return parseFloat(el.value) || 0; };
+      var prow = function (k, v, cls, neg) {
+        return '<div class="pf-row ' + (cls || '') + '"><span class="k">' + k + '</span><span class="v">' +
+          (neg ? '(' + pf(v) + ')' : pf(v)) + '</span></div>';
+      };
+      var pRecalc = function () {
+        var concession = pRegime.value === 'concession';
+        pSrbField.hidden = !concession;
+        var rev = num(pRev), cost = num(pCost), dep = num(pDep);
+        var roy = rev * (num(pRoy) / 100);
+        var srb = concession ? num(pSrb) : 0;
+        var pitaRate = concession ? 0.50 : 0.20;
+        var profit = rev - cost - dep - roy - srb;
+        var pita = profit > 0 ? profit * pitaRate : 0;
+        var net = profit - pita;
+        var take = roy + srb + pita;
+        var margin = rev - cost - dep;
+        var takePct = margin > 0 ? Math.round(take / margin * 100) : 0;
+        pOut.innerHTML =
+          prow('Revenue', rev, '') +
+          prow('&minus; Operating cost', cost, 'ded', true) +
+          prow('&minus; Depreciation', dep, 'ded', true) +
+          prow('&minus; Royalty (' + num(pRoy) + '%)', roy, 'ded', true) +
+          (concession ? prow('&minus; SRB (windfall)', srb, 'ded', true) : '') +
+          prow('= Taxable petroleum profit', profit, 'sub') +
+          prow('&minus; PITA (' + Math.round(pitaRate * 100) + '%)', pita, 'tax', true) +
+          prow('= Company net profit', net, 'net');
+        pStateN.textContent = '฿' + pf(take) + 'M';
+        pNetN.textContent = '฿' + pf(net) + 'M';
+        pStatePct.textContent = takePct + '% of margin · Royalty + SRB + PITA';
+        pNetPct.textContent = (100 - takePct) + '% of margin · after tax';
+      };
+      [pRev, pCost, pDep, pRoy, pSrb].forEach(function (el) { el.addEventListener('input', pRecalc); });
+      pRegime.addEventListener('change', pRecalc);
+      pRecalc();
     }
   })();
 </script>
