@@ -443,17 +443,294 @@
     margin: 0 auto;
   }
 
+  /* ============================================================
+     v2 — ADVANCED MOTION + DEEPER LAYOUT (page-scoped)
+     Built only from existing tokens. Every motion has a
+     prefers-reduced-motion fallback; content is visible at first
+     paint and never gated behind a class-triggered reveal.
+     ============================================================ */
+
+  /* ---- Bento re-layout: full-width animated flow, design + integration side by side ---- */
+  .sap-block--flow        { grid-column: 1 / -1; }
+  .sap-block--design      { grid-column: 1; }
+  .sap-block--integration { grid-column: 2; }
+
+  /* ---- Portfolio summary strip (aggregate readout above the deck) ---- */
+  .sap-summary {
+    max-width: 1000px;
+    margin: 0 auto 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .sap-summary-cell {
+    background: var(--surface);
+    padding: 1.2rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    transition: background 0.3s var(--ease-smooth);
+  }
+  .sap-summary-cell:hover { background: var(--surface-2); }
+  .sap-summary-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-strong);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .sap-summary-num .u { color: var(--accent); font-size: 0.6em; margin-left: 0.1em; }
+  .sap-summary-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+  }
+
+  /* ---- Animated business-flow rail — the signature moment ----
+     Nodes connected by a "wire"; a blue signal flows along each wire
+     (a document moving through the process). Nodes light up staggered
+     when the card scrolls into view. Wrap-safe; stacks on mobile. */
+  .flowline {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.55rem 0;
+  }
+  .flowstep {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+  .flownode {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.72rem;
+    line-height: 1.25;
+    /* entrance (revealed via [data-animate].is-in on the card body) */
+    opacity: 1;
+    transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+  }
+  .flownode:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent), 0 8px 18px -10px var(--glow-color);
+  }
+  .flownode-name { font-size: 0.83rem; font-weight: 600; color: var(--text); }
+  .flownode-doc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+  }
+  /* the wire between two nodes */
+  .flowwire {
+    flex: 1 1 22px;
+    min-width: 22px;
+    height: 2px;
+    margin: 0 0.15rem;
+    align-self: center;
+    position: relative;
+    border-radius: 2px;
+    background: var(--border-strong);
+    overflow: hidden;
+  }
+  .flowwire::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--accent) 15%, transparent) 35%,
+      var(--accent) 50%,
+      color-mix(in srgb, var(--accent) 15%, transparent) 65%,
+      transparent 100%);
+    background-size: 220% 100%;
+    background-position: 120% 0;
+    animation: flowSignal 2.4s linear infinite;
+    animation-delay: calc(var(--w, 0) * 0.5s);
+  }
+  @keyframes flowSignal {
+    from { background-position: 120% 0; }
+    to   { background-position: -120% 0; }
+  }
+  /* directional chevron sits on the wire */
+  .flowwire-tip {
+    position: absolute;
+    right: -1px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 0.7rem;
+    line-height: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .flowline-note {
+    margin-top: 0.75rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  /* ---- Staggered entrance for flow nodes + pipeline phases ----
+     Default state is fully visible (never gated). When JS confirms
+     the card is in view and motion is allowed, it adds .is-in, which
+     replays a short rise from the pre-set start offset. */
+  html.js .sap-card.armed .flownode,
+  html.js .sap-card.armed .sap-phase {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  html.js .sap-card.armed.is-in .flownode,
+  html.js .sap-card.armed.is-in .sap-phase {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.5s var(--ease-smooth), transform 0.5s var(--ease-smooth);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+
+  /* ---- Pipeline: sweeping progress fill drawn once on reveal ---- */
+  .sap-phasebar { position: relative; }
+  .sap-pipe-track {
+    position: relative;
+    height: 3px;
+    margin-top: 8px;
+    border-radius: 3px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .sap-pipe-fill {
+    position: absolute;
+    inset: 0;
+    transform-origin: left center;
+    transform: scaleX(1);
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 55%, transparent));
+  }
+  html.js .sap-card.armed .sap-pipe-fill { transform: scaleX(0); }
+  html.js .sap-card.armed.is-in .sap-pipe-fill {
+    transform: scaleX(1);
+    transition: transform 1s var(--ease-smooth) 0.15s;
+  }
+  .sap-phase--golive { position: relative; }
+  html.js .sap-card.is-in .sap-phase--golive::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 var(--glow-color);
+    animation: goLivePulse 2.6s var(--ease-smooth) infinite;
+    pointer-events: none;
+  }
+  @keyframes goLivePulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent); }
+    50%      { box-shadow: 0 0 0 5px transparent; }
+  }
+
+  /* ---- RICEFW register — compact tagged objects ---- */
+  .sap-ricefw {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+  }
+  .ric {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.28rem 0.55rem 0.28rem 0.32rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .ric .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 0.08rem 0.34rem;
+    flex-shrink: 0;
+  }
+  .ric[data-t="E"] .k { background: var(--warning); }
+  .ric[data-t="F"] .k { background: var(--success); }
+  .sap-integration-note {
+    margin-top: 0.85rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .sap-integration-note b { color: var(--text-strong); font-weight: 600; }
+
+  /* ---- Effort badge count-up: reserve width so the count-up doesn't reflow ---- */
+  .sap-month-num { font-variant-numeric: tabular-nums; }
+
+  /* ---- Card cursor-spotlight (page-scoped; .sap-card isn't in the shared list) ---- */
+  .sap-card { position: relative; isolation: isolate; overflow: hidden; }
+  .sap-spot {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%),
+      color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%);
+    transition: opacity 0.4s var(--ease-smooth);
+  }
+  .sap-card:hover .sap-spot { opacity: 1; }
+  .sap-card > *:not(.sap-spot) { position: relative; z-index: 1; }
+
   /* ---------- Responsive ---------- */
   @media (max-width: 720px) {
     .sap-banner { top: 62px; padding: 0 1rem; }
     .sap-banner-inner { padding: 0.75rem 0.9rem; }
     .sap-card { padding: 1.4rem; }
     .sap-card-body { grid-template-columns: 1fr; gap: 1.1rem; }
-    .sap-block--flow, .sap-block--design,
+    .sap-block--flow, .sap-block--design, .sap-block--integration,
     .sap-block--team, .sap-block--effort { grid-column: 1; }
     /* Phase bar stacks vertically so each phase stays readable */
     .sap-phasebar { flex-direction: column; }
     .sap-phase { flex-direction: row; justify-content: space-between; align-items: center; }
+    /* Flow rail stacks: wires become short vertical connectors */
+    .flowline { flex-direction: column; align-items: stretch; gap: 0; }
+    .flowstep { flex-direction: column; align-items: stretch; }
+    .flownode { width: 100%; }
+    .flowwire { width: 2px; height: 16px; min-width: 0; margin: 0.35rem 0 0.35rem 1.1rem; flex: 0 0 16px; }
+    .flowwire::after { background-size: 100% 220%; background-position: 0 120%; animation: flowSignalV 2.4s linear infinite; }
+    .flowwire-tip { right: 50%; top: auto; bottom: -6px; transform: translateX(50%) rotate(90deg); }
+    @keyframes flowSignalV { from { background-position: 0 120%; } to { background-position: 0 -120%; } }
+    .sap-summary { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 420px) {
+    .sap-summary { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Reduced motion: freeze every ambient / looping effect ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .flowwire::after { animation: none; background-position: 50% 0; opacity: 0.6; }
+    html.js .sap-card.is-in .sap-phase--golive::after { animation: none; }
+    html.js .sap-card.armed .flownode,
+    html.js .sap-card.armed .sap-phase,
+    html.js .sap-card.armed .sap-pipe-fill { opacity: 1; transform: none; }
+    .sap-spot { display: none; }
   }
 </style>
 </head>
@@ -572,10 +849,31 @@
 
 <!-- THE FOUR SAP DESIGN CARDS -->
 <section style="padding: 3rem 2.5rem 1rem;">
+
+  <!-- Portfolio summary — aggregate readout, counts up on reveal -->
+  <div class="sap-summary" data-summary role="list" aria-label="Scope at a glance">
+    <div class="sap-summary-cell" role="listitem">
+      <span class="sap-summary-num" data-count="4">4</span>
+      <span class="sap-summary-label">ERP systems re-scoped</span>
+    </div>
+    <div class="sap-summary-cell" role="listitem">
+      <span class="sap-summary-num" data-count="5">5</span>
+      <span class="sap-summary-label">SAP module areas · MM SD FI CO Test</span>
+    </div>
+    <div class="sap-summary-cell" role="listitem">
+      <span class="sap-summary-num" data-count="40">40</span>
+      <span class="sap-summary-label">sub-unit tests planned</span>
+    </div>
+    <div class="sap-summary-cell" role="listitem">
+      <span class="sap-summary-num" data-count="8">8</span>
+      <span class="sap-summary-label">RICEFW objects scoped</span>
+    </div>
+  </div>
+
   <div class="sap-deck">
 
     <!-- 1 · Procurement & Inventory → SAP MM -->
-    <article class="sap-card">
+    <article class="sap-card" data-animate>
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>Procurement &amp; Inventory</b></div>
         <h2 class="sap-card-title">Procurement &amp; Inventory <span aria-hidden="true">&rarr;</span> <em>SAP MM</em></h2>
@@ -585,37 +883,60 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <div class="sap-flow" role="list" aria-label="Business flow">
-            <span class="sap-flow-step" role="listitem">Purchase Requisition</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">PO release</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Goods Receipt</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Invoice Verification</span>
-          </div>
+          <ol class="flowline" role="list" aria-label="Business flow: Purchase Requisition to Invoice Verification">
+            <li class="flowstep" role="listitem" style="--i:0">
+              <span class="flownode"><span class="flownode-name">Purchase Requisition</span><span class="flownode-doc">ME51N · EBAN</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:0"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:1">
+              <span class="flownode"><span class="flownode-name">PO release</span><span class="flownode-doc">ME21N · EKKO/EKPO</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:1"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:2">
+              <span class="flownode"><span class="flownode-name">Goods Receipt</span><span class="flownode-doc">MIGO · mvt 101 · MSEG</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:2"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:3">
+              <span class="flownode"><span class="flownode-name">Invoice Verification</span><span class="flownode-doc">MIRO · RBKP/RSEG</span></span>
+            </li>
+          </ol>
+          <p class="flowline-note">3-way match (PO &middot; GR &middot; invoice) posts the vendor liability; the GR posts inventory + a GR/IR clearing entry to FI automatically.</p>
         </div>
 
         <div class="sap-block sap-block--design">
           <div class="sap-block-label">SAP Technical Design</div>
           <ul class="sap-design-list">
-            <li><b>MM org structure</b> &mdash; purchasing org / group</li>
-            <li><b>PO release strategy</b> &amp; <b>reorder-point / MRP</b></li>
-            <li><b>Vendor master</b> data</li>
+            <li><b>MM org structure</b> &mdash; purchasing org / group, plant, storage location</li>
+            <li><b>PO release strategy</b> via classification <span class="tcode">class type 032</span></li>
+            <li><b>Reorder-point / MRP</b> type &amp; lot-sizing on the material master</li>
+            <li><b>Vendor / material master</b> (Business Partner in S/4)</li>
             <li>Transactions <span class="tcode">ME51N</span> <span class="tcode">ME21N</span> <span class="tcode">MIGO</span> <span class="tcode">MIRO</span></li>
-            <li>Custom PR-approval report <span class="ricefw">(RICEFW)</span></li>
           </ul>
+        </div>
+
+        <div class="sap-block sap-block--integration">
+          <div class="sap-block-label">Integration &amp; RICEFW</div>
+          <ul class="sap-design-list">
+            <li><b>MM &rarr; FI</b> automatic account determination <span class="tcode">OBYC</span> &mdash; keys <span class="tcode">BSX</span> <span class="tcode">WRX</span> <span class="tcode">GBB</span> <span class="tcode">PRD</span> by valuation class</li>
+            <li><b>Key tables</b> <span class="tcode">EKKO/EKPO</span> <span class="tcode">MSEG</span> <span class="tcode">RBKP</span></li>
+          </ul>
+          <div class="sap-ricefw" aria-label="RICEFW register">
+            <span class="ric" data-t="R"><span class="k">R</span>PR-approval report</span>
+            <span class="ric" data-t="F"><span class="k">F</span>PO print · Adobe Form</span>
+          </div>
+          <p class="sap-integration-note">RICEFW = <b>2 objects</b> (1 report, 1 form). Everything else is standard config.</p>
         </div>
 
         <div class="sap-block sap-block--pipeline">
           <div class="sap-block-label">Development Pipeline</div>
           <ol class="sap-phasebar">
-            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
-            <li class="sap-phase" style="flex-grow:3"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">3w</span></li>
-            <li class="sap-phase" style="flex-grow:1"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">1w</span></li>
-            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">2w</span></li>
-            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:2;--i:0"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:3;--i:1"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">3w</span></li>
+            <li class="sap-phase" style="flex-grow:1;--i:2"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:2;--i:3"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1;--i:4"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
           </ol>
+          <div class="sap-pipe-track" aria-hidden="true"><span class="sap-pipe-fill"></span></div>
           <div class="sap-pipe-total">Sequential span <b>~9 weeks</b></div>
         </div>
 
@@ -661,7 +982,7 @@
     </article>
 
     <!-- 2 · Strategic Pricing & AR → SAP SD pricing + FI-AR -->
-    <article class="sap-card">
+    <article class="sap-card" data-animate>
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>Strategic Pricing &amp; AR</b></div>
         <h2 class="sap-card-title">Strategic Pricing &amp; AR <span aria-hidden="true">&rarr;</span> <em>SAP SD pricing + FI-AR</em></h2>
@@ -671,36 +992,61 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <div class="sap-flow" role="list" aria-label="Business flow">
-            <span class="sap-flow-step" role="listitem">Pricing <span style="opacity:.7;margin-left:.25rem;font-size:.74rem;">(condition technique)</span></span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Billing</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">AR</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Dunning</span>
-          </div>
+          <ol class="flowline" role="list" aria-label="Business flow: Pricing to Dunning">
+            <li class="flowstep" role="listitem" style="--i:0">
+              <span class="flownode"><span class="flownode-name">Pricing</span><span class="flownode-doc">V/08 · condition technique</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:0"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:1">
+              <span class="flownode"><span class="flownode-name">Billing</span><span class="flownode-doc">VF01 · VBRK/VBRP</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:1"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:2">
+              <span class="flownode"><span class="flownode-name">AR posting</span><span class="flownode-doc">VKOA · BSID</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:2"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:3">
+              <span class="flownode"><span class="flownode-name">Dunning</span><span class="flownode-doc">F150 · dunning run</span></span>
+            </li>
+          </ol>
+          <p class="flowline-note">Billing releases to accounting, which posts the receivable to FI-AR; the dunning run then walks open items by dunning level.</p>
         </div>
 
         <div class="sap-block sap-block--design">
           <div class="sap-block-label">SAP Technical Design</div>
           <ul class="sap-design-list">
-            <li><b>Pricing procedure</b> &amp; condition records <span class="tcode">VK11</span></li>
-            <li><b>Dunning procedure</b> <span class="tcode">F150</span></li>
-            <li><b>Credit control</b> <span class="tcode">FD32</span></li>
-            <li><b>AR aging</b> <span class="tcode">FBL5N</span></li>
+            <li><b>Condition technique</b> &mdash; condition tables &rarr; access sequence &rarr; condition types &rarr; <b>pricing procedure</b> <span class="tcode">V/08</span></li>
+            <li>Condition records <span class="tcode">VK11</span></li>
+            <li><b>Dunning procedure</b> config <span class="tcode">FBMP</span>, run <span class="tcode">F150</span></li>
+            <li><b>Credit management</b> <span class="tcode">FD32</span> (FSCM in S/4)</li>
+            <li><b>AR aging / line items</b> <span class="tcode">FBL5N</span></li>
           </ul>
+        </div>
+
+        <div class="sap-block sap-block--integration">
+          <div class="sap-block-label">Integration &amp; RICEFW</div>
+          <ul class="sap-design-list">
+            <li><b>SD &rarr; FI</b> revenue account determination <span class="tcode">VKOA</span> &mdash; account keys via condition types <span class="tcode">KOFI/KOFK</span></li>
+            <li><b>Key tables</b> <span class="tcode">KONV/PRCD_ELEMENTS</span> <span class="tcode">VBRK</span> <span class="tcode">BSID</span></li>
+          </ul>
+          <div class="sap-ricefw" aria-label="RICEFW register">
+            <span class="ric" data-t="E"><span class="k">E</span>Pricing routine · VOFM</span>
+            <span class="ric" data-t="R"><span class="k">R</span>AR aging report</span>
+            <span class="ric" data-t="F"><span class="k">F</span>Dunning letter</span>
+          </div>
+          <p class="sap-integration-note">RICEFW = <b>3 objects</b> (enhancement, report, form). The pricing routine handles the tiered / mixed-terms logic standard condition types can't.</p>
         </div>
 
         <div class="sap-block sap-block--pipeline">
           <div class="sap-block-label">Development Pipeline</div>
           <ol class="sap-phasebar">
-            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
-            <li class="sap-phase" style="flex-grow:4"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">4w</span></li>
-            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">2w</span></li>
-            <li class="sap-phase" style="flex-grow:3"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">3w</span></li>
-            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:2;--i:0"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:4;--i:1"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">4w</span></li>
+            <li class="sap-phase" style="flex-grow:2;--i:2"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:3;--i:3"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">3w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1;--i:4"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
           </ol>
+          <div class="sap-pipe-track" aria-hidden="true"><span class="sap-pipe-fill"></span></div>
           <div class="sap-pipe-total">Sequential span <b>~12 weeks</b></div>
         </div>
 
@@ -747,7 +1093,7 @@
     </article>
 
     <!-- 3 · Loyalty / Star Reward (UAT) → SAP Test Management & Cutover -->
-    <article class="sap-card">
+    <article class="sap-card" data-animate>
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>Loyalty / Star Reward (UAT)</b></div>
         <h2 class="sap-card-title">Loyalty / Star Reward <span aria-hidden="true">&rarr;</span> <em>SAP Test Management &amp; Cutover</em></h2>
@@ -757,35 +1103,56 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <div class="sap-flow" role="list" aria-label="Business flow">
-            <span class="sap-flow-step" role="listitem">UAT cycles</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Defect tracking</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Go-live readiness</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Cutover</span>
-          </div>
-          <p class="sap-flow-note">The loyalty logic itself would be a custom <span class="ricefw">RICEFW</span> enhancement; this card scopes the test &amp; cutover discipline around it.</p>
+          <ol class="flowline" role="list" aria-label="Business flow: UAT cycles to Cutover">
+            <li class="flowstep" role="listitem" style="--i:0">
+              <span class="flownode"><span class="flownode-name">UAT cycles</span><span class="flownode-doc">Cloud ALM · Realize</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:0"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:1">
+              <span class="flownode"><span class="flownode-name">Defect tracking</span><span class="flownode-doc">defect mgmt · triage</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:1"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:2">
+              <span class="flownode"><span class="flownode-name">Go-live readiness</span><span class="flownode-doc">cutover sign-off</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:2"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:3">
+              <span class="flownode"><span class="flownode-name">Cutover</span><span class="flownode-doc">transport · Deploy</span></span>
+            </li>
+          </ol>
+          <p class="flowline-note">The loyalty logic itself would be a custom <span class="ricefw">RICEFW</span> enhancement; this card scopes the test &amp; cutover discipline around it.</p>
         </div>
 
         <div class="sap-block sap-block--design">
           <div class="sap-block-label">SAP Technical Design</div>
           <ul class="sap-design-list">
             <li><b>SAP Activate</b> Realize / Deploy test discipline</li>
-            <li>Solution Manager / Cloud ALM <b>test suite</b></li>
-            <li><b>Defect management</b></li>
-            <li><b>Cutover plan</b></li>
+            <li>Solution Manager / Cloud ALM <b>test suite</b> &amp; test cases</li>
+            <li><b>Defect management</b> &mdash; severity, triage, retest</li>
+            <li><b>Cutover plan</b> &amp; transport strategy</li>
           </ul>
+        </div>
+
+        <div class="sap-block sap-block--integration">
+          <div class="sap-block-label">Integration &amp; RICEFW</div>
+          <ul class="sap-design-list">
+            <li><b>The loyalty engine</b> is the enhancement under test &mdash; accrual, tier recalculation, idempotent awards</li>
+            <li><b>Regression scope</b> &mdash; the enhancement touches billing / member master, so both are in the test set</li>
+          </ul>
+          <div class="sap-ricefw" aria-label="RICEFW register">
+            <span class="ric" data-t="E"><span class="k">E</span>Loyalty engine enhancement</span>
+          </div>
+          <p class="sap-integration-note">RICEFW = <b>1 object</b>. This card's value is the <b>test &amp; cutover discipline</b> that de-risks it, not new config.</p>
         </div>
 
         <div class="sap-block sap-block--pipeline">
           <div class="sap-block-label">Development Pipeline</div>
           <ol class="sap-phasebar">
-            <li class="sap-phase" style="flex-grow:1"><span class="sap-phase-name">Test strategy</span><span class="sap-phase-dur">1w</span></li>
-            <li class="sap-phase" style="flex-grow:4"><span class="sap-phase-name">Test cycles</span><span class="sap-phase-dur">4w</span></li>
-            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover readiness</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:1;--i:0"><span class="sap-phase-name">Test strategy</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:4;--i:1"><span class="sap-phase-name">Test cycles</span><span class="sap-phase-dur">4w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1;--i:2"><span class="sap-phase-name">Cutover readiness</span><span class="sap-phase-dur">1w</span></li>
           </ol>
+          <div class="sap-pipe-track" aria-hidden="true"><span class="sap-pipe-fill"></span></div>
           <div class="sap-parallel">
             <span aria-hidden="true" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--text-subtle);">&#8741;</span>
             <span><b>Defect resolution</b> &mdash; runs in <span class="sap-phase-dur">parallel</span> across the test cycles</span>
@@ -836,7 +1203,7 @@
     </article>
 
     <!-- 4 · STEM Billing & Profitability → SAP SD billing + FI-AR + CO-PA -->
-    <article class="sap-card">
+    <article class="sap-card" data-animate>
       <header class="sap-card-head">
         <div class="sap-card-source">Built on XeerSoft &middot; <b>STEM Billing &amp; Profitability</b></div>
         <h2 class="sap-card-title">STEM Billing &amp; Profitability <span aria-hidden="true">&rarr;</span> <em>SAP SD billing + FI-AR + CO-PA</em></h2>
@@ -846,34 +1213,56 @@
 
         <div class="sap-block sap-block--flow">
           <div class="sap-block-label">Business Flow</div>
-          <div class="sap-flow" role="list" aria-label="Business flow">
-            <span class="sap-flow-step" role="listitem">Billing</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">AR</span>
-            <span class="sap-flow-sep" aria-hidden="true">&rarr;</span>
-            <span class="sap-flow-step" role="listitem">Profitability analysis by segment</span>
-          </div>
+          <ol class="flowline" role="list" aria-label="Business flow: Billing to Profitability analysis">
+            <li class="flowstep" role="listitem" style="--i:0">
+              <span class="flownode"><span class="flownode-name">Billing</span><span class="flownode-doc">VF01 · VBRK/VBRP</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:0"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:1">
+              <span class="flownode"><span class="flownode-name">AR posting</span><span class="flownode-doc">VKOA · BSID</span></span>
+              <span class="flowwire" aria-hidden="true" style="--w:1"><span class="flowwire-tip">&#9656;</span></span>
+            </li>
+            <li class="flowstep" role="listitem" style="--i:2">
+              <span class="flownode"><span class="flownode-name">Profitability by segment</span><span class="flownode-doc">CO-PA · KE30</span></span>
+            </li>
+          </ol>
+          <p class="flowline-note">One billing document posts the receivable to FI-AR and, in parallel, derives the CO-PA segment (segment = subject) so margin reports read from the same source.</p>
         </div>
 
         <div class="sap-block sap-block--design">
           <div class="sap-block-label">SAP Technical Design</div>
           <ul class="sap-design-list">
-            <li><b>Billing doc types</b> <span class="tcode">VF01</span></li>
-            <li><b>Revenue account determination</b></li>
+            <li><b>Billing doc types</b> &amp; copy control <span class="tcode">VF01</span></li>
+            <li><b>Revenue account determination</b> <span class="tcode">VKOA</span></li>
             <li><b>CO-PA</b> characteristics / value fields <span style="opacity:.8;">(segment = subject)</span></li>
+            <li><b>Account-based CO-PA</b> (S/4 &mdash; Universal Journal)</li>
             <li><b>Profitability reports</b> <span class="tcode">KE30</span></li>
           </ul>
+        </div>
+
+        <div class="sap-block sap-block--integration">
+          <div class="sap-block-label">Integration &amp; RICEFW</div>
+          <ul class="sap-design-list">
+            <li><b>SD &rarr; FI</b> revenue determination <span class="tcode">VKOA</span>; <b>CO-PA derivation</b> <span class="tcode">KEDR</span> maps segment to value fields</li>
+            <li><b>Key tables</b> <span class="tcode">VBRK</span> <span class="tcode">BSID</span> <span class="tcode">ACDOCA</span> (Universal Journal)</li>
+          </ul>
+          <div class="sap-ricefw" aria-label="RICEFW register">
+            <span class="ric" data-t="E"><span class="k">E</span>CO-PA derivation</span>
+            <span class="ric" data-t="R"><span class="k">R</span>Margin / profitability report</span>
+          </div>
+          <p class="sap-integration-note">RICEFW = <b>2 objects</b>. The derivation makes every invoice line report its own segment margin without a separate allocation run.</p>
         </div>
 
         <div class="sap-block sap-block--pipeline">
           <div class="sap-block-label">Development Pipeline</div>
           <ol class="sap-phasebar">
-            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
-            <li class="sap-phase" style="flex-grow:5"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">5w</span></li>
-            <li class="sap-phase" style="flex-grow:2"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">2w</span></li>
-            <li class="sap-phase" style="flex-grow:3"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">3w</span></li>
-            <li class="sap-phase sap-phase--golive" style="flex-grow:1"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
+            <li class="sap-phase" style="flex-grow:2;--i:0"><span class="sap-phase-name">Fit-Gap</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:5;--i:1"><span class="sap-phase-name">Config</span><span class="sap-phase-dur">5w</span></li>
+            <li class="sap-phase" style="flex-grow:2;--i:2"><span class="sap-phase-name">Unit Test</span><span class="sap-phase-dur">2w</span></li>
+            <li class="sap-phase" style="flex-grow:3;--i:3"><span class="sap-phase-name">Integration / UAT</span><span class="sap-phase-dur">3w</span></li>
+            <li class="sap-phase sap-phase--golive" style="flex-grow:1;--i:4"><span class="sap-phase-name">Cutover</span><span class="sap-phase-dur">1w</span></li>
           </ol>
+          <div class="sap-pipe-track" aria-hidden="true"><span class="sap-pipe-fill"></span></div>
           <div class="sap-pipe-total">Sequential span <b>~13 weeks</b></div>
         </div>
 
@@ -937,6 +1326,120 @@
   <p>© 2026 Chatree Kengpipat · ERP Business Analyst & Implementation Consultant</p>
   <p>Bangkok · Thailand</p>
 </footer>
+
+<!-- ============================================================
+     PAGE-SCOPED MOTION ENGINE (sap-design)
+     Reveal is an ENHANCEMENT: content is visible by default and is
+     only "armed" (hidden pre-reveal) when this script runs AND motion
+     is allowed. A safety timeout + immediate in-view pass guarantee
+     nothing can stay stuck hidden. Every effect no-ops for
+     prefers-reduced-motion.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  // ---- Count-up: preserves a leading "~", suffix, and decimals ----
+  function countUp(el, finalText) {
+    var m = String(finalText).match(/^(\D*)([\d.,]+)(.*)$/);
+    if (!m) return;
+    var pre = m[1] || '', numStr = m[2], suf = m[3] || '';
+    var target = parseFloat(numStr.replace(/,/g, ''));
+    if (isNaN(target)) return;
+    var decimals = (numStr.split('.')[1] || '').length;
+    var dur = 1100, t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min((now - t0) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);           // ease-out cubic
+      var cur = target * eased;
+      el.textContent = pre + (decimals ? cur.toFixed(decimals)
+                                       : Math.round(cur).toLocaleString('en-US')) + suf;
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = finalText;              // land exactly on source text
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // ---- Reveal + trigger count-ups ----
+  function revealCard(card) {
+    if (card.classList.contains('is-in')) return;
+    card.classList.add('is-in');
+    if (!reduce.matches) {
+      card.querySelectorAll('.sap-month-num').forEach(function (el) {
+        if (el.dataset.done) return; el.dataset.done = '1';
+        countUp(el, el.textContent.trim());
+      });
+    }
+  }
+  function revealSummary(strip) {
+    if (strip.dataset.done) return; strip.dataset.done = '1';
+    if (reduce.matches) return;
+    strip.querySelectorAll('.sap-summary-num[data-count]').forEach(function (el) {
+      countUp(el, el.textContent.trim());
+    });
+  }
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.sap-card[data-animate]'));
+  var summary = document.querySelector('.sap-summary[data-summary]');
+
+  // Arm the pre-reveal hidden state only now (JS is running + motion allowed).
+  if (!reduce.matches) cards.forEach(function (c) { c.classList.add('armed'); });
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        if (e.target === summary) revealSummary(summary);
+        else revealCard(e.target);
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+
+    cards.forEach(function (c) { io.observe(c); });
+    if (summary) io.observe(summary);
+
+    // Anything already on screen at load reveals immediately (no wait, no flash-stuck).
+    requestAnimationFrame(function () {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      cards.forEach(function (c) { if (c.getBoundingClientRect().top < vh * 0.92) revealCard(c); });
+      if (summary && summary.getBoundingClientRect().top < vh) revealSummary(summary);
+    });
+
+    // Safety net: if an observer somehow never fires, force everything visible.
+    setTimeout(function () {
+      cards.forEach(revealCard);
+      if (summary) revealSummary(summary);
+    }, 1600);
+  } else {
+    // No IO support → just reveal everything.
+    cards.forEach(revealCard);
+    if (summary) revealSummary(summary);
+  }
+
+  // ---- Card cursor-spotlight (pointer + hover only) ----
+  if (canHover.matches && !reduce.matches) {
+    document.querySelectorAll('.sap-card').forEach(function (card) {
+      var spot = document.createElement('span');
+      spot.className = 'sap-spot';
+      spot.setAttribute('aria-hidden', 'true');
+      card.insertBefore(spot, card.firstChild);
+      var raf = null;
+      card.addEventListener('pointermove', function (ev) {
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          var r = card.getBoundingClientRect();
+          card.style.setProperty('--mx', (((ev.clientX - r.left) / r.width) * 100).toFixed(1) + '%');
+          card.style.setProperty('--my', (((ev.clientY - r.top) / r.height) * 100).toFixed(1) + '%');
+          raf = null;
+        });
+      }, { passive: true });
+    });
+  }
+})();
+</script>
 
 </body>
 </html>

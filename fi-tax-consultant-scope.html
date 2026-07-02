@@ -732,6 +732,43 @@
   html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.22); }
   html[data-theme="light"] .tcode { background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.30); }
   html[data-theme="light"] .theme-btn:hover { background: rgba(37, 99, 235, 0.08); }
+
+  /* ============================================================
+     v2 — ADVANCED MOTION (page-scoped)
+     Scroll-reveal is layered over visible content: the hidden
+     pre-state (.rv) is added only by JS, so content is always
+     visible if JS is off or an observer misfires. No-ops under
+     prefers-reduced-motion.
+     ============================================================ */
+  .rv { opacity: 0; transform: translateY(16px); }
+  .rv-in {
+    opacity: 1; transform: none;
+    transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1),
+                transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    transition-delay: var(--rvd, 0ms);
+  }
+
+  /* ---- Timeline signature: pulse "I am here" (now) and Go-Live (live) ---- */
+  .g-bar.now {
+    animation: tlNowPulse 2.6s cubic-bezier(0.16,1,0.3,1) infinite;
+  }
+  @keyframes tlNowPulse {
+    0%, 100% { box-shadow: 0 0 0 1px var(--flare), 0 0 16px rgba(255,107,53,0.35); }
+    55%      { box-shadow: 0 0 0 1px var(--flare), 0 0 26px rgba(255,107,53,0.65); }
+  }
+  .g-bar.live {
+    animation: tlLivePulse 2.6s cubic-bezier(0.16,1,0.3,1) infinite;
+    animation-delay: 0.6s;
+  }
+  @keyframes tlLivePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,176,75,0.0); }
+    55%      { box-shadow: 0 0 0 4px rgba(232,176,75,0.28), 0 0 20px rgba(232,176,75,0.5); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; transform: none; }
+    .g-bar.now, .g-bar.live { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -2016,6 +2053,45 @@
       pRecalc();
     }
   })();
+</script>
+
+<!-- ============================================================
+     v2 MOTION ENGINE (fi-tax-consultant-scope)
+     Scroll-reveal choreography. Reveal is an enhancement: the hidden
+     pre-state (.rv) is only added by JS, and an in-view pass + safety
+     timeout guarantee content is never stuck hidden. No-ops under
+     prefers-reduced-motion.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var blocks = [];
+  document.querySelectorAll('main .chapter').forEach(function (ch) {
+    if (ch.id === 'hero') return;                 // hero shows immediately
+    Array.prototype.forEach.call(ch.children, function (k, i) {
+      blocks.push(k);
+      k.style.setProperty('--rvd', Math.min(i, 6) * 60 + 'ms');
+    });
+  });
+  function reveal(b) { if (!b.classList.contains('rv-in')) b.classList.add('rv-in'); }
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    blocks.forEach(function (b) { b.classList.add('rv'); });   // arm only now
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    blocks.forEach(function (b) { io.observe(b); });
+    requestAnimationFrame(function () {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      blocks.forEach(function (b) { if (b.getBoundingClientRect().top < vh * 0.94) reveal(b); });
+    });
+    setTimeout(function () { blocks.forEach(reveal); }, 1800);  // safety net
+  } else {
+    blocks.forEach(reveal);
+  }
+})();
 </script>
 </body>
 </html>
