@@ -945,6 +945,77 @@
   </div>
 </section>
 
+<!-- DELIVERED · PROVEN ON XEERSOFT -->
+<style id="delivered-styles">
+  #delivered .deliv-matrix { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem; }
+  #delivered .deliv-row {
+    display: grid; grid-template-columns: 1.1fr 1.5fr auto; gap: 1.2rem; align-items: center;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 1.1rem 1.35rem; text-decoration: none; color: inherit;
+    transition: border-color 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth),
+                box-shadow 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth);
+  }
+  #delivered .deliv-row:hover {
+    border-color: var(--accent); transform: translateY(-2px);
+    box-shadow: 0 14px 30px -14px var(--glow-color); background: var(--bg);
+  }
+  #delivered .deliv-cap { display: flex; flex-direction: column; gap: 0.3rem; }
+  #delivered .deliv-name { font-weight: 600; font-size: 1rem; color: var(--text-strong); line-height: 1.3; letter-spacing: -0.01em; }
+  #delivered .deliv-sap { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); letter-spacing: 0.03em; }
+  #delivered .deliv-proof { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; }
+  #delivered .deliv-metric { font-size: 0.86rem; color: var(--text-muted); }
+  #delivered .deliv-metric b { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+  #delivered .deliv-src { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 0.35rem; justify-self: end; }
+  #delivered .deliv-arrow { color: var(--accent); transition: transform 0.3s var(--ease-smooth); }
+  #delivered .deliv-row:hover .deliv-arrow { transform: translateX(4px); }
+  #delivered .deliv-row:hover .deliv-src { color: var(--text); }
+  #delivered .deliv-foot { margin-top: 1.1rem; font-size: 0.9rem; color: var(--text-muted); max-width: 74ch; line-height: 1.65; }
+  #delivered .deliv-foot b { color: var(--text-strong); font-weight: 600; }
+  @media (max-width: 760px) {
+    #delivered .deliv-row { grid-template-columns: 1fr; gap: 0.55rem; }
+    #delivered .deliv-src { justify-self: start; }
+  }
+</style>
+<section id="delivered">
+  <div class="section-header">
+    <h2 class="section-title">Delivered, <em>proven</em></h2>
+    <span class="section-subtitle">What I've actually shipped on XeerSoft Cloud ERP — each capability backed by a real result and the live project behind it</span>
+  </div>
+  <div class="deliv-matrix">
+    <a class="deliv-row" href="project1.html">
+      <div class="deliv-cap"><span class="deliv-name">Procure-to-Pay &amp; inventory control</span><span class="deliv-sap">≈ SAP MM</span></div>
+      <div class="deliv-proof"><span class="deliv-metric"><b>68→87%</b> vendor on-time</span><span class="deliv-metric"><b>30→0%</b> unauthorised POs</span></div>
+      <span class="deliv-src">Inventory &amp; Procurement <span class="deliv-arrow" aria-hidden="true">→</span></span>
+    </a>
+    <a class="deliv-row" href="project2.html">
+      <div class="deliv-cap"><span class="deliv-name">Pricing &amp; multi-tier condition logic</span><span class="deliv-sap">≈ SAP SD pricing</span></div>
+      <div class="deliv-proof"><span class="deliv-metric"><b>480→15 min</b> pricing decision</span></div>
+      <span class="deliv-src">Strategic Pricing &amp; AR <span class="deliv-arrow" aria-hidden="true">→</span></span>
+    </a>
+    <a class="deliv-row" href="project2.html">
+      <div class="deliv-cap"><span class="deliv-name">AR, credit control &amp; dunning</span><span class="deliv-sap">≈ SAP FI-AR</span></div>
+      <div class="deliv-proof"><span class="deliv-metric"><b>78→96%</b> AR collection</span><span class="deliv-metric"><b>42→12 days</b> overdue</span></div>
+      <span class="deliv-src">Strategic Pricing &amp; AR <span class="deliv-arrow" aria-hidden="true">→</span></span>
+    </a>
+    <a class="deliv-row" href="project4.html">
+      <div class="deliv-cap"><span class="deliv-name">Billing, revenue &amp; profitability</span><span class="deliv-sap">≈ SAP SD billing + CO-PA</span></div>
+      <div class="deliv-proof"><span class="deliv-metric"><b>฿2.18M</b> billed</span><span class="deliv-metric"><b>49.6%</b> gross margin</span><span class="deliv-metric"><b>7</b> segments</span></div>
+      <span class="deliv-src">STEM Billing &amp; Profitability <span class="deliv-arrow" aria-hidden="true">→</span></span>
+    </a>
+    <a class="deliv-row" href="project3.html">
+      <div class="deliv-cap"><span class="deliv-name">UAT &amp; defect management</span><span class="deliv-sap">≈ SAP Test Mgmt</span></div>
+      <div class="deliv-proof"><span class="deliv-metric"><b>60</b> defects</span><span class="deliv-metric"><b>5</b> cycles</span><span class="deliv-metric">blockers <b>11→0</b></span></div>
+      <span class="deliv-src">CRM Star Reward Loyalty <span class="deliv-arrow" aria-hidden="true">→</span></span>
+    </a>
+    <a class="deliv-row" href="#projects">
+      <div class="deliv-cap"><span class="deliv-name">Cutover &amp; go-live discipline</span><span class="deliv-sap">≈ SAP Activate · Deploy</span></div>
+      <div class="deliv-proof"><span class="deliv-metric"><b>4</b> end-to-end go-lives</span><span class="deliv-metric"><b>2023–2026</b></span></div>
+      <span class="deliv-src">All four systems <span class="deliv-arrow" aria-hidden="true">→</span></span>
+    </a>
+  </div>
+  <p class="deliv-foot">Every go-live carried the full analyst trail behind it — <b>FSD, Use Case &amp; User Story</b> — plus <b>GL account determination</b> and master-data setup. This is real delivery on XeerSoft Cloud ERP; the <b>≈ SAP</b> tags mark where each capability maps, not SAP project experience.</p>
+</section>
+
 <!-- WORKPLACE · NEWTON SIXTH FORM -->
 <section class="workplace-section">
   <div class="workplace-grid">
