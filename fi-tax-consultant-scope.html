@@ -765,9 +765,33 @@
     55%      { box-shadow: 0 0 0 4px rgba(232,176,75,0.28), 0 0 20px rgba(232,176,75,0.5); }
   }
 
+  /* ---- S/4HANA modernization: ECC -> S/4 comparison cards ---- */
+  .s4grid { margin-top: 1.4rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  @media (max-width: 720px) { .s4grid { grid-template-columns: 1fr; } }
+  .s4card {
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 14px;
+    padding: 1.2rem 1.3rem;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .s4card:hover { border-color: var(--gas); transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(96,165,250,0.45); }
+  .s4head { display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.7rem; margin-bottom: 0.55rem; }
+  .s4old { color: var(--haze); text-decoration: line-through; text-decoration-color: var(--steel); }
+  .s4arrow { color: var(--gas); animation: s4flow 2.2s cubic-bezier(0.16,1,0.3,1) infinite; }
+  @keyframes s4flow { 0%,100% { transform: translateX(0); opacity: 0.7; } 50% { transform: translateX(3px); opacity: 1; } }
+  .s4new {
+    color: var(--gas); font-weight: 700; letter-spacing: 0.04em;
+    padding: 0.1em 0.5em; border: 1px solid rgba(96,165,250,0.4); border-radius: 5px;
+  }
+  .s4card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+  .s4was { font-size: 0.86rem; color: var(--haze); margin: 0 0 0.45rem; line-height: 1.5; }
+  .s4now { font-size: 0.9rem; color: var(--mist); margin: 0 0 0.7rem; line-height: 1.5; }
+  .s4tax { font-size: 0.84rem; color: var(--mist); margin: 0; padding-top: 0.6rem; border-top: 1px solid var(--steel); line-height: 1.5; }
+  .s4tax-k { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-right: 0.4rem; }
+
   @media (prefers-reduced-motion: reduce) {
     .rv { opacity: 1; transform: none; }
     .g-bar.now, .g-bar.live { animation: none; }
+    .s4arrow { animation: none; }
   }
 </style>
 </head>
@@ -840,8 +864,9 @@
     <li><a class="rail__link" href="#timeline" data-spy><span class="num">07</span><span class="name">Road to Go-Live</span></a></li>
     <li><a class="rail__link" href="#taxengine" data-spy><span class="num">08</span><span class="name">PTTEP tax engine</span></a></li>
     <li><a class="rail__link" href="#legal" data-spy><span class="num">09</span><span class="name">Legal watch-list</span></a></li>
-    <li><a class="rail__link" href="#programme" data-spy><span class="num">10</span><span class="name">Programme &amp; impact</span></a></li>
-    <li><a class="rail__link" href="#honest" data-spy><span class="num">11</span><span class="name">Where my depth comes from</span></a></li>
+    <li><a class="rail__link" href="#s4" data-spy><span class="num">10</span><span class="name">S/4HANA platform</span></a></li>
+    <li><a class="rail__link" href="#programme" data-spy><span class="num">11</span><span class="name">Programme &amp; impact</span></a></li>
+    <li><a class="rail__link" href="#honest" data-spy><span class="num">12</span><span class="name">Where my depth comes from</span></a></li>
   </ol>
   <a class="rail__companion" href="finance-functional-module.html">Companion module →<br><b>SAP FI · Tax · PTTEP</b> essentials</a>
   <a class="rail__back" href="index.html">Back to portfolio →</a>
@@ -1646,8 +1671,60 @@
   </section>
 
   <!-- 10 PROGRAMME & IMPACT -->
+  <!-- 10 S/4HANA PLATFORM -->
+  <section class="chapter" id="s4">
+    <div class="eyebrow"><span class="dot"></span>10 · The platform underneath</div>
+    <h2>I build on S/4HANA, not ECC.</h2>
+    <p class="lede">PTTEP's programme is <b>S/4HANA</b> — a different Financial Accounting architecture from
+      classic ECC. Knowing what actually changed isn't trivia; it's why the tax I configure is traceable in
+      real time. Four shifts that matter most for an FI tax seat.</p>
+
+    <div class="s4grid">
+      <div class="s4card">
+        <div class="s4head"><span class="s4old">ECC</span><span class="s4arrow" aria-hidden="true">→</span><span class="s4new">S/4HANA</span></div>
+        <h3>Universal Journal</h3>
+        <p class="s4was">Separate FI (<span class="tcode">BKPF/BSEG</span>), CO, ML and AA tables, reconciled at close.</p>
+        <p class="s4now"><b>One line-item table — <span class="tcode">ACDOCA</span>.</b> FI and CO merged, no reconciliation.</p>
+        <p class="s4tax"><span class="s4tax-k">For tax</span>every VAT / WHT posting sits in one auditable line, drillable to its source document.</p>
+      </div>
+
+      <div class="s4card">
+        <div class="s4head"><span class="s4old">ECC</span><span class="s4arrow" aria-hidden="true">→</span><span class="s4new">S/4HANA</span></div>
+        <h3>Business Partner</h3>
+        <p class="s4was">Separate vendor (<span class="tcode">XK01</span>) and customer (<span class="tcode">XD01</span>) masters.</p>
+        <p class="s4now"><b>A single Business Partner</b> — one role-based master (mandatory in S/4).</p>
+        <p class="s4tax"><span class="s4tax-k">For tax</span>the WHT type &amp; code is assigned once on the BP, consistent across every role.</p>
+      </div>
+
+      <div class="s4card">
+        <div class="s4head"><span class="s4old">ECC</span><span class="s4arrow" aria-hidden="true">→</span><span class="s4new">S/4HANA</span></div>
+        <h3>New Asset Accounting</h3>
+        <p class="s4was">Parallel ledgers posted through period-end delta runs.</p>
+        <p class="s4now"><b>New Asset Accounting</b> — parallel depreciation areas post in real time.</p>
+        <p class="s4tax"><span class="s4tax-k">For tax</span>asset &amp; depreciation values align to the ledger with no separate delta step.</p>
+      </div>
+
+      <div class="s4card">
+        <div class="s4head"><span class="s4old">ECC</span><span class="s4arrow" aria-hidden="true">→</span><span class="s4new">S/4HANA</span></div>
+        <h3>Fiori &amp; embedded analytics</h3>
+        <p class="s4was">SAP GUI screens and batch-extracted reports.</p>
+        <p class="s4now"><b>Fiori apps + embedded analytics</b> (CDS views) live on the Universal Journal.</p>
+        <p class="s4tax"><span class="s4tax-k">For tax</span>real-time VAT / WHT views that drill straight to the document — no extract.</p>
+      </div>
+    </div>
+
+    <div class="myseat">
+      <b>Why it matters for me —</b> the tax I configure lands in <b>one real-time journal</b>, on <b>one Business
+      Partner</b>, surfaced through <b>Fiori</b> — so a VAT or WHT figure is traceable end to end and defensible in
+      an audit. <b>Central Finance / Group Reporting</b> then rolls it up across PTTEP entities.
+    </div>
+    <p class="note">S/4HANA architecture is factual SAP platform knowledge; I present it as the ground I'm building
+      on for this role, not as a system I have configured in production.</p>
+  </section>
+
+  <!-- 11 PROGRAMME -->
   <section class="chapter" id="programme">
-    <div class="eyebrow"><span class="dot"></span>10 · The programme &amp; the impact</div>
+    <div class="eyebrow"><span class="dot"></span>11 · The programme &amp; the impact</div>
     <h2>A national-scale S/4HANA transformation — and the slice I own inside it.</h2>
     <p class="lede">This isn't a one-consultant build. PTTEP's move to S/4HANA is a large, multi-year
       transformation that Accenture runs with a blended <b>Thailand–India</b> team across a dozen
@@ -1708,7 +1785,7 @@
 
   <!-- 11 HONEST -->
   <section class="chapter" id="honest">
-    <div class="eyebrow"><span class="dot"></span>11 · Where my depth comes from</div>
+    <div class="eyebrow"><span class="dot"></span>12 · Where my depth comes from</div>
     <h2>Where my depth actually comes from.</h2>
     <p class="lede">XeerSoft isn't SAP — but four full-lifecycle ERP go-lives map cleanly onto these SAP
       concepts. I bring the concept understanding and the real delivery experience, and I stay precise
