@@ -374,20 +374,213 @@
     </a>
   </div>
 
-  <!-- Overview Dashboard -->
-  <div class="dashboard-section" style="margin-top: 2rem;">
-    <div class="dashboard-header">
-      <div class="dashboard-meta">
-        <div class="dashboard-tag">Executive Portfolio Dashboard</div>
-        <div class="dashboard-title">All Projects · 7-KPI Cross-Domain Improvement</div>
+  <!-- IMPLEMENTATION EXPLORER — interactive: pick a project, walk its process, see its Power BI dashboard -->
+  <style id="impl-explorer-styles">
+    .impl-explorer { margin-top: 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; }
+    .impl-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .impl-sap { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent); font-weight: 600; }
+    .impl-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.3rem; }
+    .impl-tab { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; padding: 0.45rem 0.85rem; border-radius: 100px; border: 1px solid var(--border); background: var(--bg); color: var(--text-muted); cursor: pointer; transition: color 0.25s var(--ease-smooth), border-color 0.25s var(--ease-smooth), background 0.25s var(--ease-smooth); }
+    .impl-tab:hover { border-color: var(--accent); color: var(--text); }
+    .impl-tab.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .impl-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+    @media (max-width: 860px) { .impl-body { grid-template-columns: 1fr; } }
+    .impl-flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.5rem 0; }
+    .impl-node { display: flex; flex-direction: column; gap: 0.15rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.5rem 0.7rem; cursor: pointer; text-align: left; font: inherit; color: inherit; transition: border-color 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth), background 0.25s var(--ease-smooth); animation: implNodeIn 0.5s var(--ease-smooth) backwards; animation-delay: calc(var(--i, 0) * 70ms); }
+    @keyframes implNodeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .impl-node:hover { border-color: var(--accent); }
+    .impl-node.is-active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 8px 18px -10px var(--glow-color); background: var(--accent-bg); }
+    .impl-node-name { font-size: 0.82rem; font-weight: 600; color: var(--text-strong); line-height: 1.25; }
+    .impl-node-doc { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text-muted); }
+    .impl-wire { flex: 1 1 20px; min-width: 20px; height: 2px; align-self: center; margin: 0 0.15rem; position: relative; border-radius: 2px; background: var(--border); overflow: hidden; }
+    .impl-wire::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--accent), transparent); background-size: 220% 100%; background-position: 120% 0; animation: implSignal 2.4s linear infinite; }
+    @keyframes implSignal { to { background-position: -120% 0; } }
+    .impl-tip { position: absolute; right: -1px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 0.7rem; line-height: 0; }
+    .impl-detail { margin-top: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.9rem 1rem; font-size: 0.9rem; color: var(--text); line-height: 1.55; min-height: 66px; }
+    .impl-detail-k { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+    .impl-kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-top: 1rem; }
+    .impl-kpi { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.7rem 0.85rem; }
+    .impl-kpi-l { font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+    .impl-kpi-v { margin-top: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; display: flex; align-items: baseline; gap: 0.35rem; flex-wrap: wrap; }
+    .impl-kpi-b { color: var(--text-subtle); font-size: 0.82rem; text-decoration: line-through; }
+    .impl-kpi-ar { color: var(--accent); }
+    .impl-kpi-a { color: var(--text-strong); font-weight: 600; }
+    .impl-projlink { display: inline-block; margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    .impl-projlink:hover { border-color: var(--accent); }
+    .impl-dash { margin: 0; position: relative; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--bg); }
+    .impl-dash img { display: block; width: 100%; height: auto; }
+    .impl-zoom { position: absolute; top: 0.6rem; right: 0.6rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; padding: 0.35rem 0.6rem; border-radius: 6px; border: 1px solid var(--border); background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(6px); color: var(--text); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+    .impl-zoom:hover { border-color: var(--accent); color: var(--accent); }
+    .impl-dash-cap { padding: 0.6rem 0.8rem; font-size: 0.76rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+    .impl-foot { margin-top: 1.2rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+    .impl-foot strong { color: var(--text-strong); }
+    .impl-lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .impl-lightbox[hidden] { display: none; }
+    .impl-lightbox img { max-width: 96vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7); }
+    .impl-lb-close { position: absolute; top: 1.2rem; right: 1.5rem; font-size: 1.5rem; line-height: 1; background: none; border: 0; color: #fff; cursor: pointer; }
+    @media (prefers-reduced-motion: reduce) {
+      .impl-wire::after { animation: none; background-position: 50% 0; opacity: 0.6; }
+      .impl-node { animation: none; }
+    }
+  </style>
+
+  <div class="impl-explorer" id="implExplorer">
+    <div class="impl-head">
+      <div class="impl-meta">
+        <div class="dashboard-tag">Implementation Explorer · interactive</div>
+        <div class="dashboard-title">Pick a project — walk the process, see the result</div>
       </div>
-      <div class="dashboard-source">Power BI</div>
+      <div class="impl-sap" id="implSap">Portfolio</div>
     </div>
-    <img src="dashboards/dashboard-overview.png?v=3" alt="Power BI executive dashboard summarising all 4 ERP projects" class="dashboard-image" width="2767" height="1600" loading="lazy">
-    <div class="dashboard-footer">
-      <strong>Source:</strong> Consolidated production data from 4 XeerSoft ERP projects at Learn Balance Group, Jan 2023 – June 2026. 47 staff trained · 219 tickets resolved · 7 KPIs improved across Procurement, Finance, Billing, and UAT domains.
+
+    <div class="impl-tabs" id="implTabs" role="tablist" aria-label="Projects">
+      <button type="button" class="impl-tab is-active" data-proj="ov" role="tab" aria-selected="true">Overview</button>
+      <button type="button" class="impl-tab" data-proj="p1" role="tab" aria-selected="false">P1 · Procurement</button>
+      <button type="button" class="impl-tab" data-proj="p2" role="tab" aria-selected="false">P2 · Pricing &amp; AR</button>
+      <button type="button" class="impl-tab" data-proj="p3" role="tab" aria-selected="false">P3 · Loyalty UAT</button>
+      <button type="button" class="impl-tab" data-proj="p4" role="tab" aria-selected="false">P4 · Billing</button>
+    </div>
+
+    <div class="impl-body">
+      <div class="impl-left">
+        <div class="impl-flow" id="implFlow" aria-label="Business process flow"></div>
+        <div class="impl-detail" id="implDetail" aria-live="polite"></div>
+        <div class="impl-kpis" id="implKpis"></div>
+        <a class="impl-projlink" id="implProjLink" href="#projects">View the full project &rarr;</a>
+      </div>
+      <figure class="impl-dash">
+        <img id="implDashImg" src="dashboards/dashboard-overview.png?v=3" alt="Power BI dashboard summarising the ERP projects" width="2767" height="1600" loading="lazy">
+        <button type="button" class="impl-zoom" id="implZoom">&#8677; View full dashboard</button>
+        <figcaption class="impl-dash-cap" id="implDashCap">Executive portfolio dashboard · all 4 ERP projects</figcaption>
+      </figure>
+    </div>
+
+    <div class="impl-foot">
+      <strong>Source:</strong> real Power BI reports from 4 XeerSoft ERP projects at Learn Balance Group, Jan 2023 – Jun 2026 · 47 staff trained · 219 tickets resolved. Every KPI reconciles to the project pages.
     </div>
   </div>
+
+  <div class="impl-lightbox" id="implLightbox" hidden>
+    <button type="button" class="impl-lb-close" id="implLbClose" aria-label="Close full dashboard">&#10005;</button>
+    <img id="implLbImg" src="" alt="Full Power BI dashboard">
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var DATA = {
+      ov: { sap: '4 domains · Portfolio', dash: 'dashboards/dashboard-overview.png?v=3',
+        cap: 'Executive portfolio dashboard · all 4 ERP projects', link: '#projects',
+        flow: [
+          { n: 'Prepare', d: 'scope & plan', did: 'Kickoff, scope, project plan and environment prep across the four rollouts.' },
+          { n: 'Explore', d: 'fit-gap', did: 'Process workshops, fit-gap, and the analyst trail: FSD · Use Case · User Story.' },
+          { n: 'Realize', d: 'build & test', did: 'Configuration, master data, and iterative build with unit + integration testing.' },
+          { n: 'Deploy', d: 'cutover', did: 'UAT sign-off, cutover, data migration and Go-Live.' },
+          { n: 'Run', d: 'hypercare', did: 'Hypercare and stabilisation — 219 tickets resolved across the portfolio.' }
+        ],
+        kpis: [ { l: 'Projects', a: '4' }, { l: 'Staff trained', a: '47' }, { l: 'Tickets resolved', a: '219' }, { l: 'KPIs improved', a: '7' } ] },
+      p1: { sap: '≈ SAP MM · Procure-to-Pay', dash: 'dashboards/dashboard-p1.png',
+        cap: 'Procurement & Inventory — P2P dashboard', link: 'project1.html',
+        flow: [
+          { n: 'Purchase Requisition', d: 'approval', did: 'A 2-level approval workflow with a ฿50K threshold and authorization control.' },
+          { n: 'PO release', d: 'strategy', did: 'Release strategy and vendor-master configuration.' },
+          { n: 'Goods Receipt', d: 'inventory', did: 'Inventory update with a GR/IR clearing entry to Finance.' },
+          { n: 'Invoice Verification', d: '3-way match', did: '3-way match (PO · GR · invoice), then payment.' }
+        ],
+        kpis: [ { l: 'Vendor on-time', b: '68%', a: '87%' }, { l: 'Unauthorised POs', b: '30%', a: '0%' }, { l: 'Stockout XS/XXL', b: '22%', a: '3%' }, { l: 'Textbook write-off', b: '฿45K', a: '฿8K' } ] },
+      p2: { sap: '≈ SAP SD pricing + FI-AR · Order-to-Cash', dash: 'dashboards/dashboard-p2.png',
+        cap: 'Strategic Pricing & AR — O2C dashboard', link: 'project2.html',
+        flow: [
+          { n: 'Pricing', d: 'condition logic', did: 'Multi-tier condition logic and pricing-procedure design.' },
+          { n: 'Billing', d: 'invoice', did: 'Invoice generation from the priced order.' },
+          { n: 'AR', d: 'open items', did: 'Open-item management and payment-term design.' },
+          { n: 'Dunning', d: 'overdue', did: 'Overdue monitoring, dunning, and credit control.' }
+        ],
+        kpis: [ { l: 'Pricing decision', b: '480 min', a: '15 min' }, { l: 'Avg days overdue', b: '42', a: '12' }, { l: 'AR collection', b: '78%', a: '96%' } ] },
+      p3: { sap: '≈ SAP Test Mgmt · Realize / Deploy', dash: 'dashboards/dashboard-p3.png',
+        cap: 'CRM Star Reward Loyalty — UAT dashboard', link: 'project3.html',
+        flow: [
+          { n: 'Test strategy', d: 'plan', did: 'Test strategy and case design for the loyalty engine.' },
+          { n: 'UAT cycles', d: '5 cycles', did: 'Five UAT cycles against a 10-step manual criteria.' },
+          { n: 'Defect tracking', d: 'triage', did: '60 defects logged, triaged by severity, with regression.' },
+          { n: 'Go-Live readiness', d: 'cutover', did: 'Go-live blockers burned down 11 → 0; cutover sign-off.' }
+        ],
+        kpis: [ { l: 'Defects logged', a: '60' }, { l: 'UAT cycles', a: '5' }, { l: 'Go-live blockers', b: '11', a: '0' }, { l: 'Defects resolved', a: '83.8%' } ] },
+      p4: { sap: '≈ SAP SD billing + FI-AR + CO-PA', dash: 'dashboards/dashboard-p4.png',
+        cap: 'STEM Billing & Profitability dashboard', link: 'project4.html',
+        flow: [
+          { n: 'Billing', d: 'doc types', did: 'Billing document types and revenue recognition.' },
+          { n: 'AR', d: 'collection', did: 'Receivables, payment terms and dunning.' },
+          { n: 'Profitability', d: 'by segment', did: 'Segment margin across 7 subjects (segment = subject).' }
+        ],
+        kpis: [ { l: 'Revenue billed', a: '฿2.18M' }, { l: 'Gross margin', a: '49.6%' }, { l: 'Segments', a: '7' }, { l: 'Collection', a: '95.0%' } ] }
+    };
+
+    var flowEl = document.getElementById('implFlow');
+    var detailEl = document.getElementById('implDetail');
+    var kpiEl = document.getElementById('implKpis');
+    var sapEl = document.getElementById('implSap');
+    var dashImg = document.getElementById('implDashImg');
+    var dashCap = document.getElementById('implDashCap');
+    var projLink = document.getElementById('implProjLink');
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.impl-tab'));
+    var curDash = DATA.ov.dash;
+
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+    function showDetail(step) {
+      detailEl.innerHTML = '<span class="impl-detail-k">' + esc(step.n) + '</span>' + esc(step.did);
+    }
+
+    function render(key) {
+      var d = DATA[key]; if (!d) return;
+      tabs.forEach(function (t) { var on = t.dataset.proj === key; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', on ? 'true' : 'false'); });
+      // flow
+      var fh = '';
+      d.flow.forEach(function (s, i) {
+        fh += '<button type="button" class="impl-node' + (i === 0 ? ' is-active' : '') + '" data-i="' + i + '" style="--i:' + i + '"><span class="impl-node-name">' + esc(s.n) + '</span><span class="impl-node-doc">' + esc(s.d) + '</span></button>';
+        if (i < d.flow.length - 1) fh += '<span class="impl-wire" aria-hidden="true"><span class="impl-tip">&#9656;</span></span>';
+      });
+      flowEl.innerHTML = fh;
+      flowEl.querySelectorAll('.impl-node').forEach(function (nd) {
+        nd.addEventListener('click', function () {
+          flowEl.querySelectorAll('.impl-node').forEach(function (x) { x.classList.remove('is-active'); });
+          nd.classList.add('is-active');
+          showDetail(d.flow[+nd.dataset.i]);
+        });
+      });
+      showDetail(d.flow[0]);
+      // kpis
+      var kh = '';
+      d.kpis.forEach(function (k) {
+        kh += '<div class="impl-kpi"><div class="impl-kpi-l">' + esc(k.l) + '</div><div class="impl-kpi-v">' +
+          (k.b ? '<span class="impl-kpi-b">' + esc(k.b) + '</span><span class="impl-kpi-ar">&rarr;</span>' : '') +
+          '<span class="impl-kpi-a">' + esc(k.a) + '</span></div></div>';
+      });
+      kpiEl.innerHTML = kh;
+      // meta + dashboard
+      sapEl.textContent = d.sap;
+      dashImg.src = d.dash; dashImg.alt = d.cap; dashCap.textContent = d.cap;
+      projLink.href = d.link;
+      projLink.style.display = key === 'ov' ? 'none' : 'inline-block';
+      curDash = d.dash;
+    }
+
+    tabs.forEach(function (t) { t.addEventListener('click', function () { render(t.dataset.proj); }); });
+    render('ov');
+
+    // Lightbox
+    var lb = document.getElementById('implLightbox');
+    var lbImg = document.getElementById('implLbImg');
+    function openLb() { lbImg.src = curDash; lb.hidden = false; document.body.style.overflow = 'hidden'; }
+    function closeLb() { lb.hidden = true; lbImg.src = ''; document.body.style.overflow = ''; }
+    document.getElementById('implZoom').addEventListener('click', openLb);
+    document.getElementById('implLbClose').addEventListener('click', closeLb);
+    lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+  })();
+  </script>
 </section>
 
 <!-- PROJECTS -->
