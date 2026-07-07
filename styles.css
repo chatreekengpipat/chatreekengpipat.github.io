@@ -12,7 +12,7 @@
   --text: #0f172a;
   --text-strong: #020617;
   --text-muted: #586379;
-  --text-subtle: #94a3b8;
+  --text-subtle: #5e6b7e; /* WCAG AA: ≥4.9:1 on all light surfaces (was #94a3b8) */
   --accent: #2563eb;
   --accent-hover: #1d4ed8;
   --accent-soft: #3b82f6;
@@ -43,7 +43,7 @@
   --text: #f1f5f9;
   --text-strong: #ffffff;
   --text-muted: #94a3b8;
-  --text-subtle: #64748b;
+  --text-subtle: #8b98ac; /* WCAG AA: ≥4.8:1 on all dark surfaces (was #64748b) */
   --accent: #60a5fa;
   --accent-hover: #93c5fd;
   --accent-soft: #3b82f6;
@@ -6153,6 +6153,23 @@ nav.scrolled {
     to   { opacity: 1; transform: none; }
   }
 }
+
+/* ---- 3d. Skip-to-content link (first focusable; a11y) ---- */
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 2000;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.7rem 1.1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-radius: 0 0 8px 0;
+  text-decoration: none;
+}
+.skip:focus { left: 0; }
 
 /* ---- 4. Slim scroll-progress bar (index; JS adds #ck-progress) ---- */
 #ck-progress {

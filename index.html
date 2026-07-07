@@ -58,7 +58,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"></noscript>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=11">
+<link rel="stylesheet" href="styles.css?v=12">
 <!-- theme.js inlined verbatim to remove a render-blocking request (it must run before paint to avoid a theme flash). Identical to theme.js. -->
 <script>
 // Theme toggle with persistence
@@ -110,6 +110,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 </head>
 <body>
+<a class="skip" href="#main-content">Skip to main content</a>
 
 <!-- NAV -->
 <nav>
@@ -164,6 +165,7 @@
     <li><a href="#about">About</a></li>
     <li><a href="#methodology">Method</a></li>
     <li><a href="#academic">Academic</a></li>
+    <li><a href="cv.html">Résumé</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
     <li>
       <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
@@ -173,6 +175,7 @@
     </li>
   </ul>
 </nav>
+<span id="main-content" tabindex="-1"></span>
 
 <!-- DYNAMIC TECH BACKGROUND -->
 <canvas id="techCanvas"></canvas>
@@ -1626,15 +1629,26 @@
 </section>
 
 <!-- CONTACT -->
+<style>
+  .contact-avail { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--success); background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 35%, transparent); border-radius: 100px; padding: 0.35rem 0.9rem; margin-bottom: 1.2rem; }
+  .contact-avail::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+  .contact-cta-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.4rem; }
+  .contact-btn-ghost { display: inline-flex; align-items: center; padding: 0.75rem 1.4rem; border-radius: 6px; font-weight: 600; text-decoration: none; background: transparent; border: 1px solid var(--border-strong); color: var(--text); transition: border-color 0.2s, color 0.2s; }
+  .contact-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+</style>
 <section id="contact" style="background: var(--surface-2);">
   <div class="section-header">
     <h2 class="section-title">Get <em>in touch</em></h2>
   </div>
   <div class="contact-grid">
     <div class="contact-text">
+      <span class="contact-avail">Available for SAP FI/CO &amp; ERP implementation roles</span>
       <h2>Let's build<br><em>something</em><br>together.</h2>
-      <p>Open to ERP Business Analyst and Implementation Consultant opportunities in Bangkok. Available for full-time roles with enterprise clients across any industry.</p>
-      <a href="mailto:chatree.kengpipat@gmail.com" class="btn btn-primary">Send Email →</a>
+      <p>Open to <strong>SAP FI/CO</strong> and <strong>ERP implementation / business-analyst</strong> roles in Bangkok — full-time, with enterprise clients across any industry. I bring <strong>four delivered ERP go-lives</strong> and hands-on SAP FI/CO configuration.</p>
+      <div class="contact-cta-row">
+        <a href="mailto:chatree.kengpipat@gmail.com" class="btn btn-primary">Send Email →</a>
+        <a href="cv.html" class="contact-btn-ghost">View résumé (PDF) →</a>
+      </div>
     </div>
     <div class="contact-links">
       <a href="mailto:chatree.kengpipat@gmail.com" class="contact-link">
