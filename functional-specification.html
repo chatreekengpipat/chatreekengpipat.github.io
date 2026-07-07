@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functional Specification (FSD) · SAP SD/FI · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/functional-specification.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Functional Specification (FSD) · SAP SD/FI — Chatree Kengpipat">
+<meta property="og:description" content="A complete, worked SAP Functional Specification for a pricing enhancement — document control, business requirement, field mapping, processing logic, messages, authorization, test scenarios and sign-off — with full Requirement → FS → ABAP → Test traceability.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/functional-specification.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/hero-photo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Functional Specification (FSD) · SAP SD/FI">
+<meta name="twitter:description" content="A worked SAP Functional Specification with full Requirement → FS → ABAP → Test traceability.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/hero-photo.png">
+<meta name="description" content="A complete worked SAP Functional Specification (FSD) for a pricing enhancement (RICEFW): document control, business requirement, field mapping, processing logic, message handling, authorization, test scenarios and sign-off, with Requirement → FS → ABAP → Test traceability. Authored by Chatree Kengpipat as a methodology exercise.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=10">
+<script src="theme.js"></script>
+<script src="animation.js?v=4" defer></script>
+<style>
+  /* ============================================================
+     FUNCTIONAL SPECIFICATION — page-scoped components.
+     Built only from existing tokens (--accent, --surface, --border,
+     --radius-*, JetBrains Mono labels). A real FS document rendered
+     for the browser: sticky TOC + scroll-spy, a traceability spine,
+     requirement-ID cross-highlighting, and a print stylesheet.
+     ============================================================ */
+
+  /* Honest banner (mirrors the SAP-design page) */
+  .fs-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .fs-banner-inner {
+    display: flex; gap: 0.85rem; align-items: flex-start;
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: blur(14px) saturate(160%);
+    border: 1px dashed var(--accent); border-radius: var(--radius-md);
+    padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md);
+  }
+  .fs-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .fs-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .fs-banner-text strong { color: var(--text); font-weight: 600; }
+  .fs-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .fs-wrap { max-width: 1120px; margin: 0 auto; }
+
+  /* ---- Traceability spine: Requirement → FS → ABAP → Test ---- */
+  .fs-trace {
+    display: flex; flex-wrap: wrap; align-items: stretch; gap: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 0.5rem; margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+  }
+  .fs-trace-node {
+    flex: 1 1 160px; min-width: 0; text-decoration: none;
+    display: flex; flex-direction: column; gap: 0.2rem;
+    padding: 0.85rem 1rem; border-radius: var(--radius-md);
+    transition: background 0.25s var(--ease-smooth), transform 0.25s var(--ease-smooth);
+    position: relative;
+  }
+  a.fs-trace-node:hover { background: var(--surface-2); transform: translateY(-2px); }
+  .fs-trace-node.is-here { background: var(--accent-bg); }
+  .fs-trace-step { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; color: var(--text-subtle); font-weight: 600; text-transform: uppercase; }
+  .fs-trace-node.is-here .fs-trace-step { color: var(--accent); }
+  .fs-trace-name { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); letter-spacing: -0.01em; }
+  .fs-trace-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); }
+  a.fs-trace-node .fs-trace-name::after { content: ' \2197'; color: var(--accent); font-weight: 600; }
+  .fs-trace-arrow { align-self: center; color: var(--border-strong); font-weight: 700; padding: 0 0.15rem; flex: 0 0 auto; }
+
+  /* ---- Document layout: sticky TOC + body ---- */
+  .fs-layout { display: grid; grid-template-columns: 220px 1fr; gap: 2.4rem; align-items: start; }
+  .fs-toc { position: sticky; top: 96px; align-self: start; }
+  .fs-toc-title { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; margin-bottom: 0.7rem; padding-left: 0.9rem; }
+  .fs-toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+  .fs-toc a {
+    display: flex; gap: 0.6rem; align-items: baseline; text-decoration: none;
+    padding: 0.4rem 0.9rem; border-radius: var(--radius-sm);
+    font-size: 0.82rem; color: var(--text-muted); line-height: 1.3;
+    border-left: 2px solid transparent; transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .fs-toc a .n { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-subtle); flex-shrink: 0; }
+  .fs-toc a:hover { color: var(--text); background: var(--surface); }
+  .fs-toc a.is-active { color: var(--accent); background: var(--accent-bg); border-left-color: var(--accent); font-weight: 600; }
+  .fs-toc a.is-active .n { color: var(--accent); }
+
+  .fs-doc { min-width: 0; }
+  .fs-section { scroll-margin-top: 96px; padding-bottom: 2.4rem; margin-bottom: 2.4rem; border-bottom: 1px solid var(--border); }
+  .fs-section:last-child { border-bottom: 0; }
+  .fs-sec-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 1rem; }
+  .fs-sec-num { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+  .fs-sec-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+  .fs-section p { font-size: 0.92rem; line-height: 1.65; color: var(--text-muted); margin: 0 0 0.9rem; }
+  .fs-section p b { color: var(--text-strong); font-weight: 600; }
+  .fs-lead { color: var(--text) !important; }
+
+  /* Key–value grid (document control) */
+  .fs-kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+  .fs-kv-cell { background: var(--surface); padding: 0.8rem 1rem; }
+  .fs-kv-k { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-subtle); font-weight: 600; margin-bottom: 0.25rem; }
+  .fs-kv-v { font-size: 0.9rem; color: var(--text-strong); font-weight: 600; }
+  .fs-kv-v .tcode { font-size: 0.76rem; }
+
+  /* Status chips */
+  .fs-chip { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 700; padding: 0.12rem 0.5rem; border-radius: 100px; letter-spacing: 0.02em; }
+  .fs-chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .fs-chip.approved { color: var(--success); background: color-mix(in srgb, var(--success) 12%, transparent); }
+  .fs-chip.review { color: var(--warning); background: color-mix(in srgb, var(--warning) 14%, transparent); }
+  .fs-chip.type-e { color: var(--accent); background: var(--accent-bg); }
+
+  /* Requirement register + interactive REQ chips */
+  .fs-reqs { list-style: none; margin: 0.4rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+  .fs-reqs li { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; align-items: start; font-size: 0.9rem; line-height: 1.55; color: var(--text); }
+  .req {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 700;
+    color: var(--accent); background: var(--accent-bg);
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+    border-radius: 5px; padding: 0.1rem 0.4rem; cursor: pointer; white-space: nowrap;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  }
+  .req:hover { background: var(--accent); color: #fff; }
+  .req.lit { background: var(--accent); color: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  .fs-reqhint { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-subtle); margin-top: 0.9rem; }
+
+  /* Tables (mapping / messages / tests / sign-off) */
+  .fs-tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); -webkit-overflow-scrolling: touch; }
+  table.fs-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 520px; }
+  .fs-table th { text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; background: var(--surface-2); padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .fs-table td { padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border); color: var(--text); line-height: 1.5; vertical-align: top; }
+  .fs-table tr:last-child td { border-bottom: 0; }
+  .fs-table tbody tr:hover, .fs-table tr:hover { background: var(--surface); }
+  .fs-table td b { color: var(--text-strong); font-weight: 600; }
+  .fs-table .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+  .fs-arrow-cell { color: var(--accent); font-weight: 700; text-align: center; }
+  .msg-e { color: var(--danger); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+  .msg-w { color: var(--warning); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+  .msg-s { color: var(--success); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+
+  /* Processing logic — numbered steps with REQ tag + code ref */
+  .fs-logic { list-style: none; margin: 0; padding: 0; counter-reset: lg; display: flex; flex-direction: column; gap: 0.7rem; }
+  .fs-logic li {
+    counter-increment: lg; display: grid; grid-template-columns: 1.9rem 1fr; gap: 0.85rem; align-items: start;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem 1rem;
+  }
+  .fs-logic li::before { content: counter(lg); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.82rem; color: #fff; background: var(--accent); border-radius: 6px; width: 1.9rem; height: 1.9rem; display: flex; align-items: center; justify-content: center; }
+  .fs-logic-body { font-size: 0.9rem; line-height: 1.55; color: var(--text); }
+  .fs-logic-body b { color: var(--text-strong); font-weight: 600; }
+  .fs-logic-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; align-items: center; }
+  .fs-coderef { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 0.1rem 0.45rem; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+  a.fs-coderef:hover { border-color: var(--accent); color: var(--accent); }
+
+  .fs-callout { background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); border-radius: var(--radius-md); padding: 1rem 1.2rem; margin-top: 1rem; }
+  .fs-callout-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 0.35rem; }
+  .fs-callout p { margin: 0; color: var(--text) !important; font-size: 0.88rem; }
+
+  .fs-print-row { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+  .fs-print-btn { appearance: none; display: inline-flex; align-items: center; gap: 0.45rem; background: var(--surface); border: 1px solid var(--border-strong); color: var(--text); border-radius: var(--radius-sm); padding: 0.5rem 0.95rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: border-color 0.2s, transform 0.2s var(--ease-smooth); }
+  .fs-print-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+  /* Entrance (safe: visible by default; armed only when JS + motion allow) */
+  html.js .fs-armed .fs-trace-node,
+  html.js .fs-armed .fs-section { opacity: 1; }
+  html.js .fs-arm .fs-trace-node { opacity: 0; transform: translateY(8px); }
+  html.js .fs-arm.in .fs-trace-node { opacity: 1; transform: none; transition: opacity 0.5s var(--ease-smooth), transform 0.5s var(--ease-smooth); transition-delay: calc(var(--i,0) * 80ms); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .fs-layout { grid-template-columns: 1fr; gap: 1.4rem; }
+    .fs-toc { position: static; top: auto; display: none; }
+  }
+  @media (max-width: 720px) {
+    .fs-banner { top: 62px; padding: 0 1rem; }
+    .fs-trace-arrow { display: none; }
+    .fs-trace-node { flex-basis: 140px; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html.js .fs-arm .fs-trace-node { opacity: 1; transform: none; }
+    a.fs-trace-node:hover { transform: none; }
+  }
+
+  /* ---------- Print: render like a real FS PDF ---------- */
+  @media print {
+    nav, #techCanvas, .fs-banner, .fs-print-row, footer, .breadcrumb, .fs-toc { display: none !important; }
+    body { background: #fff; color: #000; }
+    .fs-layout { grid-template-columns: 1fr; gap: 0; }
+    .fs-trace { box-shadow: none; }
+    .fs-section { break-inside: avoid; border-bottom: 1px solid #ccc; }
+    .fs-logic li, .fs-tablewrap { break-inside: avoid; }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Workspace of Chatree Kengpipat (Cee)
+  </a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head">
+      <span class="nav-drawer-title">Menu</span>
+      <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
+    </li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html" class="active" aria-current="page">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- DYNAMIC TECH BACKGROUND -->
+<canvas id="techCanvas"></canvas>
+
+<!-- PERSISTENT HONEST BANNER -->
+<div class="fs-banner" role="note" aria-label="Honesty disclaimer">
+  <div class="fs-banner-inner">
+    <span class="fs-banner-icon" aria-hidden="true">!</span>
+    <div class="fs-banner-text">
+      <span class="fs-banner-tag">SAMPLE FUNCTIONAL SPECIFICATION</span><br>
+      This is a <strong>sample FS I authored as a methodology exercise</strong>, specifying a real enhancement from a system I built on XeerSoft, in the format an SAP project uses. It shows how I write a developer-ready spec &mdash; not a claim of a delivered SAP production object.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<section class="project-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>SAP Design</span>
+    <span class="breadcrumb-sep">/</span>
+    <span>Functional Specification</span>
+  </div>
+
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Functional Specification · RICEFW Enhancement</div>
+      <div class="project-meta">The artifact that turns a requirement into developer-ready code</div>
+      <h1>Functional <em>Specification</em></h1>
+      <p class="project-hero-desc">
+        The <strong>Functional Specification (FS / FSD)</strong> is the document a functional consultant owns: it translates a business requirement into a design an ABAP developer can build against, unambiguously. This is a <strong>complete worked FS</strong> for the tiered-pricing enhancement whose <strong>ABAP you can already read on the SAP-design page</strong> &mdash; document control, business requirement, field mapping, processing logic, message handling, authorization, test scenarios and sign-off. Every design point carries a requirement ID, and the same IDs reappear in the test table, so the whole chain from <strong>requirement to code to test</strong> is traceable end to end.
+      </p>
+    </div>
+
+    <div class="project-info-card">
+      <div class="project-info-row">
+        <span class="project-info-label">Object</span>
+        <span class="project-info-val">ZTIR_PRICE_001 · pricing routine</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">RICEFW</span>
+        <span class="project-info-val">Enhancement (E) · SD pricing</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Source system</span>
+        <span class="project-info-val">Strategic Pricing &amp; AR · XeerSoft</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Status</span>
+        <span class="project-info-val">Sample FS · methodology exercise</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FS DOCUMENT -->
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="fs-wrap">
+
+    <div class="fs-print-row">
+      <button type="button" class="fs-print-btn" id="fsPrint"><span aria-hidden="true">⎙</span> Print / save as PDF</button>
+    </div>
+
+    <!-- Traceability spine -->
+    <div class="fs-trace" id="fsTrace" aria-label="Traceability: requirement to functional spec to code to test">
+      <span class="fs-trace-node is-here">
+        <span class="fs-trace-step">01 · Requirement</span>
+        <span class="fs-trace-name">Business need</span>
+        <span class="fs-trace-sub">§2 below</span>
+      </span>
+      <span class="fs-trace-arrow" aria-hidden="true">&rarr;</span>
+      <span class="fs-trace-node is-here">
+        <span class="fs-trace-step">02 · Functional spec</span>
+        <span class="fs-trace-name">This document</span>
+        <span class="fs-trace-sub">you are here</span>
+      </span>
+      <span class="fs-trace-arrow" aria-hidden="true">&rarr;</span>
+      <a class="fs-trace-node" href="sap-design.html#cv">
+        <span class="fs-trace-step">03 · Technical / ABAP</span>
+        <span class="fs-trace-name">The code</span>
+        <span class="fs-trace-sub">VOFM routine 601</span>
+      </a>
+      <span class="fs-trace-arrow" aria-hidden="true">&rarr;</span>
+      <a class="fs-trace-node" href="project2.html#uat">
+        <span class="fs-trace-step">04 · Test / UAT</span>
+        <span class="fs-trace-name">Executed tests</span>
+        <span class="fs-trace-sub">defect log</span>
+      </a>
+    </div>
+
+    <div class="fs-layout">
+      <!-- Sticky TOC -->
+      <aside class="fs-toc" aria-label="Section index">
+        <div class="fs-toc-title">Contents</div>
+        <ol>
+          <li><a href="#sec-control" class="is-active"><span class="n">1</span>Document control</a></li>
+          <li><a href="#sec-requirement"><span class="n">2</span>Business requirement</a></li>
+          <li><a href="#sec-scope"><span class="n">3</span>Scope &amp; assumptions</a></li>
+          <li><a href="#sec-design"><span class="n">4</span>Functional design</a></li>
+          <li><a href="#sec-messages"><span class="n">5</span>Messages &amp; errors</a></li>
+          <li><a href="#sec-auth"><span class="n">6</span>Authorization</a></li>
+          <li><a href="#sec-tests"><span class="n">7</span>Test scenarios</a></li>
+          <li><a href="#sec-signoff"><span class="n">8</span>Sign-off</a></li>
+        </ol>
+      </aside>
+
+      <!-- FS body -->
+      <div class="fs-doc" id="fsDoc">
+
+        <!-- 1 · DOCUMENT CONTROL -->
+        <section class="fs-section" id="sec-control">
+          <div class="fs-sec-head"><span class="fs-sec-num">1</span><h2 class="fs-sec-title">Document control</h2></div>
+          <div class="fs-kv">
+            <div class="fs-kv-cell"><div class="fs-kv-k">Object ID</div><div class="fs-kv-v"><span class="tcode">ZTIR_PRICE_001</span></div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">Object name</div><div class="fs-kv-v">Tiered volume price (sibling-aware)</div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">RICEFW type</div><div class="fs-kv-v"><span class="fs-chip type-e">E · Enhancement</span></div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">Module</div><div class="fs-kv-v">SD pricing &rarr; FI-AR</div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">Complexity</div><div class="fs-kv-v">Medium</div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">Priority</div><div class="fs-kv-v">High</div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">Author (functional)</div><div class="fs-kv-v">Chatree Kengpipat</div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">Version</div><div class="fs-kv-v">1.0</div></div>
+            <div class="fs-kv-cell"><div class="fs-kv-k">Status</div><div class="fs-kv-v"><span class="fs-chip approved">Approved</span></div></div>
+          </div>
+          <p style="margin-top:1rem">Related objects: pricing procedure config <span class="tcode">V/08</span> (condition <b>ZTIR</b>), custom scale table <span class="tcode">ZTIR_SCALE</span>, and the revenue-account determination <span class="tcode">VKOA</span> that receives the priced value downstream. No standard SAP object is modified.</p>
+        </section>
+
+        <!-- 2 · BUSINESS REQUIREMENT -->
+        <section class="fs-section" id="sec-requirement">
+          <div class="fs-sec-head"><span class="fs-sec-num">2</span><h2 class="fs-sec-title">Business requirement</h2></div>
+          <p class="fs-lead">Corporate customers buy across several related accounts (a parent and its branch &ldquo;siblings&rdquo;). The business wants the <b>price tier to reflect their combined volume</b>, not each account&rsquo;s volume in isolation &mdash; and it wants to maintain those tiers itself, without a developer, every time the commercial team re-negotiates.</p>
+          <p><b>As-is.</b> Standard condition records price each sold-to on its own. A customer splitting the same order across three branches lands in a lower tier on each, so they overpay versus the deal that was agreed &mdash; and disputes land in AR as short-payments and credit notes.</p>
+          <p><b>To-be.</b> A pricing enhancement pools the customer&rsquo;s sibling volume, resolves the correct tier from a business-maintained scale table, and returns that price to the standard pricing engine &mdash; leaving billing and revenue postings untouched.</p>
+
+          <p style="margin-bottom:0.4rem"><b>Requirements register</b> &mdash; click an ID to trace it through the design and tests:</p>
+          <ul class="fs-reqs">
+            <li><span class="req" data-req="R1">R1</span><span>Price is a <b>tiered unit rate</b> resolved by purchased volume band.</span></li>
+            <li><span class="req" data-req="R2">R2</span><span>Volume is <b>pooled across the customer&rsquo;s sibling accounts</b>, not per sold-to.</span></li>
+            <li><span class="req" data-req="R3">R3</span><span>Tier boundaries are <b>maintained by the business in a table</b>, with no code change or transport.</span></li>
+            <li><span class="req" data-req="R4">R4</span><span>If no tier is configured for a volume, the order <b>does not price silently wrong</b> &mdash; it alerts and falls back to list price.</span></li>
+            <li><span class="req" data-req="R5">R5</span><span><b>No change to downstream</b> billing, revenue determination or FI-AR postings.</span></li>
+          </ul>
+          <p class="fs-reqhint">Tip: the same R-tags appear on the processing steps (§4) and every test case (§7).</p>
+        </section>
+
+        <!-- 3 · SCOPE & ASSUMPTIONS -->
+        <section class="fs-section" id="sec-scope">
+          <div class="fs-sec-head"><span class="fs-sec-num">3</span><h2 class="fs-sec-title">Scope &amp; assumptions</h2></div>
+          <div class="fs-tablewrap">
+            <table class="fs-table">
+              <thead><tr><th style="width:33%">In scope</th><th style="width:33%">Out of scope</th><th>Assumptions &amp; dependencies</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>VOFM value routine for condition <b>ZTIR</b>; the <span class="tcode">ZTIR_SCALE</span> table &amp; maintenance view.</td>
+                  <td>Changes to the pricing <b>procedure</b> sequence or to any standard condition type.</td>
+                  <td>Sibling accounts are linked on the customer master via a <b>partner / hierarchy</b> relationship that the routine can read.</td>
+                </tr>
+                <tr>
+                  <td>Reading rolled-up sibling quantity; resolving and returning the tier value.</td>
+                  <td>Billing (<span class="tcode">VF01</span>), revenue determination (<span class="tcode">VKOA</span>), AR postings &mdash; unchanged by design (R5).</td>
+                  <td>Scale is per <b>sales org</b>; currency &amp; UoM follow the sales document. Table maintenance is authorization-controlled.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 4 · FUNCTIONAL DESIGN -->
+        <section class="fs-section" id="sec-design">
+          <div class="fs-sec-head"><span class="fs-sec-num">4</span><h2 class="fs-sec-title">Functional design</h2></div>
+
+          <p><b>Trigger.</b> The routine is called by the pricing engine during sales-document processing (<span class="tcode">VA01</span> / <span class="tcode">VA02</span>) for every line carrying condition type <b>ZTIR</b>, via VOFM value formula <b>601</b> assigned in <span class="tcode">V/08</span>.</p>
+
+          <p style="margin-top:1.2rem;margin-bottom:0.5rem"><b>Field mapping</b> &mdash; where each value comes from and where it lands:</p>
+          <div class="fs-tablewrap">
+            <table class="fs-table">
+              <thead><tr><th>Source</th><th>Field</th><th class="fs-arrow-cell">&rarr;</th><th>Target</th><th>Rule</th></tr></thead>
+              <tbody>
+                <tr><td>Header (KOMK)</td><td class="mono">KUNNR</td><td class="fs-arrow-cell">&rarr;</td><td>sibling rollup key</td><td>read the customer&rsquo;s sibling set <span class="req" data-req="R2">R2</span></td></tr>
+                <tr><td>Item (KOMP)</td><td class="mono">MGAME</td><td class="fs-arrow-cell">&rarr;</td><td>volume for tiering</td><td>summed across siblings <span class="req" data-req="R2">R2</span></td></tr>
+                <tr><td>Table ZTIR_SCALE</td><td class="mono">QTY_FROM / QTY_TO</td><td class="fs-arrow-cell">&rarr;</td><td>tier band match</td><td>band where rolled-up qty falls <span class="req" data-req="R1">R1</span> <span class="req" data-req="R3">R3</span></td></tr>
+                <tr><td>Table ZTIR_SCALE</td><td class="mono">KBETR</td><td class="fs-arrow-cell">&rarr;</td><td class="mono">lv_tier</td><td>resolved unit rate <span class="req" data-req="R1">R1</span></td></tr>
+                <tr><td>Routine result</td><td class="mono">lv_tier &times; MGAME</td><td class="fs-arrow-cell">&rarr;</td><td class="mono">XKWERT</td><td>condition value returned to pricing <span class="req" data-req="R5">R5</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p style="margin-top:1.4rem;margin-bottom:0.6rem"><b>Processing logic</b> &mdash; each step links to the line in the delivered ABAP:</p>
+          <ol class="fs-logic">
+            <li>
+              <div class="fs-logic-body"><b>Roll up sibling quantity.</b> Read the customer&rsquo;s linked sibling accounts and sum their order quantity into a single volume for tiering.
+                <div class="fs-logic-meta"><span class="req" data-req="R2">R2</span><a class="fs-coderef" href="sap-design.html#cv">ABAP · line 11</a></div>
+              </div>
+            </li>
+            <li>
+              <div class="fs-logic-body"><b>Resolve the tier.</b> Select the scale row from <span class="tcode">ZTIR_SCALE</span> for the sales org where the rolled-up volume falls between <span class="mono">QTY_FROM</span> and <span class="mono">QTY_TO</span>.
+                <div class="fs-logic-meta"><span class="req" data-req="R1">R1</span><span class="req" data-req="R3">R3</span><a class="fs-coderef" href="sap-design.html#cv">ABAP · lines 15&ndash;19</a></div>
+              </div>
+            </li>
+            <li>
+              <div class="fs-logic-body"><b>Compute &amp; return the value.</b> Multiply the resolved unit rate by the line quantity and place the result in <span class="mono">XKWERT</span> &mdash; the value SAP posts as the condition, which then flows to billing and revenue unchanged.
+                <div class="fs-logic-meta"><span class="req" data-req="R1">R1</span><span class="req" data-req="R5">R5</span><a class="fs-coderef" href="sap-design.html#cv">ABAP · line 22</a></div>
+              </div>
+            </li>
+            <li>
+              <div class="fs-logic-body"><b>No-tier fallback.</b> If no scale row matches, do <i>not</i> return zero. Raise message <span class="msg-e">ZTIR 001 E</span>, leave <span class="mono">XKWERT</span> untouched so the list-price condition applies, and let the pricing analyst maintain the missing band.
+                <div class="fs-logic-meta"><span class="req" data-req="R4">R4</span><span class="fs-coderef">defensive design</span></div>
+              </div>
+            </li>
+          </ol>
+
+          <div class="fs-callout">
+            <div class="fs-callout-tag">Design decision</div>
+            <p>The tier scale lives in <b>ZTIR_SCALE</b>, not in the ABAP. That is a deliberate call: it satisfies <span class="req" data-req="R3">R3</span> (business maintains tiers with no transport) and keeps the enhancement thin &mdash; the code resolves and applies a tier, it never <i>defines</i> one.</p>
+          </div>
+        </section>
+
+        <!-- 5 · MESSAGES -->
+        <section class="fs-section" id="sec-messages">
+          <div class="fs-sec-head"><span class="fs-sec-num">5</span><h2 class="fs-sec-title">Messages &amp; error handling</h2></div>
+          <div class="fs-tablewrap">
+            <table class="fs-table">
+              <thead><tr><th>ID</th><th>Type</th><th>Message text</th><th>User action</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">ZTIR 001</td><td><span class="msg-e">E</span></td><td>No price tier maintained for volume &amp;1 in sales org &amp;2.</td><td>Pricing team maintains the band in <span class="tcode">ZTIR_SCALE</span>; order falls back to list price meanwhile.</td></tr>
+                <tr><td class="mono">ZTIR 002</td><td><span class="msg-w">W</span></td><td>Sibling roll-up (&amp;1 units) crosses the top tier ceiling.</td><td>Informational; confirm the deal genuinely reaches the top band.</td></tr>
+                <tr><td class="mono">ZTIR 003</td><td><span class="msg-s">S</span></td><td>Tier &amp;1 applied on rolled-up volume of &amp;2 units.</td><td>None &mdash; confirmation shown in the pricing analysis.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 6 · AUTHORIZATION -->
+        <section class="fs-section" id="sec-auth">
+          <div class="fs-sec-head"><span class="fs-sec-num">6</span><h2 class="fs-sec-title">Authorization &amp; performance</h2></div>
+          <div class="fs-tablewrap">
+            <table class="fs-table">
+              <thead><tr><th>Concern</th><th>Design</th></tr></thead>
+              <tbody>
+                <tr><td>Table maintenance</td><td>Maintenance view for <span class="tcode">ZTIR_SCALE</span> is guarded by auth object <span class="mono">S_TABU_NAM</span> (auth group <b>ZTIR</b>) &mdash; only the pricing team maintains tiers.</td></tr>
+                <tr><td>Runtime read</td><td>The routine only <b>reads</b>; it runs under the sales-order user&rsquo;s context and adds no new authorization requirement to order entry.</td></tr>
+                <tr><td>Performance</td><td>One indexed <span class="tcode">SELECT SINGLE</span> per line on a small scale table; sibling roll-up buffered per document. Negligible added runtime vs standard pricing.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 7 · TEST SCENARIOS -->
+        <section class="fs-section" id="sec-tests">
+          <div class="fs-sec-head"><span class="fs-sec-num">7</span><h2 class="fs-sec-title">Test scenarios</h2></div>
+          <p>Each scenario maps back to a requirement, and to the <a href="project2.html#uat" style="color:var(--accent);font-weight:600;">executed sub-unit tests and defect log</a> on the delivered system.</p>
+          <div class="fs-tablewrap">
+            <table class="fs-table">
+              <thead><tr><th>#</th><th>Scenario</th><th>Traces</th><th>Expected result</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">T01</td><td>Single account, volume in mid tier</td><td><span class="req" data-req="R1">R1</span></td><td>Mid-tier unit rate applied; value = rate &times; qty.</td></tr>
+                <tr><td class="mono">T02</td><td>Order split across 3 sibling accounts</td><td><span class="req" data-req="R2">R2</span></td><td>Pooled volume lifts all lines to the correct higher tier.</td></tr>
+                <tr><td class="mono">T03</td><td>Volume exactly on a tier boundary</td><td><span class="req" data-req="R1">R1</span></td><td>Boundary resolves to the correct single band (no overlap / gap).</td></tr>
+                <tr><td class="mono">T04</td><td>Tier edited in <span class="tcode">ZTIR_SCALE</span>, re-price</td><td><span class="req" data-req="R3">R3</span></td><td>New rate applies immediately; no transport required.</td></tr>
+                <tr><td class="mono">T05</td><td>Volume with no maintained band</td><td><span class="req" data-req="R4">R4</span></td><td><span class="msg-e">ZTIR 001</span> raised; list price applies, not zero.</td></tr>
+                <tr><td class="mono">T06</td><td>Bill &amp; post the priced order</td><td><span class="req" data-req="R5">R5</span></td><td>Billing, <span class="tcode">VKOA</span> revenue &amp; AR posting identical to standard flow.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 8 · SIGN-OFF -->
+        <section class="fs-section" id="sec-signoff">
+          <div class="fs-sec-head"><span class="fs-sec-num">8</span><h2 class="fs-sec-title">Sign-off</h2></div>
+          <div class="fs-tablewrap">
+            <table class="fs-table">
+              <thead><tr><th>Role</th><th>Responsibility</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Functional consultant</td><td>Authors this FS; owns the design &amp; test scenarios</td><td><span class="fs-chip approved">Signed</span></td></tr>
+                <tr><td>ABAP developer</td><td>Builds the VOFM routine &amp; table to this spec</td><td><span class="fs-chip approved">Accepted</span></td></tr>
+                <tr><td>Business process owner</td><td>Confirms tiers &amp; sibling logic match the commercial deal</td><td><span class="fs-chip approved">Approved</span></td></tr>
+                <tr><td>Test lead</td><td>Executes T01&ndash;T06, logs &amp; retests defects</td><td><span class="fs-chip review">In UAT</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout" style="margin-top:1.6rem;">
+            <div class="callout-title">ABOUT THIS SPECIFICATION</div>
+            <p>This is a <strong>sample Functional Specification</strong> authored as a methodology exercise. The enhancement it describes is real &mdash; I designed and delivered the equivalent tiered, sibling-aware pricing on <strong>XeerSoft Cloud ERP</strong> &mdash; and the FS is written in the exact format an SAP project uses so it&rsquo;s developer-ready. The object IDs, T-codes, RICEFW classification and test structure are the genuine SAP mechanism; the document is a proposal artifact, not a delivered SAP production object.</p>
+            <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivered track record behind it — 6 capabilities, verified &rarr;</a></p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Chatree Kengpipat · ERP Business Analyst & Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<!-- ============================================================
+     FUNCTIONAL SPECIFICATION — interactions
+     Sticky-TOC scroll-spy, requirement-ID cross-highlighting, a
+     print trigger, and a safe traceability-spine entrance. Content is
+     fully visible without JS; this only enhances it.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---- Scroll-spy for the sticky TOC ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('.fs-toc a'));
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+
+  if ('IntersectionObserver' in window && sections.length) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('is-active'); });
+          if (map[e.target.id]) map[e.target.id].classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+    sections.forEach(function (s) { spy.observe(s); });
+  }
+
+  /* Smooth-scroll TOC clicks (respect reduced motion) */
+  links.forEach(function (a) {
+    a.addEventListener('click', function (ev) {
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (!t) return;
+      ev.preventDefault();
+      t.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'start' });
+      links.forEach(function (l) { l.classList.remove('is-active'); });
+      a.classList.add('is-active');
+    });
+  });
+
+  /* ---- Requirement-ID cross-highlight ---- */
+  var lit = null;
+  function litReq(id) {
+    document.querySelectorAll('.req').forEach(function (r) {
+      r.classList.toggle('lit', !!id && r.getAttribute('data-req') === id);
+    });
+  }
+  document.querySelectorAll('.req').forEach(function (r) {
+    r.setAttribute('role', 'button');
+    r.setAttribute('tabindex', '0');
+    function toggle() {
+      var id = r.getAttribute('data-req');
+      if (lit === id) { lit = null; litReq(null); }
+      else { lit = id; litReq(id); }
+    }
+    r.addEventListener('click', toggle);
+    r.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggle(); }
+    });
+  });
+
+  /* ---- Print ---- */
+  var printBtn = document.getElementById('fsPrint');
+  if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
+
+  /* ---- Safe traceability-spine entrance ---- */
+  var trace = document.getElementById('fsTrace');
+  if (trace && !reduce.matches && 'IntersectionObserver' in window) {
+    var nodes = trace.querySelectorAll('.fs-trace-node');
+    nodes.forEach(function (n, i) { n.style.setProperty('--i', i); });
+    trace.classList.add('fs-arm');
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { trace.classList.add('in'); io.disconnect(); } });
+    }, { threshold: 0.3 });
+    io.observe(trace);
+    setTimeout(function () { trace.classList.add('in'); }, 1400);
+  }
+})();
+</script>
+
+</body>
+</html>

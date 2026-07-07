@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Process Master List · SAP R2R / O2C / P2P · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/business-process-map.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Business Process Master List · SAP — Chatree Kengpipat">
+<meta property="og:description" content="An interactive SAP Business Process Master List: the three end-to-end cycles (Record-to-Report, Order-to-Cash, Procure-to-Pay) decomposed L1→L4, each process mapped to its T-codes, role, module and KPI.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/business-process-map.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/hero-photo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Business Process Master List · SAP R2R / O2C / P2P">
+<meta name="twitter:description" content="Interactive SAP BPML: R2R / O2C / P2P decomposed L1→L4 with T-codes, roles, modules and KPIs.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/hero-photo.png">
+<meta name="description" content="An interactive SAP Business Process Master List (BPML) by Chatree Kengpipat: the three end-to-end cycles — Record-to-Report, Order-to-Cash, Procure-to-Pay — decomposed L1→L4 with the T-codes, roles, SAP modules and KPIs for each process, mapped to delivered ERP work. A methodology artifact.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=10">
+<script src="theme.js"></script>
+<script src="animation.js?v=4" defer></script>
+<style>
+  /* ============================================================
+     BUSINESS PROCESS MASTER LIST — page-scoped components.
+     Built only from existing tokens. An interactive L1→L4 process
+     catalogue: cycle switcher, module filter, collapsible groups,
+     and a T-code / role / KPI readout per process.
+     ============================================================ */
+  .bpml-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .bpml-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .bpml-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .bpml-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .bpml-banner-text strong { color: var(--text); font-weight: 600; }
+  .bpml-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .bpml-wrap { max-width: 1080px; margin: 0 auto; }
+
+  /* Coverage summary strip */
+  .bpml-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2rem; }
+  .bpml-sum-cell { background: var(--surface); padding: 1.1rem 1.3rem; }
+  .bpml-sum-num { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 600; letter-spacing: -0.02em; color: var(--text-strong); line-height: 1; font-variant-numeric: tabular-nums; }
+  .bpml-sum-label { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.4rem; }
+
+  /* Controls: cycle switcher + module filter */
+  .bpml-controls { display: flex; flex-wrap: wrap; gap: 1.4rem 2rem; align-items: flex-end; margin-bottom: 1.8rem; }
+  .bpml-ctl-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; margin-bottom: 0.5rem; }
+  .bpml-seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
+  .bpml-seg button { appearance: none; background: transparent; border: 0; border-radius: var(--radius-sm); padding: 0.45rem 0.9rem; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+  .bpml-seg button:hover { color: var(--text); }
+  .bpml-seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .bpml-filter { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .bpml-filter button { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.35rem 0.85rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .bpml-filter button:hover { border-color: var(--accent); color: var(--text); }
+  .bpml-filter button[aria-pressed="true"] { background: var(--accent-bg); border-color: color-mix(in srgb, var(--accent) 32%, transparent); color: var(--accent); }
+
+  /* L1 cycle block */
+  .lvl1 { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1.4rem; box-shadow: var(--shadow-md); }
+  .lvl1-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); }
+  .lvl1-code { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 0.25rem 0.55rem; letter-spacing: 0.03em; }
+  .lvl1-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; }
+  .lvl1-mods { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+  .lvl1-evid { margin-left: auto; font-size: 0.78rem; color: var(--accent); font-weight: 600; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+  .lvl1-evid:hover { border-color: var(--accent); }
+  .lvl1-desc { padding: 0 1.5rem; margin: 1rem 0 0.4rem; font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); }
+  .lvl1-desc b { color: var(--text-strong); font-weight: 600; }
+  .lvl1-body { padding: 0.6rem 1.5rem 1.4rem; }
+
+  /* L2 group (collapsible) */
+  .lvl2 { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-top: 0.9rem; background: var(--bg); }
+  .lvl2-head { width: 100%; display: flex; align-items: center; gap: 0.7rem; padding: 0.75rem 1rem; background: var(--surface-2); border: 0; cursor: pointer; font: inherit; text-align: left; color: var(--text); transition: background 0.2s; }
+  .lvl2-head:hover { background: color-mix(in srgb, var(--accent) 8%, var(--surface-2)); }
+  .lvl2-chev { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.8rem; transition: transform 0.3s var(--ease-smooth); flex-shrink: 0; }
+  .lvl2.collapsed .lvl2-chev { transform: rotate(-90deg); }
+  .lvl2-name { font-weight: 700; font-size: 0.92rem; letter-spacing: -0.01em; }
+  .lvl2-count { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-subtle); }
+  .lvl2-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.35s var(--ease-smooth); }
+  .lvl2.collapsed .lvl2-body { grid-template-rows: 0fr; }
+  .lvl2-body-inner { overflow: hidden; }
+
+  /* L3 process row */
+  .proc { display: grid; grid-template-columns: 5.2rem 1fr 9rem 3rem; gap: 0.9rem; align-items: start; padding: 0.85rem 1rem; border-top: 1px solid var(--border); transition: opacity 0.25s, background 0.2s; }
+  .proc:hover { background: var(--surface); }
+  .proc.dim { opacity: 0.32; }
+  .proc-id { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-subtle); font-weight: 600; padding-top: 0.15rem; }
+  .proc-main .proc-name { font-size: 0.9rem; font-weight: 600; color: var(--text-strong); line-height: 1.3; margin-bottom: 0.4rem; }
+  .proc-tcodes { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .proc-kpi { font-size: 0.76rem; color: var(--text-muted); margin-top: 0.45rem; line-height: 1.4; }
+  .proc-kpi .kpi-k { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-subtle); margin-right: 0.35rem; }
+  .proc-role { font-size: 0.78rem; color: var(--text-muted); padding-top: 0.15rem; line-height: 1.35; }
+  .proc-mod { justify-self: end; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); border-radius: 5px; padding: 0.12rem 0.4rem; white-space: nowrap; }
+
+  .bpml-empty { text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding: 2rem; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px) {
+    .bpml-banner { top: 62px; padding: 0 1rem; }
+    .bpml-summary { grid-template-columns: repeat(2, 1fr); }
+    .proc { grid-template-columns: 1fr; gap: 0.5rem; }
+    .proc-id { padding-top: 0; }
+    .proc-role { padding-top: 0; }
+    .proc-mod { justify-self: start; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .lvl2-body, .lvl2-chev, .proc { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Workspace of Chatree Kengpipat (Cee)
+  </a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head">
+      <span class="nav-drawer-title">Menu</span>
+      <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
+    </li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html" class="active" aria-current="page">Business Process Master List</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- DYNAMIC TECH BACKGROUND -->
+<canvas id="techCanvas"></canvas>
+
+<!-- PERSISTENT HONEST BANNER -->
+<div class="bpml-banner" role="note" aria-label="Honesty disclaimer">
+  <div class="bpml-banner-inner">
+    <span class="bpml-banner-icon" aria-hidden="true">!</span>
+    <div class="bpml-banner-text">
+      <span class="bpml-banner-tag">METHODOLOGY REFERENCE</span><br>
+      A <strong>process reference I authored</strong>, mapping the three standard end-to-end cycles to SAP T-codes, roles and KPIs, with each cycle tied to a system I actually delivered on XeerSoft. It shows how I decompose and reason about process &mdash; not a claim of a configured SAP production landscape.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<section class="project-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>SAP Design</span>
+    <span class="breadcrumb-sep">/</span>
+    <span>Business Process Master List</span>
+  </div>
+
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Process Master List · L1&ndash;L4</div>
+      <div class="project-meta">The process architecture a functional consultant works from</div>
+      <h1>Business Process <em>Master List</em></h1>
+      <p class="project-hero-desc">
+        Before any config, a functional consultant maps the <strong>business processes</strong> the system has to run. This is a <strong>Business Process Master List (BPML)</strong> for the three end-to-end cycles every ERP turns on &mdash; <strong>Record-to-Report</strong>, <strong>Order-to-Cash</strong> and <strong>Procure-to-Pay</strong> &mdash; decomposed from the cycle (L1) down to the individual process (L3), each mapped to its <strong>T-codes, owning role, SAP module and a KPI</strong>. Switch cycles, filter by module, and open a group to see the detail. Every cycle links to the system where I delivered the equivalent flow.
+      </p>
+    </div>
+
+    <div class="project-info-card">
+      <div class="project-info-row">
+        <span class="project-info-label">Cycles</span>
+        <span class="project-info-val">R2R · O2C · P2P</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Modules</span>
+        <span class="project-info-val">FI · CO · MM · SD</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Levels</span>
+        <span class="project-info-val">L1 cycle → L2 group → L3 process</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Status</span>
+        <span class="project-info-val">Methodology reference</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BPML EXPLORER -->
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="bpml-wrap">
+
+    <div class="bpml-summary" data-summary>
+      <div class="bpml-sum-cell"><span class="bpml-sum-num" data-count="3">3</span><span class="bpml-sum-label">end-to-end cycles</span></div>
+      <div class="bpml-sum-cell"><span class="bpml-sum-num" data-count="22" id="sumProc">22</span><span class="bpml-sum-label">processes mapped</span></div>
+      <div class="bpml-sum-cell"><span class="bpml-sum-num" data-count="30" id="sumTc">30</span><span class="bpml-sum-label">T-codes referenced</span></div>
+      <div class="bpml-sum-cell"><span class="bpml-sum-num" data-count="4">4</span><span class="bpml-sum-label">SAP modules</span></div>
+    </div>
+
+    <div class="bpml-controls">
+      <div>
+        <div class="bpml-ctl-label">End-to-end cycle</div>
+        <div class="bpml-seg" id="cycleSeg" role="group" aria-label="Filter by cycle">
+          <button type="button" data-cycle="all" aria-pressed="true">All</button>
+          <button type="button" data-cycle="R2R" aria-pressed="false">R2R</button>
+          <button type="button" data-cycle="O2C" aria-pressed="false">O2C</button>
+          <button type="button" data-cycle="P2P" aria-pressed="false">P2P</button>
+        </div>
+      </div>
+      <div>
+        <div class="bpml-ctl-label">Highlight module</div>
+        <div class="bpml-filter" id="modFilter" role="group" aria-label="Filter by module">
+          <button type="button" data-mod="all" aria-pressed="true">All</button>
+          <button type="button" data-mod="FI" aria-pressed="false">FI</button>
+          <button type="button" data-mod="CO" aria-pressed="false">CO</button>
+          <button type="button" data-mod="MM" aria-pressed="false">MM</button>
+          <button type="button" data-mod="SD" aria-pressed="false">SD</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="bpmlTree" aria-live="polite">
+      <noscript><p class="bpml-empty">Enable JavaScript to explore the interactive process tree. It maps R2R / O2C / P2P to their SAP T-codes, roles and KPIs.</p></noscript>
+    </div>
+
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section style="padding: 0 2.5rem 4rem;">
+  <div class="bpml-wrap">
+    <div class="callout">
+      <div class="callout-title">ABOUT THIS PROCESS MAP</div>
+      <p>This BPML is a <strong>methodology reference</strong> I authored. The three cycles and their process decomposition are the standard way SAP structures a finance/logistics landscape; the T-codes, roles and modules are the genuine mechanism. Each cycle is tied to a system where I <strong>delivered the equivalent end-to-end flow on XeerSoft Cloud ERP</strong> &mdash; the process thinking is real, the SAP framing is how I&rsquo;d carry it onto an SAP project.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivered systems these cycles map to &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Chatree Kengpipat · ERP Business Analyst & Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<!-- ============================================================
+     BUSINESS PROCESS MASTER LIST — data + interactions
+     Renders the L1→L4 tree from data; cycle switcher, module filter,
+     collapsible groups, and a coverage count-up. Reduced-motion safe.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  var DATA = [
+    {
+      id: 'R2R', name: 'Record-to-Report', mods: 'FI · CO',
+      evid: { href: 'project4.html', label: 'delivered: STEM financial tracking →' },
+      desc: 'The financial close: from sub-ledger control through valuation and allocation to signed statements and tax filing. Where an FI consultant lives every period.',
+      groups: [
+        { name: 'Sub-ledger & period control', procs: [
+          { id: 'R2R-10', name: 'Open / close posting periods', tc: ['OB52'], role: 'GL accountant', mod: 'FI', kpi: 'Periods locked on schedule' },
+          { id: 'R2R-20', name: 'Recurring entries, accruals & deferrals', tc: ['FBS1', 'F.14'], role: 'GL accountant', mod: 'FI', kpi: 'Accrual completeness' }
+        ]},
+        { name: 'Valuation & allocation', procs: [
+          { id: 'R2R-30', name: 'Foreign-currency valuation', tc: ['FAGL_FCV'], role: 'GL accountant', mod: 'FI', kpi: 'FX revaluation accuracy' },
+          { id: 'R2R-40', name: 'Asset depreciation run', tc: ['AFAB'], role: 'Asset accountant', mod: 'FI-AA', kpi: 'Depreciation posted on time' },
+          { id: 'R2R-50', name: 'Overhead allocation & profitability', tc: ['KE30', 'KEU5'], role: 'Controller', mod: 'CO', kpi: 'Segment margin visibility' }
+        ]},
+        { name: 'Close & report', procs: [
+          { id: 'R2R-60', name: 'Tax reporting — VAT & WHT', tc: ['PP30', 'PND'], role: 'Tax consultant', mod: 'FI', kpi: 'Filing on time, audit-ready' },
+          { id: 'R2R-70', name: 'GL ↔ sub-ledger reconciliation', tc: ['FS10N', 'FBL3N'], role: 'GL accountant', mod: 'FI', kpi: 'Zero reconciling items' },
+          { id: 'R2R-80', name: 'Financial statements (FSV)', tc: ['F.01'], role: 'Finance manager', mod: 'FI', kpi: 'Close in hours, not days' }
+        ]}
+      ]
+    },
+    {
+      id: 'O2C', name: 'Order-to-Cash', mods: 'SD · FI-AR',
+      evid: { href: 'project2.html', label: 'delivered: strategic pricing & AR →' },
+      desc: 'From a customer order and its price, through delivery and billing, to the receivable and its collection. The revenue side of the ledger.',
+      groups: [
+        { name: 'Order management', procs: [
+          { id: 'O2C-10', name: 'Sales order & pricing', tc: ['VA01', 'V/08'], role: 'Sales / pricing', mod: 'SD', kpi: 'Order & price accuracy' },
+          { id: 'O2C-20', name: 'Credit check', tc: ['FD32'], role: 'Credit controller', mod: 'FI', kpi: 'Credit exposure controlled' }
+        ]},
+        { name: 'Delivery & billing', procs: [
+          { id: 'O2C-30', name: 'Outbound delivery', tc: ['VL01N'], role: 'Logistics', mod: 'SD', kpi: 'On-time delivery' },
+          { id: 'O2C-40', name: 'Billing & revenue determination', tc: ['VF01', 'VKOA'], role: 'Billing', mod: 'SD', kpi: 'Billing cycle time' }
+        ]},
+        { name: 'Receivables & collection', procs: [
+          { id: 'O2C-50', name: 'AR posting & open items', tc: ['FBL5N'], role: 'AR accountant', mod: 'FI', kpi: 'Days sales outstanding' },
+          { id: 'O2C-60', name: 'Dunning run', tc: ['F150'], role: 'Collections', mod: 'FI', kpi: 'Overdue % reduced' },
+          { id: 'O2C-70', name: 'Incoming payment & clearing', tc: ['F-28'], role: 'AR accountant', mod: 'FI', kpi: 'Unapplied cash minimised' }
+        ]}
+      ]
+    },
+    {
+      id: 'P2P', name: 'Procure-to-Pay', mods: 'MM · FI-AP',
+      evid: { href: 'project1.html', label: 'delivered: procurement & inventory →' },
+      desc: 'From a need through the purchase order and goods receipt to the matched invoice and vendor payment. The spend side of the ledger.',
+      groups: [
+        { name: 'Requisition & sourcing', procs: [
+          { id: 'P2P-10', name: 'Purchase requisition & release', tc: ['ME51N'], role: 'Requisitioner', mod: 'MM', kpi: 'PR → PO cycle time' },
+          { id: 'P2P-20', name: 'Source determination / RFQ', tc: ['ME41'], role: 'Buyer', mod: 'MM', kpi: 'Sourcing coverage' }
+        ]},
+        { name: 'Ordering & receipt', procs: [
+          { id: 'P2P-30', name: 'Purchase order & release strategy', tc: ['ME21N'], role: 'Buyer', mod: 'MM', kpi: 'PO accuracy' },
+          { id: 'P2P-40', name: 'Goods receipt (mvt 101)', tc: ['MIGO'], role: 'Warehouse', mod: 'MM', kpi: 'GR posted on time' }
+        ]},
+        { name: 'Invoice & payment', procs: [
+          { id: 'P2P-50', name: 'Invoice verification (3-way match)', tc: ['MIRO'], role: 'AP accountant', mod: 'MM', kpi: '3-way match rate' },
+          { id: 'P2P-60', name: 'GR/IR clearing & maintenance', tc: ['MR11', 'F.13'], role: 'AP accountant', mod: 'FI', kpi: 'GR/IR aged items cleared' },
+          { id: 'P2P-70', name: 'Outgoing payment run', tc: ['F110', 'F-53'], role: 'AP / treasury', mod: 'FI', kpi: 'On-time vendor payment' }
+        ]}
+      ]
+    }
+  ];
+
+  var tree = document.getElementById('bpmlTree');
+  if (!tree) return;
+  var cycle = 'all', modLit = 'all';
+
+  function tcodeChips(arr) {
+    return arr.map(function (t) { return '<span class="tcode">' + t + '</span>'; }).join(' ');
+  }
+  function matchMod(procMod, f) {
+    if (f === 'all') return true;
+    if (f === 'FI') return procMod === 'FI' || procMod === 'FI-AA' || procMod === 'FI-AR' || procMod === 'FI-AP';
+    return procMod === f;
+  }
+
+  function render() {
+    var html = '';
+    DATA.forEach(function (c) {
+      if (cycle !== 'all' && cycle !== c.id) return;
+      html += '<div class="lvl1">';
+      html += '<div class="lvl1-head">'
+        + '<span class="lvl1-code">' + c.id + '</span>'
+        + '<span class="lvl1-name">' + c.name + '</span>'
+        + '<span class="lvl1-mods">' + c.mods + '</span>'
+        + '<a class="lvl1-evid" href="' + c.evid.href + '">' + c.evid.label + '</a>'
+        + '</div>';
+      html += '<p class="lvl1-desc">' + c.desc + '</p>';
+      html += '<div class="lvl1-body">';
+      c.groups.forEach(function (g) {
+        html += '<div class="lvl2">';
+        html += '<button type="button" class="lvl2-head" aria-expanded="true">'
+          + '<span class="lvl2-chev" aria-hidden="true">▾</span>'
+          + '<span class="lvl2-name">' + g.name + '</span>'
+          + '<span class="lvl2-count">' + g.procs.length + ' process' + (g.procs.length === 1 ? '' : 'es') + '</span>'
+          + '</button>';
+        html += '<div class="lvl2-body"><div class="lvl2-body-inner">';
+        g.procs.forEach(function (p) {
+          var dim = matchMod(p.mod, modLit) ? '' : ' dim';
+          html += '<div class="proc' + dim + '">'
+            + '<div class="proc-id">' + p.id + '</div>'
+            + '<div class="proc-main">'
+              + '<div class="proc-name">' + p.name + '</div>'
+              + '<div class="proc-tcodes">' + tcodeChips(p.tc) + '</div>'
+              + '<div class="proc-kpi"><span class="kpi-k">KPI</span>' + p.kpi + '</div>'
+            + '</div>'
+            + '<div class="proc-role">' + p.role + '</div>'
+            + '<span class="proc-mod">' + p.mod + '</span>'
+          + '</div>';
+        });
+        html += '</div></div></div>';
+      });
+      html += '</div></div>';
+    });
+    tree.innerHTML = html || '<p class="bpml-empty">No cycle selected.</p>';
+
+    // wire collapse toggles
+    tree.querySelectorAll('.lvl2-head').forEach(function (h) {
+      h.addEventListener('click', function () {
+        var g = h.parentNode;
+        var open = !g.classList.contains('collapsed');
+        g.classList.toggle('collapsed', open);
+        h.setAttribute('aria-expanded', String(!open));
+      });
+    });
+  }
+
+  document.querySelectorAll('#cycleSeg button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#cycleSeg button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      cycle = b.getAttribute('data-cycle');
+      render();
+    });
+  });
+  document.querySelectorAll('#modFilter button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#modFilter button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      modLit = b.getAttribute('data-mod');
+      render();
+    });
+  });
+
+  render();
+
+  /* ---- Coverage count-up on reveal ---- */
+  function countUp(el, target) {
+    var dur = 1000, t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min((now - t0) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(frame); else el.textContent = target.toLocaleString('en-US');
+    }
+    requestAnimationFrame(frame);
+  }
+  var summary = document.querySelector('.bpml-summary[data-summary]');
+  if (summary && !reduce.matches && 'IntersectionObserver' in window) {
+    var done = false;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting && !done) {
+          done = true;
+          summary.querySelectorAll('.bpml-sum-num[data-count]').forEach(function (el) {
+            countUp(el, parseInt(el.getAttribute('data-count'), 10));
+          });
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(summary);
+    setTimeout(function () {
+      if (!done) { done = true; summary.querySelectorAll('.bpml-sum-num[data-count]').forEach(function (el) { el.textContent = el.getAttribute('data-count'); }); }
+    }, 1600);
+  }
+})();
+</script>
+
+</body>
+</html>
