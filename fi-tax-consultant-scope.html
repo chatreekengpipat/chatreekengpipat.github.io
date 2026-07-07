@@ -512,6 +512,41 @@
   .wf-step .tc { font-family: var(--mono); font-weight: 600; font-size: 0.84rem; color: var(--mist); display: block; margin: 0.18rem 0; }
   .wf-step .d { font-size: 0.74rem; color: var(--haze); line-height: 1.4; }
 
+  /* ---------- 06 · IMG / SPRO customizing tree ---------- */
+  .imgtree { margin-top: 1.6rem; border: 1px solid var(--steel); border-radius: 12px; overflow: hidden; background: var(--deep); }
+  .imgtree-top { display: flex; align-items: center; flex-wrap: wrap; gap: 0.3rem 0.5rem; padding: 0.7rem 1rem; background: var(--abyss); border-bottom: 1px solid var(--steel); font-family: var(--mono); font-size: 0.7rem; color: var(--haze); line-height: 1.5; }
+  .imgtree-top .tcode { font-size: 0.72rem; }
+  .imgtree-top .sep { color: var(--gas); }
+  .imgbranch { border-top: 1px solid var(--steel); }
+  .imgbranch:first-of-type { border-top: 0; }
+  .imgbranch-head { width: 100%; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1rem; background: transparent; border: 0; cursor: pointer; font: inherit; text-align: left; color: var(--mist); transition: background 0.2s; }
+  .imgbranch-head:hover { background: rgba(96, 165, 250, 0.06); }
+  .imgbranch-chev { color: var(--gas); font-family: var(--mono); font-size: 0.78rem; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); flex-shrink: 0; }
+  .imgbranch.collapsed .imgbranch-chev { transform: rotate(-90deg); }
+  .imgbranch-name { font-weight: 600; font-size: 0.92rem; }
+  .imgbranch-name .k { font-family: var(--mono); font-size: 0.62rem; color: var(--gas); background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.28); border-radius: 5px; padding: 0.05rem 0.4rem; margin-right: 0.5rem; }
+  .imgbranch-count { margin-left: auto; font-family: var(--mono); font-size: 0.64rem; color: var(--haze); }
+  .imgbranch-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.35s cubic-bezier(0.16,1,0.3,1); }
+  .imgbranch.collapsed .imgbranch-body { grid-template-rows: 0fr; }
+  .imgbranch-inner { overflow: hidden; }
+  .imgpath { font-family: var(--mono); font-size: 0.66rem; color: var(--haze); padding: 0.5rem 1rem 0.35rem 2.3rem; }
+  .imgpath .sep { color: var(--gas); }
+  .imgleaf { display: grid; grid-template-columns: 1fr auto auto; gap: 0.6rem 0.8rem; align-items: center; padding: 0.5rem 1rem 0.5rem 2.3rem; border-top: 1px dashed rgba(51, 65, 85, 0.5); }
+  .imgleaf-name { font-size: 0.85rem; color: var(--mist); line-height: 1.35; }
+  .imgleaf-name .fold { color: var(--haze); }
+  .imgleaf-tc { font-family: var(--mono); font-size: 0.72rem; }
+  .imgleaf-phase { font-family: var(--mono); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.14rem 0.45rem; border-radius: 5px; white-space: nowrap; }
+  .ph-explore { color: var(--gas); background: rgba(96, 165, 250, 0.12); border: 1px solid rgba(96, 165, 250, 0.3); }
+  .ph-realize { color: var(--gold); background: rgba(232, 176, 75, 0.12); border: 1px solid rgba(232, 176, 75, 0.3); }
+  .ph-run { color: var(--flare); background: rgba(255, 107, 53, 0.12); border: 1px solid rgba(255, 107, 53, 0.3); }
+  .imglegend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin-top: 0.9rem; font-family: var(--mono); font-size: 0.68rem; color: var(--haze); }
+  .imglegend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .imglegend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  @media (max-width: 640px) {
+    .imgleaf { grid-template-columns: 1fr auto; }
+    .imgleaf-phase { grid-column: 1 / -1; justify-self: start; }
+  }
+
   /* ---------- 07 Timeline (Gantt) ---------- */
   .gantt-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; margin-bottom: 1.1rem; }
   .gantt-meta .big { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--gold); }
@@ -1351,6 +1386,72 @@
         <div class="wf-step"><span class="s">step 6</span><span class="tc">F-53 → PND</span><span class="d">Withhold at payment &amp; file</span></div>
       </div>
     </div>
+
+    <!-- IMG / SPRO customizing tree -->
+    <h3 style="margin-top:2.2rem">The IMG path behind the config — the tree I actually navigate.</h3>
+    <p class="caption">A T-code is a shortcut; the real work is the <span class="tcode">SPRO</span> customizing path and knowing which <b>project phase</b> each node belongs to. This is that tree for the Thai tax engine. Tap a branch to collapse it.</p>
+
+    <div class="imgtree" id="imgtree">
+      <div class="imgtree-top"><span class="tcode">SPRO</span> <span class="sep">›</span> SAP Reference IMG <span class="sep">›</span> Financial Accounting <span class="sep">›</span> Financial Accounting Global Settings</div>
+
+      <div class="imgbranch">
+        <button type="button" class="imgbranch-head" aria-expanded="true">
+          <span class="imgbranch-chev" aria-hidden="true">▾</span>
+          <span class="imgbranch-name"><span class="k">VAT</span>Tax on Sales / Purchases</span>
+          <span class="imgbranch-count">7 nodes</span>
+        </button>
+        <div class="imgbranch-body"><div class="imgbranch-inner">
+          <div class="imgpath">… Global Settings <span class="sep">›</span> Tax on Sales/Purchases</div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Basic Settings ›</span> Check Calculation Procedure</span><span class="imgleaf-tc"><span class="tcode">OBYZ</span></span><span class="imgleaf-phase ph-explore">Explore</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Basic Settings ›</span> Assign Country to Calculation Procedure</span><span class="imgleaf-tc"><span class="tcode">OBBG</span></span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Basic Settings ›</span> Check &amp; Change Settings for Tax Processing</span><span class="imgleaf-tc"><span class="tcode">OBCN</span></span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Calculation ›</span> Define Tax Codes for Sales &amp; Purchases</span><span class="imgleaf-tc"><span class="tcode">FTXP</span></span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Calculation ›</span> Assign Co. Code to Doc. Date for Tax Determination</span><span class="imgleaf-tc">SPRO</span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Posting ›</span> Define Tax Accounts</span><span class="imgleaf-tc"><span class="tcode">OB40</span></span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Posting ›</span> Assign Tax Codes for Non-Taxable Transactions</span><span class="imgleaf-tc"><span class="tcode">OBCL</span></span><span class="imgleaf-phase ph-realize">Realize</span></div>
+        </div></div>
+      </div>
+
+      <div class="imgbranch">
+        <button type="button" class="imgbranch-head" aria-expanded="true">
+          <span class="imgbranch-chev" aria-hidden="true">▾</span>
+          <span class="imgbranch-name"><span class="k">WHT</span>Extended Withholding Tax</span>
+          <span class="imgbranch-count">7 nodes</span>
+        </button>
+        <div class="imgbranch-body"><div class="imgbranch-inner">
+          <div class="imgpath">… Global Settings <span class="sep">›</span> Withholding Tax <span class="sep">›</span> Extended Withholding Tax</div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Basic Settings ›</span> Check Withholding Tax Countries</span><span class="imgleaf-tc">SPRO</span><span class="imgleaf-phase ph-explore">Explore</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Calculation ›</span> Define W/Tax Type for Invoice Posting</span><span class="imgleaf-tc">SPRO</span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Calculation ›</span> Define W/Tax Type for Payment Posting</span><span class="imgleaf-tc">SPRO</span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Calculation ›</span> Define Withholding Tax Codes</span><span class="imgleaf-tc">SPRO</span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Company Code ›</span> Assign W/Tax Types to Company Codes</span><span class="imgleaf-tc">SPRO</span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Company Code ›</span> Activate Extended Withholding Tax</span><span class="imgleaf-tc">SPRO</span><span class="imgleaf-phase ph-realize">Realize</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Postings ›</span> Define Accounts for W/Tax to be Paid Over</span><span class="imgleaf-tc"><span class="tcode">OBWW</span></span><span class="imgleaf-phase ph-realize">Realize</span></div>
+        </div></div>
+      </div>
+
+      <div class="imgbranch">
+        <button type="button" class="imgbranch-head" aria-expanded="true">
+          <span class="imgbranch-chev" aria-hidden="true">▾</span>
+          <span class="imgbranch-name"><span class="k">RUN</span>Periodic tax reporting</span>
+          <span class="imgbranch-count">4 nodes</span>
+        </button>
+        <div class="imgbranch-body"><div class="imgbranch-inner">
+          <div class="imgpath">SAP Easy Access <span class="sep">›</span> Accounting <span class="sep">›</span> Financial Accounting <span class="sep">›</span> General Ledger <span class="sep">›</span> Reporting</div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Tax Reports ›</span> Advance Return for Tax on Sales/Purchases</span><span class="imgleaf-tc"><span class="tcode">RFUMSV00</span></span><span class="imgleaf-phase ph-run">Run</span></div>
+          <div class="imgleaf"><span class="imgleaf-name"><span class="fold">Withholding Tax ›</span> Generic Withholding Tax Reporting</span><span class="imgleaf-tc"><span class="tcode">S_P00_07000134</span></span><span class="imgleaf-phase ph-run">Run</span></div>
+          <div class="imgleaf"><span class="imgleaf-name">Thai VAT filing (output/input VAT)</span><span class="imgleaf-tc"><span class="tcode">PP30</span></span><span class="imgleaf-phase ph-run">Run</span></div>
+          <div class="imgleaf"><span class="imgleaf-name">Thai withholding returns &amp; certificates</span><span class="imgleaf-tc"><span class="tcode">PND 3/53/54</span></span><span class="imgleaf-phase ph-run">Run</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="imglegend" aria-hidden="true">
+      <span><i style="background:var(--gas)"></i>Explore &mdash; blueprint / decide the procedure</span>
+      <span><i style="background:var(--gold)"></i>Realize &mdash; build &amp; unit-test the config</span>
+      <span><i style="background:var(--flare)"></i>Run &mdash; period-end filing in hypercare / BAU</span>
+    </div>
+    <p class="note">SPRO menu texts and phase mapping follow standard SAP FI customizing; exact node names vary slightly by release. The <span class="tcode">SPRO</span>-only rows are maintained inside the IMG (no dedicated transaction shortcut).</p>
   </section>
 
   <!-- 07 PROJECT TIMELINE -->
@@ -2422,6 +2523,16 @@
       });
     });
   }
+
+  /* ---- IMG / SPRO tree: collapsible branches ---- */
+  document.querySelectorAll('#imgtree .imgbranch-head').forEach(function (h) {
+    h.addEventListener('click', function () {
+      var b = h.parentNode;
+      var open = !b.classList.contains('collapsed');
+      b.classList.toggle('collapsed', open);
+      h.setAttribute('aria-expanded', String(!open));
+    });
+  });
 
   /* ---- Scroll-progress indicator ---- */
   var bar = document.createElement('div');
