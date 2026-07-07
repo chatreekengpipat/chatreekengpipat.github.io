@@ -6171,6 +6171,39 @@ nav.scrolled {
   pointer-events: none;
 }
 
+/* ---- 4b. Back-to-top pill (JS adds #ck-top; shows past ~620px) ---- */
+#ck-top {
+  position: fixed;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 10px 26px -8px var(--glow-color), 0 2px 6px rgba(15, 23, 42, 0.18);
+  opacity: 0;
+  transform: translateY(12px) scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth), filter 0.2s;
+}
+#ck-top.show { opacity: 1; transform: none; pointer-events: auto; }
+#ck-top:hover { filter: brightness(1.08); transform: translateY(-2px); }
+#ck-top:active { transform: translateY(0) scale(0.95); }
+@media print { #ck-top { display: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  #ck-top { transition: opacity 0.2s; }
+  #ck-top:hover { transform: none; }
+}
+
 /* ---- 5. Section-title emphasis: underline draws as it scrolls in ----
    Scroll-driven (view timeline). No support / reduced motion → no underline,
    heading still perfect. */

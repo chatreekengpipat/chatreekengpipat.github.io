@@ -452,12 +452,40 @@
     animate();
   }
 
+  // ===== 3c. Back-to-top pill =====
+  // Appears after a meaningful scroll on every page that loads this engine.
+  // Motion-aware: reduced-motion users get an instant jump.
+  function initBackToTop() {
+    if (document.getElementById('ck-top')) return;
+    var btn = document.createElement('button');
+    btn.id = 'ck-top';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.innerHTML = '<span aria-hidden="true">↑</span>';
+    document.body.appendChild(btn);
+    var reduce = prefersReducedMotion();
+    var ticking = false;
+    function update() {
+      var y = window.scrollY || document.documentElement.scrollTop;
+      btn.classList.toggle('show', y > 620);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+    update();
+  }
+
   // ===== Init when DOM ready =====
   function init() {
     initScrollReveal();
     initNavScroll();
     initCardFX();          // cursor spotlight + 3D tilt
     initScrollProgress();  // slim top progress bar (index)
+    initBackToTop();       // back-to-top pill
     initSmoothScroll();
     initHeroParallax();
     initCounters();
