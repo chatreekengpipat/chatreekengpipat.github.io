@@ -709,6 +709,383 @@
   .sap-card:hover .sap-spot { opacity: 1; }
   .sap-card > *:not(.sap-spot) { position: relative; z-index: 1; }
 
+  /* ============================================================
+     v3 — TECHNICAL CODING DEEP-DIVE (page-scoped)
+     The page is titled "Technical Coding" — this section shows the
+     actual objects behind the config: an ABAP pricing routine, the
+     OBYC account-determination table, a CO-PA derivation rule, and a
+     live posting simulator that walks the double entry those objects
+     produce. Interactive: switch objects, click a line to read the
+     consultant annotation, run an execution trace, step the postings.
+     Built only from existing tokens. Reduced-motion safe.
+     ============================================================ */
+  .techlab { max-width: 1000px; margin: 0 auto; }
+  .techlab-head { margin-bottom: 1.6rem; }
+  .techlab-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.7rem;
+  }
+  .techlab-eyebrow::before {
+    content: '';
+    width: 22px; height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .techlab-title {
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+    margin-bottom: 0.7rem;
+  }
+  .techlab-title em { color: var(--accent); font-style: normal; }
+  .techlab-lede {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 46rem;
+  }
+  .techlab-lede b { color: var(--text-strong); font-weight: 600; }
+
+  /* ---- Code viewer console ---- */
+  .cv {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .cv-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 0.5rem 0.5rem 0;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .cv-tab {
+    appearance: none;
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    padding: 0.6rem 0.95rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s var(--ease-smooth), background 0.2s var(--ease-smooth);
+    white-space: nowrap;
+  }
+  .cv-tab .cv-tab-k {
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--text-subtle);
+    border-radius: 3px;
+    padding: 0.1rem 0.32rem;
+    letter-spacing: 0.02em;
+    transition: background 0.2s var(--ease-smooth);
+  }
+  .cv-tab:hover { color: var(--text); }
+  .cv-tab[aria-selected="true"] {
+    background: var(--bg);
+    border-color: var(--border);
+    color: var(--text-strong);
+    margin-bottom: -1px;
+  }
+  .cv-tab[aria-selected="true"] .cv-tab-k { background: var(--accent); }
+
+  .cv-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0.7rem 1.1rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .cv-file { font-size: 0.74rem; color: var(--text); font-weight: 600; }
+  .cv-file .cv-lang {
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 0.4rem;
+    font-size: 0.68rem;
+  }
+  .cv-run {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth), color 0.2s;
+  }
+  .cv-run:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+  .cv-run:disabled { opacity: 0.55; cursor: default; transform: none; }
+  .cv-run .cv-run-ico { font-size: 0.7rem; line-height: 0; }
+
+  .cv-body { display: grid; grid-template-columns: 1fr; }
+  .cv-code {
+    margin: 0;
+    padding: 0.9rem 0;
+    background: var(--bg);
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.72;
+    counter-reset: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cv-line {
+    display: flex;
+    align-items: flex-start;
+    padding: 0 1.1rem 0 0;
+    position: relative;
+    white-space: pre;
+    transition: background 0.18s var(--ease-smooth);
+  }
+  .cv-ln {
+    flex-shrink: 0;
+    width: 2.6rem;
+    padding-right: 0.9rem;
+    text-align: right;
+    color: var(--text-subtle);
+    user-select: none;
+    font-size: 0.72rem;
+  }
+  .cv-txt { flex: 1; min-width: 0; }
+  .cv-line.has-note { cursor: pointer; }
+  .cv-line.has-note::after {
+    content: '';
+    position: absolute;
+    left: 1.85rem;
+    top: 0.62em;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--warning);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--warning) 55%, transparent);
+    animation: cvDot 2.6s var(--ease-smooth) infinite;
+  }
+  @keyframes cvDot {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--warning) 50%, transparent); }
+    50%      { box-shadow: 0 0 0 4px transparent; }
+  }
+  .cv-line.has-note:hover { background: var(--surface); }
+  .cv-line.is-sel { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+  .cv-line.is-sel .cv-ln { color: var(--accent); }
+  .cv-line.trace-on { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+
+  /* ABAP / config token colors — from existing tokens only */
+  .t-com { color: var(--text-subtle); font-style: italic; }
+  .t-kw  { color: var(--accent); font-weight: 600; }
+  .t-str { color: var(--success); }
+  .t-num { color: var(--warning); }
+  .t-fn  { color: var(--text-strong); font-weight: 700; }
+  .t-tab { color: var(--text-strong); font-weight: 600; }
+
+  /* Annotation explainer dock */
+  .cv-exp {
+    border-top: 1px dashed var(--border);
+    padding: 1.05rem 1.2rem;
+    background: var(--surface);
+    min-height: 4.5rem;
+  }
+  .cv-exp-empty {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cv-exp-empty .cv-exp-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--warning); flex-shrink: 0;
+  }
+  .cv-exp-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .cv-exp-title { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); margin-bottom: 0.35rem; letter-spacing: -0.01em; }
+  .cv-exp-text { font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); }
+  .cv-exp-text b { color: var(--text); font-weight: 600; }
+  .cv-exp-text .tcode { font-size: 0.72rem; }
+
+  /* ---- Posting simulator (T-account player) ---- */
+  .postsim {
+    margin-top: 2.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.6rem 1.7rem;
+    box-shadow: var(--shadow-md);
+  }
+  .postsim-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.9rem; margin-bottom: 0.3rem; }
+  .postsim-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+  .postsim-title em { color: var(--accent); font-style: normal; }
+  .postsim-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+  .postsim-lede { font-size: 0.85rem; line-height: 1.55; color: var(--text-muted); max-width: 44rem; margin: 0.2rem 0 1.2rem; }
+
+  /* Journal step strip (which entry is posting) */
+  .ps-steps { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+  .ps-step {
+    display: flex; flex-direction: column; gap: 0.1rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.75rem;
+    min-width: 0;
+    opacity: 0.5;
+    transition: opacity 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+  }
+  .ps-step.done { opacity: 1; }
+  .ps-step.active { opacity: 1; border-color: var(--accent); background: var(--accent-bg); transform: translateY(-2px); }
+  .ps-step-t { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--accent); font-weight: 700; }
+  .ps-step-n { font-size: 0.8rem; font-weight: 600; color: var(--text); line-height: 1.25; }
+  .ps-step-arrow { align-self: center; color: var(--text-subtle); font-weight: 700; }
+
+  /* T-account grid */
+  .ps-ledger {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.9rem;
+  }
+  .taccount {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+  }
+  .taccount.touched { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+  .taccount.balanced { border-color: color-mix(in srgb, var(--success) 55%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--success) 30%, transparent); }
+  .taccount-head {
+    padding: 0.5rem 0.7rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .taccount-name { font-size: 0.78rem; font-weight: 700; color: var(--text-strong); line-height: 1.2; }
+  .taccount-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    margin-top: 0.12rem;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .taccount-key .k {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 3px;
+    padding: 0 0.24rem;
+    font-weight: 700;
+  }
+  .taccount-cols { display: grid; grid-template-columns: 1fr 1fr; min-height: 3.2rem; }
+  .taccount-col { padding: 0.4rem 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; }
+  .taccount-col.dr { border-right: 1px solid var(--border); }
+  .taccount-col-h {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    font-weight: 700;
+  }
+  .ps-post {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    animation: psPost 0.45s var(--ease-smooth) both;
+  }
+  .taccount-col.dr .ps-post { color: var(--accent); }
+  .taccount-col.cr .ps-post { color: var(--warning); }
+  @keyframes psPost {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .taccount-foot {
+    border-top: 1px dashed var(--border);
+    padding: 0.32rem 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .taccount-foot .bal { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .taccount.balanced .taccount-foot .bal { color: var(--success); }
+
+  .ps-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 1.3rem; }
+  .ps-btn {
+    appearance: none;
+    border: 1px solid var(--border-strong);
+    background: var(--surface-2);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s var(--ease-smooth), color 0.2s;
+  }
+  .ps-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .ps-btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .ps-btn--primary:hover { background: var(--accent-hover, var(--accent)); box-shadow: 0 8px 20px -8px var(--glow-color); }
+  .ps-btn:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
+  .ps-status { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+  .ps-status b { color: var(--text); font-weight: 600; }
+
+  /* ---------- Responsive: techlab ---------- */
+  @media (max-width: 720px) {
+    .cv-code { font-size: 0.7rem; }
+    .cv-ln { width: 2.1rem; padding-right: 0.6rem; }
+    .postsim { padding: 1.2rem 1rem 1.4rem; }
+    .ps-step-arrow { display: none; }
+  }
+
+  /* ---------- Reduced motion: techlab ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .cv-line.has-note::after { animation: none; }
+    .ps-post { animation: none; }
+    .ps-step, .taccount { transition: none; }
+  }
+
+  /* ---------- Scroll progress indicator ---------- */
+  .scrollprog {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    transform: scaleX(0); transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 45%, transparent));
+    z-index: 90; pointer-events: none; will-change: transform;
+  }
+
   /* ---------- Responsive ---------- */
   @media (max-width: 720px) {
     .sap-banner { top: 62px; padding: 0 1rem; }
@@ -1322,6 +1699,89 @@
   </div>
 </section>
 
+<!-- TECHNICAL CODING DEEP-DIVE -->
+<section style="padding: 2rem 2.5rem 1rem;">
+  <div class="techlab" data-animate>
+    <div class="techlab-head">
+      <div class="techlab-eyebrow">Advanced &middot; the code behind the config</div>
+      <h2 class="techlab-title">Where standard config stops, <em>code</em> begins.</h2>
+      <p class="techlab-lede">Most of an SAP build is configuration. The gaps that config can&rsquo;t reach become <b>RICEFW</b> objects &mdash; and this is what they actually look like. Three real objects from the cards above: an <b>ABAP pricing routine</b>, the <b>OBYC</b> account-determination table, and a <b>CO-PA derivation</b> rule. Switch objects, click a highlighted line to read what it does, or run an execution trace.</p>
+    </div>
+
+    <div class="cv" id="cv">
+      <div class="cv-tabs" role="tablist" aria-label="Technical objects">
+        <button type="button" class="cv-tab" role="tab" data-obj="vofm" aria-selected="true"><span class="cv-tab-k">E</span>Pricing routine</button>
+        <button type="button" class="cv-tab" role="tab" data-obj="obyc" aria-selected="false"><span class="cv-tab-k">C</span>OBYC account det.</button>
+        <button type="button" class="cv-tab" role="tab" data-obj="copa" aria-selected="false"><span class="cv-tab-k">E</span>CO-PA derivation</button>
+      </div>
+
+      <div class="cv-meta">
+        <span class="cv-file">FRM_KONDI_WERT_601 <span class="cv-lang">ABAP &middot; VOFM routine</span></span>
+        <button type="button" class="cv-run" id="cvRun"><span class="cv-run-ico">&#9656;</span> Run execution trace</button>
+      </div>
+
+      <div class="cv-body">
+        <pre class="cv-code" tabindex="0" aria-label="Source of the pricing routine"><span class="cv-line"><span class="cv-ln">1</span><span class="cv-txt"><span class="t-com">* FRM_KONDI_WERT_601 &mdash; VOFM pricing value routine</span></span></span><span class="cv-line"><span class="cv-ln">2</span><span class="cv-txt"><span class="t-com">* Condition ZTIR &middot; attached in V/08 &middot; tiered volume, sibling-aware</span></span></span><span class="cv-line"><span class="cv-ln">3</span><span class="cv-txt"> </span></span><span class="cv-line has-note" data-note-title="Where the routine plugs in" data-note-body="VOFM value routines are numbered (601 here) and attached to a condition type in <span class='tcode'>V/08</span>. SAP calls this FORM during pricing for every sales-document line that carries condition <b>ZTIR</b> &mdash; it is the one hook the condition technique gives you to inject custom value logic."><span class="cv-ln">4</span><span class="cv-txt"><span class="t-kw">FORM</span> <span class="t-fn">frm_kondi_wert_601</span>.</span></span><span class="cv-line"><span class="cv-ln">5</span><span class="cv-txt"> </span></span><span class="cv-line"><span class="cv-ln">6</span><span class="cv-txt">  <span class="t-kw">DATA</span>: lv_qty  <span class="t-kw">TYPE</span> komp-mgame,   <span class="t-com">" rolled-up sibling qty</span></span></span><span class="cv-line"><span class="cv-ln">7</span><span class="cv-txt">        lv_tier <span class="t-kw">TYPE</span> konp-kbetr.   <span class="t-com">" resolved unit rate</span></span></span><span class="cv-line"><span class="cv-ln">8</span><span class="cv-txt"> </span></span><span class="cv-line"><span class="cv-ln">9</span><span class="cv-txt"><span class="t-com">* 1 &middot; Standard conditions price one sold-to at a time &mdash;</span></span></span><span class="cv-line"><span class="cv-ln">10</span><span class="cv-txt"><span class="t-com">*     roll quantity up across the customer's siblings first.</span></span></span><span class="cv-line has-note" data-note-title="Why this is an enhancement, not config" data-note-body="Standard SD condition types evaluate one sold-to in isolation. Tiered pricing that pools volume across a customer's <b>sibling accounts</b> can't be expressed in the condition technique alone, so it becomes a VOFM routine &mdash; the RICEFW <b>enhancement</b> flagged on the Strategic Pricing card. This is the honest line between config and code."><span class="cv-ln">11</span><span class="cv-txt">  <span class="t-kw">PERFORM</span> read_sibling_qty <span class="t-kw">USING</span>    komk-kunnr</span></span><span class="cv-line"><span class="cv-ln">12</span><span class="cv-txt">                           <span class="t-kw">CHANGING</span> lv_qty.</span></span><span class="cv-line"><span class="cv-ln">13</span><span class="cv-txt"> </span></span><span class="cv-line"><span class="cv-ln">14</span><span class="cv-txt"><span class="t-com">* 2 &middot; Resolve which price tier that combined volume earns.</span></span></span><span class="cv-line"><span class="cv-ln">15</span><span class="cv-txt">  <span class="t-kw">SELECT SINGLE</span> kbetr <span class="t-kw">INTO</span> lv_tier</span></span><span class="cv-line has-note" data-note-title="Scale lives in a table, not in code" data-note-body="<b>ZTIR_SCALE</b> is a Z-table holding the tier boundaries (qty_from / qty_to &rarr; rate). Keeping the scale in a maintainable table means the functional consultant re-prices tiers without a developer or a transport &mdash; the enhancement stays thin, the business keeps control."><span class="cv-ln">16</span><span class="cv-txt">    <span class="t-kw">FROM</span> <span class="t-tab">ztir_scale</span></span></span><span class="cv-line"><span class="cv-ln">17</span><span class="cv-txt">   <span class="t-kw">WHERE</span> vkorg    = komk-vkorg</span></span><span class="cv-line"><span class="cv-ln">18</span><span class="cv-txt">     <span class="t-kw">AND</span> qty_from <span class="t-kw">&lt;=</span> lv_qty</span></span><span class="cv-line"><span class="cv-ln">19</span><span class="cv-txt">     <span class="t-kw">AND</span> qty_to   <span class="t-kw">&gt;=</span> lv_qty.</span></span><span class="cv-line"><span class="cv-ln">20</span><span class="cv-txt"> </span></span><span class="cv-line"><span class="cv-ln">21</span><span class="cv-txt"><span class="t-com">* 3 &middot; Return the value; SAP posts XKWERT as the condition.</span></span></span><span class="cv-line has-note" data-note-title="XKWERT is the contract with pricing" data-note-body="<b>XKWERT</b> is what the routine hands back to the pricing engine: whatever you place in it becomes the condition value on the sales order, which flows into billing and the <span class='tcode'>VKOA</span> revenue posting. One export parameter, and the whole downstream chain follows."><span class="cv-ln">22</span><span class="cv-txt">  xkwert = komp-mgame * lv_tier.</span></span><span class="cv-line"><span class="cv-ln">23</span><span class="cv-txt"> </span></span><span class="cv-line"><span class="cv-ln">24</span><span class="cv-txt"><span class="t-kw">ENDFORM</span>.</span></span></pre>
+
+        <div class="cv-exp" id="cvExp" aria-live="polite">
+          <div class="cv-exp-empty"><span class="cv-exp-dot"></span>Click a highlighted line to read what it does &mdash; and why it&rsquo;s built that way.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTING SIMULATOR -->
+    <div class="postsim" id="postsim">
+      <div class="postsim-head">
+        <span class="postsim-title">Watch the config <em>post</em>.</span>
+        <span class="postsim-sub">Procure-to-Pay &middot; MM &rarr; FI</span>
+      </div>
+      <p class="postsim-lede">The OBYC table above isn&rsquo;t abstract &mdash; it decides the GL accounts every movement hits. Step through a purchase and watch the automatic double entry land in the ledger. GR/IR and the vendor should each clear to zero when the flow completes.</p>
+
+      <div class="ps-steps" id="psSteps" aria-hidden="true">
+        <div class="ps-step" data-k="0"><span class="ps-step-t">MIGO &middot; 101</span><span class="ps-step-n">Goods Receipt</span></div>
+        <span class="ps-step-arrow">&rarr;</span>
+        <div class="ps-step" data-k="1"><span class="ps-step-t">MIRO</span><span class="ps-step-n">Invoice Receipt</span></div>
+        <span class="ps-step-arrow">&rarr;</span>
+        <div class="ps-step" data-k="2"><span class="ps-step-t">F-53</span><span class="ps-step-n">Outgoing Payment</span></div>
+      </div>
+
+      <div class="ps-ledger">
+        <div class="taccount" data-acct="inv">
+          <div class="taccount-head"><div class="taccount-name">Inventory / Stock</div><div class="taccount-key"><span class="k">BSX</span> 130000</div></div>
+          <div class="taccount-cols"><div class="taccount-col dr"><span class="taccount-col-h">Debit</span><div class="ps-slot" data-side="dr"></div></div><div class="taccount-col cr"><span class="taccount-col-h">Credit</span><div class="ps-slot" data-side="cr"></div></div></div>
+          <div class="taccount-foot"><span>balance</span><span class="bal" data-bal>&mdash;</span></div>
+        </div>
+        <div class="taccount" data-acct="grir">
+          <div class="taccount-head"><div class="taccount-name">GR/IR clearing</div><div class="taccount-key"><span class="k">WRX</span> 191100</div></div>
+          <div class="taccount-cols"><div class="taccount-col dr"><span class="taccount-col-h">Debit</span><div class="ps-slot" data-side="dr"></div></div><div class="taccount-col cr"><span class="taccount-col-h">Credit</span><div class="ps-slot" data-side="cr"></div></div></div>
+          <div class="taccount-foot"><span>balance</span><span class="bal" data-bal>&mdash;</span></div>
+        </div>
+        <div class="taccount" data-acct="vat">
+          <div class="taccount-head"><div class="taccount-name">Input VAT</div><div class="taccount-key"><span class="k">VST</span> 154000</div></div>
+          <div class="taccount-cols"><div class="taccount-col dr"><span class="taccount-col-h">Debit</span><div class="ps-slot" data-side="dr"></div></div><div class="taccount-col cr"><span class="taccount-col-h">Credit</span><div class="ps-slot" data-side="cr"></div></div></div>
+          <div class="taccount-foot"><span>balance</span><span class="bal" data-bal>&mdash;</span></div>
+        </div>
+        <div class="taccount" data-acct="ap">
+          <div class="taccount-head"><div class="taccount-name">Vendor (AP)</div><div class="taccount-key"><span class="k">KBS</span> 200000</div></div>
+          <div class="taccount-cols"><div class="taccount-col dr"><span class="taccount-col-h">Debit</span><div class="ps-slot" data-side="dr"></div></div><div class="taccount-col cr"><span class="taccount-col-h">Credit</span><div class="ps-slot" data-side="cr"></div></div></div>
+          <div class="taccount-foot"><span>balance</span><span class="bal" data-bal>&mdash;</span></div>
+        </div>
+        <div class="taccount" data-acct="bank">
+          <div class="taccount-head"><div class="taccount-name">Bank / Cash</div><div class="taccount-key"><span class="k">GL</span> 113000</div></div>
+          <div class="taccount-cols"><div class="taccount-col dr"><span class="taccount-col-h">Debit</span><div class="ps-slot" data-side="dr"></div></div><div class="taccount-col cr"><span class="taccount-col-h">Credit</span><div class="ps-slot" data-side="cr"></div></div></div>
+          <div class="taccount-foot"><span>balance</span><span class="bal" data-bal>&mdash;</span></div>
+        </div>
+      </div>
+
+      <div class="ps-controls">
+        <button type="button" class="ps-btn ps-btn--primary" id="psNext">Post next entry &#9656;</button>
+        <button type="button" class="ps-btn" id="psReset">Reset</button>
+        <span class="ps-status" id="psStatus">3 postings &middot; net vendor liability &#3647;10,700 incl. 7% input VAT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CLOSING REITERATION -->
 <section style="padding: 1rem 2.5rem 4rem;">
   <div class="sap-closing">
@@ -1450,6 +1910,234 @@
       }, { passive: true });
     });
   }
+})();
+</script>
+
+<!-- ============================================================
+     TECHNICAL CODING DEEP-DIVE — interactions
+     Code-object switcher, line annotations, execution trace, and
+     the T-account posting simulator. Content is readable without JS
+     (the ABAP object renders statically); this only enhances it.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- Code viewer ---------- */
+  var cv = document.getElementById('cv');
+  if (cv) {
+    var codeEl = cv.querySelector('.cv-code');
+    var fileEl = cv.querySelector('.cv-file');
+    var expEl  = document.getElementById('cvExp');
+    var runBtn = document.getElementById('cvRun');
+    var tabs   = Array.prototype.slice.call(cv.querySelectorAll('.cv-tab'));
+
+    function L(n, html, title, body) {
+      return '<span class="cv-line' + (title ? ' has-note' : '') + '"' +
+        (title ? ' data-note-title="' + title + '" data-note-body="' + body + '"' : '') +
+        '><span class="cv-ln">' + n + '</span><span class="cv-txt">' + html + '</span></span>';
+    }
+
+    var OBJ = {
+      vofm: {
+        file: 'FRM_KONDI_WERT_601', lang: 'ABAP · VOFM routine',
+        html: codeEl.innerHTML   // cache the static baseline
+      },
+      obyc: {
+        file: 'OBYC', lang: 'Config · MM→FI account determination',
+        html: [
+          L(1,  `<span class="t-com">* OBYC — automatic account determination · MM → FI</span>`),
+          L(2,  `<span class="t-com">* Goods movement 101 resolves each posting key by valuation class</span>`),
+          L(3,  ` `),
+          L(4,  `   key   posting                       val.class 3000   7920`),
+          L(5,  `   ----  ----------------------------  --------------   ------`),
+          L(6,  `   <span class="t-tab">BSX</span>   Inventory / stock              130000           131000`,
+                'BSX — the stock account', 'Whenever a goods receipt values inventory, SAP reads <b>BSX</b> for the valuation class on the material master. Split accounts per class (raw 3000, finished 7920) fall out of one table row — no code, no manual GL pick.'),
+          L(7,  `   <span class="t-tab">WRX</span>   GR/IR clearing                 191100           191100`,
+                'WRX — the GR/IR bridge', 'WRX is the goods-receipt / invoice-receipt clearing account. The GR credits it, the invoice debits it, and it nets to zero once both arrive — which is exactly what the posting simulator below shows.'),
+          L(8,  `   <span class="t-tab">PRD</span>   Price difference               231500           231500`,
+                'PRD — price variance', 'When the PO price and the material standard price disagree, the delta posts to <b>PRD</b> instead of distorting inventory value. It is why standard-price materials stay clean.'),
+          L(9,  `   <span class="t-tab">GBB</span>   Offsetting / consumption       400000           400000`),
+          L(10, ` `),
+          L(11, `<span class="t-com">* One movement reads these keys and builds the FI document with</span>`),
+          L(12, `<span class="t-com">* no manual GL line. That is the "automatic" in account det.</span>`)
+        ].join('')
+      },
+      copa: {
+        file: 'KEDR', lang: 'Config · CO-PA derivation rule',
+        html: [
+          L(1,  `<span class="t-com">* KEDR — CO-PA derivation (STEM Billing → Profitability card)</span>`),
+          L(2,  `<span class="t-com">* Derive the profitability segment from each billing line</span>`),
+          L(3,  ` `),
+          L(4,  `  <span class="t-kw">IF</span>   billing_type = <span class="t-str">&#39;ZS1&#39;</span>       <span class="t-com">" STEM tuition invoice</span>`,
+                'Derivation is condition-driven', 'CO-PA derivation runs per billing line. The <b>IF</b> scopes the rule to the STEM tuition billing type so unrelated invoices are untouched — the same discipline as a pricing requirement, applied to profitability.'),
+          L(5,  `  <span class="t-kw">AND</span>  item_categ   = <span class="t-str">&#39;ZTAN&#39;</span>.`),
+          L(6,  `       <span class="t-tab">WWSEG</span> = matnr-&gt;zzsubj.        <span class="t-com">" segment = subject</span>`,
+                'segment = subject', 'This one line is the whole idea of the card: the profitability <b>segment</b> is the academic subject, read from a custom field on the material master. Every downstream margin report now slices by subject for free.'),
+          L(7,  `       VV010 = netwr.                <span class="t-com">" value field · net revenue</span>`,
+                'Value fields carry the numbers', 'CO-PA characteristics say <i>who/what</i> (the segment); <b>value fields</b> say <i>how much</i>. VV010 takes net revenue and VV020 the cost to deliver, so the segment margin is complete on the invoice itself.'),
+          L(8,  `       VV020 = kwert( <span class="t-str">&#39;ZKST&#39;</span> ).      <span class="t-com">" value field · cost to deliver</span>`),
+          L(9,  `  <span class="t-kw">ENDIF</span>.`),
+          L(10, ` `),
+          L(11, `<span class="t-com">* Every invoice line now carries its own segment margin —</span>`),
+          L(12, `<span class="t-com">* KE30 reads it directly, with no separate allocation run.</span>`)
+        ].join('')
+      }
+    };
+
+    var traceTimer = null;
+    function clearTrace() {
+      if (traceTimer) { clearTimeout(traceTimer); traceTimer = null; }
+      codeEl.querySelectorAll('.cv-line.trace-on').forEach(function (l) { l.classList.remove('trace-on'); });
+      runBtn.disabled = false;
+    }
+    function resetExp() {
+      expEl.innerHTML = '<div class="cv-exp-empty"><span class="cv-exp-dot"></span>Click a highlighted line to read what it does &mdash; and why it’s built that way.</div>';
+    }
+    function bindNotes() {
+      codeEl.querySelectorAll('.cv-line.has-note').forEach(function (line) {
+        line.setAttribute('role', 'button');
+        line.setAttribute('tabindex', '0');
+        function open() {
+          codeEl.querySelectorAll('.cv-line.is-sel').forEach(function (l) { l.classList.remove('is-sel'); });
+          line.classList.add('is-sel');
+          expEl.innerHTML =
+            '<div class="cv-exp-tag">Consultant note</div>' +
+            '<div class="cv-exp-title">' + (line.getAttribute('data-note-title') || '') + '</div>' +
+            '<div class="cv-exp-text">' + (line.getAttribute('data-note-body') || '') + '</div>';
+        }
+        line.addEventListener('click', open);
+        line.addEventListener('keydown', function (ev) {
+          if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); open(); }
+        });
+      });
+    }
+    function show(key) {
+      clearTrace();
+      var o = OBJ[key];
+      codeEl.innerHTML = o.html;
+      fileEl.innerHTML = o.file + ' <span class="cv-lang">' + o.lang + '</span>';
+      resetExp();
+      bindNotes();
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        tabs.forEach(function (x) { x.setAttribute('aria-selected', 'false'); });
+        t.setAttribute('aria-selected', 'true');
+        show(t.getAttribute('data-obj'));
+      });
+    });
+
+    bindNotes();  // wire the static default object
+
+    runBtn.addEventListener('click', function () {
+      clearTrace();
+      var lines = Array.prototype.slice.call(codeEl.querySelectorAll('.cv-line'));
+      var exec = lines.filter(function (l) {
+        var t = l.textContent.trim();
+        return t && t.charAt(0) !== '*';
+      });
+      if (!exec.length) return;
+      if (reduce.matches) {
+        exec.forEach(function (l) { l.classList.add('trace-on'); });
+        traceTimer = setTimeout(clearTrace, 700);
+        return;
+      }
+      runBtn.disabled = true;
+      var i = 0;
+      (function stepTrace() {
+        lines.forEach(function (l) { l.classList.remove('trace-on'); });
+        if (i >= exec.length) { runBtn.disabled = false; traceTimer = null; return; }
+        exec[i].classList.add('trace-on');
+        i++;
+        traceTimer = setTimeout(stepTrace, 300);
+      })();
+    });
+  }
+
+  /* ---------- Posting simulator ---------- */
+  var ps = document.getElementById('postsim');
+  if (ps) {
+    var JOURNAL = [
+      { name: 'Goods Receipt', lines: [ { a: 'inv', s: 'dr', v: 10000 }, { a: 'grir', s: 'cr', v: 10000 } ] },
+      { name: 'Invoice Receipt', lines: [ { a: 'grir', s: 'dr', v: 10000 }, { a: 'vat', s: 'dr', v: 700 }, { a: 'ap', s: 'cr', v: 10700 } ] },
+      { name: 'Outgoing Payment', lines: [ { a: 'ap', s: 'dr', v: 10700 }, { a: 'bank', s: 'cr', v: 10700 } ] }
+    ];
+    var stepEls = Array.prototype.slice.call(ps.querySelectorAll('.ps-step'));
+    var nextBtn = document.getElementById('psNext');
+    var resetBtn = document.getElementById('psReset');
+    var statusEl = document.getElementById('psStatus');
+    var cur = 0, bal = {};
+
+    function fmt(n) { return n.toLocaleString('en-US'); }
+    function acct(a) { return ps.querySelector('.taccount[data-acct="' + a + '"]'); }
+
+    function updateSteps() {
+      stepEls.forEach(function (el, k) {
+        el.classList.toggle('done', k < cur);
+        el.classList.toggle('active', k === cur && cur < JOURNAL.length);
+      });
+    }
+    function post(idx) {
+      JOURNAL[idx].lines.forEach(function (ln) {
+        var el = acct(ln.a);
+        var slot = el.querySelector('.ps-slot[data-side="' + ln.s + '"]');
+        var row = document.createElement('span');
+        row.className = 'ps-post';
+        row.textContent = fmt(ln.v);
+        slot.appendChild(row);
+        el.classList.add('touched');
+        bal[ln.a] = (bal[ln.a] || 0) + (ln.s === 'dr' ? ln.v : -ln.v);
+        var v = bal[ln.a];
+        el.querySelector('[data-bal]').textContent = (v === 0 ? '0 · clear' : (v > 0 ? 'Dr ' + fmt(v) : 'Cr ' + fmt(-v)));
+        el.classList.toggle('balanced', v === 0);
+      });
+    }
+    function advance() {
+      if (cur >= JOURNAL.length) return;
+      post(cur);
+      cur++;
+      updateSteps();
+      if (cur >= JOURNAL.length) {
+        nextBtn.disabled = true;
+        statusEl.innerHTML = '<b>Flow complete</b> &middot; GR/IR and Vendor cleared to zero &middot; inventory &#3647;10,000 · input VAT &#3647;700 recoverable';
+      } else {
+        statusEl.innerHTML = 'Posted <b>' + cur + ' / ' + JOURNAL.length + '</b> &middot; next: ' + JOURNAL[cur].name;
+      }
+    }
+    function reset() {
+      cur = 0; bal = {};
+      ps.querySelectorAll('.ps-slot').forEach(function (s) { s.innerHTML = ''; });
+      ps.querySelectorAll('.taccount').forEach(function (t) { t.classList.remove('touched', 'balanced'); t.querySelector('[data-bal]').textContent = '—'; });
+      nextBtn.disabled = false;
+      updateSteps();
+      statusEl.innerHTML = '3 postings &middot; net vendor liability &#3647;10,700 incl. 7% input VAT';
+    }
+
+    nextBtn.addEventListener('click', advance);
+    resetBtn.addEventListener('click', reset);
+    updateSteps();
+  }
+
+  /* ---------- Scroll-progress indicator ---------- */
+  var bar = document.createElement('div');
+  bar.className = 'scrollprog';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(bar);
+  var ticking = false;
+  function updProg() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? window.pageYOffset / h : 0;
+    bar.style.transform = 'scaleX(' + Math.min(1, Math.max(0, p)) + ')';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(updProg); ticking = true; }
+  }, { passive: true });
+  window.addEventListener('resize', updProg);
+  updProg();
 })();
 </script>
 

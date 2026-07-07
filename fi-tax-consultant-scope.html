@@ -799,10 +799,80 @@
   .s4tax { font-size: 0.84rem; color: var(--mist); margin: 0; padding-top: 0.6rem; border-top: 1px solid var(--steel); line-height: 1.5; }
   .s4tax-k { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-right: 0.4rem; }
 
+  /* ---------- 12 · Readiness matrix ---------- */
+  .rmx-legend { display: flex; flex-wrap: wrap; gap: 0.7rem 1.2rem; margin: 1.2rem 0 0.2rem; font-family: var(--mono); font-size: 0.72rem; color: var(--haze); }
+  .rmx-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .rmx-legend i { width: 22px; height: 5px; border-radius: 3px; display: inline-block; }
+  .rmx-legend .li-del { background: var(--gas); }
+  .rmx-legend .li-con { background: var(--gold); }
+  .rmx { display: grid; grid-template-columns: repeat(auto-fit, minmax(228px, 1fr)); gap: 0.7rem; margin-top: 1rem; }
+  .rmx-item {
+    text-align: left; font: inherit; cursor: pointer; width: 100%;
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 11px;
+    padding: 0.9rem 1rem; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .rmx-item:hover { border-color: var(--gas); transform: translateY(-2px); }
+  .rmx-item.is-active { border-color: var(--gas); box-shadow: 0 0 0 1px var(--gas); }
+  .rmx-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .rmx-name { font-size: 0.92rem; color: var(--mist); font-weight: 500; line-height: 1.25; }
+  .rmx-badge { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; padding: 0.14rem 0.42rem; border-radius: 5px; white-space: nowrap; flex-shrink: 0; }
+  .rmx-badge.delivered { color: var(--gas); background: rgba(96,165,250,0.13); border: 1px solid rgba(96,165,250,0.32); }
+  .rmx-badge.concept { color: var(--gold); background: rgba(232,176,75,0.12); border: 1px solid rgba(232,176,75,0.32); }
+  .rmx-meter { display: flex; gap: 4px; }
+  .rmx-dot { flex: 1; height: 5px; border-radius: 3px; background: var(--steel); transition: background 0.3s; }
+  .rmx-item[data-tone="delivered"] .rmx-dot.on { background: var(--gas); }
+  .rmx-item[data-tone="concept"] .rmx-dot.on { background: var(--gold); }
+  .rmx-detail { margin-top: 0.9rem; min-height: 3rem; }
+  .rmx-detail .rmx-d-tag { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 0.35rem; }
+  .rmx-detail .rmx-d-tag.delivered { color: var(--gas); }
+  .rmx-detail .rmx-d-tag.concept { color: var(--gold); }
+  .rmx-detail h4 { margin: 0 0 0.35rem; font-size: 1rem; }
+  .rmx-detail p { margin: 0; font-size: 0.92rem; color: var(--mist); line-height: 1.55; }
+  .rmx-detail .rmx-empty { color: var(--haze); font-family: var(--mono); font-size: 0.82rem; }
+
+  /* ---------- 12 · Hypercare triage ---------- */
+  .hcp { margin-top: 1.8rem; background: var(--deep); border: 1px solid var(--steel); border-radius: 14px; padding: 1.3rem 1.4rem; }
+  .hcp-inc { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 1.05rem; }
+  .hcp-sev { font-family: var(--mono); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #1a0a04; background: var(--flare); border-radius: 5px; padding: 0.24rem 0.48rem; flex-shrink: 0; margin-top: 0.12rem; }
+  .hcp-inc-txt { font-size: 0.96rem; color: var(--mist); line-height: 1.5; }
+  .hcp-inc-txt b { color: var(--mist); font-weight: 700; }
+  .hcp-q { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--haze); margin-bottom: 0.6rem; }
+  .hcp-opts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .hcp-opt {
+    font: inherit; font-family: var(--mono); font-size: 0.8rem; cursor: pointer;
+    color: var(--mist); background: var(--abyss); border: 1px solid var(--steel);
+    border-radius: 9px; padding: 0.6rem 0.9rem; transition: border-color 0.2s, background 0.2s, color 0.2s, opacity 0.2s;
+  }
+  .hcp-opt:hover { border-color: var(--gas); }
+  .hcp-opt.correct { border-color: var(--gas); background: rgba(96,165,250,0.13); color: var(--gas); font-weight: 600; }
+  .hcp-opt.dim { opacity: 0.55; }
+  .hcp-verdict { border-radius: 10px; padding: 0.9rem 1.05rem; font-size: 0.9rem; line-height: 1.55; color: var(--mist); }
+  .hcp-verdict .vlabel { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; font-weight: 700; }
+  .hcp-verdict.ok { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.3); }
+  .hcp-verdict.ok .vlabel { color: var(--gas); }
+  .hcp-verdict.meh { background: rgba(232,176,75,0.07); border: 1px solid rgba(232,176,75,0.28); }
+  .hcp-verdict.meh .vlabel { color: var(--gold); }
+  .hcp-res { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px dashed var(--steel); animation: hcpReveal 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes hcpReveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .hcp-res ol { margin: 0.4rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .hcp-res li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; align-items: start; font-size: 0.9rem; color: var(--mist); line-height: 1.5; }
+  .hcp-res .rstep { font-family: var(--mono); font-size: 0.62rem; font-weight: 700; color: var(--gas); background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); border-radius: 5px; padding: 0.15rem 0.4rem; white-space: nowrap; margin-top: 0.1rem; }
+  .hcp-res .rt { font-family: var(--mono); font-size: 0.72rem; color: var(--gold); font-weight: 600; }
+  .hcp-res-title { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); margin-bottom: 0.2rem; }
+
+  /* ---------- Scroll progress indicator ---------- */
+  .scrollprog {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    transform: scaleX(0); transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--gas), var(--gold));
+    z-index: 190; pointer-events: none; will-change: transform;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .rv { opacity: 1; transform: none; }
     .g-bar.now, .g-bar.live { animation: none; }
     .s4arrow { animation: none; }
+    .hcp-res { animation: none; }
   }
 </style>
 </head>
@@ -877,7 +947,8 @@
     <li><a class="rail__link" href="#legal" data-spy><span class="num">09</span><span class="name">Legal watch-list</span></a></li>
     <li><a class="rail__link" href="#s4" data-spy><span class="num">10</span><span class="name">S/4HANA platform</span></a></li>
     <li><a class="rail__link" href="#programme" data-spy><span class="num">11</span><span class="name">Programme &amp; impact</span></a></li>
-    <li><a class="rail__link" href="#honest" data-spy><span class="num">12</span><span class="name">Where my depth comes from</span></a></li>
+    <li><a class="rail__link" href="#readiness" data-spy><span class="num">12</span><span class="name">Ready on day one</span></a></li>
+    <li><a class="rail__link" href="#honest" data-spy><span class="num">13</span><span class="name">Where my depth comes from</span></a></li>
   </ol>
   <a class="rail__companion" href="finance-functional-module.html">Companion module →<br><b>SAP FI · Tax · PTTEP</b> essentials</a>
   <a class="rail__back" href="index.html">Back to portfolio →</a>
@@ -1794,9 +1865,105 @@
       type — illustrative only, not official Accenture / PTTEP numbers.</p>
   </section>
 
-  <!-- 11 HONEST -->
+  <!-- 12 READINESS & HYPERCARE -->
+  <section class="chapter" id="readiness">
+    <div class="eyebrow"><span class="dot"></span>12 · Ready on day one</div>
+    <h2>What I can do now — and how I behave when it breaks.</h2>
+    <p class="lede">Two honest views of readiness. First a competency matrix that separates what I&rsquo;ve
+      <b style="color:var(--gas)">delivered on a live ERP</b> from what I hold as
+      <b style="color:var(--gold)">concept, ready to configure under guidance</b>. Then a real hypercare
+      incident — diagnose it yourself and see how I&rsquo;d run the fix.</p>
+
+    <div class="rmx-legend" aria-hidden="true">
+      <span><i class="li-del"></i>Delivered on a live ERP</span>
+      <span><i class="li-con"></i>Concept understanding, not yet built on SAP</span>
+    </div>
+
+    <div class="rmx" id="rmx" role="list">
+      <button type="button" class="rmx-item" role="listitem" data-tone="delivered" data-tag="Delivered on a live ERP"
+        data-title="Automatic account determination"
+        data-body="On XeerSoft, every POS sale posted straight to the right GL and tax line with no manual journal — the same job <span class='tcode'>OB40</span> does in SAP. I have wired automatic tax posting end to end; the SAP transaction is new, the mechanism is not.">
+        <div class="rmx-top"><span class="rmx-name">Automatic account determination <span class="tcode">OB40</span></span><span class="rmx-badge delivered">Delivered</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="delivered" data-tag="Delivered on a live ERP"
+        data-title="Tax GL mapping &amp; master data"
+        data-body="Designed and maintained the GL structure that accounting posts into across four go-lives — the equivalent of the tax GL master (<span class='tcode'>FS00</span>) an FI tax code points at. Master-data discipline is core to how I work.">
+        <div class="rmx-top"><span class="rmx-name">Tax GL mapping &amp; master <span class="tcode">FS00</span></span><span class="rmx-badge delivered">Delivered</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="delivered" data-tag="Delivered on a live ERP"
+        data-title="AR open items · dunning · output VAT"
+        data-body="Built and ran receivables with open-item management and dunning on XeerSoft, with output VAT attached at invoice — this is the FI-AR side of the tax engine, delivered on a real system.">
+        <div class="rmx-top"><span class="rmx-name">AR open items · dunning · output VAT</span><span class="rmx-badge delivered">Delivered</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="delivered" data-tag="Delivered on a live ERP"
+        data-title="Multi-company / branch structure"
+        data-body="Ran multi-branch consolidation on XeerSoft — the concept behind SAP&rsquo;s company-code and branch structure that petroleum entities and their VAT reporting depend on.">
+        <div class="rmx-top"><span class="rmx-name">Multi-company / branch structure</span><span class="rmx-badge delivered">Delivered</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="delivered" data-tag="Delivered on a live ERP"
+        data-title="UAT · cutover · hypercare"
+        data-body="Four full-lifecycle go-lives: I have written and run UAT, executed cutover, and sat through hypercare. This is the phase I&rsquo;m joining PTTEP for, and the one I&rsquo;ve done most.">
+        <div class="rmx-top"><span class="rmx-name">UAT · cutover · hypercare</span><span class="rmx-badge delivered">Delivered</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="concept" data-tag="Concept — not yet built on SAP"
+        data-title="VAT code configuration"
+        data-body="I understand the full chain — <span class='tcode'>FTXP</span> &rarr; <span class='tcode'>OB40</span> &rarr; post &rarr; <span class='tcode'>PP30</span> — and can walk it step by step. I have not yet built a Thai tax code on a production SAP system; I&rsquo;m ready to configure one under a senior consultant&rsquo;s guidance.">
+        <div class="rmx-top"><span class="rmx-name">VAT code configuration <span class="tcode">FTXP · TAXTH</span></span><span class="rmx-badge concept">Concept</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot"></span><span class="rmx-dot"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="concept" data-tag="Concept — not yet built on SAP"
+        data-title="Extended Withholding Tax"
+        data-body="I know why it&rsquo;s always Extended WHT, how type + code are defined and assigned on the business partner, and which PND form each feeds. Hands-on SAP configuration is the piece I&rsquo;d build on the job.">
+        <div class="rmx-top"><span class="rmx-name">Extended Withholding Tax</span><span class="rmx-badge concept">Concept</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot"></span><span class="rmx-dot"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="concept" data-tag="Concept — not yet built on SAP"
+        data-title="Month-end close (R2R)"
+        data-body="Ran period-close discipline on XeerSoft and know the SAP sequence — <span class='tcode'>OB52</span> &rarr; <span class='tcode'>AFAB</span> &rarr; FC valuation &rarr; <span class='tcode'>PP30</span> &rarr; <span class='tcode'>F.01</span>. The SAP-specific transactions are study today, not yet hands-on.">
+        <div class="rmx-top"><span class="rmx-name">Month-end close · R2R</span><span class="rmx-badge concept">Concept</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot"></span></div>
+      </button>
+      <button type="button" class="rmx-item" role="listitem" data-tone="concept" data-tag="Concept — studied for this role"
+        data-title="Petroleum tax stack"
+        data-body="Studied specifically for PTTEP: Royalty, SRB and PITA, why upstream is taxed under its own Act, and how SAP provisions each at period-end rather than as a transactional tax code. Domain-new, structured, and honest about it.">
+        <div class="rmx-top"><span class="rmx-name">Petroleum tax · Royalty / SRB / PITA</span><span class="rmx-badge concept">Concept</span></div>
+        <div class="rmx-meter" aria-hidden="true"><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot on"></span><span class="rmx-dot"></span><span class="rmx-dot"></span></div>
+      </button>
+    </div>
+
+    <div class="card rmx-detail" id="rmxDetail" aria-live="polite">
+      <span class="rmx-empty">Tap a competency to see the evidence behind the rating.</span>
+    </div>
+
+    <!-- Hypercare triage -->
+    <h3 style="margin-top:2.2rem">Hypercare, played out. Diagnose it yourself.</h3>
+    <p class="caption">Go-live is where scope meets reality. Here&rsquo;s a real-shaped incident — pick where you&rsquo;d look first, and see the reasoning either way.</p>
+
+    <div class="hcp" id="hcp">
+      <div class="hcp-inc">
+        <span class="hcp-sev">P1 · Go-live</span>
+        <div class="hcp-inc-txt"><b>08:40, go-live day.</b> Branch 2000&rsquo;s sales invoices are posting the 7% output VAT to the <b>wrong GL account</b>. The VAT amount is correct; only the target account is off. The first PP30 filing is three weeks out.</div>
+      </div>
+      <div class="hcp-q">Your first move — where do you look?</div>
+      <div class="hcp-opts" id="hcpOpts">
+        <button type="button" class="hcp-opt" data-k="ftxp">FTXP · the tax code</button>
+        <button type="button" class="hcp-opt" data-k="ob40">OB40 · account determination</button>
+        <button type="button" class="hcp-opt" data-k="master">Customer master data</button>
+      </div>
+      <div id="hcpVerdict"></div>
+      <div id="hcpRes"></div>
+    </div>
+    <p class="note">A representative hypercare incident and resolution path; specifics vary by client. The point is the method: reproduce, isolate the layer, fix in config, retest, and leave a regression case behind.</p>
+  </section>
+
+  <!-- 13 HONEST -->
   <section class="chapter" id="honest">
-    <div class="eyebrow"><span class="dot"></span>12 · Where my depth comes from</div>
+    <div class="eyebrow"><span class="dot"></span>13 · Where my depth comes from</div>
     <h2>Where my depth actually comes from.</h2>
     <p class="lede">XeerSoft isn't SAP — but four full-lifecycle ERP go-lives map cleanly onto these SAP
       concepts. I bring the concept understanding and the real delivery experience, and I stay precise
@@ -2181,6 +2348,96 @@
   } else {
     blocks.forEach(reveal);
   }
+})();
+</script>
+
+<!-- ============================================================
+     READINESS MATRIX + HYPERCARE TRIAGE (chapter 12) — interactions
+     Matrix: click a competency to reveal the evidence behind it.
+     Hypercare: pick a first move, read the verdict, and on the right
+     call the resolution path reveals. Self-contained; degrades to
+     readable static content without JS.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ---- Readiness matrix ---- */
+  var rmx = document.getElementById('rmx');
+  var rmxDetail = document.getElementById('rmxDetail');
+  if (rmx && rmxDetail) {
+    var items = Array.prototype.slice.call(rmx.querySelectorAll('.rmx-item'));
+    items.forEach(function (it) {
+      it.addEventListener('click', function () {
+        items.forEach(function (x) { x.classList.remove('is-active'); });
+        it.classList.add('is-active');
+        var tone = it.getAttribute('data-tone');
+        rmxDetail.innerHTML =
+          '<div class="rmx-d-tag ' + tone + '">' + it.getAttribute('data-tag') + '</div>' +
+          '<h4>' + it.getAttribute('data-title') + '</h4>' +
+          '<p>' + it.getAttribute('data-body') + '</p>';
+      });
+    });
+  }
+
+  /* ---- Hypercare triage ---- */
+  var hcp = document.getElementById('hcp');
+  if (hcp) {
+    var opts = Array.prototype.slice.call(document.querySelectorAll('#hcpOpts .hcp-opt'));
+    var vEl = document.getElementById('hcpVerdict');
+    var rEl = document.getElementById('hcpRes');
+    var solved = false;
+
+    var VERDICT = {
+      ftxp: { cls: 'meh', label: 'Plausible — but not it', body: 'Reasonable instinct: <span class="tcode">FTXP</span> defines the rate and the MWS tax key. But the 7% is calculating correctly — the amount is right and only the target GL is wrong. FTXP sets the key, not which GL that key posts to. Keep going.' },
+      ob40: { cls: 'ok', label: 'Correct — that is the layer', body: 'Yes. <span class="tcode">OB40</span> maps each tax transaction key (MWS) to a GL account, and an entry can be missing or wrong for a given path. A gap here quietly sends the posting to a default account — exactly this symptom. This layer owns the target GL.' },
+      master: { cls: 'meh', label: 'Unlikely — rule it out', body: 'The customer master drives the reconciliation account and tax classification, not the tax GL. Tax-account determination is configuration, not master data. Rule it out and move to OB40.' }
+    };
+
+    var RES =
+      '<div class="hcp-res">' +
+        '<div class="hcp-res-title">Root cause → fix → retest</div>' +
+        '<ol>' +
+          '<li><span class="rstep">CAUSE</span><span>OB40 had no output-VAT GL for key <b>MWS</b> on this account-determination path, so the posting fell to a default account. <span class="rt">FB03</span> confirms the wrong line.</span></li>' +
+          '<li><span class="rstep">FIX</span><span>Add GL <b>175000</b> for key MWS in <span class="rt">OB40</span>, capture it in a transport, and move it through QA into production.</span></li>' +
+          '<li><span class="rstep">RETEST</span><span>Re-post the branch 2000 invoice, confirm 175000 in <span class="rt">FB03</span>, clear the ticket, and leave a regression case so the next cutover catches it.</span></li>' +
+        '</ol>' +
+      '</div>';
+
+    opts.forEach(function (o) {
+      o.addEventListener('click', function () {
+        var k = o.getAttribute('data-k');
+        var v = VERDICT[k];
+        vEl.innerHTML = '<div class="hcp-verdict ' + v.cls + '"><span class="vlabel">' + v.label + '</span>' + v.body + '</div>';
+        opts.forEach(function (x) { x.classList.remove('correct', 'dim'); });
+        if (k === 'ob40') {
+          o.classList.add('correct');
+          opts.forEach(function (x) { if (x !== o) x.classList.add('dim'); });
+          if (!solved) { rEl.innerHTML = RES; solved = true; }
+        } else {
+          o.classList.add('dim');
+        }
+      });
+    });
+  }
+
+  /* ---- Scroll-progress indicator ---- */
+  var bar = document.createElement('div');
+  bar.className = 'scrollprog';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(bar);
+  var ticking = false;
+  function updProg() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? window.pageYOffset / h : 0;
+    bar.style.transform = 'scaleX(' + Math.min(1, Math.max(0, p)) + ')';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(updProg); ticking = true; }
+  }, { passive: true });
+  window.addEventListener('resize', updProg);
+  updProg();
 })();
 </script>
 </body>

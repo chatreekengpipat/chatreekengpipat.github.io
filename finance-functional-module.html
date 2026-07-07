@@ -897,10 +897,83 @@
   .close-tc { font-family: var(--mono); font-size: 0.68rem; color: var(--haze); white-space: nowrap; }
   .close-controls { display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap; }
 
+  /* ---------- 03 · Posting simulator — the journal a tax code builds ---------- */
+  .jrn { margin-top: 1.9rem; }
+  .jrn h3 { margin: 0 0 0.3rem; }
+  .jrn-amt {
+    display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    margin: 1rem 0 1.1rem; font-family: var(--mono); font-size: 0.82rem; color: var(--haze);
+  }
+  .jrn-amt input {
+    font-family: var(--mono); font-size: 0.92rem; font-weight: 500; color: var(--mist);
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 8px;
+    padding: 0.42rem 0.7rem; width: 8.5rem; -moz-appearance: textfield;
+  }
+  .jrn-amt input:focus { outline: none; border-color: var(--gas); box-shadow: 0 0 0 3px rgba(96,165,250,0.22); }
+  .jrn-amt #jrnScenNote { color: var(--haze); }
+
+  .jdoc {
+    background: var(--abyss); border: 1px solid var(--steel);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 20px 44px -26px rgba(0,0,0,0.55);
+  }
+  .jdoc-bar {
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    padding: 0.7rem 1.05rem; background: var(--deep); border-bottom: 1px solid var(--steel);
+    font-family: var(--mono); font-size: 0.72rem; color: var(--haze);
+  }
+  .jdoc-bar .doct { color: var(--mist); font-weight: 600; }
+  .jtable { width: 100%; border-collapse: collapse; font-family: var(--mono); }
+  .jtable th {
+    text-align: left; font-size: 0.62rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--haze); font-weight: 500; padding: 0.55rem 1.05rem; border-bottom: 1px solid var(--steel);
+  }
+  .jtable th.num, .jtable td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .jtable td {
+    padding: 0.55rem 1.05rem; border-bottom: 1px solid rgba(51,65,85,0.45);
+    font-size: 0.86rem; color: var(--mist); vertical-align: top;
+  }
+  html[data-theme="light"] .jtable td { border-bottom-color: rgba(148,163,184,0.35); }
+  .jtable tr:last-child td { border-bottom: 0; }
+  .jrow { animation: jIn 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes jIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+  .jrow .acct .gl { color: var(--haze); font-size: 0.7rem; display: block; margin-top: 0.12rem; }
+  .jrow .amt-dr { color: var(--gas); font-weight: 600; }
+  .jrow .amt-cr { color: var(--gold); font-weight: 600; }
+  .jrow.tax .amt-dr, .jrow.tax .amt-cr { color: var(--flare); }
+  .jrow .keytag {
+    display: inline-block; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.03em;
+    color: var(--gas); background: rgba(96,165,250,0.12);
+    border: 1px solid rgba(96,165,250,0.3); border-radius: 5px; padding: 0.05rem 0.35rem;
+  }
+  .jrow.tax .keytag { color: var(--flare); background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.32); }
+  .jrow .dash { color: var(--haze); }
+  .jfoot {
+    display: flex; justify-content: space-between; align-items: center; gap: 0.5rem 1rem; flex-wrap: wrap;
+    padding: 0.7rem 1.05rem; background: var(--deep); border-top: 1px solid var(--steel);
+    font-family: var(--mono); font-size: 0.76rem;
+  }
+  .jbal { color: var(--haze); }
+  .jbal b { color: var(--mist); }
+  .jbal.ok { color: var(--gas); }
+  .jbal.ok b { color: var(--gas); }
+  .jstate { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--flare); font-weight: 600; }
+  .jstate .dotf { width: 7px; height: 7px; border-radius: 50%; background: var(--flare); box-shadow: 0 0 10px var(--flare); flex-shrink: 0; }
+  .jnote { margin-top: 0.95rem; }
+
+  /* ---------- Scroll progress indicator ---------- */
+  .scrollprog {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    transform: scaleX(0); transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--gas), var(--gold));
+    z-index: 190; pointer-events: none; will-change: transform;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cfg-step.is-active .cfg-dot { animation: none; }
     .cfg-panel.swap { animation: none; }
     .close-ring .fill { transition: none; }
+    .jrow { animation: none; }
   }
 </style>
 </head>
@@ -1167,6 +1240,40 @@
       </div>
     </div>
     <p class="note">Codes, keys and transactions here are the real SAP FI mechanism — shown as a methodology walkthrough, not a claim of a configured production system.</p>
+
+    <!-- Posting simulator: the journal a tax code produces -->
+    <div class="jrn" id="jrn">
+      <h3 style="margin-top:2.2rem">Now post with it — the journal SAP builds.</h3>
+      <p class="caption">A tax code only earns its keep when a document posts <i>through</i> it. Pick a scenario and a base amount: the FI document balances itself, and the lines the State collects glow <b style="color:var(--flare)">orange</b>.</p>
+
+      <div class="vc-seg" role="group" aria-label="Posting scenario">
+        <button type="button" data-scen="sale" aria-pressed="true">Domestic sale</button>
+        <button type="button" data-scen="vendor" aria-pressed="false">Vendor service + WHT</button>
+        <button type="button" data-scen="export" aria-pressed="false">Zero-rated export</button>
+      </div>
+
+      <div class="jrn-amt">
+        <label for="jrnBase">Base amount (฿)</label>
+        <input type="number" id="jrnBase" value="100000" min="0" step="1000" inputmode="decimal" aria-label="Base amount in baht">
+        <span id="jrnScenNote">FB70 · customer invoice · output VAT 7%</span>
+      </div>
+
+      <div class="jdoc">
+        <div class="jdoc-bar">
+          <span class="doct" id="jdocType">FI document · Customer invoice</span>
+          <span id="jdocTax"><span class="tcode">O7</span> output VAT 7%</span>
+        </div>
+        <table class="jtable">
+          <thead><tr><th scope="col">Account</th><th scope="col" class="num">Debit</th><th scope="col" class="num">Credit</th><th scope="col">Key</th></tr></thead>
+          <tbody id="jrnBody" aria-live="polite"></tbody>
+        </table>
+        <div class="jfoot">
+          <span class="jbal" id="jrnBal">Debit ฿0 · Credit ฿0</span>
+          <span class="jstate" id="jrnState"><span class="dotf"></span>To the State: ฿0</span>
+        </div>
+      </div>
+      <p class="note jnote" id="jrnExplain">A customer invoice posts the receivable gross; the output-VAT line is a liability you collect for the State and remit on <span class="tcode">PP30</span>.</p>
+    </div>
   </section>
 
   <!-- 04 RECORD-TO-REPORT / MONTH-END CLOSE -->
@@ -1835,6 +1942,139 @@
     $('resetClose').addEventListener('click', resetClose);
     updateClose();
   }
+})();
+</script>
+
+<!-- ============================================================
+     POSTING SIMULATOR (chapter 03) — the journal a tax code builds.
+     Scenario + base amount drive a self-balancing FI document; tax
+     lines (to/from the State) are highlighted. Self-contained.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var jrn = document.getElementById('jrn');
+  if (!jrn) return;
+
+  var body       = document.getElementById('jrnBody');
+  var baseInput  = document.getElementById('jrnBase');
+  var segBtns    = Array.prototype.slice.call(jrn.querySelectorAll('.vc-seg button'));
+  var elType     = document.getElementById('jdocType');
+  var elTax      = document.getElementById('jdocTax');
+  var elBal      = document.getElementById('jrnBal');
+  var elState    = document.getElementById('jrnState');
+  var elExplain  = document.getElementById('jrnExplain');
+  var elScenNote = document.getElementById('jrnScenNote');
+  var scen = 'sale';
+
+  function fmt(n) { return '฿' + Math.round(n).toLocaleString('en-US'); }
+
+  function model(base) {
+    var vat = base * 0.07, wht = base * 0.03;
+    if (scen === 'sale') {
+      return {
+        type: 'FI document · Customer invoice',
+        tax: '<span class="tcode">O7</span> output VAT 7%',
+        scennote: 'FB70 · customer invoice · output VAT 7%',
+        explain: 'A customer invoice posts the receivable <b>gross</b>. The output-VAT line is a liability you collect for the State and remit, net of input VAT, on <span class="tcode">PP30</span>.',
+        state: vat, stateLbl: 'output VAT collected',
+        rows: [
+          { acct: 'Customer (A/R)',      gl: '121000', dr: base + vat },
+          { acct: 'Revenue',             gl: '410000', cr: base },
+          { acct: 'Output VAT payable',  gl: '175000', cr: vat, key: 'MWS', tax: true }
+        ]
+      };
+    }
+    if (scen === 'vendor') {
+      return {
+        type: 'FI document · Vendor invoice',
+        tax: '<span class="tcode">I7</span> input VAT 7% &middot; WHT 3%',
+        scennote: 'FB60 · vendor service invoice · input VAT + 3% WHT (PND 53)',
+        explain: 'A service invoice: you reclaim <b>input VAT</b> (an asset) and <b>withhold 3%</b> from the vendor to remit to the Revenue Department. The vendor is paid net; debits and credits still balance.',
+        state: wht, stateLbl: 'WHT withheld → remitted',
+        rows: [
+          { acct: 'Expense · services', gl: '520000', dr: base },
+          { acct: 'Input VAT',          gl: '154000', dr: vat, key: 'VST', tax: true },
+          { acct: 'Vendor (A/P)',       gl: '211000', cr: base + vat - wht },
+          { acct: 'WHT payable',        gl: '176000', cr: wht, key: 'PND', tax: true }
+        ]
+      };
+    }
+    return {
+      type: 'FI document · Export invoice',
+      tax: '<span class="tcode">O0</span> output VAT 0% (zero-rated)',
+      scennote: 'FB70 · export invoice · zero-rated VAT (still reported)',
+      explain: 'Exports are <b>zero-rated</b>: VAT applies at 0%, so no VAT line posts — but the sale is still declared on <span class="tcode">PP30</span> and it supports input-VAT recovery.',
+      state: 0, stateLbl: 'zero-rated',
+      rows: [
+        { acct: 'Customer (A/R)',   gl: '121000', dr: base },
+        { acct: 'Revenue · export', gl: '411000', cr: base }
+      ]
+    };
+  }
+
+  function render() {
+    var base = Math.max(0, parseFloat(baseInput.value) || 0);
+    var m = model(base);
+    elType.textContent = m.type;
+    elTax.innerHTML = m.tax;
+    elScenNote.textContent = m.scennote;
+    elExplain.innerHTML = m.explain;
+
+    body.innerHTML = '';
+    var totDr = 0, totCr = 0;
+    m.rows.forEach(function (r, i) {
+      totDr += r.dr || 0; totCr += r.cr || 0;
+      var tr = document.createElement('tr');
+      tr.className = 'jrow' + (r.tax ? ' tax' : '');
+      tr.style.animationDelay = (i * 70) + 'ms';
+      tr.innerHTML =
+        '<td class="acct">' + r.acct + '<span class="gl">GL ' + r.gl + '</span></td>' +
+        '<td class="num amt-dr">' + (r.dr ? fmt(r.dr) : '') + '</td>' +
+        '<td class="num amt-cr">' + (r.cr ? fmt(r.cr) : '') + '</td>' +
+        '<td>' + (r.key ? '<span class="keytag">' + r.key + '</span>' : '<span class="dash">—</span>') + '</td>';
+      body.appendChild(tr);
+    });
+
+    var balanced = Math.round(totDr) === Math.round(totCr);
+    elBal.className = 'jbal' + (balanced ? ' ok' : '');
+    elBal.innerHTML = (balanced ? '✓ ' : '') + 'Debit <b>' + fmt(totDr) + '</b> = Credit <b>' + fmt(totCr) + '</b>';
+    elState.innerHTML = '<span class="dotf"></span>To the State: ' + fmt(m.state) + ' · ' + m.stateLbl;
+  }
+
+  segBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      segBtns.forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      scen = b.getAttribute('data-scen');
+      render();
+    });
+  });
+  baseInput.addEventListener('input', render);
+  render();
+})();
+</script>
+
+<!-- Scroll-progress indicator -->
+<script>
+(function () {
+  'use strict';
+  var bar = document.createElement('div');
+  bar.className = 'scrollprog';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(bar);
+  var ticking = false;
+  function upd() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? window.pageYOffset / h : 0;
+    bar.style.transform = 'scaleX(' + Math.min(1, Math.max(0, p)) + ')';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(upd); ticking = true; }
+  }, { passive: true });
+  window.addEventListener('resize', upd);
+  upd();
 })();
 </script>
 </body>
