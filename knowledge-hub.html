@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP Knowledge Hub · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/knowledge-hub.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="SAP Knowledge Hub — Chatree Kengpipat">
+<meta property="og:description" content="The map of a working SAP FI/CO knowledge base: methodology and design artifacts, an FI-Tax specialization, and a live reference — with a suggested reading path through all of it.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/knowledge-hub.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SAP Knowledge Hub">
+<meta name="twitter:description" content="The map of a working SAP FI/CO knowledge base — design artifacts, FI-Tax specialization, live reference, with a reading path.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="The SAP Knowledge Hub by Chatree Kengpipat: a map of the whole SAP FI/CO knowledge base on this site — methodology and design artifacts (business flow, FSD, BPML, migration, integration), the FI-Tax specialization, and a live reference (glossary, RICEFW register, audited metrics) — with a suggested reading path.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     SAP KNOWLEDGE HUB — page-scoped. A map of the SAP pages,
+     grouped into clusters, plus a suggested learning path.
+     ============================================================ */
+  .kh-wrap { max-width: 1050px; margin: 0 auto; }
+
+  .kh-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2.4rem; }
+  .kh-stat { background: var(--surface); padding: 1.1rem 1.3rem; }
+  .kh-stat-num { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.02em; color: var(--text-strong); line-height: 1; font-variant-numeric: tabular-nums; }
+  .kh-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.4rem; }
+
+  /* Learning path */
+  .kh-path { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; margin-bottom: 2.6rem; box-shadow: var(--shadow-md); }
+  .kh-path h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 0.3rem; }
+  .kh-path h2 em { color: var(--accent); font-style: normal; }
+  .kh-path-sub { font-size: 0.86rem; color: var(--text-muted); margin: 0 0 1.2rem; }
+  .kh-steps { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.5rem 0; }
+  .kh-step { display: flex; align-items: center; min-width: 0; }
+  .kh-step a { display: flex; flex-direction: column; gap: 0.15rem; text-decoration: none; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.7rem 0.85rem; transition: border-color 0.2s, transform 0.2s var(--ease-smooth); }
+  .kh-step a:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .kh-step-n { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; color: var(--accent); }
+  .kh-step-name { font-size: 0.82rem; font-weight: 600; color: var(--text-strong); line-height: 1.25; }
+  .kh-arrow { color: var(--border-strong); font-weight: 700; padding: 0 0.35rem; flex-shrink: 0; }
+
+  /* Clusters */
+  .kh-cluster { margin-bottom: 2.6rem; }
+  .kh-cluster-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 1.1rem; }
+  .kh-cluster-k { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 5px; padding: 0.2rem 0.5rem; }
+  .kh-cluster-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
+  .kh-cluster-desc { font-size: 0.86rem; color: var(--text-muted); margin-left: auto; max-width: 24rem; text-align: right; line-height: 1.4; }
+
+  .kh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 0.8rem; }
+  .kh-card { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.1rem 1.2rem; text-decoration: none; color: var(--text); position: relative; overflow: hidden; transition: border-color 0.25s var(--ease-smooth), transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth); }
+  .kh-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 16px 34px -18px var(--glow-color); }
+  .kh-card-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--text-strong); margin-bottom: 0.35rem; }
+  .kh-card-title .arr { color: var(--accent); opacity: 0; transform: translateX(-4px); transition: opacity 0.2s, transform 0.2s; }
+  .kh-card:hover .kh-card-title .arr { opacity: 1; transform: none; }
+  .kh-card-desc { font-size: 0.85rem; line-height: 1.5; color: var(--text-muted); flex: 1; }
+  .kh-card-feat { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); border-radius: 5px; padding: 0.18rem 0.45rem; margin-top: 0.8rem; align-self: flex-start; }
+
+  @media (max-width: 720px) {
+    .kh-stats { grid-template-columns: repeat(2, 1fr); }
+    .kh-cluster-desc { display: none; }
+    .kh-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html" class="active" aria-current="page">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>SAP Knowledge Hub</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">SAP Knowledge Hub · The map</div>
+      <div class="project-meta">One body of work, not scattered pages</div>
+      <h1>SAP Knowledge <em>Hub</em></h1>
+      <p class="project-hero-desc">This site carries a working <strong>SAP FI/CO knowledge base</strong>: the design and methodology artifacts a consultant produces, an <strong>FI-Tax specialization</strong>, and a live reference. This page is the map &mdash; what each piece covers, how they connect, and a <strong>suggested path</strong> to read them in. Every page is a proposal/methodology artifact tied to real ERP delivery on XeerSoft Cloud ERP.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Design</span><span class="project-info-val">Business flow · FSD · BPML · Migration · Integration</span></div>
+      <div class="project-info-row"><span class="project-info-label">Specialization</span><span class="project-info-val">SAP FI Tax · Accenture × PTTEP</span></div>
+      <div class="project-info-row"><span class="project-info-label">Reference</span><span class="project-info-val">Glossary · RICEFW · Metrics</span></div>
+      <div class="project-info-row"><span class="project-info-label">Grounded in</span><span class="project-info-val">4 delivered ERP go-lives</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="kh-wrap">
+
+    <div class="kh-stats">
+      <div class="kh-stat"><span class="kh-stat-num">10</span><span class="kh-stat-label">SAP knowledge pages</span></div>
+      <div class="kh-stat"><span class="kh-stat-num">15+</span><span class="kh-stat-label">interactive tools</span></div>
+      <div class="kh-stat"><span class="kh-stat-num">86</span><span class="kh-stat-label">glossary terms</span></div>
+      <div class="kh-stat"><span class="kh-stat-num">4</span><span class="kh-stat-label">delivered go-lives</span></div>
+    </div>
+
+    <!-- LEARNING PATH -->
+    <div class="kh-path">
+      <h2>A <em>reading path</em>, if you want one.</h2>
+      <p class="kh-path-sub">From the process landscape down to the code and cutover — the order I&rsquo;d walk a new joiner through.</p>
+      <div class="kh-steps">
+        <div class="kh-step"><a href="business-process-map.html"><span class="kh-step-n">01</span><span class="kh-step-name">Process landscape</span></a><span class="kh-arrow" aria-hidden="true">→</span></div>
+        <div class="kh-step"><a href="finance-functional-module.html"><span class="kh-step-n">02</span><span class="kh-step-name">FI &amp; tax essentials</span></a><span class="kh-arrow" aria-hidden="true">→</span></div>
+        <div class="kh-step"><a href="sap-design.html"><span class="kh-step-n">03</span><span class="kh-step-name">Design → code</span></a><span class="kh-arrow" aria-hidden="true">→</span></div>
+        <div class="kh-step"><a href="functional-specification.html"><span class="kh-step-n">04</span><span class="kh-step-name">The FSD artifact</span></a><span class="kh-arrow" aria-hidden="true">→</span></div>
+        <div class="kh-step"><a href="integration-architecture.html"><span class="kh-step-n">05</span><span class="kh-step-name">Integration</span></a><span class="kh-arrow" aria-hidden="true">→</span></div>
+        <div class="kh-step"><a href="data-migration-cutover.html"><span class="kh-step-n">06</span><span class="kh-step-name">Migration &amp; go-live</span></a></div>
+      </div>
+    </div>
+
+    <!-- CLUSTER A -->
+    <div class="kh-cluster">
+      <div class="kh-cluster-head"><span class="kh-cluster-k">A</span><span class="kh-cluster-name">Design &amp; Methodology</span><span class="kh-cluster-desc">The artifacts a functional consultant produces to turn a requirement into a live system.</span></div>
+      <div class="kh-grid">
+        <a class="kh-card" href="sap-design.html">
+          <div class="kh-card-title">Technical Coding &amp; Business Flow <span class="arr">→</span></div>
+          <div class="kh-card-desc">Four delivered ERP systems re-scoped as SAP designs: business flow, RICEFW, pipeline and a live ABAP/config code viewer with a posting simulator.</div>
+          <span class="kh-card-feat">interactive code viewer</span>
+        </a>
+        <a class="kh-card" href="functional-specification.html">
+          <div class="kh-card-title">Functional Specification (FSD) <span class="arr">→</span></div>
+          <div class="kh-card-desc">A complete worked FS for a pricing enhancement, with full Requirement → FS → ABAP → Test traceability and a print-ready layout.</div>
+          <span class="kh-card-feat">requirement-ID highlighting</span>
+        </a>
+        <a class="kh-card" href="business-process-map.html">
+          <div class="kh-card-title">Business Process Master List <span class="arr">→</span></div>
+          <div class="kh-card-desc">R2R / O2C / P2P decomposed L1→L3, each process mapped to its T-codes, role, module and KPI.</div>
+          <span class="kh-card-feat">cycle &amp; module filter</span>
+        </a>
+        <a class="kh-card" href="integration-architecture.html">
+          <div class="kh-card-title">Integration Architecture <span class="arr">→</span></div>
+          <div class="kh-card-desc">How MM/SD/CO post to FI in real time and how S/4HANA talks to banks, the Revenue Department, POS and CRM.</div>
+          <span class="kh-card-feat">interface explorer</span>
+        </a>
+        <a class="kh-card" href="data-migration-cutover.html">
+          <div class="kh-card-title">Data Migration &amp; Cutover <span class="arr">→</span></div>
+          <div class="kh-card-desc">The migration-object catalogue and load sequence, a runnable T-minus cutover runbook, and the go/no-go reconciliation gate.</div>
+          <span class="kh-card-feat">runnable cutover</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- CLUSTER B -->
+    <div class="kh-cluster">
+      <div class="kh-cluster-head"><span class="kh-cluster-k">B</span><span class="kh-cluster-name">FI Tax Specialization</span><span class="kh-cluster-desc">The finance and tax depth for the Accenture × PTTEP S/4HANA seat.</span></div>
+      <div class="kh-grid">
+        <a class="kh-card" href="finance-functional-module.html">
+          <div class="kh-card-title">Functional Module of Finance — SAP FI <span class="arr">→</span></div>
+          <div class="kh-card-desc">FI essentials and the tax engine: build a tax code end to end, run the month-end close, and see the journal SAP posts — with PTTEP petroleum tax.</div>
+          <span class="kh-card-feat">journal &amp; close simulators</span>
+        </a>
+        <a class="kh-card" href="fi-tax-consultant-scope.html">
+          <div class="kh-card-title">FI Tax Consultant — Scope of Work <span class="arr">→</span></div>
+          <div class="kh-card-desc">The role end to end: what I own, the T-code playbook with its SPRO/IMG tree, the petroleum tax engine with calculators, and a hypercare triage.</div>
+          <span class="kh-card-feat">calculators &amp; hypercare triage</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- CLUSTER C -->
+    <div class="kh-cluster">
+      <div class="kh-cluster-head"><span class="kh-cluster-k">C</span><span class="kh-cluster-name">Reference &amp; Transparency</span><span class="kh-cluster-desc">The look-up layer that keeps the rest precise and honest.</span></div>
+      <div class="kh-grid">
+        <a class="kh-card" href="glossary.html">
+          <div class="kh-card-title">Glossary &amp; T-code Reference <span class="arr">→</span></div>
+          <div class="kh-card-desc">86 SAP FI/CO terms, T-codes, tables and concepts, each with a plain-language definition.</div>
+          <span class="kh-card-feat">live search &amp; filter</span>
+        </a>
+        <a class="kh-card" href="ricefw-register.html">
+          <div class="kh-card-title">RICEFW Register <span class="arr">→</span></div>
+          <div class="kh-card-desc">Every custom object across the designs consolidated into one catalogue with module, complexity and effort.</div>
+          <span class="kh-card-feat">type filter</span>
+        </a>
+        <a class="kh-card" href="metrics.html">
+          <div class="kh-card-title">Metrics, Audited <span class="arr">→</span></div>
+          <div class="kh-card-desc">Every headline number defined and reconciled — the delivered KPIs and how the STEM figures add up.</div>
+          <span class="kh-card-feat">single source of truth</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">HONESTY, THROUGHOUT</div>
+      <p>The SAP content across these pages is <strong>methodology, design and preparation</strong> — proposal artifacts tied to systems I actually delivered on <strong>XeerSoft Cloud ERP</strong>, never a claim of configured SAP production work. That line is held on every page.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivered track record it&rsquo;s built on &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+</body>
+</html>

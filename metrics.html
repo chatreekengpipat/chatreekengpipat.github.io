@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metrics, Audited · How every number reconciles · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/metrics.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Metrics, Audited — Chatree Kengpipat">
+<meta property="og:description" content="Every headline number on this portfolio, defined and reconciled: the delivered ERP KPIs across four projects, the margin and collection definitions behind them, and how the STEM figures add up to the total.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/metrics.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Metrics, Audited">
+<meta name="twitter:description" content="Every headline ERP number defined and reconciled: KPIs, margin/collection definitions, and how the figures add up.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="A transparency page by Chatree Kengpipat: every headline metric on the portfolio defined and reconciled — delivered ERP KPIs across four XeerSoft Cloud ERP projects, the gross-margin and collection-rate definitions behind them, and how the STEM per-subject figures sum to the headline totals.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     METRICS, AUDITED — page-scoped. Definitions, per-project KPI
+     tables, and a reconciliation the reader can verify.
+     ============================================================ */
+  .mx-wrap { max-width: 1000px; margin: 0 auto; }
+  .mx-sec { margin-bottom: 3rem; }
+  .mx-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 0.7rem; }
+  .mx-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+  .mx-title { font-size: clamp(1.4rem, 2.8vw, 1.9rem); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.6rem; }
+  .mx-lede { font-size: 0.92rem; line-height: 1.6; color: var(--text-muted); max-width: 46rem; }
+  .mx-lede b { color: var(--text-strong); font-weight: 600; }
+
+  .mx-defs { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.8rem; margin-top: 1.3rem; }
+  .mx-def { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.1rem; }
+  .mx-def h3 { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); margin: 0 0 0.4rem; }
+  .mx-def p { font-size: 0.84rem; line-height: 1.55; color: var(--text-muted); margin: 0; }
+  .mx-def .eq { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--accent); display: block; margin-bottom: 0.4rem; }
+
+  .mx-proj { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.3rem 0 1.1rem; }
+  .mx-proj button { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.4rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .mx-proj button:hover { border-color: var(--accent); color: var(--text); }
+  .mx-proj button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .mx-panel { display: none; }
+  .mx-panel.on { display: block; animation: mxIn 0.4s var(--ease-smooth) both; }
+  @keyframes mxIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .mx-panel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.9rem; margin-bottom: 0.9rem; }
+  .mx-panel-name { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
+  .mx-panel-when { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+  .mx-panel-link { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  .mx-panel-link:hover { border-color: var(--accent); }
+
+  .mx-tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); -webkit-overflow-scrolling: touch; }
+  table.mx-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 440px; }
+  .mx-table th { text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; background: var(--surface-2); padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .mx-table th.num, .mx-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .mx-table td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); color: var(--text); }
+  .mx-table tbody tr:last-child td { border-bottom: 0; }
+  .mx-table .b { color: var(--text-subtle); }
+  .mx-table .a { color: var(--success); font-weight: 700; }
+  .mx-table .imp { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--accent); font-weight: 700; }
+  .mx-table tfoot td { border-top: 2px solid var(--border-strong); font-weight: 700; color: var(--text-strong); background: var(--surface-2); }
+  .mx-recon { display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; color: var(--success); background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 35%, transparent); border-radius: 100px; padding: 0.35rem 0.9rem; }
+  .mx-recon::before { content: '✓'; font-weight: 700; }
+
+  @media (max-width: 720px) { .mx-panel-link { margin-left: 0; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html" class="active" aria-current="page">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>SAP Reference</span><span class="breadcrumb-sep">/</span><span>Metrics, Audited</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Transparency · Metrics, Audited</div>
+      <div class="project-meta">Every number, defined and reconciled</div>
+      <h1>Metrics, <em>Audited</em></h1>
+      <p class="project-hero-desc">Numbers only build trust if they hold up. This page defines <strong>every headline metric</strong> on the portfolio and shows <strong>how it reconciles</strong> &mdash; the delivered ERP KPIs across four projects on XeerSoft Cloud ERP, the margin and collection definitions behind them, and how the STEM figures add up to the totals. If a number appears elsewhere on the site, it matches here.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Basis</span><span class="project-info-val">Gross/contribution margin · billed (accrual)</span></div>
+      <div class="project-info-row"><span class="project-info-label">Platform</span><span class="project-info-val">XeerSoft Cloud ERP (delivered)</span></div>
+      <div class="project-info-row"><span class="project-info-label">Scope</span><span class="project-info-val">4 projects · 2023–2026</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Reconciled · single source of truth</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="mx-wrap">
+
+    <!-- DEFINITIONS -->
+    <div class="mx-sec">
+      <div class="mx-eyebrow">01 · How the numbers are defined</div>
+      <h2 class="mx-title">Definitions first, so the figures are explainable.</h2>
+      <p class="mx-lede">Three definitions carry most of the weight. They are stated up front so every figure below is <b>defensible, not just consistent</b>.</p>
+      <div class="mx-defs">
+        <div class="mx-def">
+          <h3>Gross margin</h3>
+          <span class="eq">GP = Revenue (billed) − Direct cost</span>
+          <p>A <b>gross / contribution</b> margin on a billed basis, before instructor salary and overhead. Lab direct cost = lab + transport + materials; competition = staffing.</p>
+        </div>
+        <div class="mx-def">
+          <h3>Collection rate</h3>
+          <span class="eq">Collected ÷ Billed</span>
+          <p>A separate <b>AR metric</b>, independent of margin — the standard FI/CO split between profitability and cash collection.</p>
+        </div>
+        <div class="mx-def">
+          <h3>Basis</h3>
+          <span class="eq">Billed / accrual</span>
+          <p>Revenue and profit are recognised when <b>billed</b>, not when collected — so margin and collection are measured separately and never conflated.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PER-PROJECT KPIs -->
+    <div class="mx-sec">
+      <div class="mx-eyebrow">02 · Delivered KPIs by project</div>
+      <h2 class="mx-title">Four go-lives, the numbers behind each.</h2>
+      <p class="mx-lede">Pick a project. Every value here matches its project page and the &ldquo;Delivered, proven&rdquo; matrix on the home page.</p>
+
+      <div class="mx-proj" id="mxProj" role="group" aria-label="Select project">
+        <button type="button" data-p="p1" aria-pressed="true">P1 · Procurement</button>
+        <button type="button" data-p="p2" aria-pressed="false">P2 · Pricing &amp; AR</button>
+        <button type="button" data-p="p3" aria-pressed="false">P3 · Loyalty UAT</button>
+        <button type="button" data-p="p4" aria-pressed="false">P4 · STEM</button>
+      </div>
+
+      <div class="mx-panel on" data-p="p1">
+        <div class="mx-panel-head"><span class="mx-panel-name">Procurement &amp; Inventory (P2P)</span><span class="mx-panel-when">Jan – Jun 2023</span><a class="mx-panel-link" href="project1.html">project page →</a></div>
+        <div class="mx-tablewrap"><table class="mx-table"><thead><tr><th>KPI</th><th class="num">Before</th><th class="num">After</th><th class="num">Improvement</th></tr></thead><tbody>
+          <tr><td>Vendor on-time delivery</td><td class="num b">68%</td><td class="num a">87%</td><td class="num imp">▲ 27.9%</td></tr>
+          <tr><td>Unauthorised PO rate</td><td class="num b">30%</td><td class="num a">0%</td><td class="num imp">▲ 100%</td></tr>
+          <tr><td>Stockout rate (XS / XXL)</td><td class="num b">22%</td><td class="num a">3%</td><td class="num imp">▲ 86.4%</td></tr>
+          <tr><td>Textbook write-off</td><td class="num b">฿45,000</td><td class="num a">฿8,000</td><td class="num imp">▲ 82.2%</td></tr>
+        </tbody></table></div>
+      </div>
+
+      <div class="mx-panel" data-p="p2">
+        <div class="mx-panel-head"><span class="mx-panel-name">Strategic Pricing &amp; AR</span><span class="mx-panel-when">Jun 2023 – Jun 2024</span><a class="mx-panel-link" href="project2.html">project page →</a></div>
+        <div class="mx-tablewrap"><table class="mx-table"><thead><tr><th>KPI</th><th class="num">Before</th><th class="num">After</th><th class="num">Improvement</th></tr></thead><tbody>
+          <tr><td>Pricing decision time</td><td class="num b">480 min</td><td class="num a">15 min</td><td class="num imp">▲ 96.9%</td></tr>
+          <tr><td>Average days overdue</td><td class="num b">42 days</td><td class="num a">12 days</td><td class="num imp">▲ 71.4%</td></tr>
+          <tr><td>AR collection rate</td><td class="num b">78%</td><td class="num a">96%</td><td class="num imp">▲ 23.1%</td></tr>
+        </tbody></table></div>
+        <p class="mx-lede" style="font-size:0.8rem;margin-top:0.7rem;">P2 collection (96%) and P4 STEM collection (95.0%) are <b>different projects</b> — never merged.</p>
+      </div>
+
+      <div class="mx-panel" data-p="p3">
+        <div class="mx-panel-head"><span class="mx-panel-name">CRM Star Reward Loyalty — UAT</span><span class="mx-panel-when">Jun 2024 – Jan 2025</span><a class="mx-panel-link" href="project3.html">project page →</a></div>
+        <div class="mx-tablewrap"><table class="mx-table"><thead><tr><th>Metric</th><th class="num">Value</th></tr></thead><tbody>
+          <tr><td>Total defects logged</td><td class="num a">60</td></tr>
+          <tr><td>Go-live blockers</td><td class="num a">11 (16.2%)</td></tr>
+          <tr><td>Defects resolved</td><td class="num a">83.8%</td></tr>
+          <tr><td>Regression defects</td><td class="num a">10</td></tr>
+          <tr><td>UAT cycles</td><td class="num a">5</td></tr>
+          <tr><td>Blocker burn-down (per cycle)</td><td class="num a">7 → 2 → 2 → 0 → 0</td></tr>
+        </tbody></table></div>
+      </div>
+
+      <div class="mx-panel" data-p="p4">
+        <div class="mx-panel-head"><span class="mx-panel-name">STEM Billing &amp; Profitability</span><span class="mx-panel-when">Jan 2025 – Go-Live Jun 2026</span><a class="mx-panel-link" href="project4.html">project page →</a></div>
+        <div class="mx-tablewrap"><table class="mx-table"><thead><tr><th>Headline</th><th class="num">Value</th></tr></thead><tbody>
+          <tr><td>Total revenue (billed)</td><td class="num a">฿2,181,000</td></tr>
+          <tr><td>Total collected</td><td class="num a">฿2,071,000</td></tr>
+          <tr><td>Collection rate</td><td class="num a">95.0%</td></tr>
+          <tr><td>Outstanding AR</td><td class="num a">฿110,000</td></tr>
+          <tr><td>Gross profit (billed basis)</td><td class="num a">฿1,080,869</td></tr>
+          <tr><td>Overall margin</td><td class="num a">49.6%</td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+
+    <!-- P4 RECONCILIATION -->
+    <div class="mx-sec">
+      <div class="mx-eyebrow">03 · The reconciliation</div>
+      <h2 class="mx-title">STEM, subject by subject — and it adds up.</h2>
+      <p class="mx-lede">The headline P4 figures are the sum of seven subjects across 802 transactions. Here is the breakdown; the per-subject revenue and gross profit sum exactly to the headline totals.</p>
+      <div class="mx-tablewrap" style="margin-top:1.2rem;"><table class="mx-table"><thead><tr><th>Subject</th><th class="num">Revenue</th><th class="num">Collected</th><th class="num">Gross profit</th><th class="num">Margin</th><th class="num">Collection</th></tr></thead>
+        <tbody>
+          <tr><td>Biology Lab</td><td class="num">฿555,000</td><td class="num">฿504,000</td><td class="num">฿268,374</td><td class="num">48%</td><td class="num">91%</td></tr>
+          <tr><td>Robotics</td><td class="num">฿534,000</td><td class="num">฿501,000</td><td class="num">฿267,020</td><td class="num">50%</td><td class="num">94%</td></tr>
+          <tr><td>Math Camp</td><td class="num">฿390,000</td><td class="num">฿390,000</td><td class="num">฿185,302</td><td class="num">48%</td><td class="num">100%</td></tr>
+          <tr><td>Physics Lab</td><td class="num">฿267,000</td><td class="num">฿267,000</td><td class="num">฿138,504</td><td class="num">52%</td><td class="num">100%</td></tr>
+          <tr><td>Chemistry Lab</td><td class="num">฿264,000</td><td class="num">฿258,000</td><td class="num">฿140,094</td><td class="num">53%</td><td class="num">98%</td></tr>
+          <tr><td>Engineering Design</td><td class="num">฿126,000</td><td class="num">฿108,000</td><td class="num">฿54,575</td><td class="num">43%</td><td class="num">86%</td></tr>
+          <tr><td>Math Competition</td><td class="num">฿45,000</td><td class="num">฿43,000</td><td class="num">฿27,000</td><td class="num">60%</td><td class="num">96%</td></tr>
+        </tbody>
+        <tfoot><tr><td>Total (7 subjects)</td><td class="num">฿2,181,000</td><td class="num">฿2,071,000</td><td class="num">฿1,080,869</td><td class="num">49.6%</td><td class="num">95.0%</td></tr></tfoot>
+      </table></div>
+      <span class="mx-recon">Per-subject revenue and gross profit sum to the headline totals</span>
+    </div>
+
+    <!-- EXEC OVERVIEW -->
+    <div class="mx-sec">
+      <div class="mx-eyebrow">04 · Across the portfolio</div>
+      <h2 class="mx-title">The figures that don&rsquo;t move.</h2>
+      <p class="mx-lede">The executive overview on the home page: <b>4</b> projects · <b>47</b> staff trained · <b>219</b> tickets resolved · <b>4</b> domains (Procurement · Finance · Billing · UAT). These are fixed reference points.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">ABOUT THESE METRICS</div>
+      <p>Every figure here is <strong>real delivery on XeerSoft Cloud ERP</strong>, measured on a billed/accrual basis with gross margin and collection kept as separate metrics. Margins are gross/contribution (before instructor salary and overhead); collection reflects genuine post-go-live dunning recovery, not a perfect 100%. This page is the single source these numbers reconcile to — if the site ever disagrees with it, the site is wrong.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivered capability matrix &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var btns = Array.prototype.slice.call(document.querySelectorAll('#mxProj button'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.mx-panel'));
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      btns.forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      var p = b.getAttribute('data-p');
+      panels.forEach(function (pn) { pn.classList.toggle('on', pn.getAttribute('data-p') === p); });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

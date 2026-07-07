@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP FI/CO Glossary &amp; T-code Reference · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/glossary.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="SAP FI/CO Glossary &amp; T-code Reference — Chatree Kengpipat">
+<meta property="og:description" content="A searchable SAP FI/CO reference: transaction codes, tables, account-determination keys and core concepts (RICEFW, FSD, Universal Journal, condition technique) — each with a plain-language definition.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/glossary.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SAP FI/CO Glossary &amp; T-code Reference">
+<meta name="twitter:description" content="Searchable SAP FI/CO reference: T-codes, tables, account keys and core concepts, each with a plain-language definition.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="A searchable SAP FI/CO glossary and T-code reference by Chatree Kengpipat: transaction codes, tables, account-determination keys and core concepts (RICEFW, FSD, Universal Journal, condition technique, CO-PA) each with a plain-language definition. Filter by area or search live.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     GLOSSARY & T-CODE REFERENCE — page-scoped. Live search + area
+     filter over a curated SAP FI/CO reference. Built from tokens.
+     ============================================================ */
+  .gl-wrap { max-width: 1000px; margin: 0 auto; }
+  .gl-tools { position: sticky; top: 64px; z-index: 40; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(10px); padding: 1rem 0 0.8rem; margin-bottom: 0.4rem; }
+  .gl-search { position: relative; margin-bottom: 0.8rem; }
+  .gl-search input {
+    width: 100%; box-sizing: border-box; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+    color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 0.75rem 1rem 0.75rem 2.6rem; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .gl-search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+  .gl-search .gl-ico { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-subtle); font-size: 1rem; pointer-events: none; }
+  .gl-filter { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .gl-filter button { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.32rem 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .gl-filter button:hover { border-color: var(--accent); color: var(--text); }
+  .gl-filter button[aria-pressed="true"] { background: var(--accent-bg); border-color: color-mix(in srgb, var(--accent) 32%, transparent); color: var(--accent); }
+  .gl-count { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin: 0.2rem 0 1.2rem; }
+
+  .gl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.7rem; }
+  .gl-entry { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem 1rem; transition: border-color 0.2s, transform 0.2s var(--ease-smooth); }
+  .gl-entry:hover { border-color: color-mix(in srgb, var(--accent) 40%, transparent); transform: translateY(-1px); }
+  .gl-entry-top { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.4rem; }
+  .gl-term { font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; font-weight: 700; color: var(--accent); letter-spacing: -0.01em; }
+  .gl-cat { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-subtle); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 0.1rem 0.4rem; white-space: nowrap; flex-shrink: 0; }
+  .gl-def { font-size: 0.85rem; line-height: 1.5; color: var(--text-muted); }
+  .gl-def b { color: var(--text); font-weight: 600; }
+  .gl-link { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; display: inline-block; margin-top: 0.5rem; }
+  .gl-link:hover { border-color: var(--accent); }
+  .gl-empty { text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding: 2.5rem 1rem; grid-column: 1 / -1; }
+  mark { background: color-mix(in srgb, var(--accent) 26%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; }
+
+  @media (max-width: 720px) { .gl-tools { top: 56px; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html" class="active" aria-current="page">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>SAP Reference</span><span class="breadcrumb-sep">/</span><span>Glossary &amp; T-codes</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Reference · Glossary &amp; T-codes</div>
+      <div class="project-meta">The vocabulary behind every page on this site</div>
+      <h1>SAP FI/CO <em>Glossary</em></h1>
+      <p class="project-hero-desc">A working reference for the language an SAP FI/CO consultant uses: the <strong>transaction codes</strong>, <strong>tables</strong>, <strong>account-determination keys</strong> and <strong>core concepts</strong> that appear across the methodology pages here &mdash; each with a plain-language definition. Search live, or filter by area.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Entries</span><span class="project-info-val" id="glTotal">—</span></div>
+      <div class="project-info-row"><span class="project-info-label">Areas</span><span class="project-info-val">Config · Postings · Reporting · Tax · Tables · Concepts</span></div>
+      <div class="project-info-row"><span class="project-info-label">Use</span><span class="project-info-val">Search or filter live</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 1rem 2.5rem 4rem;">
+  <div class="gl-wrap">
+    <div class="gl-tools">
+      <div class="gl-search">
+        <span class="gl-ico" aria-hidden="true">⌕</span>
+        <input type="search" id="glSearch" placeholder="Search T-code, table or concept — e.g. OB40, ACDOCA, dunning" aria-label="Search the glossary" autocomplete="off">
+      </div>
+      <div class="gl-filter" id="glFilter" role="group" aria-label="Filter by area">
+        <button type="button" data-c="all" aria-pressed="true">All</button>
+        <button type="button" data-c="cfg" aria-pressed="false">Config</button>
+        <button type="button" data-c="post" aria-pressed="false">Postings</button>
+        <button type="button" data-c="rep" aria-pressed="false">Reporting</button>
+        <button type="button" data-c="md" aria-pressed="false">Master data</button>
+        <button type="button" data-c="tax" aria-pressed="false">Tax &amp; WHT</button>
+        <button type="button" data-c="tbl" aria-pressed="false">Tables</button>
+        <button type="button" data-c="key" aria-pressed="false">Account keys</button>
+        <button type="button" data-c="mig" aria-pressed="false">Migration</button>
+        <button type="button" data-c="intg" aria-pressed="false">Integration</button>
+        <button type="button" data-c="concept" aria-pressed="false">Concepts</button>
+      </div>
+    </div>
+    <div class="gl-count" id="glCount"></div>
+    <div class="gl-grid" id="glGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var CATS = { cfg:'Config', post:'Posting', rep:'Reporting', md:'Master data', tax:'Tax/WHT', tbl:'Table', key:'Acct key', mig:'Migration', intg:'Integration', concept:'Concept' };
+  var E = [
+    // Config / IMG
+    ['SPRO','cfg','The Implementation Guide (IMG) — SAP’s central customizing tree. Every configuration path lives here.'],
+    ['OBBG','cfg','Assign a country to its tax calculation procedure (e.g. TH → TAXTH).'],
+    ['OBYZ','cfg','Maintain the tax calculation procedure, condition types and account keys.'],
+    ['OBCN','cfg','Define and adjust the tax processing (transaction) keys.'],
+    ['OBCL','cfg','Assign tax codes for non-taxable transactions per company code.'],
+    ['FTXP','cfg','Create and maintain <b>tax codes</b> and their rates under a calculation procedure.'],
+    ['OB40','cfg','<b>Tax account determination</b> — map each tax transaction key to the GL account it posts to.',['fi-tax-consultant-scope.html','FI Tax scope']],
+    ['OB52','cfg','Open and close posting periods (period control).'],
+    ['OBYC','cfg','<b>Automatic account determination for MM</b> — the keys (BSX/WRX/GBB/PRD) a goods movement posts to.',['sap-design.html#cv','See it in code']],
+    ['OBWW','cfg','Define the GL accounts for withholding tax to be paid over.'],
+    ['FBMP','cfg','Configure the dunning procedure (levels, charges, forms).'],
+    ['FD32','cfg','Maintain customer credit master (classic credit management; FSCM in S/4).'],
+    ['V/08','cfg','Define and maintain the <b>SD pricing procedure</b>.'],
+    ['VK11','cfg','Create condition records (prices, discounts, surcharges) for SD pricing.'],
+    ['VKOA','cfg','<b>Revenue account determination</b> — map SD billing to FI GL accounts.'],
+    ['TAXTH','cfg','The Thai tax calculation procedure that VAT/WHT codes hang off.'],
+    // Postings
+    ['FB60','post','Post a <b>vendor (AP) invoice</b> — the core P2P tax test.'],
+    ['FB70','post','Post a <b>customer (AR) invoice</b> — the core O2C tax test.'],
+    ['FB03','post','Display a financial document — read the posted line items to verify a posting.'],
+    ['F-53','post','Post a manual outgoing payment — where extended withholding tax is realised.'],
+    ['F110','post','Automatic payment run (batch vendor payments).'],
+    ['F150','post','Dunning run — issue overdue reminders by dunning level.'],
+    ['FBS1','post','Post an accrual / deferral document (auto-reversed the next period).'],
+    ['MIGO','post','Goods movement — goods receipt (mvt 101), issues, transfers.'],
+    ['MIRO','post','Logistics invoice verification — the PO-based (3-way match) invoice in MM.'],
+    ['VA01 / VA02','post','Create / change a sales order.'],
+    ['VF01','post','Create a billing document — releases revenue to FI.'],
+    ['ME21N','post','Create a purchase order.'],
+    ['ME51N','post','Create a purchase requisition.'],
+    // Reporting / period-end
+    ['RFUMSV00','rep','Advance return for tax on sales/purchases — the VAT report feeding PP30.'],
+    ['PP30','rep','Thai VAT filing (output/input VAT return).'],
+    ['S_P00_07000134','rep','Generic withholding-tax reporting — feeds the Thai WHT certificate and PND output.'],
+    ['KE30','rep','Run a CO-PA profitability report (margin by segment).'],
+    ['FS10N','rep','GL account balance display.'],
+    ['FBL1N / FBL5N','rep','Vendor / customer line-item display (open and cleared items).'],
+    ['F.01','rep','Financial statement — balance sheet / P&amp;L via the Financial Statement Version.'],
+    ['F.13','rep','Automatic clearing (e.g. clearing GR/IR).'],
+    ['AFAB','rep','Asset depreciation run.'],
+    ['FAGL_FCV','rep','Foreign-currency valuation of open items and balances (new GL).'],
+    ['FAGLGVTR','rep','GL balance carry-forward to the new fiscal year.'],
+    // Master data
+    ['FS00','md','GL account master — create/change, incl. the tax category flag.'],
+    ['XD01 / XK01','md','Create customer / vendor master (classic; unified as Business Partner in S/4).'],
+    ['AS91','md','Create a legacy asset master with take-over values (migration).'],
+    ['MM01','md','Create a material master (with its MM/SD/FI views).'],
+    // Tax & WHT
+    ['PP36','tax','Reverse-charge VAT reporting for imported services.'],
+    ['PND 3 / 53 / 54','tax','Thai withholding-tax returns: PND&nbsp;3 (individuals), 53 (companies), 54 (overseas).'],
+    ['Extended WHT','tax','SAP’s withholding-tax solution: a <b>type</b> (at invoice or payment) plus a <b>code</b> (rate), assigned on the business partner. Always used over Classic WHT.'],
+    ['MWS / VST','tax','Output-tax (MWS) and input-tax (VST) transaction keys resolved in OB40.'],
+    ['O7 / I7 / O0','tax','Example Thai tax codes: output VAT 7% / input VAT 7% / zero-rated output.'],
+    // Tables
+    ['ACDOCA','tbl','The <b>Universal Journal</b> — the single line-item table for FI + CO in S/4HANA.'],
+    ['BKPF / BSEG','tbl','FI document header (BKPF) and line items (BSEG).'],
+    ['BSID','tbl','Customer open-item secondary index.'],
+    ['EKKO / EKPO','tbl','Purchasing document header (EKKO) and items (EKPO).'],
+    ['MSEG','tbl','Material document segment — goods-movement line items.'],
+    ['RBKP / RSEG','tbl','Invoice-verification document header (RBKP) and items (RSEG).'],
+    ['VBRK / VBRP','tbl','Billing document header (VBRK) and items (VBRP).'],
+    ['PRCD_ELEMENTS','tbl','Pricing condition records on a document in S/4 (was KONV).'],
+    // Account-determination keys
+    ['BSX','key','OBYC key: the <b>inventory / stock</b> posting account.'],
+    ['WRX','key','OBYC key: the <b>GR/IR clearing</b> account bridging receipt and invoice.'],
+    ['GBB','key','OBYC key: offsetting entry for goods movements (consumption, etc.).'],
+    ['PRD','key','OBYC key: price differences when PO price ≠ standard price.'],
+    ['KOFI / KOFK','key','SD→FI account-determination condition types (without / with CO).'],
+    // Migration
+    ['LTMC','mig','SAP S/4HANA <b>Migration Cockpit</b> — loads master and transactional data.',['data-migration-cutover.html','Migration page']],
+    ['LSMW','mig','Legacy System Migration Workbench — the older batch migration tool.'],
+    ['MB1C','mig','Post initial stock (mvt 561) — inventory balance take-over.'],
+    // Integration
+    ['IDoc','intg','Intermediate Document — SAP’s asynchronous message format for interfaces.',['integration-architecture.html','Integration page']],
+    ['BAPI','intg','Business API — a standard synchronous method on a business object.'],
+    ['RFC','intg','Remote Function Call — SAP’s synchronous cross-system protocol.'],
+    ['OData','intg','REST-style protocol behind Fiori apps and modern integrations.'],
+    ['SAP CPI','intg','Cloud Platform Integration / Integration Suite — SAP’s iPaaS middleware.'],
+    ['DMEE','intg','Data Medium Exchange Engine — builds bank payment files (e.g. ISO 20022).'],
+    ['WE02 / BD87','intg','Monitor / reprocess IDocs when an interface message fails.'],
+    // Concepts
+    ['RICEFW','concept','<b>R</b>eports, <b>I</b>nterfaces, <b>C</b>onversions, <b>E</b>nhancements, <b>F</b>orms, <b>W</b>orkflows — the categories of custom development.',['ricefw-register.html','RICEFW register']],
+    ['FSD','concept','Functional Specification Document — turns a business requirement into a developer-ready design.',['functional-specification.html','See a worked FSD']],
+    ['Use Case / User Story','concept','Requirement artifacts describing an actor’s goal / an increment of value.'],
+    ['Universal Journal','concept','S/4HANA’s single source of truth (ACDOCA) merging FI and CO — no FI-CO reconciliation.'],
+    ['Condition technique','concept','SAP’s pricing rule engine: condition tables → access sequence → condition types → procedure.'],
+    ['CO-PA','concept','Profitability Analysis — margin by market segment (product, region, customer).'],
+    ['Fit-Gap','concept','Comparing requirements to SAP standard; the gaps become RICEFW objects.'],
+    ['SAP Activate','concept','SAP’s implementation methodology: Prepare → Explore → Realize → Deploy → Run.'],
+    ['Business Partner','concept','S/4HANA’s single master record carrying customer and vendor roles.'],
+    ['Reconciliation account','concept','The GL account a sub-ledger (AR / AP / assets) rolls its balance up into.'],
+    ['Dunning','concept','The process of reminding customers of overdue items, escalated by dunning level.'],
+    ['GR/IR','concept','Goods-Receipt / Invoice-Receipt clearing — the account bridging an MM receipt and its invoice.'],
+    ['3-way match','concept','Reconciling purchase order ↔ goods receipt ↔ invoice before a vendor is paid.'],
+    ['Royalty / SRB / PITA','concept','Thai petroleum taxes: royalty on gross, Special Remuneratory Benefit (windfall), and Petroleum Income Tax.',['fi-tax-consultant-scope.html','PTTEP tax engine']]
+  ];
+
+  var grid = document.getElementById('glGrid');
+  var countEl = document.getElementById('glCount');
+  var searchEl = document.getElementById('glSearch');
+  document.getElementById('glTotal').textContent = E.length + ' terms';
+  var cat = 'all', q = '';
+
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;' }[c]; }); }
+  function hl(text, term) {
+    if (!term) return text;
+    // highlight only in plain text portions (defs may contain <b>); simple case-insensitive wrap
+    try {
+      var re = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+      return text.replace(re, '<mark>$1</mark>');
+    } catch (e) { return text; }
+  }
+
+  function render() {
+    var ql = q.trim().toLowerCase();
+    var rows = E.filter(function (e) {
+      if (cat !== 'all' && e[1] !== cat) return false;
+      if (!ql) return true;
+      return (e[0] + ' ' + e[2].replace(/<[^>]+>/g, '')).toLowerCase().indexOf(ql) !== -1;
+    });
+    countEl.textContent = rows.length + ' of ' + E.length + ' entries' + (cat !== 'all' ? ' · ' + CATS[cat] : '') + (ql ? ' · matching “' + q.trim() + '”' : '');
+    if (!rows.length) { grid.innerHTML = '<div class="gl-empty">No entry matches “' + esc(q.trim()) + '”. Try a shorter term or clear the filter.</div>'; return; }
+    grid.innerHTML = rows.map(function (e) {
+      var term = ql ? hl(esc(e[0]), q.trim()) : esc(e[0]);
+      var def = ql ? hl(e[2], q.trim()) : e[2];
+      var link = e[3] ? '<a class="gl-link" href="' + e[3][0] + '">' + e[3][1] + ' →</a>' : '';
+      return '<div class="gl-entry"><div class="gl-entry-top"><span class="gl-term">' + term + '</span><span class="gl-cat">' + CATS[e[1]] + '</span></div><div class="gl-def">' + def + '</div>' + link + '</div>';
+    }).join('');
+  }
+
+  document.querySelectorAll('#glFilter button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#glFilter button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      cat = b.getAttribute('data-c'); render();
+    });
+  });
+  searchEl.addEventListener('input', function () { q = searchEl.value; render(); });
+  render();
+})();
+</script>
+
+</body>
+</html>

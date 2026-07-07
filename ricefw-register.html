@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RICEFW Development Register · SAP · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/ricefw-register.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="RICEFW Development Register · SAP — Chatree Kengpipat">
+<meta property="og:description" content="A consolidated SAP RICEFW register: every custom object (Reports, Interfaces, Conversions, Enhancements, Forms, Workflows) across the methodology pages, with module, complexity and a planning effort estimate.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/ricefw-register.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RICEFW Development Register · SAP">
+<meta name="twitter:description" content="Consolidated SAP RICEFW register: custom objects with module, complexity and a planning effort estimate.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="A consolidated SAP RICEFW development register by Chatree Kengpipat: every custom object (Reports, Interfaces, Conversions, Enhancements, Forms, Workflows) drawn from the methodology pages, each with its module, complexity band and a planning effort estimate. Filter by object type.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     RICEFW REGISTER — page-scoped. Type filter + summary + a
+     register table of custom objects. Built from existing tokens.
+     ============================================================ */
+  .rf-wrap { max-width: 1000px; margin: 0 auto; }
+
+  .rf-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1.8rem; }
+  .rf-sum-cell { background: var(--surface); padding: 1.1rem 1.3rem; }
+  .rf-sum-num { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.02em; color: var(--text-strong); line-height: 1; font-variant-numeric: tabular-nums; }
+  .rf-sum-num .u { color: var(--accent); font-size: 0.55em; margin-left: 0.15em; }
+  .rf-sum-label { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.4rem; }
+
+  .rf-legend { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.4rem; }
+  .rf-type { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.3rem 0.7rem 0.3rem 0.35rem; }
+  .rf-k { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 700; color: #fff; border-radius: 5px; padding: 0.1rem 0.42rem; }
+  .rf-k[data-t="R"] { background: var(--accent); }
+  .rf-k[data-t="I"] { background: #a855f7; }
+  .rf-k[data-t="C"] { background: var(--text-subtle); }
+  .rf-k[data-t="E"] { background: var(--warning); color: #1a0a04; }
+  .rf-k[data-t="F"] { background: var(--success); }
+  .rf-k[data-t="W"] { background: #ec4899; }
+
+  .rf-filter { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+  .rf-filter button { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.35rem 0.85rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .rf-filter button:hover { border-color: var(--accent); color: var(--text); }
+  .rf-filter button[aria-pressed="true"] { background: var(--accent-bg); border-color: color-mix(in srgb, var(--accent) 32%, transparent); color: var(--accent); }
+
+  .rf-tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); -webkit-overflow-scrolling: touch; }
+  table.rf-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 680px; }
+  .rf-table th { text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; background: var(--surface-2); padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .rf-table th.num, .rf-table td.num { text-align: right; }
+  .rf-table td { padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  .rf-table tr:last-child td { border-bottom: 0; }
+  .rf-table tbody tr { transition: background 0.2s; }
+  .rf-table tbody tr:hover { background: var(--surface); }
+  .rf-table tr.hide { display: none; }
+  .rf-id { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--accent); font-weight: 600; }
+  .rf-name { color: var(--text-strong); font-weight: 600; }
+  .rf-name a { color: var(--accent); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; border-bottom: 1px solid transparent; }
+  .rf-name a:hover { border-color: var(--accent); }
+  .rf-mod { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+  .rf-cx { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 0.14rem 0.45rem; border-radius: 5px; white-space: nowrap; }
+  .rf-cx.low { color: var(--success); background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 30%, transparent); }
+  .rf-cx.med { color: var(--warning); background: color-mix(in srgb, var(--warning) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent); }
+  .rf-cx.high { color: var(--danger); background: color-mix(in srgb, var(--danger) 12%, transparent); border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent); }
+  .rf-eff { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text); font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 720px) { .rf-summary { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html" class="active" aria-current="page">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>SAP Reference</span><span class="breadcrumb-sep">/</span><span>RICEFW Register</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Reference · RICEFW Development Register</div>
+      <div class="project-meta">Every custom object the standard config couldn't reach</div>
+      <h1>RICEFW <em>Register</em></h1>
+      <p class="project-hero-desc">Configuration covers most of an SAP build; the gaps become <strong>RICEFW</strong> objects &mdash; Reports, Interfaces, Conversions, Enhancements, Forms and Workflows. This register consolidates the custom development scoped across the methodology pages here into one catalogue, each with its <strong>module, complexity and a planning effort estimate</strong>. Filter by type.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Objects</span><span class="project-info-val" id="rfTotal">—</span></div>
+      <div class="project-info-row"><span class="project-info-label">Types</span><span class="project-info-val">R · I · C · E · F · W</span></div>
+      <div class="project-info-row"><span class="project-info-label">Effort</span><span class="project-info-val">Planning estimate (person-days)</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="rf-wrap">
+
+    <div class="rf-summary" data-summary>
+      <div class="rf-sum-cell"><span class="rf-sum-num" data-count="17" id="rfCountObjects">17</span><span class="rf-sum-label">custom objects scoped</span></div>
+      <div class="rf-sum-cell"><span class="rf-sum-num" data-count="6">6</span><span class="rf-sum-label">RICEFW types covered</span></div>
+      <div class="rf-sum-cell"><span class="rf-sum-num" data-count="151" id="rfEffort">151</span><span class="rf-sum-label">planning person-days</span></div>
+    </div>
+
+    <div class="rf-legend" aria-hidden="true">
+      <span class="rf-type"><span class="rf-k" data-t="R">R</span>Report</span>
+      <span class="rf-type"><span class="rf-k" data-t="I">I</span>Interface</span>
+      <span class="rf-type"><span class="rf-k" data-t="C">C</span>Conversion</span>
+      <span class="rf-type"><span class="rf-k" data-t="E">E</span>Enhancement</span>
+      <span class="rf-type"><span class="rf-k" data-t="F">F</span>Form</span>
+      <span class="rf-type"><span class="rf-k" data-t="W">W</span>Workflow</span>
+    </div>
+
+    <div class="rf-filter" id="rfFilter" role="group" aria-label="Filter by RICEFW type">
+      <button type="button" data-t="all" aria-pressed="true">All</button>
+      <button type="button" data-t="R" aria-pressed="false">Reports</button>
+      <button type="button" data-t="I" aria-pressed="false">Interfaces</button>
+      <button type="button" data-t="C" aria-pressed="false">Conversions</button>
+      <button type="button" data-t="E" aria-pressed="false">Enhancements</button>
+      <button type="button" data-t="F" aria-pressed="false">Forms</button>
+      <button type="button" data-t="W" aria-pressed="false">Workflows</button>
+    </div>
+
+    <div class="rf-tablewrap">
+      <table class="rf-table">
+        <thead><tr><th>Type</th><th>Object</th><th>Description</th><th>Module</th><th>Complexity</th><th class="num">Effort (pd)</th></tr></thead>
+        <tbody id="rfBody"></tbody>
+      </table>
+    </div>
+    <p class="project-hero-desc" style="font-size:0.84rem;margin-top:1rem;max-width:none;">Complexity bands map to a planning effort (Low ≈ 3&ndash;5 pd, Medium ≈ 8&ndash;12 pd, High ≈ 14&ndash;18 pd). The total is a <b>planning figure</b>, not a quote — it exists to show how I&rsquo;d size and sequence a development backlog.</p>
+
+    <div class="callout" style="margin-top:2.4rem;">
+      <div class="callout-title">ABOUT THIS REGISTER</div>
+      <p>These objects are drawn from the proposal designs across this site &mdash; the <a href="sap-design.html" style="color:var(--accent);">four re-scoped ERP systems</a>, the <a href="functional-specification.html" style="color:var(--accent);">worked FSD</a>, the <a href="integration-architecture.html" style="color:var(--accent);">integration map</a> and the <a href="data-migration-cutover.html" style="color:var(--accent);">migration plan</a>. RICEFW classification, complexity and effort sizing are the real SAP mechanism; the objects are proposed designs, tied to systems I delivered on XeerSoft Cloud ERP. A methodology artifact, not a delivered SAP backlog.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivered systems behind them &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // [type, id, name, description, module, complexity, effort-pd, link?]
+  var OBJ = [
+    ['R','ZR_PR_APPROVAL','PR approval status report','Live view of purchase requisitions by release status','MM','low',4,['project1.html','P1']],
+    ['F','ZF_PO_PRINT','Purchase order print form','Adobe Form for the outbound PO document','MM','low',3,['project1.html','P1']],
+    ['W','ZW_PR_RELEASE','PR release / approval workflow','Multi-level release routing above the ฿50K threshold','MM','med',8,['project1.html','P1']],
+    ['E','ZTIR_PRICE_001','Tiered, sibling-aware pricing routine','VOFM value routine pooling volume across sibling accounts','SD','med',10,['functional-specification.html','FSD']],
+    ['R','ZR_AR_AGING','AR aging report','Open receivables bucketed by overdue band','FI-AR','low',5,['project2.html','P2']],
+    ['F','ZF_DUNNING','Dunning letter form','Templated overdue reminder by dunning level','FI-AR','low',4,['project2.html','P2']],
+    ['E','ZE_LOYALTY','Loyalty accrual &amp; tier engine','Points accrual, tier recalculation, idempotent awards','SD/FI','high',18,['project3.html','P3']],
+    ['E','ZE_COPA_DERIV','CO-PA segment derivation','KEDR rule deriving the profitability segment per billing line','CO-PA','med',9,['project4.html','P4']],
+    ['R','ZR_MARGIN','Segment margin / profitability report','Margin by segment read from CO-PA value fields','CO-PA','med',8,['project4.html','P4']],
+    ['I','ZI_POS_IN','POS sales feed inbound','IDoc / OData feed of store sales into billing &amp; FI','SD/FI','high',16,['integration-architecture.html','Integration']],
+    ['I','ZI_BANK_OUT','Outbound payment file','DMEE / CPI payment file in ISO 20022 (pain.001)','FI','med',10,['integration-architecture.html','Integration']],
+    ['I','ZI_BANK_IN','Bank statement import','CAMT / MT940 import with open-item auto-reconciliation','FI','med',9,['integration-architecture.html','Integration']],
+    ['I','ZI_ETAX','e-Tax / e-WHT submission','CPI interface to the Revenue Department in the Thai format','FI','high',14,['integration-architecture.html','Integration']],
+    ['C','ZC_MASTER','Master-data conversion load','Migration Cockpit load of GL / BP / material / asset masters','cross','med',12,['data-migration-cutover.html','Migration']],
+    ['C','ZC_OPENITEM','Open-item / balance conversion','GL balances and AR/AP open-item takeover with reconciliation','FI','med',11,['data-migration-cutover.html','Migration']],
+    ['F','ZF_WHT_CERT','WHT certificate &amp; PND form','Thai withholding certificate + PND 3/53/54 layout','FI','low',5,['fi-tax-consultant-scope.html','FI Tax']],
+    ['R','ZR_TAX_RECON','VAT / WHT reconciliation report','Ties tax GL balances to the PP30 / PND filings','FI','low',5,['fi-tax-consultant-scope.html','FI Tax']]
+  ];
+  var CX = { low:'Low', med:'Medium', high:'High' };
+  var body = document.getElementById('rfBody');
+  var filt = 'all';
+
+  function render() {
+    body.innerHTML = OBJ.map(function (o) {
+      var linked = o[7] ? ' <a href="' + o[7][0] + '">' + o[7][1] + ' →</a>' : '';
+      return '<tr data-t="' + o[0] + '"' + (filt !== 'all' && o[0] !== filt ? ' class="hide"' : '') + '>' +
+        '<td><span class="rf-k" data-t="' + o[0] + '">' + o[0] + '</span></td>' +
+        '<td><span class="rf-id">' + o[1] + '</span></td>' +
+        '<td><span class="rf-name">' + o[3] + '</span>' + linked + '</td>' +
+        '<td><span class="rf-mod">' + o[4] + '</span></td>' +
+        '<td><span class="rf-cx ' + o[5] + '">' + CX[o[5]] + '</span></td>' +
+        '<td class="num"><span class="rf-eff">' + o[6] + '</span></td>' +
+        '</tr>';
+    }).join('');
+  }
+  render();
+  document.querySelectorAll('#rfFilter button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#rfFilter button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      filt = b.getAttribute('data-t');
+      body.querySelectorAll('tr').forEach(function (tr) { tr.classList.toggle('hide', filt !== 'all' && tr.getAttribute('data-t') !== filt); });
+    });
+  });
+
+  /* count-up */
+  function countUp(el, target) {
+    var dur = 1000, t0 = null;
+    function frame(now) { if (t0 === null) t0 = now; var p = Math.min((now - t0) / dur, 1); var e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(target * e).toLocaleString('en-US'); if (p < 1) requestAnimationFrame(frame); else el.textContent = target.toLocaleString('en-US'); }
+    requestAnimationFrame(frame);
+  }
+  var summary = document.querySelector('.rf-summary[data-summary]');
+  if (summary && !reduce.matches && 'IntersectionObserver' in window) {
+    var done = false;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting && !done) { done = true; summary.querySelectorAll('.rf-sum-num[data-count]').forEach(function (el) { countUp(el, parseInt(el.getAttribute('data-count'), 10)); }); io.disconnect(); } });
+    }, { threshold: 0.4 });
+    io.observe(summary);
+    setTimeout(function () { if (!done) { done = true; summary.querySelectorAll('.rf-sum-num[data-count]').forEach(function (el) { el.textContent = el.getAttribute('data-count'); }); } }, 1600);
+  }
+})();
+</script>
+
+</body>
+</html>
