@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integration Architecture · SAP Interfaces · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/integration-architecture.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Integration Architecture · SAP Interfaces — Chatree Kengpipat">
+<meta property="og:description" content="An interactive SAP integration map: how the modules post to FI in real time and how S/4HANA talks to banks, the Revenue Department, POS and CRM — each interface with its technology (IDoc / BAPI / OData / CPI), direction and error handling.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/integration-architecture.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Integration Architecture · SAP Interfaces">
+<meta name="twitter:description" content="Interactive SAP integration map: module-to-FI postings and external interfaces (IDoc / BAPI / OData / CPI) with direction and error handling.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive SAP integration-architecture reference by Chatree Kengpipat: how MM / SD / CO post to FI in real time and how S/4HANA integrates with banks, the Revenue Department, POS and CRM — each interface with its technology (IDoc / BAPI / OData / SAP CPI), direction, trigger and error handling. A methodology artifact.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     INTEGRATION ARCHITECTURE — page-scoped. A hub of SAP modules,
+     a clickable interface catalogue with a detail panel, and a
+     technology legend. Built from existing tokens.
+     ============================================================ */
+  .ia-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .ia-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .ia-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .ia-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .ia-banner-text strong { color: var(--text); font-weight: 600; }
+  .ia-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .ia-wrap { max-width: 1000px; margin: 0 auto; }
+  .ia-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 0.7rem; }
+  .ia-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+  .ia-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 0.6rem; }
+  .ia-title em { color: var(--accent); font-style: normal; }
+  .ia-lede { font-size: 0.95rem; line-height: 1.65; color: var(--text-muted); max-width: 46rem; }
+  .ia-lede b { color: var(--text-strong); font-weight: 600; }
+
+  /* Core hub */
+  .ia-core { background: linear-gradient(135deg, var(--accent-bg), var(--surface)); border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); border-radius: var(--radius-lg); padding: 1.3rem 1.5rem; margin: 1.6rem 0 2rem; box-shadow: var(--shadow-md); }
+  .ia-core-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.9rem; }
+  .ia-core-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
+  .ia-core-name em { color: var(--accent); font-style: normal; }
+  .ia-core-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+  .ia-core-mods { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; }
+  .ia-mod { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 0.3rem 0.7rem; }
+  .ia-mod.soft { color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+  .ia-core-note { margin-top: 0.9rem; font-size: 0.84rem; line-height: 1.5; color: var(--text-muted); }
+  .ia-core-note b { color: var(--text-strong); font-weight: 600; }
+
+  /* Interface catalogue */
+  .ia-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.7rem; }
+  .ia-if { text-align: left; width: 100%; font: inherit; cursor: pointer; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.9rem 1rem; transition: border-color 0.2s, transform 0.2s var(--ease-smooth), box-shadow 0.2s; }
+  .ia-if:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .ia-if.is-active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .ia-if-flow { display: flex; align-items: center; gap: 0.4rem; font-size: 0.86rem; font-weight: 700; color: var(--text-strong); line-height: 1.25; letter-spacing: -0.01em; }
+  .ia-if-flow .arr { color: var(--accent); font-weight: 700; }
+  .ia-if-meta { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.6rem; align-items: center; }
+  .ia-tech { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.03em; padding: 0.14rem 0.42rem; border-radius: 5px; white-space: nowrap; }
+  .ia-tech[data-k="idoc"] { color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent); }
+  .ia-tech[data-k="bapi"] { color: var(--success); background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 30%, transparent); }
+  .ia-tech[data-k="odata"] { color: var(--warning); background: color-mix(in srgb, var(--warning) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent); }
+  .ia-tech[data-k="cpi"] { color: #a855f7; background: color-mix(in srgb, #a855f7 12%, transparent); border: 1px solid color-mix(in srgb, #a855f7 30%, transparent); }
+  .ia-tech[data-k="file"] { color: var(--text-muted); background: var(--surface-2); border: 1px solid var(--border); }
+  .ia-if-freq { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--text-subtle); }
+
+  /* Detail panel */
+  .ia-detail { margin-top: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.4rem 1.5rem; min-height: 8rem; box-shadow: var(--shadow-md); }
+  .ia-detail-empty { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.6rem; }
+  .ia-detail-empty::before { content: ''; width: 9px; height: 9px; border-radius: 2px; background: var(--accent); transform: rotate(45deg); flex-shrink: 0; }
+  .ia-d-flow { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.2rem; }
+  .ia-d-flow .arr { color: var(--accent); }
+  .ia-d-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); margin-bottom: 1rem; }
+  .ia-dl { display: grid; grid-template-columns: 7rem 1fr; gap: 0.5rem 1rem; }
+  .ia-dl dt { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; padding-top: 0.1rem; }
+  .ia-dl dd { margin: 0; font-size: 0.88rem; line-height: 1.5; color: var(--text); }
+  .ia-dl dd b { color: var(--text-strong); font-weight: 600; }
+  .ia-dl dd .tcode { font-size: 0.74rem; }
+
+  .ia-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; margin-top: 1.3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+  .ia-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .ia-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+  @media (max-width: 720px) {
+    .ia-banner { top: 62px; padding: 0 1rem; }
+    .ia-dl { grid-template-columns: 1fr; gap: 0.2rem 0; }
+    .ia-dl dt { margin-top: 0.6rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ia-if { transition: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html" class="active" aria-current="page">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="ia-banner" role="note" aria-label="Honesty disclaimer">
+  <div class="ia-banner-inner">
+    <span class="ia-banner-icon" aria-hidden="true">!</span>
+    <div class="ia-banner-text">
+      <span class="ia-banner-tag">METHODOLOGY REFERENCE</span><br>
+      An <strong>integration map</strong> I authored: how the modules post to FI and how SAP talks to the outside world. The <strong>integration thinking is real</strong> &mdash; I wired POS-to-accounting and multi-system flows on XeerSoft &mdash; framed here in SAP interface terms; it is not a delivered SAP integration build.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>SAP Design</span><span class="breadcrumb-sep">/</span><span>Integration Architecture</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Integration Architecture · Interfaces</div>
+      <div class="project-meta">How the ledger stays the single source of truth</div>
+      <h1>Integration <em>Architecture</em></h1>
+      <p class="project-hero-desc">Finance is only trustworthy if <strong>everything posts to it correctly</strong>. Two kinds of integration make that happen: the <strong>real-time module postings</strong> inside SAP (MM, SD and CO into FI) and the <strong>external interfaces</strong> to banks, the Revenue Department, POS and CRM. This map lays them out &mdash; pick an interface to see its technology, direction, trigger and error handling.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Internal</span><span class="project-info-val">MM · SD · CO → FI (real-time)</span></div>
+      <div class="project-info-row"><span class="project-info-label">External</span><span class="project-info-val">Bank · Revenue Dept · POS · CRM</span></div>
+      <div class="project-info-row"><span class="project-info-label">Tech</span><span class="project-info-val">IDoc · BAPI/RFC · OData · SAP CPI</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="ia-wrap">
+
+    <div class="ia-eyebrow">The core</div>
+    <div class="ia-core">
+      <div class="ia-core-top">
+        <span class="ia-core-name">SAP <em>S/4HANA</em></span>
+        <span class="ia-core-sub">Universal Journal · ACDOCA — one line-item table for FI + CO</span>
+      </div>
+      <div class="ia-core-mods">
+        <span class="ia-mod">FI</span>
+        <span class="ia-mod">CO</span>
+        <span class="ia-mod soft">MM</span>
+        <span class="ia-mod soft">SD</span>
+        <span class="ia-mod soft">AA</span>
+      </div>
+      <p class="ia-core-note">In S/4HANA, FI and CO share <b>one table (ACDOCA)</b> — no reconciliation between them. Logistics modules post <b>through</b> FI in real time via account determination, so the ledger is never out of step with operations.</p>
+    </div>
+
+    <div class="ia-eyebrow">01 · The interfaces</div>
+    <h2 class="ia-title">Every way in and out of the ledger.</h2>
+    <p class="ia-lede">Six integration points — three internal module postings, three external system interfaces. Tap one to open its spec.</p>
+
+    <div class="ia-grid" id="iaGrid" role="list" style="margin-top:1.3rem;"></div>
+
+    <div class="ia-detail" id="iaDetail" aria-live="polite">
+      <div class="ia-detail-empty">Select an interface above to see its technology, direction, trigger and error handling.</div>
+    </div>
+
+    <div class="ia-legend" aria-hidden="true">
+      <span><i style="background:var(--accent)"></i>IDoc — asynchronous document</span>
+      <span><i style="background:var(--success)"></i>BAPI / RFC — synchronous call</span>
+      <span><i style="background:var(--warning)"></i>OData — REST / Fiori &amp; apps</span>
+      <span><i style="background:#a855f7"></i>SAP CPI — Integration Suite</span>
+      <span><i style="background:var(--text-subtle)"></i>File — DMEE / flat file</span>
+    </div>
+
+    <div class="callout" style="margin-top:2.4rem;">
+      <div class="callout-title">ABOUT THIS MAP</div>
+      <p>The interfaces, technologies and account-determination points are the standard SAP mechanism. The <strong>integration thinking is real</strong> — on XeerSoft I built automatic <strong>POS-to-accounting</strong> posting, GL account determination and multi-branch consolidation, which are exactly the internal-posting and external-interface patterns shown here. This is a methodology artifact, not a delivered SAP integration.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivered integration work behind it &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var IFS = [
+    { from: 'MM', to: 'FI', tech: 'internal', techK: 'bapi', techLabel: 'Real-time posting', freq: 'Real-time',
+      dir: 'Goods movement / invoice → FI document', trig: 'Goods receipt (<span class="tcode">MIGO</span>) or invoice (<span class="tcode">MIRO</span>)',
+      how: 'Automatic account determination <span class="tcode">OBYC</span> resolves the GL accounts (keys BSX / WRX / PRD); the FI document is created synchronously in the same posting.',
+      err: 'Posting fails atomically — no GR without its FI document. Missing OBYC entry stops the movement with a message.' },
+    { from: 'SD', to: 'FI-AR', tech: 'internal', techK: 'bapi', techLabel: 'Real-time posting', freq: 'Real-time',
+      dir: 'Billing document → FI-AR receivable', trig: 'Billing (<span class="tcode">VF01</span>) release to accounting',
+      how: 'Revenue account determination <span class="tcode">VKOA</span> maps condition types to GL; the receivable and output-VAT lines post to FI in the same step.',
+      err: 'Billing blocked from release if account determination is incomplete; the document sits in the billing due list until fixed.' },
+    { from: 'CO', to: 'FI', tech: 'internal', techK: 'odata', techLabel: 'Universal Journal', freq: 'Real-time',
+      dir: 'Controlling ↔ Financial Accounting', trig: 'Every posting with a CO object',
+      how: 'In S/4HANA FI and CO write to <b>one table, ACDOCA</b>. There is no periodic FI-CO reconciliation ledger — the split happens on the same line item.',
+      err: 'Real-time by construction; the classic FI-CO reconciliation gap simply does not exist in the Universal Journal.' },
+    { from: 'SAP', to: 'Bank', tech: 'external', techK: 'file', techLabel: 'Payment / statement', freq: 'Daily batch',
+      dir: 'Payment file out · bank statement in', trig: 'Payment run (<span class="tcode">F110</span>) → outbound; statement import → inbound',
+      how: 'Outbound payment file built by <b>DMEE</b> / SAP CPI in the bank format (ISO 20022 pain.001); inbound statement (CAMT.053 / MT940) auto-reconciles open items.',
+      err: 'File acknowledgements and a reprocessing queue; unmatched statement lines route to a clearing exception for manual assignment.' },
+    { from: 'SAP', to: 'Revenue Dept', tech: 'external', techK: 'cpi', techLabel: 'e-Tax / e-WHT', freq: 'Monthly / per-doc',
+      dir: 'VAT &amp; withholding submission', trig: 'Month-end tax run and per-invoice e-document',
+      how: 'Tax reports (VAT / WHT) and e-Tax invoices submitted via <b>SAP CPI / Integration Suite</b> to the Revenue Department API in the required Thai format.',
+      err: 'Submission status tracked per document; rejects return an error code that blocks the filing until corrected and resubmitted.' },
+    { from: 'POS / CRM', to: 'SAP', tech: 'external', techK: 'idoc', techLabel: 'Sales &amp; customer feed', freq: 'Real-time / batch',
+      dir: 'POS sales &amp; customer master → SAP', trig: 'Store sale posted or customer created in the front-end',
+      how: 'Sales feed inbound as <b>IDoc</b> (or OData for real-time), creating the billing / FI posting; customer master syncs via <b>BAPI</b> to keep the Business Partner aligned.',
+      err: 'IDoc status monitoring (<span class="tcode">WE02</span> / <span class="tcode">BD87</span>); failed IDocs sit in error status for reprocessing with no data loss.' }
+  ];
+  var grid = document.getElementById('iaGrid');
+  var detail = document.getElementById('iaDetail');
+
+  grid.innerHTML = IFS.map(function (f, i) {
+    return '<button type="button" class="ia-if" role="listitem" data-i="' + i + '">' +
+      '<span class="ia-if-flow">' + f.from + ' <span class="arr">&rarr;</span> ' + f.to + '</span>' +
+      '<span class="ia-if-meta"><span class="ia-tech" data-k="' + f.techK + '">' + f.techLabel + '</span>' +
+      '<span class="ia-if-freq">' + f.freq + '</span></span>' +
+      '</button>';
+  }).join('');
+
+  var btns = Array.prototype.slice.call(grid.querySelectorAll('.ia-if'));
+  function show(i) {
+    var f = IFS[i];
+    btns.forEach(function (b) { b.classList.toggle('is-active', +b.getAttribute('data-i') === i); });
+    detail.innerHTML =
+      '<div class="ia-d-flow">' + f.from + ' <span class="arr">&rarr;</span> ' + f.to + '</div>' +
+      '<div class="ia-d-tag">' + (f.tech === 'internal' ? 'Internal · module → FI' : 'External interface') + ' · ' + f.freq + '</div>' +
+      '<dl class="ia-dl">' +
+      '<dt>Direction</dt><dd>' + f.dir + '</dd>' +
+      '<dt>Trigger</dt><dd>' + f.trig + '</dd>' +
+      '<dt>How</dt><dd>' + f.how + '</dd>' +
+      '<dt>Error handling</dt><dd>' + f.err + '</dd>' +
+      '</dl>';
+  }
+  btns.forEach(function (b) { b.addEventListener('click', function () { show(+b.getAttribute('data-i')); }); });
+})();
+</script>
+
+</body>
+</html>

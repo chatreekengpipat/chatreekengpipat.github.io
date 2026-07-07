@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Migration &amp; Cutover Runbook · SAP S/4HANA · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/data-migration-cutover.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Data Migration &amp; Cutover Runbook · SAP — Chatree Kengpipat">
+<meta property="og:description" content="An interactive SAP data-migration and cutover reference: the migration-object catalogue (Migration Cockpit / LTMC load sequence), a T-minus cutover runbook you can step through, and the go/no-go reconciliation gate.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/data-migration-cutover.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Data Migration &amp; Cutover Runbook · SAP">
+<meta name="twitter:description" content="Interactive SAP migration-object catalogue, a T-minus cutover runbook, and the go/no-go reconciliation gate.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive SAP data-migration and cutover methodology reference by Chatree Kengpipat: the migration-object catalogue and load sequence (S/4HANA Migration Cockpit / LTMC / LSMW), a T-minus cutover runbook you can step through, and the go/no-go reconciliation gate. A methodology artifact.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     DATA MIGRATION & CUTOVER — page-scoped. Built from existing
+     tokens. Migration-object catalogue (filter), a T-minus cutover
+     runbook you can run, and a go/no-go reconciliation gate.
+     ============================================================ */
+  .dm-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .dm-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .dm-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .dm-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .dm-banner-text strong { color: var(--text); font-weight: 600; }
+  .dm-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .dm-wrap { max-width: 1000px; margin: 0 auto; }
+  .dm-sec { margin-bottom: 3.2rem; }
+  .dm-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 0.7rem; }
+  .dm-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+  .dm-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 0.6rem; }
+  .dm-title em { color: var(--accent); font-style: normal; }
+  .dm-lede { font-size: 0.95rem; line-height: 1.65; color: var(--text-muted); max-width: 46rem; }
+  .dm-lede b { color: var(--text-strong); font-weight: 600; }
+
+  /* Migration catalogue */
+  .dm-filter { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.3rem 0 1rem; }
+  .dm-filter button { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.35rem 0.9rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .dm-filter button:hover { border-color: var(--accent); color: var(--text); }
+  .dm-filter button[aria-pressed="true"] { background: var(--accent-bg); border-color: color-mix(in srgb, var(--accent) 32%, transparent); color: var(--accent); }
+  .dm-tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); -webkit-overflow-scrolling: touch; }
+  table.dm-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+  .dm-table th { text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; background: var(--surface-2); padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .dm-table td { padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  .dm-table tr:last-child td { border-bottom: 0; }
+  .dm-table tbody tr { transition: background 0.2s, opacity 0.2s; }
+  .dm-table tbody tr:hover { background: var(--surface); }
+  .dm-table tr.hide { display: none; }
+  .dm-seq { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.72rem; color: #fff; background: var(--accent); border-radius: 6px; width: 1.7rem; height: 1.7rem; display: inline-flex; align-items: center; justify-content: center; }
+  .dm-obj-name { font-weight: 600; color: var(--text-strong); }
+  .dm-obj-sap { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); }
+  .dm-type { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 0.14rem 0.45rem; border-radius: 5px; white-space: nowrap; }
+  .dm-type.master { color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent); }
+  .dm-type.txn { color: var(--warning); background: color-mix(in srgb, var(--warning) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent); }
+  .dm-method { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+  .dm-val { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* Cutover runbook */
+  .cut { margin-top: 1.4rem; }
+  .cut-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-bottom: 1.3rem; }
+  .cut-btn { appearance: none; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); border-radius: var(--radius-sm); padding: 0.55rem 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; cursor: pointer; transition: border-color 0.2s, transform 0.2s var(--ease-smooth), background 0.2s, color 0.2s; }
+  .cut-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .cut-btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .cut-btn--primary:hover { filter: brightness(1.08); box-shadow: 0 8px 20px -8px var(--glow-color); }
+  .cut-btn:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
+  .cut-status { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+  .cut-status b { color: var(--text); }
+  .cut-track { height: 4px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-bottom: 1.3rem; }
+  .cut-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 55%, transparent)); border-radius: inherit; transition: width 0.5s var(--ease-smooth); }
+  .cut-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+  .cut-step { display: grid; grid-template-columns: 4.4rem 1fr; gap: 0.9rem; align-items: start; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem 1rem; transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth), opacity 0.3s; }
+  .cut-step.pending { opacity: 0.6; }
+  .cut-step.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 10px 26px -14px var(--glow-color); opacity: 1; }
+  .cut-step.done { opacity: 1; }
+  .cut-t { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.82rem; color: var(--accent); }
+  .cut-step.done .cut-t::after { content: ' ✓'; color: var(--success); }
+  .cut-step-name { font-size: 0.9rem; font-weight: 600; color: var(--text-strong); line-height: 1.3; }
+  .cut-step-detail { font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin-top: 0.25rem; }
+  .cut-step-detail .tcode { font-size: 0.72rem; }
+  .cut-step-own { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--text-subtle); margin-top: 0.35rem; }
+
+  /* Go/No-Go checklist */
+  .gate { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.6rem; margin-top: 1.3rem; }
+  .gate-item { display: flex; align-items: flex-start; gap: 0.7rem; text-align: left; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.8rem 0.95rem; cursor: pointer; font: inherit; color: var(--text); transition: border-color 0.2s, background 0.2s; }
+  .gate-item:hover { border-color: var(--accent); }
+  .gate-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border-strong); flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: transparent; font-size: 0.75rem; transition: background 0.2s, border-color 0.2s, color 0.2s; margin-top: 0.05rem; }
+  .gate-item.checked .gate-box { background: var(--success); border-color: var(--success); color: #fff; }
+  .gate-name { font-size: 0.85rem; line-height: 1.4; color: var(--text); }
+  .gate-item.checked .gate-name { color: var(--text-muted); }
+  .gate-bar { margin-top: 1.1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+  .gate-verdict { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 0.9rem; border-radius: 100px; }
+  .gate-verdict.nogo { color: var(--warning); background: color-mix(in srgb, var(--warning) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warning) 32%, transparent); }
+  .gate-verdict.go { color: var(--success); background: color-mix(in srgb, var(--success) 14%, transparent); border: 1px solid color-mix(in srgb, var(--success) 38%, transparent); }
+  .gate-count { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+
+  @media (max-width: 720px) {
+    .dm-banner { top: 62px; padding: 0 1rem; }
+    .cut-step { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cut-step, .cut-fill, .gate-box { transition: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html" class="active" aria-current="page">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="dm-banner" role="note" aria-label="Honesty disclaimer">
+  <div class="dm-banner-inner">
+    <span class="dm-banner-icon" aria-hidden="true">!</span>
+    <div class="dm-banner-text">
+      <span class="dm-banner-tag">METHODOLOGY REFERENCE</span><br>
+      A <strong>migration &amp; cutover playbook</strong> I authored, showing how I&rsquo;d sequence data load and run a go-live. The <strong>cutover discipline is real</strong> &mdash; I&rsquo;ve executed it across four XeerSoft go-lives &mdash; framed here in SAP S/4HANA terms; it is not a record of a delivered SAP migration.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>SAP Design</span><span class="breadcrumb-sep">/</span><span>Data Migration &amp; Cutover</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Data Migration &amp; Cutover · Runbook</div>
+      <div class="project-meta">Where a build becomes a live system</div>
+      <h1>Data Migration &amp; <em>Cutover</em></h1>
+      <p class="project-hero-desc">Go-live is won or lost in the <strong>data load and the cutover window</strong>. This is the discipline I run: a <strong>migration-object catalogue</strong> with the right load sequence (master before transactional), a <strong>T-minus cutover runbook</strong> you can step through, and the <strong>go/no-go reconciliation gate</strong> that decides whether the system goes live. Framed in SAP S/4HANA Migration Cockpit terms, built on four real ERP cutovers.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Load tool</span><span class="project-info-val">S/4HANA Migration Cockpit (LTMC) · LSMW</span></div>
+      <div class="project-info-row"><span class="project-info-label">Objects</span><span class="project-info-val">6 master · 6 transactional</span></div>
+      <div class="project-info-row"><span class="project-info-label">Gate</span><span class="project-info-val">Reconciliation → go/no-go</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="dm-wrap">
+
+    <!-- 1 · MIGRATION CATALOGUE -->
+    <div class="dm-sec">
+      <div class="dm-eyebrow">01 · What loads, and in what order</div>
+      <h2 class="dm-title">The migration-object catalogue.</h2>
+      <p class="dm-lede">You cannot load an open invoice before the customer exists. Every object has a <b>type</b> and a <b>load sequence</b> &mdash; master data first, then the transactional open items that reference it. Filter the catalogue below.</p>
+
+      <div class="dm-filter" id="dmFilter" role="group" aria-label="Filter migration objects">
+        <button type="button" data-t="all" aria-pressed="true">All</button>
+        <button type="button" data-t="master" aria-pressed="false">Master data</button>
+        <button type="button" data-t="txn" aria-pressed="false">Transactional</button>
+      </div>
+
+      <div class="dm-tablewrap">
+        <table class="dm-table">
+          <thead><tr><th>Seq</th><th>Object</th><th>Type</th><th>Load method</th><th>Validation</th></tr></thead>
+          <tbody id="dmBody"></tbody>
+        </table>
+      </div>
+      <p class="dm-lede" style="margin-top:0.9rem;font-size:0.84rem;">Org structure &amp; config travel by <b>transport</b>, not the Migration Cockpit &mdash; they are the container everything else loads into.</p>
+    </div>
+
+    <!-- 2 · CUTOVER RUNBOOK -->
+    <div class="dm-sec">
+      <div class="dm-eyebrow">02 · The cutover window</div>
+      <h2 class="dm-title">Run the <em>cutover</em>.</h2>
+      <p class="dm-lede">A cutover is a countdown: freeze legacy, extract, load, reconcile, decide, open. Press <b>Run cutover</b> to walk the T-minus sequence, or step it yourself.</p>
+
+      <div class="cut">
+        <div class="cut-track" aria-hidden="true"><span class="cut-fill" id="cutFill"></span></div>
+        <ol class="cut-list" id="cutList"></ol>
+        <div class="cut-controls" style="margin-top:1.3rem;">
+          <button type="button" class="cut-btn cut-btn--primary" id="cutRun">Run cutover &#9656;</button>
+          <button type="button" class="cut-btn" id="cutStep">Step</button>
+          <button type="button" class="cut-btn" id="cutReset">Reset</button>
+          <span class="cut-status" id="cutStatus">9 phases · T-7 to T+1 hypercare</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · GO / NO-GO -->
+    <div class="dm-sec">
+      <div class="dm-eyebrow">03 · The decision gate</div>
+      <h2 class="dm-title">Go / no-go: every box, or you don&rsquo;t go.</h2>
+      <p class="dm-lede">Cutover ends at a gate. These are the criteria I&rsquo;d hold the line on &mdash; tick each as it clears; the verdict flips to <b>GO</b> only when they all do.</p>
+
+      <div class="gate" id="gate" role="group" aria-label="Go / no-go criteria">
+        <button type="button" class="gate-item"><span class="gate-box" aria-hidden="true">✓</span><span class="gate-name">Master data reconciled <b>100%</b> (record counts + control totals)</span></button>
+        <button type="button" class="gate-item"><span class="gate-box" aria-hidden="true">✓</span><span class="gate-name">GL trial balance ties to legacy to the baht</span></button>
+        <button type="button" class="gate-item"><span class="gate-box" aria-hidden="true">✓</span><span class="gate-name">Open AR / AP items tie to sub-ledger aging</span></button>
+        <button type="button" class="gate-item"><span class="gate-box" aria-hidden="true">✓</span><span class="gate-name">Critical RICEFW objects tested in the target client</span></button>
+        <button type="button" class="gate-item"><span class="gate-box" aria-hidden="true">✓</span><span class="gate-name">Roles &amp; authorizations assigned to go-live users</span></button>
+        <button type="button" class="gate-item"><span class="gate-box" aria-hidden="true">✓</span><span class="gate-name">Fallback / rollback plan signed off</span></button>
+      </div>
+      <div class="gate-bar">
+        <span class="gate-verdict nogo" id="gateVerdict">NO-GO</span>
+        <span class="gate-count" id="gateCount">0 / 6 criteria cleared</span>
+        <button type="button" class="cut-btn" id="gateReset" style="margin-left:auto;">Reset</button>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">ABOUT THIS RUNBOOK</div>
+      <p>The migration objects, load sequence and cutover phases are the standard SAP mechanism; the go/no-go criteria are the ones I hold to. I&rsquo;ve <strong>run this cutover discipline for real on four XeerSoft Cloud ERP go-lives</strong> &mdash; freeze, migrate, reconcile, decide, hypercare &mdash; and this is how I&rsquo;d carry it onto an SAP programme. It is a methodology artifact, not a delivered SAP migration.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivered go-lives behind it &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---- Migration catalogue ---- */
+  var OBJECTS = [
+    { seq: 1, name: 'GL account master', sap: 'chart of accounts', type: 'master', method: 'LTMC', val: 'account count + hierarchy check' },
+    { seq: 2, name: 'Cost / profit centers', sap: 'CO master', type: 'master', method: 'LTMC', val: 'count + standard hierarchy' },
+    { seq: 3, name: 'Business Partner', sap: 'customer / vendor', type: 'master', method: 'LTMC', val: 'count + tax/bank fields' },
+    { seq: 4, name: 'Material master', sap: 'MM01 views', type: 'master', method: 'LTMC', val: 'count per material type' },
+    { seq: 5, name: 'Fixed asset master', sap: 'AS91', type: 'master', method: 'LTMC', val: 'count + APC values' },
+    { seq: 6, name: 'Bank master', sap: 'house banks', type: 'master', method: 'LTMC', val: 'count + IBAN validity' },
+    { seq: 7, name: 'GL open items &amp; balances', sap: 'FB01 / migration', type: 'txn', method: 'LTMC', val: 'trial balance = legacy' },
+    { seq: 8, name: 'AR open items', sap: 'customer open items', type: 'txn', method: 'LTMC', val: 'aging = sub-ledger' },
+    { seq: 9, name: 'AP open items', sap: 'vendor open items', type: 'txn', method: 'LTMC', val: 'aging = sub-ledger' },
+    { seq: 10, name: 'Open purchase orders', sap: 'ME open POs', type: 'txn', method: 'LTMC', val: 'open qty + value' },
+    { seq: 11, name: 'Inventory balances', sap: 'mvt 561', type: 'txn', method: 'MB1C / LTMC', val: 'qty + value per plant' },
+    { seq: 12, name: 'Asset accumulated depr.', sap: 'AS91 takeover', type: 'txn', method: 'LTMC', val: 'NBV = legacy' }
+  ];
+  var dmBody = document.getElementById('dmBody');
+  function renderObjects() {
+    dmBody.innerHTML = OBJECTS.map(function (o) {
+      return '<tr data-type="' + o.type + '">' +
+        '<td><span class="dm-seq">' + o.seq + '</span></td>' +
+        '<td><span class="dm-obj-name">' + o.name + '</span><br><span class="dm-obj-sap">' + o.sap + '</span></td>' +
+        '<td><span class="dm-type ' + o.type + '">' + (o.type === 'master' ? 'Master' : 'Transactional') + '</span></td>' +
+        '<td><span class="dm-method">' + o.method + '</span></td>' +
+        '<td><span class="dm-val">' + o.val + '</span></td>' +
+        '</tr>';
+    }).join('');
+  }
+  renderObjects();
+  document.querySelectorAll('#dmFilter button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#dmFilter button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      var t = b.getAttribute('data-t');
+      dmBody.querySelectorAll('tr').forEach(function (tr) {
+        tr.classList.toggle('hide', t !== 'all' && tr.getAttribute('data-type') !== t);
+      });
+    });
+  });
+
+  /* ---- Cutover runbook ---- */
+  var PHASES = [
+    { t: 'T-7', name: 'Freeze legacy master data', detail: 'Stop new master-data changes in the legacy system so the extract is a stable baseline.', own: 'Consultant + business owner' },
+    { t: 'T-5', name: 'Final legacy extract', detail: 'Pull the definitive master and open-item extracts; version and lock the files.', own: 'Data lead' },
+    { t: 'T-3', name: 'Load master data', detail: 'Run the Migration Cockpit master objects in sequence (GL → CO → BP → material → asset → bank).', own: 'Migration team' },
+    { t: 'T-2', name: 'Reconcile master counts', detail: 'Record counts + control fields match the extract before any transactional load.', own: 'Consultant' },
+    { t: 'T-1', name: 'Load open items &amp; balances', detail: 'GL balances, AR/AP open items, open POs, inventory and asset takeover.', own: 'Migration team' },
+    { t: 'T-1', name: 'Reconcile control totals', detail: 'GL trial balance ties to legacy; sub-ledger aging ties to GL. <span class="tcode">FS10N</span> / <span class="tcode">FBL5N</span>.', own: 'Consultant + finance' },
+    { t: 'T-0', name: 'Go / no-go decision', detail: 'The reconciliation gate below is cleared, or the go-live slips. No exceptions on finance.', own: 'Steering + PM' },
+    { t: 'T-0', name: 'Open periods, unfreeze', detail: 'Open the posting period (<span class="tcode">OB52</span>), release the system to users.', own: 'Consultant' },
+    { t: 'T+1', name: 'First live postings · hypercare', detail: 'Watch the first real documents post; triage issues fast with the team on standby.', own: 'Whole team' }
+  ];
+  var cutList = document.getElementById('cutList');
+  var cutFill = document.getElementById('cutFill');
+  var cutStatus = document.getElementById('cutStatus');
+  var runBtn = document.getElementById('cutRun');
+  var stepBtn = document.getElementById('cutStep');
+  var resetBtn = document.getElementById('cutReset');
+  var cur = 0, timer = null;
+
+  cutList.innerHTML = PHASES.map(function (p, i) {
+    return '<li class="cut-step pending" data-i="' + i + '">' +
+      '<span class="cut-t">' + p.t + '</span>' +
+      '<div><div class="cut-step-name">' + p.name + '</div>' +
+      '<div class="cut-step-detail">' + p.detail + '</div>' +
+      '<div class="cut-step-own">' + p.own + '</div></div></li>';
+  }).join('');
+  var stepEls = Array.prototype.slice.call(cutList.querySelectorAll('.cut-step'));
+
+  function paint() {
+    stepEls.forEach(function (el, i) {
+      el.classList.toggle('done', i < cur);
+      el.classList.toggle('active', i === cur);
+      el.classList.toggle('pending', i > cur);
+    });
+    cutFill.style.width = (cur / PHASES.length * 100) + '%';
+    if (cur >= PHASES.length) {
+      cutFill.style.width = '100%';
+      cutStatus.innerHTML = '<b>Cutover complete</b> · system live · hypercare running';
+      runBtn.disabled = true; stepBtn.disabled = true;
+    } else {
+      cutStatus.innerHTML = 'Phase <b>' + (cur + 1) + ' / ' + PHASES.length + '</b> · ' + PHASES[cur].t + ' — ' + PHASES[cur].name.replace(/&amp;/g, '&');
+    }
+  }
+  function advance() { if (cur < PHASES.length) { cur++; paint(); } }
+  function run() {
+    if (cur >= PHASES.length) return;
+    runBtn.disabled = true; stepBtn.disabled = true;
+    (function tick() {
+      if (cur >= PHASES.length) { runBtn.disabled = true; stepBtn.disabled = true; return; }
+      advance();
+      if (cur < PHASES.length) timer = setTimeout(tick, reduce.matches ? 250 : 780);
+      else { runBtn.disabled = true; stepBtn.disabled = true; }
+    })();
+  }
+  function reset() {
+    if (timer) { clearTimeout(timer); timer = null; }
+    cur = 0; runBtn.disabled = false; stepBtn.disabled = false;
+    cutStatus.innerHTML = '9 phases · T-7 to T+1 hypercare';
+    paint();
+  }
+  runBtn.addEventListener('click', run);
+  stepBtn.addEventListener('click', function () { if (timer) { clearTimeout(timer); timer = null; } runBtn.disabled = false; advance(); });
+  resetBtn.addEventListener('click', reset);
+  paint();
+
+  /* ---- Go / no-go gate ---- */
+  var gate = document.getElementById('gate');
+  var gateItems = Array.prototype.slice.call(gate.querySelectorAll('.gate-item'));
+  var gateVerdict = document.getElementById('gateVerdict');
+  var gateCount = document.getElementById('gateCount');
+  function updateGate() {
+    var n = gateItems.filter(function (g) { return g.classList.contains('checked'); }).length;
+    gateCount.textContent = n + ' / ' + gateItems.length + ' criteria cleared';
+    var go = n === gateItems.length;
+    gateVerdict.textContent = go ? 'GO' : 'NO-GO';
+    gateVerdict.className = 'gate-verdict ' + (go ? 'go' : 'nogo');
+  }
+  gateItems.forEach(function (g) {
+    g.setAttribute('aria-pressed', 'false');
+    g.addEventListener('click', function () {
+      g.classList.toggle('checked');
+      g.setAttribute('aria-pressed', String(g.classList.contains('checked')));
+      updateGate();
+    });
+  });
+  document.getElementById('gateReset').addEventListener('click', function () {
+    gateItems.forEach(function (g) { g.classList.remove('checked'); g.setAttribute('aria-pressed', 'false'); });
+    updateGate();
+  });
+  updateGate();
+})();
+</script>
+
+</body>
+</html>
