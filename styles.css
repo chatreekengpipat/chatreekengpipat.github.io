@@ -188,6 +188,12 @@ nav {
   right: 0;
   min-width: 340px;
   max-width: 90vw;
+  /* Cap to the viewport and scroll inside — the menu now has enough
+     groups to run past the bottom of the screen. */
+  max-height: calc(100vh - 92px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -201,6 +207,10 @@ nav {
   transition: opacity 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth), visibility 0.2s;
   z-index: 210;
 }
+/* Thin, unobtrusive scrollbar for the dropdown */
+.nav-dd-panel::-webkit-scrollbar { width: 8px; }
+.nav-dd-panel::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+.nav-dd-panel { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 .nav-dd:hover .nav-dd-panel,
 .nav-dd:focus-within .nav-dd-panel { opacity: 1; visibility: visible; transform: none; }
 .nav-dd-group { padding: 0.25rem 0; }
@@ -230,6 +240,7 @@ nav {
     position: static; opacity: 1; visibility: visible; transform: none;
     min-width: 0; box-shadow: none; border: 0; background: transparent;
     padding: 0.1rem 0 0.3rem 0.6rem; transition: none;
+    max-height: none; overflow: visible;  /* the mobile drawer scrolls, not this panel */
   }
   .nav-dd-panel a { font-size: 0.92rem; padding: 0.55rem 0.7rem; }
 }
