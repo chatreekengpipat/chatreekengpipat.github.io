@@ -99,7 +99,31 @@
   .cm-d-l2 { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .cm-d-l2 span { font-size: 0.8rem; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.3rem 0.6rem; }
 
-  @media (max-width: 720px) { .cm-banner { top: 62px; padding: 0 1rem; } .cm-tier-desc { display: none; } }
+  /* Self-assessment */
+  .cm-assess-btn, .cm-reset-btn { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; cursor: pointer; border-radius: var(--radius-sm); padding: 0.48rem 0.9rem; transition: border-color 0.2s, background 0.2s, color 0.2s; }
+  .cm-assess-btn { background: var(--surface); border: 1px solid var(--border-strong); color: var(--text); }
+  .cm-assess-btn:hover { border-color: var(--accent); }
+  .cm-assess-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .cm-reset-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); margin-left: 0.4rem; }
+  .cm-reset-btn:hover { border-color: var(--danger); color: var(--danger); }
+  .cm-summary { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.2rem 1.4rem; margin-bottom: 1.4rem; box-shadow: var(--shadow-md); }
+  .cm-sum-top { display: flex; flex-wrap: wrap; gap: 1.2rem 2.4rem; align-items: center; }
+  .cm-sum-metric .k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; display: block; margin-bottom: 0.2rem; }
+  .cm-sum-metric .v { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 600; color: var(--text-strong); font-variant-numeric: tabular-nums; }
+  .cm-sum-metric .v small { font-size: 0.85rem; color: var(--text-muted); }
+  .cm-sum-hint { font-size: 0.82rem; color: var(--text-muted); margin-left: auto; max-width: 22rem; line-height: 1.45; }
+  .cm-sum-hint b { color: var(--text); font-weight: 600; }
+  .cm-gaps { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+  .cm-gaps-title { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--warning); font-weight: 700; margin-bottom: 0.55rem; }
+  .cm-gaps-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .cm-gap { font-size: 0.78rem; color: var(--text); background: color-mix(in srgb, var(--warning) 10%, transparent); border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent); border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; }
+  .cm-gap b { color: var(--warning); font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; margin-left: 0.25rem; }
+  .cm-gaps-none { font-size: 0.82rem; color: var(--success); }
+  .cm-d-scale.rate i { cursor: pointer; width: 26px; height: 11px; transition: background 0.15s; }
+  .cm-d-scale.rate i:hover { background: color-mix(in srgb, var(--accent) 55%, var(--border-strong)); }
+  .cm-rate-hint { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--accent); margin-top: 0.9rem; }
+
+  @media (max-width: 720px) { .cm-banner { top: 62px; padding: 0 1rem; } .cm-tier-desc { display: none; } .cm-sum-hint { margin-left: 0; } }
   @media (prefers-reduced-motion: reduce) { .cm-box { transition: none; } }
 </style>
 </head>
@@ -212,6 +236,11 @@
           <button type="button" data-v="imp" aria-pressed="false">Priority</button>
         </div>
       </div>
+      <div>
+        <div class="cm-ctl-label">Assess it yourself</div>
+        <button type="button" class="cm-assess-btn" id="cmAssess" aria-pressed="false">◉ Self-assess mode</button>
+        <button type="button" class="cm-reset-btn" id="cmReset" hidden>Reset ratings</button>
+      </div>
       <div class="cm-legend hidden" id="cmLegend" aria-hidden="true">
         <span><i style="background:color-mix(in srgb,var(--danger) 24%,var(--surface));border-color:var(--danger)"></i>1 · Low</span>
         <span><i style="background:color-mix(in srgb,var(--danger) 12%,var(--surface))"></i>2</span>
@@ -221,6 +250,7 @@
       </div>
     </div>
 
+    <div class="cm-summary" id="cmSummary" hidden></div>
     <div id="cmTiers"></div>
 
     <div class="cm-detail" id="cmDetail" aria-live="polite">
@@ -282,13 +312,17 @@
   var tiersEl = document.getElementById('cmTiers');
   var detail = document.getElementById('cmDetail');
   var legend = document.getElementById('cmLegend');
-  var view = 'structure';
+  var summary = document.getElementById('cmSummary');
+  var assessBtn = document.getElementById('cmAssess');
+  var resetBtn = document.getElementById('cmReset');
+  var view = 'structure', assess = false, LS = 'ck-capmap-ratings', R = {};
+  try { R = JSON.parse(localStorage.getItem(LS) || '{}') || {}; } catch (e) { R = {}; }
 
-  function dots(n) {
-    var h = '';
-    for (var i = 1; i <= 5; i++) h += '<span class="cm-dot' + (i <= n ? ' on' : '') + '"></span>';
-    return h;
-  }
+  function mat(c) { return (R[c[1]] && R[c[1]].m) || c[2]; }
+  function imp(c) { return (R[c[1]] && R[c[1]].i) || c[3]; }
+  function save() { try { localStorage.setItem(LS, JSON.stringify(R)); } catch (e) {} }
+  function dots(n) { var h = ''; for (var i = 1; i <= 5; i++) h += '<span class="cm-dot' + (i <= n ? ' on' : '') + '"></span>'; return h; }
+
   function render() {
     var html = '';
     Object.keys(TIERS).forEach(function (t) {
@@ -296,11 +330,11 @@
       html += '<div class="cm-tier"><div class="cm-tier-head"><span class="cm-tier-k">' + t + '</span><span class="cm-tier-name">' + TIERS[t][0] + '</span><span class="cm-tier-desc">' + TIERS[t][1] + '</span></div><div class="cm-boxes">';
       caps.forEach(function (x) {
         var c = x[0], i = x[1];
-        var lvl = view === 'mat' ? c[2] : (view === 'imp' ? c[3] : 0);
+        var lvl = view === 'mat' ? mat(c) : (view === 'imp' ? imp(c) : 0);
         var heat = view !== 'structure';
         html += '<button type="button" class="cm-box' + (heat ? ' heat' : '') + '" data-i="' + i + '"' + (heat ? ' data-lvl="' + lvl + '"' : '') + '>' +
           '<span class="cm-box-name">' + c[1] + '</span>' +
-          '<span class="cm-box-foot"><span class="cm-box-l2">' + c[5].length + ' sub-caps</span><span class="cm-dots" aria-hidden="true">' + dots(view === 'imp' ? c[3] : c[2]) + '</span></span>' +
+          '<span class="cm-box-foot"><span class="cm-box-l2">' + c[5].length + ' sub-caps</span><span class="cm-dots" aria-hidden="true">' + dots(view === 'imp' ? imp(c) : mat(c)) + '</span></span>' +
           '</button>';
       });
       html += '</div></div>';
@@ -315,25 +349,73 @@
     var c = CAPS[i];
     tiersEl.querySelectorAll('.cm-box.is-active').forEach(function (x) { x.classList.remove('is-active'); });
     if (box) box.classList.add('is-active');
-    function scale(n) { var h = ''; for (var k = 1; k <= 5; k++) h += '<i class="' + (k <= n ? 'on' : '') + '"></i>'; return h; }
+    function scale(n, kind) {
+      var h = '<span class="cm-d-scale' + (assess ? ' rate" data-i="' + i + '" data-kind="' + kind + '"' : '"') + '>';
+      for (var k = 1; k <= 5; k++) h += '<i class="' + (k <= n ? 'on' : '') + '" data-v="' + k + '"></i>';
+      return h + '</span>';
+    }
     detail.innerHTML =
       '<div class="cm-d-tier">' + TIERS[c[0]][0] + '</div>' +
       '<div class="cm-d-name">' + c[1] + '</div>' +
       '<div class="cm-d-def">' + c[4] + '</div>' +
       '<div class="cm-d-meta">' +
-        '<div class="cm-d-metric"><span class="k">Maturity</span><span class="v"><span class="cm-d-scale">' + scale(c[2]) + '</span>' + c[2] + '/5</span></div>' +
-        '<div class="cm-d-metric"><span class="k">Investment priority</span><span class="v"><span class="cm-d-scale">' + scale(c[3]) + '</span>' + c[3] + '/5</span></div>' +
+        '<div class="cm-d-metric"><span class="k">Maturity</span><span class="v">' + scale(mat(c), 'm') + mat(c) + '/5</span></div>' +
+        '<div class="cm-d-metric"><span class="k">Investment priority</span><span class="v">' + scale(imp(c), 'i') + imp(c) + '/5</span></div>' +
       '</div>' +
+      (assess ? '<div class="cm-rate-hint">▸ Click a bar to set your own rating — it updates the heat-map and saves in your browser.</div>' : '') +
       '<div class="cm-d-l2title">Level-2 sub-capabilities</div>' +
       '<div class="cm-d-l2">' + c[5].map(function (s) { return '<span>' + s + '</span>'; }).join('') + '</div>';
+    if (assess) {
+      detail.querySelectorAll('.cm-d-scale.rate i').forEach(function (seg) {
+        seg.addEventListener('click', function () {
+          var wrap = seg.parentNode, ci = +wrap.getAttribute('data-i'), kind = wrap.getAttribute('data-kind'), v = +seg.getAttribute('data-v');
+          var name = CAPS[ci][1];
+          R[name] = R[name] || {}; R[name][kind] = v; save();
+          if (view === 'structure') setView('mat');
+          render();
+          show(ci, tiersEl.querySelector('.cm-box[data-i="' + ci + '"]'));
+          updateSummary();
+        });
+      });
+    }
+  }
+  function updateSummary() {
+    if (!assess) { summary.hidden = true; return; }
+    summary.hidden = false;
+    var sumM = 0, gaps = [];
+    CAPS.forEach(function (c) { var m = mat(c), p = imp(c); sumM += m; if (p - m >= 2) gaps.push({ n: c[1], d: p - m }); });
+    gaps.sort(function (a, b) { return b.d - a.d; });
+    var avg = (sumM / CAPS.length).toFixed(1), rated = Object.keys(R).length;
+    var gapHtml = gaps.length
+      ? '<div class="cm-gaps-list">' + gaps.map(function (g) { return '<span class="cm-gap">' + g.n + '<b>+' + g.d + '</b></span>'; }).join('') + '</div>'
+      : '<div class="cm-gaps-none">No priority gaps yet — a capability appears here when its priority exceeds its maturity by 2 or more.</div>';
+    summary.innerHTML =
+      '<div class="cm-sum-top">' +
+        '<div class="cm-sum-metric"><span class="k">Portfolio maturity</span><span class="v">' + avg + '<small>/5</small></span></div>' +
+        '<div class="cm-sum-metric"><span class="k">Priority gaps</span><span class="v">' + gaps.length + '</span></div>' +
+        '<div class="cm-sum-metric"><span class="k">You have rated</span><span class="v">' + rated + '<small>/' + CAPS.length + '</small></span></div>' +
+        '<div class="cm-sum-hint">Select a capability and click its bars to rate <b>maturity</b> and <b>priority</b>. The gaps below are where <b>priority outpaces maturity</b> &mdash; the capabilities to invest in first.</div>' +
+      '</div>' +
+      '<div class="cm-gaps"><div class="cm-gaps-title">▸ Investment targets · priority − maturity ≥ 2</div>' + gapHtml + '</div>';
+  }
+  function setView(v) {
+    view = v;
+    document.querySelectorAll('#cmView button').forEach(function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-v') === v)); });
   }
   document.querySelectorAll('#cmView button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('#cmView button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-      b.setAttribute('aria-pressed', 'true');
-      view = b.getAttribute('data-v');
-      render();
-    });
+    b.addEventListener('click', function () { setView(b.getAttribute('data-v')); render(); });
+  });
+  assessBtn.addEventListener('click', function () {
+    assess = !assess;
+    assessBtn.setAttribute('aria-pressed', String(assess));
+    resetBtn.hidden = !assess;
+    if (assess && view === 'structure') setView('mat');
+    render(); updateSummary();
+    if (assess) { var a = tiersEl.querySelector('.cm-box'); if (a) show(0, a); }
+  });
+  resetBtn.addEventListener('click', function () {
+    R = {}; save(); render(); updateSummary();
+    detail.innerHTML = '<div class="cm-detail-empty">Ratings reset to the reference model. Select a capability to rate it again.</div>';
   });
   render();
 })();
