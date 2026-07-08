@@ -878,7 +878,15 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       <div class="xsim-cap">Pick Year → Track → Class → Student; the e-mail auto-fills, then set how many stars and the reason. On import, rows are grouped by student e-mail and written as a single batch &mdash; balances and ranks update live and persist in your browser. Public demo uses an anonymised roster; on the school's machine a local data file supplies the live roster. Demonstrates the specified behaviour, not the proprietary interface.</div>
     </div>
     <script src="newton-students.js?v=2"></script>
-    <script src="newton-students.local.js?v=1"></script>
+    <script>
+      /* Optional live-roster override — loaded only OFF the public host (the school's
+         local machine / localhost), never on GitHub Pages. The real roster file is
+         git-ignored and absent from the deploy, so a static reference would 404 in
+         public. document.write keeps it synchronous, before the sim reads the roster. */
+      if (location.hostname !== 'chatreekengpipat.github.io') {
+        document.write('<scr' + 'ipt src="newton-students.local.js?v=1"><\/scr' + 'ipt>');
+      }
+    </script>
     <script>
     (function(){
       var root=document.getElementById('sim3imp');
