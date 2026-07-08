@@ -29,6 +29,7 @@
     { t: 'Business Architecture Hub', u: 'business-architecture.html', c: 'Business Arch', k: 'bizbok togaf archimate primer' },
     { t: 'Capability Map', u: 'capability-map.html', c: 'Business Arch', k: 'capability heat map maturity bizbok' },
     { t: 'Value Streams', u: 'value-streams.html', c: 'Business Arch', k: 'value stream stakeholder stage cross map' },
+    { t: 'Traceability Explorer', u: 'traceability.html', c: 'Business Arch', k: 'traceability golden thread strategy capability initiative ricefw test lineage togaf' },
     { t: 'Target Operating Model', u: 'operating-model.html', c: 'Business Arch', k: 'tom operating model current future dimensions' },
     { t: 'Business Architecture Glossary', u: 'ba-glossary.html', c: 'Business Arch', k: 'bizbok togaf adm archimate glossary' },
     // SAP design cluster

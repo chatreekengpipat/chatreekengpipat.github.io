@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traceability Explorer · Business Architecture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/traceability.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Traceability Explorer · Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="An interactive traceability lens: click any node to trace the golden thread from a strategic objective through capability, value stream, initiative and RICEFW deliverable to the test that validates it.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/traceability.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Traceability Explorer · Business Architecture">
+<meta name="twitter:description" content="Trace the golden thread: strategy → capability → value stream → initiative → deliverable → test.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive Business Architecture traceability explorer by Chatree Kengpipat: click any node to light up the golden thread that connects a strategic objective to the capability it needs, the value stream that delivers it, the change initiative that builds it, the RICEFW deliverable it produces, and the test scenario that validates it. Upstream ancestry and downstream descendants, live.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     TRACEABILITY EXPLORER — page-scoped. Six layers of nodes;
+     clicking one lights its upstream ancestry + downstream
+     descendants (the "golden thread"), and reports the lineage.
+     ============================================================ */
+  .tr-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .tr-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .tr-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .tr-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .tr-banner-text strong { color: var(--text); font-weight: 600; }
+  .tr-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .tr-wrap { max-width: 1160px; margin: 0 auto; }
+
+  /* Lineage readout */
+  .tr-thread { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.15rem 1.4rem; margin-bottom: 1.4rem; box-shadow: var(--shadow-md); min-height: 5.4rem; }
+  .tr-thread-empty { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.6rem; }
+  .tr-thread-empty::before { content: ''; width: 9px; height: 9px; background: var(--accent); border-radius: 50%; flex-shrink: 0; animation: trPulse 2s var(--ease-smooth) infinite; }
+  @keyframes trPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .tr-thread-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.9rem; margin-bottom: 0.85rem; }
+  .tr-thread-sel { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
+  .tr-thread-count { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); }
+  .tr-thread-count b { color: var(--accent); font-weight: 700; }
+  .tr-thread-clear { margin-left: auto; appearance: none; background: none; border: 1px solid var(--border); border-radius: 100px; padding: 0.28rem 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+  .tr-thread-clear:hover { border-color: var(--accent); color: var(--text); }
+  .tr-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.15rem; }
+  .tr-chain-step { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .tr-chain-k { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 4px; padding: 0.14rem 0.4rem; }
+  .tr-chain-k.up { background: var(--text-subtle); }
+  .tr-chain-k.down { background: var(--success); }
+  .tr-chain-items { font-size: 0.82rem; color: var(--text); }
+  .tr-chain-items .sel { color: var(--accent); font-weight: 700; }
+  .tr-chain-sep { color: var(--border-strong); font-weight: 700; padding: 0 0.15rem; }
+
+  /* Column board */
+  .tr-scroll { overflow-x: auto; padding-bottom: 0.4rem; }
+  .tr-board { display: grid; grid-template-columns: repeat(6, minmax(158px, 1fr)); gap: 0.65rem; min-width: 940px; }
+  .tr-col { display: flex; flex-direction: column; gap: 0.45rem; }
+  .tr-col-head { position: relative; padding: 0 0.15rem 0.55rem; border-bottom: 1px solid var(--border); margin-bottom: 0.15rem; }
+  .tr-col-k { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .tr-col-name { font-size: 0.9rem; font-weight: 800; letter-spacing: -0.01em; color: var(--text-strong); line-height: 1.15; }
+  .tr-col-sub { font-size: 0.66rem; color: var(--text-subtle); margin-top: 0.1rem; }
+  .tr-col:not(:last-child) .tr-col-head::after { content: '\203A'; position: absolute; right: -0.5rem; top: 0.2rem; color: var(--border-strong); font-weight: 700; z-index: 1; }
+
+  .tr-node {
+    text-align: left; font: inherit; cursor: pointer; width: 100%;
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 0.55rem 0.65rem; color: var(--text);
+    transition: border-color 0.2s, transform 0.18s var(--ease-smooth), box-shadow 0.2s, opacity 0.25s, background 0.2s;
+    display: flex; flex-direction: column; gap: 0.15rem;
+  }
+  .tr-node-name { font-size: 0.78rem; font-weight: 600; line-height: 1.25; color: var(--text-strong); }
+  .tr-node-meta { font-size: 0.62rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+  .tr-node:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 9px 22px -14px var(--glow-color); }
+  .tr-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Trace states — applied only when the board has a selection */
+  .tr-board.armed .tr-node { opacity: 0.28; }
+  .tr-board.armed .tr-node.up { opacity: 1; border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); background: var(--surface); }
+  .tr-board.armed .tr-node.down { opacity: 1; border-color: color-mix(in srgb, var(--success) 55%, var(--border)); background: var(--surface); }
+  .tr-board.armed .tr-node.up::after,
+  .tr-board.armed .tr-node.down::after { content: '↑ enables'; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; font-weight: 700; color: var(--accent); margin-top: 0.05rem; }
+  .tr-board.armed .tr-node.down::after { content: '↓ realises'; color: var(--success); }
+  .tr-board.armed .tr-node.sel { opacity: 1; border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 10px 26px -14px var(--glow-color); }
+  .tr-board.armed .tr-node.sel .tr-node-name, .tr-board.armed .tr-node.sel .tr-node-meta { color: #fff; }
+  .tr-board.armed .tr-node.sel::after { content: '● selected'; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; font-weight: 700; color: rgba(255,255,255,0.85); margin-top: 0.05rem; }
+
+  .tr-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; margin-top: 1.3rem; font-size: 0.72rem; color: var(--text-muted); }
+  .tr-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .tr-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .tr-legend .li-sel { background: var(--accent); }
+  .tr-legend .li-up { background: color-mix(in srgb, var(--accent) 45%, var(--border)); border: 1px solid var(--accent); }
+  .tr-legend .li-down { background: color-mix(in srgb, var(--success) 55%, var(--border)); border: 1px solid var(--success); }
+
+  @media (max-width: 720px) {
+    .tr-banner { top: 62px; padding: 0 1rem; }
+    .tr-chain { gap: 0.3rem 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tr-node { transition: opacity 0.01ms, background 0.01ms, border-color 0.01ms; }
+    .tr-thread-empty::before { animation: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="traceability.html" class="active" aria-current="page">Traceability Explorer</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="tr-banner" role="note" aria-label="Methodology note">
+  <div class="tr-banner-inner">
+    <span class="tr-banner-icon" aria-hidden="true">!</span>
+    <div class="tr-banner-text">
+      <span class="tr-banner-tag">BUSINESS ARCHITECTURE · METHODOLOGY REFERENCE</span><br>
+      The <strong>golden thread</strong> a Business Architect maintains: every objective traces to a capability, a value stream, an initiative and a testable deliverable. Nodes are drawn from the real projects and RICEFW objects on this site; the linkage is the technique.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Business Architecture</span><span class="breadcrumb-sep">/</span><span>Traceability Explorer</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · Traceability</div>
+      <div class="project-meta">Strategy → capability → value → initiative → deliverable → test</div>
+      <h1>Traceability <em>Explorer</em></h1>
+      <p class="project-hero-desc">The question an architecture has to answer is <strong>&ldquo;why are we building this, and how do we know it worked?&rdquo;</strong> Traceability is the answer: an unbroken thread from a <a href="business-architecture.html" style="color:var(--accent)">strategic objective</a> down to the test that validates the delivered object. <strong>Click any node</strong> &mdash; its <span style="color:var(--accent);font-weight:600">upstream ancestry</span> (what it serves) and <span style="color:var(--success);font-weight:600">downstream descendants</span> (what it produces) light up across all six layers.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Framework</span><span class="project-info-val">BIZBOK · TOGAF ADM traceability</span></div>
+      <div class="project-info-row"><span class="project-info-label">Layers</span><span class="project-info-val">6 · strategy → validation</span></div>
+      <div class="project-info-row"><span class="project-info-label">Direction</span><span class="project-info-val">ancestry ↑ &nbsp;·&nbsp; descendants ↓</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="tr-wrap">
+    <div class="tr-thread" id="trThread" aria-live="polite">
+      <div class="tr-thread-empty">Click any node below to trace its golden thread across all six layers.</div>
+    </div>
+
+    <div class="tr-scroll">
+      <div class="tr-board" id="trBoard"></div>
+    </div>
+
+    <div class="tr-legend" aria-hidden="true">
+      <span><i class="li-sel"></i> Selected node</span>
+      <span><i class="li-up"></i> Upstream — what it enables / serves</span>
+      <span><i class="li-down"></i> Downstream — what realises / validates it</span>
+    </div>
+
+    <div class="callout" style="margin-top:2.4rem;">
+      <div class="callout-title">WHY TRACEABILITY IS THE ARCHITECT'S JOB</div>
+      <p>An initiative with no line back to a strategic objective is <strong>scope with no sponsor</strong>; an objective with no line down to a deliverable and a test is a <strong>slogan</strong>. Maintaining this thread is how a Business Architect keeps a change portfolio honest &mdash; it makes orphaned work and unfunded strategy visible on sight, and it turns &ldquo;is this done?&rdquo; into a concrete question with a test attached. It is the same discipline as an SAP <a href="ricefw-register.html" style="color:var(--accent)">RICEFW register</a> tied to <a href="functional-specification.html" style="color:var(--accent)">functional specs</a>, lifted to the enterprise level and cross-mapped to the <a href="capability-map.html" style="color:var(--accent)">capability map</a> and <a href="value-streams.html" style="color:var(--accent)">value streams</a>.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="operating-model.html" style="color:var(--accent);font-weight:600;">See how the operating model runs it &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // Six layers, ordered strategy -> validation.
+  var LAYERS = [
+    { k: 'S', name: 'Strategy', sub: 'Strategic objective' },
+    { k: 'C', name: 'Capability', sub: 'BIZBOK capability' },
+    { k: 'V', name: 'Value Stream', sub: 'How value flows' },
+    { k: 'I', name: 'Initiative', sub: 'Change / project' },
+    { k: 'D', name: 'Deliverable', sub: 'RICEFW object' },
+    { k: 'T', name: 'Validation', sub: 'Test scenario' }
+  ];
+
+  // node: id -> {L: layer index, t: name, meta, href?, to:[downstream ids]}
+  var N = {
+    // Strategy
+    s_rev:  { L: 0, t: 'Grow recurring revenue', meta: 'OBJECTIVE', to: ['c_sales', 'c_cust', 'c_order'] },
+    s_close:{ L: 0, t: 'Faster, cleaner close', meta: 'OBJECTIVE', to: ['c_fin', 'c_data'] },
+    s_comp: { L: 0, t: 'Strengthen tax &amp; compliance', meta: 'OBJECTIVE', to: ['c_fin', 'c_risk'] },
+    s_cx:   { L: 0, t: 'Elevate customer experience', meta: 'OBJECTIVE', to: ['c_cust', 'c_svc'] },
+    // Capability
+    c_sales:{ L: 1, t: 'Sales Management', meta: 'CAPABILITY', href: 'capability-map.html?cap=sales-management', to: ['v_otc', 'v_a2o'] },
+    c_cust: { L: 1, t: 'Customer Management', meta: 'CAPABILITY', href: 'capability-map.html?cap=customer-management', to: ['v_a2o', 'v_i2r'] },
+    c_order:{ L: 1, t: 'Order Management', meta: 'CAPABILITY', href: 'capability-map.html?cap=order-management', to: ['v_otc'] },
+    c_fin:  { L: 1, t: 'Finance Management', meta: 'CAPABILITY', href: 'capability-map.html?cap=finance-management', to: ['v_otc', 'v_r2r'] },
+    c_data: { L: 1, t: 'Data &amp; Analytics', meta: 'CAPABILITY', href: 'capability-map.html?cap=data-and-analytics', to: ['v_r2r'] },
+    c_risk: { L: 1, t: 'Enterprise Risk &amp; Compliance', meta: 'CAPABILITY', href: 'capability-map.html?cap=enterprise-risk-and-compliance', to: ['v_r2r'] },
+    c_svc:  { L: 1, t: 'Service &amp; Support', meta: 'CAPABILITY', href: 'capability-map.html?cap=service-and-support', to: ['v_i2r'] },
+    // Value stream
+    v_otc:  { L: 2, t: 'Order to Cash', meta: 'VALUE STREAM', href: 'value-streams.html', to: ['i_price', 'i_p2p'] },
+    v_a2o:  { L: 2, t: 'Acquire to Onboard', meta: 'VALUE STREAM', href: 'value-streams.html', to: ['i_loy'] },
+    v_i2r:  { L: 2, t: 'Issue to Resolution', meta: 'VALUE STREAM', href: 'value-streams.html', to: ['i_loy'] },
+    v_r2r:  { L: 2, t: 'Record to Report', meta: 'VALUE STREAM', href: 'value-streams.html', to: ['i_stem', 'i_fitax', 'i_s4'] },
+    // Initiative
+    i_price:{ L: 3, t: 'Strategic Pricing &amp; AR', meta: 'PROJECT', href: 'project2.html', to: ['d_price', 'd_aging'] },
+    i_p2p:  { L: 3, t: 'ERP Cloud P2P', meta: 'PROJECT', href: 'project1.html', to: ['d_appr', 'd_grir'] },
+    i_loy:  { L: 3, t: 'CRM Star Reward Loyalty', meta: 'PROJECT', href: 'project3.html', to: ['d_accr', 'd_stmt'] },
+    i_stem: { L: 3, t: 'STEM Portfolio Tracking', meta: 'PROJECT', href: 'project4.html', to: ['d_fund'] },
+    i_fitax:{ L: 3, t: 'FI-Tax Localization', meta: 'INITIATIVE', href: 'fi-tax-consultant-scope.html', to: ['d_wht', 'd_taxif'] },
+    i_s4:   { L: 3, t: 'S/4HANA Close', meta: 'INITIATIVE', href: 'finance-functional-module.html', to: ['d_acdoca'] },
+    // Deliverable (RICEFW)
+    d_price:{ L: 4, t: 'ZTIR_PRICE_001 · pricing routine', meta: 'ENHANCEMENT', href: 'ricefw-register.html', to: ['t_price'] },
+    d_aging:{ L: 4, t: 'AR aging report', meta: 'REPORT', href: 'ricefw-register.html', to: ['t_aging'] },
+    d_appr: { L: 4, t: 'PR/PO approval workflow', meta: 'WORKFLOW', href: 'ricefw-register.html', to: ['t_appr'] },
+    d_grir: { L: 4, t: 'GR/IR conversion', meta: 'CONVERSION', href: 'ricefw-register.html', to: ['t_grir'] },
+    d_accr: { L: 4, t: 'Loyalty accrual enhancement', meta: 'ENHANCEMENT', href: 'ricefw-register.html', to: ['t_accr'] },
+    d_stmt: { L: 4, t: 'Points statement form', meta: 'FORM', href: 'ricefw-register.html', to: ['t_accr'] },
+    d_fund: { L: 4, t: 'Fund / grant tracking report', meta: 'REPORT', href: 'ricefw-register.html', to: ['t_fund'] },
+    d_wht:  { L: 4, t: 'WHT certificate form', meta: 'FORM', href: 'ricefw-register.html', to: ['t_wht'] },
+    d_taxif:{ L: 4, t: 'Tax reporting interface', meta: 'INTERFACE', href: 'ricefw-register.html', to: ['t_taxif'] },
+    d_acdoca:{ L: 4, t: 'Universal Journal migration', meta: 'CONVERSION', href: 'data-migration-cutover.html', to: ['t_acdoca'] },
+    // Validation
+    t_price: { L: 5, t: 'SIT · tiered pricing across siblings', meta: 'SIT' },
+    t_aging: { L: 5, t: 'UAT · AR aging buckets', meta: 'UAT' },
+    t_appr:  { L: 5, t: 'SIT · approval matrix', meta: 'SIT' },
+    t_grir:  { L: 5, t: 'Cutover · GR/IR reconciliation', meta: 'CUTOVER' },
+    t_accr:  { L: 5, t: 'SIT · accrual &amp; redemption', meta: 'SIT' },
+    t_fund:  { L: 5, t: 'UAT · grant balance', meta: 'UAT' },
+    t_wht:   { L: 5, t: 'UAT · WHT certificate (PND53)', meta: 'UAT' },
+    t_taxif: { L: 5, t: 'SIT · tax filing extract', meta: 'SIT' },
+    t_acdoca:{ L: 5, t: 'Cutover · ACDOCA reconciliation', meta: 'CUTOVER' }
+  };
+
+  // Build reverse adjacency once.
+  var FROM = {};
+  Object.keys(N).forEach(function (id) { FROM[id] = []; });
+  Object.keys(N).forEach(function (id) {
+    (N[id].to || []).forEach(function (t) { if (FROM[t]) FROM[t].push(id); });
+  });
+
+  var board = document.getElementById('trBoard');
+  var thread = document.getElementById('trThread');
+  var selId = null;
+
+  // Render the six columns.
+  board.innerHTML = LAYERS.map(function (lay, li) {
+    var ids = Object.keys(N).filter(function (id) { return N[id].L === li; });
+    var nodes = ids.map(function (id) {
+      return '<button type="button" class="tr-node" id="tn_' + id + '" data-id="' + id + '">' +
+        '<span class="tr-node-name">' + N[id].t + '</span>' +
+        '<span class="tr-node-meta">' + N[id].meta + '</span></button>';
+    }).join('');
+    return '<div class="tr-col"><div class="tr-col-head"><div class="tr-col-k">' + lay.k + ' · LAYER ' + (li + 1) +
+      '</div><div class="tr-col-name">' + lay.name + '</div><div class="tr-col-sub">' + lay.sub + '</div></div>' + nodes + '</div>';
+  }).join('');
+
+  function walk(start, map) {
+    var seen = {}, stack = [start];
+    while (stack.length) {
+      var cur = stack.pop();
+      (map[cur] || []).forEach(function (nx) { if (!seen[nx]) { seen[nx] = true; stack.push(nx); } });
+    }
+    return seen;
+  }
+
+  function esc(s) { return String(s); }
+
+  function select(id, push) {
+    if (!N[id]) return;
+    selId = id;
+    var ups = walk(id, FROM);      // ancestors (what it enables / serves)
+    var downs = walk(id, N.__to || (N.__to = buildTo()));  // descendants
+    // clear + reapply state classes
+    board.classList.add('armed');
+    board.querySelectorAll('.tr-node').forEach(function (el) {
+      el.classList.remove('sel', 'up', 'down');
+      var nid = el.getAttribute('data-id');
+      if (nid === id) el.classList.add('sel');
+      else if (ups[nid]) el.classList.add('up');
+      else if (downs[nid]) el.classList.add('down');
+    });
+    renderThread(id, ups, downs);
+    var selEl = document.getElementById('tn_' + id);
+    if (selEl && selEl.scrollIntoView) { try { selEl.scrollIntoView({ block: 'nearest', inline: 'center' }); } catch (e) {} }
+    if (push !== false) { try { history.replaceState(null, '', '?trace=' + id); } catch (e) {} }
+  }
+
+  function buildTo() { var m = {}; Object.keys(N).forEach(function (k) { if (k.indexOf('__') !== 0) m[k] = N[k].to || []; }); return m; }
+
+  function renderThread(id, ups, downs) {
+    // Collect every lit node grouped by layer, in layer order.
+    var lit = {}; lit[id] = 'sel';
+    Object.keys(ups).forEach(function (k) { lit[k] = 'up'; });
+    Object.keys(downs).forEach(function (k) { lit[k] = 'down'; });
+    var count = Object.keys(lit).length;
+    var layersUsed = 0;
+    var steps = LAYERS.map(function (lay, li) {
+      var ids = Object.keys(lit).filter(function (k) { return N[k] && N[k].L === li; });
+      if (!ids.length) return null;
+      layersUsed++;
+      var role = ids.length === 1 && lit[ids[0]] ? lit[ids[0]] : (li < N[id].L ? 'up' : (li > N[id].L ? 'down' : 'sel'));
+      var kls = ids.some(function (k) { return lit[k] === 'sel'; }) ? '' : (li < N[id].L ? 'up' : 'down');
+      var items = ids.map(function (k) {
+        return '<span class="' + (lit[k] === 'sel' ? 'sel' : '') + '">' + N[k].t + '</span>';
+      }).join('<span class="tr-chain-sep">·</span>');
+      return '<span class="tr-chain-step"><span class="tr-chain-k ' + kls + '">' + lay.k + '</span><span class="tr-chain-items">' + items + '</span></span>';
+    }).filter(Boolean).join('<span class="tr-chain-sep">&rsaquo;</span>');
+
+    thread.innerHTML =
+      '<div class="tr-thread-head">' +
+        '<span class="tr-thread-sel">' + N[id].t + '</span>' +
+        '<span class="tr-thread-count">golden thread &middot; <b>' + count + '</b> nodes across <b>' + layersUsed + '</b> layers</span>' +
+        '<button type="button" class="tr-thread-clear" id="trClear">Clear ✕</button>' +
+      '</div>' +
+      '<div class="tr-chain">' + steps + '</div>';
+    var clr = document.getElementById('trClear');
+    if (clr) clr.addEventListener('click', clearSel);
+  }
+
+  function clearSel() {
+    selId = null;
+    board.classList.remove('armed');
+    board.querySelectorAll('.tr-node').forEach(function (el) { el.classList.remove('sel', 'up', 'down'); });
+    thread.innerHTML = '<div class="tr-thread-empty">Click any node below to trace its golden thread across all six layers.</div>';
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  }
+
+  board.addEventListener('click', function (e) {
+    var btn = e.target && e.target.closest ? e.target.closest('.tr-node') : null;
+    if (btn) select(btn.getAttribute('data-id'));
+  });
+
+  // Deep-link ?trace=<id>
+  try {
+    var q = new URLSearchParams(location.search).get('trace');
+    if (q && N[q]) select(q, false);
+  } catch (e) {}
+})();
+</script>
+
+<script src="search.js?v=4" defer></script>
+</body>
+</html>
