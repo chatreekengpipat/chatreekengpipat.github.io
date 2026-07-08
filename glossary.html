@@ -323,11 +323,12 @@
       cat = b.getAttribute('data-c'); render();
     });
   });
-  searchEl.addEventListener('input', function () { q = searchEl.value; render(); });
+  searchEl.addEventListener('input', function () { q = searchEl.value; try { history.replaceState(null, '', q.trim() ? '?q=' + encodeURIComponent(q.trim()) : location.pathname); } catch (e) {} render(); });
+  try { var _q = new URLSearchParams(location.search).get('q'); if (_q) { searchEl.value = _q; q = _q; } } catch (e) {}
   render();
 })();
 </script>
 
-<script src="search.js?v=2" defer></script>
+<script src="search.js?v=3" defer></script>
 </body>
 </html>

@@ -115,7 +115,11 @@
     '.cks-btn:hover{opacity:1;}',
     '.cks-btn .kbd{font-family:ui-monospace,"JetBrains Mono",monospace;font-size:.6rem;opacity:.8;}',
     '@media(max-width:640px){.cks-btn .kbd{display:none;}.cks-ov{padding-top:6vh;}}',
-    '@media(prefers-reduced-motion:reduce){.cks-modal{animation:none;}}'
+    '@media(prefers-reduced-motion:reduce){.cks-modal{animation:none;}}',
+    '.tcode{cursor:pointer;}',
+    '.tcode.cks-copied{outline:2px solid var(--accent,#3b82f6);outline-offset:1px;}',
+    '.cks-toast{position:fixed;left:50%;bottom:2.4rem;transform:translateX(-50%) translateY(10px);z-index:3100;background:#0f172a;color:#f1f5f9;border:1px solid #334155;border-radius:100px;padding:.5rem 1.15rem;font-family:Inter,system-ui,sans-serif;font-size:.82rem;box-shadow:0 14px 34px -12px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;}',
+    '.cks-toast.on{opacity:1;transform:translateX(-50%) translateY(0);}'
   ].join('');
   var style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
 
@@ -231,4 +235,22 @@
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
+
+  /* ---- Click-to-copy on T-codes / code chips (delegated; works for dynamic ones) ---- */
+  var toastEl = null, toastT = null;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'cks-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    if (toastT) clearTimeout(toastT);
+    toastT = setTimeout(function () { toastEl.classList.remove('on'); }, 1100);
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target && e.target.closest ? e.target.closest('.tcode') : null;
+    if (!el || el.closest('a')) return;              // don't hijack T-codes that are links
+    var txt = (el.textContent || '').trim();
+    if (!txt) return;
+    var ok = function () { el.classList.add('cks-copied'); setTimeout(function () { el.classList.remove('cks-copied'); }, 900); toast('Copied “' + txt + '”'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(ok, function () {}); }
+    else { try { var ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); ok(); } catch (_) {} }
+  });
 })();

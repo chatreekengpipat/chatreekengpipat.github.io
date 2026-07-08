@@ -418,9 +418,20 @@
     detail.innerHTML = '<div class="cm-detail-empty">Ratings reset to the reference model. Select a capability to rate it again.</div>';
   });
   render();
+
+  /* ---- Deep-links: ?cap=<slug> opens a capability; selecting updates the URL ---- */
+  function slugCap(s) { return String(s).toLowerCase().replace(/&amp;/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+  tiersEl.addEventListener('click', function (e) {
+    var b = e.target && e.target.closest ? e.target.closest('.cm-box') : null;
+    if (b) { try { history.replaceState(null, '', '?cap=' + slugCap(CAPS[+b.getAttribute('data-i')][1])); } catch (_) {} }
+  });
+  try {
+    var _c = new URLSearchParams(location.search).get('cap');
+    if (_c) { for (var _i = 0; _i < CAPS.length; _i++) { if (slugCap(CAPS[_i][1]) === _c) { var _b = tiersEl.querySelector('.cm-box[data-i="' + _i + '"]'); if (_b) { show(_i, _b); _b.scrollIntoView({ block: 'center' }); } break; } } }
+  } catch (e) {}
 })();
 </script>
 
-<script src="search.js?v=2" defer></script>
+<script src="search.js?v=3" defer></script>
 </body>
 </html>
