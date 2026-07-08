@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Capability Map · Business Architecture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/capability-map.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Business Capability Map · Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="An interactive business capability model (BIZBOK-aligned): 22 Level-1 capabilities across direction, customer, operations and enabling tiers, with a maturity / priority heat-map and click-to-detail sub-capabilities.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/capability-map.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Business Capability Map · Business Architecture">
+<meta name="twitter:description" content="Interactive BIZBOK-aligned business capability model with a maturity/priority heat-map and click-to-detail sub-capabilities.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive business capability map by Chatree Kengpipat: a BIZBOK-aligned Level-1→3 business capability model across direction, customer, operations and enabling tiers, with a maturity and investment-priority heat-map and click-to-detail sub-capabilities. A Business Architecture methodology reference.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     BUSINESS CAPABILITY MAP — page-scoped. A tiered capability
+     model with a maturity / priority heat-map toggle and a
+     click-to-detail panel. Built only from existing tokens.
+     ============================================================ */
+  .cm-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .cm-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .cm-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .cm-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .cm-banner-text strong { color: var(--text); font-weight: 600; }
+  .cm-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .cm-wrap { max-width: 1180px; margin: 0 auto; }
+
+  /* Controls */
+  .cm-controls { display: flex; flex-wrap: wrap; gap: 1.2rem 2rem; align-items: flex-end; margin-bottom: 1.6rem; }
+  .cm-ctl-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; margin-bottom: 0.5rem; }
+  .cm-seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
+  .cm-seg button { appearance: none; background: transparent; border: 0; border-radius: var(--radius-sm); padding: 0.45rem 0.9rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+  .cm-seg button:hover { color: var(--text); }
+  .cm-seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .cm-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); align-items: center; }
+  .cm-legend.hidden { display: none; }
+  .cm-legend i { width: 22px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid var(--border-strong); }
+  .cm-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+  /* Tiers */
+  .cm-tier { margin-bottom: 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
+  .cm-tier-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+  .cm-tier-k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 4px; padding: 0.14rem 0.45rem; }
+  .cm-tier-name { font-size: 0.9rem; font-weight: 700; color: var(--text-strong); }
+  .cm-tier-desc { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); margin-left: auto; }
+  .cm-boxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 0.5rem; padding: 0.8rem; }
+  .cm-box {
+    text-align: left; width: 100%; font: inherit; cursor: pointer;
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 0.7rem 0.8rem; transition: border-color 0.2s, transform 0.15s var(--ease-smooth), box-shadow 0.2s, background 0.3s;
+    display: flex; flex-direction: column; gap: 0.4rem; min-height: 4.4rem;
+  }
+  .cm-box:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -14px var(--glow-color); border-color: var(--accent); }
+  .cm-box.is-active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .cm-box-name { font-size: 0.82rem; font-weight: 600; color: var(--text-strong); line-height: 1.25; }
+  .cm-box-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+  .cm-box-l2 { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text-subtle); }
+  .cm-dots { display: flex; gap: 2px; }
+  .cm-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-strong); }
+  .cm-dot.on { background: var(--accent); }
+  /* Heat map fills */
+  .cm-box.heat[data-lvl="1"] { background: color-mix(in srgb, var(--danger) 24%, var(--surface)); border-color: color-mix(in srgb, var(--danger) 55%, transparent); }
+  .cm-box.heat[data-lvl="2"] { background: color-mix(in srgb, var(--danger) 12%, var(--surface)); border-color: color-mix(in srgb, var(--danger) 32%, transparent); }
+  .cm-box.heat[data-lvl="3"] { background: color-mix(in srgb, var(--warning) 16%, var(--surface)); border-color: color-mix(in srgb, var(--warning) 38%, transparent); }
+  .cm-box.heat[data-lvl="4"] { background: color-mix(in srgb, var(--success) 14%, var(--surface)); border-color: color-mix(in srgb, var(--success) 34%, transparent); }
+  .cm-box.heat[data-lvl="5"] { background: color-mix(in srgb, var(--success) 26%, var(--surface)); border-color: color-mix(in srgb, var(--success) 55%, transparent); }
+  .cm-box.heat .cm-dot.on { background: var(--text-strong); }
+
+  /* Detail panel */
+  .cm-detail { margin-top: 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; min-height: 9rem; box-shadow: var(--shadow-md); }
+  .cm-detail-empty { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.6rem; }
+  .cm-detail-empty::before { content: ''; width: 10px; height: 10px; background: var(--accent); border-radius: 2px; flex-shrink: 0; }
+  .cm-d-tier { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 0.3rem; }
+  .cm-d-name { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+  .cm-d-def { font-size: 0.92rem; line-height: 1.6; color: var(--text-muted); max-width: 46rem; margin-bottom: 1.1rem; }
+  .cm-d-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.2rem; }
+  .cm-d-metric .k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; display: block; margin-bottom: 0.25rem; }
+  .cm-d-metric .v { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 600; color: var(--text-strong); display: flex; align-items: center; gap: 0.5rem; }
+  .cm-d-scale { display: flex; gap: 3px; }
+  .cm-d-scale i { width: 20px; height: 6px; border-radius: 2px; background: var(--border-strong); }
+  .cm-d-scale i.on { background: var(--accent); }
+  .cm-d-l2title { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; margin-bottom: 0.6rem; }
+  .cm-d-l2 { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .cm-d-l2 span { font-size: 0.8rem; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.3rem 0.6rem; }
+
+  @media (max-width: 720px) { .cm-banner { top: 62px; padding: 0 1rem; } .cm-tier-desc { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .cm-box { transition: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="cm-banner" role="note" aria-label="Methodology note">
+  <div class="cm-banner-inner">
+    <span class="cm-banner-icon" aria-hidden="true">!</span>
+    <div class="cm-banner-text">
+      <span class="cm-banner-tag">BUSINESS ARCHITECTURE · METHODOLOGY REFERENCE</span><br>
+      A <strong>reference capability model</strong> I built to work the Business Architecture discipline as I take on the analyst role at Accenture. The structure is BIZBOK-aligned; the maturity/priority ratings are illustrative to show how the technique works &mdash; not an assessment of a specific client.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Business Architecture</span><span class="breadcrumb-sep">/</span><span>Capability Map</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · Capability Map</div>
+      <div class="project-meta">What the enterprise does — stable, and independent of org or process</div>
+      <h1>Business Capability <em>Map</em></h1>
+      <p class="project-hero-desc">The <strong>capability map</strong> is the anchor artifact of business architecture: a stable, noun-based model of <strong>what an enterprise does</strong> &mdash; not how, not who. It underpins strategy alignment, investment decisions and operating-model design. This is a BIZBOK-aligned Level-1 model across four tiers; toggle the <strong>heat-map</strong> to see maturity or investment priority, and select any capability to open its sub-capabilities.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Framework</span><span class="project-info-val">BIZBOK · capability mapping</span></div>
+      <div class="project-info-row"><span class="project-info-label">Levels</span><span class="project-info-val">L1 tiers → L2 sub-capabilities</span></div>
+      <div class="project-info-row"><span class="project-info-label">Views</span><span class="project-info-val">Structure · Maturity · Priority heat-map</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="cm-wrap">
+
+    <div class="cm-controls">
+      <div>
+        <div class="cm-ctl-label">View</div>
+        <div class="cm-seg" id="cmView" role="group" aria-label="Capability map view">
+          <button type="button" data-v="structure" aria-pressed="true">Structure</button>
+          <button type="button" data-v="mat" aria-pressed="false">Maturity</button>
+          <button type="button" data-v="imp" aria-pressed="false">Priority</button>
+        </div>
+      </div>
+      <div class="cm-legend hidden" id="cmLegend" aria-hidden="true">
+        <span><i style="background:color-mix(in srgb,var(--danger) 24%,var(--surface));border-color:var(--danger)"></i>1 · Low</span>
+        <span><i style="background:color-mix(in srgb,var(--danger) 12%,var(--surface))"></i>2</span>
+        <span><i style="background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warning)"></i>3 · Developing</span>
+        <span><i style="background:color-mix(in srgb,var(--success) 14%,var(--surface))"></i>4</span>
+        <span><i style="background:color-mix(in srgb,var(--success) 26%,var(--surface));border-color:var(--success)"></i>5 · Strong</span>
+      </div>
+    </div>
+
+    <div id="cmTiers"></div>
+
+    <div class="cm-detail" id="cmDetail" aria-live="polite">
+      <div class="cm-detail-empty">Select a capability to open its definition, rating and Level-2 sub-capabilities.</div>
+    </div>
+
+    <div class="callout" style="margin-top:2.4rem;">
+      <div class="callout-title">READING A CAPABILITY MAP</div>
+      <p>A capability answers <strong>&ldquo;what,&rdquo; not &ldquo;how&rdquo;</strong> &mdash; it is a stable noun (&ldquo;Customer Management&rdquo;), so it doesn&rsquo;t churn when processes, org charts or systems change. That stability is why it&rsquo;s the backbone of business architecture: strategy maps to capabilities, initiatives are planned against them, value streams are enabled by them, and a heat-map turns them into an investment conversation. The next artifacts &mdash; value streams and the operating model &mdash; hang off this one.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivery experience this analysis sits on &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var TIERS = {
+    direction: ['Direction', 'Strategic — set direction &amp; govern'],
+    customer:  ['Customer &amp; Value', 'Core — engage the market &amp; customer'],
+    ops:       ['Operations &amp; Delivery', 'Core — make &amp; deliver the offering'],
+    enabling:  ['Enabling', 'Shared services — run the enterprise']
+  };
+  // [tier, name, maturity(1-5), priority(1-5), definition, [L2 sub-capabilities]]
+  var CAPS = [
+    ['direction','Strategy Management',4,5,'Set enterprise direction: define strategy, business model and the goals everything else is measured against.',['Strategic Planning','Business Model Design','Performance Management','Portfolio Management']],
+    ['direction','Enterprise Risk &amp; Compliance',3,4,'Identify, assess and control risk and keep the enterprise within its legal and regulatory obligations.',['Risk Management','Regulatory Compliance','Audit Management','Policy Management']],
+    ['direction','Business Architecture',3,5,'Maintain the blueprints — capabilities, value streams, operating model — that connect strategy to execution.',['Capability Mapping','Value Stream Mapping','Operating Model Design','Roadmap Planning']],
+    ['direction','Innovation Management',2,4,'Generate, evaluate and incubate new ideas, products and business models ahead of the core.',['Idea Management','Research &amp; Development','Venturing &amp; Partnerships']],
+
+    ['customer','Customer Management',4,5,'Understand, segment and grow relationships with customers across their lifecycle.',['Customer Insight','Segmentation','Relationship Management','Loyalty &amp; Retention']],
+    ['customer','Product &amp; Service Management',3,4,'Define, price and manage the products and services the enterprise offers.',['Product Lifecycle','Portfolio Management','Pricing','Catalogue Management']],
+    ['customer','Marketing Management',3,3,'Build demand and brand through market analysis, campaigns and channels.',['Brand Management','Campaign Management','Digital Marketing','Market Analysis']],
+    ['customer','Sales Management',4,4,'Convert demand into orders through opportunities, quotes and contracts.',['Lead &amp; Opportunity','Quote &amp; Proposal','Contract Management','Sales Operations']],
+    ['customer','Channel Management',2,3,'Design and run the routes to market — direct, partner and digital.',['Channel Strategy','Partner Management','Digital Channels']],
+    ['customer','Service &amp; Support',3,4,'Resolve customer needs after the sale, across assisted and self-service.',['Case Management','Field Service','Self-Service','SLA Management']],
+
+    ['ops','Order Management',4,4,'Capture, orchestrate and fulfil customer orders end to end, including returns.',['Order Capture','Fulfilment','Returns &amp; Reverse Logistics']],
+    ['ops','Supply Chain Management',3,4,'Plan and balance demand and supply across the network.',['Demand Planning','Supply Planning','Logistics &amp; Distribution']],
+    ['ops','Procurement',4,3,'Source, buy and manage suppliers and the goods and services bought from them.',['Sourcing','Purchasing','Supplier Management','Contract Management']],
+    ['ops','Operations &amp; Delivery',3,4,'Produce or deliver the offering to the required quality, capacity and schedule.',['Production / Delivery','Capacity Management','Scheduling']],
+    ['ops','Inventory &amp; Asset Management',3,3,'Control physical stock and the lifecycle of enterprise assets.',['Inventory Control','Warehousing','Asset Lifecycle']],
+    ['ops','Quality Management',2,3,'Assure and continuously improve the quality of products, services and processes.',['Quality Assurance','Continuous Improvement']],
+
+    ['enabling','Finance Management',4,4,'Steward the money: record, plan, fund and report enterprise finances.',['Accounting','Financial Planning &amp; Analysis','Treasury','Tax Management']],
+    ['enabling','Human Capital Management',3,3,'Attract, develop, reward and organise the workforce.',['Talent Acquisition','Learning &amp; Development','Compensation &amp; Benefits','Workforce Management']],
+    ['enabling','Information Technology',3,4,'Provide and run the applications, infrastructure and security the business depends on.',['Application Management','Infrastructure','Cyber Security','IT Service Management']],
+    ['enabling','Data &amp; Analytics',2,5,'Turn data into a governed, trusted asset and into insight.',['Data Management','Business Intelligence','Data Governance']],
+    ['enabling','Legal Management',3,2,'Protect the enterprise legally — contracts, intellectual property and disputes.',['Contract Law','Intellectual Property','Litigation']],
+    ['enabling','Enterprise Support',3,2,'Run the shared services that keep the enterprise operating day to day.',['Facilities Management','Knowledge Management','Administrative Services']]
+  ];
+
+  var tiersEl = document.getElementById('cmTiers');
+  var detail = document.getElementById('cmDetail');
+  var legend = document.getElementById('cmLegend');
+  var view = 'structure';
+
+  function dots(n) {
+    var h = '';
+    for (var i = 1; i <= 5; i++) h += '<span class="cm-dot' + (i <= n ? ' on' : '') + '"></span>';
+    return h;
+  }
+  function render() {
+    var html = '';
+    Object.keys(TIERS).forEach(function (t) {
+      var caps = CAPS.map(function (c, i) { return [c, i]; }).filter(function (x) { return x[0][0] === t; });
+      html += '<div class="cm-tier"><div class="cm-tier-head"><span class="cm-tier-k">' + t + '</span><span class="cm-tier-name">' + TIERS[t][0] + '</span><span class="cm-tier-desc">' + TIERS[t][1] + '</span></div><div class="cm-boxes">';
+      caps.forEach(function (x) {
+        var c = x[0], i = x[1];
+        var lvl = view === 'mat' ? c[2] : (view === 'imp' ? c[3] : 0);
+        var heat = view !== 'structure';
+        html += '<button type="button" class="cm-box' + (heat ? ' heat' : '') + '" data-i="' + i + '"' + (heat ? ' data-lvl="' + lvl + '"' : '') + '>' +
+          '<span class="cm-box-name">' + c[1] + '</span>' +
+          '<span class="cm-box-foot"><span class="cm-box-l2">' + c[5].length + ' sub-caps</span><span class="cm-dots" aria-hidden="true">' + dots(view === 'imp' ? c[3] : c[2]) + '</span></span>' +
+          '</button>';
+      });
+      html += '</div></div>';
+    });
+    tiersEl.innerHTML = html;
+    tiersEl.querySelectorAll('.cm-box').forEach(function (b) {
+      b.addEventListener('click', function () { show(+b.getAttribute('data-i'), b); });
+    });
+    legend.classList.toggle('hidden', view === 'structure');
+  }
+  function show(i, box) {
+    var c = CAPS[i];
+    tiersEl.querySelectorAll('.cm-box.is-active').forEach(function (x) { x.classList.remove('is-active'); });
+    if (box) box.classList.add('is-active');
+    function scale(n) { var h = ''; for (var k = 1; k <= 5; k++) h += '<i class="' + (k <= n ? 'on' : '') + '"></i>'; return h; }
+    detail.innerHTML =
+      '<div class="cm-d-tier">' + TIERS[c[0]][0] + '</div>' +
+      '<div class="cm-d-name">' + c[1] + '</div>' +
+      '<div class="cm-d-def">' + c[4] + '</div>' +
+      '<div class="cm-d-meta">' +
+        '<div class="cm-d-metric"><span class="k">Maturity</span><span class="v"><span class="cm-d-scale">' + scale(c[2]) + '</span>' + c[2] + '/5</span></div>' +
+        '<div class="cm-d-metric"><span class="k">Investment priority</span><span class="v"><span class="cm-d-scale">' + scale(c[3]) + '</span>' + c[3] + '/5</span></div>' +
+      '</div>' +
+      '<div class="cm-d-l2title">Level-2 sub-capabilities</div>' +
+      '<div class="cm-d-l2">' + c[5].map(function (s) { return '<span>' + s + '</span>'; }).join('') + '</div>';
+  }
+  document.querySelectorAll('#cmView button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#cmView button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      view = b.getAttribute('data-v');
+      render();
+    });
+  });
+  render();
+})();
+</script>
+
+</body>
+</html>
