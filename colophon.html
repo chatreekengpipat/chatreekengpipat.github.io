@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colophon · How this site is built · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/colophon.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Colophon · How this site is built — Chatree Kengpipat">
+<meta property="og:description" content="The system behind the portfolio: the page architecture, the two design systems and their tokens, the shared infrastructure, and the conventions that keep it precise — built as static HTML/CSS/JS, no framework.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/colophon.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Colophon · How this site is built">
+<meta name="twitter:description" content="The system behind the portfolio: architecture, design systems, tokens, infrastructure and conventions. Static HTML/CSS/JS, no framework.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="Colophon for chatreekengpipat.github.io: the page architecture, the two design systems and their tokens, the shared infrastructure (styles.css / animation.js / theme.js), and the engineering conventions — honesty rule, single-source metrics, WCAG AA, WebP, PWA. Built as hand-written static HTML/CSS/JS with no framework or build step.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     COLOPHON — page-scoped. The site documenting its own system:
+     page map, design systems + token swatches, shared infra,
+     conventions. Built only from existing tokens.
+     ============================================================ */
+  .co-wrap { max-width: 1000px; margin: 0 auto; }
+  .co-sec { margin-bottom: 3.2rem; }
+  .co-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 0.7rem; }
+  .co-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+  .co-title { font-size: clamp(1.4rem, 2.8vw, 1.9rem); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.6rem; }
+  .co-title em { color: var(--accent); font-style: normal; }
+  .co-lede { font-size: 0.93rem; line-height: 1.65; color: var(--text-muted); max-width: 46rem; }
+  .co-lede b { color: var(--text-strong); font-weight: 600; }
+
+  /* Stats */
+  .co-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2.6rem; }
+  .co-stat { background: var(--surface); padding: 1.1rem 1.3rem; }
+  .co-stat-num { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.02em; color: var(--text-strong); line-height: 1; font-variant-numeric: tabular-nums; }
+  .co-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.4rem; }
+
+  /* Page map tree */
+  .co-tree { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; box-shadow: var(--shadow-md); font-family: 'JetBrains Mono', monospace; }
+  .co-branch { margin-bottom: 1.2rem; }
+  .co-branch:last-child { margin-bottom: 0; }
+  .co-branch-h { font-size: 0.78rem; font-weight: 700; color: var(--text-strong); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+  .co-branch-h .k { font-size: 0.6rem; color: #fff; background: var(--accent); border-radius: 4px; padding: 0.1rem 0.4rem; }
+  .co-leaves { display: flex; flex-wrap: wrap; gap: 0.35rem; padding-left: 0.4rem; }
+  .co-leaf { font-size: 0.72rem; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.22rem 0.55rem; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+  .co-leaf:hover { border-color: var(--accent); color: var(--accent); }
+  .co-leaf.self { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 34%, transparent); background: var(--accent-bg); }
+
+  /* Design-system cards + swatches */
+  .co-ds { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.3rem; }
+  .co-dscard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.3rem 1.4rem; box-shadow: var(--shadow-md); }
+  .co-dscard h3 { font-size: 1.02rem; font-weight: 700; margin: 0 0 0.25rem; }
+  .co-dscard .where { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); margin-bottom: 0.9rem; }
+  .co-swatches { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+  .co-sw { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+  .co-sw i { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--border-strong); display: block; }
+  .co-sw span { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; color: var(--text-subtle); }
+  .co-ds-type { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); line-height: 1.6; }
+  .co-ds-type b { color: var(--text); }
+
+  /* Infra / convention lists */
+  .co-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.8rem; margin-top: 1.3rem; }
+  .co-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.15rem; }
+  .co-item h4 { font-size: 0.9rem; font-weight: 700; color: var(--text-strong); margin: 0 0 0.35rem; display: flex; align-items: baseline; gap: 0.5rem; }
+  .co-item h4 .file { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--accent); font-weight: 600; }
+  .co-item p { font-size: 0.84rem; line-height: 1.55; color: var(--text-muted); margin: 0; }
+  .co-item p b { color: var(--text); font-weight: 600; }
+
+  .co-principles { list-style: none; margin: 1.2rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+  .co-principles li { display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: start; font-size: 0.9rem; line-height: 1.55; color: var(--text-muted); }
+  .co-principles li b { color: var(--text-strong); font-weight: 600; }
+  .co-pk { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); border-radius: 5px; padding: 0.18rem 0.45rem; white-space: nowrap; margin-top: 0.1rem; }
+
+  .co-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
+  .co-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px; padding: 0.3rem 0.75rem; }
+  .co-chip b { color: var(--accent); }
+
+  @media (max-width: 720px) { .co-stats { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Colophon</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Colophon · How this site is built</div>
+      <div class="project-meta">The system behind the system</div>
+      <h1>Colophon</h1>
+      <p class="project-hero-desc">A consultant&rsquo;s job is to build systems that are precise, documented and maintainable &mdash; so this portfolio is built the same way. This page is its <strong>own specification</strong>: the page architecture, the two design systems and their tokens, the shared infrastructure, and the conventions that keep it consistent. It is hand-written <strong>static HTML/CSS/JS &mdash; no framework, no build step</strong>.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Stack</span><span class="project-info-val">Static HTML · CSS · vanilla JS</span></div>
+      <div class="project-info-row"><span class="project-info-label">Host</span><span class="project-info-val">GitHub Pages</span></div>
+      <div class="project-info-row"><span class="project-info-label">Type</span><span class="project-info-val">Inter · JetBrains Mono</span></div>
+      <div class="project-info-row"><span class="project-info-label">Build</span><span class="project-info-val">None — edit &amp; deploy</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="co-wrap">
+
+    <div class="co-stats">
+      <div class="co-stat"><span class="co-stat-num">21</span><span class="co-stat-label">pages</span></div>
+      <div class="co-stat"><span class="co-stat-num">2</span><span class="co-stat-label">design systems</span></div>
+      <div class="co-stat"><span class="co-stat-num">15+</span><span class="co-stat-label">interactive tools</span></div>
+      <div class="co-stat"><span class="co-stat-num">0</span><span class="co-stat-label">build steps</span></div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="co-sec">
+      <div class="co-eyebrow">01 · Architecture</div>
+      <h2 class="co-title">The page map.</h2>
+      <p class="co-lede">Every page is a single self-contained document. They group into a home, the delivered projects, and a three-tier SAP knowledge base mapped by the <a href="knowledge-hub.html" style="color:var(--accent)">Knowledge Hub</a>.</p>
+      <div class="co-tree" style="margin-top:1.3rem;">
+        <div class="co-branch">
+          <div class="co-branch-h"><span class="k">HOME</span>Entry &amp; conversion</div>
+          <div class="co-leaves"><a class="co-leaf" href="index.html">index</a><a class="co-leaf" href="cv.html">cv</a><a class="co-leaf" href="index.html#contact">contact</a></div>
+        </div>
+        <div class="co-branch">
+          <div class="co-branch-h"><span class="k">PROJECTS</span>Delivered work</div>
+          <div class="co-leaves"><a class="co-leaf" href="project1.html">project1 · P2P</a><a class="co-leaf" href="project2.html">project2 · Pricing/AR</a><a class="co-leaf" href="project3.html">project3 · Loyalty</a><a class="co-leaf" href="project4.html">project4 · STEM</a><a class="co-leaf" href="project5.html">project5 · FPDU</a><a class="co-leaf" href="muvmi.html">muvmi · EV</a><a class="co-leaf" href="senior-project.html">senior · LiDAR</a></div>
+        </div>
+        <div class="co-branch">
+          <div class="co-branch-h"><span class="k">SAP · A</span>Design &amp; methodology</div>
+          <div class="co-leaves"><a class="co-leaf" href="sap-design.html">sap-design</a><a class="co-leaf" href="functional-specification.html">functional-specification</a><a class="co-leaf" href="business-process-map.html">business-process-map</a><a class="co-leaf" href="data-migration-cutover.html">data-migration-cutover</a><a class="co-leaf" href="integration-architecture.html">integration-architecture</a></div>
+        </div>
+        <div class="co-branch">
+          <div class="co-branch-h"><span class="k">SAP · B</span>FI Tax specialization</div>
+          <div class="co-leaves"><a class="co-leaf" href="finance-functional-module.html">finance-functional-module</a><a class="co-leaf" href="fi-tax-consultant-scope.html">fi-tax-consultant-scope</a></div>
+        </div>
+        <div class="co-branch">
+          <div class="co-branch-h"><span class="k">SAP · C</span>Reference &amp; transparency</div>
+          <div class="co-leaves"><a class="co-leaf" href="knowledge-hub.html">knowledge-hub</a><a class="co-leaf" href="glossary.html">glossary</a><a class="co-leaf" href="ricefw-register.html">ricefw-register</a><a class="co-leaf" href="metrics.html">metrics</a><a class="co-leaf self" href="colophon.html">colophon ← you are here</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN SYSTEMS -->
+    <div class="co-sec">
+      <div class="co-eyebrow">02 · Design systems</div>
+      <h2 class="co-title">Two systems, on purpose.</h2>
+      <p class="co-lede">Most of the site runs one shared system; the two FI-Tax pages carry a deliberately separate identity, so the specialization reads as its own body of work.</p>
+      <div class="co-ds">
+        <div class="co-dscard">
+          <h3>The Engineer&rsquo;s Console</h3>
+          <div class="where">shared · styles.css · home + projects + SAP cluster + reference</div>
+          <div class="co-swatches">
+            <div class="co-sw"><i style="background:#2563eb"></i><span>#2563eb</span></div>
+            <div class="co-sw"><i style="background:#0f172a"></i><span>#0f172a</span></div>
+            <div class="co-sw"><i style="background:#f8fafc"></i><span>#f8fafc</span></div>
+            <div class="co-sw"><i style="background:#586379"></i><span>#586379</span></div>
+            <div class="co-sw"><i style="background:#059669"></i><span>#059669</span></div>
+            <div class="co-sw"><i style="background:#d97706"></i><span>#d97706</span></div>
+          </div>
+          <div class="co-ds-type"><b>Inter</b> — display &amp; body &middot; <b>JetBrains Mono</b> — labels/readouts. One <b>Implementation Blue</b> accent; slate neutrals; flat surfaces that glow on interaction. Full light/dark parity.</div>
+        </div>
+        <div class="co-dscard">
+          <h3>SAP FI Tax (self-contained)</h3>
+          <div class="where">finance-functional-module · fi-tax-consultant-scope</div>
+          <div class="co-swatches">
+            <div class="co-sw"><i style="background:#60a5fa"></i><span>gas</span></div>
+            <div class="co-sw"><i style="background:#FF6B35"></i><span>flare</span></div>
+            <div class="co-sw"><i style="background:#E8B04B"></i><span>gold</span></div>
+            <div class="co-sw"><i style="background:#0f172a"></i><span>abyss</span></div>
+            <div class="co-sw"><i style="background:#1e293b"></i><span>deep</span></div>
+            <div class="co-sw"><i style="background:#334155"></i><span>steel</span></div>
+          </div>
+          <div class="co-ds-type"><b>Space Grotesk</b> + <b>IBM Plex Sans/Mono</b>. A three-colour language: <b>gas</b> = SAP/data, <b>flare</b> = tax to the State, <b>gold</b> = value. Own inline CSS/JS + left rail nav.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHARED INFRASTRUCTURE -->
+    <div class="co-sec">
+      <div class="co-eyebrow">03 · Shared infrastructure</div>
+      <h2 class="co-title">Three files carry the chrome.</h2>
+      <div class="co-list">
+        <div class="co-item"><h4>Styles <span class="file">styles.css</span></h4><p>Design tokens (light/dark), components, the nav, the <b>scroll-progress bar</b>, <b>back-to-top</b> pill and the <b>skip link</b>. Cache-busted with <code>?v=12</code>.</p></div>
+        <div class="co-item"><h4>Motion <span class="file">animation.js</span></h4><p>Cursor spotlight + tilt, scroll-reveal, count-ups, hero parallax, and the neural-network background canvas. Every effect is <b>reduced-motion aware</b>.</p></div>
+        <div class="co-item"><h4>Theme <span class="file">theme.js</span></h4><p>Sets light/dark <b>before first paint</b> to avoid a flash, off a shared <code>theme</code> localStorage key. Inlined on the home page to drop a request.</p></div>
+        <div class="co-item"><h4>Discoverability</h4><p><b>sitemap.xml</b> + <b>robots.txt</b>, per-page Open Graph / Twitter / canonical, JSON-LD, a dedicated <b>1200×630 share card</b>, and a <b>web manifest</b> + touch icon.</p></div>
+      </div>
+    </div>
+
+    <!-- CONVENTIONS -->
+    <div class="co-sec">
+      <div class="co-eyebrow">04 · Conventions</div>
+      <h2 class="co-title">The rules that keep it honest and precise.</h2>
+      <ul class="co-principles">
+        <li><span class="co-pk">Honesty</span><span><b>XeerSoft is the delivery; SAP is methodology.</b> Every SAP page states that its content is design/preparation, never a claim of configured SAP production work.</span></li>
+        <li><span class="co-pk">One source</span><span><b>Every number reconciles to one file.</b> A single internal source of truth governs the metrics; the public <a href="metrics.html" style="color:var(--accent)">Metrics page</a> shows the reconciliation.</span></li>
+        <li><span class="co-pk">A11y</span><span><b>WCAG 2.1 AA.</b> Contrast holds in both themes, every interactive control is keyboard-reachable with a visible focus ring, and a skip link leads each page.</span></li>
+        <li><span class="co-pk">Motion</span><span><b>Reveals enhance, never gate.</b> Content is visible by default; motion only layers on when JS runs and <code>prefers-reduced-motion</code> allows.</span></li>
+        <li><span class="co-pk">Perf</span><span><b>Lean by default.</b> Project imagery served as <b>WebP</b> with lazy-loading, no framework payload, and cache-busted assets.</span></li>
+        <li><span class="co-pk">Interaction</span><span><b>Show, don&rsquo;t tell.</b> Each SAP page carries a real interactive tool &mdash; a simulator, an explorer, a calculator &mdash; rather than static claims.</span></li>
+      </ul>
+    </div>
+
+    <!-- TECH -->
+    <div class="co-sec">
+      <div class="co-eyebrow">05 · Under the hood</div>
+      <h2 class="co-title">The whole stack, honestly small.</h2>
+      <p class="co-lede">No framework, no bundler, no dependencies at runtime. The one build-time tool used was <b>sharp</b>, run once locally to generate WebP &mdash; it isn&rsquo;t shipped.</p>
+      <div class="co-chips">
+        <span class="co-chip">Static <b>HTML</b></span>
+        <span class="co-chip">Hand-written <b>CSS</b> (custom properties)</span>
+        <span class="co-chip">Vanilla <b>JS</b> (no libraries)</span>
+        <span class="co-chip"><b>GitHub Pages</b> hosting</span>
+        <span class="co-chip"><b>Git</b> — commit &amp; deploy</span>
+        <span class="co-chip">Inter + JetBrains Mono / Space Grotesk + IBM Plex</span>
+        <span class="co-chip">SVG favicon + canvas motion</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">WHY A COLOPHON</div>
+      <p>An implementation consultant is judged on the systems they leave behind: are they documented, consistent, maintainable? This page answers that for the portfolio itself &mdash; the same discipline, turned on the thing you&rsquo;re reading.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="knowledge-hub.html" style="color:var(--accent);font-weight:600;">Back to the SAP Knowledge Hub &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+</body>
+</html>
