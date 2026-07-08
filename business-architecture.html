@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Architecture · Accenture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/business-architecture.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="A working business-architecture knowledge base: what the discipline is, the BIZBOK core-four blueprints and the TOGAF ADM, a reading path, and interactive artifacts — capability map, value streams, target operating model and a glossary.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/business-architecture.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Business Architecture">
+<meta name="twitter:description" content="A business-architecture knowledge base: BIZBOK core-four, TOGAF ADM, a reading path, and interactive artifacts.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="The Business Architecture hub by Chatree Kengpipat: what the discipline is and the analyst's role, the BIZBOK core-four blueprints (capability, value stream, organisation, information), the TOGAF ADM, a reading path, and interactive artifacts — an interactive capability map, value streams, a target operating model and a glossary. Built as I take on a Business Architecture Analyst role at Accenture.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     BUSINESS ARCHITECTURE HUB — page-scoped. Primer, the core-four,
+     the frameworks, a reading path, and the artifact cards.
+     ============================================================ */
+  .ba-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .ba-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .ba-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .ba-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .ba-banner-text strong { color: var(--text); font-weight: 600; }
+  .ba-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .ba-wrap { max-width: 1050px; margin: 0 auto; }
+  .ba-sec { margin-bottom: 2.8rem; }
+  .ba-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 0.7rem; }
+  .ba-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+  .ba-title { font-size: clamp(1.4rem, 2.8vw, 1.9rem); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.6rem; }
+  .ba-title em { color: var(--accent); font-style: normal; }
+  .ba-lede { font-size: 0.93rem; line-height: 1.65; color: var(--text-muted); max-width: 48rem; }
+  .ba-lede b { color: var(--text-strong); font-weight: 600; }
+
+  .ba-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2.4rem; }
+  .ba-stat { background: var(--surface); padding: 1.1rem 1.3rem; }
+  .ba-stat-num { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; letter-spacing: -0.02em; color: var(--text-strong); line-height: 1; font-variant-numeric: tabular-nums; }
+  .ba-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.4rem; }
+
+  /* Core-four */
+  .ba-four { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.8rem; margin-top: 1.3rem; }
+  .ba-blue { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.1rem 1.2rem; text-decoration: none; display: block; transition: border-color 0.2s, transform 0.2s var(--ease-smooth); }
+  .ba-blue:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .ba-blue .q { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem; }
+  .ba-blue h3 { font-size: 1rem; font-weight: 700; color: var(--text-strong); margin: 0 0 0.35rem; }
+  .ba-blue p { font-size: 0.83rem; line-height: 1.5; color: var(--text-muted); margin: 0; }
+  .ba-blue .go { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; color: var(--accent); margin-top: 0.6rem; display: inline-block; }
+  .ba-blue.soft { cursor: default; }
+  .ba-blue.soft:hover { border-color: var(--border); transform: none; }
+  .ba-blue.soft .q { color: var(--text-subtle); }
+
+  /* Reading path */
+  .ba-path { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; box-shadow: var(--shadow-md); }
+  .ba-steps { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.5rem 0; margin-top: 1rem; }
+  .ba-step { display: flex; align-items: center; min-width: 0; }
+  .ba-step a { display: flex; flex-direction: column; gap: 0.15rem; text-decoration: none; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.7rem 0.85rem; transition: border-color 0.2s, transform 0.2s var(--ease-smooth); }
+  .ba-step a:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .ba-step-n { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; color: var(--accent); }
+  .ba-step-name { font-size: 0.82rem; font-weight: 600; color: var(--text-strong); line-height: 1.25; }
+  .ba-arrow { color: var(--border-strong); font-weight: 700; padding: 0 0.35rem; flex-shrink: 0; }
+
+  /* Framework + artifact cards */
+  .ba-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.8rem; }
+  .ba-card { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.1rem 1.2rem; text-decoration: none; color: var(--text); transition: border-color 0.25s var(--ease-smooth), transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth); }
+  .ba-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 16px 34px -18px var(--glow-color); }
+  .ba-card-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--text-strong); margin-bottom: 0.35rem; }
+  .ba-card-desc { font-size: 0.85rem; line-height: 1.5; color: var(--text-muted); flex: 1; }
+  .ba-card-feat { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); border-radius: 5px; padding: 0.18rem 0.45rem; margin-top: 0.8rem; align-self: flex-start; }
+  .ba-fw { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.2rem; }
+  .ba-fw h4 { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); margin: 0 0 0.35rem; }
+  .ba-fw p { font-size: 0.83rem; line-height: 1.5; color: var(--text-muted); margin: 0; }
+  .ba-fw p b { color: var(--text); font-weight: 600; }
+
+  @media (max-width: 720px) { .ba-banner { top: 62px; padding: 0 1rem; } .ba-stats { grid-template-columns: repeat(2, 1fr); } .ba-arrow { display: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html" class="active" aria-current="page">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="ba-banner" role="note" aria-label="Methodology note">
+  <div class="ba-banner-inner">
+    <span class="ba-banner-icon" aria-hidden="true">!</span>
+    <div class="ba-banner-text">
+      <span class="ba-banner-tag">BUSINESS ARCHITECTURE · KNOWLEDGE BASE</span><br>
+      A working knowledge base I&rsquo;m building as I take on a <strong>Business Architecture Analyst</strong> role at Accenture &mdash; the frameworks, the core blueprints, and interactive artifacts to work the discipline. BIZBOK/TOGAF-aligned methodology and study, on a foundation of real delivery experience.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Business Architecture</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · The map</div>
+      <div class="project-meta">The blueprint that connects strategy to execution</div>
+      <h1>Business <em>Architecture</em></h1>
+      <p class="project-hero-desc">Business architecture is the <strong>blueprint of the enterprise from a business view</strong> &mdash; capabilities, value streams, organisation and information &mdash; used to align initiatives with strategy, expose gaps and overlaps, and guide transformation. This hub is where I work the discipline: the frameworks, the core-four blueprints, a reading path, and <strong>interactive artifacts</strong> you can explore. It sits alongside my ERP/SAP delivery work, not instead of it.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Frameworks</span><span class="project-info-val">BIZBOK · TOGAF ADM · ArchiMate</span></div>
+      <div class="project-info-row"><span class="project-info-label">Core-four</span><span class="project-info-val">Capability · Value · Organisation · Information</span></div>
+      <div class="project-info-row"><span class="project-info-label">Artifacts</span><span class="project-info-val">Capability map · value streams · TOM · glossary</span></div>
+      <div class="project-info-row"><span class="project-info-label">Context</span><span class="project-info-val">Business Architecture Analyst · Accenture</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="ba-wrap">
+
+    <div class="ba-stats">
+      <div class="ba-stat"><span class="ba-stat-num">4</span><span class="ba-stat-label">core blueprints</span></div>
+      <div class="ba-stat"><span class="ba-stat-num">22</span><span class="ba-stat-label">capabilities modelled</span></div>
+      <div class="ba-stat"><span class="ba-stat-num">5</span><span class="ba-stat-label">value streams</span></div>
+      <div class="ba-stat"><span class="ba-stat-num">55</span><span class="ba-stat-label">glossary terms</span></div>
+    </div>
+
+    <!-- WHAT IT IS -->
+    <div class="ba-sec">
+      <div class="ba-eyebrow">01 · What it is</div>
+      <h2 class="ba-title">Strategy on one side, execution on the other &mdash; the bridge is business architecture.</h2>
+      <p class="ba-lede">A business architect builds and maintains models of the enterprise so leaders can see <b>what the business does</b>, <b>how value flows</b>, and <b>where to invest</b> &mdash; then connects those models to strategy and to the change portfolio. The discipline organises around four foundational blueprints (the BIZBOK &ldquo;core-four&rdquo;):</p>
+      <div class="ba-four">
+        <a class="ba-blue" href="capability-map.html">
+          <div class="q">What · capabilities</div>
+          <h3>Capability Map</h3>
+          <p>Stable, noun-based model of what the enterprise does — independent of process or org.</p>
+          <span class="go">interactive →</span>
+        </a>
+        <a class="ba-blue" href="value-streams.html">
+          <div class="q">How · value</div>
+          <h3>Value Streams</h3>
+          <p>How value is delivered to a stakeholder, end to end, enabled by capabilities.</p>
+          <span class="go">interactive →</span>
+        </a>
+        <div class="ba-blue soft">
+          <div class="q">Who · organisation</div>
+          <h3>Organization Map</h3>
+          <p>Business units, partners and their relationships — who does the work.</p>
+        </div>
+        <div class="ba-blue soft">
+          <div class="q">With what · information</div>
+          <h3>Information Map</h3>
+          <p>The business information concepts the enterprise runs on — a business view, not a data model.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- READING PATH -->
+    <div class="ba-sec">
+      <div class="ba-path">
+        <div class="ba-eyebrow" style="margin-bottom:0.3rem;">02 · A reading path</div>
+        <h2 class="ba-title" style="font-size:1.15rem;margin-bottom:0.2rem;">From what, to how, to how it&rsquo;s run.</h2>
+        <p class="ba-lede" style="font-size:0.86rem;">The order the artifacts build on each other.</p>
+        <div class="ba-steps">
+          <div class="ba-step"><a href="capability-map.html"><span class="ba-step-n">01</span><span class="ba-step-name">Capability Map</span></a><span class="ba-arrow" aria-hidden="true">→</span></div>
+          <div class="ba-step"><a href="value-streams.html"><span class="ba-step-n">02</span><span class="ba-step-name">Value Streams</span></a><span class="ba-arrow" aria-hidden="true">→</span></div>
+          <div class="ba-step"><a href="operating-model.html"><span class="ba-step-n">03</span><span class="ba-step-name">Operating Model</span></a><span class="ba-arrow" aria-hidden="true">→</span></div>
+          <div class="ba-step"><a href="ba-glossary.html"><span class="ba-step-n">04</span><span class="ba-step-name">Glossary &amp; frameworks</span></a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAMEWORKS -->
+    <div class="ba-sec">
+      <div class="ba-eyebrow">03 · The frameworks</div>
+      <h2 class="ba-title">The bodies of knowledge behind it.</h2>
+      <div class="ba-grid" style="margin-top:1.3rem;">
+        <div class="ba-fw"><h4>BIZBOK</h4><p>The <b>Business Architecture Body of Knowledge</b> (Business Architecture Guild) — defines the core blueprints and the techniques for capability, value, organisation and information.</p></div>
+        <div class="ba-fw"><h4>TOGAF · ADM</h4><p>An enterprise-architecture method; <b>business architecture is Phase B</b> of the Architecture Development Method, across the Business / Data / Application / Technology domains.</p></div>
+        <div class="ba-fw"><h4>ArchiMate</h4><p>The Open Group&rsquo;s <b>modelling notation</b> for enterprise architecture, layered into business, application and technology.</p></div>
+      </div>
+    </div>
+
+    <!-- ARTIFACTS -->
+    <div class="ba-sec">
+      <div class="ba-eyebrow">04 · The artifacts</div>
+      <h2 class="ba-title">Explore each one.</h2>
+      <div class="ba-grid" style="margin-top:1.3rem;">
+        <a class="ba-card" href="capability-map.html">
+          <div class="ba-card-title">Business Capability Map</div>
+          <div class="ba-card-desc">A BIZBOK-aligned L1→L3 capability model across four tiers, with a maturity / priority heat-map and click-to-detail sub-capabilities.</div>
+          <span class="ba-card-feat">heat-map toggle</span>
+        </a>
+        <a class="ba-card" href="value-streams.html">
+          <div class="ba-card-title">Value Streams</div>
+          <div class="ba-card-desc">Five end-to-end value streams (customer, business, employee) with each stage cross-mapped to the capabilities that enable it.</div>
+          <span class="ba-card-feat">stage → capability cross-map</span>
+        </a>
+        <a class="ba-card" href="operating-model.html">
+          <div class="ba-card-title">Target Operating Model</div>
+          <div class="ba-card-desc">The seven dimensions an operating model is designed across, each with a current-state → future-state shift and its design levers.</div>
+          <span class="ba-card-feat">current → future</span>
+        </a>
+        <a class="ba-card" href="ba-glossary.html">
+          <div class="ba-card-title">Glossary &amp; Frameworks</div>
+          <div class="ba-card-desc">55 searchable terms — BIZBOK, TOGAF ADM, ArchiMate, the blueprints, techniques and roles — each with a plain-language definition.</div>
+          <span class="ba-card-feat">live search</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">HOW THIS CONNECTS TO MY DELIVERY WORK</div>
+      <p>Business architecture is a natural step up from implementation: I&rsquo;ve delivered the systems that <em>run</em> capabilities (ERP go-lives, SAP FI/CO), and this is the discipline that decides <em>which capabilities matter and how they&rsquo;re organised</em>. I&rsquo;m building this depth as I take on the analyst role &mdash; framed honestly as methodology and study on a foundation of real delivery, not a claim of years of business-architecture practice.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="index.html#delivered" style="color:var(--accent);font-weight:600;">See the delivery experience it builds on &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Architecture Glossary · BIZBOK &amp; TOGAF · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/ba-glossary.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Business Architecture Glossary · BIZBOK &amp; TOGAF — Chatree Kengpipat">
+<meta property="og:description" content="A searchable business-architecture reference: BIZBOK and TOGAF frameworks, the core blueprints (capability, value stream, organisation, information), techniques, and the ADM — each with a plain-language definition.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/ba-glossary.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Business Architecture Glossary · BIZBOK &amp; TOGAF">
+<meta name="twitter:description" content="Searchable business-architecture reference: BIZBOK/TOGAF, blueprints, techniques and the ADM, each with a plain-language definition.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="A searchable business-architecture glossary by Chatree Kengpipat: BIZBOK and TOGAF frameworks, the core blueprints (capability, value stream, organisation, information), core techniques (capability-based planning, heat-mapping, cross-mapping), the TOGAF ADM and roles — each with a plain-language definition. A Business Architecture study reference.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     BA GLOSSARY — page-scoped. Live search + category filter over
+     a curated business-architecture reference. From existing tokens.
+     ============================================================ */
+  .bg-wrap { max-width: 1000px; margin: 0 auto; }
+  .bg-tools { position: sticky; top: 64px; z-index: 40; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(10px); padding: 1rem 0 0.8rem; margin-bottom: 0.4rem; }
+  .bg-search { position: relative; margin-bottom: 0.8rem; }
+  .bg-search input { width: 100%; box-sizing: border-box; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.75rem 1rem 0.75rem 2.6rem; transition: border-color 0.2s, box-shadow 0.2s; }
+  .bg-search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+  .bg-search .bg-ico { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-subtle); font-size: 1rem; pointer-events: none; }
+  .bg-filter { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .bg-filter button { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.32rem 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .bg-filter button:hover { border-color: var(--accent); color: var(--text); }
+  .bg-filter button[aria-pressed="true"] { background: var(--accent-bg); border-color: color-mix(in srgb, var(--accent) 32%, transparent); color: var(--accent); }
+  .bg-count { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin: 0.2rem 0 1.2rem; }
+
+  .bg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.7rem; }
+  .bg-entry { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem 1rem; transition: border-color 0.2s, transform 0.2s var(--ease-smooth); }
+  .bg-entry:hover { border-color: color-mix(in srgb, var(--accent) 40%, transparent); transform: translateY(-1px); }
+  .bg-entry-top { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.4rem; }
+  .bg-term { font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; font-weight: 700; color: var(--accent); letter-spacing: -0.01em; }
+  .bg-cat { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-subtle); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 0.1rem 0.4rem; white-space: nowrap; flex-shrink: 0; }
+  .bg-def { font-size: 0.85rem; line-height: 1.5; color: var(--text-muted); }
+  .bg-def b { color: var(--text); font-weight: 600; }
+  .bg-link { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; display: inline-block; margin-top: 0.5rem; }
+  .bg-link:hover { border-color: var(--accent); }
+  .bg-empty { text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding: 2.5rem 1rem; grid-column: 1 / -1; }
+  mark { background: color-mix(in srgb, var(--accent) 26%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; }
+  @media (max-width: 720px) { .bg-tools { top: 56px; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html" class="active" aria-current="page">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Business Architecture</span><span class="breadcrumb-sep">/</span><span>Glossary</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · Glossary &amp; Frameworks</div>
+      <div class="project-meta">The vocabulary of BIZBOK and TOGAF</div>
+      <h1>Business Architecture <em>Glossary</em></h1>
+      <p class="project-hero-desc">The working reference for the language of business architecture: the <strong>frameworks</strong> (BIZBOK, TOGAF, ArchiMate), the <strong>core blueprints</strong> (capability, value stream, organisation, information), the <strong>techniques</strong>, and the <strong>TOGAF ADM</strong> &mdash; each with a plain-language definition. Search live, or filter by area.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Entries</span><span class="project-info-val" id="bgTotal">—</span></div>
+      <div class="project-info-row"><span class="project-info-label">Areas</span><span class="project-info-val">Frameworks · Blueprints · Techniques · TOGAF · Concepts</span></div>
+      <div class="project-info-row"><span class="project-info-label">Use</span><span class="project-info-val">Search or filter live</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Study reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 1rem 2.5rem 4rem;">
+  <div class="bg-wrap">
+    <div class="bg-tools">
+      <div class="bg-search">
+        <span class="bg-ico" aria-hidden="true">⌕</span>
+        <input type="search" id="bgSearch" placeholder="Search — e.g. BIZBOK, capability, value stream, ADM" aria-label="Search the glossary" autocomplete="off">
+      </div>
+      <div class="bg-filter" id="bgFilter" role="group" aria-label="Filter by area">
+        <button type="button" data-c="all" aria-pressed="true">All</button>
+        <button type="button" data-c="fw" aria-pressed="false">Frameworks</button>
+        <button type="button" data-c="bp" aria-pressed="false">Blueprints</button>
+        <button type="button" data-c="tech" aria-pressed="false">Techniques</button>
+        <button type="button" data-c="strat" aria-pressed="false">Strategy</button>
+        <button type="button" data-c="togaf" aria-pressed="false">TOGAF</button>
+        <button type="button" data-c="role" aria-pressed="false">Roles</button>
+        <button type="button" data-c="concept" aria-pressed="false">Concepts</button>
+      </div>
+    </div>
+    <div class="bg-count" id="bgCount"></div>
+    <div class="bg-grid" id="bgGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var CATS = { fw:'Framework', bp:'Blueprint', tech:'Technique', strat:'Strategy', togaf:'TOGAF', role:'Role', concept:'Concept' };
+  var E = [
+    ['BIZBOK','fw','The <b>Business Architecture Body of Knowledge</b> from the Business Architecture Guild — the definitive framework defining the core blueprints and techniques.',['business-architecture.html','BA Hub']],
+    ['TOGAF','fw','<b>The Open Group Architecture Framework</b> — an enterprise-architecture method; business architecture is delivered in Phase B of its ADM.'],
+    ['ADM','fw','TOGAF&rsquo;s <b>Architecture Development Method</b> — the cycle: Preliminary, A Vision, B Business, C Information Systems, D Technology, E Opportunities, F Migration, G Governance, H Change.'],
+    ['ArchiMate','fw','The Open Group&rsquo;s modelling <b>notation</b> for enterprise architecture, layered into business, application and technology.'],
+    ['Zachman Framework','fw','An enterprise-architecture <b>ontology</b>: a matrix of perspectives (rows) against interrogatives — what, how, where, who, when, why.'],
+    ['Business Model Canvas','fw','A one-page strategic tool describing a business across nine blocks (value proposition, segments, channels, revenue, cost).'],
+    ['Operating Model Canvas','fw','A tool for designing how an organisation delivers value operationally across a set of dimensions.',['operating-model.html','TOM page']],
+
+    ['Business Capability','bp','What a business does, as a <b>stable noun</b> (&ldquo;Customer Management&rdquo;) — independent of process, org or technology.',['capability-map.html','Capability Map']],
+    ['Capability Map','bp','The hierarchical model (L1→L3) of an enterprise&rsquo;s capabilities — the anchor artifact of business architecture.',['capability-map.html','open it']],
+    ['Value Stream','bp','An end-to-end sequence of stages that delivers value to a <b>stakeholder</b>; each stage is enabled by capabilities.',['value-streams.html','Value Streams']],
+    ['Value Stream Stage','bp','A discrete step in a value stream producing a value item, with entrance and exit criteria.'],
+    ['Value Item','bp','The unit of value a stakeholder receives at a value-stream stage.'],
+    ['Organization Map','bp','A blueprint of business units, partners and their relationships — the <i>who</i> of the enterprise.'],
+    ['Information Map','bp','A blueprint of the business information <b>concepts</b> the enterprise uses — the business view of data, not a data model.'],
+    ['Information Concept','bp','A business-meaningful unit of information (Customer, Order, Product) in the information map.'],
+    ['Stakeholder','bp','Any party with an interest in, or that receives value from, the enterprise — customer, employee, partner, regulator.'],
+
+    ['Capability-Based Planning','tech','Planning investment and change around <b>capabilities</b> rather than projects or org units.'],
+    ['Heat Map','tech','Colouring a capability map by a dimension — maturity, performance, importance or investment — to focus the conversation.',['capability-map.html','see it live']],
+    ['Cross-Mapping','tech','Relating two blueprints — e.g., mapping which capabilities enable each value-stream stage.'],
+    ['Current State','tech','The <b>as-is</b> architecture — how things work today. Also called the baseline.'],
+    ['Future State','tech','The <b>to-be</b> architecture — the target design. Also the target state.'],
+    ['Gap Analysis','tech','The difference between current and future state, which defines what must change.'],
+    ['Roadmap','tech','A sequenced set of initiatives that moves the enterprise from current to future state.'],
+    ['Capability Assessment','tech','Rating capabilities (maturity, importance, performance) to prioritise where to invest.'],
+    ['Capability Increment','tech','A defined improvement to a capability delivered by an initiative.'],
+
+    ['Strategy Map','strat','A view linking objectives to the capabilities and initiatives that achieve them.'],
+    ['Objective','strat','A measurable goal the strategy is trying to achieve.'],
+    ['Initiative','strat','A programme or project that changes capabilities to deliver a business outcome.'],
+    ['Business Outcome','strat','The measurable result an initiative is meant to produce.'],
+    ['Course of Action','strat','A strategic approach chosen to reach an objective.'],
+    ['Value Proposition','strat','The bundle of value an enterprise offers a stakeholder segment.'],
+
+    ['Phase B','togaf','The <b>Business Architecture</b> phase of the TOGAF ADM — where capability, value, organisation and information views are developed.'],
+    ['BDAT','togaf','The four TOGAF architecture <b>domains</b>: Business, Data, Application, Technology.'],
+    ['Architecture Vision','togaf','ADM Phase A — the high-level, aspirational view that scopes the work.'],
+    ['Architecture Building Block','togaf','ABB — a reusable, technology-independent architecture component.'],
+    ['Solution Building Block','togaf','SBB — a specific, implementable component that realises an ABB.'],
+    ['Architecture Repository','togaf','Where architecture assets, standards and reference models are stored.'],
+    ['Enterprise Continuum','togaf','TOGAF&rsquo;s way of classifying architecture assets from generic to organisation-specific.'],
+    ['Requirements Management','togaf','The central ADM activity that governs requirements across every phase.'],
+    ['Architecture Governance','togaf','ADM Phase G — controlling the implementation so it conforms to the architecture.'],
+
+    ['Business Architect','role','Owns the business blueprints and connects strategy to execution across the enterprise.'],
+    ['Enterprise Architect','role','Owns the architecture across all domains — business, data, application and technology.'],
+    ['Solution Architect','role','Designs the architecture for a specific solution or initiative.'],
+
+    ['Enterprise Architecture','concept','The discipline of describing and governing an enterprise across business, data, application and technology to align it with strategy.'],
+    ['Operating Model','concept','How an enterprise is <b>organised to deliver value</b> — its processes, structure, information, technology, partners, locations and governance.',['operating-model.html','TOM page']],
+    ['Target Operating Model','concept','TOM — the designed future operating model an organisation is transforming toward.',['operating-model.html','open it']],
+    ['Baseline','concept','The current-state architecture used as the starting point for change.'],
+    ['Operating Model (MIT)','concept','Ross &amp; Weill&rsquo;s four models by process standardisation/integration: Coordination, Unification, Diversification, Replication.'],
+    ['POLDAT','concept','An operating-model dimension set: Process, Organisation, Location, Data, Applications, Technology.'],
+    ['Business Motivation Model','concept','A structure for the <i>why</i>: ends (vision, goals) and means (strategies, tactics), with influencers and assessments.'],
+    ['Digital Decoupling','concept','Progressively replacing or wrapping legacy systems so the business can move faster without a big-bang replacement.'],
+    ['Lean Value Stream Map','concept','A lean-manufacturing technique visualising material and information flow — related to, but distinct from, the BIZBOK value stream.']
+  ];
+
+  var grid = document.getElementById('bgGrid');
+  var countEl = document.getElementById('bgCount');
+  var searchEl = document.getElementById('bgSearch');
+  document.getElementById('bgTotal').textContent = E.length + ' terms';
+  var cat = 'all', q = '';
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;' }[c]; }); }
+  function hl(text, term) {
+    if (!term) return text;
+    try { var re = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'); return text.replace(re, '<mark>$1</mark>'); }
+    catch (e) { return text; }
+  }
+  function render() {
+    var ql = q.trim().toLowerCase();
+    var rows = E.filter(function (e) {
+      if (cat !== 'all' && e[1] !== cat) return false;
+      if (!ql) return true;
+      return (e[0] + ' ' + e[2].replace(/<[^>]+>/g, '')).toLowerCase().indexOf(ql) !== -1;
+    });
+    countEl.textContent = rows.length + ' of ' + E.length + ' entries' + (cat !== 'all' ? ' · ' + CATS[cat] : '') + (ql ? ' · matching “' + q.trim() + '”' : '');
+    if (!rows.length) { grid.innerHTML = '<div class="bg-empty">No entry matches “' + esc(q.trim()) + '”. Try a shorter term or clear the filter.</div>'; return; }
+    grid.innerHTML = rows.map(function (e) {
+      var term = ql ? hl(esc(e[0]), q.trim()) : esc(e[0]);
+      var def = ql ? hl(e[2], q.trim()) : e[2];
+      var link = e[3] ? '<a class="bg-link" href="' + e[3][0] + '">' + e[3][1] + ' →</a>' : '';
+      return '<div class="bg-entry"><div class="bg-entry-top"><span class="bg-term">' + term + '</span><span class="bg-cat">' + CATS[e[1]] + '</span></div><div class="bg-def">' + def + '</div>' + link + '</div>';
+    }).join('');
+  }
+  document.querySelectorAll('#bgFilter button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#bgFilter button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true'); cat = b.getAttribute('data-c'); render();
+    });
+  });
+  searchEl.addEventListener('input', function () { q = searchEl.value; render(); });
+  render();
+})();
+</script>
+
+</body>
+</html>

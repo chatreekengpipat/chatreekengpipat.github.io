@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Value Streams · Business Architecture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/value-streams.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Value Streams · Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="Interactive business value streams (BIZBOK-aligned): how value is delivered to a stakeholder end to end, stage by stage, each cross-mapped to the business capabilities that enable it.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/value-streams.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Value Streams · Business Architecture">
+<meta name="twitter:description" content="Interactive value streams cross-mapped to the business capabilities that enable each stage.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="Interactive business value streams by Chatree Kengpipat: a BIZBOK-aligned view of how value is delivered to a stakeholder end to end — Acquire-to-Onboard, Order-to-Cash, Concept-to-Market and more — each stage carrying its value item, entrance/exit criteria, and the business capabilities that enable it. A Business Architecture methodology reference.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     VALUE STREAMS — page-scoped. A value-stream selector, a stage
+     flow, and a stage detail that cross-maps to capabilities.
+     ============================================================ */
+  .vs-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .vs-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .vs-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .vs-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .vs-banner-text strong { color: var(--text); font-weight: 600; }
+  .vs-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .vs-wrap { max-width: 1080px; margin: 0 auto; }
+  .vs-select { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.4rem; }
+  .vs-select button { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.45rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .vs-select button:hover { border-color: var(--accent); color: var(--text); }
+  .vs-select button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .vs-head { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg) var(--radius-lg) 0 0; border-bottom: 0; padding: 1.2rem 1.5rem; }
+  .vs-head-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; margin-bottom: 0.4rem; }
+  .vs-head-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; }
+  .vs-head-name em { color: var(--accent); font-style: normal; }
+  .vs-stakeholder { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: #fff; background: var(--accent); border-radius: 5px; padding: 0.2rem 0.55rem; }
+  .vs-head-value { font-size: 0.88rem; line-height: 1.55; color: var(--text-muted); }
+  .vs-head-value b { color: var(--text-strong); font-weight: 600; }
+
+  /* Stage flow */
+  .vs-flow { background: var(--surface); border: 1px solid var(--border); border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 1.3rem 1.5rem; box-shadow: var(--shadow-md); overflow-x: auto; }
+  .vs-stages { display: flex; align-items: stretch; gap: 0; min-width: min-content; }
+  .vs-stage { display: flex; align-items: stretch; }
+  .vs-node {
+    text-align: left; font: inherit; cursor: pointer; min-width: 150px; flex: 1;
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 0.8rem 0.9rem; transition: border-color 0.2s, transform 0.2s var(--ease-smooth), box-shadow 0.2s;
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .vs-node:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 24px -14px var(--glow-color); }
+  .vs-node.is-active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); background: var(--accent-bg); }
+  .vs-node-n { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; color: var(--accent); }
+  .vs-node-name { font-size: 0.88rem; font-weight: 700; color: var(--text-strong); line-height: 1.2; }
+  .vs-node-val { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+  .vs-arrow { align-self: center; color: var(--accent); font-weight: 700; padding: 0 0.45rem; flex-shrink: 0; }
+
+  /* Stage detail */
+  .vs-detail { margin-top: 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; min-height: 8rem; box-shadow: var(--shadow-md); }
+  .vs-d-empty { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.6rem; }
+  .vs-d-empty::before { content: ''; width: 9px; height: 9px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+  .vs-d-stage { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 0.3rem; }
+  .vs-d-name { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.9rem; }
+  .vs-dl { display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.55rem 1rem; margin-bottom: 1.2rem; }
+  .vs-dl dt { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; padding-top: 0.1rem; }
+  .vs-dl dd { margin: 0; font-size: 0.88rem; line-height: 1.5; color: var(--text); }
+  .vs-caps-title { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; margin-bottom: 0.55rem; }
+  .vs-caps { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .vs-cap { font-size: 0.8rem; color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent); border-radius: var(--radius-sm); padding: 0.3rem 0.6rem; text-decoration: none; transition: background 0.2s, color 0.2s; }
+  .vs-cap:hover { background: var(--accent); color: #fff; }
+
+  @media (max-width: 720px) { .vs-banner { top: 62px; padding: 0 1rem; } .vs-dl { grid-template-columns: 1fr; gap: 0.15rem; } .vs-dl dt { margin-top: 0.6rem; } }
+  @media (prefers-reduced-motion: reduce) { .vs-node { transition: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html" class="active" aria-current="page">Value Streams</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="vs-banner" role="note" aria-label="Methodology note">
+  <div class="vs-banner-inner">
+    <span class="vs-banner-icon" aria-hidden="true">!</span>
+    <div class="vs-banner-text">
+      <span class="vs-banner-tag">BUSINESS ARCHITECTURE · METHODOLOGY REFERENCE</span><br>
+      <strong>Reference value streams</strong> I built to work the Business Architecture technique of cross-mapping stakeholder value to capabilities. BIZBOK-aligned; illustrative, not a specific client&rsquo;s streams.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Business Architecture</span><span class="breadcrumb-sep">/</span><span>Value Streams</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · Value Streams</div>
+      <div class="project-meta">How value is delivered — end to end, to a stakeholder</div>
+      <h1>Value <em>Streams</em></h1>
+      <p class="project-hero-desc">Where the <a href="capability-map.html" style="color:var(--accent)">capability map</a> shows <strong>what</strong> the enterprise does, a <strong>value stream</strong> shows <strong>how value flows</strong> to a stakeholder, end to end, in stages. Each stage delivers a value item and is <strong>enabled by capabilities</strong> &mdash; that cross-map is the heart of the technique. Pick a stream, then open a stage to see its value, its criteria, and the capabilities behind it.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Framework</span><span class="project-info-val">BIZBOK · value streams</span></div>
+      <div class="project-info-row"><span class="project-info-label">Streams</span><span class="project-info-val">5 · customer / business / employee</span></div>
+      <div class="project-info-row"><span class="project-info-label">Cross-map</span><span class="project-info-val">stage → enabling capabilities</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="vs-wrap">
+    <div class="vs-select" id="vsSelect" role="group" aria-label="Select a value stream"></div>
+    <div class="vs-head" id="vsHead"></div>
+    <div class="vs-flow"><div class="vs-stages" id="vsStages"></div></div>
+    <div class="vs-detail" id="vsDetail" aria-live="polite">
+      <div class="vs-d-empty">Select a stage above to see the value it delivers and the capabilities that enable it.</div>
+    </div>
+
+    <div class="callout" style="margin-top:2.4rem;">
+      <div class="callout-title">WHY VALUE STREAMS MATTER</div>
+      <p>A value stream is <strong>stakeholder-centric and cross-functional</strong> &mdash; it cuts across the org chart to show how value actually reaches the customer, employee or partner. Cross-mapping each stage to <a href="capability-map.html" style="color:var(--accent)">capabilities</a> turns a strategy conversation into a concrete one: a weak stage points straight at the capabilities to strengthen. This pairing &mdash; value streams over a capability map &mdash; is the core of the BIZBOK method and what an <strong>operating model</strong> is then designed to run.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="operating-model.html" style="color:var(--accent);font-weight:600;">Next: the Target Operating Model &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  // stream: {name, stakeholder, value, stages:[{name, val, entrance, exit, caps:[...]}]}
+  var STREAMS = [
+    { name: 'Acquire to Onboard', stakeholder: 'Customer', value: 'A prospect becomes an active, value-realising customer.',
+      stages: [
+        { name: 'Attract', val: 'Prospect is aware and interested', entrance: 'Target market defined', exit: 'Qualified lead captured', caps: ['Marketing Management','Channel Management','Customer Management'] },
+        { name: 'Evaluate', val: 'Prospect can assess fit and price', entrance: 'Qualified lead', exit: 'Proposal accepted', caps: ['Sales Management','Product &amp; Service Management','Customer Management'] },
+        { name: 'Acquire', val: 'Agreement is in place', entrance: 'Proposal accepted', exit: 'Contract signed', caps: ['Sales Management','Enterprise Risk &amp; Compliance'] },
+        { name: 'Onboard', val: 'Customer is set up to transact', entrance: 'Contract signed', exit: 'Account provisioned', caps: ['Customer Management','Information Technology','Service &amp; Support'] },
+        { name: 'Activate', val: 'Customer realises first value', entrance: 'Account provisioned', exit: 'First successful use', caps: ['Service &amp; Support','Customer Management','Data &amp; Analytics'] }
+      ] },
+    { name: 'Order to Cash', stakeholder: 'Customer', value: 'An order is fulfilled and converted to collected cash.',
+      stages: [
+        { name: 'Capture Order', val: 'Order is accurate and confirmed', entrance: 'Customer intent to buy', exit: 'Order confirmed', caps: ['Order Management','Sales Management'] },
+        { name: 'Fulfil', val: 'Goods/services are delivered', entrance: 'Order confirmed', exit: 'Delivery complete', caps: ['Order Management','Supply Chain Management','Operations &amp; Delivery'] },
+        { name: 'Invoice', val: 'A correct bill is issued', entrance: 'Delivery complete', exit: 'Invoice sent', caps: ['Finance Management','Order Management'] },
+        { name: 'Collect', val: 'Cash is received on time', entrance: 'Invoice sent', exit: 'Payment cleared', caps: ['Finance Management','Customer Management'] },
+        { name: 'Support', val: 'Post-sale issues are resolved', entrance: 'Payment cleared', exit: 'Case closed', caps: ['Service &amp; Support','Quality Management'] }
+      ] },
+    { name: 'Concept to Market', stakeholder: 'Business', value: 'An idea becomes a scaled, revenue-generating offering.',
+      stages: [
+        { name: 'Ideate', val: 'A validated opportunity', entrance: 'Strategic theme', exit: 'Concept approved', caps: ['Innovation Management','Strategy Management'] },
+        { name: 'Design', val: 'A buildable offering', entrance: 'Concept approved', exit: 'Design signed off', caps: ['Product &amp; Service Management','Business Architecture'] },
+        { name: 'Validate', val: 'Evidence of market fit', entrance: 'Design signed off', exit: 'Pilot passed', caps: ['Innovation Management','Data &amp; Analytics','Customer Management'] },
+        { name: 'Launch', val: 'Offering is in market', entrance: 'Pilot passed', exit: 'Go-live', caps: ['Marketing Management','Operations &amp; Delivery','Channel Management'] },
+        { name: 'Scale', val: 'Offering grows profitably', entrance: 'Go-live', exit: 'Target run-rate', caps: ['Operations &amp; Delivery','Finance Management','Data &amp; Analytics'] }
+      ] },
+    { name: 'Recruit to Retire', stakeholder: 'Employee', value: 'A candidate becomes a productive employee and transitions well.',
+      stages: [
+        { name: 'Attract', val: 'A strong candidate pool', entrance: 'Role approved', exit: 'Candidates sourced', caps: ['Human Capital Management','Marketing Management'] },
+        { name: 'Hire', val: 'The right person is offered', entrance: 'Candidates sourced', exit: 'Offer accepted', caps: ['Human Capital Management','Enterprise Risk &amp; Compliance'] },
+        { name: 'Onboard', val: 'New hire is ready to contribute', entrance: 'Offer accepted', exit: 'Fully enabled', caps: ['Human Capital Management','Information Technology'] },
+        { name: 'Develop', val: 'Employee grows and performs', entrance: 'Fully enabled', exit: 'Ongoing performance', caps: ['Human Capital Management','Knowledge Management'] },
+        { name: 'Transition', val: 'A clean exit or move', entrance: 'Change/leave event', exit: 'Offboarded', caps: ['Human Capital Management','Enterprise Risk &amp; Compliance'] }
+      ] },
+    { name: 'Issue to Resolution', stakeholder: 'Customer', value: 'A reported problem is resolved and prevented from recurring.',
+      stages: [
+        { name: 'Report', val: 'Issue is logged and understood', entrance: 'Customer reports issue', exit: 'Case created', caps: ['Service &amp; Support','Customer Management'] },
+        { name: 'Triage', val: 'Priority and owner are set', entrance: 'Case created', exit: 'Case assigned', caps: ['Service &amp; Support','Quality Management'] },
+        { name: 'Resolve', val: 'The problem is fixed', entrance: 'Case assigned', exit: 'Fix applied', caps: ['Service &amp; Support','Operations &amp; Delivery','Information Technology'] },
+        { name: 'Confirm', val: 'Customer agrees it is fixed', entrance: 'Fix applied', exit: 'Case closed', caps: ['Service &amp; Support','Customer Management'] },
+        { name: 'Improve', val: 'Root cause is removed', entrance: 'Case closed', exit: 'Improvement made', caps: ['Quality Management','Data &amp; Analytics'] }
+      ] }
+  ];
+
+  var selEl = document.getElementById('vsSelect');
+  var headEl = document.getElementById('vsHead');
+  var stagesEl = document.getElementById('vsStages');
+  var detail = document.getElementById('vsDetail');
+  var cur = 0;
+  var capHref = 'capability-map.html';
+
+  selEl.innerHTML = STREAMS.map(function (s, i) {
+    return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + s.name + '</button>';
+  }).join('');
+
+  function renderStream(idx) {
+    cur = idx;
+    var s = STREAMS[idx];
+    selEl.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-i') === idx)); });
+    headEl.innerHTML = '<div class="vs-head-top"><span class="vs-head-name">' + s.name.replace(' to ', ' <em>to</em> ') + '</span><span class="vs-stakeholder">▸ ' + s.stakeholder + '</span></div><div class="vs-head-value"><b>Value delivered:</b> ' + s.value + '</div>';
+    stagesEl.innerHTML = s.stages.map(function (st, i) {
+      var arrow = i < s.stages.length - 1 ? '<span class="vs-arrow" aria-hidden="true">&rarr;</span>' : '';
+      return '<div class="vs-stage"><button type="button" class="vs-node" data-s="' + i + '"><span class="vs-node-n">STAGE ' + (i + 1) + '</span><span class="vs-node-name">' + st.name + '</span><span class="vs-node-val">' + st.val + '</span></button>' + arrow + '</div>';
+    }).join('');
+    stagesEl.querySelectorAll('.vs-node').forEach(function (n) {
+      n.addEventListener('click', function () { showStage(idx, +n.getAttribute('data-s'), n); });
+    });
+    detail.innerHTML = '<div class="vs-d-empty">Select a stage above to see the value it delivers and the capabilities that enable it.</div>';
+  }
+  function showStage(si, sti, node) {
+    var st = STREAMS[si].stages[sti];
+    stagesEl.querySelectorAll('.vs-node.is-active').forEach(function (x) { x.classList.remove('is-active'); });
+    if (node) node.classList.add('is-active');
+    detail.innerHTML =
+      '<div class="vs-d-stage">' + STREAMS[si].name + ' · Stage ' + (sti + 1) + '</div>' +
+      '<div class="vs-d-name">' + st.name + '</div>' +
+      '<dl class="vs-dl">' +
+        '<dt>Value item</dt><dd>' + st.val + '</dd>' +
+        '<dt>Entrance</dt><dd>' + st.entrance + '</dd>' +
+        '<dt>Exit</dt><dd>' + st.exit + '</dd>' +
+      '</dl>' +
+      '<div class="vs-caps-title">Enabling capabilities</div>' +
+      '<div class="vs-caps">' + st.caps.map(function (c) { return '<a class="vs-cap" href="' + capHref + '">' + c + '</a>'; }).join('') + '</div>';
+  }
+  selEl.querySelectorAll('button').forEach(function (b) {
+    b.addEventListener('click', function () { renderStream(+b.getAttribute('data-i')); });
+  });
+  renderStream(0);
+})();
+</script>
+
+</body>
+</html>

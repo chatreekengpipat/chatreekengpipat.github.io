@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Target Operating Model · Business Architecture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/operating-model.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Target Operating Model · Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="An interactive Target Operating Model: the dimensions an operating model is designed across (process, organisation, information, technology, partners, governance, locations), each with a current-state to future-state shift.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/operating-model.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Target Operating Model · Business Architecture">
+<meta name="twitter:description" content="Interactive Target Operating Model: the operating-model dimensions with a current-to-future-state shift for each.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive Target Operating Model (TOM) by Chatree Kengpipat: the seven dimensions an operating model is designed across — process, organisation, information, technology, partners, governance, locations — each with a current-state to future-state shift and its design questions. A Business Architecture methodology reference.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     TARGET OPERATING MODEL — page-scoped. The dimensions of an
+     operating model, each with a current → future shift and a
+     detail panel. Built from existing tokens.
+     ============================================================ */
+  .om-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .om-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .om-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .om-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .om-banner-text strong { color: var(--text); font-weight: 600; }
+  .om-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .om-wrap { max-width: 1000px; margin: 0 auto; }
+  .om-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.8rem; }
+  .om-dim {
+    text-align: left; width: 100%; font: inherit; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 1.1rem 1.2rem; transition: border-color 0.2s, transform 0.2s var(--ease-smooth), box-shadow 0.2s;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .om-dim:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 16px 34px -18px var(--glow-color); }
+  .om-dim.is-active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .om-dim-top { display: flex; align-items: center; gap: 0.6rem; }
+  .om-dim-k { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; width: 1.7rem; height: 1.7rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .om-dim-name { font-size: 0.98rem; font-weight: 700; color: var(--text-strong); letter-spacing: -0.01em; }
+  .om-dim-q { font-size: 0.82rem; line-height: 1.5; color: var(--text-muted); }
+  .om-shift { display: flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; margin-top: auto; }
+  .om-from { color: var(--text-muted); background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 0.2rem 0.45rem; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .om-to { color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent); border-radius: 5px; padding: 0.2rem 0.45rem; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .om-arrow { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+  .om-detail { margin-top: 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; min-height: 8rem; box-shadow: var(--shadow-md); }
+  .om-d-empty { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.6rem; }
+  .om-d-empty::before { content: ''; width: 9px; height: 9px; background: var(--accent); border-radius: 2px; flex-shrink: 0; }
+  .om-d-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+  .om-d-q { font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 1.2rem; max-width: 46rem; }
+  .om-states { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: stretch; margin-bottom: 1.2rem; }
+  .om-state { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.1rem; }
+  .om-state.future { border-color: color-mix(in srgb, var(--accent) 38%, transparent); background: var(--accent-bg); }
+  .om-state h4 { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 0.5rem; color: var(--text-subtle); }
+  .om-state.future h4 { color: var(--accent); }
+  .om-state p { margin: 0; font-size: 0.86rem; line-height: 1.55; color: var(--text); }
+  .om-states-arrow { align-self: center; color: var(--accent); font-size: 1.4rem; font-weight: 700; }
+  .om-lever-title { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); font-weight: 700; margin-bottom: 0.55rem; }
+  .om-levers { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .om-lever { font-size: 0.8rem; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.3rem 0.6rem; }
+
+  @media (max-width: 720px) { .om-banner { top: 62px; padding: 0 1rem; } .om-states { grid-template-columns: 1fr; } .om-states-arrow { transform: rotate(90deg); } }
+  @media (prefers-reduced-motion: reduce) { .om-dim { transition: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="operating-model.html" class="active" aria-current="page">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="om-banner" role="note" aria-label="Methodology note">
+  <div class="om-banner-inner">
+    <span class="om-banner-icon" aria-hidden="true">!</span>
+    <div class="om-banner-text">
+      <span class="om-banner-tag">BUSINESS ARCHITECTURE · METHODOLOGY REFERENCE</span><br>
+      A <strong>reference operating-model canvas</strong> I built to work the target-operating-model technique. The dimensions and design questions are the real method; the current→future shifts are illustrative, not a specific client&rsquo;s model.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Business Architecture</span><span class="breadcrumb-sep">/</span><span>Operating Model</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · Target Operating Model</div>
+      <div class="project-meta">How the enterprise is organised to run its capabilities</div>
+      <h1>Target Operating <em>Model</em></h1>
+      <p class="project-hero-desc">Strategy sets direction, <a href="capability-map.html" style="color:var(--accent)">capabilities</a> say what the enterprise does, <a href="value-streams.html" style="color:var(--accent)">value streams</a> say how value flows &mdash; the <strong>operating model</strong> says how it is all <strong>organised to run</strong>. A Target Operating Model (TOM) designs the future across a consistent set of dimensions. Select a dimension to see its design question and a current-state → future-state shift.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Artifact</span><span class="project-info-val">Target Operating Model (TOM)</span></div>
+      <div class="project-info-row"><span class="project-info-label">Dimensions</span><span class="project-info-val">7 · process → governance</span></div>
+      <div class="project-info-row"><span class="project-info-label">View</span><span class="project-info-val">Current → Future shift per dimension</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="om-wrap">
+    <div class="om-grid" id="omGrid"></div>
+    <div class="om-detail" id="omDetail" aria-live="polite">
+      <div class="om-d-empty">Select a dimension to see its design question, current → future shift and levers.</div>
+    </div>
+
+    <div class="callout" style="margin-top:2.4rem;">
+      <div class="callout-title">WHAT A TARGET OPERATING MODEL IS FOR</div>
+      <p>A TOM is the bridge from <strong>strategy to a runnable design</strong>: it takes the capabilities that matter most and decides how they will be delivered &mdash; which processes, which structure, what information and technology, which partners, and how it is governed. Designing across a <strong>consistent set of dimensions</strong> keeps the answer coherent, so a transformation changes the whole model together rather than one piece at a time. It is where business architecture becomes an execution plan.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="business-architecture.html" style="color:var(--accent);font-weight:600;">Back to the Business Architecture Hub &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  // [num, name, question, current, future, [levers]]
+  var DIMS = [
+    ['1','Process','How is work performed end to end, and where is it standardised vs differentiated?','Siloed, function-owned processes','Value-stream aligned, standardised where it should be',['Process ownership','Standardisation','Automation']],
+    ['2','Organisation','How are people structured, and who owns which capability and decision?','Structured by function / hierarchy','Capability-aligned, clear accountability',['Structure','Roles','Spans &amp; layers','Accountability']],
+    ['3','Information','What information does the model run on, and is it trusted and shared?','Fragmented, duplicated data','Single trusted source, governed &amp; shared',['Information model','Data governance','Master data']],
+    ['4','Technology','Which applications and platforms enable the capabilities, and how integrated?','Point solutions, manual hand-offs','Integrated platform, real-time flows',['Application landscape','Integration','Platform strategy']],
+    ['5','Partners &amp; Sourcing','What is done in-house vs by partners, and how are they managed?','Ad-hoc outsourcing','Deliberate build/buy/partner, managed ecosystem',['Sourcing strategy','Partner management','Service model']],
+    ['6','Locations','Where is work done — centralised, shared services, offshore, or at the edge?','Dispersed, inconsistent','Right-shored: shared services + local delivery',['Footprint','Shared services','Onshore / offshore mix']],
+    ['7','Governance &amp; Performance','How are decisions made and performance measured against strategy?','Reactive, unclear ownership','Capability-based planning, clear KPIs',['Decision rights','KPIs &amp; metrics','Investment governance']]
+  ];
+  var grid = document.getElementById('omGrid');
+  var detail = document.getElementById('omDetail');
+  grid.innerHTML = DIMS.map(function (d, i) {
+    return '<button type="button" class="om-dim" data-i="' + i + '">' +
+      '<div class="om-dim-top"><span class="om-dim-k">' + d[0] + '</span><span class="om-dim-name">' + d[1] + '</span></div>' +
+      '<div class="om-dim-q">' + d[2] + '</div>' +
+      '<div class="om-shift"><span class="om-from" title="' + d[3] + '">' + d[3] + '</span><span class="om-arrow" aria-hidden="true">&rarr;</span><span class="om-to" title="' + d[4] + '">' + d[4] + '</span></div>' +
+      '</button>';
+  }).join('');
+  function show(i, el) {
+    var d = DIMS[i];
+    grid.querySelectorAll('.om-dim.is-active').forEach(function (x) { x.classList.remove('is-active'); });
+    if (el) el.classList.add('is-active');
+    detail.innerHTML =
+      '<div class="om-d-name">' + d[0] + ' · ' + d[1] + '</div>' +
+      '<div class="om-d-q">' + d[2] + '</div>' +
+      '<div class="om-states">' +
+        '<div class="om-state current"><h4>Current state</h4><p>' + d[3] + '</p></div>' +
+        '<div class="om-states-arrow" aria-hidden="true">&rarr;</div>' +
+        '<div class="om-state future"><h4>Future state</h4><p>' + d[4] + '</p></div>' +
+      '</div>' +
+      '<div class="om-lever-title">Design levers</div>' +
+      '<div class="om-levers">' + d[5].map(function (l) { return '<span class="om-lever">' + l + '</span>'; }).join('') + '</div>';
+  }
+  grid.querySelectorAll('.om-dim').forEach(function (b) { b.addEventListener('click', function () { show(+b.getAttribute('data-i'), b); }); });
+})();
+</script>
+
+</body>
+</html>
