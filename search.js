@@ -8,6 +8,16 @@
   'use strict';
   if (window.__ckSearch) return; window.__ckSearch = true;
 
+  /* ---- Record this page as visited (read-progress; hubs read this) ---- */
+  try {
+    var _vk = 'ck-visited';
+    var _vv = JSON.parse(localStorage.getItem(_vk) || '{}') || {};
+    var _pg = (location.pathname.split('/').pop() || '').trim();
+    if (!_pg) _pg = 'index.html';
+    _vv[_pg] = Date.now();
+    localStorage.setItem(_vk, JSON.stringify(_vv));
+  } catch (e) {}
+
   /* ---- Search index (curated: pages + key reference terms) ---- */
   var IDX = [
     // Primary pages

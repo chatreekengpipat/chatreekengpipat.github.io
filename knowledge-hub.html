@@ -250,6 +250,11 @@
           <div class="kh-card-desc">Every headline number defined and reconciled — the delivered KPIs and how the STEM figures add up.</div>
           <span class="kh-card-feat">single source of truth</span>
         </a>
+        <a class="kh-card" href="quiz.html">
+          <div class="kh-card-title">Self-Test Quiz <span class="arr">→</span></div>
+          <div class="kh-card-desc">18 questions across SAP FI/CO and Business Architecture, with instant feedback and a best score saved in your browser.</div>
+          <span class="kh-card-feat">active recall</span>
+        </a>
       </div>
     </div>
 
@@ -267,6 +272,31 @@
   <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;border-bottom:1px solid transparent;">Colophon · how this site is built →</a></p>
 </footer>
 
-<script src="search.js?v=1" defer></script>
+<style>
+  .ckread { position: relative; }
+  .ckread::after { content: '✓ read'; position: absolute; top: 0.7rem; right: 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; font-weight: 700; color: var(--success); background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 32%, transparent); border-radius: 100px; padding: 0.1rem 0.42rem; }
+  .ckprog { display: flex; align-items: center; gap: 0.9rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.7rem 1.1rem; margin: 0 0 2.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+  .ckprog .bar { flex: 1; height: 5px; border-radius: 4px; background: var(--surface-2); overflow: hidden; min-width: 80px; }
+  .ckprog .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 55%, transparent)); border-radius: inherit; transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
+  .ckprog b { color: var(--text-strong); }
+  @media (prefers-reduced-motion: reduce) { .ckprog .bar span { transition: none; } }
+</style>
+<script>
+(function () {
+  var v = {}; try { v = JSON.parse(localStorage.getItem('ck-visited') || '{}') || {}; } catch (e) {}
+  var cards = document.querySelectorAll('.kh-card, .ba-card');
+  if (!cards.length) return;
+  var done = 0;
+  cards.forEach(function (c) { var h = (c.getAttribute('href') || '').split('/').pop().split('#')[0]; if (h && v[h]) { done++; c.classList.add('ckread'); } });
+  var stats = document.querySelector('.kh-stats, .ba-stats');
+  if (!stats || !stats.parentNode) return;
+  var pct = Math.round(done / cards.length * 100);
+  var el = document.createElement('div');
+  el.className = 'ckprog';
+  el.innerHTML = '<span>Your progress</span><span class="bar" aria-hidden="true"><span style="width:' + pct + '%"></span></span><span><b>' + done + '</b> / ' + cards.length + ' pages explored</span>';
+  stats.parentNode.insertBefore(el, stats.nextSibling);
+})();
+</script>
+<script src="search.js?v=2" defer></script>
 </body>
 </html>

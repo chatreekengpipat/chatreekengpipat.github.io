@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test · SAP FI/CO + Business Architecture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/quiz.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Self-Test · SAP FI/CO + Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="An interactive self-test across SAP FI/CO and Business Architecture — 18 questions on T-codes, tax, RICEFW, BIZBOK and TOGAF, with instant feedback, a score and a saved best.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/quiz.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Self-Test · SAP FI/CO + Business Architecture">
+<meta name="twitter:description" content="Interactive self-test: SAP FI/CO + Business Architecture, 18 questions, instant feedback and a saved best score.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive self-test by Chatree Kengpipat across SAP FI/CO and Business Architecture: 18 multiple-choice questions on T-codes, tax, RICEFW, the Universal Journal, BIZBOK and TOGAF, with instant feedback, explanations, a score and a best-score saved in your browser.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     SELF-TEST QUIZ — page-scoped. One question at a time, instant
+     feedback, score + best score in localStorage. From tokens.
+     ============================================================ */
+  .qz-wrap { max-width: 720px; margin: 0 auto; }
+  .qz-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.8rem 1.9rem 1.9rem; box-shadow: var(--shadow-md); }
+  .qz-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.4rem; }
+  .qz-prog { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+  .qz-prog b { color: var(--text-strong); }
+  .qz-score { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent); font-weight: 600; }
+  .qz-bar { height: 4px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-bottom: 1.4rem; }
+  .qz-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 55%, transparent)); border-radius: inherit; transition: width 0.35s var(--ease-smooth); }
+  .qz-cat { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 0.5rem; }
+  .qz-q { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.35; color: var(--text-strong); margin-bottom: 1.2rem; }
+  .qz-opts { display: flex; flex-direction: column; gap: 0.55rem; }
+  .qz-opt { text-align: left; width: 100%; font: inherit; font-size: 0.92rem; cursor: pointer; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem 1rem; color: var(--text); display: flex; align-items: center; gap: 0.7rem; transition: border-color 0.2s, background 0.2s; }
+  .qz-opt:hover:not(:disabled) { border-color: var(--accent); }
+  .qz-opt:disabled { cursor: default; }
+  .qz-opt .mk { width: 1.5rem; height: 1.5rem; border-radius: 6px; border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); flex-shrink: 0; }
+  .qz-opt.correct { border-color: var(--success); background: color-mix(in srgb, var(--success) 10%, transparent); }
+  .qz-opt.correct .mk { background: var(--success); border-color: var(--success); color: #fff; }
+  .qz-opt.wrong { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 8%, transparent); }
+  .qz-opt.wrong .mk { background: var(--danger); border-color: var(--danger); color: #fff; }
+  .qz-fb { margin-top: 1.1rem; padding: 0.9rem 1.1rem; border-radius: var(--radius-md); font-size: 0.88rem; line-height: 1.55; display: none; }
+  .qz-fb.show { display: block; }
+  .qz-fb.ok { background: color-mix(in srgb, var(--success) 9%, transparent); border: 1px solid color-mix(in srgb, var(--success) 30%, transparent); }
+  .qz-fb.no { background: color-mix(in srgb, var(--warning) 9%, transparent); border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent); }
+  .qz-fb .lab { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; }
+  .qz-fb.ok .lab { color: var(--success); }
+  .qz-fb.no .lab { color: var(--warning); }
+  .qz-fb b { color: var(--text-strong); font-weight: 600; }
+  .qz-actions { display: flex; justify-content: flex-end; margin-top: 1.3rem; }
+  .qz-btn { appearance: none; background: var(--accent); color: #fff; border: 1px solid var(--accent); border-radius: var(--radius-sm); padding: 0.6rem 1.3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 600; cursor: pointer; transition: filter 0.2s, transform 0.2s var(--ease-smooth); }
+  .qz-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .qz-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+  .qz-btn--ghost { background: transparent; color: var(--text); border-color: var(--border-strong); }
+  .qz-btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Result screen */
+  .qz-result { text-align: center; padding: 1rem 0.5rem; }
+  .qz-result-score { font-family: 'JetBrains Mono', monospace; font-size: clamp(2.6rem, 8vw, 3.6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--accent); }
+  .qz-result-score small { color: var(--text-muted); font-size: 0.4em; }
+  .qz-result-pct { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text-muted); margin-top: 0.4rem; }
+  .qz-result-msg { font-size: 1.05rem; font-weight: 600; color: var(--text-strong); margin: 1rem 0 0.4rem; }
+  .qz-best { display: inline-flex; align-items: center; gap: 0.45rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent); background: var(--accent-bg); border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent); border-radius: 100px; padding: 0.3rem 0.9rem; margin-top: 0.8rem; }
+  .qz-result-actions { display: flex; gap: 0.7rem; justify-content: center; margin-top: 1.6rem; flex-wrap: wrap; }
+
+  @media (prefers-reduced-motion: reduce) { .qz-bar span, .qz-btn { transition: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><span>Self-Test</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Self-Test · SAP FI/CO + Business Architecture</div>
+      <div class="project-meta">Active recall across the whole knowledge base</div>
+      <h1>Self-<em>Test</em></h1>
+      <p class="project-hero-desc">A quick active-recall check across the two disciplines on this site: <strong>SAP FI/CO</strong> (T-codes, tax, RICEFW, the Universal Journal) and <strong>Business Architecture</strong> (BIZBOK, TOGAF, capabilities, value streams). 18 questions, instant feedback with a short explanation, a running score, and your <strong>best saved in your browser</strong>.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Questions</span><span class="project-info-val">18 · shuffled each run</span></div>
+      <div class="project-info-row"><span class="project-info-label">Topics</span><span class="project-info-val">SAP FI/CO · Business Architecture</span></div>
+      <div class="project-info-row"><span class="project-info-label">Feedback</span><span class="project-info-val">Instant + explanation</span></div>
+      <div class="project-info-row"><span class="project-info-label">Best score</span><span class="project-info-val">Saved locally</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="qz-wrap">
+    <div class="qz-card" id="qzCard"></div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var Q = [
+    { c: 'SAP · Config', q: 'Which transaction maps each tax transaction key to the GL account it posts to?', o: ['FTXP', 'OB40', 'VKOA', 'FS00'], a: 1, e: '<b>OB40</b> is tax account determination. FTXP defines the code/rate; VKOA is SD revenue; FS00 is the GL master.' },
+    { c: 'SAP · S/4HANA', q: 'In S/4HANA, which single table merges FI and CO line items (the Universal Journal)?', o: ['BSEG', 'BKPF', 'ACDOCA', 'KONV'], a: 2, e: '<b>ACDOCA</b> is the Universal Journal — one line-item table for FI + CO, so there is no FI-CO reconciliation.' },
+    { c: 'SAP · Concept', q: 'In RICEFW, the “E” stands for…', o: ['Extension', 'Enhancement', 'Estimate', 'Entity'], a: 1, e: '<b>Enhancement</b>. RICEFW = Reports, Interfaces, Conversions, Enhancements, Forms, Workflows.' },
+    { c: 'SAP · Migration', q: 'Which tool loads master and transactional data in an S/4HANA migration?', o: ['LSMW', 'DMEE', 'Migration Cockpit (LTMC)', 'WE02'], a: 2, e: 'The <b>S/4HANA Migration Cockpit (LTMC)</b> is the standard load tool. LSMW is the older tool; DMEE builds bank files; WE02 monitors IDocs.' },
+    { c: 'SAP · Tax', q: 'Thai output/input VAT is filed on which report?', o: ['PND 3', 'PP30', 'F110', 'FBL5N'], a: 1, e: '<b>PP30</b> is the Thai VAT filing. RFUMSV00 produces the underlying VAT report that feeds it.' },
+    { c: 'SAP · Postings', q: 'Which transaction posts a customer (AR) invoice?', o: ['FB60', 'MIRO', 'FB70', 'VF01'], a: 2, e: '<b>FB70</b> posts a customer (AR) invoice. FB60 is vendor (AP); MIRO is logistics IV; VF01 is billing.' },
+    { c: 'SAP · Concept', q: 'The GR/IR clearing account bridges which two events?', o: ['Order and delivery', 'Goods receipt and invoice receipt', 'Invoice and payment', 'Requisition and PO'], a: 1, e: '<b>GR/IR</b> = Goods-Receipt / Invoice-Receipt clearing — it nets to zero once both the receipt and the invoice post.' },
+    { c: 'SAP · Config', q: 'Revenue account determination (SD billing → FI) is configured in…', o: ['OBYC', 'VKOA', 'OB40', 'FTXP'], a: 1, e: '<b>VKOA</b> maps SD condition types to GL revenue accounts. OBYC does the same for MM inventory postings.' },
+    { c: 'SAP · Tax', q: 'For Thai withholding tax, SAP recommends which approach?', o: ['Classic WHT', 'Extended WHT', 'Manual journal', 'No WHT config'], a: 1, e: 'Always <b>Extended WHT</b> — it supports withholding at invoice or payment and the Thai PND requirements; Classic is legacy.' },
+    { c: 'SAP · P2P', q: 'A three-way match reconciles which three documents?', o: ['Order, delivery, invoice', 'PO, goods receipt, invoice', 'PR, PO, payment', 'Invoice, GR, payment'], a: 1, e: 'The <b>3-way match</b> reconciles purchase order ↔ goods receipt ↔ invoice before the vendor is paid.' },
+    { c: 'BA · Framework', q: 'Which is the definitive Business Architecture body of knowledge?', o: ['ITIL', 'COBIT', 'BIZBOK', 'PMBOK'], a: 2, e: '<b>BIZBOK</b>, from the Business Architecture Guild. TOGAF is the broader enterprise-architecture method.' },
+    { c: 'BA · TOGAF', q: 'In the TOGAF ADM, business architecture is which phase?', o: ['Phase A', 'Phase B', 'Phase C', 'Phase D'], a: 1, e: '<b>Phase B</b> is Business Architecture. A is Vision, C is Information Systems, D is Technology.' },
+    { c: 'BA · Concept', q: 'A business capability is best expressed as a…', o: ['Verb / action', 'Stable noun', 'Process flow', 'Org unit'], a: 1, e: 'A capability is a <b>stable noun</b> (“Customer Management”) — it doesn’t change when processes, org or systems do.' },
+    { c: 'BA · Concept', q: 'A value stream delivers value to a…', o: ['Department', 'Stakeholder', 'System', 'Process owner'], a: 1, e: 'A <b>value stream</b> is stakeholder-centric — it shows how value flows end to end to a customer, employee or partner.' },
+    { c: 'BA · BIZBOK', q: 'The BIZBOK “core four” blueprints are capability, value, organisation and…', o: ['Information', 'Technology', 'Finance', 'Strategy'], a: 0, e: 'The core four are Capability, Value, Organisation and <b>Information</b> — the foundational business blueprints.' },
+    { c: 'BA · Technique', q: 'Capability-based planning organises change around…', o: ['Projects', 'Org units', 'Capabilities', 'Budgets'], a: 2, e: 'It plans investment and change around <b>capabilities</b> rather than one-off projects or org structure.' },
+    { c: 'BA · TOGAF', q: 'TOGAF’s four architecture domains (BDAT) are Business, Data, Application and…', o: ['Delivery', 'Technology', 'Deployment', 'Design'], a: 1, e: '<b>Technology</b>. BDAT = Business, Data, Application, Technology.' },
+    { c: 'BA · Concept', q: 'A Target Operating Model (TOM) primarily designs…', o: ['The product roadmap', 'How the enterprise is organised to run', 'The IT architecture only', 'The marketing plan'], a: 1, e: 'A <b>TOM</b> designs the future operating model — how capabilities are delivered across process, org, information, technology, partners, locations and governance.' }
+  ];
+
+  var card = document.getElementById('qzCard');
+  var order = [], idx = 0, score = 0, answered = false;
+  var BEST = 'ck-quiz-best';
+
+  function shuffle(arr) { for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; }
+  function getBest() { try { return parseInt(localStorage.getItem(BEST) || '0', 10) || 0; } catch (e) { return 0; } }
+  function setBest(v) { try { localStorage.setItem(BEST, String(v)); } catch (e) {} }
+
+  function start() {
+    order = shuffle(Q.map(function (_, i) { return i; }));
+    idx = 0; score = 0; renderQ();
+  }
+  function renderQ() {
+    answered = false;
+    var qi = order[idx], q = Q[qi];
+    var opts = q.o.map(function (t, i) { return { t: t, i: i }; });
+    // keep option order stable (answers are meaningful) but could shuffle; keep for clarity
+    var letters = ['A', 'B', 'C', 'D'];
+    card.innerHTML =
+      '<div class="qz-top"><span class="qz-prog">Question <b>' + (idx + 1) + '</b> / ' + Q.length + '</span><span class="qz-score">Score ' + score + '</span></div>' +
+      '<div class="qz-bar"><span style="width:' + (idx / Q.length * 100) + '%"></span></div>' +
+      '<div class="qz-cat">' + q.c + '</div>' +
+      '<div class="qz-q">' + q.q + '</div>' +
+      '<div class="qz-opts">' + opts.map(function (o) {
+        return '<button type="button" class="qz-opt" data-i="' + o.i + '"><span class="mk">' + letters[o.i] + '</span><span>' + o.t + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="qz-fb" id="qzFb"></div>' +
+      '<div class="qz-actions"><button type="button" class="qz-btn" id="qzNext" disabled>' + (idx === Q.length - 1 ? 'See results' : 'Next question') + ' &#9656;</button></div>';
+    card.querySelectorAll('.qz-opt').forEach(function (b) {
+      b.addEventListener('click', function () { answer(+b.getAttribute('data-i'), b); });
+    });
+    document.getElementById('qzNext').addEventListener('click', next);
+  }
+  function answer(i, btn) {
+    if (answered) return; answered = true;
+    var qi = order[idx], q = Q[qi], ok = i === q.a;
+    if (ok) score++;
+    card.querySelectorAll('.qz-opt').forEach(function (b) {
+      b.disabled = true;
+      var bi = +b.getAttribute('data-i');
+      if (bi === q.a) b.classList.add('correct');
+      else if (bi === i) b.classList.add('wrong');
+    });
+    var fb = document.getElementById('qzFb');
+    fb.className = 'qz-fb show ' + (ok ? 'ok' : 'no');
+    fb.innerHTML = '<span class="lab">' + (ok ? '✓ Correct' : '✗ Not quite') + '</span>' + q.e;
+    document.getElementById('qzNext').disabled = false;
+    document.querySelector('.qz-score').textContent = 'Score ' + score;
+  }
+  function next() {
+    if (idx < Q.length - 1) { idx++; renderQ(); }
+    else result();
+  }
+  function result() {
+    var pct = Math.round(score / Q.length * 100);
+    var prevBest = getBest(), isBest = score > prevBest;
+    if (isBest) setBest(score);
+    var best = Math.max(score, prevBest);
+    var msg = pct >= 90 ? 'Outstanding — that’s consultant-grade recall.' : pct >= 70 ? 'Strong. A few to sharpen.' : pct >= 50 ? 'Solid base — revisit the reference pages.' : 'Good start — the glossaries will help.';
+    card.innerHTML =
+      '<div class="qz-result">' +
+        '<div class="qz-result-score">' + score + '<small>/' + Q.length + '</small></div>' +
+        '<div class="qz-result-pct">' + pct + '% correct</div>' +
+        '<div class="qz-result-msg">' + msg + '</div>' +
+        '<div class="qz-best">★ Best score: ' + best + ' / ' + Q.length + (isBest ? ' · new best!' : '') + '</div>' +
+        '<div class="qz-result-actions">' +
+          '<button type="button" class="qz-btn" id="qzAgain">Try again &#8635;</button>' +
+          '<a class="qz-btn qz-btn--ghost" href="knowledge-hub.html">SAP Knowledge Hub</a>' +
+          '<a class="qz-btn qz-btn--ghost" href="business-architecture.html">Business Architecture</a>' +
+        '</div>' +
+      '</div>';
+    document.getElementById('qzAgain').addEventListener('click', start);
+  }
+  start();
+})();
+</script>
+
+<script src="search.js?v=2" defer></script>
+</body>
+</html>
