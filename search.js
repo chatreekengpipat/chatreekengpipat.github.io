@@ -30,6 +30,7 @@
     { t: 'Capability Map', u: 'capability-map.html', c: 'Business Arch', k: 'capability heat map maturity bizbok' },
     { t: 'Value Streams', u: 'value-streams.html', c: 'Business Arch', k: 'value stream stakeholder stage cross map' },
     { t: 'Information Map', u: 'information-map.html', c: 'Business Arch', k: 'information map bizbok conceptual data model entity customer invoice journal acdoca cardinality core four' },
+    { t: 'Organization Map', u: 'organization-map.html', c: 'Business Arch', k: 'organization org map bizbok business unit reporting line partner raci decision rights capability ownership core four' },
     { t: 'Traceability Explorer', u: 'traceability.html', c: 'Business Arch', k: 'traceability golden thread strategy capability initiative ricefw test lineage togaf' },
     { t: 'Target Operating Model', u: 'operating-model.html', c: 'Business Arch', k: 'tom operating model current future dimensions' },
     { t: 'Business Architecture Glossary', u: 'ba-glossary.html', c: 'Business Arch', k: 'bizbok togaf adm archimate glossary' },

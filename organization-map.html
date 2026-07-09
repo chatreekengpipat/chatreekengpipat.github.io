@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organization Map · Business Architecture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/organization-map.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Organization Map · Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="An interactive organization map: click any business unit to light its reporting line, the units it oversees and the external partners it works with, and read the capabilities it owns, the value streams it drives, and its decision rights.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/organization-map.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Organization Map · Business Architecture">
+<meta name="twitter:description" content="The third BIZBOK blueprint: business units, reporting lines and partners — each cross-mapped to the capabilities it owns and the decisions it makes.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive Business Architecture organization map by Chatree Kengpipat — the third BIZBOK core blueprint. A conceptual model of the business units, reporting lines and external partners an enterprise runs on, across governance, core business units, shared services and partners. Click any unit to light its reporting line, the units it oversees and the partners it works with — and read the capabilities it owns (cross-mapped to the capability map), the value streams it drives, its decision rights and key roles.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     ORGANIZATION MAP — page-scoped. A conceptual organization
+     model (BIZBOK "core-four" #3). Units grouped by tier; clicking
+     one lights its reporting line (ancestors), the units it oversees
+     (descendants) and its external partners, and a detail panel maps
+     it to the capabilities it owns / value streams / decision rights.
+     Everything is visible by default (no reveal-gating) to avoid the
+     repo's known blank-content trap.
+     ============================================================ */
+  .om-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .om-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .om-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .om-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .om-banner-text strong { color: var(--text); font-weight: 600; }
+  .om-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .om-wrap { max-width: 1200px; margin: 0 auto; }
+
+  /* Filter chips */
+  .om-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; align-items: center; }
+  .om-filters-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-subtle); margin-right: 0.2rem; }
+  .om-chip { appearance: none; font: inherit; cursor: pointer; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.34rem 0.9rem; font-size: 0.76rem; font-weight: 600; color: var(--text-muted); transition: border-color 0.2s, color 0.2s, background 0.2s; }
+  .om-chip:hover { border-color: var(--accent); color: var(--text); }
+  .om-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .om-chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .om-chip .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.4rem; vertical-align: middle; }
+  .om-chip.on .dot { background: #fff !important; }
+
+  /* Two-column layout: board + sticky detail */
+  .om-layout { display: grid; grid-template-columns: 1fr 350px; gap: 1.5rem; align-items: start; }
+  .om-board { display: flex; flex-direction: column; gap: 1.3rem; }
+
+  .om-group-head { display: flex; align-items: baseline; gap: 0.6rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--border); margin-bottom: 0.85rem; }
+  .om-group-k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; border-radius: 4px; padding: 0.16rem 0.44rem; }
+  .om-group-k.t-gov { background: var(--accent); }
+  .om-group-k.t-core { background: #7c5cff; }
+  .om-group-k.t-shared { background: var(--success); }
+  .om-group-k.t-partner { background: #d98c3f; }
+  .om-group-name { font-size: 0.95rem; font-weight: 800; letter-spacing: -0.01em; color: var(--text-strong); }
+  .om-group-sub { font-size: 0.68rem; color: var(--text-subtle); margin-left: auto; font-family: 'JetBrains Mono', monospace; }
+
+  .om-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; }
+  .om-card {
+    position: relative; text-align: left; font: inherit; cursor: pointer; width: 100%;
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 0.7rem 0.75rem; color: var(--text);
+    transition: border-color 0.2s, transform 0.18s var(--ease-smooth), box-shadow 0.2s, opacity 0.25s, background 0.2s;
+    display: flex; flex-direction: column; gap: 0.22rem; min-height: 74px;
+  }
+  .om-card-name { font-size: 0.83rem; font-weight: 700; line-height: 1.2; color: var(--text-strong); }
+  .om-card-role { font-size: 0.62rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.01em; }
+  .om-card-edge { display: none; }
+  .om-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 9px 22px -14px var(--glow-color); }
+  .om-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Tier accent stripe */
+  .om-card::before { content: ''; position: absolute; left: 0; top: 0.6rem; bottom: 0.6rem; width: 3px; border-radius: 3px; background: var(--border-strong); transition: background 0.2s; }
+  .om-card[data-t="gov"]::before { background: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+  .om-card[data-t="core"]::before { background: color-mix(in srgb, #7c5cff 55%, var(--border)); }
+  .om-card[data-t="shared"]::before { background: color-mix(in srgb, var(--success) 55%, var(--border)); }
+  .om-card[data-t="partner"]::before { background: color-mix(in srgb, #d98c3f 60%, var(--border)); }
+
+  /* Selection / relation states — only when board is armed */
+  .om-board.armed .om-card { opacity: 0.3; }
+  .om-board.armed .om-card.up { opacity: 1; border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); background: var(--surface); }
+  .om-board.armed .om-card.down { opacity: 1; border-color: color-mix(in srgb, #7c5cff 50%, var(--border)); background: var(--surface); }
+  .om-board.armed .om-card.side { opacity: 1; border-color: color-mix(in srgb, #d98c3f 55%, var(--border)); background: var(--surface); }
+  .om-board.armed .om-card.up .om-card-edge, .om-board.armed .om-card.down .om-card-edge, .om-board.armed .om-card.side .om-card-edge { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700; margin-top: 0.1rem; }
+  .om-board.armed .om-card.up .om-card-edge { color: var(--accent); }
+  .om-board.armed .om-card.down .om-card-edge { color: #7c5cff; }
+  .om-board.armed .om-card.side .om-card-edge { color: #d98c3f; }
+  .om-board.armed .om-card.sel { opacity: 1; border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 10px 26px -14px var(--glow-color); }
+  .om-board.armed .om-card.sel::before { background: #fff; }
+  .om-board.armed .om-card.sel .om-card-name, .om-board.armed .om-card.sel .om-card-role { color: #fff; }
+  .om-board.armed .om-card.filtered-out { display: none; }
+  .om-board.filtering .om-card.filtered-out { display: none; }
+
+  /* Detail panel */
+  .om-detail { position: sticky; top: 96px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.35rem; box-shadow: var(--shadow-md); min-height: 260px; }
+  .om-d-empty { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; display: flex; flex-direction: column; gap: 0.7rem; }
+  .om-d-empty .pin { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .om-d-empty .pin::before { content: ''; width: 9px; height: 9px; background: var(--accent); border-radius: 50%; flex-shrink: 0; animation: omPulse 2s var(--ease-smooth) infinite; }
+  @keyframes omPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .om-d-k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .om-d-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; margin: 0.15rem 0 0.15rem; line-height: 1.1; }
+  .om-d-role { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-subtle); margin-bottom: 0.5rem; }
+  .om-d-def { font-size: 0.85rem; line-height: 1.55; color: var(--text-muted); margin-bottom: 0.95rem; }
+  .om-d-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 0.4rem; }
+  .om-d-caps { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1rem; }
+  .om-cap { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg)); border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border)); border-radius: 5px; padding: 0.14rem 0.44rem; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+  .om-cap:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--bg)); }
+
+  .om-d-map { display: flex; flex-direction: column; gap: 0.5rem; margin: 0 0 1rem; padding: 0.85rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .om-d-map > div { display: grid; grid-template-columns: 92px 1fr; gap: 0.6rem; align-items: baseline; }
+  .om-d-map dt { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-subtle); }
+  .om-d-map dd { margin: 0; font-size: 0.8rem; color: var(--text); }
+  .om-d-map dd.raci { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-strong); line-height: 1.45; }
+  .om-d-map dd a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .om-d-map dd a:hover { text-decoration: underline; }
+
+  .om-d-rel-h { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 0.5rem; }
+  .om-d-rel-list { display: flex; flex-direction: column; gap: 0.35rem; }
+  .om-rel-row { appearance: none; font: inherit; text-align: left; cursor: pointer; width: 100%; display: flex; align-items: baseline; gap: 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.42rem 0.6rem; color: var(--text); transition: border-color 0.2s, transform 0.15s; }
+  .om-rel-row:hover { border-color: var(--accent); transform: translateX(2px); }
+  .om-rel-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .om-rel-k { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; color: #fff; border-radius: 4px; padding: 0.1rem 0.34rem; flex-shrink: 0; }
+  .om-rel-k.up { background: var(--accent); }
+  .om-rel-k.down { background: #7c5cff; }
+  .om-rel-k.side { background: #d98c3f; }
+  .om-rel-name { font-size: 0.76rem; color: var(--text-strong); font-weight: 600; }
+  .om-d-clear { appearance: none; margin-top: 1rem; width: 100%; background: none; border: 1px solid var(--border); border-radius: 100px; padding: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+  .om-d-clear:hover { border-color: var(--accent); color: var(--text); }
+
+  .om-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; margin-top: 1.6rem; font-size: 0.72rem; color: var(--text-muted); }
+  .om-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .om-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .om-legend .li-up { background: var(--accent); }
+  .om-legend .li-down { background: #7c5cff; }
+  .om-legend .li-side { background: #d98c3f; }
+
+  @media (max-width: 940px) {
+    .om-layout { grid-template-columns: 1fr; }
+    .om-detail { position: static; order: -1; }
+  }
+  @media (max-width: 720px) {
+    .om-banner { top: 62px; padding: 0 1rem; }
+    .om-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .om-card, .om-rel-row { transition: opacity 0.01ms, background 0.01ms, border-color 0.01ms; }
+    .om-d-empty .pin::before { animation: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="information-map.html">Information Map</a>
+          <a href="organization-map.html" class="active" aria-current="page">Organization Map</a>
+          <a href="traceability.html">Traceability Explorer</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="om-banner" role="note" aria-label="Methodology note">
+  <div class="om-banner-inner">
+    <span class="om-banner-icon" aria-hidden="true">!</span>
+    <div class="om-banner-text">
+      <span class="om-banner-tag">BUSINESS ARCHITECTURE · METHODOLOGY REFERENCE</span><br>
+      A <strong>conceptual</strong> organization map — a representative enterprise structure, not any one org chart. Its value is the <strong>cross-map</strong>: each unit is tied to the <a href="capability-map.html" style="color:var(--accent)">capabilities</a> it owns and the decisions it makes. Governance and delivery accountabilities mirror the real single-consultant, 3-branch, ~200-user delivery context behind this portfolio.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><a href="business-architecture.html">Business Architecture</a><span class="breadcrumb-sep">/</span><span>Organization Map</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · BIZBOK core-four #3</div>
+      <div class="project-meta">Who does the work — units, reporting lines and partners</div>
+      <h1>Organization <em>Map</em></h1>
+      <p class="project-hero-desc">The third BIZBOK blueprint answers <strong>&ldquo;who does the work, and who decides?&rdquo;</strong> &mdash; the business units, reporting lines and external partners that run the enterprise. On its own it is just an org chart; its architectural value is the <strong>cross-map</strong> to <a href="capability-map.html" style="color:var(--accent)">capabilities</a> and <a href="value-streams.html" style="color:var(--accent)">value streams</a> &mdash; which unit <em>owns</em> a capability, and who is accountable when a stream underperforms. <strong>Click any unit</strong> to light its <span style="color:var(--accent);font-weight:600">reporting line</span>, the units it <span style="color:#7c5cff;font-weight:600">oversees</span> and the <span style="color:#d98c3f;font-weight:600">partners</span> it works with.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Framework</span><span class="project-info-val">BIZBOK organization map · conceptual</span></div>
+      <div class="project-info-row"><span class="project-info-label">Units</span><span class="project-info-val">20 · across 4 tiers</span></div>
+      <div class="project-info-row"><span class="project-info-label">Cross-map</span><span class="project-info-val">unit → capability ownership</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="om-wrap">
+    <div class="om-filters" role="group" aria-label="Filter by tier">
+      <span class="om-filters-label">Tier</span>
+      <button type="button" class="om-chip on" data-filter="all">All</button>
+      <button type="button" class="om-chip" data-filter="gov"><span class="dot" style="background:var(--accent)"></span>Governance</button>
+      <button type="button" class="om-chip" data-filter="core"><span class="dot" style="background:#7c5cff"></span>Core units</button>
+      <button type="button" class="om-chip" data-filter="shared"><span class="dot" style="background:var(--success)"></span>Shared services</button>
+      <button type="button" class="om-chip" data-filter="partner"><span class="dot" style="background:#d98c3f"></span>Partners</button>
+    </div>
+
+    <div class="om-layout">
+      <div class="om-board" id="omBoard"></div>
+
+      <aside class="om-detail" id="omDetail" aria-live="polite">
+        <div class="om-d-empty">
+          <span class="pin">Select a unit to explore it.</span>
+          <span style="color:var(--text-subtle)">Each unit shows the capabilities it owns (cross-mapped to the capability map), the value streams it drives, its decision rights and key roles — plus its reporting line, the units it oversees and its partners.</span>
+        </div>
+      </aside>
+    </div>
+
+    <div class="om-legend" aria-hidden="true">
+      <span><i class="li-up"></i> Reporting line — who it reports to</span>
+      <span><i class="li-down"></i> Oversees — units beneath it</span>
+      <span><i class="li-side"></i> Partners — external parties</span>
+    </div>
+
+    <div class="callout" style="margin-top:2.6rem;">
+      <div class="callout-title">WHY THE ORGANIZATION MAP MATTERS</div>
+      <p>A capability map deliberately ignores the org chart &mdash; it says <em>what</em> the business does, not <em>who</em> does it. The organization map is where those two meet: it assigns an <strong>owner</strong> to every capability and an <strong>accountability</strong> to every value stream. That mapping is what makes a target operating model actionable &mdash; you cannot redesign spans, layers or decision rights until you can see who owns what today. It is also the honest picture behind this portfolio: <strong>one consultant</strong> holding the Finance, Operations and IT accountabilities for a <strong>3-branch, ~200-user</strong> enterprise, with an <strong>ERP vendor</strong> as the delivery partner. Cross-map it to the <a href="value-streams.html" style="color:var(--accent)">value streams</a> and you can read exactly where that concentration is a risk.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="operating-model.html" style="color:var(--accent);font-weight:600;">See how the operating model redesigns it &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
+</footer>
+
+<noscript>
+  <div style="max-width:1200px;margin:0 auto;padding:0 2.5rem 3rem;font-size:0.9rem;color:var(--text-muted);line-height:1.6;">
+    <strong>The interactive explorer needs JavaScript.</strong> The organization model has 20 units across four tiers —
+    <em>Governance:</em> Board &amp; Executive, Strategy &amp; Architecture Office, Risk &amp; Compliance ·
+    <em>Core business units:</em> Operations Executive, Sales &amp; Marketing, Customer Service, Product &amp; Portfolio, Operations &amp; Delivery, Procurement ·
+    <em>Shared services:</em> Corporate Services, Finance &amp; Accounting, Human Resources, Information Technology, Legal, Facilities ·
+    <em>Partners:</em> ERP / Technology Vendor, Bank, Revenue Department, Logistics &amp; Suppliers, POS / CRM Provider — each mapped to the capabilities it owns and the value streams it drives.
+  </div>
+</noscript>
+
+<script>
+(function () {
+  'use strict';
+
+  var TIERS = [
+    { key: 'gov',     k: 'G', name: 'Governance & Direction', sub: 'Sets direction & governs' },
+    { key: 'core',    k: 'C', name: 'Core Business Units',    sub: 'Engages the market & delivers' },
+    { key: 'shared',  k: 'S', name: 'Shared Services',        sub: 'Runs the enterprise' },
+    { key: 'partner', k: 'P', name: 'External Partners',      sub: 'The managed ecosystem' }
+  ];
+
+  // Matches capability-map.html's slugCap exactly (handles the &amp; entity) so ?cap= deep-links resolve.
+  function slugCap(s) { return String(s).toLowerCase().replace(/&amp;/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+  // unit: t=tier, name, role, def, parent (reports-to id | null),
+  // partners[] (ids), caps[] (capability display names), streams[] {t,u},
+  // raci (decision rights), roles (key roles).
+  var VS = {
+    a2o: { t: 'Acquire to Onboard', u: 'value-streams.html' },
+    o2c: { t: 'Order to Cash', u: 'value-streams.html' },
+    c2m: { t: 'Concept to Market', u: 'value-streams.html' },
+    r2r: { t: 'Recruit to Retire', u: 'value-streams.html' },
+    i2r: { t: 'Issue to Resolution', u: 'value-streams.html' }
+  };
+
+  var U = {
+    // ---- Governance & Direction ----
+    board: { t: 'gov', name: 'Board & Executive', role: 'CEO office', parent: null, partners: [],
+      def: 'The top of the enterprise — sets strategy, allocates investment and holds every other unit accountable.',
+      caps: ['Strategy Management', 'Innovation Management'], streams: [],
+      raci: 'A: strategy · A: investment · A: enterprise risk', roles: 'CEO · Executive committee' },
+    strategy: { t: 'gov', name: 'Strategy & Architecture Office', role: 'EA / BA function', parent: 'board', partners: [],
+      def: 'The team that maintains the capability, value-stream, information and organization models and steers the change portfolio — the function this whole cluster demonstrates.',
+      caps: ['Business Architecture'], streams: [],
+      raci: 'R: architecture models · A: change portfolio · C: investment cases', roles: 'Business/Enterprise Architect · PMO' },
+    risk: { t: 'gov', name: 'Risk & Compliance', role: 'GRC', parent: 'board', partners: ['revenue', 'bank'],
+      def: 'Owns enterprise risk, regulatory compliance and audit — the guardrails delivery runs inside.',
+      caps: ['Enterprise Risk &amp; Compliance'], streams: [],
+      raci: 'A: compliance · A: audit · C: contracts', roles: 'Risk officer · Compliance · Internal audit' },
+    // ---- Core Business Units ----
+    coo: { t: 'core', name: 'Operations Executive', role: 'COO', parent: 'board', partners: [],
+      def: 'Runs the market-facing and delivery units end to end — the accountability line for revenue and fulfilment.',
+      caps: [], streams: [VS.o2c],
+      raci: 'A: revenue · A: fulfilment · A: service', roles: 'COO · Divisional heads' },
+    sales: { t: 'core', name: 'Sales & Marketing', role: 'Demand generation', parent: 'coo', partners: ['pos_crm'],
+      def: 'Wins and grows customers — insight, segmentation, campaigns and the sales pipeline.',
+      caps: ['Sales Management', 'Marketing Management', 'Customer Management'], streams: [VS.a2o, VS.o2c],
+      raci: 'A: acquisition · R: revenue targets · R: brand', roles: 'CCO · Sales managers · Marketing' },
+    service: { t: 'core', name: 'Customer Service', role: 'Support & success', parent: 'coo', partners: ['pos_crm'],
+      def: 'Keeps customers by resolving issues and running post-sale support and field service.',
+      caps: ['Service &amp; Support'], streams: [VS.i2r, VS.a2o],
+      raci: 'A: resolution SLA · R: retention · C: product feedback', roles: 'Service manager · Support agents' },
+    product: { t: 'core', name: 'Product & Portfolio', role: 'Offering management', parent: 'coo', partners: [],
+      def: 'Decides what the enterprise offers — product lifecycle, portfolio mix and new development.',
+      caps: ['Product &amp; Service Management'], streams: [VS.c2m],
+      raci: 'A: portfolio · R: roadmap · C: pricing', roles: 'Product owner · Portfolio manager' },
+    operations: { t: 'core', name: 'Operations & Delivery', role: 'Make & deliver', parent: 'coo', partners: ['logistics'],
+      def: 'Fulfils demand — order capture, production/delivery, inventory and warehousing.',
+      caps: ['Order Management', 'Operations &amp; Delivery', 'Inventory &amp; Asset Management', 'Supply Chain Management'], streams: [VS.o2c],
+      raci: 'A: on-time delivery · R: inventory accuracy · R: quality', roles: 'Operations manager · Planners · Warehouse' },
+    procurement: { t: 'core', name: 'Procurement', role: 'Source & buy', parent: 'coo', partners: ['logistics'],
+      def: 'Secures goods and services — sourcing strategy, purchasing and supplier management.',
+      caps: ['Procurement'], streams: [VS.o2c],
+      raci: 'A: spend control · R: supplier performance · C: contracts', roles: 'Procurement lead · Buyers' },
+    // ---- Shared Services ----
+    corp: { t: 'shared', name: 'Corporate Services', role: 'CFO / enabling lead', parent: 'board', partners: [],
+      def: 'The enabling backbone — finance, people, technology and legal that every other unit depends on.',
+      caps: [], streams: [],
+      raci: 'A: enabling services · A: budget · C: policy', roles: 'CFO · Services directors' },
+    finance: { t: 'shared', name: 'Finance & Accounting', role: 'FI / CO', parent: 'corp', partners: ['bank', 'revenue'],
+      def: 'Keeps the books and the cash — accounting, close, AR/AP, tax and management reporting. The home of the FI/CO work behind this portfolio.',
+      caps: ['Finance Management'], streams: [VS.o2c],
+      raci: 'A: books & close · A: cash · R: statutory reporting', roles: 'Finance manager · Accountants · AR/AP' },
+    hr: { t: 'shared', name: 'Human Resources', role: 'People', parent: 'corp', partners: [],
+      def: 'Attracts, develops and retains people — the recruit-to-retire lifecycle.',
+      caps: ['Human Capital Management'], streams: [VS.r2r],
+      raci: 'A: hiring · R: capability building · C: org design', roles: 'HR manager · Talent · L&amp;D' },
+    it: { t: 'shared', name: 'Information Technology', role: 'Systems & data', parent: 'corp', partners: ['erp_vendor'],
+      def: 'Runs the applications, infrastructure and data platform — including the ERP the enterprise depends on.',
+      caps: ['Information Technology', 'Data &amp; Analytics'], streams: [],
+      raci: 'A: systems availability · A: data governance · R: ERP roadmap', roles: 'IT manager · Admins · Data/BI' },
+    legal: { t: 'shared', name: 'Legal', role: 'Counsel', parent: 'corp', partners: [],
+      def: 'Manages contracts, IP and legal risk across the enterprise.',
+      caps: ['Legal Management'], streams: [],
+      raci: 'A: contracts · A: IP · C: compliance', roles: 'Legal counsel' },
+    facilities: { t: 'shared', name: 'Facilities', role: 'Workplace', parent: 'corp', partners: [],
+      def: 'Runs the physical estate and the internal knowledge base across the branches.',
+      caps: ['Enterprise Support'], streams: [],
+      raci: 'A: premises · R: knowledge base', roles: 'Facilities manager' },
+    // ---- External Partners ----
+    erp_vendor: { t: 'partner', name: 'ERP / Technology Vendor', role: 'XeerSoft · delivery partner', parent: null, partners: ['it', 'finance', 'operations'],
+      def: 'The cloud-ERP provider and remote development team that builds and hosts the platform — the delivery partner behind every go-live.',
+      caps: [], streams: [],
+      raci: 'R: development · R: hosting · C: roadmap', roles: 'Account manager · Remote dev team' },
+    bank: { t: 'partner', name: 'Bank', role: 'Financial institution', parent: null, partners: ['finance', 'risk'],
+      def: 'Provides accounts, payment rails and statements — the counterpart for cash and clearing.',
+      caps: [], streams: [],
+      raci: 'R: payment settlement · C: financing', roles: 'Relationship manager' },
+    revenue: { t: 'partner', name: 'Revenue Department', role: 'Tax authority', parent: null, partners: ['finance', 'risk'],
+      def: 'The tax authority the enterprise files VAT and withholding to — a compliance counterpart, not a supplier.',
+      caps: [], streams: [],
+      raci: 'A: tax rules · consumes: filings', roles: 'Regulator' },
+    logistics: { t: 'partner', name: 'Logistics & Suppliers', role: 'Supply ecosystem', parent: null, partners: ['procurement', 'operations'],
+      def: 'The suppliers and carriers that provide goods and move them — the upstream of procure-to-pay.',
+      caps: [], streams: [],
+      raci: 'R: supply · R: delivery', roles: 'Suppliers · Carriers' },
+    pos_crm: { t: 'partner', name: 'POS / CRM Provider', role: 'Channel platform', parent: null, partners: ['sales', 'service'],
+      def: 'The point-of-sale and CRM platform that captures customer and transaction data at the channel edge.',
+      caps: [], streams: [],
+      raci: 'R: channel data · C: loyalty', roles: 'Platform vendor' }
+  };
+
+  // Build children lists from parent pointers, and a symmetric partner map.
+  var CHILDREN = {}, PARTNERS = {};
+  Object.keys(U).forEach(function (id) { CHILDREN[id] = []; PARTNERS[id] = {}; });
+  Object.keys(U).forEach(function (id) {
+    var p = U[id].parent;
+    if (p && U[p]) CHILDREN[p].push(id);
+    (U[id].partners || []).forEach(function (q) {
+      if (U[q]) { PARTNERS[id][q] = true; PARTNERS[q][id] = true; }
+    });
+  });
+
+  function ancestors(id) { var out = [], cur = U[id].parent; while (cur && U[cur]) { out.push(cur); cur = U[cur].parent; } return out; }
+  function descendants(id) {
+    var out = [], stack = CHILDREN[id].slice();
+    while (stack.length) { var c = stack.pop(); out.push(c); CHILDREN[c].forEach(function (g) { stack.push(g); }); }
+    return out;
+  }
+
+  var board = document.getElementById('omBoard');
+  var detail = document.getElementById('omDetail');
+  var filter = 'all';
+
+  board.innerHTML = TIERS.map(function (tier) {
+    var ids = Object.keys(U).filter(function (id) { return U[id].t === tier.key; });
+    var cards = ids.map(function (id) {
+      return '<button type="button" class="om-card" id="ou_' + id + '" data-id="' + id + '" data-t="' + U[id].t + '">' +
+        '<span class="om-card-name">' + U[id].name + '</span>' +
+        '<span class="om-card-role">' + U[id].role + '</span>' +
+        '<span class="om-card-edge"></span></button>';
+    }).join('');
+    return '<div class="om-group" data-t="' + tier.key + '">' +
+      '<div class="om-group-head"><span class="om-group-k t-' + tier.key + '">' + tier.k + '</span>' +
+      '<span class="om-group-name">' + tier.name + '</span>' +
+      '<span class="om-group-sub">' + ids.length + ' units</span></div>' +
+      '<div class="om-cards">' + cards + '</div></div>';
+  }).join('');
+
+  function applyFilter() {
+    board.classList.toggle('filtering', filter !== 'all');
+    board.querySelectorAll('.om-card').forEach(function (el) {
+      el.classList.toggle('filtered-out', filter !== 'all' && el.getAttribute('data-t') !== filter);
+    });
+    board.querySelectorAll('.om-group').forEach(function (g) {
+      g.style.display = (filter === 'all' || g.getAttribute('data-t') === filter) ? '' : 'none';
+    });
+  }
+
+  function relRow(id, kind, label) {
+    return '<button type="button" class="om-rel-row" data-goto="' + id + '">' +
+      '<span class="om-rel-k ' + kind + '">' + label + '</span>' +
+      '<span class="om-rel-name">' + U[id].name + '</span></button>';
+  }
+
+  function renderDetail(id) {
+    var u = U[id];
+    var anc = ancestors(id), kids = CHILDREN[id], prt = Object.keys(PARTNERS[id]);
+    var tierName = { gov: 'Governance & Direction', core: 'Core Business Unit', shared: 'Shared Service', partner: 'External Partner' }[u.t];
+
+    var capsHtml = u.caps.length
+      ? u.caps.map(function (c) { return '<a class="om-cap" href="capability-map.html?cap=' + slugCap(c) + '">' + c + '</a>'; }).join('')
+      : (u.t === 'partner'
+          ? '<span style="font-size:0.76rem;color:var(--text-subtle)">External party — owns no internal capability.</span>'
+          : '<span style="font-size:0.76rem;color:var(--text-subtle)">A management layer — owns capabilities through its sub-units.</span>');
+
+    var streamsHtml = u.streams.length
+      ? u.streams.map(function (s) { return '<a href="' + s.u + '">' + s.t + '</a>'; }).join(' &middot; ')
+      : '<span style="color:var(--text-subtle)">—</span>';
+
+    var relRows = [];
+    if (anc.length) relRows.push(relRow(anc[0], 'up', '↑ reports to'));
+    anc.slice(1).forEach(function (a) { relRows.push(relRow(a, 'up', '↑ line')); });
+    kids.forEach(function (k) { relRows.push(relRow(k, 'down', '↓ oversees')); });
+    prt.forEach(function (p) { relRows.push(relRow(p, 'side', '↔ partner')); });
+    var relHtml = relRows.length
+      ? '<div class="om-d-rel-h">Relationships · ' + relRows.length + '</div><div class="om-d-rel-list">' + relRows.join('') + '</div>'
+      : '<div class="om-d-rel-h">Relationships</div><div class="om-rel-name" style="font-weight:400;color:var(--text-muted)">Top of the enterprise.</div>';
+
+    detail.innerHTML =
+      '<div class="om-d-k">' + tierName + '</div>' +
+      '<h2 class="om-d-name">' + u.name + '</h2>' +
+      '<div class="om-d-role">' + u.role + '</div>' +
+      '<p class="om-d-def">' + u.def + '</p>' +
+      '<div class="om-d-sub">Capabilities owned</div>' +
+      '<div class="om-d-caps">' + capsHtml + '</div>' +
+      '<dl class="om-d-map">' +
+        '<div><dt>Value streams</dt><dd>' + streamsHtml + '</dd></div>' +
+        '<div><dt>Decision rights</dt><dd class="raci">' + u.raci + '</dd></div>' +
+        '<div><dt>Key roles</dt><dd>' + u.roles + '</dd></div>' +
+      '</dl>' +
+      relHtml +
+      '<button type="button" class="om-d-clear" id="omClear">Clear selection ✕</button>';
+    var clr = document.getElementById('omClear');
+    if (clr) clr.addEventListener('click', clearSel);
+  }
+
+  function select(id, push) {
+    if (!U[id]) return;
+    var upSet = {}, downSet = {}, sideSet = Object.assign({}, PARTNERS[id]);
+    ancestors(id).forEach(function (a) { upSet[a] = true; });
+    descendants(id).forEach(function (d) { downSet[d] = true; });
+    board.classList.add('armed');
+    board.querySelectorAll('.om-card').forEach(function (el) {
+      var cid = el.getAttribute('data-id');
+      el.classList.remove('sel', 'up', 'down', 'side');
+      var edge = el.querySelector('.om-card-edge');
+      var txt = '';
+      if (cid === id) { el.classList.add('sel'); }
+      else if (upSet[cid]) { el.classList.add('up'); txt = U[id].parent === cid ? '↑ reports to' : '↑ reporting line'; }
+      else if (downSet[cid]) { el.classList.add('down'); txt = U[cid].parent === id ? '↓ oversees' : '↓ under'; }
+      else if (sideSet[cid]) { el.classList.add('side'); txt = '↔ partners with'; }
+      if (edge) edge.textContent = txt;
+    });
+    renderDetail(id);
+    if (window.matchMedia && window.matchMedia('(max-width: 940px)').matches && detail.scrollIntoView) {
+      try { detail.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+    }
+    if (push !== false) { try { history.replaceState(null, '', '?unit=' + id); } catch (e) {} }
+  }
+
+  function clearSel() {
+    board.classList.remove('armed');
+    board.querySelectorAll('.om-card').forEach(function (el) { el.classList.remove('sel', 'up', 'down', 'side'); });
+    detail.innerHTML =
+      '<div class="om-d-empty"><span class="pin">Select a unit to explore it.</span>' +
+      '<span style="color:var(--text-subtle)">Each unit shows the capabilities it owns (cross-mapped to the capability map), the value streams it drives, its decision rights and key roles — plus its reporting line, the units it oversees and its partners.</span></div>';
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  }
+
+  board.addEventListener('click', function (e) {
+    var btn = e.target && e.target.closest ? e.target.closest('.om-card') : null;
+    if (btn) select(btn.getAttribute('data-id'));
+  });
+
+  detail.addEventListener('click', function (e) {
+    var row = e.target && e.target.closest ? e.target.closest('.om-rel-row') : null;
+    if (row) select(row.getAttribute('data-goto'));
+  });
+
+  document.querySelector('.om-filters').addEventListener('click', function (e) {
+    var chip = e.target && e.target.closest ? e.target.closest('.om-chip') : null;
+    if (!chip) return;
+    filter = chip.getAttribute('data-filter');
+    document.querySelectorAll('.om-chip').forEach(function (c) { c.classList.toggle('on', c === chip); });
+    applyFilter();
+  });
+
+  // Deep-link ?unit=<id>
+  try {
+    var q = new URLSearchParams(location.search).get('unit');
+    if (q && U[q]) select(q, false);
+  } catch (e) {}
+})();
+</script>
+
+<script src="search.js?v=6" defer></script>
+</body>
+</html>

@@ -178,6 +178,7 @@
           <a href="capability-map.html">Capability Map</a>
           <a href="value-streams.html">Value Streams</a>
           <a href="information-map.html" class="active" aria-current="page">Information Map</a>
+          <a href="organization-map.html">Organization Map</a>
           <a href="traceability.html">Traceability Explorer</a>
           <a href="operating-model.html">Target Operating Model</a>
           <a href="ba-glossary.html">BIZBOK Glossary</a>
@@ -320,7 +321,7 @@
     customer: { d: 'master', t: 'Customer', sap: 'BUT000 · KNA1 (Business Partner)',
       def: 'A person or organisation the business sells to and bills. In S/4HANA a customer is a role on the central Business Partner.',
       attrs: ['Partner ID', 'Name', 'Payment terms', 'Credit limit', 'Tax number'],
-      cap: { t: 'Customer Insight', u: 'capability-map.html?cap=customer-insight' },
+      cap: { t: 'Customer Management', u: 'capability-map.html?cap=customer-management' },
       vs: { t: 'Acquire to Onboard', u: 'value-streams.html' },
       proj: { t: 'CRM Star Reward Loyalty', u: 'project3.html' },
       rel: [
@@ -331,8 +332,8 @@
     vendor: { d: 'master', t: 'Vendor', sap: 'BUT000 · LFA1 (Business Partner)',
       def: 'A supplier the business buys from and pays. Like the customer, a supplier role on the Business Partner.',
       attrs: ['Partner ID', 'Name', 'Payment terms', 'Bank details', 'WHT type'],
-      cap: { t: 'Purchasing', u: 'capability-map.html?cap=purchasing' },
-      vs: { t: 'Procure to Pay', u: 'value-streams.html' },
+      cap: { t: 'Procurement', u: 'capability-map.html?cap=procurement' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
       rel: [
         { to: 'purchase_order', card: '1:N', verb: 'supplies against', rverb: 'placed with' }
@@ -340,7 +341,7 @@
     product: { d: 'master', t: 'Product / Material', sap: 'MARA · MARC (Material master)',
       def: 'A good or service the business sells or procures — the item that flows through orders and stock.',
       attrs: ['Material no.', 'Description', 'UoM', 'Valuation class', 'Tax class'],
-      cap: { t: 'Product Lifecycle', u: 'capability-map.html?cap=product-lifecycle' },
+      cap: { t: 'Product &amp; Service Management', u: 'capability-map.html?cap=product-and-service-management' },
       vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
       rel: [
@@ -351,22 +352,22 @@
     gl_account: { d: 'master', t: 'GL Account', sap: 'SKA1 · SKB1 (Chart of Accounts)',
       def: 'A classification bucket in the general ledger. Every accounting posting lands on one, giving the balance sheet and P&L their structure.',
       attrs: ['Account no.', 'Name', 'Account type', 'Tax category', 'Open-item mgmt'],
-      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
-      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      cap: { t: 'Finance Management', u: 'capability-map.html?cap=finance-management' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
       rel: [] },
     cost_center: { d: 'master', t: 'Cost Center', sap: 'CSKS (Cost centre master)',
       def: 'A responsibility unit that carries cost in controlling — where an expense is incurred, so profitability can be read by area.',
       attrs: ['Cost centre', 'Name', 'Hierarchy node', 'Responsible', 'Company code'],
-      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
-      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      cap: { t: 'Finance Management', u: 'capability-map.html?cap=finance-management' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
       rel: [] },
     // ---- Transactional ----
     sales_order: { d: 'txn', t: 'Sales Order', sap: 'VBAK · VBAP (Sales document)',
       def: 'A confirmed customer request for products at agreed prices — the commitment that drives fulfilment and billing.',
       attrs: ['Order no.', 'Sold-to', 'Item / qty', 'Net value', 'Pricing conditions'],
-      cap: { t: 'Order Capture', u: 'capability-map.html?cap=order-capture' },
+      cap: { t: 'Order Management', u: 'capability-map.html?cap=order-management' },
       vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'Strategic Pricing & AR', u: 'project2.html' },
       rel: [
@@ -375,8 +376,8 @@
     purchase_order: { d: 'txn', t: 'Purchase Order', sap: 'EKKO · EKPO (Purchasing document)',
       def: 'A formal order to a vendor for goods or services at agreed terms — the control point for spend and receiving.',
       attrs: ['PO no.', 'Vendor', 'Item / qty', 'Net price', 'Delivery date'],
-      cap: { t: 'Purchasing', u: 'capability-map.html?cap=purchasing' },
-      vs: { t: 'Procure to Pay', u: 'value-streams.html' },
+      cap: { t: 'Procurement', u: 'capability-map.html?cap=procurement' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
       rel: [
         { to: 'goods_movement', card: '1:N', verb: 'received via', rverb: 'receives' }
@@ -384,8 +385,8 @@
     goods_movement: { d: 'txn', t: 'Goods Movement', sap: 'MKPF · MSEG (Material document)',
       def: 'A recorded change in stock — a receipt, issue or transfer. It both moves inventory and triggers a valuation posting.',
       attrs: ['Material doc', 'Movement type', 'Material / qty', 'Plant', 'Posting date'],
-      cap: { t: 'Inventory Control', u: 'capability-map.html?cap=inventory-control' },
-      vs: { t: 'Procure to Pay', u: 'value-streams.html' },
+      cap: { t: 'Inventory &amp; Asset Management', u: 'capability-map.html?cap=inventory-and-asset-management' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
       rel: [
         { to: 'journal_entry', card: '1:N', verb: 'posts', rverb: 'posted by' }
@@ -393,7 +394,7 @@
     billing: { d: 'txn', t: 'Billing Document', sap: 'VBRK · VBRP (Billing document)',
       def: 'The invoice raised to a customer for delivered goods or services — the event that turns fulfilment into a receivable.',
       attrs: ['Billing no.', 'Payer', 'Net / tax', 'Reference order', 'Billing date'],
-      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      cap: { t: 'Finance Management', u: 'capability-map.html?cap=finance-management' },
       vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
       rel: [
@@ -404,7 +405,7 @@
     loyalty: { d: 'txn', t: 'Loyalty Account', sap: 'Custom (points subledger)',
       def: 'A running balance of reward points a customer has earned and can redeem — a light subledger outside the core FI ledger.',
       attrs: ['Member ID', 'Points balance', 'Tier', 'Accrual rule', 'Expiry'],
-      cap: { t: 'Campaign Management', u: 'capability-map.html?cap=campaign-management' },
+      cap: { t: 'Customer Management', u: 'capability-map.html?cap=customer-management' },
       vs: { t: 'Acquire to Onboard', u: 'value-streams.html' },
       proj: { t: 'CRM Star Reward Loyalty', u: 'project3.html' },
       rel: [
@@ -414,8 +415,8 @@
     journal_entry: { d: 'financial', t: 'Journal Entry', sap: 'ACDOCA · BKPF · BSEG',
       def: 'A balanced accounting document — debits equal credits. In S/4HANA every posting is a line in the Universal Journal (ACDOCA).',
       attrs: ['Document no.', 'Company code', 'Posting date', 'Dr / Cr lines', 'Amount'],
-      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
-      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      cap: { t: 'Finance Management', u: 'capability-map.html?cap=finance-management' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
       rel: [
         { to: 'gl_account', card: 'N:1', verb: 'classified to', rverb: 'classifies' },
@@ -424,7 +425,7 @@
     ar_item: { d: 'financial', t: 'AR Open Item', sap: 'BSID · BSAD (AR sub-ledger)',
       def: 'An unpaid customer line — what a customer owes until it is cleared. The raw material of collections and aging.',
       attrs: ['Document no.', 'Customer', 'Amount', 'Due date', 'Dunning level'],
-      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      cap: { t: 'Finance Management', u: 'capability-map.html?cap=finance-management' },
       vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'Strategic Pricing & AR', u: 'project2.html' },
       rel: [
@@ -433,7 +434,7 @@
     payment: { d: 'financial', t: 'Payment / Clearing', sap: 'REGUH · BSEG (clearing)',
       def: 'The settlement that clears an open item — cash in against a receivable, or cash out against a payable.',
       attrs: ['Clearing doc', 'Amount', 'Value date', 'Bank / house', 'Method'],
-      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      cap: { t: 'Finance Management', u: 'capability-map.html?cap=finance-management' },
       vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'Strategic Pricing & AR', u: 'project2.html' },
       rel: [
@@ -442,8 +443,8 @@
     tax_item: { d: 'financial', t: 'Tax Item', sap: 'BSET (tax document)',
       def: 'The tax portion of a posting — output VAT, input VAT or withholding — carried as its own line for reporting to the authority.',
       attrs: ['Tax code', 'Base amount', 'Tax amount', 'Condition', 'Reporting date'],
-      cap: { t: 'Regulatory Compliance', u: 'capability-map.html?cap=regulatory-compliance' },
-      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      cap: { t: 'Finance Management', u: 'capability-map.html?cap=finance-management' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
       proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
       rel: [
         { to: 'gl_account', card: 'N:1', verb: 'posts to', rverb: 'receives' }
@@ -585,6 +586,6 @@
 })();
 </script>
 
-<script src="search.js?v=5" defer></script>
+<script src="search.js?v=6" defer></script>
 </body>
 </html>
