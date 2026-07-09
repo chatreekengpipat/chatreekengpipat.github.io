@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Information Map · Business Architecture · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/information-map.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Information Map · Business Architecture — Chatree Kengpipat">
+<meta property="og:description" content="An interactive conceptual information model: click any business information concept to light its related concepts with cardinality, and see the SAP object that realises it, the capability that owns it, the value stream that moves it, and the project that delivered it.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/information-map.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Information Map · Business Architecture">
+<meta name="twitter:description" content="The fourth BIZBOK blueprint: a conceptual model of the information the enterprise runs on — Customer, Order, Invoice, Journal Entry — each mapped to its SAP object, capability, value stream and delivery.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive Business Architecture information map by Chatree Kengpipat — the fourth BIZBOK core blueprint. A conceptual model of the ~14 business information concepts an enterprise runs on across master data, transactional and financial domains. Click any concept to light its related concepts with cardinality (1:N, N:M), and read its conceptual attributes, the realising SAP object (BUT000, ACDOCA, BSEG, VBRK), the owning capability, the value stream that moves it, and the real project that delivered it.">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     INFORMATION MAP — page-scoped. A conceptual information model
+     (BIZBOK "core-four" #4). Concepts grouped by domain; clicking
+     one lights its related concepts with cardinality, and a detail
+     panel maps it to SAP object / capability / value stream / project.
+     Everything is visible by default (no reveal-gating) to avoid the
+     repo's known blank-content trap.
+     ============================================================ */
+  .im-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .im-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .im-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .im-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .im-banner-text strong { color: var(--text); font-weight: 600; }
+  .im-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .im-wrap { max-width: 1200px; margin: 0 auto; }
+
+  /* Filter chips */
+  .im-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; align-items: center; }
+  .im-filters-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-subtle); margin-right: 0.2rem; }
+  .im-chip { appearance: none; font: inherit; cursor: pointer; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.34rem 0.9rem; font-size: 0.76rem; font-weight: 600; color: var(--text-muted); transition: border-color 0.2s, color 0.2s, background 0.2s; }
+  .im-chip:hover { border-color: var(--accent); color: var(--text); }
+  .im-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .im-chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .im-chip .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.4rem; vertical-align: middle; }
+  .im-chip.on .dot { background: #fff !important; }
+
+  /* Two-column layout: board + sticky detail */
+  .im-layout { display: grid; grid-template-columns: 1fr 350px; gap: 1.5rem; align-items: start; }
+  .im-board { display: flex; flex-direction: column; gap: 1.3rem; }
+
+  .im-group-head { display: flex; align-items: baseline; gap: 0.6rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--border); margin-bottom: 0.85rem; }
+  .im-group-k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 4px; padding: 0.16rem 0.44rem; }
+  .im-group-k.d-master { background: var(--accent); }
+  .im-group-k.d-txn { background: #7c5cff; }
+  .im-group-k.d-financial { background: var(--success); }
+  .im-group-name { font-size: 0.95rem; font-weight: 800; letter-spacing: -0.01em; color: var(--text-strong); }
+  .im-group-sub { font-size: 0.68rem; color: var(--text-subtle); margin-left: auto; font-family: 'JetBrains Mono', monospace; }
+
+  .im-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; }
+  .im-card {
+    position: relative; text-align: left; font: inherit; cursor: pointer; width: 100%;
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 0.7rem 0.75rem; color: var(--text);
+    transition: border-color 0.2s, transform 0.18s var(--ease-smooth), box-shadow 0.2s, opacity 0.25s, background 0.2s;
+    display: flex; flex-direction: column; gap: 0.22rem; min-height: 74px;
+  }
+  .im-card-name { font-size: 0.83rem; font-weight: 700; line-height: 1.2; color: var(--text-strong); }
+  .im-card-sap { font-size: 0.62rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.01em; }
+  .im-card-edge { display: none; }
+  .im-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 9px 22px -14px var(--glow-color); }
+  .im-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Domain accent stripe */
+  .im-card::before { content: ''; position: absolute; left: 0; top: 0.6rem; bottom: 0.6rem; width: 3px; border-radius: 3px; background: var(--border-strong); transition: background 0.2s; }
+  .im-card[data-d="master"]::before { background: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+  .im-card[data-d="txn"]::before { background: color-mix(in srgb, #7c5cff 55%, var(--border)); }
+  .im-card[data-d="financial"]::before { background: color-mix(in srgb, var(--success) 55%, var(--border)); }
+
+  /* Selection / relation states — only when board is armed */
+  .im-board.armed .im-card { opacity: 0.3; }
+  .im-board.armed .im-card.rel { opacity: 1; border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); background: var(--surface); }
+  .im-board.armed .im-card.rel .im-card-edge { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 600; margin-top: 0.1rem; }
+  .im-card-edge b { color: var(--accent); font-weight: 700; }
+  .im-board.armed .im-card.sel { opacity: 1; border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 10px 26px -14px var(--glow-color); }
+  .im-board.armed .im-card.sel::before { background: #fff; }
+  .im-board.armed .im-card.sel .im-card-name, .im-board.armed .im-card.sel .im-card-sap { color: #fff; }
+  .im-board.armed .im-card.filtered-out { display: none; }
+
+  /* Filter-only dimming (no selection) */
+  .im-board.filtering .im-card.filtered-out { display: none; }
+
+  /* Detail panel */
+  .im-detail { position: sticky; top: 96px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.35rem; box-shadow: var(--shadow-md); min-height: 260px; }
+  .im-d-empty { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; display: flex; flex-direction: column; gap: 0.7rem; }
+  .im-d-empty .pin { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .im-d-empty .pin::before { content: ''; width: 9px; height: 9px; background: var(--accent); border-radius: 50%; flex-shrink: 0; animation: imPulse 2s var(--ease-smooth) infinite; }
+  @keyframes imPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .im-d-k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .im-d-name { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; margin: 0.15rem 0 0.5rem; line-height: 1.1; }
+  .im-d-def { font-size: 0.85rem; line-height: 1.55; color: var(--text-muted); margin-bottom: 0.95rem; }
+  .im-d-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 0.4rem; }
+  .im-d-attrs { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1rem; }
+  .im-attr { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 0.14rem 0.44rem; }
+
+  .im-d-map { display: flex; flex-direction: column; gap: 0.5rem; margin: 0 0 1rem; padding: 0.85rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .im-d-map > div { display: grid; grid-template-columns: 92px 1fr; gap: 0.6rem; align-items: baseline; }
+  .im-d-map dt { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-subtle); }
+  .im-d-map dd { margin: 0; font-size: 0.8rem; color: var(--text); }
+  .im-d-map dd.sap { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-strong); }
+  .im-d-map dd a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .im-d-map dd a:hover { text-decoration: underline; }
+
+  .im-d-rel-h { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 0.5rem; }
+  .im-d-rel-h b { color: var(--accent); }
+  .im-d-rel-list { display: flex; flex-direction: column; gap: 0.35rem; }
+  .im-rel-row { appearance: none; font: inherit; text-align: left; cursor: pointer; width: 100%; display: flex; align-items: baseline; gap: 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.42rem 0.6rem; color: var(--text); transition: border-color 0.2s, transform 0.15s; }
+  .im-rel-row:hover { border-color: var(--accent); transform: translateX(2px); }
+  .im-rel-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .im-rel-card { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700; color: #fff; background: var(--accent); border-radius: 4px; padding: 0.1rem 0.34rem; flex-shrink: 0; }
+  .im-rel-verb { font-size: 0.74rem; color: var(--text-muted); }
+  .im-rel-verb b { color: var(--text-strong); font-weight: 700; }
+  .im-d-clear { appearance: none; margin-top: 1rem; width: 100%; background: none; border: 1px solid var(--border); border-radius: 100px; padding: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+  .im-d-clear:hover { border-color: var(--accent); color: var(--text); }
+
+  .im-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; margin-top: 1.6rem; font-size: 0.72rem; color: var(--text-muted); }
+  .im-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .im-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .im-legend .li-m { background: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+  .im-legend .li-t { background: color-mix(in srgb, #7c5cff 55%, var(--border)); }
+  .im-legend .li-f { background: color-mix(in srgb, var(--success) 55%, var(--border)); }
+
+  @media (max-width: 940px) {
+    .im-layout { grid-template-columns: 1fr; }
+    .im-detail { position: static; order: -1; }
+  }
+  @media (max-width: 720px) {
+    .im-banner { top: 62px; padding: 0 1rem; }
+    .im-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .im-card, .im-rel-row { transition: opacity 0.01ms, background 0.01ms, border-color 0.01ms; }
+    .im-d-empty .pin::before { animation: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="information-map.html" class="active" aria-current="page">Information Map</a>
+          <a href="traceability.html">Traceability Explorer</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><span class="icon-sun">☀</span><span class="icon-moon">☾</span></button></li>
+  </ul>
+</nav>
+<canvas id="techCanvas"></canvas>
+<span id="main-content" tabindex="-1"></span>
+
+<div class="im-banner" role="note" aria-label="Methodology note">
+  <div class="im-banner-inner">
+    <span class="im-banner-icon" aria-hidden="true">!</span>
+    <div class="im-banner-text">
+      <span class="im-banner-tag">BUSINESS ARCHITECTURE · METHODOLOGY REFERENCE</span><br>
+      A <strong>conceptual</strong> information model — the business view, not a physical schema. The <strong>SAP objects</strong> shown (BUT000, ACDOCA, VBRK…) are the standard mapping a functional consultant reaches for; the <strong>delivery links</strong> point to the real XeerSoft Cloud ERP projects where each concept was actually implemented.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb"><a href="index.html">Home</a><span class="breadcrumb-sep">/</span><a href="business-architecture.html">Business Architecture</a><span class="breadcrumb-sep">/</span><span>Information Map</span></div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Business Architecture · BIZBOK core-four #4</div>
+      <div class="project-meta">Customer → Order → Invoice → Journal Entry, and how they connect</div>
+      <h1>Information <em>Map</em></h1>
+      <p class="project-hero-desc">The fourth BIZBOK blueprint answers <strong>&ldquo;what does the business need to know about?&rdquo;</strong> &mdash; the stable information concepts an enterprise runs on, independent of the systems that store them. It is where business architecture meets the ledger: each concept has a home in a real <a href="capability-map.html" style="color:var(--accent)">capability</a>, moves through a <a href="value-streams.html" style="color:var(--accent)">value stream</a>, and lands as a row in an SAP object. <strong>Click any concept</strong> to light the concepts it <span style="color:var(--accent);font-weight:600">relates to</span> &mdash; with cardinality &mdash; and read its full mapping.</p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Framework</span><span class="project-info-val">BIZBOK information map · conceptual</span></div>
+      <div class="project-info-row"><span class="project-info-label">Concepts</span><span class="project-info-val">14 · across 3 domains</span></div>
+      <div class="project-info-row"><span class="project-info-label">Relationships</span><span class="project-info-val">19 · with cardinality</span></div>
+      <div class="project-info-row"><span class="project-info-label">Status</span><span class="project-info-val">Methodology reference</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="im-wrap">
+    <div class="im-filters" role="group" aria-label="Filter by information domain">
+      <span class="im-filters-label">Domain</span>
+      <button type="button" class="im-chip on" data-filter="all">All</button>
+      <button type="button" class="im-chip" data-filter="master"><span class="dot" style="background:var(--accent)"></span>Master data</button>
+      <button type="button" class="im-chip" data-filter="txn"><span class="dot" style="background:#7c5cff"></span>Transactional</button>
+      <button type="button" class="im-chip" data-filter="financial"><span class="dot" style="background:var(--success)"></span>Financial</button>
+    </div>
+
+    <div class="im-layout">
+      <div class="im-board" id="imBoard"></div>
+
+      <aside class="im-detail" id="imDetail" aria-live="polite">
+        <div class="im-d-empty">
+          <span class="pin">Select a concept to explore it.</span>
+          <span style="color:var(--text-subtle)">Each concept maps to its SAP object, the capability that owns it, the value stream that moves it, and the project that delivered it — plus every concept it relates to, with cardinality.</span>
+        </div>
+      </aside>
+    </div>
+
+    <div class="im-legend" aria-hidden="true">
+      <span><i class="li-m"></i> Master data — the nouns</span>
+      <span><i class="li-t"></i> Transactional — the events</span>
+      <span><i class="li-f"></i> Financial — the accounting record</span>
+    </div>
+
+    <div class="callout" style="margin-top:2.6rem;">
+      <div class="callout-title">WHY THE INFORMATION MAP MATTERS</div>
+      <p>A capability map says <em>what</em> the business does; the information map says <em>what it does it to</em>. The two are a pair &mdash; every capability acts on information concepts, and every concept is owned by a capability. Getting this model right is what keeps a data-migration honest (you can only load a <strong>Customer</strong> once you agree what a customer <em>is</em>), what makes an integration contract precise (which system masters the <strong>GL Account</strong>?), and what lets a close reconcile (does every <strong>Billing Document</strong> post exactly one balanced <strong>Journal Entry</strong>?). It is the same discipline as an SAP <a href="data-migration-cutover.html" style="color:var(--accent)">migration object catalogue</a> and an <a href="integration-architecture.html" style="color:var(--accent)">integration map</a>, lifted to the conceptual level and cross-mapped to the <a href="capability-map.html" style="color:var(--accent)">capability model</a>.</p>
+      <p style="margin-top:0.9rem;font-size:0.92rem;"><a href="traceability.html" style="color:var(--accent);font-weight:600;">See how a concept traces to the test that validates it &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
+</footer>
+
+<noscript>
+  <div style="max-width:1200px;margin:0 auto;padding:0 2.5rem 3rem;font-size:0.9rem;color:var(--text-muted);line-height:1.6;">
+    <strong>The interactive explorer needs JavaScript.</strong> The information model has 14 concepts across three domains —
+    <em>Master data:</em> Customer, Vendor, Product, GL Account, Cost Center ·
+    <em>Transactional:</em> Sales Order, Purchase Order, Goods Movement, Billing Document, Loyalty Account ·
+    <em>Financial:</em> Journal Entry, AR Open Item, Payment, Tax Item — each mapped to its SAP object, capability, value stream and delivering project.
+  </div>
+</noscript>
+
+<script>
+(function () {
+  'use strict';
+
+  var DOMAINS = [
+    { key: 'master',    k: 'M', name: 'Master data',   sub: 'The nouns the business is about' },
+    { key: 'txn',       k: 'T', name: 'Transactional', sub: 'The events that happen to them' },
+    { key: 'financial', k: 'F', name: 'Financial',     sub: 'The accounting record' }
+  ];
+
+  // Each concept: d=domain, t=name, sap=realising object, def, attrs[],
+  // cap {t,u}, vs {t,u}, proj {t,u}, rel[] of {to, card, verb, rverb}.
+  // Relationships are declared once (from the "one" side); the reverse
+  // direction is built automatically with the inverse cardinality + rverb.
+  var E = {
+    // ---- Master data ----
+    customer: { d: 'master', t: 'Customer', sap: 'BUT000 · KNA1 (Business Partner)',
+      def: 'A person or organisation the business sells to and bills. In S/4HANA a customer is a role on the central Business Partner.',
+      attrs: ['Partner ID', 'Name', 'Payment terms', 'Credit limit', 'Tax number'],
+      cap: { t: 'Customer Insight', u: 'capability-map.html?cap=customer-insight' },
+      vs: { t: 'Acquire to Onboard', u: 'value-streams.html' },
+      proj: { t: 'CRM Star Reward Loyalty', u: 'project3.html' },
+      rel: [
+        { to: 'sales_order', card: '1:N', verb: 'places', rverb: 'placed by' },
+        { to: 'ar_item', card: '1:N', verb: 'owes', rverb: 'owed by' },
+        { to: 'loyalty', card: '1:N', verb: 'earns', rverb: 'earned by' }
+      ] },
+    vendor: { d: 'master', t: 'Vendor', sap: 'BUT000 · LFA1 (Business Partner)',
+      def: 'A supplier the business buys from and pays. Like the customer, a supplier role on the Business Partner.',
+      attrs: ['Partner ID', 'Name', 'Payment terms', 'Bank details', 'WHT type'],
+      cap: { t: 'Purchasing', u: 'capability-map.html?cap=purchasing' },
+      vs: { t: 'Procure to Pay', u: 'value-streams.html' },
+      proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
+      rel: [
+        { to: 'purchase_order', card: '1:N', verb: 'supplies against', rverb: 'placed with' }
+      ] },
+    product: { d: 'master', t: 'Product / Material', sap: 'MARA · MARC (Material master)',
+      def: 'A good or service the business sells or procures — the item that flows through orders and stock.',
+      attrs: ['Material no.', 'Description', 'UoM', 'Valuation class', 'Tax class'],
+      cap: { t: 'Product Lifecycle', u: 'capability-map.html?cap=product-lifecycle' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
+      proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
+      rel: [
+        { to: 'sales_order', card: 'N:M', verb: 'ordered on', rverb: 'includes' },
+        { to: 'purchase_order', card: 'N:M', verb: 'sourced via', rverb: 'orders' },
+        { to: 'goods_movement', card: '1:N', verb: 'moved as', rverb: 'moves' }
+      ] },
+    gl_account: { d: 'master', t: 'GL Account', sap: 'SKA1 · SKB1 (Chart of Accounts)',
+      def: 'A classification bucket in the general ledger. Every accounting posting lands on one, giving the balance sheet and P&L their structure.',
+      attrs: ['Account no.', 'Name', 'Account type', 'Tax category', 'Open-item mgmt'],
+      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
+      rel: [] },
+    cost_center: { d: 'master', t: 'Cost Center', sap: 'CSKS (Cost centre master)',
+      def: 'A responsibility unit that carries cost in controlling — where an expense is incurred, so profitability can be read by area.',
+      attrs: ['Cost centre', 'Name', 'Hierarchy node', 'Responsible', 'Company code'],
+      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
+      rel: [] },
+    // ---- Transactional ----
+    sales_order: { d: 'txn', t: 'Sales Order', sap: 'VBAK · VBAP (Sales document)',
+      def: 'A confirmed customer request for products at agreed prices — the commitment that drives fulfilment and billing.',
+      attrs: ['Order no.', 'Sold-to', 'Item / qty', 'Net value', 'Pricing conditions'],
+      cap: { t: 'Order Capture', u: 'capability-map.html?cap=order-capture' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
+      proj: { t: 'Strategic Pricing & AR', u: 'project2.html' },
+      rel: [
+        { to: 'billing', card: '1:N', verb: 'billed as', rverb: 'bills' }
+      ] },
+    purchase_order: { d: 'txn', t: 'Purchase Order', sap: 'EKKO · EKPO (Purchasing document)',
+      def: 'A formal order to a vendor for goods or services at agreed terms — the control point for spend and receiving.',
+      attrs: ['PO no.', 'Vendor', 'Item / qty', 'Net price', 'Delivery date'],
+      cap: { t: 'Purchasing', u: 'capability-map.html?cap=purchasing' },
+      vs: { t: 'Procure to Pay', u: 'value-streams.html' },
+      proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
+      rel: [
+        { to: 'goods_movement', card: '1:N', verb: 'received via', rverb: 'receives' }
+      ] },
+    goods_movement: { d: 'txn', t: 'Goods Movement', sap: 'MKPF · MSEG (Material document)',
+      def: 'A recorded change in stock — a receipt, issue or transfer. It both moves inventory and triggers a valuation posting.',
+      attrs: ['Material doc', 'Movement type', 'Material / qty', 'Plant', 'Posting date'],
+      cap: { t: 'Inventory Control', u: 'capability-map.html?cap=inventory-control' },
+      vs: { t: 'Procure to Pay', u: 'value-streams.html' },
+      proj: { t: 'Inventory & Procurement (P2P)', u: 'project1.html' },
+      rel: [
+        { to: 'journal_entry', card: '1:N', verb: 'posts', rverb: 'posted by' }
+      ] },
+    billing: { d: 'txn', t: 'Billing Document', sap: 'VBRK · VBRP (Billing document)',
+      def: 'The invoice raised to a customer for delivered goods or services — the event that turns fulfilment into a receivable.',
+      attrs: ['Billing no.', 'Payer', 'Net / tax', 'Reference order', 'Billing date'],
+      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
+      proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
+      rel: [
+        { to: 'journal_entry', card: '1:N', verb: 'posts to', rverb: 'posted from' },
+        { to: 'ar_item', card: '1:N', verb: 'creates', rverb: 'created by' },
+        { to: 'tax_item', card: '1:N', verb: 'bears', rverb: 'borne on' }
+      ] },
+    loyalty: { d: 'txn', t: 'Loyalty Account', sap: 'Custom (points subledger)',
+      def: 'A running balance of reward points a customer has earned and can redeem — a light subledger outside the core FI ledger.',
+      attrs: ['Member ID', 'Points balance', 'Tier', 'Accrual rule', 'Expiry'],
+      cap: { t: 'Campaign Management', u: 'capability-map.html?cap=campaign-management' },
+      vs: { t: 'Acquire to Onboard', u: 'value-streams.html' },
+      proj: { t: 'CRM Star Reward Loyalty', u: 'project3.html' },
+      rel: [
+        { to: 'journal_entry', card: '1:N', verb: 'accrues to', rverb: 'accrued from' }
+      ] },
+    // ---- Financial ----
+    journal_entry: { d: 'financial', t: 'Journal Entry', sap: 'ACDOCA · BKPF · BSEG',
+      def: 'A balanced accounting document — debits equal credits. In S/4HANA every posting is a line in the Universal Journal (ACDOCA).',
+      attrs: ['Document no.', 'Company code', 'Posting date', 'Dr / Cr lines', 'Amount'],
+      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
+      rel: [
+        { to: 'gl_account', card: 'N:1', verb: 'classified to', rverb: 'classifies' },
+        { to: 'cost_center', card: 'N:1', verb: 'assigned to', rverb: 'carries' }
+      ] },
+    ar_item: { d: 'financial', t: 'AR Open Item', sap: 'BSID · BSAD (AR sub-ledger)',
+      def: 'An unpaid customer line — what a customer owes until it is cleared. The raw material of collections and aging.',
+      attrs: ['Document no.', 'Customer', 'Amount', 'Due date', 'Dunning level'],
+      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
+      proj: { t: 'Strategic Pricing & AR', u: 'project2.html' },
+      rel: [
+        { to: 'payment', card: '1:N', verb: 'cleared by', rverb: 'clears' }
+      ] },
+    payment: { d: 'financial', t: 'Payment / Clearing', sap: 'REGUH · BSEG (clearing)',
+      def: 'The settlement that clears an open item — cash in against a receivable, or cash out against a payable.',
+      attrs: ['Clearing doc', 'Amount', 'Value date', 'Bank / house', 'Method'],
+      cap: { t: 'Accounting', u: 'capability-map.html?cap=accounting' },
+      vs: { t: 'Order to Cash', u: 'value-streams.html' },
+      proj: { t: 'Strategic Pricing & AR', u: 'project2.html' },
+      rel: [
+        { to: 'journal_entry', card: '1:N', verb: 'posts', rverb: 'posted by' }
+      ] },
+    tax_item: { d: 'financial', t: 'Tax Item', sap: 'BSET (tax document)',
+      def: 'The tax portion of a posting — output VAT, input VAT or withholding — carried as its own line for reporting to the authority.',
+      attrs: ['Tax code', 'Base amount', 'Tax amount', 'Condition', 'Reporting date'],
+      cap: { t: 'Regulatory Compliance', u: 'capability-map.html?cap=regulatory-compliance' },
+      vs: { t: 'Record to Report', u: 'value-streams.html' },
+      proj: { t: 'STEM Portfolio Financial Tracking', u: 'project4.html' },
+      rel: [
+        { to: 'gl_account', card: 'N:1', verb: 'posts to', rverb: 'receives' }
+      ] }
+  };
+
+  function invCard(c) { return c === '1:N' ? 'N:1' : (c === 'N:1' ? '1:N' : c); }
+
+  // Build a symmetric neighbour map: id -> [{id, card, verb}]
+  var NB = {};
+  Object.keys(E).forEach(function (id) { NB[id] = []; });
+  Object.keys(E).forEach(function (id) {
+    (E[id].rel || []).forEach(function (r) {
+      if (!E[r.to]) return;
+      NB[id].push({ id: r.to, card: r.card, verb: r.verb });
+      NB[r.to].push({ id: id, card: invCard(r.card), verb: r.rverb });
+    });
+  });
+
+  var board = document.getElementById('imBoard');
+  var detail = document.getElementById('imDetail');
+  var selId = null;
+  var filter = 'all';
+
+  // Render the domain groups + concept cards.
+  board.innerHTML = DOMAINS.map(function (dom) {
+    var ids = Object.keys(E).filter(function (id) { return E[id].d === dom.key; });
+    var cards = ids.map(function (id) {
+      return '<button type="button" class="im-card" id="ic_' + id + '" data-id="' + id + '" data-d="' + E[id].d + '">' +
+        '<span class="im-card-name">' + E[id].t + '</span>' +
+        '<span class="im-card-sap">' + E[id].sap + '</span>' +
+        '<span class="im-card-edge"></span></button>';
+    }).join('');
+    return '<div class="im-group" data-d="' + dom.key + '">' +
+      '<div class="im-group-head"><span class="im-group-k d-' + dom.key + '">' + dom.k + '</span>' +
+      '<span class="im-group-name">' + dom.name + '</span>' +
+      '<span class="im-group-sub">' + ids.length + ' concepts</span></div>' +
+      '<div class="im-cards">' + cards + '</div></div>';
+  }).join('');
+
+  function applyFilter() {
+    board.classList.toggle('filtering', filter !== 'all');
+    board.querySelectorAll('.im-card').forEach(function (el) {
+      el.classList.toggle('filtered-out', filter !== 'all' && el.getAttribute('data-d') !== filter);
+    });
+    board.querySelectorAll('.im-group').forEach(function (g) {
+      g.style.display = (filter === 'all' || g.getAttribute('data-d') === filter) ? '' : 'none';
+    });
+  }
+
+  function relRow(n) {
+    return '<button type="button" class="im-rel-row" data-goto="' + n.id + '">' +
+      '<span class="im-rel-card">' + n.card + '</span>' +
+      '<span class="im-rel-verb">' + n.verb + ' <b>' + E[n.id].t + '</b></span></button>';
+  }
+
+  function renderDetail(id) {
+    var e = E[id];
+    var nbs = NB[id];
+    var relHtml = nbs.length
+      ? '<div class="im-d-rel-h">Relates to · <b>' + nbs.length + '</b></div><div class="im-d-rel-list">' + nbs.map(relRow).join('') + '</div>'
+      : '<div class="im-d-rel-h">Relates to</div><div class="im-rel-verb" style="font-size:0.76rem">A reference concept — other concepts point to it (select one to see how).</div>';
+    detail.innerHTML =
+      '<div class="im-d-k">' + (e.d === 'master' ? 'Master data' : e.d === 'txn' ? 'Transactional' : 'Financial') + '</div>' +
+      '<h2 class="im-d-name">' + e.t + '</h2>' +
+      '<p class="im-d-def">' + e.def + '</p>' +
+      '<div class="im-d-sub">Conceptual attributes</div>' +
+      '<div class="im-d-attrs">' + e.attrs.map(function (a) { return '<span class="im-attr">' + a + '</span>'; }).join('') + '</div>' +
+      '<dl class="im-d-map">' +
+        '<div><dt>Realised by</dt><dd class="sap">' + e.sap + '</dd></div>' +
+        '<div><dt>Capability</dt><dd><a href="' + e.cap.u + '">' + e.cap.t + ' &rarr;</a></dd></div>' +
+        '<div><dt>Value stream</dt><dd><a href="' + e.vs.u + '">' + e.vs.t + ' &rarr;</a></dd></div>' +
+        '<div><dt>Delivered in</dt><dd><a href="' + e.proj.u + '">' + e.proj.t + ' &rarr;</a></dd></div>' +
+      '</dl>' +
+      relHtml +
+      '<button type="button" class="im-d-clear" id="imClear">Clear selection ✕</button>';
+    var clr = document.getElementById('imClear');
+    if (clr) clr.addEventListener('click', clearSel);
+  }
+
+  function select(id, push) {
+    if (!E[id]) return;
+    selId = id;
+    var relSet = {};
+    NB[id].forEach(function (n) { relSet[n.id] = n; });
+    board.classList.add('armed');
+    board.querySelectorAll('.im-card').forEach(function (el) {
+      var cid = el.getAttribute('data-id');
+      el.classList.remove('sel', 'rel');
+      var edge = el.querySelector('.im-card-edge');
+      if (cid === id) { el.classList.add('sel'); if (edge) edge.textContent = ''; }
+      else if (relSet[cid]) {
+        el.classList.add('rel');
+        if (edge) edge.innerHTML = '<b>' + relSet[cid].card + '</b> ' + relSet[cid].verb;
+      } else if (edge) { edge.textContent = ''; }
+    });
+    renderDetail(id);
+    var selEl = document.getElementById('ic_' + id);
+    // On the stacked mobile layout the detail sits above the board; keep it in view.
+    if (window.matchMedia && window.matchMedia('(max-width: 940px)').matches && detail.scrollIntoView) {
+      try { detail.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+    }
+    if (push !== false) { try { history.replaceState(null, '', '?entity=' + id); } catch (e) {} }
+  }
+
+  function clearSel() {
+    selId = null;
+    board.classList.remove('armed');
+    board.querySelectorAll('.im-card').forEach(function (el) { el.classList.remove('sel', 'rel'); });
+    detail.innerHTML =
+      '<div class="im-d-empty"><span class="pin">Select a concept to explore it.</span>' +
+      '<span style="color:var(--text-subtle)">Each concept maps to its SAP object, the capability that owns it, the value stream that moves it, and the project that delivered it — plus every concept it relates to, with cardinality.</span></div>';
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  }
+
+  board.addEventListener('click', function (e) {
+    var btn = e.target && e.target.closest ? e.target.closest('.im-card') : null;
+    if (btn) select(btn.getAttribute('data-id'));
+  });
+
+  detail.addEventListener('click', function (e) {
+    var row = e.target && e.target.closest ? e.target.closest('.im-rel-row') : null;
+    if (row) select(row.getAttribute('data-goto'));
+  });
+
+  document.querySelector('.im-filters').addEventListener('click', function (e) {
+    var chip = e.target && e.target.closest ? e.target.closest('.im-chip') : null;
+    if (!chip) return;
+    filter = chip.getAttribute('data-filter');
+    document.querySelectorAll('.im-chip').forEach(function (c) { c.classList.toggle('on', c === chip); });
+    applyFilter();
+  });
+
+  // Deep-link ?entity=<id>
+  try {
+    var q = new URLSearchParams(location.search).get('entity');
+    if (q && E[q]) select(q, false);
+  } catch (e) {}
+})();
+</script>
+
+<script src="search.js?v=5" defer></script>
+</body>
+</html>
