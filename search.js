@@ -36,12 +36,14 @@
     { t: 'Business Architecture Glossary', u: 'ba-glossary.html', c: 'Business Arch', k: 'bizbok togaf adm archimate glossary' },
     // SAP design cluster
     { t: 'Technical Coding & Business Flow', u: 'sap-design.html', c: 'SAP Design', k: 'abap code viewer posting simulator ricefw' },
+    { t: 'FI/CO Configuration Simulator', u: 'fico-config-simulator.html', c: 'SAP Design', k: 'interactive config posting journal entry tax code obyc vkoa reconciliation account valuation class ftxp t007 debit credit balanced fi document simulator migo miro vf01' },
     { t: 'Functional Specification (FSD)', u: 'functional-specification.html', c: 'SAP Design', k: 'fsd functional spec requirement traceability' },
     { t: 'Business Process Master List', u: 'business-process-map.html', c: 'SAP Design', k: 'bpml r2r o2c p2p process' },
     { t: 'Data Migration & Cutover', u: 'data-migration-cutover.html', c: 'SAP Design', k: 'migration ltmc cutover go no go runbook' },
     { t: 'Integration Architecture', u: 'integration-architecture.html', c: 'SAP Design', k: 'interface idoc bapi odata cpi integration' },
     // SAP reference
     { t: 'SAP Knowledge Hub', u: 'knowledge-hub.html', c: 'SAP Reference', k: 'sap hub map reading path' },
+    { t: 'Reference Data & API — canonical dataset', u: 'knowledge-data.html', c: 'SAP Reference', k: 'json dataset api export download raw data single source of truth canonical knowledge t-codes terms bizbok schema' },
     { t: 'SAP Glossary & T-codes', u: 'glossary.html', c: 'SAP Reference', k: 'glossary tcode reference search' },
     { t: 'RICEFW Register', u: 'ricefw-register.html', c: 'SAP Reference', k: 'ricefw report interface conversion enhancement form workflow' },
     { t: 'Metrics, Audited', u: 'metrics.html', c: 'SAP Reference', k: 'metrics kpi reconcile transparency' },

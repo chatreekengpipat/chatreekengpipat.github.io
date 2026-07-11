@@ -90,6 +90,7 @@
         <div class="nav-dd-group">
           <div class="nav-dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
           <a href="functional-specification.html">Functional Specification (FSD)</a>
           <a href="business-process-map.html">Business Process Master List</a>
           <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
@@ -98,6 +99,7 @@
         <div class="nav-dd-group">
           <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
           <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="knowledge-data.html">Reference Data &amp; API</a>
           <a href="glossary.html">Glossary &amp; T-codes</a>
           <a href="ricefw-register.html">RICEFW Register</a>
           <a href="metrics.html">Metrics, Audited</a>
@@ -175,70 +177,15 @@
   <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;">Colophon · how this site is built →</a></p>
 </footer>
 
+<script src="data/knowledge.js"></script>
 <script>
 (function () {
   'use strict';
-  var CATS = { fw:'Framework', bp:'Blueprint', tech:'Technique', strat:'Strategy', togaf:'TOGAF', role:'Role', concept:'Concept' };
-  var E = [
-    ['BIZBOK','fw','The <b>Business Architecture Body of Knowledge</b> from the Business Architecture Guild — the definitive framework defining the core blueprints and techniques.',['business-architecture.html','BA Hub']],
-    ['TOGAF','fw','<b>The Open Group Architecture Framework</b> — an enterprise-architecture method; business architecture is delivered in Phase B of its ADM.'],
-    ['ADM','fw','TOGAF&rsquo;s <b>Architecture Development Method</b> — the cycle: Preliminary, A Vision, B Business, C Information Systems, D Technology, E Opportunities, F Migration, G Governance, H Change.'],
-    ['ArchiMate','fw','The Open Group&rsquo;s modelling <b>notation</b> for enterprise architecture, layered into business, application and technology.'],
-    ['Zachman Framework','fw','An enterprise-architecture <b>ontology</b>: a matrix of perspectives (rows) against interrogatives — what, how, where, who, when, why.'],
-    ['Business Model Canvas','fw','A one-page strategic tool describing a business across nine blocks (value proposition, segments, channels, revenue, cost).'],
-    ['Operating Model Canvas','fw','A tool for designing how an organisation delivers value operationally across a set of dimensions.',['operating-model.html','TOM page']],
-
-    ['Business Capability','bp','What a business does, as a <b>stable noun</b> (&ldquo;Customer Management&rdquo;) — independent of process, org or technology.',['capability-map.html','Capability Map']],
-    ['Capability Map','bp','The hierarchical model (L1→L3) of an enterprise&rsquo;s capabilities — the anchor artifact of business architecture.',['capability-map.html','open it']],
-    ['Value Stream','bp','An end-to-end sequence of stages that delivers value to a <b>stakeholder</b>; each stage is enabled by capabilities.',['value-streams.html','Value Streams']],
-    ['Value Stream Stage','bp','A discrete step in a value stream producing a value item, with entrance and exit criteria.'],
-    ['Value Item','bp','The unit of value a stakeholder receives at a value-stream stage.'],
-    ['Organization Map','bp','A blueprint of business units, partners and their relationships — the <i>who</i> of the enterprise.'],
-    ['Information Map','bp','A blueprint of the business information <b>concepts</b> the enterprise uses — the business view of data, not a data model.'],
-    ['Information Concept','bp','A business-meaningful unit of information (Customer, Order, Product) in the information map.'],
-    ['Stakeholder','bp','Any party with an interest in, or that receives value from, the enterprise — customer, employee, partner, regulator.'],
-
-    ['Capability-Based Planning','tech','Planning investment and change around <b>capabilities</b> rather than projects or org units.'],
-    ['Heat Map','tech','Colouring a capability map by a dimension — maturity, performance, importance or investment — to focus the conversation.',['capability-map.html','see it live']],
-    ['Cross-Mapping','tech','Relating two blueprints — e.g., mapping which capabilities enable each value-stream stage.'],
-    ['Current State','tech','The <b>as-is</b> architecture — how things work today. Also called the baseline.'],
-    ['Future State','tech','The <b>to-be</b> architecture — the target design. Also the target state.'],
-    ['Gap Analysis','tech','The difference between current and future state, which defines what must change.'],
-    ['Roadmap','tech','A sequenced set of initiatives that moves the enterprise from current to future state.'],
-    ['Capability Assessment','tech','Rating capabilities (maturity, importance, performance) to prioritise where to invest.'],
-    ['Capability Increment','tech','A defined improvement to a capability delivered by an initiative.'],
-
-    ['Strategy Map','strat','A view linking objectives to the capabilities and initiatives that achieve them.'],
-    ['Objective','strat','A measurable goal the strategy is trying to achieve.'],
-    ['Initiative','strat','A programme or project that changes capabilities to deliver a business outcome.'],
-    ['Business Outcome','strat','The measurable result an initiative is meant to produce.'],
-    ['Course of Action','strat','A strategic approach chosen to reach an objective.'],
-    ['Value Proposition','strat','The bundle of value an enterprise offers a stakeholder segment.'],
-
-    ['Phase B','togaf','The <b>Business Architecture</b> phase of the TOGAF ADM — where capability, value, organisation and information views are developed.'],
-    ['BDAT','togaf','The four TOGAF architecture <b>domains</b>: Business, Data, Application, Technology.'],
-    ['Architecture Vision','togaf','ADM Phase A — the high-level, aspirational view that scopes the work.'],
-    ['Architecture Building Block','togaf','ABB — a reusable, technology-independent architecture component.'],
-    ['Solution Building Block','togaf','SBB — a specific, implementable component that realises an ABB.'],
-    ['Architecture Repository','togaf','Where architecture assets, standards and reference models are stored.'],
-    ['Enterprise Continuum','togaf','TOGAF&rsquo;s way of classifying architecture assets from generic to organisation-specific.'],
-    ['Requirements Management','togaf','The central ADM activity that governs requirements across every phase.'],
-    ['Architecture Governance','togaf','ADM Phase G — controlling the implementation so it conforms to the architecture.'],
-
-    ['Business Architect','role','Owns the business blueprints and connects strategy to execution across the enterprise.'],
-    ['Enterprise Architect','role','Owns the architecture across all domains — business, data, application and technology.'],
-    ['Solution Architect','role','Designs the architecture for a specific solution or initiative.'],
-
-    ['Enterprise Architecture','concept','The discipline of describing and governing an enterprise across business, data, application and technology to align it with strategy.'],
-    ['Operating Model','concept','How an enterprise is <b>organised to deliver value</b> — its processes, structure, information, technology, partners, locations and governance.',['operating-model.html','TOM page']],
-    ['Target Operating Model','concept','TOM — the designed future operating model an organisation is transforming toward.',['operating-model.html','open it']],
-    ['Baseline','concept','The current-state architecture used as the starting point for change.'],
-    ['Operating Model (MIT)','concept','Ross &amp; Weill&rsquo;s four models by process standardisation/integration: Coordination, Unification, Diversification, Replication.'],
-    ['POLDAT','concept','An operating-model dimension set: Process, Organisation, Location, Data, Applications, Technology.'],
-    ['Business Motivation Model','concept','A structure for the <i>why</i>: ends (vision, goals) and means (strategies, tactics), with influencers and assessments.'],
-    ['Digital Decoupling','concept','Progressively replacing or wrapping legacy systems so the business can move faster without a big-bang replacement.'],
-    ['Lean Value Stream Map','concept','A lean-manufacturing technique visualising material and information flow — related to, but distinct from, the BIZBOK value stream.']
-  ];
+  // Reference data now comes from the shared canonical dataset (data/knowledge.js).
+  // Edit terms THERE, not here — glossary, ba-glossary and knowledge-data all read it.
+  var _set = (window.CK_KNOWLEDGE && window.CK_KNOWLEDGE.sets && window.CK_KNOWLEDGE.sets.ba) || { cats: {}, entries: [] };
+  var CATS = _set.cats;
+  var E = _set.entries;
 
   var grid = document.getElementById('bgGrid');
   var countEl = document.getElementById('bgCount');
@@ -279,6 +226,6 @@
 })();
 </script>
 
-<script src="search.js?v=6" defer></script>
+<script src="search.js?v=8" defer></script>
 </body>
 </html>

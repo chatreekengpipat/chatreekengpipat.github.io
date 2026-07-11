@@ -101,13 +101,45 @@
   .tr-legend .li-up { background: color-mix(in srgb, var(--accent) 45%, var(--border)); border: 1px solid var(--accent); }
   .tr-legend .li-down { background: color-mix(in srgb, var(--success) 55%, var(--border)); border: 1px solid var(--success); }
 
+  /* ---- Guided tour (narrated walkthrough) ---- */
+  .trn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.05rem 1.25rem; margin-bottom: 1.4rem; box-shadow: var(--shadow-md); }
+  .trn-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.9rem; }
+  .trn-title { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+  .trn-stories { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-left: auto; }
+  .trn-story { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 100px; padding: 0.34rem 0.8rem; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+  .trn-story:hover { color: var(--accent); border-color: var(--accent); }
+  .trn-story[aria-selected="true"] { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .trn-stage { margin-top: 1rem; }
+  .trn-stage[hidden] { display: none; }
+  .trn-cap-tag { display: inline-flex; align-items: center; gap: 0.45rem; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
+  .trn-cap-k { color: #fff; background: var(--accent); border-radius: 4px; padding: 0.12rem 0.4rem; }
+  .trn-cap-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+  .trn-cap-title .amp { font-weight: 800; }
+  .trn-cap-text { font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); }
+  .trn-cap-text b, .trn-cap-text strong { color: var(--text); font-weight: 600; }
+  .trn-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+  .trn-btn { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text); background: var(--bg); border: 1px solid var(--border-strong); border-radius: 8px; padding: 0.42rem 0.85rem; cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s; }
+  .trn-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .trn-btn:disabled { opacity: 0.4; cursor: default; }
+  .trn-btn.primary { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .trn-btn.primary:hover:not(:disabled) { background: var(--accent-hover); color: #fff; }
+  .trn-exit { margin-left: auto; border-color: var(--border); color: var(--text-muted); }
+  .trn-dots { display: inline-flex; gap: 0.3rem; align-items: center; }
+  .trn-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--border-strong); display: inline-block; transition: background 0.25s, transform 0.25s; }
+  .trn-dots i.on { background: var(--accent); }
+  .trn-dots i.done { background: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+  .trn-progress { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); }
+
   @media (max-width: 720px) {
     .tr-banner { top: 62px; padding: 0 1rem; }
     .tr-chain { gap: 0.3rem 0; }
+    .trn-stories { margin-left: 0; width: 100%; }
+    .trn-exit { margin-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     .tr-node { transition: opacity 0.01ms, background 0.01ms, border-color 0.01ms; }
     .tr-thread-empty::before { animation: none; }
+    .trn-dots i { transition: none; }
   }
 </style>
 </head>
@@ -143,6 +175,7 @@
         <div class="nav-dd-group">
           <div class="nav-dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
           <a href="functional-specification.html">Functional Specification (FSD)</a>
           <a href="business-process-map.html">Business Process Master List</a>
           <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
@@ -151,6 +184,7 @@
         <div class="nav-dd-group">
           <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
           <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="knowledge-data.html">Reference Data &amp; API</a>
           <a href="glossary.html">Glossary &amp; T-codes</a>
           <a href="ricefw-register.html">RICEFW Register</a>
           <a href="metrics.html">Metrics, Audited</a>
@@ -198,7 +232,7 @@
       <div class="platform-badge">Business Architecture · Traceability</div>
       <div class="project-meta">Strategy → capability → value → initiative → deliverable → test</div>
       <h1>Traceability <em>Explorer</em></h1>
-      <p class="project-hero-desc">The question an architecture has to answer is <strong>&ldquo;why are we building this, and how do we know it worked?&rdquo;</strong> Traceability is the answer: an unbroken thread from a <a href="business-architecture.html" style="color:var(--accent)">strategic objective</a> down to the test that validates the delivered object. <strong>Click any node</strong> &mdash; its <span style="color:var(--accent);font-weight:600">upstream ancestry</span> (what it serves) and <span style="color:var(--success);font-weight:600">downstream descendants</span> (what it produces) light up across all six layers.</p>
+      <p class="project-hero-desc">The question an architecture has to answer is <strong>&ldquo;why are we building this, and how do we know it worked?&rdquo;</strong> Traceability is the answer: an unbroken thread from a <a href="business-architecture.html" style="color:var(--accent)">strategic objective</a> down to the test that validates the delivered object. <strong>Click any node</strong> &mdash; its <span style="color:var(--accent);font-weight:600">upstream ancestry</span> (what it serves) and <span style="color:var(--success);font-weight:600">downstream descendants</span> (what it produces) light up across all six layers. Or take the <strong>guided tour</strong> below to watch one requirement travel the whole thread, one hop at a time.</p>
     </div>
     <div class="project-info-card">
       <div class="project-info-row"><span class="project-info-label">Framework</span><span class="project-info-val">BIZBOK · TOGAF ADM traceability</span></div>
@@ -213,6 +247,30 @@
   <div class="tr-wrap">
     <div class="tr-thread" id="trThread" aria-live="polite">
       <div class="tr-thread-empty">Click any node below to trace its golden thread across all six layers.</div>
+    </div>
+
+    <!-- Guided tour: narrated single-path walkthrough, strategy → test -->
+    <div class="trn" id="trNarrator">
+      <div class="trn-bar">
+        <span class="trn-title">▶ Guided tour · trace one requirement end to end</span>
+        <div class="trn-stories" role="tablist" aria-label="Choose a storyline">
+          <button type="button" class="trn-story" role="tab" data-story="pricing"  aria-selected="false">Pricing &amp; AR</button>
+          <button type="button" class="trn-story" role="tab" data-story="tax"      aria-selected="false">Tax &amp; Compliance</button>
+          <button type="button" class="trn-story" role="tab" data-story="loyalty"  aria-selected="false">Loyalty / CX</button>
+          <button type="button" class="trn-story" role="tab" data-story="close"    aria-selected="false">S/4HANA Close</button>
+        </div>
+      </div>
+      <div class="trn-stage" id="trnStage" hidden>
+        <div class="trn-caption" id="trnCaption" aria-live="polite"></div>
+        <div class="trn-controls">
+          <button type="button" class="trn-btn" id="trnPrev">‹ Back</button>
+          <button type="button" class="trn-btn primary" id="trnPlay">▶ Play</button>
+          <button type="button" class="trn-btn" id="trnNext">Next ›</button>
+          <span class="trn-dots" id="trnDots" aria-hidden="true"></span>
+          <span class="trn-progress" id="trnProgress"></span>
+          <button type="button" class="trn-btn trn-exit" id="trnExit">Exit ✕</button>
+        </div>
+      </div>
     </div>
 
     <div class="tr-scroll">
@@ -410,6 +468,194 @@
 })();
 </script>
 
-<script src="search.js?v=6" defer></script>
+<!-- ============================================================
+     GUIDED TOUR — narrated single-path walkthrough.
+     Drives the existing board's node classes (.sel/.up on .tr-board.armed)
+     one hop at a time, with a caption per layer handoff. Self-contained:
+     it reads node titles from the DOM so wording never drifts from the
+     board, and it stops cleanly the moment a visitor clicks to free-explore.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var board = document.getElementById('trBoard');
+  var narr = document.getElementById('trNarrator');
+  if (!board || !narr) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  var LK = ['S', 'C', 'V', 'I', 'D', 'T'];
+  var LNAME = ['Strategy', 'Capability', 'Value Stream', 'Initiative', 'Deliverable', 'Validation'];
+
+  // Each story is one valid top-to-bottom path already present in the graph,
+  // plus the narration for arriving at each node.
+  var STORIES = {
+    pricing: {
+      chain: ['s_rev', 'c_sales', 'v_otc', 'i_price', 'd_price', 't_price'],
+      caps: [
+        'Every build below has to ladder up to a business objective. This is the one we start from — <b>grow the recurring, repeatable revenue base</b>.',
+        'An objective needs a capability to stand on: something the business must be <i>good at</i>. Here it is <b>Sales Management</b> — the owner of pricing, quoting and the deal.',
+        'A capability only creates value inside a flow. This one runs in <b>Order to Cash</b> — order → deliver → invoice → collect.',
+        'To strengthen that flow, we funded a change: the <b>Strategic Pricing &amp; AR</b> project. This is where strategy becomes a scoped initiative.',
+        'The initiative produced a concrete SAP object — <b>a pricing routine</b>, a RICEFW enhancement. This is the line where architecture meets ABAP.',
+        'And nothing is &ldquo;done&rdquo; until it is proven. This <b>SIT scenario</b> validates the routine — the thread is now unbroken, strategy → test.'
+      ]
+    },
+    tax: {
+      chain: ['s_comp', 'c_fin', 'v_r2r', 'i_fitax', 'd_wht', 't_wht'],
+      caps: [
+        'We start from a <b>regulatory objective</b> — strengthen tax &amp; compliance. Getting this wrong is a legal cost, not just a financial one.',
+        'It rests on <b>Finance Management</b> — the capability that owns accounting, tax determination and statutory reporting.',
+        'Exercised inside <b>Record to Report</b> — the close-and-report flow where tax is calculated, posted and filed.',
+        'Delivered through the <b>FI-Tax Localization</b> initiative — Thai withholding tax and VAT brought into the standard.',
+        'Producing the <b>WHT certificate form</b>, a RICEFW form object — the artefact the tax office actually receives.',
+        'Signed off by a <b>UAT scenario</b> tied to the PND53 filing. Compliance you can trace from statute to test.'
+      ]
+    },
+    loyalty: {
+      chain: ['s_cx', 'c_cust', 'v_a2o', 'i_loy', 'd_accr', 't_accr'],
+      caps: [
+        'The objective is a growth one aimed at retention, not just acquisition — <b>elevate the customer experience</b>.',
+        'It is anchored in <b>Customer Management</b> — the capability that owns the relationship end to end.',
+        'Lived through <b>Acquire to Onboard</b> — how a customer is won and brought into the fold.',
+        'Realised by the <b>CRM Star Reward Loyalty</b> initiative.',
+        'Whose core object is the <b>loyalty accrual enhancement</b> — the logic that earns and books points.',
+        'Proven by an <b>SIT scenario</b> covering accrual &amp; redemption. Experience, made measurable and testable.'
+      ]
+    },
+    close: {
+      chain: ['s_close', 'c_fin', 'v_r2r', 'i_s4', 'd_acdoca', 't_acdoca'],
+      caps: [
+        'The CFO&rsquo;s objective: a <b>faster, cleaner close</b> — shorten days-to-close without losing control.',
+        'It depends on <b>Finance Management</b> — the capability that runs the period-end machine.',
+        'Inside <b>Record to Report</b> — where sub-ledgers roll up into the financial statements.',
+        'Advanced by the <b>S/4HANA Close</b> initiative — a modern close on a single source of truth.',
+        'Turning on the <b>Universal Journal migration</b> — moving to ACDOCA, one line-item table for FI + CO.',
+        'Reconciled by a <b>cutover scenario</b> on ACDOCA. A faster close you can actually prove balances.'
+      ]
+    }
+  };
+
+  var stories = Array.prototype.slice.call(narr.querySelectorAll('.trn-story'));
+  var stage = document.getElementById('trnStage');
+  var capEl = document.getElementById('trnCaption');
+  var prevBtn = document.getElementById('trnPrev');
+  var nextBtn = document.getElementById('trnNext');
+  var playBtn = document.getElementById('trnPlay');
+  var exitBtn = document.getElementById('trnExit');
+  var dotsEl = document.getElementById('trnDots');
+  var progEl = document.getElementById('trnProgress');
+
+  var activeKey = null, step = 0, timer = null;
+
+  function nodeEl(id) { return document.getElementById('tn_' + id); }
+  function nodeTitle(id) {
+    var el = nodeEl(id);
+    var nm = el && el.querySelector('.tr-node-name');
+    return nm ? nm.innerHTML : id;
+  }
+
+  function paint() {
+    var chain = STORIES[activeKey].chain;
+    board.classList.add('armed');
+    board.querySelectorAll('.tr-node').forEach(function (el) { el.classList.remove('sel', 'up', 'down'); });
+    for (var j = 0; j <= step; j++) {
+      var el = nodeEl(chain[j]);
+      if (el) el.classList.add(j === step ? 'sel' : 'up');
+    }
+    var cur = nodeEl(chain[step]);
+    if (cur && cur.scrollIntoView) { try { cur.scrollIntoView({ block: 'nearest', inline: 'center' }); } catch (e) {} }
+  }
+
+  function renderCaption() {
+    var s = STORIES[activeKey];
+    var id = s.chain[step];
+    capEl.innerHTML =
+      '<div class="trn-cap-tag"><span class="trn-cap-k">' + LK[step] + '</span> Layer ' + (step + 1) + ' · ' + LNAME[step] + '</div>' +
+      '<div class="trn-cap-title">' + nodeTitle(id) + '</div>' +
+      '<div class="trn-cap-text">' + s.caps[step] + '</div>';
+    dotsEl.innerHTML = s.chain.map(function (_, i) {
+      return '<i class="' + (i === step ? 'on' : (i < step ? 'done' : '')) + '"></i>';
+    }).join('');
+    progEl.textContent = 'Step ' + (step + 1) + ' / ' + s.chain.length;
+    prevBtn.disabled = step === 0;
+    nextBtn.disabled = step === s.chain.length - 1;
+  }
+
+  function show() { paint(); renderCaption(); }
+
+  function setStep(i) {
+    var max = STORIES[activeKey].chain.length - 1;
+    step = Math.max(0, Math.min(max, i));
+    show();
+    if (step === max) stopPlay();
+  }
+
+  function startStory(key, atStep) {
+    if (!STORIES[key]) return;
+    activeKey = key;
+    step = atStep || 0;
+    stories.forEach(function (b) { b.setAttribute('aria-selected', String(b.getAttribute('data-story') === key)); });
+    stage.hidden = false;
+    show();
+    try { history.replaceState(null, '', '?story=' + key); } catch (e) {}
+  }
+
+  function stopPlay() {
+    if (timer) { clearInterval(timer); timer = null; }
+    playBtn.textContent = '▶ Play';
+    playBtn.classList.add('primary');
+  }
+  function play() {
+    if (!activeKey) return;
+    var max = STORIES[activeKey].chain.length - 1;
+    if (step >= max) setStep(0);
+    playBtn.textContent = '❚❚ Pause';
+    playBtn.classList.remove('primary');
+    timer = setInterval(function () {
+      if (step >= max) { stopPlay(); return; }
+      setStep(step + 1);
+    }, reduce.matches ? 900 : 2100);
+  }
+
+  function exit() {
+    stopPlay();
+    activeKey = null;
+    stage.hidden = true;
+    stories.forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
+    board.classList.remove('armed');
+    board.querySelectorAll('.tr-node').forEach(function (el) { el.classList.remove('sel', 'up', 'down'); });
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  }
+
+  stories.forEach(function (b) {
+    b.addEventListener('click', function () { stopPlay(); startStory(b.getAttribute('data-story'), 0); });
+  });
+  prevBtn.addEventListener('click', function () { stopPlay(); setStep(step - 1); });
+  nextBtn.addEventListener('click', function () { stopPlay(); setStep(step + 1); });
+  playBtn.addEventListener('click', function () { timer ? stopPlay() : play(); });
+  exitBtn.addEventListener('click', exit);
+
+  // Free-exploring (clicking a board node) interrupts the tour without
+  // fighting the explorer — the explorer repaints the board; we just stand down.
+  board.addEventListener('click', function (e) {
+    if (!activeKey) return;
+    if (e.target && e.target.closest && e.target.closest('.tr-node')) {
+      stopPlay();
+      activeKey = null;
+      stage.hidden = true;
+      stories.forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
+    }
+  });
+
+  // Deep-link ?story=<key> (only when the explorer isn't already tracing).
+  try {
+    var params = new URLSearchParams(location.search);
+    var q = params.get('story');
+    if (q && STORIES[q] && !params.get('trace')) startStory(q, 0);
+  } catch (e) {}
+})();
+</script>
+
+<script src="search.js?v=8" defer></script>
 </body>
 </html>

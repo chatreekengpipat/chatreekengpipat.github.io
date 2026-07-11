@@ -95,6 +95,7 @@
         <div class="nav-dd-group">
           <div class="nav-dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
           <a href="functional-specification.html">Functional Specification (FSD)</a>
           <a href="business-process-map.html">Business Process Master List</a>
           <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
@@ -103,6 +104,7 @@
         <div class="nav-dd-group">
           <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
           <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="knowledge-data.html">Reference Data &amp; API</a>
           <a href="glossary.html" class="active" aria-current="page">Glossary &amp; T-codes</a>
           <a href="ricefw-register.html">RICEFW Register</a>
           <a href="metrics.html">Metrics, Audited</a>
@@ -183,108 +185,15 @@
   <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;border-bottom:1px solid transparent;">Colophon · how this site is built →</a></p>
 </footer>
 
+<script src="data/knowledge.js"></script>
 <script>
 (function () {
   'use strict';
-  var CATS = { cfg:'Config', post:'Posting', rep:'Reporting', md:'Master data', tax:'Tax/WHT', tbl:'Table', key:'Acct key', mig:'Migration', intg:'Integration', concept:'Concept' };
-  var E = [
-    // Config / IMG
-    ['SPRO','cfg','The Implementation Guide (IMG) — SAP’s central customizing tree. Every configuration path lives here.'],
-    ['OBBG','cfg','Assign a country to its tax calculation procedure (e.g. TH → TAXTH).'],
-    ['OBYZ','cfg','Maintain the tax calculation procedure, condition types and account keys.'],
-    ['OBCN','cfg','Define and adjust the tax processing (transaction) keys.'],
-    ['OBCL','cfg','Assign tax codes for non-taxable transactions per company code.'],
-    ['FTXP','cfg','Create and maintain <b>tax codes</b> and their rates under a calculation procedure.'],
-    ['OB40','cfg','<b>Tax account determination</b> — map each tax transaction key to the GL account it posts to.',['fi-tax-consultant-scope.html','FI Tax scope']],
-    ['OB52','cfg','Open and close posting periods (period control).'],
-    ['OBYC','cfg','<b>Automatic account determination for MM</b> — the keys (BSX/WRX/GBB/PRD) a goods movement posts to.',['sap-design.html#cv','See it in code']],
-    ['OBWW','cfg','Define the GL accounts for withholding tax to be paid over.'],
-    ['FBMP','cfg','Configure the dunning procedure (levels, charges, forms).'],
-    ['FD32','cfg','Maintain customer credit master (classic credit management; FSCM in S/4).'],
-    ['V/08','cfg','Define and maintain the <b>SD pricing procedure</b>.'],
-    ['VK11','cfg','Create condition records (prices, discounts, surcharges) for SD pricing.'],
-    ['VKOA','cfg','<b>Revenue account determination</b> — map SD billing to FI GL accounts.'],
-    ['TAXTH','cfg','The Thai tax calculation procedure that VAT/WHT codes hang off.'],
-    // Postings
-    ['FB60','post','Post a <b>vendor (AP) invoice</b> — the core P2P tax test.'],
-    ['FB70','post','Post a <b>customer (AR) invoice</b> — the core O2C tax test.'],
-    ['FB03','post','Display a financial document — read the posted line items to verify a posting.'],
-    ['F-53','post','Post a manual outgoing payment — where extended withholding tax is realised.'],
-    ['F110','post','Automatic payment run (batch vendor payments).'],
-    ['F150','post','Dunning run — issue overdue reminders by dunning level.'],
-    ['FBS1','post','Post an accrual / deferral document (auto-reversed the next period).'],
-    ['MIGO','post','Goods movement — goods receipt (mvt 101), issues, transfers.'],
-    ['MIRO','post','Logistics invoice verification — the PO-based (3-way match) invoice in MM.'],
-    ['VA01 / VA02','post','Create / change a sales order.'],
-    ['VF01','post','Create a billing document — releases revenue to FI.'],
-    ['ME21N','post','Create a purchase order.'],
-    ['ME51N','post','Create a purchase requisition.'],
-    // Reporting / period-end
-    ['RFUMSV00','rep','Advance return for tax on sales/purchases — the VAT report feeding PP30.'],
-    ['PP30','rep','Thai VAT filing (output/input VAT return).'],
-    ['S_P00_07000134','rep','Generic withholding-tax reporting — feeds the Thai WHT certificate and PND output.'],
-    ['KE30','rep','Run a CO-PA profitability report (margin by segment).'],
-    ['FS10N','rep','GL account balance display.'],
-    ['FBL1N / FBL5N','rep','Vendor / customer line-item display (open and cleared items).'],
-    ['F.01','rep','Financial statement — balance sheet / P&amp;L via the Financial Statement Version.'],
-    ['F.13','rep','Automatic clearing (e.g. clearing GR/IR).'],
-    ['AFAB','rep','Asset depreciation run.'],
-    ['FAGL_FCV','rep','Foreign-currency valuation of open items and balances (new GL).'],
-    ['FAGLGVTR','rep','GL balance carry-forward to the new fiscal year.'],
-    // Master data
-    ['FS00','md','GL account master — create/change, incl. the tax category flag.'],
-    ['XD01 / XK01','md','Create customer / vendor master (classic; unified as Business Partner in S/4).'],
-    ['AS91','md','Create a legacy asset master with take-over values (migration).'],
-    ['MM01','md','Create a material master (with its MM/SD/FI views).'],
-    // Tax & WHT
-    ['PP36','tax','Reverse-charge VAT reporting for imported services.'],
-    ['PND 3 / 53 / 54','tax','Thai withholding-tax returns: PND&nbsp;3 (individuals), 53 (companies), 54 (overseas).'],
-    ['Extended WHT','tax','SAP’s withholding-tax solution: a <b>type</b> (at invoice or payment) plus a <b>code</b> (rate), assigned on the business partner. Always used over Classic WHT.'],
-    ['MWS / VST','tax','Output-tax (MWS) and input-tax (VST) transaction keys resolved in OB40.'],
-    ['O7 / I7 / O0','tax','Example Thai tax codes: output VAT 7% / input VAT 7% / zero-rated output.'],
-    // Tables
-    ['ACDOCA','tbl','The <b>Universal Journal</b> — the single line-item table for FI + CO in S/4HANA.'],
-    ['BKPF / BSEG','tbl','FI document header (BKPF) and line items (BSEG).'],
-    ['BSID','tbl','Customer open-item secondary index.'],
-    ['EKKO / EKPO','tbl','Purchasing document header (EKKO) and items (EKPO).'],
-    ['MSEG','tbl','Material document segment — goods-movement line items.'],
-    ['RBKP / RSEG','tbl','Invoice-verification document header (RBKP) and items (RSEG).'],
-    ['VBRK / VBRP','tbl','Billing document header (VBRK) and items (VBRP).'],
-    ['PRCD_ELEMENTS','tbl','Pricing condition records on a document in S/4 (was KONV).'],
-    // Account-determination keys
-    ['BSX','key','OBYC key: the <b>inventory / stock</b> posting account.'],
-    ['WRX','key','OBYC key: the <b>GR/IR clearing</b> account bridging receipt and invoice.'],
-    ['GBB','key','OBYC key: offsetting entry for goods movements (consumption, etc.).'],
-    ['PRD','key','OBYC key: price differences when PO price ≠ standard price.'],
-    ['KOFI / KOFK','key','SD→FI account-determination condition types (without / with CO).'],
-    // Migration
-    ['LTMC','mig','SAP S/4HANA <b>Migration Cockpit</b> — loads master and transactional data.',['data-migration-cutover.html','Migration page']],
-    ['LSMW','mig','Legacy System Migration Workbench — the older batch migration tool.'],
-    ['MB1C','mig','Post initial stock (mvt 561) — inventory balance take-over.'],
-    // Integration
-    ['IDoc','intg','Intermediate Document — SAP’s asynchronous message format for interfaces.',['integration-architecture.html','Integration page']],
-    ['BAPI','intg','Business API — a standard synchronous method on a business object.'],
-    ['RFC','intg','Remote Function Call — SAP’s synchronous cross-system protocol.'],
-    ['OData','intg','REST-style protocol behind Fiori apps and modern integrations.'],
-    ['SAP CPI','intg','Cloud Platform Integration / Integration Suite — SAP’s iPaaS middleware.'],
-    ['DMEE','intg','Data Medium Exchange Engine — builds bank payment files (e.g. ISO 20022).'],
-    ['WE02 / BD87','intg','Monitor / reprocess IDocs when an interface message fails.'],
-    // Concepts
-    ['RICEFW','concept','<b>R</b>eports, <b>I</b>nterfaces, <b>C</b>onversions, <b>E</b>nhancements, <b>F</b>orms, <b>W</b>orkflows — the categories of custom development.',['ricefw-register.html','RICEFW register']],
-    ['FSD','concept','Functional Specification Document — turns a business requirement into a developer-ready design.',['functional-specification.html','See a worked FSD']],
-    ['Use Case / User Story','concept','Requirement artifacts describing an actor’s goal / an increment of value.'],
-    ['Universal Journal','concept','S/4HANA’s single source of truth (ACDOCA) merging FI and CO — no FI-CO reconciliation.'],
-    ['Condition technique','concept','SAP’s pricing rule engine: condition tables → access sequence → condition types → procedure.'],
-    ['CO-PA','concept','Profitability Analysis — margin by market segment (product, region, customer).'],
-    ['Fit-Gap','concept','Comparing requirements to SAP standard; the gaps become RICEFW objects.'],
-    ['SAP Activate','concept','SAP’s implementation methodology: Prepare → Explore → Realize → Deploy → Run.'],
-    ['Business Partner','concept','S/4HANA’s single master record carrying customer and vendor roles.'],
-    ['Reconciliation account','concept','The GL account a sub-ledger (AR / AP / assets) rolls its balance up into.'],
-    ['Dunning','concept','The process of reminding customers of overdue items, escalated by dunning level.'],
-    ['GR/IR','concept','Goods-Receipt / Invoice-Receipt clearing — the account bridging an MM receipt and its invoice.'],
-    ['3-way match','concept','Reconciling purchase order ↔ goods receipt ↔ invoice before a vendor is paid.'],
-    ['Royalty / SRB / PITA','concept','Thai petroleum taxes: royalty on gross, Special Remuneratory Benefit (windfall), and Petroleum Income Tax.',['fi-tax-consultant-scope.html','PTTEP tax engine']]
-  ];
+  // Reference data now comes from the shared canonical dataset (data/knowledge.js).
+  // Edit terms THERE, not here — glossary, ba-glossary and knowledge-data all read it.
+  var _set = (window.CK_KNOWLEDGE && window.CK_KNOWLEDGE.sets && window.CK_KNOWLEDGE.sets.sap) || { cats: {}, entries: [] };
+  var CATS = _set.cats;
+  var E = _set.entries;
 
   var grid = document.getElementById('glGrid');
   var countEl = document.getElementById('glCount');
@@ -332,6 +241,6 @@
 })();
 </script>
 
-<script src="search.js?v=6" defer></script>
+<script src="search.js?v=8" defer></script>
 </body>
 </html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reference Data · One Canonical Dataset · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/knowledge-data.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="SAP & BA Reference Data — one canonical dataset · Chatree Kengpipat">
+<meta property="og:description" content="Every T-code, table, key and BIZBOK/TOGAF term on this site comes from one JSON dataset. Browse it live, or download the raw JSON — the same source the glossary pages and command palette read from.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/knowledge-data.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SAP & BA Reference Data — one canonical dataset">
+<meta name="twitter:description" content="One JSON dataset behind the glossaries and command palette. Browse it live or download the raw JSON.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="A single canonical reference dataset (data/knowledge.js) behind Chatree Kengpipat's SAP glossary, Business Architecture glossary and command palette — SAP T-codes, tables, account keys and BIZBOK/TOGAF terms. Browse it live with search and category filters, or export the raw JSON. A demonstration of a single source of truth driving multiple consumers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     KNOWLEDGE DATA EXPLORER — page-scoped. Reads the single canonical
+     dataset (window.CK_KNOWLEDGE from data/knowledge.js), renders it,
+     and exports it as JSON. Tokens only; no new colors, no libraries.
+     ============================================================ */
+  .kd-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
+  .kd-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
+  .kd-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .kd-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .kd-banner-text strong { color: var(--text); font-weight: 600; }
+  .kd-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
+
+  .kd-wrap { max-width: 1120px; margin: 0 auto; }
+
+  /* Stat strip */
+  .kd-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1.6rem; }
+  .kd-stat { background: var(--surface); padding: 1.15rem 0.8rem; text-align: center; }
+  .kd-stat-num { display: block; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; color: var(--accent); line-height: 1; }
+  .kd-stat-label { display: block; margin-top: 0.35rem; font-size: 0.66rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+
+  /* Export / API panel */
+  .kd-api { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.4rem 1.5rem; margin-bottom: 1.8rem; box-shadow: var(--shadow-md); }
+  .kd-api-top { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem 1rem; }
+  .kd-api-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+  .kd-api-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+  .kd-api-meta b { color: var(--text); font-weight: 600; }
+  .kd-api-btns { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; }
+  .kd-btn { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; color: #fff; background: var(--accent); border: 1px solid var(--accent); border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+  .kd-btn:hover { background: var(--accent-hover); }
+  .kd-btn.ghost { color: var(--text); background: var(--bg); border-color: var(--border-strong); }
+  .kd-btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .kd-schema { margin-top: 1.15rem; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; line-height: 1.7; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.1rem; overflow-x: auto; }
+  .kd-schema .k { color: var(--accent); }
+  .kd-schema .c { color: var(--text-subtle); }
+
+  /* Toolbar */
+  .kd-tools { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; margin-bottom: 1rem; }
+  .kd-sets { display: inline-flex; gap: 0.35rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px; padding: 0.25rem; }
+  .kd-set { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); background: transparent; border: 0; border-radius: 100px; padding: 0.4rem 0.85rem; cursor: pointer; transition: color 0.2s, background 0.2s; }
+  .kd-set[aria-selected="true"] { color: #fff; background: var(--accent); }
+  .kd-search { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 0.5rem; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; padding: 0.15rem 0.8rem; }
+  .kd-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+  .kd-search span { color: var(--text-subtle); font-size: 1rem; }
+  .kd-search input { flex: 1; background: transparent; border: 0; outline: none; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.9rem; padding: 0.55rem 0; }
+
+  .kd-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+  .kd-cat { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 100px; padding: 0.32rem 0.75rem; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+  .kd-cat:hover { color: var(--accent); border-color: var(--accent); }
+  .kd-cat[aria-pressed="true"] { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .kd-count { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+  /* Entry grid */
+  .kd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); gap: 0.9rem; }
+  .kd-entry { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.1rem; transition: border-color 0.2s, transform 0.18s var(--ease-smooth), box-shadow 0.2s; }
+  .kd-entry:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 24px -16px var(--glow-color); }
+  .kd-entry-top { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; margin-bottom: 0.4rem; }
+  .kd-term { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--text-strong); }
+  .kd-cat-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--accent); background: var(--accent-bg); border-radius: 4px; padding: 0.12rem 0.42rem; flex-shrink: 0; white-space: nowrap; }
+  .kd-def { font-size: 0.83rem; line-height: 1.55; color: var(--text-muted); }
+  .kd-def b { color: var(--text); font-weight: 600; }
+  .kd-link { display: inline-block; margin-top: 0.55rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; color: var(--accent); text-decoration: none; }
+  .kd-link:hover { text-decoration: underline; }
+  .kd-mark { background: color-mix(in srgb, var(--accent) 26%, transparent); border-radius: 2px; padding: 0 1px; }
+  .kd-empty { grid-column: 1 / -1; padding: 2rem; text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; }
+
+  .kd-toast { position: fixed; left: 50%; bottom: 2.4rem; transform: translateX(-50%) translateY(10px); z-index: 3100; background: var(--surface); color: var(--text); border: 1px solid var(--border-strong); border-radius: 100px; padding: 0.5rem 1.15rem; font-size: 0.82rem; box-shadow: 0 14px 34px -12px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; }
+  .kd-toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 720px) {
+    .kd-banner { top: 62px; padding: 0 1rem; }
+    .kd-stats { grid-template-columns: repeat(3, 1fr); }
+    .kd-api-btns { margin-left: 0; width: 100%; }
+  }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"SAP & Business Architecture Reference Dataset","description":"Canonical reference dataset of SAP FI/CO T-codes, tables, account keys and BIZBOK/TOGAF terms behind chatreekengpipat.github.io.","creator":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/"},"url":"https://chatreekengpipat.github.io/knowledge-data.html","inLanguage":"en"}</script>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Workspace of Chatree Kengpipat (Cee)
+  </a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head">
+      <span class="nav-drawer-title">Menu</span>
+      <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
+    </li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="information-map.html">Information Map</a>
+          <a href="organization-map.html">Organization Map</a>
+          <a href="traceability.html">Traceability Explorer</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="knowledge-data.html" class="active" aria-current="page">Reference Data &amp; API</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+<span id="main-content" tabindex="-1"></span>
+
+<canvas id="techCanvas"></canvas>
+
+<div class="kd-banner" role="note" aria-label="About this dataset">
+  <div class="kd-banner-inner">
+    <span class="kd-banner-icon" aria-hidden="true">{ }</span>
+    <div class="kd-banner-text">
+      <span class="kd-banner-tag">SINGLE SOURCE OF TRUTH</span><br>
+      Every term below lives in <strong>one file</strong> — <code>data/knowledge.js</code>. The <a href="glossary.html" style="color:var(--accent)">SAP glossary</a>, the <a href="ba-glossary.html" style="color:var(--accent)">BA glossary</a> and this page all read the <strong>same dataset</strong>; edit a term once and every consumer updates. This page also lets you <strong>export the raw JSON</strong>.
+    </div>
+  </div>
+</div>
+
+<section class="project-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>Reference Data</span>
+  </div>
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Reference Data · One Canonical Dataset</div>
+      <div class="project-meta">SAP T-codes · tables · keys · BIZBOK / TOGAF terms</div>
+      <h1>Reference <em>Data</em> &amp; API</h1>
+      <p class="project-hero-desc">
+        A small thing that separates a real system from a pile of pages: <strong>one source of truth</strong>. Every SAP T-code, table, account key and Business-Architecture term on this site is defined <strong>once</strong>, in <code>data/knowledge.js</code>, and every consumer — the two glossaries, this explorer, the command palette — reads from it. Nothing is duplicated by hand. Browse the dataset live below, filter it, then <strong>copy or download the raw JSON</strong> and take it with you.
+      </p>
+    </div>
+    <div class="project-info-card">
+      <div class="project-info-row"><span class="project-info-label">Source</span><span class="project-info-val">data/knowledge.js · one file</span></div>
+      <div class="project-info-row"><span class="project-info-label">Consumers</span><span class="project-info-val">glossary · ba-glossary · this page</span></div>
+      <div class="project-info-row"><span class="project-info-label">Schema</span><span class="project-info-val">[term, category, definition, link?]</span></div>
+      <div class="project-info-row"><span class="project-info-label">Export</span><span class="project-info-val">copy · download knowledge.json</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem 2.5rem 4rem;">
+  <div class="kd-wrap">
+
+    <div class="kd-stats" id="kdStats">
+      <div class="kd-stat"><span class="kd-stat-num" data-count="0" id="kdTotal">0</span><span class="kd-stat-label">total terms</span></div>
+      <div class="kd-stat"><span class="kd-stat-num" data-count="0" id="kdSap">0</span><span class="kd-stat-label">SAP terms</span></div>
+      <div class="kd-stat"><span class="kd-stat-num" data-count="0" id="kdBa">0</span><span class="kd-stat-label">BA terms</span></div>
+      <div class="kd-stat"><span class="kd-stat-num" data-count="0" id="kdCats">0</span><span class="kd-stat-label">categories</span></div>
+      <div class="kd-stat"><span class="kd-stat-num" id="kdVer">—</span><span class="kd-stat-label">dataset version</span></div>
+    </div>
+
+    <div class="kd-api">
+      <div class="kd-api-top">
+        <span class="kd-api-tag">▸ knowledge.json</span>
+        <span class="kd-api-meta" id="kdApiMeta"></span>
+        <div class="kd-api-btns">
+          <button type="button" class="kd-btn ghost" id="kdCopy">Copy JSON</button>
+          <button type="button" class="kd-btn" id="kdDownload">Download knowledge.json</button>
+        </div>
+      </div>
+      <div class="kd-schema" id="kdSchema"></div>
+    </div>
+
+    <div class="kd-tools">
+      <div class="kd-sets" role="tablist" aria-label="Dataset">
+        <button class="kd-set" role="tab" data-set="all" aria-selected="true">All</button>
+        <button class="kd-set" role="tab" data-set="sap" aria-selected="false">SAP FI/CO</button>
+        <button class="kd-set" role="tab" data-set="ba" aria-selected="false">Business Arch</button>
+      </div>
+      <label class="kd-search">
+        <span aria-hidden="true">⌕</span>
+        <input type="text" id="kdSearch" placeholder="Search terms and definitions…" aria-label="Search the dataset" autocomplete="off" spellcheck="false">
+      </label>
+    </div>
+
+    <div class="kd-cats" id="kdCatsRow" role="group" aria-label="Filter by category"></div>
+    <div class="kd-count" id="kdCount"></div>
+    <div class="kd-grid" id="kdGrid"></div>
+
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;border-bottom:1px solid transparent;">Colophon · how this site is built →</a></p>
+</footer>
+
+<!-- Canonical dataset — the single source of truth this page consumes and exports. -->
+<script src="data/knowledge.js"></script>
+<script>
+(function () {
+  'use strict';
+  var K = window.CK_KNOWLEDGE;
+  var grid = document.getElementById('kdGrid');
+  if (!K || !grid) {
+    if (grid) grid.innerHTML = '<div class="kd-empty">Reference data could not be loaded (data/knowledge.js). On a local file:// preview this still loads via the script tag; if you see this on the live site, the dataset failed to fetch.</div>';
+    return;
+  }
+
+  // Flatten the dataset into one working list, tagged by set.
+  var SETS = K.sets;
+  var ALL = [];
+  Object.keys(SETS).forEach(function (sk) {
+    SETS[sk].entries.forEach(function (e) {
+      ALL.push({ set: sk, term: e[0], cat: e[1], def: e[2], link: e[3] || null });
+    });
+  });
+  var sapN = SETS.sap ? SETS.sap.entries.length : 0;
+  var baN = SETS.ba ? SETS.ba.entries.length : 0;
+  var catCount = Object.keys((SETS.sap && SETS.sap.cats) || {}).length + Object.keys((SETS.ba && SETS.ba.cats) || {}).length;
+
+  // ---- Stat tiles (with a light count-up) ----
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function countUp(el, target) {
+    if (reduce.matches) { el.textContent = target.toLocaleString('en-US'); return; }
+    var dur = 900, t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min((now - t0) / dur, 1), eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(frame); else el.textContent = target.toLocaleString('en-US');
+    }
+    requestAnimationFrame(frame);
+  }
+  countUp(document.getElementById('kdTotal'), ALL.length);
+  countUp(document.getElementById('kdSap'), sapN);
+  countUp(document.getElementById('kdBa'), baN);
+  countUp(document.getElementById('kdCats'), catCount);
+  document.getElementById('kdVer').textContent = 'v' + K.version;
+  document.getElementById('kdApiMeta').innerHTML =
+    '<b>v' + K.version + '</b> · updated ' + K.updated + ' · <b>' + ALL.length + '</b> entries · ' + Object.keys(SETS).length + ' sets';
+
+  // ---- Schema doc ----
+  document.getElementById('kdSchema').innerHTML =
+    '<span class="c">// one entry — array of [term, category, definitionHTML, [href, label]?]</span><br>' +
+    '[ <span class="k">"OB40"</span>, <span class="k">"cfg"</span>, <span class="k">"&lt;b&gt;Tax account determination&lt;/b&gt; — …"</span>, [ <span class="k">"fi-tax-consultant-scope.html"</span>, <span class="k">"FI Tax scope"</span> ] ]<br>' +
+    '<span class="c">// grouped under sets.sap / sets.ba, each with its own { cats } lookup</span>';
+
+  // ---- JSON export (built on demand from the single source) ----
+  function exportObject() {
+    return { version: K.version, updated: K.updated, sets: K.sets };
+  }
+  function exportJSON() { return JSON.stringify(exportObject(), null, 2); }
+
+  var toastEl = null, toastT = null;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'kd-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    if (toastT) clearTimeout(toastT);
+    toastT = setTimeout(function () { toastEl.classList.remove('on'); }, 1400);
+  }
+  document.getElementById('kdCopy').addEventListener('click', function () {
+    var json = exportJSON();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(json).then(function () { toast('Copied ' + json.length.toLocaleString('en-US') + ' chars of JSON'); }, function () { toast('Copy blocked — use Download'); });
+    } else { toast('Clipboard unavailable — use Download'); }
+  });
+  document.getElementById('kdDownload').addEventListener('click', function () {
+    var blob = new Blob([exportJSON()], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'knowledge.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    toast('Downloading knowledge.json');
+  });
+
+  // ---- Browse / filter ----
+  var setKey = 'all', cat = 'all', q = '';
+  var setBtns = Array.prototype.slice.call(document.querySelectorAll('.kd-set'));
+  var catsRow = document.getElementById('kdCatsRow');
+  var countEl = document.getElementById('kdCount');
+  var searchEl = document.getElementById('kdSearch');
+
+  function catLabel(set, key) {
+    var c = SETS[set] && SETS[set].cats;
+    return (c && c[key]) || key;
+  }
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function hl(text, term) {
+    if (!term) return text;
+    try { var re = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'); return text.replace(re, '<mark class="kd-mark">$1</mark>'); }
+    catch (e) { return text; }
+  }
+
+  function renderCats() {
+    // categories available for the current set selection
+    var seen = [];
+    ALL.forEach(function (r) {
+      if (setKey !== 'all' && r.set !== setKey) return;
+      var id = r.set + ':' + r.cat;
+      if (seen.indexOf(id) < 0) seen.push(id);
+    });
+    var html = '<button type="button" class="kd-cat" data-c="all" aria-pressed="' + (cat === 'all') + '">All</button>';
+    seen.forEach(function (id) {
+      var parts = id.split(':'), s = parts[0], c = parts[1];
+      html += '<button type="button" class="kd-cat" data-c="' + id + '" aria-pressed="' + (cat === id) + '">' + esc(catLabel(s, c)) + '</button>';
+    });
+    catsRow.innerHTML = html;
+    catsRow.querySelectorAll('.kd-cat').forEach(function (b) {
+      b.addEventListener('click', function () { cat = b.getAttribute('data-c'); renderCats(); render(); });
+    });
+  }
+
+  function render() {
+    var ql = q.trim().toLowerCase();
+    var rows = ALL.filter(function (r) {
+      if (setKey !== 'all' && r.set !== setKey) return false;
+      if (cat !== 'all' && (r.set + ':' + r.cat) !== cat) return false;
+      if (!ql) return true;
+      return (r.term + ' ' + r.def.replace(/<[^>]+>/g, '')).toLowerCase().indexOf(ql) !== -1;
+    });
+    countEl.innerHTML = rows.length + ' of ' + ALL.length + ' entries' +
+      (setKey !== 'all' ? ' · ' + (setKey === 'sap' ? 'SAP FI/CO' : 'Business Architecture') : '') +
+      (q.trim() ? ' · matching “' + esc(q.trim()) + '”' : '');
+    if (!rows.length) { grid.innerHTML = '<div class="kd-empty">No entry matches “' + esc(q.trim()) + '”. Try a shorter term or clear the filter.</div>'; return; }
+    grid.innerHTML = rows.map(function (r) {
+      var term = ql ? hl(esc(r.term), q.trim()) : esc(r.term);
+      var def = ql ? hl(r.def, q.trim()) : r.def;
+      var link = r.link ? '<a class="kd-link" href="' + r.link[0] + '">' + esc(r.link[1]) + ' →</a>' : '';
+      return '<div class="kd-entry"><div class="kd-entry-top"><span class="kd-term">' + term + '</span>' +
+        '<span class="kd-cat-tag">' + esc(catLabel(r.set, r.cat)) + '</span></div>' +
+        '<div class="kd-def">' + def + '</div>' + link + '</div>';
+    }).join('');
+  }
+
+  setBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      setKey = b.getAttribute('data-set');
+      setBtns.forEach(function (x) { x.setAttribute('aria-selected', String(x === b)); });
+      cat = 'all';
+      renderCats(); render();
+    });
+  });
+  searchEl.addEventListener('input', function () {
+    q = searchEl.value;
+    try { history.replaceState(null, '', q.trim() ? '?q=' + encodeURIComponent(q.trim()) : location.pathname); } catch (e) {}
+    render();
+  });
+  try { var _q = new URLSearchParams(location.search).get('q'); if (_q) { searchEl.value = _q; q = _q; } } catch (e) {}
+
+  renderCats();
+  render();
+})();
+</script>
+
+<script src="search.js?v=8" defer></script>
+</body>
+</html>

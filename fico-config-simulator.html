@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FI/CO Configuration Simulator · Config → Posting · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/fico-config-simulator.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="FI/CO Configuration Simulator — Chatree Kengpipat">
+<meta property="og:description" content="An interactive SAP FI/CO model: set the configuration a functional consultant maintains — tax code, valuation class, reconciliation account group — and watch the balanced FI document derive itself, each line traced back to the config object that produced it.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/fico-config-simulator.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FI/CO Configuration Simulator">
+<meta name="twitter:description" content="Set SAP FI/CO config — tax code, valuation class, reconciliation account — and watch the balanced FI document derive itself, line by line.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive SAP FI/CO configuration model by Chatree Kengpipat. Choose a transaction event (goods receipt, vendor invoice, customer billing) and the configuration behind it — tax code (T007), account determination (OBYC/VKOA), reconciliation account group — and the balanced FI document is derived live, with each posting line traced to the config object that generated it. A demonstration of functional configuration judgment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=13">
+<script src="theme.js"></script>
+<script src="animation.js?v=5" defer></script>
+<style>
+  /* ============================================================
+     FI/CO CONFIGURATION SIMULATOR — page-scoped components.
+     Built only from existing tokens (--accent, --surface, --border,
+     --radius-*, JetBrains Mono labels). No new colors, no libraries.
+     The FI document is DERIVED from the config controls in JS; nothing
+     is hard-coded, so the page proves configuration drives posting.
+     ============================================================ */
+
+  /* Persistent framing banner — sticks below the fixed nav, outside any
+     section so the scroll-reveal never hides it. Same pattern as the
+     SAP design page's honesty banner. */
+  .sim-banner {
+    position: sticky;
+    top: 72px;
+    z-index: 60;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+  .sim-banner-inner {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: blur(14px) saturate(160%);
+    border: 1px dashed var(--accent);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.2rem;
+    box-shadow: var(--shadow-md);
+  }
+  .sim-banner-icon {
+    width: 24px; height: 24px; flex-shrink: 0;
+    background: var(--accent); color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem;
+  }
+  .sim-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+  .sim-banner-text strong { color: var(--text); font-weight: 600; }
+  .sim-banner-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.66rem;
+    letter-spacing: 0.04em; color: var(--accent); font-weight: 600;
+    display: inline-block; margin-bottom: 0.15rem;
+  }
+
+  /* Summary strip (count-up on reveal) */
+  .sim-summary {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: var(--radius-md); overflow: hidden;
+    max-width: 1000px; margin: 0 auto 2.5rem;
+  }
+  .sim-summary-cell { background: var(--surface); padding: 1.3rem 1rem; text-align: center; }
+  .sim-summary-num {
+    display: block; font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em;
+    color: var(--accent); line-height: 1;
+  }
+  .sim-summary-label {
+    display: block; margin-top: 0.4rem; font-size: 0.72rem;
+    color: var(--text-muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em;
+  }
+
+  /* Transaction selector */
+  .sim-tabs {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; max-width: 1000px;
+    margin: 0 auto 1.4rem; justify-content: center;
+  }
+  .sim-tab {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 600;
+    color: var(--text-muted); background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius-pill, 999px);
+    padding: 0.6rem 1.15rem; cursor: pointer;
+    transition: color .25s var(--ease-smooth), border-color .25s var(--ease-smooth), background .25s var(--ease-smooth);
+  }
+  .sim-tab:hover { color: var(--accent); border-color: var(--accent); }
+  .sim-tab[aria-selected="true"] { color: #fff; background: var(--accent); border-color: var(--accent); }
+
+  /* Two-panel workbench: config on the left, FI document on the right */
+  .sim-wrap {
+    display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 1.5rem; max-width: 1000px; margin: 0 auto;
+  }
+  .sim-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.6rem;
+  }
+  .sim-panel-head {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+  .sim-panel-title { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 1.2rem; }
+  .sim-panel-title em { color: var(--accent); font-style: normal; }
+
+  /* Config fields */
+  .sim-field { margin-bottom: 1.15rem; }
+  .sim-field:last-child { margin-bottom: 0; }
+  .sim-field label {
+    display: block; font-size: 0.8rem; font-weight: 600; color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .sim-field-hint {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-subtle);
+    font-weight: 500;
+  }
+  .sim-control {
+    width: 100%; font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--text);
+    background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--radius);
+    padding: 0.6rem 0.7rem; transition: border-color .2s var(--ease-smooth), box-shadow .2s var(--ease-smooth);
+  }
+  .sim-control:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  select.sim-control { cursor: pointer; }
+
+  /* FI document (the derived output) */
+  .sim-doc-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;
+    margin-bottom: 1rem; flex-wrap: wrap;
+  }
+  .sim-doc-type {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);
+  }
+  .sim-doc-type b { color: var(--accent); font-weight: 600; }
+  .sim-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .sim-table thead th {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--text-subtle); font-weight: 600;
+    text-align: left; padding: 0 0.5rem 0.5rem; border-bottom: 1px solid var(--border);
+  }
+  .sim-table thead th.num { text-align: right; }
+  .sim-table tbody td { padding: 0.55rem 0.5rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .sim-table .sim-pk {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600;
+    color: var(--text); background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 5px; padding: 0.1rem 0.4rem; white-space: nowrap;
+  }
+  .sim-acct { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 600; color: var(--text-strong); }
+  .sim-acct-name { display: block; font-family: 'Inter', sans-serif; font-size: 0.74rem; color: var(--text-muted); margin-top: 0.15rem; font-weight: 400; }
+  .sim-src {
+    display: inline-block; margin-top: 0.3rem; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; color: var(--accent); background: var(--accent-bg);
+    border-radius: 4px; padding: 0.08rem 0.4rem; letter-spacing: 0.01em;
+  }
+  .sim-num { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+  .sim-num.empty { color: var(--text-subtle); font-weight: 400; }
+  .sim-row-new { animation: simFade .45s var(--ease-smooth); }
+  @keyframes simFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* Balance bar */
+  .sim-balance {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    margin-top: 1rem; padding: 0.75rem 0.9rem; border-radius: var(--radius);
+    background: var(--surface-2); border: 1px solid var(--border); flex-wrap: wrap;
+  }
+  .sim-balance-totals { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-muted); }
+  .sim-balance-totals b { color: var(--text-strong); }
+  .sim-balance-flag {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.25rem 0.7rem; border-radius: var(--radius-pill, 999px);
+  }
+  .sim-balance-flag.ok { color: #16794a; background: color-mix(in srgb, #16a34a 15%, transparent); }
+  :root[data-theme="dark"] .sim-balance-flag.ok { color: #6ee7b7; }
+  .sim-balance-flag.warn { color: #b45309; background: color-mix(in srgb, #f59e0b 18%, transparent); }
+  :root[data-theme="dark"] .sim-balance-flag.warn { color: #fcd34d; }
+
+  /* Consultant note under the document */
+  .sim-explain {
+    margin-top: 1rem; font-size: 0.82rem; line-height: 1.6; color: var(--text-muted);
+    border-left: 2px solid var(--accent); padding-left: 0.85rem;
+  }
+  .sim-explain b { color: var(--text); font-weight: 600; }
+
+  /* Explainer / config-object cards below the workbench */
+  .sim-cards {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;
+    max-width: 1000px; margin: 3rem auto 0;
+  }
+  .sim-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem;
+    transition: border-color .4s var(--ease-smooth), box-shadow .4s var(--ease-smooth), transform .4s var(--ease-smooth);
+  }
+  .sim-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 18px 38px -12px var(--glow-color), 0 0 22px var(--glow-color); }
+  .sim-card-key {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600;
+    color: var(--accent); letter-spacing: 0.03em; margin-bottom: 0.5rem;
+  }
+  .sim-card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+  .sim-card p { font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); margin: 0; }
+  .sim-card p b { color: var(--text); font-weight: 600; }
+
+  /* Reveal arming — content is visible by default; JS only "arms" the
+     hidden pre-reveal state when motion is allowed. */
+  .sim-card.armed, .sim-panel.armed { opacity: 0; transform: translateY(18px); }
+  .sim-card.armed.is-in, .sim-panel.armed.is-in {
+    opacity: 1; transform: none;
+    transition: opacity .6s var(--ease-smooth), transform .6s var(--ease-smooth);
+  }
+
+  @media (max-width: 860px) {
+    .sim-wrap { grid-template-columns: 1fr; }
+    .sim-summary { grid-template-columns: repeat(2, 1fr); }
+    .sim-banner, .sim-tabs { padding-left: 1.25rem; padding-right: 1.25rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sim-row-new { animation: none; }
+  }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"FI/CO Configuration Simulator — Chatree Kengpipat","headline":"FI/CO Configuration Simulator — Chatree Kengpipat","description":"An interactive SAP FI/CO model: choose a transaction event and its configuration (tax code, valuation class, reconciliation account group) and the balanced FI document is derived live, each line traced to the config object that generated it.","url":"https://chatreekengpipat.github.io/fico-config-simulator.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chatreekengpipat.github.io/"},{"@type":"ListItem","position":2,"name":"FI/CO Configuration Simulator","item":"https://chatreekengpipat.github.io/fico-config-simulator.html"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark"></span>
+    Workspace of Chatree Kengpipat (Cee)
+  </a>
+  <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="primary-nav">
+    <li class="nav-drawer-head">
+      <span class="nav-drawer-title">Menu</span>
+      <button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button>
+    </li>
+    <li><a href="index.html">Home</a></li>
+    <li class="nav-dd">
+      <button type="button" class="nav-dd-btn" aria-haspopup="true">Projects <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-panel">
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="information-map.html">Information Map</a>
+          <a href="organization-map.html">Organization Map</a>
+          <a href="traceability.html">Traceability Explorer</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="fico-config-simulator.html" class="active" aria-current="page">FI/CO Configuration Simulator</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="knowledge-data.html">Reference Data &amp; API</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="nav-dd-group">
+          <div class="nav-dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+<span id="main-content" tabindex="-1"></span>
+
+<!-- DYNAMIC TECH BACKGROUND -->
+<canvas id="techCanvas"></canvas>
+
+<!-- PERSISTENT FRAMING BANNER -->
+<div class="sim-banner" role="note" aria-label="About this simulator">
+  <div class="sim-banner-inner">
+    <span class="sim-banner-icon" aria-hidden="true">i</span>
+    <div class="sim-banner-text">
+      <span class="sim-banner-tag">INTERACTIVE MODEL</span><br>
+      A working model of how <strong>SAP configuration drives accounting</strong>. Set the config a functional consultant maintains — the FI document below is <strong>derived from your choices, never hard-coded</strong>. Account numbers, tax codes and keys are realistic SAP-style values chosen for demonstration, not a specific client's chart of accounts.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<section class="project-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>FI/CO Configuration Simulator</span>
+  </div>
+
+  <div class="project-hero-grid">
+    <div>
+      <div class="platform-badge">Interactive · SAP FI/CO · Config → Posting</div>
+      <div class="project-meta">Set the configuration · watch the FI document derive itself</div>
+      <h1>FI/CO Configuration <em>Simulator</em></h1>
+      <p class="project-hero-desc">
+        Most portfolios <em>describe</em> configuration. This one lets you <strong>do</strong> it. Pick a transaction event — a goods receipt, a vendor invoice, a customer billing — then set the config a functional consultant actually maintains: the <strong>tax code</strong>, the <strong>valuation class</strong> that steers account determination, the <strong>reconciliation account group</strong>. The balanced FI document rebuilds live, and every posting line is <strong>traced back to the config object</strong> (T007, OBYC, VKOA, the recon account) that produced it. It's the same logic I reason through when I configure and test SAP FI: change one setting, and see exactly which line of the journal entry moves.
+      </p>
+    </div>
+
+    <div class="project-info-card">
+      <div class="project-info-row">
+        <span class="project-info-label">Modules</span>
+        <span class="project-info-val">FI-GL · FI-AP · FI-AR · MM · SD → FI</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Config shown</span>
+        <span class="project-info-val">T007 tax · OBYC / VKOA account det. · recon accounts · posting keys</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Output</span>
+        <span class="project-info-val">Balanced FI document · Dr = Cr · line-level config trace</span>
+      </div>
+      <div class="project-info-row">
+        <span class="project-info-label">Type</span>
+        <span class="project-info-val">Interactive model</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE SIMULATOR -->
+<section style="padding: 2.5rem 2.5rem 1rem;">
+
+  <div class="sim-summary" data-summary role="list" aria-label="At a glance">
+    <div class="sim-summary-cell" role="listitem">
+      <span class="sim-summary-num" data-count="3">3</span>
+      <span class="sim-summary-label">transaction events</span>
+    </div>
+    <div class="sim-summary-cell" role="listitem">
+      <span class="sim-summary-num" data-count="4">4</span>
+      <span class="sim-summary-label">config objects wired</span>
+    </div>
+    <div class="sim-summary-cell" role="listitem">
+      <span class="sim-summary-num" data-count="0">0</span>
+      <span class="sim-summary-label">hard-coded journal lines</span>
+    </div>
+    <div class="sim-summary-cell" role="listitem">
+      <span class="sim-summary-num" data-count="100">100</span>
+      <span class="sim-summary-label">% Dr = Cr, always</span>
+    </div>
+  </div>
+
+  <!-- Transaction selector -->
+  <div class="sim-tabs" id="simTabs" role="tablist" aria-label="Transaction event">
+    <button class="sim-tab" role="tab" data-txn="gr"   aria-selected="true">Goods Receipt · MIGO 101</button>
+    <button class="sim-tab" role="tab" data-txn="ir"   aria-selected="false">Vendor Invoice · MIRO</button>
+    <button class="sim-tab" role="tab" data-txn="bill" aria-selected="false">Customer Billing · VF01</button>
+  </div>
+
+  <!-- Workbench -->
+  <div class="sim-wrap">
+    <div class="sim-panel" id="simConfigPanel" data-animate>
+      <div class="sim-panel-head">Configuration</div>
+      <div class="sim-panel-title" id="simConfigTitle">What a consultant <em>maintains</em></div>
+      <div id="simConfig"><!-- controls injected by JS --></div>
+    </div>
+
+    <div class="sim-panel" id="simDocPanel" data-animate>
+      <div class="sim-doc-head">
+        <div>
+          <div class="sim-panel-head">Result</div>
+          <div class="sim-panel-title">The <em>FI document</em></div>
+        </div>
+        <div class="sim-doc-type" id="simDocType"></div>
+      </div>
+      <table class="sim-table" aria-live="polite">
+        <thead>
+          <tr>
+            <th>PK</th>
+            <th>G/L account</th>
+            <th class="num">Debit</th>
+            <th class="num">Credit</th>
+          </tr>
+        </thead>
+        <tbody id="simDocBody"></tbody>
+      </table>
+      <div class="sim-balance" id="simBalance">
+        <span class="sim-balance-totals" id="simTotals"></span>
+        <span class="sim-balance-flag ok" id="simFlag">✓ balanced</span>
+      </div>
+      <div class="sim-explain" id="simExplain"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIG-OBJECT EXPLAINERS -->
+<section style="padding: 1rem 2.5rem 3rem;">
+  <div class="sim-cards">
+    <div class="sim-card" data-animate>
+      <div class="sim-card-key">T007A · FTXP</div>
+      <div class="sim-card-title">Tax code</div>
+      <p>The tax code carries the <b>rate</b> and the <b>tax G/L account</b>. Change <b>V1 → V0</b> on a vendor invoice and the input-VAT line simply disappears — the rest of the document stands. That's why tax config is maintained once, centrally, not coded per posting.</p>
+    </div>
+    <div class="sim-card" data-animate>
+      <div class="sim-card-key">OBYC · MM → FI</div>
+      <div class="sim-card-title">Automatic account determination</div>
+      <p>On a goods receipt, SAP reads posting key <b>BSX</b> for the material's <b>valuation class</b> to pick the inventory account, and <b>WRX</b> for GR/IR clearing. Switch the valuation class and the debit account changes — no manual G/L entry, ever.</p>
+    </div>
+    <div class="sim-card" data-animate>
+      <div class="sim-card-key">VKOA · SD → FI</div>
+      <div class="sim-card-title">Revenue account determination</div>
+      <p>Billing resolves the revenue account from account key <b>ERL</b> so sales post to the right P&amp;L line automatically, while output VAT posts to its own tax account. Configuration, not a hand-picked account, decides where revenue lands.</p>
+    </div>
+    <div class="sim-card" data-animate>
+      <div class="sim-card-key">Recon account · account group</div>
+      <div class="sim-card-title">Sub-ledger → G/L link</div>
+      <p>The vendor's or customer's <b>account group</b> fixes the <b>reconciliation account</b> — the single G/L account that mirrors every sub-ledger posting. It's how AP and AR stay tied to the general ledger without a manual reconciliation step.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Chatree Kengpipat · SAP FI/CO &amp; ERP Implementation Consultant · Business Architecture Analyst</p>
+  <p>Bangkok · Thailand</p>
+  <p style="margin-top:0.5rem;"><a href="colophon.html" style="color:var(--text-subtle);font-size:0.78rem;text-decoration:none;border-bottom:1px solid transparent;">Colophon · how this site is built →</a></p>
+</footer>
+
+<!-- ============================================================
+     PAGE-SCOPED MOTION ENGINE (fico-config-simulator)
+     Reveal is an ENHANCEMENT: content is visible by default and only
+     "armed" (hidden pre-reveal) when this script runs AND motion is
+     allowed. A safety timeout + immediate in-view pass guarantee
+     nothing can stay stuck hidden. No-ops for prefers-reduced-motion.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function countUp(el, finalText) {
+    var m = String(finalText).match(/^(\D*)([\d.,]+)(.*)$/);
+    if (!m) return;
+    var pre = m[1] || '', numStr = m[2], suf = m[3] || '';
+    var target = parseFloat(numStr.replace(/,/g, ''));
+    if (isNaN(target)) return;
+    var decimals = (numStr.split('.')[1] || '').length;
+    var dur = 1100, t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min((now - t0) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var cur = target * eased;
+      el.textContent = pre + (decimals ? cur.toFixed(decimals) : Math.round(cur).toLocaleString('en-US')) + suf;
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = finalText;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-animate]'));
+  var summary = document.querySelector('.sim-summary[data-summary]');
+
+  function reveal(el) {
+    if (el.classList.contains('is-in')) return;
+    el.classList.add('is-in');
+  }
+  function revealSummary(strip) {
+    if (strip.dataset.done) return; strip.dataset.done = '1';
+    if (reduce.matches) return;
+    strip.querySelectorAll('.sim-summary-num[data-count]').forEach(function (el) {
+      countUp(el, el.textContent.trim());
+    });
+  }
+
+  if (!reduce.matches) items.forEach(function (c) { c.classList.add('armed'); });
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        if (e.target === summary) revealSummary(summary);
+        else reveal(e.target);
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+    items.forEach(function (c) { io.observe(c); });
+    if (summary) io.observe(summary);
+
+    requestAnimationFrame(function () {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      items.forEach(function (c) { if (c.getBoundingClientRect().top < vh * 0.92) reveal(c); });
+      if (summary && summary.getBoundingClientRect().top < vh) revealSummary(summary);
+    });
+
+    setTimeout(function () {
+      items.forEach(reveal);
+      if (summary) revealSummary(summary);
+    }, 1600);
+  } else {
+    items.forEach(reveal);
+    if (summary) revealSummary(summary);
+  }
+})();
+</script>
+
+<!-- ============================================================
+     FI/CO CONFIGURATION SIMULATOR — derivation engine
+     The FI document is computed from the config controls. Nothing in
+     the journal is hard-coded: pick a transaction, set config, and each
+     posting line (posting key, G/L account, amount) is derived and
+     traced to the config object that generated it. Debits always
+     equal credits by construction.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---- Config tables (what a consultant maintains) ---- */
+  var TAX_IN = {   // input tax (purchasing)
+    V0: { rate: 0,    name: 'Input VAT 0%',            acct: '—' },
+    V1: { rate: 0.07, name: 'Input VAT 7% · deductible', acct: '154000' }
+  };
+  var TAX_OUT = {  // output tax (sales)
+    A0: { rate: 0,    name: 'Output VAT 0%',           acct: '—' },
+    A1: { rate: 0.07, name: 'Output VAT 7% · payable', acct: '175000' }
+  };
+  var VALCLASS = {
+    '3000': { acct: '130000', name: 'Inventory — raw materials' },
+    '3100': { acct: '135000', name: 'Inventory — trading goods' },
+    '7920': { acct: '137000', name: 'Inventory — finished goods' }
+  };
+  var VENDOR_GRP = {
+    KRED: { acct: '160000', name: 'Trade payables — domestic vendor' },
+    KREM: { acct: '160100', name: 'Trade payables — one-time vendor' }
+  };
+  var CUST_GRP = {
+    DEBI: { acct: '140000', name: 'Trade receivables — domestic customer' },
+    CPD:  { acct: '140100', name: 'Trade receivables — one-time customer' }
+  };
+
+  /* ---- Transaction definitions ---- */
+  var TXN = {
+    gr: {
+      doc: 'Material doc → <b>WE</b> · movement 101',
+      controls: [
+        { id: 'valclass', label: 'Valuation class', hint: 'material master → OBYC BSX', type: 'select',
+          options: [['3000','3000 · raw materials'],['3100','3100 · trading goods'],['7920','7920 · finished goods']], value: '3000' },
+        { id: 'amount', label: 'Goods value (PO price × qty)', hint: 'THB', type: 'number', value: 10000 }
+      ],
+      build: function (s) {
+        var inv = VALCLASS[s.valclass], amt = num(s.amount);
+        return {
+          lines: [
+            { pk: '89', side: 'dr', acct: inv.acct, name: inv.name, amt: amt, src: 'OBYC · BSX (' + s.valclass + ')' },
+            { pk: '96', side: 'cr', acct: '191100', name: 'GR/IR clearing', amt: amt, src: 'OBYC · WRX' }
+          ],
+          explain: 'The goods receipt values stock into <b>' + inv.acct + ' — ' + inv.name + '</b>, chosen by OBYC key <b>BSX</b> for valuation class <b>' + s.valclass + '</b>, and parks the liability in <b>GR/IR clearing</b> until the invoice arrives. Change the valuation class and only the debit account moves.'
+        };
+      }
+    },
+    ir: {
+      doc: 'Vendor invoice → <b>KR</b>',
+      controls: [
+        { id: 'taxIn', label: 'Tax code', hint: 'T007A · input VAT', type: 'select',
+          options: [['V1','V1 · input VAT 7% (deductible)'],['V0','V0 · input VAT 0%']], value: 'V1' },
+        { id: 'vendorGrp', label: 'Vendor account group', hint: '→ reconciliation account', type: 'select',
+          options: [['KRED','KRED · domestic vendor'],['KREM','KREM · one-time vendor']], value: 'KRED' },
+        { id: 'amount', label: 'Net invoice amount', hint: 'THB', type: 'number', value: 10000 }
+      ],
+      build: function (s) {
+        var tax = TAX_IN[s.taxIn], ven = VENDOR_GRP[s.vendorGrp];
+        var net = num(s.amount), taxAmt = round2(net * tax.rate), gross = round2(net + taxAmt);
+        var lines = [
+          { pk: '40', side: 'dr', acct: '191100', name: 'GR/IR clearing', amt: net, src: 'OBYC · WRX' }
+        ];
+        if (tax.rate > 0) lines.push({ pk: '40', side: 'dr', acct: tax.acct, name: tax.name, amt: taxAmt, src: 'T007A · ' + s.taxIn });
+        lines.push({ pk: '31', side: 'cr', acct: ven.acct, name: ven.name, amt: gross, src: 'Recon acct · ' + s.vendorGrp });
+        return {
+          lines: lines,
+          explain: 'The invoice clears <b>GR/IR</b> against the vendor, and posting key <b>31</b> credits the vendor sub-ledger — mirrored to reconciliation account <b>' + ven.acct + '</b> from account group <b>' + s.vendorGrp + '</b>. Tax code <b>' + s.taxIn + '</b>' + (tax.rate > 0 ? ' adds a <b>' + (tax.rate * 100) + '% input-VAT</b> debit to ' + tax.acct + '.' : ' is 0%, so no VAT line is generated.')
+        };
+      }
+    },
+    bill: {
+      doc: 'Billing doc → <b>RV</b>',
+      controls: [
+        { id: 'taxOut', label: 'Tax code', hint: 'T007A · output VAT', type: 'select',
+          options: [['A1','A1 · output VAT 7% (payable)'],['A0','A0 · output VAT 0%']], value: 'A1' },
+        { id: 'custGrp', label: 'Customer account group', hint: '→ reconciliation account', type: 'select',
+          options: [['DEBI','DEBI · domestic customer'],['CPD','CPD · one-time customer']], value: 'DEBI' },
+        { id: 'amount', label: 'Net sales amount', hint: 'THB', type: 'number', value: 10000 }
+      ],
+      build: function (s) {
+        var tax = TAX_OUT[s.taxOut], cust = CUST_GRP[s.custGrp];
+        var net = num(s.amount), taxAmt = round2(net * tax.rate), gross = round2(net + taxAmt);
+        var lines = [
+          { pk: '01', side: 'dr', acct: cust.acct, name: cust.name, amt: gross, src: 'Recon acct · ' + s.custGrp },
+          { pk: '50', side: 'cr', acct: '800000', name: 'Sales revenue — domestic', amt: net, src: 'VKOA · ERL' }
+        ];
+        if (tax.rate > 0) lines.push({ pk: '50', side: 'cr', acct: tax.acct, name: tax.name, amt: taxAmt, src: 'T007A · ' + s.taxOut });
+        return {
+          lines: lines,
+          explain: 'Posting key <b>01</b> debits the customer sub-ledger — mirrored to reconciliation account <b>' + cust.acct + '</b> from group <b>' + s.custGrp + '</b>. Revenue lands in <b>800000</b> via VKOA account key <b>ERL</b>' + (tax.rate > 0 ? ', and output VAT of <b>' + (tax.rate * 100) + '%</b> credits ' + tax.acct + '.' : ' with no output VAT (0% code).')
+        };
+      }
+    }
+  };
+
+  /* ---- Helpers ---- */
+  function num(v) { var n = parseFloat(String(v).replace(/,/g, '')); return isNaN(n) || n < 0 ? 0 : n; }
+  function round2(n) { return Math.round(n * 100) / 100; }
+  function fmt(n) {
+    return n.toLocaleString('en-US', { minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2 });
+  }
+
+  /* ---- DOM ---- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.sim-tab'));
+  var configEl = document.getElementById('simConfig');
+  var bodyEl = document.getElementById('simDocBody');
+  var docTypeEl = document.getElementById('simDocType');
+  var totalsEl = document.getElementById('simTotals');
+  var flagEl = document.getElementById('simFlag');
+  var explainEl = document.getElementById('simExplain');
+  if (!configEl || !bodyEl) return;
+
+  var current = 'gr';
+  var state = {};
+
+  function renderControls(key) {
+    var def = TXN[key];
+    state = {};
+    configEl.innerHTML = '';
+    def.controls.forEach(function (c) {
+      state[c.id] = c.value;
+      var field = document.createElement('div');
+      field.className = 'sim-field';
+      var id = 'sim-' + c.id;
+      var html = '<label for="' + id + '">' + c.label + ' <span class="sim-field-hint">· ' + c.hint + '</span></label>';
+      if (c.type === 'select') {
+        html += '<select class="sim-control" id="' + id + '" data-key="' + c.id + '">' +
+          c.options.map(function (o) {
+            return '<option value="' + o[0] + '"' + (o[0] === c.value ? ' selected' : '') + '>' + o[1] + '</option>';
+          }).join('') + '</select>';
+      } else {
+        html += '<input class="sim-control" id="' + id + '" data-key="' + c.id +
+          '" type="number" min="0" step="100" value="' + c.value + '" inputmode="decimal">';
+      }
+      field.innerHTML = html;
+      configEl.appendChild(field);
+    });
+    configEl.querySelectorAll('.sim-control').forEach(function (ctrl) {
+      var evt = ctrl.tagName === 'SELECT' ? 'change' : 'input';
+      ctrl.addEventListener(evt, function () {
+        state[ctrl.getAttribute('data-key')] = ctrl.value;
+        renderDoc();
+      });
+    });
+  }
+
+  function renderDoc() {
+    var def = TXN[current];
+    var result = def.build(state);
+    docTypeEl.innerHTML = def.doc;
+
+    var totDr = 0, totCr = 0;
+    bodyEl.innerHTML = result.lines.map(function (ln) {
+      if (ln.side === 'dr') totDr += ln.amt; else totCr += ln.amt;
+      var drTxt = ln.side === 'dr' ? fmt(ln.amt) : '';
+      var crTxt = ln.side === 'cr' ? fmt(ln.amt) : '';
+      return '<tr class="sim-row-new">' +
+        '<td><span class="sim-pk">' + ln.pk + '</span></td>' +
+        '<td><span class="sim-acct">' + ln.acct + '</span>' +
+          '<span class="sim-acct-name">' + ln.name + '</span>' +
+          '<span class="sim-src">' + ln.src + '</span></td>' +
+        '<td class="sim-num' + (drTxt ? '' : ' empty') + '">' + (drTxt || '·') + '</td>' +
+        '<td class="sim-num' + (crTxt ? '' : ' empty') + '">' + (crTxt || '·') + '</td>' +
+        '</tr>';
+    }).join('');
+
+    totDr = round2(totDr); totCr = round2(totCr);
+    totalsEl.innerHTML = 'Σ Dr <b>' + fmt(totDr) + '</b> &nbsp;·&nbsp; Σ Cr <b>' + fmt(totCr) + '</b>';
+    var balanced = Math.abs(totDr - totCr) < 0.005;
+    flagEl.className = 'sim-balance-flag ' + (balanced ? 'ok' : 'warn');
+    flagEl.textContent = balanced ? '✓ balanced' : '✗ out of balance';
+    explainEl.innerHTML = result.explain;
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      current = t.getAttribute('data-txn');
+      tabs.forEach(function (x) { x.setAttribute('aria-selected', String(x === t)); });
+      renderControls(current);
+      renderDoc();
+    });
+  });
+
+  // Initial render
+  renderControls(current);
+  renderDoc();
+})();
+</script>
+
+<script src="search.js?v=8" defer></script>
+</body>
+</html>
