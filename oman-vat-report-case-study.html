@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forensic Testing of a Custom Oman VAT Report — SAP S/4HANA FI-Tax + JVA · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/oman-vat-report-case-study.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="Forensic Testing of a Custom Oman VAT Report — SAP FI-Tax + JVA">
+<meta property="og:description" content="A case study: taking over a stalled custom Oman VAT report (a clone of SAP RFUMSV00 extended for Joint Venture Accounting cash-calls), reading the ABAP to find its two-data-path architecture, and using hypothesis-matrix testing to find the real defects.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/oman-vat-report-case-study.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Forensic Testing of a Custom Oman VAT Report — SAP FI-Tax + JVA">
+<meta name="twitter:description" content="How I found the real defects in a custom Oman VAT report (RFUMSV00 + JVA) with forensic, hypothesis-driven functional testing.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="A forensic functional-testing case study: inheriting a stalled custom Oman VAT report — a clone of SAP RFUMSV00 extended for Joint Venture Accounting cash calls — reading the ABAP to uncover its two-data-path architecture, then using single-variable hypothesis matrices to find the real defects and engineer them one root cause per ticket.">
+<script>
+  /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --abyss: #0f172a;
+    --deep: #1e293b;
+    --steel: #334155;
+    --gas: #60a5fa;   /* SAP / system / data / what I own */
+    --flare: #FF6B35; /* tax / the State / boundaries */
+    --gold: #E8B04B;  /* value / deliverables / outcomes */
+    --mist: #f1f5f9;  /* body */
+    --haze: #94a3b8;  /* captions */
+    --rail-w: 232px;
+    --content-w: 800px;
+    --bar-h: 56px;
+    --display: 'Space Grotesk', system-ui, sans-serif;
+    --body: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 74px; }
+
+  body {
+    margin: 0;
+    background: var(--abyss);
+    color: var(--mist);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(59, 130, 246, 0.06), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(255, 107, 53, 0.05), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; text-wrap: balance; }
+  p { margin: 0 0 1rem; text-wrap: pretty; }
+  .chapter p:not(.caption), .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
+  a { color: var(--gas); }
+
+  .mono { font-family: var(--mono); }
+  .tcode {
+    font-family: var(--mono);
+    font-weight: 500;
+    color: var(--gas);
+    background: rgba(59, 130, 246, 0.09);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+    border-radius: 5px;
+    padding: 0.05em 0.42em;
+    font-size: 0.88em;
+    white-space: nowrap;
+  }
+
+  /* ---------- Focus visibility ---------- */
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--gas);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--gas);
+    color: var(--abyss);
+    padding: 0.7rem 1.1rem;
+    z-index: 200;
+    font-family: var(--mono);
+    font-weight: 600;
+    border-radius: 0 0 8px 0;
+  }
+  .skip:focus { left: 0; }
+
+  /* ---------- Site nav bar (links to every page) ---------- */
+  .sitebar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--bar-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.1rem; z-index: 160;
+    background: rgba(15, 23, 42, 0.86);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--steel);
+  }
+  .sitebar__logo { display: flex; align-items: center; gap: 0.55rem; text-decoration: none;
+    font-family: var(--display); font-weight: 700; font-size: 0.92rem; color: var(--mist); }
+  .sitebar__logo .mark { width: 12px; height: 12px; border-radius: 3px; background: var(--gas); box-shadow: 0 0 12px var(--gas); }
+  .sitebar__logo:hover { color: var(--gas); }
+  .sitemenu { display: flex; align-items: center; gap: 0.2rem; }
+  .sitemenu > a, .dd-btn {
+    font-family: var(--body); font-size: 0.9rem; color: var(--haze);
+    text-decoration: none; background: none; border: 0; cursor: pointer;
+    padding: 0.5rem 0.8rem; border-radius: 8px; white-space: nowrap;
+    transition: color 0.2s, background 0.2s;
+  }
+  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(59, 130, 246, 0.07); }
+  .sitemenu > a.cta { color: var(--abyss); background: var(--gas); font-weight: 600; }
+  .sitemenu > a.cta:hover { filter: brightness(1.08); background: var(--gas); }
+  .dd { position: relative; }
+  .dd-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; min-width: 320px;
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 12px;
+    padding: 0.5rem; opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    box-shadow: 0 24px 60px -24px #000; z-index: 5;
+  }
+  .dd:hover .dd-panel, .dd:focus-within .dd-panel { opacity: 1; visibility: visible; transform: none; }
+  .dd-group { padding: 0.3rem; }
+  .dd-group + .dd-group { border-top: 1px solid var(--steel); margin-top: 0.2rem; padding-top: 0.5rem; }
+  .dd-head { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gas); padding: 0.2rem 0.5rem 0.35rem; }
+  .dd-panel a { display: block; padding: 0.45rem 0.6rem; font-size: 0.86rem; color: var(--mist); text-decoration: none; border-radius: 7px; }
+  .dd-panel a:hover { background: rgba(59, 130, 246, 0.08); color: var(--gas); }
+  .dd-panel a.is-current { color: var(--gas); background: rgba(59, 130, 246, 0.06); }
+  .sitebar__burger { display: none; flex-direction: column; gap: 4px; background: none; border: 0; cursor: pointer; padding: 8px; }
+  .sitebar__burger span { width: 22px; height: 2px; background: var(--mist); border-radius: 2px; transition: transform 0.2s, opacity 0.2s; }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ---------- Left nav rail ---------- */
+  .rail {
+    position: fixed;
+    top: var(--bar-h);
+    left: 0;
+    width: var(--rail-w);
+    height: calc(100vh - var(--bar-h));
+    background: linear-gradient(180deg, var(--deep), var(--abyss));
+    border-right: 1px solid var(--steel);
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem 1.1rem;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .rail__brand {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--haze);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .rail__title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.04rem;
+    color: var(--mist);
+    margin-bottom: 1.2rem;
+    line-height: 1.25;
+  }
+  .rail__title b { color: var(--gas); font-weight: 700; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+  .rail__link {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--haze);
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border-left: 2px solid transparent;
+    font-size: 0.9rem;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .rail__link .num { font-family: var(--mono); font-size: 0.74rem; color: var(--steel); transition: color 0.2s; }
+  .rail__link:hover { color: var(--mist); background: rgba(59, 130, 246, 0.05); }
+  .rail__link.is-active {
+    color: var(--mist);
+    background: rgba(59, 130, 246, 0.09);
+    border-left-color: var(--gas);
+  }
+  .rail__link.is-active .num { color: var(--gas); }
+  .rail__companion {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--haze);
+    text-decoration: none;
+    border: 1px dashed var(--steel);
+    border-radius: 9px;
+    padding: 0.6rem 0.7rem;
+    line-height: 1.5;
+    display: block;
+  }
+  .rail__companion b { color: var(--gas); font-weight: 600; }
+  .rail__companion:hover { border-color: var(--gas); color: var(--mist); }
+  .rail__back {
+    margin-top: auto;
+    padding-top: 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--haze);
+    text-decoration: none;
+  }
+  .rail__back:hover { color: var(--gas); }
+
+  /* ---------- Main ---------- */
+  main { margin-left: var(--rail-w); padding-top: var(--bar-h); }
+  .chapter {
+    max-width: var(--content-w);
+    margin-left: max(0px, calc(50vw - var(--content-w) / 2 - var(--rail-w)));
+    margin-right: auto;
+    padding: 5.5rem 4rem 4rem;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  }
+  .chapter:first-child { padding-top: 4rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gas);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gas); box-shadow: 0 0 12px var(--gas); }
+  .chapter h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 0.6rem; }
+  .lede { font-size: 1.12rem; color: var(--mist); max-width: 64ch; }
+  .caption { color: var(--haze); font-size: 0.92rem; }
+
+  .card {
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 14px;
+    padding: 1.3rem 1.4rem;
+  }
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 760px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ---------- Hero role statement ---------- */
+  .rolestate {
+    border-left: 3px solid var(--gas);
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 0 12px 12px 0;
+    padding: 1.1rem 1.3rem;
+    margin: 1.6rem 0;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.18rem;
+    line-height: 1.45;
+    color: var(--mist);
+  }
+  .rolestate b { color: var(--gas); font-weight: 600; }
+
+  /* ---------- Segmented selectors (interfaces / lifecycle / boundaries) ---------- */
+  .seg { display: flex; gap: 0; margin: 1.3rem 0 1rem; border: 1px solid var(--steel); border-radius: 11px; overflow: hidden; flex-wrap: wrap; }
+  .seg button {
+    flex: 1 1 auto;
+    min-width: 0;
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--haze);
+    background: var(--deep);
+    border: 0;
+    border-right: 1px solid var(--steel);
+    padding: 0.75rem 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { color: var(--abyss); background: var(--gas); font-weight: 600; }
+  .seg--gold button[aria-pressed="true"] { background: var(--gas); }
+  .seg .im-here {
+    display: inline-block;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-left: 0.35rem;
+    color: var(--flare);
+    border: 1px solid var(--flare);
+    border-radius: 5px;
+    padding: 0.05em 0.3em;
+    vertical-align: middle;
+  }
+  .seg button[aria-pressed="true"] .im-here { color: var(--abyss); border-color: var(--abyss); }
+  .detail { min-height: 150px; }
+  .detail h3 { color: var(--gas); margin-bottom: 0.4rem; }
+  .seg-gold-detail h3 { color: var(--gold); }
+  .detail .role-of { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--haze); margin-bottom: 0.5rem; }
+  .detail dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1.1rem; margin: 0.6rem 0 0; font-size: 0.94rem; }
+  .detail dt { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gas); }
+  .detail dd { margin: 0; }
+  @media (max-width: 560px) { .detail dl { grid-template-columns: 1fr; gap: 0.15rem 0; } .detail dd { margin-bottom: 0.6rem; } }
+
+  /* ---------- Pillars (expanders) ---------- */
+  .pillars { margin-top: 1.4rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .pillar { border: 1px solid var(--steel); border-radius: 11px; background: var(--deep); overflow: hidden; }
+  .pillar__btn {
+    width: 100%;
+    font: inherit;
+    text-align: left;
+    background: none;
+    border: 0;
+    color: var(--mist);
+    padding: 0.95rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .pillar__btn .pnum { font-family: var(--mono); font-size: 0.78rem; color: var(--gas); flex-shrink: 0; }
+  .pillar__btn .pname { font-family: var(--display); font-weight: 600; font-size: 1.05rem; flex: 1; }
+  .pillar__btn .ptag { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--haze); }
+  .pillar__btn .chev { font-family: var(--mono); color: var(--gas); transition: transform 0.3s; flex-shrink: 0; }
+  .pillar__btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .pillar__body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .pillar__body.is-open { max-height: 760px; }
+  .pillar__body-inner { padding: 0 1.2rem 1.1rem; }
+  .pillar__body-inner p { margin: 0 0 0.7rem; font-size: 0.94rem; }
+  .pillar__body-inner .tcodes { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  /* ---------- Tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--steel); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); font-weight: 500; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ---------- Scope columns (in / out) ---------- */
+  .scope-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.3rem; }
+  @media (max-width: 720px) { .scope-cols { grid-template-columns: 1fr; } }
+  .scope-col { border: 1px solid var(--steel); border-radius: 13px; padding: 1.2rem 1.3rem; background: var(--deep); }
+  .scope-col--in { border-color: rgba(59, 130, 246, 0.45); }
+  .scope-col--out { border-color: rgba(255, 107, 53, 0.45); }
+  .scope-col h3 { display: flex; align-items: center; gap: 0.55rem; font-size: 1.1rem; }
+  .scope-col--in h3 { color: var(--gas); }
+  .scope-col--out h3 { color: var(--flare); }
+  .scope-col ul { list-style: none; margin: 0.7rem 0 0; padding: 0; }
+  .scope-col li { position: relative; padding-left: 1.5rem; margin-bottom: 0.7rem; font-size: 0.94rem; }
+  .scope-col li::before { position: absolute; left: 0; top: 0; font-family: var(--mono); }
+  .scope-col--in li::before { content: '▸'; color: var(--gas); }
+  .scope-col--out li::before { content: '✕'; color: var(--flare); }
+  .scope-col li .owner { display: block; font-family: var(--mono); font-size: 0.7rem; color: var(--haze); margin-top: 0.15rem; }
+
+  /* ---------- RACI ---------- */
+  .raci td .r { color: var(--gas); font-weight: 600; }
+  .raci td .a { color: var(--gold); font-weight: 600; }
+  .raci td .c { color: var(--mist); }
+  .raci td .i { color: var(--haze); }
+  .raci .who { font-family: var(--mono); font-size: 0.82rem; text-align: center; }
+  .raci th.who { text-align: center; }
+  .raci-legend { font-family: var(--mono); font-size: 0.74rem; color: var(--haze); margin-top: 0.7rem; line-height: 1.7; }
+  .raci-legend b { color: var(--mist); font-weight: 600; }
+
+  /* ---------- Deliverables checklist ---------- */
+  .checklist { margin-top: 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .chk {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 11px;
+    padding: 0.85rem 1.1rem;
+    color: var(--mist);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .chk:hover { border-color: var(--gas); }
+  .chk .box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--steel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--gas);
+    transition: border-color 0.2s, background 0.2s;
+    margin-top: 1px;
+  }
+  .chk[aria-checked="true"] { border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.05); }
+  .chk[aria-checked="true"] .box { border-color: var(--gas); background: var(--gas); color: var(--abyss); }
+  .chk .ctext { flex: 1; }
+  .chk .ctext .ctitle { font-weight: 500; }
+  .chk[aria-checked="true"] .ctext .ctitle { color: var(--gas); }
+  .chk .ctext .csub { display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--haze); margin-top: 0.15rem; }
+  .chk-bar { display: flex; align-items: center; gap: 1rem; margin-top: 1.1rem; }
+  .chk-bar .count { font-family: var(--mono); font-size: 0.85rem; color: var(--haze); min-width: 92px; }
+  .progress { flex: 1; height: 6px; border-radius: 99px; background: var(--steel); overflow: hidden; }
+  .progress span { display: block; height: 100%; background: var(--gas); width: 0%; transition: width 0.35s ease; }
+  .chk-reset {
+    font: inherit; font-family: var(--mono); font-size: 0.78rem;
+    background: var(--deep); border: 1px solid var(--steel); color: var(--mist);
+    border-radius: 9px; padding: 0.55rem 1rem; cursor: pointer;
+  }
+  .chk-reset:hover { border-color: var(--gas); }
+
+  /* ---------- Notes / callouts / bridge ---------- */
+  .note {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--haze);
+    border-left: 2px solid var(--steel);
+    padding-left: 0.9rem;
+  }
+  .callout {
+    border: 1px solid var(--flare);
+    border-left-width: 4px;
+    border-radius: 0 12px 12px 0;
+    background: rgba(255, 107, 53, 0.07);
+    padding: 1.1rem 1.3rem;
+    margin: 1.8rem 0;
+  }
+  .callout .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--flare); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .saythis {
+    margin-top: 1.3rem;
+    border: 1px dashed rgba(59, 130, 246, 0.4);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    background: rgba(59, 130, 246, 0.04);
+    font-style: italic;
+    font-size: 1.02rem;
+  }
+  .saythis b { font-style: normal; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; margin-bottom: 0.4rem; }
+  .onerule {
+    margin-top: 1.3rem;
+    border: 1px solid var(--gold);
+    border-left-width: 4px;
+    border-radius: 0 12px 12px 0;
+    background: rgba(232, 176, 75, 0.06);
+    padding: 1.1rem 1.3rem;
+  }
+  .onerule .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .onerule b { color: var(--gold); }
+
+  /* ---------- dl inside pillars (tax & legal detail) ---------- */
+  .pillar__body-inner dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0; font-size: 0.9rem; }
+  .pillar__body-inner dt { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gas); }
+  .pillar__body-inner dd { margin: 0; }
+  @media (max-width: 560px) { .pillar__body-inner dl { grid-template-columns: 1fr; gap: 0.1rem 0; } .pillar__body-inner dd { margin-bottom: 0.5rem; } }
+  .pillar__btn .ptag.warn { color: var(--flare); border: 1px solid var(--flare); border-radius: 5px; padding: 0.05em 0.4em; }
+
+  /* ---------- 05 SAP FI map ---------- */
+  .fimap { margin: 1.5rem 0 0.4rem; }
+  .fimap__root { text-align: center; background: var(--deep); border: 1px solid var(--gas); border-radius: 12px; padding: 0.85rem 1rem; max-width: 380px; margin: 0 auto; }
+  .fimap__root .t { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; }
+  .fimap__root .n { font-family: var(--display); font-weight: 700; font-size: 1.08rem; }
+  .fimap__stem { width: 2px; height: 22px; background: var(--steel); margin: 0 auto; }
+  .fimap__row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.55rem; }
+  .fimap__subrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; }
+  @media (max-width: 720px) { .fimap__row { grid-template-columns: repeat(2, 1fr); } .fimap__subrow { grid-template-columns: 1fr; } }
+  .fimap__node { font: inherit; cursor: pointer; text-align: center; background: var(--deep); border: 1px solid var(--steel); border-radius: 10px; padding: 0.65rem 0.5rem; color: var(--mist); transition: transform 0.2s, border-color 0.2s, background 0.2s; }
+  .fimap__node:hover { transform: translateY(-2px); border-color: var(--gas); }
+  .fimap__node .code { font-family: var(--mono); font-weight: 600; font-size: 0.9rem; display: block; color: var(--gas); }
+  .fimap__node .lbl { font-size: 0.64rem; color: var(--haze); display: block; margin-top: 0.18rem; line-height: 1.3; }
+  .fimap__node[aria-pressed="true"] { border-color: var(--gas); background: rgba(59, 130, 246, 0.09); box-shadow: 0 0 0 1px var(--gas); }
+  .fimap__node.is-here { border-color: var(--flare); background: rgba(255, 107, 53, 0.08); }
+  .fimap__node.is-here .code { color: var(--flare); }
+  .fimap__node.is-here[aria-pressed="true"] { box-shadow: 0 0 0 1px var(--flare); }
+  .fimap__node .pin { display: none; font-family: var(--mono); font-size: 0.58rem; color: var(--flare); margin-top: 0.25rem; }
+  .fimap__node.is-here .pin { display: block; }
+
+  /* ---------- 06 T-code filter + workflow ---------- */
+  .filterbar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.2rem 0 0.9rem; }
+  .filterbar button { font: inherit; font-family: var(--mono); font-size: 0.76rem; cursor: pointer; color: var(--haze); background: var(--deep); border: 1px solid var(--steel); border-radius: 8px; padding: 0.4rem 0.85rem; transition: color 0.2s, background 0.2s, border-color 0.2s; }
+  .filterbar button:hover { color: var(--mist); border-color: var(--gas); }
+  .filterbar button[aria-pressed="true"] { color: var(--abyss); background: var(--gas); border-color: var(--gas); font-weight: 600; }
+  .workflow { margin-top: 1.3rem; }
+  .workflow h4 { font-family: var(--display); font-size: 0.98rem; margin: 0 0 0.6rem; color: var(--gas); }
+  .wf-steps { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .wf-step { flex: 1 1 132px; background: var(--deep); border: 1px solid var(--steel); border-radius: 10px; padding: 0.65rem 0.75rem; }
+  .wf-step .s { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gas); }
+  .wf-step .tc { font-family: var(--mono); font-weight: 600; font-size: 0.84rem; color: var(--mist); display: block; margin: 0.18rem 0; }
+  .wf-step .d { font-size: 0.74rem; color: var(--haze); line-height: 1.4; }
+
+  /* ---------- 06 · IMG / SPRO customizing tree ---------- */
+  .imgtree { margin-top: 1.6rem; border: 1px solid var(--steel); border-radius: 12px; overflow: hidden; background: var(--deep); }
+  .imgtree-top { display: flex; align-items: center; flex-wrap: wrap; gap: 0.3rem 0.5rem; padding: 0.7rem 1rem; background: var(--abyss); border-bottom: 1px solid var(--steel); font-family: var(--mono); font-size: 0.7rem; color: var(--haze); line-height: 1.5; }
+  .imgtree-top .tcode { font-size: 0.72rem; }
+  .imgtree-top .sep { color: var(--gas); }
+  .imgbranch { border-top: 1px solid var(--steel); }
+  .imgbranch:first-of-type { border-top: 0; }
+  .imgbranch-head { width: 100%; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1rem; background: transparent; border: 0; cursor: pointer; font: inherit; text-align: left; color: var(--mist); transition: background 0.2s; }
+  .imgbranch-head:hover { background: rgba(96, 165, 250, 0.06); }
+  .imgbranch-chev { color: var(--gas); font-family: var(--mono); font-size: 0.78rem; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); flex-shrink: 0; }
+  .imgbranch.collapsed .imgbranch-chev { transform: rotate(-90deg); }
+  .imgbranch-name { font-weight: 600; font-size: 0.92rem; }
+  .imgbranch-name .k { font-family: var(--mono); font-size: 0.62rem; color: var(--gas); background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.28); border-radius: 5px; padding: 0.05rem 0.4rem; margin-right: 0.5rem; }
+  .imgbranch-count { margin-left: auto; font-family: var(--mono); font-size: 0.64rem; color: var(--haze); }
+  .imgbranch-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.35s cubic-bezier(0.16,1,0.3,1); }
+  .imgbranch.collapsed .imgbranch-body { grid-template-rows: 0fr; }
+  .imgbranch-inner { overflow: hidden; }
+  .imgpath { font-family: var(--mono); font-size: 0.66rem; color: var(--haze); padding: 0.5rem 1rem 0.35rem 2.3rem; }
+  .imgpath .sep { color: var(--gas); }
+  .imgleaf { display: grid; grid-template-columns: 1fr auto auto; gap: 0.6rem 0.8rem; align-items: center; padding: 0.5rem 1rem 0.5rem 2.3rem; border-top: 1px dashed rgba(51, 65, 85, 0.5); }
+  .imgleaf-name { font-size: 0.85rem; color: var(--mist); line-height: 1.35; }
+  .imgleaf-name .fold { color: var(--haze); }
+  .imgleaf-tc { font-family: var(--mono); font-size: 0.72rem; }
+  .imgleaf-phase { font-family: var(--mono); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.14rem 0.45rem; border-radius: 5px; white-space: nowrap; }
+  .ph-explore { color: var(--gas); background: rgba(96, 165, 250, 0.12); border: 1px solid rgba(96, 165, 250, 0.3); }
+  .ph-realize { color: var(--gold); background: rgba(232, 176, 75, 0.12); border: 1px solid rgba(232, 176, 75, 0.3); }
+  .ph-run { color: var(--flare); background: rgba(255, 107, 53, 0.12); border: 1px solid rgba(255, 107, 53, 0.3); }
+  .imglegend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin-top: 0.9rem; font-family: var(--mono); font-size: 0.68rem; color: var(--haze); }
+  .imglegend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .imglegend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  @media (max-width: 640px) {
+    .imgleaf { grid-template-columns: 1fr auto; }
+    .imgleaf-phase { grid-column: 1 / -1; justify-self: start; }
+  }
+
+  /* ---------- 07 Timeline (Gantt) ---------- */
+  .gantt-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; margin-bottom: 1.1rem; }
+  .gantt-meta .big { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--gold); }
+  .gantt-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .gantt { min-width: 640px; }
+  .g-row { display: grid; grid-template-columns: 188px 1fr; align-items: center; gap: 0.6rem; margin: 0.3rem 0; }
+  .g-label { font-size: 0.82rem; color: var(--mist); padding-right: 0.4rem; line-height: 1.25; }
+  .g-track { position: relative; height: 30px; border-radius: 6px;
+    background: repeating-linear-gradient(90deg, transparent, transparent calc(100% / var(--cols) - 1px), var(--steel) calc(100% / var(--cols))); }
+  .g-track.head { height: auto; background: none; display: flex; }
+  .g-mon { flex: 1; text-align: center; font-family: var(--mono); font-size: 0.6rem; color: var(--haze); letter-spacing: 0.01em; border-left: 1px solid var(--steel); padding: 0.2rem 0; }
+  .g-mon:first-child { border-left: 0; }
+  .g-mon.yr { color: var(--gas); }
+  .g-bar { position: absolute; top: 5px; bottom: 5px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 0.62rem; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden;
+    left: calc((var(--s) - 1) / var(--cols) * 100%); width: calc(var(--l) / var(--cols) * 100%); min-width: 12px; color: var(--abyss); transition: filter 0.2s; }
+  .g-bar:hover { filter: brightness(1.08); }
+  .g-bar.done { background: var(--gas); }
+  .g-bar.now { background: var(--flare); box-shadow: 0 0 0 1px var(--flare), 0 0 16px rgba(255, 107, 53, 0.35); }
+  .g-bar.plan { background: transparent; border: 1px dashed var(--haze); color: var(--haze); }
+  .g-bar.live { background: var(--gold); font-weight: 600; }
+  .g-legend { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1rem; font-size: 0.72rem; color: var(--haze); }
+  .g-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .g-legend i { width: 15px; height: 10px; border-radius: 3px; display: inline-block; }
+  .g-focus { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .g-foc { display: grid; grid-template-columns: 150px 1fr; gap: 0.9rem; align-items: baseline; font-size: 0.9rem; }
+  .g-foc .ph { font-family: var(--mono); font-size: 0.72rem; color: var(--gas); }
+  .g-foc.now .ph { color: var(--flare); }
+  @media (max-width: 680px) { .g-row { grid-template-columns: 120px 1fr; } .g-foc { grid-template-columns: 1fr; gap: 0.15rem; } }
+
+  /* ---------- 08 Tax calculator ---------- */
+  .calc { border: 1px solid var(--steel); border-radius: 14px; background: var(--deep); padding: 1.3rem 1.4rem; margin: 1.2rem 0; }
+  .calc__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media (max-width: 720px) { .calc__grid { grid-template-columns: 1fr; gap: 1.1rem; } }
+  .calc label { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gas); margin: 0 0 0.35rem; }
+  .calc input[type="number"], .calc select { width: 100%; font: inherit; font-family: var(--mono); background: var(--abyss); color: var(--mist); border: 1px solid var(--steel); border-radius: 9px; padding: 0.6rem 0.7rem; }
+  .calc input[type="number"]:focus, .calc select:focus { outline: none; border-color: var(--gas); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25); }
+  .calc__field { margin-bottom: 1rem; }
+  .calc__check { display: flex; align-items: center; gap: 0.55rem; font-family: var(--mono); font-size: 0.84rem; color: var(--mist); cursor: pointer; }
+  .calc__check input { width: 18px; height: 18px; accent-color: var(--gas); }
+  .calc__line { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px dashed var(--steel); font-size: 0.92rem; }
+  .calc__line .k { color: var(--haze); }
+  .calc__line .v { font-family: var(--mono); font-weight: 600; }
+  .calc__line.vat .v { color: var(--flare); }
+  .calc__line.wht .v { color: var(--gold); }
+  .calc__line.total { border-bottom: 0; border-top: 2px solid var(--steel); margin-top: 0.3rem; padding-top: 0.6rem; }
+  .calc__line.total .k { color: var(--mist); }
+  .calc__line.total .v { color: var(--gas); font-size: 1.12rem; }
+  .taccount { margin-top: 1.1rem; border: 1px solid var(--steel); border-radius: 10px; overflow: hidden; }
+  .taccount .th { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); background: var(--abyss); padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--steel); }
+  .taccount table { width: 100%; }
+  .taccount td { padding: 0.4rem 0.85rem; font-family: var(--mono); font-size: 0.83rem; border-bottom: 1px solid rgba(51, 65, 85, 0.5); }
+  .taccount tr:last-child td { border-bottom: 0; }
+  .taccount td.amt { text-align: right; color: var(--mist); }
+  .taccount td.dr { color: var(--mist); }
+  .taccount td.cr { color: var(--haze); padding-left: 1.9rem; }
+  .taccount td.sub { color: var(--haze); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; background: rgba(59, 130, 246, 0.04); }
+
+  /* ---------- 10 Programme scale / team / impact ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin: 1.5rem 0; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--deep); border: 1px solid var(--steel); border-radius: 12px; padding: 1rem 1.1rem; }
+  .stat .v { font-family: var(--display); font-weight: 700; font-size: 1.85rem; line-height: 1; color: var(--gas); }
+  .stat .v small { font-size: 0.9rem; color: var(--haze); font-weight: 500; }
+  .stat .l { font-size: 0.74rem; color: var(--haze); margin-top: 0.45rem; line-height: 1.35; }
+  .team { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.3rem 0; }
+  @media (max-width: 720px) { .team { grid-template-columns: 1fr; } }
+  .team .card h3 { font-size: 1.0rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.2rem; }
+  .team .flag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--steel); border-radius: 5px; padding: 0.12em 0.45em; color: var(--haze); }
+  .team .onshore h3 { color: var(--gas); }
+  .team .offshore h3 { color: var(--gold); }
+  .team ul { margin: 0.5rem 0 0; padding-left: 1.1rem; }
+  .team li { font-size: 0.88rem; margin-bottom: 0.4rem; color: var(--mist); }
+  .myseat { margin-top: 1.2rem; border-left: 3px solid var(--flare); background: rgba(255, 107, 53, 0.06); border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; font-size: 0.96rem; }
+  .myseat b { color: var(--flare); }
+  .impact-list { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 1.2rem; }
+  .impact-row { display: grid; grid-template-columns: 116px 1fr; gap: 0.9rem; align-items: baseline; background: var(--deep); border: 1px solid var(--steel); border-radius: 10px; padding: 0.75rem 0.95rem; }
+  .impact-row .m { font-family: var(--display); font-weight: 700; font-size: 1.05rem; color: var(--gold); line-height: 1.2; }
+  .impact-row .t { font-size: 0.9rem; color: var(--mist); }
+  @media (max-width: 560px) { .impact-row { grid-template-columns: 1fr; gap: 0.2rem; } }
+
+  /* ---------- Image banner ---------- */
+  .banner { position: relative; border-radius: 14px; overflow: hidden; margin: 1.5rem 0; border: 1px solid var(--steel); }
+  .banner img { width: 100%; height: 230px; object-fit: cover; display: block; filter: saturate(0.96) brightness(0.9); }
+  .banner .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 1.2rem 0.9rem; background: linear-gradient(transparent, rgba(15, 23, 42, 0.92)); font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; color: var(--mist); }
+  .banner .cap b { color: var(--gas); }
+  .banner--hero img { height: 300px; filter: saturate(0.95) brightness(0.82); }
+  .banner--hero .cap { padding-top: 2rem; font-size: 0.75rem; letter-spacing: 0.04em; }
+  @media (max-width: 560px) { .banner img { height: 175px; } .banner--hero img { height: 205px; } }
+
+  /* ---------- Petroleum layer: two-track + calc ---------- */
+  .tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.3rem 0; }
+  @media (max-width: 720px) { .tracks { grid-template-columns: 1fr; } }
+  .track { border: 1px solid var(--steel); border-radius: 12px; background: var(--deep); padding: 1.1rem 1.2rem; }
+  .track--up { border-color: rgba(59, 130, 246, 0.45); }
+  .track--down { border-color: rgba(255, 107, 53, 0.4); }
+  .track__h { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.6rem; line-height: 1.4; }
+  .track--up .track__h { color: var(--gas); }
+  .track--down .track__h { color: var(--flare); }
+  .track ol { list-style: none; margin: 0; padding: 0; }
+  .track li { font-size: 0.86rem; padding: 0.32rem 0; border-bottom: 1px dashed var(--steel); display: flex; justify-content: space-between; gap: 0.6rem; align-items: center; }
+  .track li:last-child { border-bottom: 0; }
+  .track li span { font-family: var(--mono); font-size: 0.6rem; color: var(--haze); border: 1px solid var(--steel); border-radius: 5px; padding: 0.05em 0.4em; white-space: nowrap; }
+  .track li.sum { font-weight: 600; color: var(--gas); border-bottom-style: solid; }
+  .track--down li.sum { color: var(--flare); }
+  .track__note { font-size: 0.79rem; color: var(--haze); margin: 0.7rem 0 0; line-height: 1.5; }
+  .pf-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.42rem 0; border-bottom: 1px dashed var(--steel); font-size: 0.92rem; }
+  .pf-row .k { color: var(--haze); }
+  .pf-row .v { font-family: var(--mono); font-weight: 600; }
+  .pf-row.ded .v { color: var(--gold); }
+  .pf-row.sub { border-bottom: 2px solid var(--steel); }
+  .pf-row.sub .k, .pf-row.sub .v { color: var(--mist); font-weight: 700; }
+  .pf-row.tax .v { color: var(--flare); }
+  .pf-row.net { border-bottom: 0; border-top: 2px solid var(--steel); margin-top: 0.2rem; padding-top: 0.55rem; }
+  .pf-row.net .k { color: var(--mist); }
+  .pf-row.net .v { color: var(--gas); font-size: 1.12rem; }
+  .petro-take { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.1rem; }
+  .petro-take .box { border: 1px solid var(--steel); border-radius: 11px; padding: 0.85rem 1rem; background: var(--abyss); }
+  .petro-take .box .l { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--haze); }
+  .petro-take .box .n { font-family: var(--display); font-weight: 700; font-size: 1.5rem; line-height: 1.1; margin-top: 0.2rem; }
+  .petro-take .box .pct { font-family: var(--mono); font-size: 0.68rem; color: var(--haze); margin-top: 0.2rem; }
+  .petro-take .box--state .n { color: var(--flare); }
+  .petro-take .box--net .n { color: var(--gas); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-left: max(0px, calc(50vw - var(--content-w) / 2 - var(--rail-w)));
+    padding: 2.5rem 4rem;
+    max-width: var(--content-w);
+    margin-right: auto;
+  }
+  footer .foot-inner { font-size: 0.82rem; color: var(--haze); }
+  footer .sources { font-family: var(--mono); font-size: 0.74rem; margin-top: 0.6rem; line-height: 1.7; }
+
+  /* ---------- Mobile rail → top strip ---------- */
+  @media (max-width: 900px) {
+    .rail {
+      position: sticky;
+      top: var(--bar-h);
+      width: auto;
+      height: auto;
+      flex-direction: column;
+      padding: 0.8rem 1rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--steel);
+    }
+    .rail__title, .rail__companion, .rail__brand, .rail__back { display: none; }
+    .rail ol {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 0.4rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .rail ol::-webkit-scrollbar { display: none; }
+    .rail__link { border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; padding: 0.4rem 0.6rem; }
+    .rail__link.is-active { border-left: 0; border-bottom-color: var(--gas); }
+    .rail__link .name { display: none; }
+    .rail__link .num { font-size: 0.85rem; }
+    .rail__back { margin-top: 0.5rem; padding-top: 0; }
+    main, footer { margin-left: 0; }
+    main { padding-top: 0; }
+    body { padding-top: var(--bar-h); }
+    html { scroll-padding-top: 116px; }
+    .sitebar__burger { display: flex; }
+    .sitemenu {
+      position: fixed; top: var(--bar-h); left: 0; right: 0;
+      flex-direction: column; align-items: stretch; gap: 0.15rem;
+      background: var(--deep); border-bottom: 1px solid var(--steel);
+      padding: 0.6rem; max-height: calc(100vh - var(--bar-h)); overflow: auto;
+      transform: translateY(-12px); opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.22s, transform 0.22s, visibility 0.22s;
+    }
+    .sitemenu.is-open { transform: none; opacity: 1; visibility: visible; pointer-events: auto; }
+    .dd { position: static; }
+    .dd-btn { width: 100%; text-align: left; }
+    .dd-panel { position: static; opacity: 1; visibility: visible; transform: none;
+      box-shadow: none; border: 0; min-width: 0; background: none; padding: 0 0 0 0.4rem; }
+    .sitemenu > a { padding: 0.6rem 0.7rem; }
+    .chapter { padding: 3rem 1.3rem 2.5rem; }
+  }
+
+  @media (max-width: 380px) {
+    .chapter { padding: 2.4rem 1rem 2rem; }
+    .rolestate { font-size: 1.05rem; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+
+  /* ---------- Theme toggle button ---------- */
+  .theme-btn {
+    font-size: 1rem; line-height: 1; cursor: pointer;
+    padding: 0.45rem 0.65rem; border-radius: 8px;
+    background: none; border: 1px solid var(--steel); color: var(--mist);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(59, 130, 246, 0.07); }
+  .theme-btn .icon-moon { display: none; }
+  html[data-theme="light"] .theme-btn .icon-sun { display: none; }
+  html[data-theme="light"] .theme-btn .icon-moon { display: inline; }
+
+  /* ---------- Light (Day) theme ---------- */
+  html[data-theme="light"] {
+    --abyss: #f5f8fc;
+    --deep: #FFFFFF;
+    --steel: #e2e8f0;
+    --gas: #2563eb;
+    --flare: #C9501E;
+    --gold: #95680F;
+    --mist: #0f172a;
+    --haze: #586379;
+    --royalty: #8a6f1d;
+    --srb: #b1591b;
+  }
+  html[data-theme="light"] body {
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(37, 99, 235, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(201, 80, 30, 0.07), transparent 60%);
+  }
+  html[data-theme="light"] .sitebar { background: rgba(255, 255, 255, 0.86); }
+  html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.22); }
+  html[data-theme="light"] .tcode { background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.30); }
+  html[data-theme="light"] .theme-btn:hover { background: rgba(37, 99, 235, 0.08); }
+
+  /* ============================================================
+     v2 — ADVANCED MOTION (page-scoped)
+     Scroll-reveal is layered over visible content: the hidden
+     pre-state (.rv) is added only by JS, so content is always
+     visible if JS is off or an observer misfires. No-ops under
+     prefers-reduced-motion.
+     ============================================================ */
+  .rv { opacity: 0; transform: translateY(16px); }
+  .rv-in {
+    opacity: 1; transform: none;
+    transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1),
+                transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    transition-delay: var(--rvd, 0ms);
+  }
+
+  /* ---- Timeline signature: pulse "I am here" (now) and Go-Live (live) ---- */
+  .g-bar.now {
+    animation: tlNowPulse 2.6s cubic-bezier(0.16,1,0.3,1) infinite;
+  }
+  @keyframes tlNowPulse {
+    0%, 100% { box-shadow: 0 0 0 1px var(--flare), 0 0 16px rgba(255,107,53,0.35); }
+    55%      { box-shadow: 0 0 0 1px var(--flare), 0 0 26px rgba(255,107,53,0.65); }
+  }
+  .g-bar.live {
+    animation: tlLivePulse 2.6s cubic-bezier(0.16,1,0.3,1) infinite;
+    animation-delay: 0.6s;
+  }
+  @keyframes tlLivePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,176,75,0.0); }
+    55%      { box-shadow: 0 0 0 4px rgba(232,176,75,0.28), 0 0 20px rgba(232,176,75,0.5); }
+  }
+
+  /* ---- S/4HANA modernization: ECC -> S/4 comparison cards ---- */
+  .s4grid { margin-top: 1.4rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  @media (max-width: 720px) { .s4grid { grid-template-columns: 1fr; } }
+  .s4card {
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 14px;
+    padding: 1.2rem 1.3rem;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .s4card:hover { border-color: var(--gas); transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(96,165,250,0.45); }
+  .s4head { display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.7rem; margin-bottom: 0.55rem; }
+  .s4old { color: var(--haze); text-decoration: line-through; text-decoration-color: var(--steel); }
+  .s4arrow { color: var(--gas); animation: s4flow 2.2s cubic-bezier(0.16,1,0.3,1) infinite; }
+  @keyframes s4flow { 0%,100% { transform: translateX(0); opacity: 0.7; } 50% { transform: translateX(3px); opacity: 1; } }
+  .s4new {
+    color: var(--gas); font-weight: 700; letter-spacing: 0.04em;
+    padding: 0.1em 0.5em; border: 1px solid rgba(96,165,250,0.4); border-radius: 5px;
+  }
+  .s4card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+  .s4was { font-size: 0.86rem; color: var(--haze); margin: 0 0 0.45rem; line-height: 1.5; }
+  .s4now { font-size: 0.9rem; color: var(--mist); margin: 0 0 0.7rem; line-height: 1.5; }
+  .s4tax { font-size: 0.84rem; color: var(--mist); margin: 0; padding-top: 0.6rem; border-top: 1px solid var(--steel); line-height: 1.5; }
+  .s4tax-k { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-right: 0.4rem; }
+
+  /* ---------- 12 · Readiness matrix ---------- */
+  .rmx-legend { display: flex; flex-wrap: wrap; gap: 0.7rem 1.2rem; margin: 1.2rem 0 0.2rem; font-family: var(--mono); font-size: 0.72rem; color: var(--haze); }
+  .rmx-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .rmx-legend i { width: 22px; height: 5px; border-radius: 3px; display: inline-block; }
+  .rmx-legend .li-del { background: var(--gas); }
+  .rmx-legend .li-con { background: var(--gold); }
+  .rmx { display: grid; grid-template-columns: repeat(auto-fit, minmax(228px, 1fr)); gap: 0.7rem; margin-top: 1rem; }
+  .rmx-item {
+    text-align: left; font: inherit; cursor: pointer; width: 100%;
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 11px;
+    padding: 0.9rem 1rem; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .rmx-item:hover { border-color: var(--gas); transform: translateY(-2px); }
+  .rmx-item.is-active { border-color: var(--gas); box-shadow: 0 0 0 1px var(--gas); }
+  .rmx-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .rmx-name { font-size: 0.92rem; color: var(--mist); font-weight: 500; line-height: 1.25; }
+  .rmx-badge { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; padding: 0.14rem 0.42rem; border-radius: 5px; white-space: nowrap; flex-shrink: 0; }
+  .rmx-badge.delivered { color: var(--gas); background: rgba(96,165,250,0.13); border: 1px solid rgba(96,165,250,0.32); }
+  .rmx-badge.concept { color: var(--gold); background: rgba(232,176,75,0.12); border: 1px solid rgba(232,176,75,0.32); }
+  .rmx-meter { display: flex; gap: 4px; }
+  .rmx-dot { flex: 1; height: 5px; border-radius: 3px; background: var(--steel); transition: background 0.3s; }
+  .rmx-item[data-tone="delivered"] .rmx-dot.on { background: var(--gas); }
+  .rmx-item[data-tone="concept"] .rmx-dot.on { background: var(--gold); }
+  .rmx-detail { margin-top: 0.9rem; min-height: 3rem; }
+  .rmx-detail .rmx-d-tag { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 0.35rem; }
+  .rmx-detail .rmx-d-tag.delivered { color: var(--gas); }
+  .rmx-detail .rmx-d-tag.concept { color: var(--gold); }
+  .rmx-detail h4 { margin: 0 0 0.35rem; font-size: 1rem; }
+  .rmx-detail p { margin: 0; font-size: 0.92rem; color: var(--mist); line-height: 1.55; }
+  .rmx-detail .rmx-empty { color: var(--haze); font-family: var(--mono); font-size: 0.82rem; }
+
+  /* ---------- 12 · Hypercare triage ---------- */
+  .hcp { margin-top: 1.8rem; background: var(--deep); border: 1px solid var(--steel); border-radius: 14px; padding: 1.3rem 1.4rem; }
+  .hcp-inc { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 1.05rem; }
+  .hcp-sev { font-family: var(--mono); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #1a0a04; background: var(--flare); border-radius: 5px; padding: 0.24rem 0.48rem; flex-shrink: 0; margin-top: 0.12rem; }
+  .hcp-inc-txt { font-size: 0.96rem; color: var(--mist); line-height: 1.5; }
+  .hcp-inc-txt b { color: var(--mist); font-weight: 700; }
+  .hcp-q { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--haze); margin-bottom: 0.6rem; }
+  .hcp-opts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .hcp-opt {
+    font: inherit; font-family: var(--mono); font-size: 0.8rem; cursor: pointer;
+    color: var(--mist); background: var(--abyss); border: 1px solid var(--steel);
+    border-radius: 9px; padding: 0.6rem 0.9rem; transition: border-color 0.2s, background 0.2s, color 0.2s, opacity 0.2s;
+  }
+  .hcp-opt:hover { border-color: var(--gas); }
+  .hcp-opt.correct { border-color: var(--gas); background: rgba(96,165,250,0.13); color: var(--gas); font-weight: 600; }
+  .hcp-opt.dim { opacity: 0.55; }
+  .hcp-verdict { border-radius: 10px; padding: 0.9rem 1.05rem; font-size: 0.9rem; line-height: 1.55; color: var(--mist); }
+  .hcp-verdict .vlabel { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; font-weight: 700; }
+  .hcp-verdict.ok { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.3); }
+  .hcp-verdict.ok .vlabel { color: var(--gas); }
+  .hcp-verdict.meh { background: rgba(232,176,75,0.07); border: 1px solid rgba(232,176,75,0.28); }
+  .hcp-verdict.meh .vlabel { color: var(--gold); }
+  .hcp-res { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px dashed var(--steel); animation: hcpReveal 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes hcpReveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .hcp-res ol { margin: 0.4rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .hcp-res li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; align-items: start; font-size: 0.9rem; color: var(--mist); line-height: 1.5; }
+  .hcp-res .rstep { font-family: var(--mono); font-size: 0.62rem; font-weight: 700; color: var(--gas); background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); border-radius: 5px; padding: 0.15rem 0.4rem; white-space: nowrap; margin-top: 0.1rem; }
+  .hcp-res .rt { font-family: var(--mono); font-size: 0.72rem; color: var(--gold); font-weight: 600; }
+  .hcp-res-title { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); margin-bottom: 0.2rem; }
+
+  /* ---------- Scroll progress indicator ---------- */
+  .scrollprog {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    transform: scaleX(0); transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--gas), var(--gold));
+    z-index: 190; pointer-events: none; will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; transform: none; }
+    .g-bar.now, .g-bar.live { animation: none; }
+    .s4arrow { animation: none; }
+    .hcp-res { animation: none; }
+  }
+</style>
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Forensic Testing of a Custom Oman VAT Report — SAP FI-Tax + JVA","headline":"Forensic Testing of a Custom Oman VAT Report — SAP FI-Tax + JVA","description":"A case study: taking over a stalled custom Oman VAT report (a clone of SAP RFUMSV00 extended for Joint Venture Accounting cash-calls), reading the ABAP to find its two-data-path architecture, and using hypothesis-matrix testing to find the real defects.","url":"https://chatreekengpipat.github.io/oman-vat-report-case-study.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chatreekengpipat.github.io/"},{"@type":"ListItem","position":2,"name":"Forensic Testing of a Custom Oman VAT Report — SAP FI-Tax + JVA","item":"https://chatreekengpipat.github.io/oman-vat-report-case-study.html"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- SITE NAV BAR — links to every page, mirrors the main site nav -->
+<header class="sitebar">
+  <a class="sitebar__logo" href="index.html"><span class="mark" aria-hidden="true"></span>Chatree Kengpipat (Cee)</a>
+  <button type="button" class="sitebar__burger" id="siteBurger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="sitemenu" id="siteMenu" aria-label="Site">
+    <div class="dd">
+      <button type="button" class="dd-btn" aria-haspopup="true">Projects <span aria-hidden="true">▾</span></button>
+      <div class="dd-panel">
+        <div class="dd-group">
+          <div class="dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="traceability.html">Traceability Explorer</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        <div class="dd-group">
+          <div class="dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">SAP FI Tax Methodology · Accenture × PTTEP</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+          <a href="oman-vat-report-case-study.html" class="is-current" aria-current="page">Oman VAT Report — Forensic FUT Case Study</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </div>
+    <a href="index.html#featured-award">Award</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#methodology">Method</a>
+    <a href="index.html#academic">Academic</a>
+    <a href="index.html#contact" class="cta">Contact</a>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle day and night theme" title="Toggle day / night">
+      <span class="icon-sun" aria-hidden="true">☀</span><span class="icon-moon" aria-hidden="true">☾</span>
+    </button>
+  </nav>
+</header>
+
+<!-- LEFT NAV RAIL -->
+<nav class="rail" aria-label="Section navigation">
+  <a class="rail__brand" href="index.html">← Chatree · Portfolio</a>
+  <div class="rail__title">Custom Oman VAT Report<br><b>Forensic FUT Case Study</b></div>
+  <ol>
+    <li><a class="rail__link" href="#hero" data-spy><span class="num">00</span><span class="name">The case</span></a></li>
+    <li><a class="rail__link" href="#situation" data-spy><span class="num">01</span><span class="name">Situation</span></a></li>
+    <li><a class="rail__link" href="#evidence" data-spy><span class="num">02</span><span class="name">Knowledge base</span></a></li>
+    <li><a class="rail__link" href="#paths" data-spy><span class="num">03</span><span class="name">Two data paths</span></a></li>
+    <li><a class="rail__link" href="#splitting" data-spy><span class="num">04</span><span class="name">JVA splitting</span></a></li>
+    <li><a class="rail__link" href="#findings" data-spy><span class="num">05</span><span class="name">Findings register</span></a></li>
+    <li><a class="rail__link" href="#engineering" data-spy><span class="num">06</span><span class="name">Defect engineering</span></a></li>
+    <li><a class="rail__link" href="#human" data-spy><span class="num">07</span><span class="name">The human layer</span></a></li>
+    <li><a class="rail__link" href="#principles" data-spy><span class="num">08</span><span class="name">Principles</span></a></li>
+    <li><a class="rail__link" href="#skills" data-spy><span class="num">09</span><span class="name">Skills &amp; tools</span></a></li>
+  </ol>
+  <a class="rail__companion" href="fi-tax-consultant-scope.html">Companion →<br><b>FI Tax · Scope of Work</b></a>
+  <a class="rail__back" href="index.html">Back to portfolio →</a>
+</nav>
+
+<main id="main">
+
+  <!-- 00 THE CASE -->
+  <section class="chapter" id="hero">
+    <div class="banner banner--hero">
+      <img src="media/platform-hero.jpg" alt="Offshore oil and gas production platform standing in open sea" loading="eager" width="1600" height="1200">
+      <div class="cap"><b>Accenture × PTTEP</b> · SAP S/4HANA — forensic functional testing of a custom Oman VAT report (FI-Tax + JVA)</div>
+    </div>
+    <div class="eyebrow"><span class="dot"></span>00 · The case</div>
+    <h2>I inherited a stalled <span style="color:var(--gas)">custom VAT report</span> and found its real defects by testing it like a forensic experiment.</h2>
+
+    <div class="rolestate">
+      <b>Role — SAP FI-Tax Consultant, WRICEF object owner</b> during the Functional Unit Test (FUT) phase of a large S/4HANA implementation for an upstream oil &amp; gas company. <b>The object:</b> the statutory VAT report for the Omani company code — a custom clone of SAP standard report <b>RFUMSV00</b> (Advance Return for Tax on Sales/Purchases), extended to display <b>Joint Venture Accounting (JVA)</b> cash-call transactions that the standard report structurally cannot see. Environment: 3-decimal local currency (<b>OMR</b>), documents posted in <b>USD</b>, a parallel group-currency (LC2) ledger, and quarterly VAT filing where the report's final balance page is the filing basis.
+    </div>
+
+    <div class="grid grid-2" style="margin-top:1.4rem">
+      <div class="card"><b class="mono" style="color:var(--gas);font-size:0.72rem;letter-spacing:.1em">01 · READ THE CODE</b><p style="margin:.4rem 0 0">Read the ABAP to uncover a <b>two-data-path architecture</b> — and turned defect hunting into prediction: check every column on both paths before anyone reports it broken.</p></div>
+      <div class="card"><b class="mono" style="color:var(--gas);font-size:0.72rem;letter-spacing:.1em">02 · DISPROVED A NULL TEST</b><p style="margin:.4rem 0 0">A trusted on/off comparison had run on a cash-call-only date — nothing to split. Designed a <b>discriminating run matrix</b> that proved the JV split works, and exposed a new attribution defect.</p></div>
+      <div class="card"><b class="mono" style="color:var(--gas);font-size:0.72rem;letter-spacing:.1em">03 · ENGINEERED THE DEFECTS</b><p style="margin:.4rem 0 0">Seven findings, <b>one root cause per ticket</b>, each shipped with pre-computed expected values from posted data so retest completes in a single run.</p></div>
+      <div class="card"><b class="mono" style="color:var(--gas);font-size:0.72rem;letter-spacing:.1em">04 · EVIDENCE-FIRST</b><p style="margin:.4rem 0 0">Every claim carries a confidence label — <b>observed · arithmetic · code-confirmed · inference</b> — so no conclusion ever outruns its evidence.</p></div>
+    </div>
+  </section>
+
+  <!-- 01 SITUATION -->
+  <section class="chapter" id="situation">
+    <div class="eyebrow"><span class="dot"></span>01 · Situation</div>
+    <h2>A stalled sign-off, behind the wrong blocker.</h2>
+    <p class="lede">I inherited the object mid-phase from a consultant rolling off the project, with reviewer sign-off stalled behind a vaguely recorded blocker — a "JVA splitting function" — and go-live approaching.</p>
+    <p>The recorded blocker turned out to be wrong. The real defects were elsewhere entirely — invisible until the report was tested systematically. The first job wasn't to fix anything; it was to find out what was actually true.</p>
+  </section>
+
+  <!-- 02 KNOWLEDGE BASE -->
+  <section class="chapter" id="evidence">
+    <div class="eyebrow"><span class="dot"></span>02 · Before touching anything</div>
+    <h2>Rebuilding the knowledge base from primary sources.</h2>
+    <p class="lede">Rather than trusting the handover narrative, I re-verified every load-bearing claim against primary sources: the Functional Design document clause by clause, the ABAP main program, and the posted documents themselves.</p>
+    <p>Every statement in my working notes carries an explicit confidence label — so that no conclusion ever outruns its evidence. This habit repeatedly caught errors before they reached stakeholders.</p>
+    <div class="callout">
+      <div class="label">◆ The confidence labels</div>
+      Every claim is tagged with how it is known:
+      <div class="tcodes" style="margin-top:.6rem">
+        <span class="tcode">observed on screen</span><span class="tcode">arithmetic</span>
+        <span class="tcode">code-confirmed</span><span class="tcode">inference</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 TWO DATA PATHS -->
+  <section class="chapter" id="paths">
+    <div class="eyebrow"><span class="dot"></span>03 · The master key</div>
+    <h2>One report, two data paths.</h2>
+    <p class="lede">Reading the code revealed the architecture that explains nearly every defect found. Almost every defect reduced to one pattern: a feature was implemented on the standard path, and the second path was never followed through.</p>
+
+    <div class="grid grid-2" style="margin-top:1.2rem">
+      <div class="card">
+        <h3 style="color:var(--gas);font-size:1.06rem;margin:0">▸ Standard path</h3>
+        <p style="margin:.5rem 0 0">Tax lines selected from table <span class="tcode">BSET</span>, exactly as standard <span class="tcode">RFUMSV00</span> works. <b>All balance pages are built here.</b></p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--flare);font-size:1.06rem;margin:0">▸ Cash-call path</h3>
+        <p style="margin:.5rem 0 0">JVA cash calls post as vendor special-G/L transfers with <b>no tax line at all</b> — therefore no <span class="tcode">BSET</span> entry, therefore invisible to the standard logic. A custom read from <span class="tcode">BSEG</span> / <span class="tcode">ACDOCA</span> was added at <span class="tcode">END-OF-SELECTION</span> to display them.</p>
+      </div>
+    </div>
+    <p class="note">Recognizing the pattern converted defect hunting from guesswork into <b>prediction</b> — each new column or behaviour could be checked on <b>both paths</b> before anyone reported it broken.</p>
+  </section>
+
+  <!-- 04 JVA SPLITTING -->
+  <section class="chapter" id="splitting">
+    <div class="eyebrow"><span class="dot"></span>04 · The disputed feature</div>
+    <h2>Verifying "JVA splitting" scientifically.</h2>
+    <p class="lede">The splitting feature — dividing tax lines among joint-venture partners by equity share — had been declared both "broken" and "working" by different observers. I treated it as a hypothesis problem.</p>
+
+    <div class="grid grid-2" style="margin-top:1.2rem">
+      <div class="card"><b class="mono" style="color:var(--gold);font-size:.72rem;letter-spacing:.1em">LOCATED IN CODE</b><p style="margin:.4rem 0 0">Found the split call: gated by the activation checkbox plus a company-code JVA-active check, and applied <b>only to the standard path</b> — which proved a previously trusted on/off comparison, run on a cash-call-only date, was a <b>null test</b> (there was nothing to split).</p></div>
+      <div class="card"><b class="mono" style="color:var(--gold);font-size:.72rem;letter-spacing:.1em">THE LOGIC TRAP</b><p style="margin:.4rem 0 0">Identical before/after totals <b>cannot distinguish</b> "split works at 100% equity share" from "split does nothing" — a positive result both hypotheses predict proves neither.</p></div>
+      <div class="card"><b class="mono" style="color:var(--gold);font-size:.72rem;letter-spacing:.1em">DISCRIMINATING RUN</b><p style="margin:.4rem 0 0">Designed a matrix — one variable per run, expected outcome written per hypothesis <b>before</b> execution — and found the decisive case: a single document spanning two ventures. The tax line split into two, correctly pro-rated → <b>the split works.</b></p></div>
+      <div class="card"><b class="mono" style="color:var(--flare);font-size:.72rem;letter-spacing:.1em">NEW DEFECT EXPOSED</b><p style="margin:.4rem 0 0">The same run showed both split lines carrying the <b>first venture's</b> attributes (Profit Center / Joint Venture / Equity Group) — misattributing one partner's tax to another. Arithmetically right, informationally useless. Raised with per-line expected values from the posted document.</p></div>
+    </div>
+    <div class="saythis"><b>The move</b>Design the run whose outcome would come out <i>different</i> under each hypothesis — then the result actually decides something.</div>
+  </section>
+
+  <!-- 05 FINDINGS -->
+  <section class="chapter" id="findings">
+    <div class="eyebrow"><span class="dot"></span>05 · Findings register</div>
+    <h2>What systematic testing surfaced.</h2>
+    <p class="lede">Condensed. Nearly every root cause traces back to the same pattern — a feature built on the standard path and never carried to the custom one.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>Defect found</th><th>Root cause</th></tr></thead>
+        <tbody>
+          <tr><td><b>Final balance page</b></td><td>Cash-call amounts reach "Balance per company code" but never the final "Balance of all company codes" — the page the VAT return is filed from</td><td>Consolidation step for the custom path left unimplemented in code</td></tr>
+          <tr><td><b>Currency display</b></td><td>Cash-call block shown under USD / 2 decimals with a blank transaction key, although amounts were already correct OMR values</td><td>Reporting-currency key never assigned on the custom path</td></tr>
+          <tr><td><b>Document scope</b></td><td>Only vendor-side cash calls selectable; FD requires customer side too</td><td>Document type hardcoded</td></tr>
+          <tr><td><b>Line attributes</b></td><td>Equity Group and Tax Reporting Date blank on cash-call lines</td><td>Fields fetched but never assigned / wrong source field</td></tr>
+          <tr><td><b>JVA split output</b></td><td>Split lines inherit the first venture's attributes</td><td>Attributes assigned per document instead of per split line</td></tr>
+          <tr><td><b>Report layout</b></td><td>Four FD-required currency columns (LC2 pair, report-currency pair) absent from the field catalog — while the data sits fully posted in the same <span class="tcode">BSET</span> record and in <span class="tcode">ACDOCA</span> group-currency fields</td><td>Display gap, not data gap — proven by <span class="tcode">SE16N</span> before development started</td></tr>
+          <tr><td><b>Exchange rate</b></td><td>Rate type deviates from the FD-specified configuration source</td><td>Default rate type used instead of country configuration</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">One earlier suspicion was formally <b>withdrawn</b> after negative testing disproved it — kept visible in the record deliberately: showing what was ruled out is part of the evidence.</p>
+  </section>
+
+  <!-- 06 DEFECT ENGINEERING -->
+  <section class="chapter" id="engineering">
+    <div class="eyebrow"><span class="dot"></span>06 · Method</div>
+    <h2>Defect engineering, not just defect reporting.</h2>
+    <p class="lede">A defect is only useful if it can be fixed once, correctly, without breaking a correct value on the way. That is a design problem, and I treated it as one.</p>
+
+    <div class="grid grid-2" style="margin-top:1.2rem">
+      <div class="card"><b>One root cause per ticket.</b> Bundled tickets die of partial fixes — the first fix closes the ticket and the second defect ships. Related tickets carry an explicit "must not be closed by the other fix" line.</div>
+      <div class="card"><b>Expected results pre-computed from posted data.</b> Every ticket ships with verification documents and exact expected values, so retest completes in a single run the day the fix lands.</div>
+      <div class="card"><b>Guards against predictable wrong fixes</b> written into the ticket itself — e.g. "amounts are already correct OMR; assign the currency key, do <b>not</b> convert again", preventing a double conversion that would corrupt correct values.</div>
+      <div class="card"><b>Read from the document, never recalculate.</b> Report values must equal what posting wrote to the ledger; runtime conversion breaks reconciliation with the GL the moment a rate table moves.</div>
+      <div class="card"><b>Evidence discipline.</b> Selection screen captured before every execute; ground truth via <span class="tcode">SE16N</span> / <span class="tcode">FB03</span> before any conclusion; the strongest evidence built as an <b>A/B contrast inside a single artifact</b> — a correct standard line beside the defective custom line, or the same amount present on one balance page and absent on the next.</div>
+      <div class="card"><b>Environment traps codified.</b> <span class="tcode">SE16N</span> shows 3-decimal-currency fields as raw values (a ×10 reading trap, caught by cross-checking arithmetic against <span class="tcode">FB03</span>); update-run mode is never ticked during testing because it permanently stamps the documents.</div>
+    </div>
+  </section>
+
+  <!-- 07 HUMAN LAYER -->
+  <section class="chapter" id="human">
+    <div class="eyebrow"><span class="dot"></span>07 · The human layer</div>
+    <h2>The fix is only half the job.</h2>
+    <p class="lede">A correct diagnosis routed to the wrong owner, or phrased so it invites the wrong fix, is worse than no diagnosis. Getting the fix to land is its own discipline.</p>
+
+    <div class="grid grid-2" style="margin-top:1.2rem">
+      <div class="card"><b>Reframed an invalid comparison.</b> When the developer asked to "compare the behaviour in the standard TCODE", the trap was that cash calls <b>cannot appear in the standard report at all</b> — a naive comparison would show an empty screen and end the discussion. I reframed the valid comparison (the currency-key behaviour the standard applies to every line it outputs), ran the standard baseline, and delivered retest criteria with it.</div>
+      <div class="card"><b>Held the line on a statutory defect.</b> A fix initially described as "display beautification" was kept on record as a statutory-currency defect — without confrontation, by anchoring to what the reporting currency means on a VAT filing.</div>
+      <div class="card"><b>Scope governance.</b> When two on-hold columns could ride the same code change for free, I requested written reviewer approval before instructing the developer, and delivered them hidden-by-default pending the end user's decision — build-to-spec efficiency without silent scope creep.</div>
+      <div class="card"><b>Took formal ownership</b> of the object at the outgoing consultant's roll-off, including redirecting the development team's future defect and configuration questions to me directly.</div>
+    </div>
+  </section>
+
+  <!-- 08 PRINCIPLES -->
+  <section class="chapter" id="principles">
+    <div class="eyebrow"><span class="dot"></span>08 · Principles this burned in</div>
+    <h2>Five rules I now test everything against.</h2>
+    <div class="saythis"><b>Design for difference</b>A positive result that every hypothesis predicts proves nothing — design the run that would come out <i>different</i>.</div>
+    <div class="saythis"><b>Null tests</b>A test with nothing to act on is a null test, no matter how clean it looks.</div>
+    <div class="saythis"><b>Reports read; they don't fix</b>Wrong posted values are corrected at the source, never masked in the display.</div>
+    <div class="saythis"><b>Label every claim</b>Every claim gets a label — observed, arithmetic, code-confirmed, or inference — and the label travels with it.</div>
+    <div class="saythis"><b>Retest should cost one run</b>Expected values are ready before the fix is.</div>
+  </section>
+
+  <!-- 09 SKILLS -->
+  <section class="chapter" id="skills">
+    <div class="eyebrow"><span class="dot"></span>09 · Skills &amp; tools demonstrated</div>
+    <h2>What this engagement exercised.</h2>
+    <p class="lede">Deep FI-Tax on the SAP data model, JVA, multi-currency, code reading for root cause, and test design that refuses to be fooled by a clean-looking null.</p>
+
+    <div style="display:flex;flex-direction:column;gap:.9rem;margin-top:1rem">
+      <div><div class="mono" style="font-size:.68rem;letter-spacing:.1em;color:var(--haze);margin-bottom:.35rem">SAP FI-TAX &amp; PLATFORM</div>
+        <div class="tcodes"><span class="tcode">SAP S/4HANA FI-Tax</span><span class="tcode">RFUMSV00 report family</span><span class="tcode">OB40 / FTXP</span><span class="tcode">Extended Withholding Tax</span></div></div>
+      <div><div class="mono" style="font-size:.68rem;letter-spacing:.1em;color:var(--haze);margin-bottom:.35rem">JOINT VENTURE ACCOUNTING</div>
+        <div class="tcodes"><span class="tcode">ventures &amp; equity groups</span><span class="tcode">recovery indicators</span><span class="tcode">cash calls</span><span class="tcode">tax-line splitting</span></div></div>
+      <div><div class="mono" style="font-size:.68rem;letter-spacing:.1em;color:var(--haze);margin-bottom:.35rem">SAP DATA MODEL &amp; CODE</div>
+        <div class="tcodes"><span class="tcode">BKPF</span><span class="tcode">BSEG</span><span class="tcode">BSET</span><span class="tcode">ACDOCA</span><span class="tcode">T005</span><span class="tcode">TCURR</span><span class="tcode">OB08</span><span class="tcode">SE16N</span><span class="tcode">FB03</span><span class="tcode">ABAP code reading</span></div></div>
+      <div><div class="mono" style="font-size:.68rem;letter-spacing:.1em;color:var(--haze);margin-bottom:.35rem">MULTI-CURRENCY</div>
+        <div class="tcodes"><span class="tcode">3-decimal currencies</span><span class="tcode">document / local / group / report layers</span></div></div>
+      <div><div class="mono" style="font-size:.68rem;letter-spacing:.1em;color:var(--haze);margin-bottom:.35rem">TEST DESIGN &amp; DELIVERY</div>
+        <div class="tcodes"><span class="tcode">hypothesis matrices</span><span class="tcode">negative testing</span><span class="tcode">null-test detection</span><span class="tcode">single-variable discipline</span><span class="tcode">defect lifecycle · JIRA</span><span class="tcode">evidence-first documentation</span><span class="tcode">bilingual TH/EN stakeholder comms</span></div></div>
+    </div>
+
+    <p class="note" style="margin-top:1.5rem">Companion reading: <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a> · <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a></p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    A personal methodology &amp; positioning page defining the scope of an SAP FI consultant specializing in
+    tax, written for the Accenture / PTTEP S/4HANA programme. Not affiliated with PTTEP, PTT, Accenture,
+    or SAP. Lifecycle uses the SAP Activate phase model; figures and T-codes are for reference only.
+    <div class="sources">Companion: <a href="finance-functional-module.html">SAP FI · Tax · PTTEP essentials</a>.
+      Sources: SAP Activate methodology · Thai Revenue Department (rd.go.th) · PwC Thailand Tax Summaries.</div>
+    <div class="sources">Images via Wikimedia Commons — open-sea platform © Gary Bembridge (CC BY 2.0) · offshore platform © W. Bulach (CC BY-SA 4.0).</div>
+  </div>
+</footer>
+
+<script>
+(function(){'use strict';
+  var burger=document.getElementById('siteBurger'),siteMenu=document.getElementById('siteMenu');
+  if(burger&&siteMenu){var close=function(){siteMenu.classList.remove('is-open');burger.setAttribute('aria-expanded','false');};burger.addEventListener('click',function(){var o=siteMenu.classList.toggle('is-open');burger.setAttribute('aria-expanded',o?'true':'false');});siteMenu.addEventListener('click',function(e){if(e.target.closest('a'))close();});document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});}
+  var t=document.getElementById('themeBtn');if(t){t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme'),n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}});}
+  var L=Array.prototype.slice.call(document.querySelectorAll('.rail__link[data-spy]')),S=L.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  if('IntersectionObserver' in window){var sp=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var id='#'+e.target.id;L.forEach(function(a){a.classList.toggle('is-active',a.getAttribute('href')===id);});}});},{rootMargin:'-45% 0px -50% 0px',threshold:0});S.forEach(function(s){if(s)sp.observe(s);});}
+})();
+</script>
+<script>
+/* scroll-reveal choreography (generic; no-ops under reduced motion) */
+(function(){'use strict';
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,blocks=[];
+  document.querySelectorAll('main .chapter').forEach(function(ch){if(ch.id==='hero')return;Array.prototype.forEach.call(ch.children,function(k,i){blocks.push(k);k.style.setProperty('--rvd',Math.min(i,6)*60+'ms');});});
+  function reveal(b){if(!b.classList.contains('rv-in'))b.classList.add('rv-in');}
+  if(!reduce&&'IntersectionObserver' in window){blocks.forEach(function(b){b.classList.add('rv');});var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.12,rootMargin:'0px 0px -6% 0px'});blocks.forEach(function(b){io.observe(b);});requestAnimationFrame(function(){var vh=window.innerHeight||document.documentElement.clientHeight;blocks.forEach(function(b){if(b.getBoundingClientRect().top<vh*0.94)reveal(b);});});setTimeout(function(){blocks.forEach(reveal);},1800);}else{blocks.forEach(reveal);}
+})();
+</script>
+<script>
+/* scroll progress bar */
+(function(){var bar=document.createElement('div');bar.className='scrollprog';bar.setAttribute('aria-hidden','true');document.body.appendChild(bar);var tick=false;function up(){var hh=document.documentElement.scrollHeight-window.innerHeight,p=hh>0?window.pageYOffset/hh:0;bar.style.transform='scaleX('+Math.min(1,Math.max(0,p))+')';tick=false;}window.addEventListener('scroll',function(){if(!tick){requestAnimationFrame(up);tick=true;}},{passive:true});window.addEventListener('resize',up);up();})();
+</script>
+<script src="search.js?v=4" defer></script>
+</body>
+</html>
