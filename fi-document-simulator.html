@@ -1,0 +1,3185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FI Document Simulator — every table, every column · SAP S/4HANA · Chatree Kengpipat</title>
+<link rel="canonical" href="https://chatreekengpipat.github.io/fi-document-simulator.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chatree Kengpipat (Cee)">
+<meta property="og:title" content="FI Document Simulator — every table, every column · SAP S/4HANA">
+<meta property="og:description" content="Post an SAP FI document in a Fiori-style workbench and watch BKPF, BSEG, ACDOCA, BSET and WITH_ITEM fill in. Click any column header for what the field means, where it comes from, and which configuration sets it.">
+<meta property="og:url" content="https://chatreekengpipat.github.io/fi-document-simulator.html">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FI Document Simulator — every table, every column · SAP S/4HANA">
+<meta name="twitter:description" content="A Fiori-style FI posting workbench: BKPF · BSEG · ACDOCA · BSET · WITH_ITEM, column by column, with the configuration behind every line.">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="description" content="An interactive SAP S/4HANA Financial Accounting document simulator. Choose a business event (supplier invoice, payment with withholding tax, customer invoice, goods receipt, reverse-charge import), set the configuration, post it, and read the resulting BKPF, BSEG, ACDOCA, BSET and WITH_ITEM rows — every column explained, with the IMG node that determines it.">
+<script>
+  /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"FI Document Simulator — every table, every column","headline":"FI Document Simulator — every table, every column","description":"An interactive SAP S/4HANA Financial Accounting document simulator: post a business event in a Fiori-style workbench and read the resulting BKPF, BSEG, ACDOCA, BSET and WITH_ITEM rows, column by column, with the configuration behind each line.","url":"https://chatreekengpipat.github.io/fi-document-simulator.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","learningResourceType":"Interactive simulation","educationalLevel":"Professional","teaches":["SAP S/4HANA Financial Accounting document structure","Universal Journal (ACDOCA)","Tax determination and BSET","Extended Withholding Tax and WITH_ITEM","Document splitting and the general ledger view"],"author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chatreekengpipat.github.io/"},{"@type":"ListItem","position":2,"name":"FI Document Simulator","item":"https://chatreekengpipat.github.io/fi-document-simulator.html"}]}</script>
+<style>
+  :root {
+    --abyss: #0f172a;
+    --deep: #1e293b;
+    --steel: #334155;
+    --gas: #60a5fa;   /* SAP / system / data */
+    --flare: #FF6B35; /* tax flowing to the State */
+    --gold: #E8B04B;  /* value / baht / revenue */
+    --mist: #f1f5f9;  /* body */
+    --haze: #94a3b8;  /* captions */
+    --royalty: #caa23e;
+    --srb: #e8843a;
+    --rail-w: 232px;
+    --content-w: 800px;
+    --bar-h: 56px;
+    --display: 'Space Grotesk', system-ui, sans-serif;
+    --body: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 74px; }
+
+  body {
+    margin: 0;
+    background: var(--abyss);
+    color: var(--mist);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(59, 130, 246, 0.06), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(255, 107, 53, 0.05), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; text-wrap: balance; }
+  p { margin: 0 0 1rem; text-wrap: pretty; }
+  .chapter p:not(.caption), .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
+  a { color: var(--gas); }
+
+  .mono { font-family: var(--mono); }
+  .tcode {
+    font-family: var(--mono);
+    font-weight: 500;
+    color: var(--gas);
+    background: rgba(59, 130, 246, 0.09);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+    border-radius: 5px;
+    padding: 0.05em 0.42em;
+    font-size: 0.88em;
+    white-space: nowrap;
+  }
+
+  /* ---------- Focus visibility ---------- */
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--gas);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--gas);
+    color: var(--abyss);
+    padding: 0.7rem 1.1rem;
+    z-index: 200;
+    font-family: var(--mono);
+    font-weight: 600;
+    border-radius: 0 0 8px 0;
+  }
+  .skip:focus { left: 0; }
+
+  /* ---------- Site nav bar (links to every page) ---------- */
+  .sitebar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--bar-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.1rem; z-index: 160;
+    background: rgba(15, 23, 42, 0.86);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--steel);
+  }
+  .sitebar__logo { display: flex; align-items: center; gap: 0.55rem; text-decoration: none;
+    font-family: var(--display); font-weight: 700; font-size: 0.92rem; color: var(--mist); }
+  .sitebar__logo .mark { width: 12px; height: 12px; border-radius: 3px; background: var(--gas); box-shadow: 0 0 12px var(--gas); }
+  .sitebar__logo:hover { color: var(--gas); }
+  .sitemenu { display: flex; align-items: center; gap: 0.2rem; }
+  .sitemenu > a, .dd-btn {
+    font-family: var(--body); font-size: 0.9rem; color: var(--haze);
+    text-decoration: none; background: none; border: 0; cursor: pointer;
+    padding: 0.5rem 0.8rem; border-radius: 8px; white-space: nowrap;
+    transition: color 0.2s, background 0.2s;
+  }
+  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(59, 130, 246, 0.07); }
+  .sitemenu > a.cta { color: var(--abyss); background: var(--gas); font-weight: 600; }
+  .sitemenu > a.cta:hover { filter: brightness(1.08); background: var(--gas); }
+  .dd { position: relative; }
+  .dd-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; min-width: 320px;
+    background: var(--deep); border: 1px solid var(--steel); border-radius: 12px;
+    padding: 0.5rem; opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    box-shadow: 0 24px 60px -24px #000; z-index: 5;
+  }
+  .dd:hover .dd-panel, .dd:focus-within .dd-panel { opacity: 1; visibility: visible; transform: none; }
+  .dd-group { padding: 0.3rem; }
+  .dd-group + .dd-group { border-top: 1px solid var(--steel); margin-top: 0.2rem; padding-top: 0.5rem; }
+  .dd-head { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gas); padding: 0.2rem 0.5rem 0.35rem; }
+  .dd-panel a { display: block; padding: 0.45rem 0.6rem; font-size: 0.86rem; color: var(--mist); text-decoration: none; border-radius: 7px; }
+  .dd-panel a:hover { background: rgba(59, 130, 246, 0.08); color: var(--gas); }
+  .dd-panel a.is-current { color: var(--gas); background: rgba(59, 130, 246, 0.06); }
+  .sitebar__burger { display: none; flex-direction: column; gap: 4px; background: none; border: 0; cursor: pointer; padding: 8px; }
+  .sitebar__burger span { width: 22px; height: 2px; background: var(--mist); border-radius: 2px; transition: transform 0.2s, opacity 0.2s; }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .sitebar__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ---------- Left nav rail ---------- */
+  .rail {
+    position: fixed;
+    top: var(--bar-h);
+    left: 0;
+    width: var(--rail-w);
+    height: calc(100vh - var(--bar-h));
+    background: linear-gradient(180deg, var(--deep), var(--abyss));
+    border-right: 1px solid var(--steel);
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem 1.1rem;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .rail__brand {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--haze);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .rail__title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.04rem;
+    color: var(--mist);
+    margin-bottom: 1.6rem;
+    line-height: 1.25;
+  }
+  .rail__title b { color: var(--gas); font-weight: 700; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+  .rail__link {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--haze);
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border-left: 2px solid transparent;
+    font-size: 0.9rem;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .rail__link .num { font-family: var(--mono); font-size: 0.74rem; color: var(--steel); transition: color 0.2s; }
+  .rail__link:hover { color: var(--mist); background: rgba(59, 130, 246, 0.05); }
+  .rail__link.is-active {
+    color: var(--mist);
+    background: rgba(59, 130, 246, 0.09);
+    border-left-color: var(--gas);
+  }
+  .rail__link.is-active .num { color: var(--gas); }
+  .rail__back {
+    margin-top: auto;
+    padding-top: 1.4rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--haze);
+    text-decoration: none;
+  }
+  .rail__back:hover { color: var(--gas); }
+
+  /* ---------- Main ---------- */
+  main { margin-left: var(--rail-w); padding-top: var(--bar-h); }
+  .chapter {
+    max-width: var(--content-w);
+    margin-left: max(0px, calc(50vw - var(--content-w) / 2 - var(--rail-w)));
+    margin-right: auto;
+    padding: 5.5rem 4rem 4rem;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  }
+  .chapter:first-child { padding-top: 4rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gas);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gas); box-shadow: 0 0 12px var(--gas); }
+  .chapter h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 0.6rem; }
+  .lede { font-size: 1.12rem; color: var(--mist); max-width: 62ch; }
+  .caption { color: var(--haze); font-size: 0.92rem; }
+
+  .card {
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 14px;
+    padding: 1.3rem 1.4rem;
+  }
+  .grid { display: grid; gap: 1rem; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 720px) { .grid-3 { grid-template-columns: 1fr; } }
+
+
+  /* ---------- Tabs ---------- */
+  .tablist { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 1.4rem 0 1rem; }
+  .tab {
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: var(--haze);
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 9px;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .tab[aria-selected="true"] { color: var(--abyss); background: var(--gas); border-color: var(--gas); font-weight: 600; }
+  .tabpanel[hidden] { display: none; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--steel); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); font-weight: 500; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .note {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--haze);
+    border-left: 2px solid var(--steel);
+    padding-left: 0.9rem;
+  }
+  .saythis {
+    margin-top: 1rem;
+    border: 1px dashed rgba(59, 130, 246, 0.4);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    background: rgba(59, 130, 246, 0.04);
+    font-style: italic;
+  }
+  .saythis b { font-style: normal; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; margin-bottom: 0.3rem; }
+
+  /* ---------- Value chain selector ---------- */
+  .vc-seg { display: flex; gap: 0; margin: 1.4rem 0 1rem; border: 1px solid var(--steel); border-radius: 11px; overflow: hidden; }
+  .vc-seg button {
+    flex: 1;
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--haze);
+    background: var(--deep);
+    border: 0;
+    border-right: 1px solid var(--steel);
+    padding: 0.8rem 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+  }
+  .vc-seg button:last-child { border-right: 0; }
+  .vc-seg button[aria-pressed="true"] { color: var(--abyss); background: var(--gas); font-weight: 600; }
+  .vc-detail { min-height: 150px; }
+  .vc-detail h3 { color: var(--gold); }
+  .vc-img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 0.9rem; border: 1px solid var(--steel); filter: saturate(0.96) brightness(0.92); display: block; }
+  .taglist { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    border-radius: 7px;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--steel);
+  }
+  .tag .scope { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; margin-left: 0.4rem; }
+  .tag--up { border-color: rgba(59, 130, 246, 0.5); color: var(--gas); background: rgba(59, 130, 246, 0.07); }
+  .tag--down { border-color: rgba(255, 107, 53, 0.5); color: var(--flare); background: rgba(255, 107, 53, 0.07); }
+  .tag--all { border-color: rgba(232, 176, 75, 0.5); color: var(--gold); background: rgba(232, 176, 75, 0.07); }
+
+  .callout {
+    border: 1px solid var(--flare);
+    border-left-width: 4px;
+    border-radius: 0 12px 12px 0;
+    background: rgba(255, 107, 53, 0.07);
+    padding: 1.1rem 1.3rem;
+    margin: 1.8rem 0;
+  }
+  .callout .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--flare); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+
+  /* ---------- Waterfall ---------- */
+  .waterfall-wrap { margin: 2rem 0 1rem; }
+  .counters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.3rem; }
+  .counter {
+    border: 1px solid var(--steel);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    background: var(--deep);
+  }
+  .counter .clabel { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--haze); }
+  .counter .cval { font-family: var(--display); font-weight: 700; font-size: 2.5rem; line-height: 1.1; margin-top: 0.2rem; }
+  .counter--state .cval { color: var(--flare); }
+  .counter--net .cval { color: var(--gas); }
+
+  .wbar {
+    display: flex;
+    width: 100%;
+    height: 64px;
+    border-radius: 11px;
+    overflow: hidden;
+    border: 1px solid var(--steel);
+    background: var(--abyss);
+  }
+  .wseg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--abyss);
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.7s cubic-bezier(0.45, 0.05, 0.2, 1);
+  }
+  .wseg--royalty { background: var(--royalty); }
+  .wseg--srb { background: var(--srb); }
+  .wseg--pita { background: var(--flare); }
+  .wseg--net { background: var(--gas); }
+  .wseg .wlbl { opacity: 0; transition: opacity 0.4s 0.3s; padding: 0 0.3rem; }
+  .wseg.show .wlbl { opacity: 1; }
+
+  .wcontrols { display: flex; gap: 0.7rem; margin-top: 1.1rem; flex-wrap: wrap; align-items: center; }
+  .btn {
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    padding: 0.6rem 1.2rem;
+    border-radius: 9px;
+    cursor: pointer;
+    border: 1px solid var(--steel);
+    background: var(--deep);
+    color: var(--mist);
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  }
+  .btn:hover { border-color: var(--gas); }
+  .btn:active { transform: translateY(1px); }
+  .btn--primary { background: var(--flare); border-color: var(--flare); color: #1a0a04; font-weight: 600; }
+  .btn--primary:hover { filter: brightness(1.08); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .wstep-label { font-family: var(--mono); font-size: 0.82rem; color: var(--haze); }
+
+  /* ---------- Layer expanders ---------- */
+  .layers { margin-top: 1.8rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .layer { border: 1px solid var(--steel); border-radius: 11px; background: var(--deep); overflow: hidden; }
+  .layer__btn {
+    width: 100%;
+    font: inherit;
+    text-align: left;
+    background: none;
+    border: 0;
+    color: var(--mist);
+    padding: 0.95rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .layer__btn .lname { font-family: var(--display); font-weight: 600; font-size: 1.05rem; }
+  .layer__btn .lname .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 0.6rem; vertical-align: middle; }
+  .layer__btn .chev { font-family: var(--mono); color: var(--gas); transition: transform 0.3s; }
+  .layer__btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .layer__body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .layer__body.is-open { max-height: 320px; }
+  .layer__body-inner { padding: 0 1.2rem 1.1rem; }
+  .layer__body dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0; font-size: 0.92rem; }
+  .layer__body dt { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gas); }
+  .layer__body dd { margin: 0; }
+  @media (max-width: 560px) { .layer__body dl { grid-template-columns: 1fr; gap: 0.1rem 0; } .layer__body dd { margin-bottom: 0.6rem; } }
+
+  .closing {
+    margin-top: 1.8rem;
+    border-top: 1px solid var(--steel);
+    padding-top: 1.2rem;
+    font-size: 1.04rem;
+  }
+  .closing b { color: var(--gold); }
+
+  /* ---------- Flashcards ---------- */
+  .deck { margin-top: 1.5rem; }
+  .fcard {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    cursor: pointer;
+    perspective: 1400px;
+    display: block;
+  }
+  .fcard__inner {
+    position: relative;
+    display: grid;
+    width: 100%;
+    min-height: 250px;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .fcard.is-flipped .fcard__inner { transform: rotateY(180deg); }
+  .fcard__face {
+    grid-area: 1 / 1;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--steel);
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .fcard__face--q { background: var(--deep); }
+  .fcard__face--a { background: linear-gradient(160deg, #172033, #152238); border-color: rgba(59, 130, 246, 0.45); transform: rotateY(180deg); }
+  .fcard__kind { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.8rem; }
+  .fcard__face--q .fcard__kind { color: var(--gold); }
+  .fcard__face--a .fcard__kind { color: var(--gas); }
+  .fcard__text { font-family: var(--display); font-size: 1.25rem; font-weight: 500; line-height: 1.4; }
+  .fcard__face--a .fcard__text { font-size: 1.1rem; color: var(--mist); }
+  .fcard__hint { margin-top: 1rem; font-family: var(--mono); font-size: 0.68rem; color: var(--haze); }
+
+  .deck-bar { display: flex; align-items: center; gap: 1rem; margin-top: 1.1rem; }
+  .deck-bar .count { font-family: var(--mono); font-size: 0.85rem; color: var(--haze); min-width: 64px; }
+  .progress { flex: 1; height: 6px; border-radius: 99px; background: var(--steel); overflow: hidden; }
+  .progress span { display: block; height: 100%; background: var(--gas); width: 12.5%; transition: width 0.35s ease; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-left: max(0px, calc(50vw - var(--content-w) / 2 - var(--rail-w)));
+    padding: 2.5rem 4rem;
+    max-width: var(--content-w);
+    margin-right: auto;
+  }
+  footer .foot-inner { font-size: 0.82rem; color: var(--haze); }
+  footer .sources { font-family: var(--mono); font-size: 0.74rem; margin-top: 0.6rem; line-height: 1.7; }
+
+  /* ---------- Mobile rail → top strip ---------- */
+  @media (max-width: 900px) {
+    .rail {
+      position: sticky;
+      top: var(--bar-h);
+      width: auto;
+      height: auto;
+      flex-direction: column;
+      padding: 0.8rem 1rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--steel);
+    }
+    .rail__title, .rail__brand, .rail__back { display: none; }
+    .rail ol {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 0.4rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .rail ol::-webkit-scrollbar { display: none; }
+    .rail__link { border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; padding: 0.4rem 0.6rem; }
+    .rail__link.is-active { border-left: 0; border-bottom-color: var(--gas); }
+    .rail__link .name { display: none; }
+    .rail__link .num { font-size: 0.85rem; }
+    .rail__back { margin-top: 0.5rem; padding-top: 0; }
+    main, footer { margin-left: 0; }
+    main { padding-top: 0; }
+    body { padding-top: var(--bar-h); }
+    html { scroll-padding-top: 116px; }
+    .sitebar__burger { display: flex; }
+    .sitemenu {
+      position: fixed; top: var(--bar-h); left: 0; right: 0;
+      flex-direction: column; align-items: stretch; gap: 0.15rem;
+      background: var(--deep); border-bottom: 1px solid var(--steel);
+      padding: 0.6rem; max-height: calc(100vh - var(--bar-h)); overflow: auto;
+      transform: translateY(-12px); opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.22s, transform 0.22s, visibility 0.22s;
+    }
+    .sitemenu.is-open { transform: none; opacity: 1; visibility: visible; pointer-events: auto; }
+    .dd { position: static; }
+    .dd-btn { width: 100%; text-align: left; }
+    .dd-panel { position: static; opacity: 1; visibility: visible; transform: none;
+      box-shadow: none; border: 0; min-width: 0; background: none; padding: 0 0 0 0.4rem; }
+    .sitemenu > a { padding: 0.6rem 0.7rem; }
+    .chapter { padding: 3rem 1.3rem 2.5rem; }
+  }
+
+  @media (max-width: 380px) {
+    .chapter { padding: 2.4rem 1rem 2rem; }
+    .counter .cval { font-size: 2rem; }
+  }
+
+  /* ============================================================
+     v2 — ADVANCED MOTION (page-scoped)
+     Scroll-reveal is an enhancement layered on visible content:
+     the hidden pre-state is only applied by JS (class .rv), so
+     content is always visible if JS is off or an observer misfires.
+     ============================================================ */
+
+  /* Scroll-reveal: JS adds .rv (armed) then .rv-in (revealed). */
+  .rv { opacity: 0; transform: translateY(16px); }
+  .rv-in {
+    opacity: 1; transform: none;
+    transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1),
+                transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    transition-delay: var(--rvd, 0ms);
+  }
+
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+    /* Reveal state can never be left hidden under reduced motion */
+    .rv { opacity: 1; transform: none; }
+    .modwire { animation: none; opacity: 0.4; stroke-dasharray: none; }
+    .modmap:not(.is-fi-focus) .mod--fi { animation: none; }
+    .drain-invite { animation: none; }
+  }
+
+  /* ---------- Theme toggle button ---------- */
+  .theme-btn {
+    font-size: 1rem; line-height: 1; cursor: pointer;
+    padding: 0.45rem 0.65rem; border-radius: 8px;
+    background: none; border: 1px solid var(--steel); color: var(--mist);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(59, 130, 246, 0.07); }
+  .theme-btn .icon-moon { display: none; }
+  html[data-theme="light"] .theme-btn .icon-sun { display: none; }
+  html[data-theme="light"] .theme-btn .icon-moon { display: inline; }
+
+  /* ---------- Light (Day) theme ---------- */
+  html[data-theme="light"] {
+    --abyss: #f5f8fc;
+    --deep: #FFFFFF;
+    --steel: #e2e8f0;
+    --gas: #2563eb;
+    --flare: #C9501E;
+    --gold: #95680F;
+    --mist: #0f172a;
+    --haze: #586379;
+    --royalty: #8a6f1d;
+    --srb: #b1591b;
+  }
+  html[data-theme="light"] body {
+    background-image:
+      radial-gradient(900px 600px at 85% -10%, rgba(37, 99, 235, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(201, 80, 30, 0.07), transparent 60%);
+  }
+  html[data-theme="light"] .sitebar { background: rgba(255, 255, 255, 0.86); }
+  html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.22); }
+  html[data-theme="light"] .tcode { background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.30); }
+  html[data-theme="light"] .theme-btn:hover { background: rgba(37, 99, 235, 0.08); }
+  html[data-theme="light"] .flip__face--back { background: #eff6ff; border-color: rgba(37, 99, 235, 0.35); }
+  html[data-theme="light"] .fcard__face--a { background: linear-gradient(160deg, #eff6ff, #e8f0fe); border-color: rgba(37, 99, 235, 0.35); }
+
+  /* ============================================================
+     Tax-code config walkthrough (.cfg) + Record-to-Report close (.close)
+     Page-scoped, built from existing tokens (--gas/--gold/--flare/--mono).
+     ============================================================ */
+
+
+  /* ---------- Scroll progress indicator ---------- */
+  .scrollprog {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    transform: scaleX(0); transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--gas), var(--gold));
+    z-index: 190; pointer-events: none; will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cfg-step.is-active .cfg-dot { animation: none; }
+    .cfg-panel.swap { animation: none; }
+    .close-ring .fill { transition: none; }
+    .jrow { animation: none; }
+  }
+
+  /* The workbench needs more room than the reading column. The .chapter rule
+     derives both its width and its centring from --content-w, so overriding
+     that one property widens the section without duplicating the formula. */
+  .chapter--wide { --content-w: 1180px; max-width: min(1180px, 100%); padding-left: 2.5rem; padding-right: 2.5rem; }
+  @media (max-width: 1180px) { .chapter--wide { --content-w: 800px; } }
+
+  /* ============================================================
+     FIORI CANVAS — an authentic SAP Fiori surface embedded in the
+     dark page. Fiori is a light design language, so this frame keeps
+     its own palette in both site themes; it reads as a real screen.
+     Palette: SAP Fiori 3 / Horizon semantic colours.
+     ============================================================ */
+  .fiori {
+    --f-brand:      #0a6ed1;  /* sapButton_Emphasized / links        */
+    --f-brand-dk:   #0854a0;  /* hover                               */
+    --f-shell:      #354a5f;  /* shell bar                           */
+    --f-bg:         #f5f6f7;  /* sapBackgroundColor                  */
+    --f-tile:       #ffffff;  /* sapTile_Background                  */
+    --f-line:       #d9d9d9;  /* sapList_BorderColor                 */
+    --f-line-soft:  #e5e5e5;
+    --f-text:       #32363a;  /* sapTextColor                        */
+    --f-text-2:     #6a6d70;  /* sapContent_LabelColor               */
+    --f-pos:        #107e3e;  /* success                             */
+    --f-crit:       #e9730c;  /* warning                             */
+    --f-neg:        #bb0000;  /* error                               */
+    --f-pos-bg:     #f1fdf6;
+    --f-crit-bg:    #fef7f1;
+    --f-mono: var(--mono);
+
+    background: var(--f-bg);
+    color: var(--f-text);
+    border: 1px solid #22303f;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04);
+    font-family: var(--body);
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    margin: 1.6rem 0;
+  }
+  .fiori *, .fiori *::before, .fiori *::after { box-sizing: border-box; }
+  .fiori p { margin: 0 0 0.6rem; text-align: left; hyphens: none; }
+  .fiori b { font-weight: 600; }
+
+  /* ---------- Shell bar ---------- */
+  .f-shell {
+    background: var(--f-shell);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+    height: 44px;
+    font-size: 0.875rem;
+  }
+  .f-shell__logo {
+    font-family: var(--display);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-size: 1.05rem;
+    color: #fff;
+    flex: none;
+  }
+  .f-shell__title { flex: 1 1 auto; min-width: 0; }
+  .f-shell__title b { display: block; font-weight: 600; line-height: 1.15; }
+  .f-shell__title span { display: block; font-size: 0.72rem; opacity: 0.75; line-height: 1.2; }
+  .f-shell__acts { display: flex; align-items: center; gap: 0.3rem; flex: none; }
+  .f-shell__acts span {
+    width: 28px; height: 28px; display: grid; place-items: center;
+    color: #fff; border-radius: 4px;
+    font-size: 0.9rem; opacity: 0.85;
+  }
+  .f-shell__avatar {
+    width: 28px; height: 28px; border-radius: 50%; flex: none;
+    background: #5b7489; color: #fff; display: grid; place-items: center;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em;
+  }
+
+  /* ---------- Icon tab bar (scenario picker) ---------- */
+  .f-tabs {
+    background: var(--f-tile);
+    border-bottom: 1px solid var(--f-line);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .f-tab {
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    padding: 0.6rem 1rem 0.5rem;
+    font: inherit;
+    font-size: 0.8rem;
+    color: var(--f-text-2);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .f-tab:hover { background: #f0f5fb; color: var(--f-brand); }
+  .f-tab b { font-family: var(--f-mono); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; }
+  .f-tab span { font-size: 0.7rem; }
+  .f-tab[aria-selected="true"] { color: var(--f-brand); border-bottom-color: var(--f-brand); background: #fff; }
+  .f-tab[aria-selected="true"] b { color: var(--f-brand); }
+  .f-tab:focus-visible { outline: 2px solid var(--f-brand); outline-offset: -2px; }
+
+  /* ---------- Workbench grid ---------- */
+  .f-work { display: grid; grid-template-columns: 302px 1fr; align-items: start; }
+  @media (max-width: 900px) { .f-work { grid-template-columns: 1fr; } }
+
+  .f-pane { padding: 1rem 1.1rem 1.2rem; min-width: 0; }
+  .f-pane--cfg { background: var(--f-tile); border-right: 1px solid var(--f-line); }
+  @media (max-width: 900px) { .f-pane--cfg { border-right: 0; border-bottom: 1px solid var(--f-line); } }
+
+  .f-h {
+    font-family: var(--f-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--f-text-2);
+    margin: 0 0 0.75rem;
+    display: flex; align-items: center; gap: 0.45rem;
+  }
+  .f-h::after { content: ""; flex: 1; height: 1px; background: var(--f-line); }
+
+  /* ---------- Form controls ---------- */
+  .f-field { margin-bottom: 0.8rem; }
+  .f-field > label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--f-text-2);
+    margin-bottom: 0.2rem;
+  }
+  .f-src {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.02em;
+    color: var(--f-brand);
+    margin-top: 0.22rem;
+  }
+  .fiori select, .fiori input[type="number"] {
+    width: 100%;
+    font: inherit;
+    font-size: 0.82rem;
+    color: var(--f-text);
+    background: #fff;
+    border: 1px solid #89919a;
+    border-bottom: 2px solid #89919a;
+    border-radius: 4px;
+    padding: 0.32rem 0.45rem;
+    transition: border-color 0.15s;
+  }
+  .fiori select:hover, .fiori input:hover { border-color: var(--f-brand); }
+  .fiori select:focus, .fiori input:focus {
+    outline: 1px solid var(--f-brand);
+    outline-offset: 0;
+    border-bottom-color: var(--f-brand);
+  }
+  .fiori input[type="number"] { font-family: var(--f-mono); text-align: right; }
+
+  .f-check { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.7rem; font-size: 0.78rem; }
+  .f-check input { margin: 0.18rem 0 0; accent-color: var(--f-brand); width: 14px; height: 14px; flex: none; }
+  .f-check label { color: var(--f-text); cursor: pointer; }
+
+  /* ---------- Buttons ---------- */
+  .f-bar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+  .f-btn {
+    font: inherit; font-size: 0.8rem;
+    border: 1px solid #0854a0;
+    background: #fff; color: var(--f-brand);
+    border-radius: 4px;
+    padding: 0.36rem 0.8rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .f-btn:hover { background: #ebf3fc; }
+  .f-btn:active { background: #d9e8f8; }
+  .f-btn--emph { background: var(--f-brand); color: #fff; border-color: var(--f-brand); font-weight: 600; }
+  .f-btn--emph:hover { background: var(--f-brand-dk); border-color: var(--f-brand-dk); }
+  .f-btn--ghost { border-color: #89919a; color: var(--f-text); }
+  .f-btn--ghost:hover { background: #ededed; }
+  .f-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .f-btn:focus-visible { outline: 2px solid var(--f-brand); outline-offset: 2px; }
+
+  /* ---------- Object header (the posted document) ---------- */
+  .f-objhead {
+    background: var(--f-tile);
+    border: 1px solid var(--f-line);
+    border-radius: 8px;
+    padding: 0.8rem 0.95rem;
+    margin-bottom: 0.9rem;
+  }
+  .f-objhead__top { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+  .f-objno {
+    font-family: var(--f-mono);
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--f-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .f-objno.is-empty { color: #b0b4b8; }
+  .f-objsub { font-size: 0.74rem; color: var(--f-text-2); }
+  .f-objfacts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(98px, 1fr));
+    gap: 0.6rem 0.9rem;
+    margin: 0.7rem 0 0;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--f-line-soft);
+  }
+  .f-fact { min-width: 0; }
+  .f-fact dt { font-size: 0.68rem; color: var(--f-text-2); margin-bottom: 0.1rem; }
+  .f-fact dd { margin: 0; font-family: var(--f-mono); font-size: 0.8rem; font-weight: 500; overflow-wrap: anywhere; }
+
+  /* ---------- Object status (Fiori semantic) ---------- */
+  .f-status {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.74rem; font-weight: 600;
+    padding: 0.1rem 0.45rem; border-radius: 4px;
+    border: 1px solid currentColor;
+  }
+  .f-status--pos { color: var(--f-pos); background: var(--f-pos-bg); }
+  .f-status--none { color: var(--f-text-2); background: #f4f4f4; }
+
+  /* ---------- Message strip ---------- */
+  .f-msg {
+    display: flex; gap: 0.55rem; align-items: flex-start;
+    border: 1px solid var(--f-pos);
+    background: var(--f-pos-bg);
+    border-radius: 4px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.9rem;
+  }
+  .f-msg[hidden] { display: none !important; }
+  .f-msg__ico { flex: none; color: var(--f-pos); font-weight: 700; }
+  .f-msg code { font-family: var(--f-mono); font-size: 0.95em; }
+
+  /* ---------- Posting pipeline (the technical motion) ---------- */
+  .f-pipe {
+    background: #1c2531;
+    border-radius: 8px;
+    padding: 0.7rem 0.85rem;
+    margin-bottom: 0.9rem;
+    font-family: var(--f-mono);
+    font-size: 0.74rem;
+    color: #c8d4e0;
+  }
+  .f-pipe__head {
+    display: flex; align-items: center; gap: 0.5rem;
+    color: #8fa6bd; font-size: 0.66rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.45rem;
+  }
+  .f-pipe__log { display: grid; gap: 0.12rem; }
+  .f-step { display: flex; align-items: baseline; gap: 0.5rem; }
+  .f-step__ico { flex: none; width: 1em; text-align: center; }
+  .f-step--done .f-step__ico { color: #4db96a; }
+  .f-step--run  .f-step__ico { color: #6ab4f0; }
+  .f-step--done { color: #e2eaf2; }
+  .f-step--run  { color: #fff; }
+  .f-step--wait { color: #6b7d90; }
+  .f-step__t { flex: 1 1 auto; min-width: 0; }
+  .f-step__n { color: #8fa6bd; font-variant-numeric: tabular-nums; }
+
+  /* Fiori busy indicator — three pulsing dots */
+  .f-busy { display: inline-flex; gap: 3px; vertical-align: middle; }
+  .f-busy i {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #6ab4f0; display: block;
+    animation: fBusy 1.1s infinite ease-in-out both;
+  }
+  .f-busy i:nth-child(2) { animation-delay: 0.14s; }
+  .f-busy i:nth-child(3) { animation-delay: 0.28s; }
+  @keyframes fBusy {
+    0%, 70%, 100% { transform: scale(0.65); opacity: 0.45; }
+    35%           { transform: scale(1);    opacity: 1; }
+  }
+
+  /* ---------- Table tab strip with row-count badges ---------- */
+  .f-ttabs { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.6rem; }
+  .f-ttab {
+    font: inherit; font-size: 0.76rem;
+    font-family: var(--f-mono);
+    border: 1px solid var(--f-line);
+    background: var(--f-tile);
+    color: var(--f-text-2);
+    border-radius: 999px;
+    padding: 0.22rem 0.65rem;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .f-ttab:hover { color: var(--f-brand); border-color: var(--f-brand); }
+  .f-ttab[aria-selected="true"] { background: var(--f-brand); border-color: var(--f-brand); color: #fff; font-weight: 600; }
+  .f-ttab:focus-visible { outline: 2px solid var(--f-brand); outline-offset: 2px; }
+  .f-ttab__n {
+    font-size: 0.66rem; font-weight: 600;
+    background: #eaecee; color: var(--f-text-2);
+    border-radius: 999px; padding: 0 0.32rem;
+    min-width: 1.2em; text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .f-ttab[aria-selected="true"] .f-ttab__n { background: rgba(255, 255, 255, 0.25); color: #fff; }
+  .f-ttab--empty { opacity: 0.5; }
+
+  /* ---------- View switch (entry vs GL view) ---------- */
+  .f-vrow { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; align-items: center; margin-bottom: 0.6rem; }
+  .f-vswitch { display: inline-flex; border: 1px solid var(--f-brand); border-radius: 4px; overflow: hidden; }
+  .f-vswitch button {
+    font: inherit; font-size: 0.74rem;
+    border: 0; background: #fff; color: var(--f-brand);
+    padding: 0.26rem 0.7rem; cursor: pointer;
+  }
+  .f-vswitch button + button { border-left: 1px solid var(--f-brand); }
+  .f-vswitch button[aria-pressed="true"] { background: var(--f-brand); color: #fff; font-weight: 600; }
+  .f-vswitch button:focus-visible { outline: 2px solid var(--f-brand); outline-offset: -2px; }
+  .f-vnote { font-size: 0.72rem; color: var(--f-text-2); }
+
+  /* ---------- The data table ---------- */
+  .f-tablewrap {
+    background: var(--f-tile);
+    border: 1px solid var(--f-line);
+    border-radius: 8px 8px 0 0;
+    overflow-x: auto;
+  }
+  table.f-table {
+    width: 100%;
+    min-width: max-content;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    font-family: var(--f-mono);
+  }
+  table.f-table th, table.f-table td {
+    text-align: left;
+    padding: 0.34rem 0.6rem;
+    border-bottom: 1px solid var(--f-line-soft);
+    white-space: nowrap;
+    vertical-align: middle;
+    color: var(--f-text);
+  }
+  table.f-table thead th {
+    background: #f7f7f7;
+    border-bottom: 1px solid var(--f-line);
+    padding: 0;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.72rem;
+    color: var(--f-text);
+    font-weight: 600;
+  }
+  /* every column header is a button into the field dictionary */
+  .f-col {
+    font: inherit; font-weight: 600;
+    border: 0; background: transparent;
+    color: var(--f-text);
+    padding: 0.4rem 0.6rem;
+    width: 100%; text-align: left;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 0.3rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+  }
+  .f-col::after {
+    content: "?";
+    font-size: 0.6rem; font-weight: 700;
+    width: 12px; height: 12px; flex: none;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: #e3e5e8; color: var(--f-text-2);
+    transition: background 0.15s, color 0.15s;
+  }
+  .f-col:hover, .f-col:focus-visible {
+    color: var(--f-brand);
+    background: #eaf3fc;
+    border-bottom-color: var(--f-brand);
+    outline: none;
+  }
+  .f-col:hover::after, .f-col:focus-visible::after { background: var(--f-brand); color: #fff; }
+  .f-col.is-open { color: var(--f-brand); background: #e3eefb; border-bottom-color: var(--f-brand); }
+  .f-col.is-open::after { content: "\2713"; background: var(--f-brand); color: #fff; }
+
+  table.f-table tbody tr:last-child td { border-bottom: 0; }
+  table.f-table tbody tr:hover td { background: #f3f8fd; }
+  table.f-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.f-table td.zero { color: #a8acb0; }
+  table.f-table .k { color: var(--f-brand); font-weight: 600; }  /* key field  */
+  table.f-table .derived { color: #a35008; }                     /* derived    */
+  table.f-table .empty { color: #b8bcc0; }
+  table.f-table td.is-lit, table.f-table thead th.is-lit { background: #e3eefb; }
+  table.f-table tbody tr:hover td.is-lit { background: #d8e8fa; }
+
+  /* row entry motion */
+  .f-row-in { animation: fRowIn 0.34s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+  @keyframes fRowIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ---------- Balance / totals bar ---------- */
+  .f-tot {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem;
+    align-items: center;
+    background: var(--f-tile);
+    border: 1px solid var(--f-line);
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+    padding: 0.45rem 0.7rem;
+    font-family: var(--f-mono);
+    font-size: 0.74rem;
+  }
+  .f-tot__i { color: var(--f-text-2); }
+  .f-tot__i b { color: var(--f-text); font-variant-numeric: tabular-nums; }
+  .f-tot__flag { margin-left: auto; font-weight: 600; }
+  .f-tot__flag.ok  { color: var(--f-pos); }
+  .f-tot__flag.bad { color: var(--f-neg); }
+
+  /* ---------- Field dictionary panel ---------- */
+  .f-dict {
+    background: var(--f-tile);
+    border: 1px solid var(--f-brand);
+    border-left-width: 3px;
+    border-radius: 4px 8px 8px 4px;
+    padding: 0.8rem 0.95rem;
+    margin-top: 0.9rem;
+  }
+  .f-dict__top { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.1rem; }
+  .f-dict__f { font-family: var(--f-mono); font-size: 1rem; font-weight: 600; color: var(--f-brand); }
+  .f-dict__tbl { font-family: var(--f-mono); font-size: 0.7rem; color: var(--f-text-2); }
+  .f-dict__close {
+    margin-left: auto; border: 0; background: transparent;
+    color: var(--f-text-2); font-size: 1rem; cursor: pointer;
+    width: 22px; height: 22px; border-radius: 4px; line-height: 1;
+  }
+  .f-dict__close:hover { background: #ededed; color: var(--f-text); }
+  .f-dict__close:focus-visible { outline: 2px solid var(--f-brand); outline-offset: 1px; }
+  .f-dict__name { font-weight: 600; margin-bottom: 0.35rem; }
+  .f-dict__what { font-size: 0.82rem; margin-bottom: 0.5rem; }
+  .f-dict__rows { display: grid; gap: 0.3rem; margin: 0; }
+  .f-dict__row { display: grid; grid-template-columns: 78px 1fr; gap: 0.6rem; font-size: 0.78rem; align-items: baseline; }
+  .f-dict__row > dt {
+    font-family: var(--f-mono); font-size: 0.64rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--f-text-2); padding-top: 0.12rem;
+  }
+  .f-dict__row > dd { margin: 0; }
+  .f-dict__row code, .f-dict__what code {
+    font-family: var(--f-mono); font-size: 0.92em;
+    background: #eef1f4; border-radius: 3px; padding: 0.02em 0.28em;
+  }
+  .f-dict__row.is-src code { color: var(--f-brand); background: #eaf3fc; font-weight: 600; }
+  .f-dict__row.is-care > dd { color: #8a4408; }
+
+  /* ---------- Teaching note inside the canvas ---------- */
+  .f-teach {
+    border-left: 3px solid var(--f-crit);
+    background: var(--f-crit-bg);
+    border-radius: 0 4px 4px 0;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.8rem;
+    margin-top: 0.9rem;
+  }
+  .f-teach b { color: #a35008; }
+
+  /* ---------- Legend ---------- */
+  .f-legend {
+    display: flex; flex-wrap: wrap; gap: 0.4rem 1rem;
+    font-size: 0.7rem; color: var(--f-text-2);
+    margin-top: 0.6rem;
+  }
+  .f-legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+  .f-legend i { width: 9px; height: 9px; border-radius: 2px; flex: none; display: block; }
+  .f-legend i.lk { background: var(--f-brand); }
+  .f-legend i.ld { background: #a35008; }
+  .f-legend i.le { background: #b8bcc0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-row-in { animation: none; }
+    .f-busy i { animation: none; opacity: 0.8; transform: none; }
+  }
+
+  /* ============================================================
+     Page-side components (dark theme, the site's own language)
+     ============================================================ */
+
+  /* ---------- Table-of-tables summary cards ---------- */
+  .tbls { display: grid; grid-template-columns: repeat(auto-fit, minmax(214px, 1fr)); gap: 0.7rem; margin: 1.4rem 0; }
+  .tbls__c {
+    background: var(--deep); border: 1px solid var(--steel);
+    border-radius: 12px; padding: 0.9rem 1rem;
+  }
+  .tbls__c h4 { font-family: var(--mono); font-size: 0.92rem; color: var(--gas); margin: 0 0 0.2rem; }
+  .tbls__c .one { font-size: 0.72rem; font-family: var(--mono); color: var(--gold); letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+  .tbls__c p { margin: 0; font-size: 0.86rem; color: var(--haze); }
+
+  /* ---------- Config → field trace ---------- */
+  .trace { display: grid; gap: 0.5rem; margin: 1.4rem 0; }
+  .trace__row {
+    display: grid;
+    grid-template-columns: minmax(0, 152px) minmax(0, 1fr) minmax(0, 176px);
+    gap: 0.8rem;
+    align-items: center;
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 11px;
+    padding: 0.7rem 0.9rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .trace__row:hover { border-color: var(--gas); transform: translateX(2px); }
+  @media (max-width: 760px) { .trace__row { grid-template-columns: 1fr; gap: 0.35rem; } }
+  .trace__cfg { font-family: var(--mono); font-size: 0.78rem; color: var(--gold); font-weight: 500; }
+  .trace__cfg small { display: block; font-size: 0.66rem; color: var(--haze); letter-spacing: 0.04em; font-weight: 400; }
+  .trace__what { font-size: 0.88rem; color: var(--mist); }
+  .trace__fld { font-family: var(--mono); font-size: 0.76rem; color: var(--gas); text-align: right; }
+  @media (max-width: 760px) { .trace__fld { text-align: left; } }
+  .trace__fld small { display: block; font-size: 0.66rem; color: var(--haze); font-weight: 400; }
+
+  /* ---------- Reading method ---------- */
+  .method { counter-reset: m; display: grid; gap: 0.7rem; margin: 1.4rem 0; }
+  .method__i {
+    counter-increment: m;
+    display: grid; grid-template-columns: 2rem 1fr; gap: 0.9rem;
+    align-items: start;
+    background: var(--deep);
+    border: 1px solid var(--steel);
+    border-radius: 11px;
+    padding: 0.85rem 1rem;
+  }
+  .method__i::before {
+    content: counter(m, decimal-leading-zero);
+    font-family: var(--mono); font-size: 0.82rem; font-weight: 600;
+    color: var(--flare);
+  }
+  .method__i h4 { font-size: 0.96rem; margin: 0 0 0.25rem; font-family: var(--body); font-weight: 600; }
+  .method__i p { margin: 0; font-size: 0.88rem; color: var(--haze); }
+
+  /* inline code in page prose */
+  .chapter p code, .chapter li code, .method__i p code, .trace__what code, .f-vnote code {
+    font-family: var(--mono); font-size: 0.9em;
+    color: var(--gas); background: rgba(59, 130, 246, 0.1);
+    border-radius: 3px; padding: 0.02em 0.3em;
+  }
+
+  /* ---------- Light (Day) theme: keep the Fiori canvas readable ---------- */
+  :root[data-theme="light"] .fiori { border-color: #c2c9d1; box-shadow: 0 16px 40px -20px rgba(15, 23, 42, 0.28); }
+  :root[data-theme="light"] .tbls__c,
+  :root[data-theme="light"] .trace__row,
+  :root[data-theme="light"] .method__i { background: #fff; border-color: #dbe2ea; }
+  :root[data-theme="light"] .chapter p code,
+  :root[data-theme="light"] .chapter li code,
+  :root[data-theme="light"] .method__i p code,
+  :root[data-theme="light"] .trace__what code { background: rgba(37, 99, 235, 0.1); }
+</style>
+</head>
+<body data-page="fi-document-simulator">
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- SITE NAV BAR — links to every page, mirrors the main site nav -->
+<header class="sitebar">
+  <a class="sitebar__logo" href="index.html"><span class="mark" aria-hidden="true"></span>Chatree Kengpipat (Cee)</a>
+  <button type="button" class="sitebar__burger" id="siteBurger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="sitemenu" id="siteMenu" aria-label="Site">
+    <div class="dd">
+      <button type="button" class="dd-btn" aria-haspopup="true">Projects <span aria-hidden="true">▾</span></button>
+      <div class="dd-panel">
+        <div class="dd-group">
+          <div class="dd-head">ERP Cloud · Learn Balance</div>
+          <a href="project1.html">Inventory &amp; Procurement (P2P)</a>
+          <a href="project2.html">Strategic Pricing &amp; AR</a>
+          <a href="project3.html">CRM Star Reward Loyalty</a>
+          <a href="project4.html">STEM Portfolio Financial Tracking</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">Business Architecture · Accenture</div>
+          <a href="business-architecture.html">Business Architecture Hub</a>
+          <a href="capability-map.html">Capability Map</a>
+          <a href="value-streams.html">Value Streams</a>
+          <a href="information-map.html">Information Map</a>
+          <a href="organization-map.html">Organization Map</a>
+          <a href="traceability.html">Traceability Explorer</a>
+          <a href="operating-model.html">Target Operating Model</a>
+          <a href="ba-glossary.html">BIZBOK Glossary</a>
+        <div class="dd-group">
+          <div class="dd-head">My SAP Specification Design</div>
+          <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
+          <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
+          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="business-process-map.html">Business Process Master List</a>
+          <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
+          <a href="integration-architecture.html">Integration Architecture</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">SAP Reference &amp; Knowledge</div>
+          <a href="knowledge-hub.html">SAP Knowledge Hub</a>
+          <a href="knowledge-data.html">Reference Data &amp; API</a>
+          <a href="glossary.html">Glossary &amp; T-codes</a>
+          <a href="ricefw-register.html">RICEFW Register</a>
+          <a href="metrics.html">Metrics, Audited</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">SAP FI &middot; General Ledger &amp; Tax &middot; Accenture</div>
+          <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
+          <a href="fi-document-simulator.html" class="is-current" aria-current="page">FI Document Simulator — tables &amp; columns</a>
+          <a href="fi-tax-consultant-scope.html">FI Tax Consultant — Scope of Work</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">AI Deep Learning · Chula × CU Smartmobility</div>
+          <a href="senior-project.html">LiDAR Autonomous Driving (DDPG)</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">EV Software &amp; Hardware · Chula × MUVMI</div>
+          <a href="muvmi.html">Regen-Brake Software &amp; Ergonomics</a>
+        </div>
+        <div class="dd-group">
+          <div class="dd-head">Engineering Design &amp; SAP · MMTh</div>
+          <a href="project5.html">FPDU Assist Device · PHEV</a>
+        </div>
+      </div>
+    </div>
+    <a href="index.html#featured-award">Award</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#methodology">Method</a>
+    <a href="index.html#academic">Academic</a>
+    <a href="index.html#contact" class="cta">Contact</a>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle day and night theme" title="Toggle day / night">
+      <span class="icon-sun" aria-hidden="true">☀</span><span class="icon-moon" aria-hidden="true">☾</span>
+    </button>
+  </nav>
+</header>
+
+<!-- LEFT NAV RAIL -->
+<nav class="rail" aria-label="Chapter navigation">
+  <a class="rail__brand" href="index.html">← Chatree · Portfolio</a>
+  <div class="rail__title">FI Document <b>Simulator</b><br>Tables &middot; columns &middot; config</div>
+  <ol>
+    <li><a class="rail__link" href="#why" data-spy><span class="num">00</span><span class="name">The posting is the proof</span></a></li>
+    <li><a class="rail__link" href="#bench" data-spy><span class="num">01</span><span class="name">The workbench</span></a></li>
+    <li><a class="rail__link" href="#tables" data-spy><span class="num">02</span><span class="name">Five tables, one document</span></a></li>
+    <li><a class="rail__link" href="#bkpf" data-spy><span class="num">03</span><span class="name">BKPF · the header</span></a></li>
+    <li><a class="rail__link" href="#bseg" data-spy><span class="num">04</span><span class="name">BSEG · the entry view</span></a></li>
+    <li><a class="rail__link" href="#acdoca" data-spy><span class="num">05</span><span class="name">ACDOCA · universal journal</span></a></li>
+    <li><a class="rail__link" href="#bset" data-spy><span class="num">06</span><span class="name">BSET · the tax lines</span></a></li>
+    <li><a class="rail__link" href="#withitem" data-spy><span class="num">07</span><span class="name">WITH_ITEM · withholding</span></a></li>
+    <li><a class="rail__link" href="#split" data-spy><span class="num">08</span><span class="name">Entry view vs GL view</span></a></li>
+    <li><a class="rail__link" href="#currency" data-spy><span class="num">09</span><span class="name">Currencies on every line</span></a></li>
+    <li><a class="rail__link" href="#config" data-spy><span class="num">10</span><span class="name">Config behind the line</span></a></li>
+    <li><a class="rail__link" href="#method" data-spy><span class="num">11</span><span class="name">Read a document in 60s</span></a></li>
+  </ol>
+  <a class="rail__companion" href="finance-functional-module.html">Companion module →<br><b>SAP FI &middot; GL &middot; Tax</b> essentials</a>
+  <a class="rail__back" href="index.html">Back to portfolio →</a>
+</nav>
+
+<main id="main">
+
+  <!-- 00 WHY -->
+  <section class="chapter" id="why">
+    <div class="eyebrow"><span class="dot"></span>00 · Why this page exists</div>
+    <h2>Anyone can name a T-code. A consultant can read the <span style="color:var(--gas)">posting</span>.</h2>
+
+    <p class="lede">In Financial Accounting, every argument ends at the document. Not at the design
+      slide, not at the config screenshot — at the rows SAP actually wrote. So this page does the
+      one thing a static reference cannot: it <b>posts</b> a document in front of you, then opens
+      every table it touched and explains every column.</p>
+
+    <p>Pick a business event, set the configuration a consultant actually owns, and press
+      <b>Post</b>. The number range assigns a document number, the database writes fill in one by
+      one, and five tables appear with their real field names. Then click <b>any column header</b> —
+      you get what the field is, where its value came from (user entry, master data, configuration,
+      or derived by SAP), and why it matters when something goes wrong.</p>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> The honest framing</div>
+      <p style="margin:0">This is a <b>teaching model</b>, not a sandbox client. The amounts, accounts
+        and document numbers are illustrative; the <b>mechanics</b> — which table receives which field,
+        which transaction key labels which line, which IMG node determines an account — are standard
+        SAP S/4HANA behaviour. Verify a rate or a field name in the system before you rely on it.</p>
+    </div>
+  </section>
+
+  <!-- 01 THE WORKBENCH -->
+  <section class="chapter chapter--wide" id="bench">
+    <div class="eyebrow"><span class="dot"></span>01 · The workbench</div>
+    <h2>Post a document. Watch the tables fill.</h2>
+    <p class="lede">A Fiori-style posting surface. Change the configuration on the left and the
+      document on the right is rebuilt from it — no journal line here is hard-coded. Every column
+      header is a button into the field dictionary.</p>
+
+    <!-- =============== FIORI CANVAS =============== -->
+    <div class="fiori" id="fiori">
+
+      <!-- Shell bar -->
+      <div class="f-shell">
+        <span class="f-shell__logo" aria-hidden="true">SAP</span>
+        <span class="f-shell__title">
+          <b id="fAppTitle">Create Supplier Invoice</b>
+          <span id="fAppSub">Financial Accounting &middot; company code 1000</span>
+        </span>
+        <span class="f-shell__acts" aria-hidden="true">
+          <span>⌕</span><span>⚙</span><span>?</span>
+        </span>
+        <span class="f-shell__avatar" aria-hidden="true">CK</span>
+      </div>
+
+      <!-- Scenario tabs -->
+      <div class="f-tabs" id="fTabs" role="tablist" aria-label="Business event">
+        <button class="f-tab" type="button" role="tab" id="tab-fb60" data-sc="fb60" aria-selected="true"  aria-controls="fPanel"><b>FB60</b><span>Supplier invoice · VAT</span></button>
+        <button class="f-tab" type="button" role="tab" id="tab-f53"  data-sc="f53"  aria-selected="false" aria-controls="fPanel"><b>F-53</b><span>Payment · withholding tax</span></button>
+        <button class="f-tab" type="button" role="tab" id="tab-fb70" data-sc="fb70" aria-selected="false" aria-controls="fPanel"><b>FB70</b><span>Customer invoice · output VAT</span></button>
+        <button class="f-tab" type="button" role="tab" id="tab-migo" data-sc="migo" aria-selected="false" aria-controls="fPanel"><b>MIGO 101</b><span>Goods receipt · no tax</span></button>
+        <button class="f-tab" type="button" role="tab" id="tab-pp36" data-sc="pp36" aria-selected="false" aria-controls="fPanel"><b>Reverse charge</b><span>Imported service · P.P.36</span></button>
+      </div>
+
+      <!-- Workbench -->
+      <div class="f-work" id="fPanel" role="tabpanel" aria-labelledby="tab-fb60">
+
+        <!-- CONFIG PANE -->
+        <div class="f-pane f-pane--cfg">
+          <h3 class="f-h">Configuration &amp; entry</h3>
+          <div id="fCfg"><!-- controls injected by JS --></div>
+          <div class="f-bar">
+            <button type="button" class="f-btn f-btn--emph" id="fPost">Post</button>
+            <button type="button" class="f-btn f-btn--ghost" id="fReset">Reset</button>
+          </div>
+          <p class="f-teach" id="fCfgNote" style="margin-top:1rem"></p>
+        </div>
+
+        <!-- DOCUMENT PANE -->
+        <div class="f-pane">
+
+          <!-- success message strip -->
+          <div class="f-msg" id="fMsg" role="status" hidden>
+            <span class="f-msg__ico" aria-hidden="true">✓</span>
+            <span id="fMsgText"></span>
+          </div>
+
+          <!-- posting pipeline -->
+          <div class="f-pipe" id="fPipe">
+            <div class="f-pipe__head">
+              <span>Posting pipeline</span>
+              <span class="f-busy" id="fBusy" aria-hidden="true" hidden><i></i><i></i><i></i></span>
+            </div>
+            <div class="f-pipe__log" id="fLog" aria-live="polite"></div>
+          </div>
+
+          <!-- object header -->
+          <div class="f-objhead">
+            <div class="f-objhead__top">
+              <span class="f-objno is-empty" id="fDocNo">—</span>
+              <span class="f-status f-status--none" id="fDocStatus">Not posted</span>
+            </div>
+            <div class="f-objsub" id="fDocSub">Press Post to assign a document number from the number range.</div>
+            <dl class="f-objfacts" id="fFacts"></dl>
+          </div>
+
+          <!-- table tabs -->
+          <h3 class="f-h">Database tables written</h3>
+          <div class="f-ttabs" id="fTtabs" role="tablist" aria-label="Database table"></div>
+
+          <!-- view switch -->
+          <div class="f-vrow" id="fVrow" hidden>
+            <span class="f-vswitch" role="group" aria-label="Document view">
+              <button type="button" id="fViewEntry" aria-pressed="true">Entry view</button>
+              <button type="button" id="fViewGl" aria-pressed="false">General ledger view</button>
+            </span>
+            <span class="f-vnote" id="fVnote"></span>
+          </div>
+
+          <!-- the table -->
+          <div class="f-tablewrap">
+            <table class="f-table" id="fTable">
+              <caption class="skip" id="fCaption">Posted rows</caption>
+              <thead id="fThead"></thead>
+              <tbody id="fTbody"></tbody>
+            </table>
+          </div>
+          <div class="f-tot" id="fTot"></div>
+
+          <div class="f-legend" aria-hidden="true">
+            <span><i class="lk"></i> key field</span>
+            <span><i class="ld"></i> derived by SAP</span>
+            <span><i class="le"></i> empty / not filled</span>
+            <span>? click a column header for the field dictionary</span>
+          </div>
+
+          <!-- field dictionary -->
+          <div class="f-dict" id="fDict">
+            <div class="f-dict__top">
+              <span class="f-dict__f" id="fDictF">Field dictionary</span>
+              <span class="f-dict__tbl" id="fDictTbl"></span>
+              <button type="button" class="f-dict__close" id="fDictClose" aria-label="Close field dictionary" hidden>✕</button>
+            </div>
+            <div id="fDictBody">
+              <p class="f-dict__what" style="margin:0;color:#6a6d70">Click any <b>column header</b> above to see what that
+                field holds, where SAP gets it from, and which configuration decides it.</p>
+            </div>
+          </div>
+
+          <p class="f-teach" id="fTeach"></p>
+        </div>
+      </div>
+    </div>
+    <!-- =============== /FIORI CANVAS =============== -->
+
+    <p class="caption">Rendered in SAP Fiori's own semantic palette (brand <code>#0a6ed1</code>,
+      shell <code>#354a5f</code>, success <code>#107e3e</code>). SAP ships the proprietary
+      <b>72</b> typeface; this page substitutes IBM&nbsp;Plex, so treat the look as faithful rather
+      than pixel-identical.</p>
+  </section>
+
+  <!-- 02 FIVE TABLES -->
+  <section class="chapter" id="tables">
+    <div class="eyebrow"><span class="dot"></span>02 · The shape of a document</div>
+    <h2>One posting. Five tables. Each answers a different question.</h2>
+    <p class="lede">A new consultant's most common mistake is looking for everything in one table.
+      An FI document is deliberately spread across five, because five different readers need it —
+      the accountant, the auditor, the tax authority, the controller and the subledger.</p>
+
+    <div class="tbls">
+      <div class="tbls__c">
+        <h4>BKPF</h4>
+        <div class="one">One row per document</div>
+        <p><b>What happened, once.</b> Company code, document number, year, type, dates, currency,
+          rate, and the reference back to the MM or SD document that caused it.</p>
+      </div>
+      <div class="tbls__c">
+        <h4>BSEG</h4>
+        <div class="one">One row per entered line</div>
+        <p><b>What the user posted.</b> The entry view — posting keys, accounts, amounts in document
+          and local currency. The compatibility view in S/4HANA.</p>
+      </div>
+      <div class="tbls__c">
+        <h4>ACDOCA</h4>
+        <div class="one">One row per ledger per line</div>
+        <p><b>The single source of truth.</b> The Universal Journal: FI + CO + asset + material
+          ledger in one table, after document splitting, with every currency and reporting dimension.</p>
+      </div>
+      <div class="tbls__c">
+        <h4>BSET</h4>
+        <div class="one">One row per tax code</div>
+        <p><b>What the tax authority needs.</b> Base and tax amount per tax code, in every currency —
+          this is what the VAT return reads.</p>
+      </div>
+      <div class="tbls__c">
+        <h4>WITH_ITEM</h4>
+        <div class="one">One row per line per WHT type</div>
+        <p><b>What the payee's certificate needs.</b> Withholding base, withheld amount, code,
+          recipient type and certificate number.</p>
+      </div>
+    </div>
+
+    <div class="saythis">
+      <b>Say this in a meeting</b>
+      "VAT lives in BSET, withholding lives in WITH_ITEM, and the balance lives in ACDOCA. If a tax
+      report disagrees with the general ledger, those are the three tables to reconcile — in that order."
+    </div>
+
+    <p class="note">The open- and cleared-item tables you may know from ECC — <code>BSIK</code>/<code>BSAK</code>
+      (vendor), <code>BSID</code>/<code>BSAD</code> (customer), <code>BSIS</code>/<code>BSAS</code> (G/L) —
+      still answer queries in S/4HANA, but they are now <b>views over ACDOCA</b>, not separate stores.</p>
+  </section>
+
+  <!-- 03 BKPF -->
+  <section class="chapter" id="bkpf">
+    <div class="eyebrow"><span class="dot"></span>03 · BKPF</div>
+    <h2>The header: the facts that apply to the whole document.</h2>
+    <p class="lede">BKPF is small and boring until something is wrong — then it is the first place
+      you look, because almost every "why did it post like that?" question traces back to a header field.</p>
+
+    <p><b>The key is three fields:</b> <code>BUKRS</code> + <code>BELNR</code> + <code>GJAHR</code> —
+      company code, document number, fiscal year. Document numbers are only unique <i>within</i> a
+      company code and year, which is why every FI table repeats all three.</p>
+
+    <h3 style="font-size:1.05rem;margin-top:1.8rem">What each group of header fields is for</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Group</th><th>Fields</th><th>Why a consultant reads it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Identity</b></td>
+            <td><code>BUKRS</code> <code>BELNR</code> <code>GJAHR</code> <code>BLART</code></td>
+            <td>The document type (<code>BLART</code>) drives the number range and which account
+              types are allowed. A document in the wrong range usually means the wrong type was used.</td>
+          </tr>
+          <tr>
+            <td><b>Dates</b></td>
+            <td><code>BLDAT</code> <code>BUDAT</code> <code>MONAT</code> <code>CPUDT</code></td>
+            <td>Document date is the <i>invoice</i> date; posting date decides the <b>period</b> and
+              therefore the tax return. When a VAT report and a G/L balance disagree on timing, this
+              is nearly always why.</td>
+          </tr>
+          <tr>
+            <td><b>Currency</b></td>
+            <td><code>WAERS</code> <code>KURSF</code> <code>HWAER</code></td>
+            <td><code>KURSF</code> is the rate actually used by this document. For a foreign-currency
+              payment, quoting this field settles the argument about which rate applied.</td>
+          </tr>
+          <tr>
+            <td><b>Provenance</b></td>
+            <td><code>AWTYP</code> <code>AWKEY</code> <code>TCODE</code> <code>USNAM</code></td>
+            <td>The reference pair points back to the source: <code>MKPF</code> a material document,
+              <code>RMRP</code> a logistics invoice, <code>VBRK</code> a billing document. This is
+              how you prove an FI document came from MM or SD rather than a manual journal.</td>
+          </tr>
+          <tr>
+            <td><b>Reversal</b></td>
+            <td><code>STBLG</code> <code>STJAH</code> <code>XREVERSAL</code></td>
+            <td>A filled <code>STBLG</code> means this document was reversed. Reports that forget to
+              exclude reversals double-count.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note">Open any document with <span class="tcode">FB03</span> and read the header before
+      the lines. Ninety percent of "wrong posting" tickets are a wrong <b>posting date</b>, a wrong
+      <b>document type</b>, or a wrong <b>exchange rate</b> — all three are header fields.</p>
+  </section>
+
+  <!-- 04 BSEG -->
+  <section class="chapter" id="bseg">
+    <div class="eyebrow"><span class="dot"></span>04 · BSEG</div>
+    <h2>The entry view: what the user actually typed.</h2>
+    <p class="lede">BSEG holds the document as it was entered — before document splitting, one row
+      per line, with the posting keys that decided debit, credit and account type.</p>
+
+    <p>Two fields do most of the explaining:</p>
+
+    <div class="grid grid-3" style="margin:1.4rem 0">
+      <div class="card">
+        <h4 style="font-family:var(--mono);color:var(--gas);margin:0 0 0.4rem">BSCHL</h4>
+        <p style="margin:0;font-size:0.9rem">The <b>posting key</b> — what the <i>user</i> chose. It
+          fixes the account type and the debit/credit sign together:
+          <code>40</code>/<code>50</code> G/L debit/credit · <code>31</code>/<code>21</code> vendor
+          credit/debit · <code>01</code>/<code>11</code> customer debit/credit ·
+          <code>70</code>/<code>75</code> asset · <code>25</code> vendor payment ·
+          <code>89</code>/<code>96</code> stock / GR-IR.</p>
+      </div>
+      <div class="card">
+        <h4 style="font-family:var(--mono);color:var(--flare);margin:0 0 0.4rem">KTOSL</h4>
+        <p style="margin:0;font-size:0.9rem">The <b>transaction key</b> — why <i>SAP</i> generated the
+          line. This is the single most useful field on the page:
+          <code>VST</code> input tax · <code>MWS</code> output tax · <code>NVV</code> non-deductible ·
+          <code>ESA</code>/<code>ESE</code> reverse-charge pair · <code>WIT</code> withholding ·
+          <code>WRX</code> GR/IR · <code>BSX</code> stock · <code>KDF</code> exchange-rate difference.</p>
+      </div>
+      <div class="card">
+        <h4 style="font-family:var(--mono);color:var(--gold);margin:0 0 0.4rem">SHKZG</h4>
+        <p style="margin:0;font-size:0.9rem">The <b>debit/credit indicator</b>, <code>S</code> or
+          <code>H</code>. Amounts in BSEG are stored <b>unsigned</b> — the sign lives here. Reports
+          that sum <code>DMBTR</code> without reading <code>SHKZG</code> produce nonsense.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> The trap worth remembering</div>
+      <p style="margin:0">A user picks <code>BSCHL</code>. SAP fills <code>KTOSL</code>. So when a
+        tax line posts to an unexpected account, the user did not choose that account — the
+        <b>account key behind the transaction key</b> did, in <span class="tcode">OB40</span>.
+        Checking the user's entry is the wrong first move; check the determination.</p>
+    </div>
+
+    <p>Amount fields come in pairs: <code>WRBTR</code> in document currency and <code>DMBTR</code> in
+      local currency, with <code>MWSTS</code> for the tax portion. Clearing adds <code>AUGBL</code>
+      (the clearing document) and <code>AUGDT</code> — an open item is simply a line where those are empty.</p>
+  </section>
+
+  <!-- 05 ACDOCA -->
+  <section class="chapter" id="acdoca">
+    <div class="eyebrow"><span class="dot"></span>05 · ACDOCA</div>
+    <h2>The Universal Journal: one table, every dimension.</h2>
+    <p class="lede">S/4HANA's defining change. Where ECC kept FI in BSEG, CO in COEP, assets in ANEP
+      and the material ledger elsewhere — and reconciled them nightly — S/4HANA writes
+      <b>one row</b> carrying all of it.</p>
+
+    <p>The consequence is practical: a cost-centre report and a G/L balance can no longer disagree,
+      because they read the same row. The reconciliation job that used to exist has nothing left to do.</p>
+
+    <h3 style="font-size:1.05rem;margin-top:1.8rem">The key, and why it has five parts</h3>
+    <p><code>RLDNR</code> + <code>RBUKRS</code> + <code>GJAHR</code> + <code>BELNR</code> +
+      <code>DOCLN</code> — ledger, company code, year, document, line. The ledger comes <b>first</b>
+      because the same posting exists once per ledger. Forget <code>RLDNR = '0L'</code> in a
+      <span class="tcode">SE16N</span> query and every amount you see is multiplied by the number of
+      ledgers.</p>
+
+    <div class="saythis">
+      <b>Say this in a meeting</b>
+      "Which ledger are we looking at? ACDOCA is one row per ledger per line, so a total without a
+      ledger filter is not a number — it's a sum of several books."
+    </div>
+
+    <h3 style="font-size:1.05rem;margin-top:1.8rem">Field families</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Family</th><th>Fields</th><th>What it gives you</th></tr></thead>
+        <tbody>
+          <tr><td><b>Ledger &amp; key</b></td><td><code>RLDNR</code> <code>RBUKRS</code> <code>GJAHR</code> <code>BELNR</code> <code>DOCLN</code></td><td>Which book, which document, which line.</td></tr>
+          <tr><td><b>Account</b></td><td><code>RACCT</code> <code>KTOSL</code> <code>MWSKZ</code> <code>DRCRK</code></td><td>The G/L account plus the reason the line exists and its tax code.</td></tr>
+          <tr><td><b>Amounts</b></td><td><code>WSL</code> <code>HSL</code> <code>KSL</code> <code>OSL</code> <code>RWCUR</code></td><td>Transaction, company-code, group and freely-defined currency — <b>signed</b>, unlike BSEG.</td></tr>
+          <tr><td><b>Reporting</b></td><td><code>RCNTR</code> <code>PRCTR</code> <code>SEGMENT</code> <code>RFAREA</code></td><td>Cost centre, profit centre, segment, functional area — the dimensions a balance sheet can be sliced by.</td></tr>
+          <tr><td><b>Subledger</b></td><td><code>LIFNR</code> <code>KUNNR</code> <code>ANLN1</code> <code>MATNR</code></td><td>Vendor, customer, asset, material on the same row — no join needed.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note"><b>Amounts in ACDOCA are signed; amounts in BSEG are not.</b> That single
+      difference is behind a surprising number of custom-report defects: logic ported from ECC keeps
+      reading <code>SHKZG</code>, which ACDOCA does not need, and flips half the lines.</p>
+  </section>
+
+  <!-- 06 BSET -->
+  <section class="chapter" id="bset">
+    <div class="eyebrow"><span class="dot"></span>06 · BSET</div>
+    <h2>The tax lines: what the VAT return actually reads.</h2>
+    <p class="lede">One row per tax code per document. Not per line item — per <b>tax code</b>. Three
+      expense lines sharing one tax code produce one BSET row with the summed base.</p>
+
+    <p>The amount fields come in <b>pairs, once per currency</b>, and the naming is worth memorising
+      because every tax report in SAP uses it:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Currency</th><th>Base</th><th>Tax</th><th>Which currency</th></tr></thead>
+        <tbody>
+          <tr><td>Document</td><td><code>FWBAS</code></td><td><code>FWSTE</code></td><td>The currency on the invoice</td></tr>
+          <tr><td>Local 1</td><td><code>HWBAS</code></td><td><code>HWSTE</code></td><td>Company-code currency — what the return is filed in</td></tr>
+          <tr><td>Local 2</td><td><code>H2BAS</code></td><td><code>H2STE</code></td><td>Group currency, if configured</td></tr>
+          <tr><td>Local 3</td><td><code>H3BAS</code></td><td><code>H3STE</code></td><td>Third currency, often a tax-specific one</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Alongside them: <code>MWSKZ</code> the tax code, <code>KTOSL</code> the account key that sent
+      it to a G/L account, <code>KSCHL</code> the condition type from the tax procedure,
+      <code>KBETR</code> the rate as applied, and <code>HKONT</code> the account it landed in.</p>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> Two cases that confuse everyone</div>
+      <p><b>A non-deductible tax code shows no separate tax line.</b> With account key
+        <code>NVV</code> the tax is added into the expense or GR/IR line, so BSEG has nothing
+        tax-shaped in it — but BSET still records the base and the amount. Read BSET, not the lines.</p>
+      <p style="margin:0"><b>A reverse-charge code produces two BSET rows.</b> The <code>ESE</code>/<code>ESA</code>
+        pair self-assesses the tax: one row is the input tax you may reclaim, the other the output tax
+        you owe. The net cash effect is nil, which is exactly why it is easy to miss.</p>
+    </div>
+
+    <p class="note">The standard VAT return report is <span class="tcode">RFUMSV00</span>
+      (<span class="tcode">S_ALR_87012357</span>). It reads BSET. If a tax amount is missing from the
+      return but visible in the G/L, the posting reached BSEG without reaching BSET — usually a tax
+      code with no condition record or a manual posting to a tax account.</p>
+  </section>
+
+  <!-- 07 WITH_ITEM -->
+  <section class="chapter" id="withitem">
+    <div class="eyebrow"><span class="dot"></span>07 · WITH_ITEM</div>
+    <h2>Withholding tax: a separate engine, a separate table.</h2>
+    <p class="lede">VAT and withholding tax are often spoken of together and configured nowhere near
+      each other. VAT is a tax code on a line. Extended Withholding Tax is its own engine, keyed by
+      <b>type</b> and <b>code</b>, writing to its own table.</p>
+
+    <p>The key is <code>BUKRS</code> + <code>GJAHR</code> + <code>BELNR</code> + <code>BUZEI</code> +
+      <code>WITHT</code> — note the last part: one row <b>per withholding type</b> on the line. A
+      vendor subject to two types produces two rows on the same line.</p>
+
+    <h3 style="font-size:1.05rem;margin-top:1.8rem">Type versus code — the distinction that matters</h3>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:1.2rem 0">
+      <div class="card">
+        <h4 style="font-family:var(--mono);color:var(--gas);margin:0 0 0.4rem">WHT type · T059P</h4>
+        <p style="margin:0;font-size:0.9rem"><b>When and how</b> tax is calculated: at invoice or at
+          payment, the base amount type, rounding, accumulation, and whether the posting is with or
+          without offsetting. Changing a type changes <i>timing</i>.</p>
+      </div>
+      <div class="card">
+        <h4 style="font-family:var(--mono);color:var(--gold);margin:0 0 0.4rem">WHT code · T059Z</h4>
+        <p style="margin:0;font-size:0.9rem"><b>How much</b>: the rate (<code>QSATZ</code>) and the
+          income type (<code>QEKAR</code>) that decides which return the amount appears on. Changing a
+          code changes the <i>number</i>.</p>
+      </div>
+      <div class="card">
+        <h4 style="font-family:var(--mono);color:var(--flare);margin:0 0 0.4rem">Vendor data · LFBW</h4>
+        <p style="margin:0;font-size:0.9rem">Per company code: which types apply, the <b>liable</b>
+          flag, the default code and the recipient type. <b>If the liable flag is off, nothing is
+          withheld</b> — and that is the first thing to check when a deduction is missing.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> Why a row can show a base but zero tax</div>
+      <p style="margin:0">For a <b>deduct-at-payment</b> type, the invoice writes a WITH_ITEM row with
+        the type, the code and the base — but <b>amount zero</b>. The amount only appears on the
+        <i>payment</i> document. A row with a base and no amount is not a defect; it is the invoice
+        half of a two-document story. Run the payment in the simulator above and watch the amount
+        appear on the second document.</p>
+    </div>
+
+    <p>Amount fields follow the same per-currency pattern as BSET: <code>WT_QSSHB</code>/<code>WT_QBSHB</code>
+      base and tax in document currency, <code>WT_QSSHH</code>/<code>WT_QBSHH</code> in local currency 1,
+      then <code>…SH2</code> / <code>…SH3</code> for further currencies. <code>QSREC</code> carries the
+      recipient type and <code>CTNUMBER</code> the certificate number.</p>
+
+    <p class="note">Reporting runs through <span class="tcode">RFIDYYWT</span> — Generic Withholding Tax
+      Reporting (<span class="tcode">S_P00_07000134</span>). One selection screen produces forms,
+      lists and e-filing files; which of them you get is decided by the <b>output group</b>, not by
+      the selection. A report that "runs but produces nothing" is usually the wrong output group.</p>
+  </section>
+
+  <!-- 08 SPLITTING -->
+  <section class="chapter" id="split">
+    <div class="eyebrow"><span class="dot"></span>08 · Entry view vs general ledger view</div>
+    <h2>Document splitting: the same document, told twice.</h2>
+    <p class="lede">Turn on splitting in the workbench and the row count changes. Nothing was posted
+      twice — you are looking at the second view of one document.</p>
+
+    <p>A user enters an expense against a profit centre and a vendor line with none; the vendor is a
+      balance-sheet account and carries no reporting dimension of its own. Document splitting pushes
+      the <b>characteristics of the P&amp;L lines onto the balance-sheet lines</b>, in proportion to
+      the amounts, so that a balance sheet can be produced per profit centre or segment.</p>
+
+    <div class="grid grid-3" style="margin:1.4rem 0">
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem">Entry view — BSEG</h4>
+        <p style="margin:0;font-size:0.9rem">What the user posted. The vendor and tax lines are single
+          rows with no profit centre. This is what <span class="tcode">FB60</span> showed them.</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem">GL view — ACDOCA</h4>
+        <p style="margin:0;font-size:0.9rem">After splitting. The vendor and tax lines are now
+          <b>several rows</b>, one per profit centre, each balanced in its own right.</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem">Why it matters</h4>
+        <p style="margin:0;font-size:0.9rem">A report that reads "the" profit centre of a document
+          must decide <b>which line's</b> profit centre it means. Often there is no single answer.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> Two consequences that generate real defects</div>
+      <p><b>Tax lines multiply.</b> One invoice across two profit centres produces two tax lines in the
+        GL view, each with its own dimension. A tax report joining on "the tax line" of a document will
+        find two and must decide whether to sum them or pick one.</p>
+      <p style="margin:0"><b>Zero-amount split lines exist.</b> A characteristic can be carried with
+        <code>0.00</code>. Reports that do not skip them show phantom rows — and a reviewer who sees
+        a 0.00 line assumes the report is broken.</p>
+    </div>
+
+    <p class="note">In <span class="tcode">FB03</span>, always choose the <b>General Ledger View</b> and
+      name the ledger before discussing segment or profit centre. Arguing about dimensions from the
+      entry view is arguing about a document that does not exist in the ledger.</p>
+  </section>
+
+  <!-- 09 CURRENCIES -->
+  <section class="chapter" id="currency">
+    <div class="eyebrow"><span class="dot"></span>09 · Currencies</div>
+    <h2>Every line carries several amounts — and all of them must balance.</h2>
+    <p class="lede">Switch the workbench to USD and watch a second and third amount column come alive.
+      S/4HANA stores up to ten currencies per line; most implementations use three.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Field</th><th>Currency type</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>WSL</code></td><td>—</td><td><b>Transaction currency</b> — what the invoice was written in.</td></tr>
+          <tr><td><code>HSL</code></td><td>10</td><td><b>Company-code currency</b> (local 1) — what the statutory books and the tax return are in.</td></tr>
+          <tr><td><code>KSL</code></td><td>30</td><td><b>Group currency</b> — what consolidation reads.</td></tr>
+          <tr><td><code>OSL</code> / <code>VSL</code></td><td>40+</td><td><b>Freely defined</b> — a hard currency, an index currency, or a tax-specific currency.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Each amount is converted <b>at the moment of posting</b> using a rate from <code>TCURR</code>,
+      selected by rate type (<code>KURST</code>, commonly <code>M</code> for average) and valid-from
+      date (<code>GDATU</code>, which is stored <i>inverted</i> — a detail that has broken many a
+      custom report). Maintain rates in <span class="tcode">OB08</span>.</p>
+
+    <div class="saythis">
+      <b>The 10-second integrity check on any document</b>
+      Per ledger: Σ<code>WSL</code> = 0, Σ<code>HSL</code> = 0, Σ<code>KSL</code> = 0. If the
+      transaction currency balances but the local currency does not, you are not looking at a posting
+      error — you are looking at a <b>rounding or rate</b> problem.
+    </div>
+
+    <p class="note">Rates are set at posting and then frozen. Period-end foreign-currency valuation
+      (<span class="tcode">FAGL_FCV</span>) does not change them — it posts <i>additional</i> lines
+      for the difference on open items. So an open item legitimately shows an old rate; the
+      revaluation sits beside it, not on it.</p>
+  </section>
+
+  <!-- 10 CONFIG -->
+  <section class="chapter" id="config">
+    <div class="eyebrow"><span class="dot"></span>10 · Configuration</div>
+    <h2>Nothing on a line is typed. Trace any field to the node that decides it.</h2>
+    <p class="lede">This is the table a consultant actually works from. Read it right to left: a field
+      on the document, the thing that determines it, and the IMG node or transaction where you change it.</p>
+
+    <div class="trace" id="trace">
+      <div class="trace__row">
+        <div class="trace__cfg">OBBG<small>Country → procedure</small></div>
+        <div class="trace__what">Assigns the <b>tax calculation procedure</b> to a country. Every company code in that country shares it — which is why a tax code is <i>never</i> company-code-specific.</div>
+        <div class="trace__fld">BSET-KSCHL<small>which conditions exist</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">OBYZ<small>Procedure &amp; condition types</small></div>
+        <div class="trace__what">Defines the condition types and <b>account keys</b> in the procedure, and the order they calculate in.</div>
+        <div class="trace__fld">BSET-KTOSL<small>account key per condition</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">FTXP<small>Tax codes &amp; rates</small></div>
+        <div class="trace__what">Creates the <b>tax code</b> and its rate per condition. Change a rate here and every later posting changes; earlier documents keep the rate they were posted with.</div>
+        <div class="trace__fld">BSET-MWSKZ · KBETR<small>code and rate as applied</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">OB40<small>Tax account determination</small></div>
+        <div class="trace__what">Maps each <b>account key to a G/L account</b> (table <code>T030K</code>). This — not the user — decides where a tax line lands.</div>
+        <div class="trace__fld">BSET-HKONT · BSEG-HKONT<small>the tax account</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">OBCN<small>Transaction keys</small></div>
+        <div class="trace__what">Defines the processing keys themselves — whether a key is deductible, non-deductible, or part of a reverse-charge pair.</div>
+        <div class="trace__fld">ACDOCA-KTOSL<small>why the line exists</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">OBYC<small>MM → FI</small></div>
+        <div class="trace__what">Automatic account determination for goods movements: <code>BSX</code> picks the stock account from the material's valuation class, <code>WRX</code> the GR/IR clearing account.</div>
+        <div class="trace__fld">BSEG-HKONT<small>on a goods receipt</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">VKOA<small>SD → FI</small></div>
+        <div class="trace__what">Revenue account determination: account key <code>ERL</code> sends billing to the right revenue line while output tax goes to its own account.</div>
+        <div class="trace__fld">BSEG-HKONT<small>on a billing document</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">BP / OBD3<small>Account group</small></div>
+        <div class="trace__what">The business partner's account group fixes the <b>reconciliation account</b> — the one G/L account that mirrors every subledger posting.</div>
+        <div class="trace__fld">BSEG-HKONT<small>vendor / customer line</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">T059P<small>Extended WHT · type</small></div>
+        <div class="trace__what">Defines <b>when</b> withholding is calculated — at invoice or at payment — plus base type, rounding and accumulation.</div>
+        <div class="trace__fld">WITH_ITEM-WITHT<small>and whether the amount is 0</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">T059Z<small>Extended WHT · code</small></div>
+        <div class="trace__what">Carries the <b>rate</b> (<code>QSATZ</code>) and the income type that decides which statutory return the amount lands on.</div>
+        <div class="trace__fld">WITH_ITEM-WT_WITHCD<small>and WT_QBSHB</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">LFBW<small>Vendor WHT data</small></div>
+        <div class="trace__what">Per company code: types allowed, the <b>liable flag</b>, default code, recipient type. Liable off means nothing is withheld, however correct the config above is.</div>
+        <div class="trace__fld">WITH_ITEM exists at all<small>plus QSREC</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">OBWW<small>WHT accounts</small></div>
+        <div class="trace__what">The G/L accounts withholding tax is posted over to, and the offsetting account used when the company bears the tax (gross-up).</div>
+        <div class="trace__fld">BSEG-HKONT<small>the WIT line</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">FINSC_LEDGER<small>Ledgers &amp; currencies</small></div>
+        <div class="trace__what">Which ledgers exist, which currency types each carries, and which fiscal year variant applies. Decides how many ACDOCA rows one line becomes.</div>
+        <div class="trace__fld">ACDOCA-RLDNR<small>and HSL / KSL / OSL</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">OB08<small>Exchange rates</small></div>
+        <div class="trace__what">Maintains <code>TCURR</code> by rate type and valid-from date. The document freezes the rate it found at posting.</div>
+        <div class="trace__fld">BKPF-KURSF<small>and every HSL</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">Document splitting<small>SPRO · G/L global settings</small></div>
+        <div class="trace__what">Which characteristics are split, which are mandatory, and the splitting method. Decides whether the GL view has more rows than the entry view.</div>
+        <div class="trace__fld">ACDOCA-PRCTR · SEGMENT<small>on balance-sheet lines</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">KE51 / GGB1<small>Profit centre · substitution</small></div>
+        <div class="trace__what">Segment is normally derived from the <b>profit centre master</b>; a substitution can derive or overwrite it at posting. Both are legitimate, and knowing which is in play saves a long argument.</div>
+        <div class="trace__fld">ACDOCA-SEGMENT<small>derived, not entered</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">FBN1<small>Number ranges</small></div>
+        <div class="trace__what">The number range per document type and fiscal year. The range a document sits in tells you which type was used, even if nobody remembers choosing it.</div>
+        <div class="trace__fld">BKPF-BELNR<small>the document number</small></div>
+      </div>
+      <div class="trace__row">
+        <div class="trace__cfg">OB52<small>Period control</small></div>
+        <div class="trace__what">Which posting periods are open, per account type and authorisation group. The most common cause of "it won't post" that is not a config error at all.</div>
+        <div class="trace__fld">BKPF-BUDAT · MONAT<small>accepted or refused</small></div>
+      </div>
+    </div>
+
+    <p class="note">Two of these are worth internalising because they are asked at interview:
+      <b>a tax code belongs to a country, not a company code</b> (<span class="tcode">OBBG</span>), and
+      <b>the account key, not the user, chooses the tax account</b> (<span class="tcode">OB40</span>).</p>
+  </section>
+
+  <!-- 11 METHOD -->
+  <section class="chapter" id="method">
+    <div class="eyebrow"><span class="dot"></span>11 · Method</div>
+    <h2>How to read any FI document in sixty seconds.</h2>
+    <p class="lede">The same order, every time. It works because it moves from the facts that apply to
+      the whole document down to the line that is actually wrong.</p>
+
+    <div class="method">
+      <div class="method__i">
+        <div>
+          <h4>Header first, in the general ledger view</h4>
+          <p><span class="tcode">FB03</span> → General Ledger View, and name the ledger. Read
+            <code>BLART</code>, <code>BUDAT</code>, <code>WAERS</code>, <code>KURSF</code>. Most
+            "wrong posting" reports die here.</p>
+        </div>
+      </div>
+      <div class="method__i">
+        <div>
+          <h4>Check it balances, per currency</h4>
+          <p>Σ<code>HSL</code> = 0 and Σ<code>WSL</code> = 0. If only one of them balances, the
+            problem is a rate or a rounding difference, not the posting logic.</p>
+        </div>
+      </div>
+      <div class="method__i">
+        <div>
+          <h4>Read KTOSL down the lines</h4>
+          <p>It tells you which lines SAP generated and why. A missing <code>VST</code> line means
+            tax determination did not fire; an unexpected <code>KDF</code> means a currency difference.</p>
+        </div>
+      </div>
+      <div class="method__i">
+        <div>
+          <h4>Reconcile tax against its own table</h4>
+          <p>VAT in BSET, withholding in WITH_ITEM. Compare the base, not just the tax — a wrong base
+            with a right rate is a different defect from a wrong rate.</p>
+        </div>
+      </div>
+      <div class="method__i">
+        <div>
+          <h4>Three-layer diagnosis, in order</h4>
+          <p>Does the <b>master data</b> exist (vendor liable flag, tax classification)? Is the
+            <b>configuration</b> right <i>for this company code</i>? And what was <b>actually posted</b>?
+            Checking them out of order wastes the most time.</p>
+        </div>
+      </div>
+      <div class="method__i">
+        <div>
+          <h4>Isolate with a discriminating pair</h4>
+          <p>Find two documents that differ in exactly one variable — one currency, one tax code, one
+            profit centre. The difference between them is the cause. One document is an anecdote; a
+            pair is an argument.</p>
+        </div>
+      </div>
+      <div class="method__i">
+        <div>
+          <h4>Check the design before raising anything</h4>
+          <p>Never raise as a defect what the signed design says is intended. Evidence before action:
+            table trace, document, configuration — <i>then</i> raise it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> Where to go next</div>
+      <p style="margin:0">The module around these documents — organisational units, master data,
+        ledgers and currencies, the period-end close, and Thailand's VAT and withholding returns — is
+        on the companion page: <a href="finance-functional-module.html">Functional Module of Finance
+        — SAP FI</a>. How configuration turns into a posting in the first place is on the
+        <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>, and the consulting role
+        around it all is in <a href="fi-tax-consultant-scope.html">Scope of Work</a>.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    An interactive teaching model of the SAP S/4HANA Financial Accounting document, written as a
+    personal reference for an FI (Tax) consultant role. Independent study material — not affiliated
+    with, endorsed by, or containing confidential material from Accenture, SAP, or any client.
+    Document numbers, accounts and amounts are illustrative; table and field names are standard SAP.
+    <div class="sources">Behaviour described follows standard SAP S/4HANA Financial Accounting:
+      Universal Journal (ACDOCA), tax determination via the calculation procedure and account keys,
+      Extended Withholding Tax, and document splitting. Verify rates, field names and output groups
+      in the system before relying on them.</div>
+  </div>
+</footer>
+<script>
+  (function () {
+    'use strict';
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- Site nav bar (mobile drawer) ---------- */
+    var burger = document.getElementById('siteBurger');
+    var siteMenu = document.getElementById('siteMenu');
+    if (burger && siteMenu) {
+      var closeSiteMenu = function () {
+        siteMenu.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+      };
+      burger.addEventListener('click', function () {
+        var open = siteMenu.classList.toggle('is-open');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      siteMenu.addEventListener('click', function (e) {
+        if (e.target.closest('a')) { closeSiteMenu(); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeSiteMenu(); }
+      });
+    }
+
+    /* ---------- Day / Night theme toggle ---------- */
+    var themeBtn = document.getElementById('themeBtn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme');
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    }
+
+    /* ---------- Scroll-spy rail ---------- */
+    var spyLinks = Array.prototype.slice.call(document.querySelectorAll('.rail__link[data-spy]'));
+    var sections = spyLinks.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+    if ('IntersectionObserver' in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var id = '#' + e.target.id;
+            spyLinks.forEach(function (a) {
+              a.classList.toggle('is-active', a.getAttribute('href') === id);
+            });
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      sections.forEach(function (s) { if (s) spy.observe(s); });
+    }
+
+})();
+</script>
+<!-- ============================================================
+     FI DOCUMENT SIMULATOR
+     A teaching model of an S/4HANA FI posting. Every journal line is
+     derived from the configuration panel — nothing is hard-coded.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- reference data ---------------- */
+
+  var CC    = '1000';
+  var YEAR  = '2026';
+  var RATE  = { THB: 1, USD: 36.50, EUR: 39.80 };
+  var GROUP = 'USD';                 /* group currency for KSL */
+  var LC1   = 'THB';                 /* company-code currency  */
+
+  var GL = {
+    exp:     ['6100100', 'Professional fees'],
+    stock:   ['1300100', 'Raw material stock'],
+    grir:    ['2110100', 'GR/IR clearing'],
+    vatIn:   ['1540100', 'Input VAT — deductible'],
+    vatOut:  ['2540100', 'Output VAT'],
+    vatRcIn: ['1540300', 'Input VAT — reverse charge'],
+    vatRcOut:['2540300', 'Output VAT — reverse charge'],
+    vendor:  ['2100100', 'Trade payables — domestic'],
+    vendorF: ['2100200', 'Trade payables — foreign'],
+    cust:    ['1200100', 'Trade receivables'],
+    rev:     ['4100100', 'Service revenue'],
+    bank:    ['1110100', 'Bank — current account'],
+    wht:     ['2160100', 'Withholding tax payable'],
+    whtExp:  ['6900100', 'Withholding tax borne by company']
+  };
+
+  var PC = [
+    { pc: '1010', seg: 'SEG-A', share: 0.6 },
+    { pc: '1020', seg: 'SEG-B', share: 0.4 }
+  ];
+
+  var TAXC = {
+    V7: { rate: 7,  ktosl: 'VST', txt: 'Input VAT 7% — deductible',       ded: true  },
+    V0: { rate: 0,  ktosl: 'VST', txt: 'Zero-rated / exempt 0%',          ded: true  },
+    VN: { rate: 7,  ktosl: 'NVV', txt: 'Input VAT 7% — non-deductible',   ded: false },
+    O7: { rate: 7,  ktosl: 'MWS', txt: 'Output VAT 7%',                   ded: true  },
+    RC: { rate: 7,  ktosl: 'ESE', txt: 'Reverse charge 7% — self-assessed', ded: true }
+  };
+
+  var WHTC = {
+    none: null,
+    W53:  { witht: 'B', code: '53', rate: 3,  rec: 'CO', txt: 'PND53 · services 3% · company payee',   when: 'payment' },
+    W03:  { witht: 'B', code: '03', rate: 3,  rec: 'IN', txt: 'PND3 · services 3% · individual payee', when: 'payment' },
+    W01:  { witht: 'B', code: '01', rate: 5,  rec: 'CO', txt: 'Rent 5% · company payee',               when: 'payment' },
+    W54:  { witht: 'B', code: '54', rate: 15, rec: 'FO', txt: 'PND54 · foreign company 15%',           when: 'payment' },
+    WA53: { witht: 'A', code: '53', rate: 3,  rec: 'CO', txt: 'PND53 3% · deducted at INVOICE',        when: 'invoice' }
+  };
+
+  /* ---------------- field dictionary ----------------
+     f     field name
+     n     business name
+     w     what it holds
+     s     where the value comes from
+     c     why a consultant cares (optional)
+     k     true = part of the table key
+     d     true = derived by SAP rather than entered
+     num   true = numeric, right-aligned
+  --------------------------------------------------- */
+
+  var F = {
+    /* ---------- BKPF ---------- */
+    BUKRS:  { f: 'BUKRS',  n: 'Company code', k: 1,
+      w: 'The legal entity that files its own financial statements. Carries the company-code currency and the country that drives tax.',
+      s: 'Entered on the posting screen · master table <code>T001</code>',
+      c: 'Tax codes are shared by every company code in the same country, so this field tells you which <i>set</i> of codes applies.' },
+    BELNR:  { f: 'BELNR',  n: 'Document number', k: 1, d: 1,
+      w: 'The FI document number, assigned from the number range of the document type.',
+      s: 'Number range object <code>RF_BELEG</code> · maintained in <span class="f-src">FBN1</span>',
+      c: 'Unique only within a company code and fiscal year — never query it alone.' },
+    GJAHR:  { f: 'GJAHR',  n: 'Fiscal year', k: 1, d: 1,
+      w: 'The fiscal year the document belongs to, derived from the posting date and the fiscal year variant.',
+      s: 'Derived from <code>BUDAT</code> · variant in <span class="f-src">OB29</span>' },
+    BLART:  { f: 'BLART',  n: 'Document type',
+      w: 'Classifies the document: KR supplier invoice, KZ supplier payment, DR customer invoice, DZ customer payment, SA G/L, WE goods receipt, RE logistics invoice.',
+      s: 'Chosen by the transaction · configured in <span class="f-src">OBA7</span>',
+      c: 'Decides the number range and which account types may be posted. A document in an unexpected range means the wrong type was used.' },
+    BLDAT:  { f: 'BLDAT',  n: 'Document date',
+      w: 'The date on the supplier\'s or customer\'s document — the invoice date.',
+      s: 'Entered by the user',
+      c: 'Drives payment terms and the baseline date, not the accounting period.' },
+    BUDAT:  { f: 'BUDAT',  n: 'Posting date',
+      w: 'The date the document posts to the ledger. Decides the period, and therefore which tax return and which month-end it falls in.',
+      s: 'Entered by the user · period must be open in <span class="f-src">OB52</span>',
+      c: 'The single most common cause of a tax report disagreeing with a G/L balance.' },
+    MONAT:  { f: 'MONAT',  n: 'Posting period', d: 1,
+      w: 'The period number derived from the posting date — 1 to 12 plus special periods 13 to 16 for year-end adjustments.',
+      s: 'Derived from <code>BUDAT</code> and the fiscal year variant' },
+    WAERS:  { f: 'WAERS',  n: 'Document currency',
+      w: 'The currency the transaction was conducted in. Amounts in this currency are the <code>WSL</code> / <code>WRBTR</code> fields.',
+      s: 'Entered by the user, defaulted from the vendor or customer' },
+    KURSF:  { f: 'KURSF',  n: 'Exchange rate', num: 1,
+      w: 'The rate actually applied by this document to convert to company-code currency.',
+      s: 'Read from <code>TCURR</code> at posting · maintained in <span class="f-src">OB08</span>',
+      c: 'Frozen at posting. Quoting this field ends most arguments about "which rate applied" — the answer is always the one on the document.' },
+    XBLNR:  { f: 'XBLNR',  n: 'Reference',
+      w: 'The external reference — usually the supplier\'s invoice number.',
+      s: 'Entered by the user',
+      c: 'Duplicate-invoice checking uses this with the vendor and the date.' },
+    TCODE:  { f: 'TCODE',  n: 'Transaction code', d: 1,
+      w: 'The transaction or app that created the document.',
+      s: 'Recorded by the system',
+      c: 'Tells you instantly whether a document came from a user, a batch job, or an interface.' },
+    AWTYP:  { f: 'AWTYP',  n: 'Reference type', d: 1,
+      w: 'What kind of source object caused this FI document: <code>MKPF</code> material document, <code>RMRP</code> logistics invoice, <code>VBRK</code> billing document, blank for a direct FI posting.',
+      s: 'Set by the calling application',
+      c: 'With <code>AWKEY</code>, this is how you prove a posting came from MM or SD rather than a manual journal.' },
+    AWKEY:  { f: 'AWKEY',  n: 'Reference key', d: 1,
+      w: 'The key of the source document in its own table — the object <code>AWTYP</code> names.',
+      s: 'Set by the calling application' },
+    USNAM:  { f: 'USNAM',  n: 'User name', d: 1,
+      w: 'The user who posted the document.',
+      s: 'Recorded by the system' },
+
+    /* ---------- BSEG ---------- */
+    BUZEI:  { f: 'BUZEI',  n: 'Line item', k: 1, d: 1,
+      w: 'The line number within the document, numbered in entry sequence.',
+      s: 'Assigned by the system' },
+    BSCHL:  { f: 'BSCHL',  n: 'Posting key',
+      w: 'What the <b>user</b> chose. Fixes the account type and the debit/credit sign together: 40/50 G/L, 31/21 vendor, 01/11 customer, 70/75 asset, 25 vendor payment, 89/96 stock and GR/IR.',
+      s: 'Entered by the user · configured in <span class="f-src">OB41</span>',
+      c: 'Contrast with <code>KTOSL</code>: the posting key is a user decision, the transaction key is a system decision.' },
+    KOART:  { f: 'KOART',  n: 'Account type', d: 1,
+      w: 'S G/L, K vendor, D customer, A asset, M material — implied by the posting key.',
+      s: 'Derived from <code>BSCHL</code>' },
+    SHKZG:  { f: 'SHKZG',  n: 'Debit / credit', d: 1,
+      w: '<code>S</code> debit or <code>H</code> credit. BSEG amounts are stored <b>unsigned</b>, so the sign lives here.',
+      s: 'Derived from <code>BSCHL</code>',
+      c: 'A report that sums <code>DMBTR</code> without reading this field returns a meaningless total. ACDOCA avoids the problem by storing signed amounts.' },
+    HKONT:  { f: 'HKONT',  n: 'G/L account',
+      w: 'The general ledger account the line posts to. For a vendor or customer line this is the <b>reconciliation account</b>, not the subledger number.',
+      s: 'Entered for expense lines; <b>determined</b> for tax (<span class="f-src">OB40</span>), stock and GR/IR (<span class="f-src">OBYC</span>), revenue (<span class="f-src">VKOA</span>) and subledger recon accounts (account group)',
+      c: 'When a tax line hits an unexpected account the user did not choose it — the account key did. Check the determination, not the entry.' },
+    LIFNR:  { f: 'LIFNR',  n: 'Supplier',
+      w: 'The supplier account on a vendor line. Filled only on lines with account type K.',
+      s: 'Entered by the user · master data <code>LFA1</code> / <code>LFB1</code> via the business partner' },
+    KUNNR:  { f: 'KUNNR',  n: 'Customer',
+      w: 'The customer account on a receivables line. Filled only on lines with account type D.',
+      s: 'Entered by the user · master data <code>KNA1</code> / <code>KNB1</code> via the business partner' },
+    WRBTR:  { f: 'WRBTR',  n: 'Amount in document currency', num: 1,
+      w: 'The line amount in the document currency, unsigned.',
+      s: 'Entered for the base lines; calculated for tax and withholding lines' },
+    DMBTR:  { f: 'DMBTR',  n: 'Amount in local currency', num: 1,
+      w: 'The same amount converted to company-code currency at <code>KURSF</code>, unsigned.',
+      s: 'Calculated at posting from <code>WRBTR</code> × <code>KURSF</code>' },
+    MWSKZ:  { f: 'MWSKZ',  n: 'Tax code',
+      w: 'The tax code that applies to the line. Carries the rate and, through its account key, the tax account.',
+      s: 'From the PO item on <span class="f-src">MIRO</span>, from user entry on <span class="f-src">FB60</span>, or from SD condition <code>MWST</code> on billing · defined in <span class="f-src">FTXP</span>',
+      c: 'A code belongs to a <b>country</b>, never to a company code — the chain is <code>T001-LAND1</code> → procedure → code.' },
+    KTOSL:  { f: 'KTOSL',  n: 'Transaction key', d: 1,
+      w: 'Why <b>SAP</b> generated this line: <code>VST</code> input tax, <code>MWS</code> output tax, <code>NVV</code> non-deductible, <code>ESA</code>/<code>ESE</code> reverse-charge pair, <code>WIT</code> withholding, <code>WRX</code> GR/IR, <code>BSX</code> stock, <code>KDF</code> exchange-rate difference.',
+      s: 'Set by the posting logic · keys defined in <span class="f-src">OBCN</span>, mapped to accounts in <span class="f-src">OB40</span>',
+      c: 'The most useful single field when reading an unfamiliar document — read it down the lines and the document explains itself.' },
+    PRCTR:  { f: 'PRCTR',  n: 'Profit centre',
+      w: 'The reporting dimension on the line. Entered on P&amp;L lines; on balance-sheet lines it is filled by <b>document splitting</b> in the general ledger view, and is often empty in the entry view.',
+      s: 'Entered or derived from the cost object · master data <span class="f-src">KE51</span>',
+      c: 'If this is empty in the entry view but filled in the GL view, splitting is working as designed — not a defect.' },
+    SGTXT:  { f: 'SGTXT',  n: 'Line item text',
+      w: 'Free text on the line.',
+      s: 'Entered by the user, or filled by a substitution',
+      c: 'Often carries information a report depends on. If it does, that is a design smell worth raising — but check the signed design first.' },
+    AUGBL:  { f: 'AUGBL',  n: 'Clearing document',
+      w: 'The document that cleared this line. Empty means the item is still <b>open</b>.',
+      s: 'Filled by clearing — payment, <span class="f-src">F110</span>, or <span class="f-src">F.13</span>',
+      c: 'This, with <code>AUGDT</code>, is the whole definition of open versus cleared. The classic index tables are just views built on it.' },
+
+    /* ---------- ACDOCA ---------- */
+    RLDNR:  { f: 'RLDNR',  n: 'Ledger', k: 1,
+      w: 'Which book this row belongs to. <code>0L</code> is the leading ledger, integrated with Controlling; non-leading ledgers carry parallel valuations such as local GAAP or a tax view.',
+      s: 'Posting goes to all ledgers of the ledger group · configured in <span class="f-src">FINSC_LEDGER</span>',
+      c: 'The key starts with the ledger because one line exists once <b>per ledger</b>. Query ACDOCA without a ledger filter and every total is multiplied.' },
+    RBUKRS: { f: 'RBUKRS', n: 'Company code', k: 1,
+      w: 'The company code — the same value as <code>BKPF-BUKRS</code>, repeated because the key needs it.',
+      s: 'From the document header' },
+    DOCLN:  { f: 'DOCLN',  n: 'Line item', k: 1, d: 1,
+      w: 'The line number in the universal journal. Six digits, and <b>not</b> the same numbering as <code>BSEG-BUZEI</code> once splitting is active.',
+      s: 'Assigned by the system',
+      c: 'Do not join BSEG to ACDOCA on the line number. Join on document and read the split lines separately.' },
+    RACCT:  { f: 'RACCT',  n: 'G/L account',
+      w: 'The account in the universal journal — the same account as <code>BSEG-HKONT</code>.',
+      s: 'From the posting, by the same determination as the entry view' },
+    RCNTR:  { f: 'RCNTR',  n: 'Cost centre',
+      w: 'The cost centre on the line. Present in the same table as the G/L amount, which is what removes the FI-to-CO reconciliation entirely.',
+      s: 'Entered or derived · master data <span class="f-src">KS01</span>' },
+    SEGMENT:{ f: 'SEGMENT', n: 'Segment', d: 1,
+      w: 'The IFRS 8 reporting dimension. Normally derived from the profit centre master record, and in some designs overwritten by a substitution at posting.',
+      s: 'Derived from the profit centre · or a substitution in <span class="f-src">GGB1</span>',
+      c: 'Always establish <i>which</i> mechanism is in play before debugging a wrong segment — the two have completely different fixes.' },
+    WSL:    { f: 'WSL',    n: 'Amount in transaction currency', num: 1,
+      w: 'The amount in the document currency — <b>signed</b>, unlike BSEG.',
+      s: 'From the posting',
+      c: 'Σ<code>WSL</code> per ledger must be zero. This is the fastest integrity check on any document.' },
+    HSL:    { f: 'HSL',    n: 'Amount in company-code currency', num: 1,
+      w: 'The amount in local currency 1 (currency type 10) — the statutory books and the tax return.',
+      s: 'Converted at posting using <code>TCURR</code>',
+      c: 'If <code>WSL</code> balances but <code>HSL</code> does not, you have a rate or rounding problem, not a posting error.' },
+    KSL:    { f: 'KSL',    n: 'Amount in group currency', num: 1,
+      w: 'The amount in group currency (type 30) — what consolidation reads.',
+      s: 'Converted at posting, often at a different rate type from LC1' },
+    RWCUR:  { f: 'RWCUR',  n: 'Transaction currency',
+      w: 'The currency that <code>WSL</code> is expressed in.',
+      s: 'From the document header' },
+    DRCRK:  { f: 'DRCRK',  n: 'Debit / credit', d: 1,
+      w: 'Kept for compatibility. The amounts are already signed, so this is informational rather than load-bearing.',
+      s: 'Derived from the amount sign' },
+
+    /* ---------- BSET ---------- */
+    KSCHL:  { f: 'KSCHL',  n: 'Condition type', d: 1,
+      w: 'The condition in the tax calculation procedure that produced this row — for example input tax, output tax, or a reverse-charge condition.',
+      s: 'From the tax procedure · maintained in <span class="f-src">OBYZ</span>' },
+    KBETR:  { f: 'KBETR',  n: 'Rate', num: 1,
+      w: 'The tax rate as actually applied to this document, in percent.',
+      s: 'From the tax code condition record · <span class="f-src">FTXP</span>',
+      c: 'This is the rate <i>at the time of posting</i>. Changing a rate in FTXP never changes documents already posted — which is exactly what you want, and exactly what surprises people.' },
+    FWBAS:  { f: 'FWBAS',  n: 'Tax base — document currency', num: 1,
+      w: 'The amount the tax was calculated on, in document currency.',
+      s: 'Summed by the posting logic from the lines carrying the tax code',
+      c: 'When a tax amount is wrong, check the base first. A wrong base with a correct rate is a different defect from a wrong rate.' },
+    FWSTE:  { f: 'FWSTE',  n: 'Tax amount — document currency', num: 1,
+      w: 'The tax amount in document currency.',
+      s: 'Base × rate, with the rounding rule of the tax code' },
+    HWBAS:  { f: 'HWBAS',  n: 'Tax base — local currency 1', num: 1,
+      w: 'The base converted to company-code currency.',
+      s: 'Converted at posting',
+      c: 'This is the figure the statutory VAT return reports, so this is the one to reconcile against the filing.' },
+    HWSTE:  { f: 'HWSTE',  n: 'Tax amount — local currency 1', num: 1,
+      w: 'The tax amount in company-code currency.',
+      s: 'Converted at posting' },
+    STBKZ:  { f: 'STBKZ',  n: 'Posting indicator', d: 1,
+      w: 'How the tax was posted: as a separate line, distributed into the expense line, or not posted at all.',
+      s: 'From the account key definition · <span class="f-src">OBCN</span>',
+      c: 'This is what makes a non-deductible code show no separate tax line while still writing a BSET row.' },
+
+    /* ---------- WITH_ITEM ---------- */
+    WITHT:  { f: 'WITHT',  n: 'Withholding tax type', k: 1,
+      w: 'Defines <b>when and how</b> withholding is calculated: at invoice or at payment, the base type, rounding and accumulation.',
+      s: 'From the vendor\'s withholding data · types defined in <code>T059P</code>',
+      c: 'Part of the key, so one line can carry several types — and a vendor subject to two types produces two rows on the same line.' },
+    WT_WITHCD: { f: 'WT_WITHCD', n: 'Withholding tax code',
+      w: 'Carries the <b>rate</b> and the income type that decides which statutory return the amount appears on.',
+      s: 'Defaulted from the vendor, overridable on the document · codes in <code>T059Z</code>',
+      c: 'Type changes the timing, code changes the number. Keeping that distinction straight saves a lot of confusion.' },
+    WT_QSSHB: { f: 'WT_QSSHB', n: 'Withholding base — document currency', num: 1,
+      w: 'The amount withholding tax is calculated on, in document currency.',
+      s: 'Calculated from the invoice lines per the base type on the WHT type',
+      c: 'The base <b>excludes VAT</b>. A base that equals the gross invoice is a configuration error worth catching early.' },
+    WT_QBSHB: { f: 'WT_QBSHB', n: 'Withholding amount — document currency', num: 1,
+      w: 'The tax withheld, in document currency.',
+      s: 'Base × rate from the withholding code',
+      c: 'Zero with a filled base is normal on a <b>deduct-at-payment</b> invoice — the amount appears on the payment document instead.' },
+    WT_QSSHH: { f: 'WT_QSSHH', n: 'Withholding base — local currency 1', num: 1,
+      w: 'The base in company-code currency — the figure the statutory return and the certificate use.',
+      s: 'Converted at posting' },
+    WT_QBSHH: { f: 'WT_QBSHH', n: 'Withholding amount — local currency 1', num: 1,
+      w: 'The withheld amount in company-code currency.',
+      s: 'Converted at posting' },
+    QSREC:  { f: 'QSREC',  n: 'Recipient type',
+      w: 'Who is being paid — individual, juristic person, or a foreign entity. This is what decides which return the amount lands on.',
+      s: 'From the vendor\'s withholding data per company code · <code>LFBW</code>',
+      c: 'In Thailand this is the difference between PND3 (individual), PND53 (company) and PND54 (foreign company) — same service, same rate, three different returns.' },
+    CTNUMBER: { f: 'CTNUMBER', n: 'Certificate number', d: 1,
+      w: 'The withholding tax certificate number given to the payee.',
+      s: 'Assigned by the certificate numbering when the certificate is issued',
+      c: 'In Thailand the certificate is the 50 Tawi handed to the payee; e-withholding replaces the paper document with a bank filing.' }
+  };
+
+  /* ---------------- table definitions ---------------- */
+
+  var TABLES = [
+    { id: 'BKPF',      cols: ['BUKRS','BELNR','GJAHR','BLART','BLDAT','BUDAT','MONAT','WAERS','KURSF','XBLNR','TCODE','AWTYP','AWKEY','USNAM'] },
+    { id: 'BSEG',      cols: ['BUZEI','BSCHL','KOART','SHKZG','HKONT','LIFNR','KUNNR','WRBTR','DMBTR','MWSKZ','KTOSL','PRCTR','SGTXT','AUGBL'] },
+    { id: 'ACDOCA',    cols: ['RLDNR','RBUKRS','GJAHR','BELNR','DOCLN','RACCT','KTOSL','MWSKZ','RCNTR','PRCTR','SEGMENT','RWCUR','WSL','HSL','KSL','DRCRK'] },
+    { id: 'BSET',      cols: ['BUKRS','BELNR','GJAHR','BUZEI','MWSKZ','KTOSL','KSCHL','HKONT','KBETR','FWBAS','FWSTE','HWBAS','HWSTE','STBKZ'] },
+    { id: 'WITH_ITEM', cols: ['BUKRS','BELNR','GJAHR','BUZEI','WITHT','WT_WITHCD','QSREC','WT_QSSHB','WT_QBSHB','WT_QSSHH','WT_QBSHH','CTNUMBER'] }
+  ];
+
+  /* ---------------- scenarios ---------------- */
+
+  var SCEN = {
+    fb60: {
+      app: 'Create Supplier Invoice', tcode: 'FB60', blart: 'KR', range: 1900000000,
+      sub: 'A supplier invoice for services. Tax posts here — at the invoice, never at the goods receipt.',
+      cfg: ['amount', 'currency', 'taxcode', 'wht', 'split', 'ledger'],
+      taxcodes: ['V7', 'V0', 'VN'],
+      note: 'The expense and the tax code are the consultant\'s levers. Switch to <b>VN</b> and the separate tax line disappears — the tax is added into the expense instead, but BSET still records it.'
+    },
+    f53: {
+      app: 'Post Outgoing Payment', tcode: 'F-53', blart: 'KZ', range: 2000000000,
+      sub: 'Paying the supplier. For a deduct-at-payment withholding type, this is where the tax is actually withheld.',
+      cfg: ['amount', 'currency', 'vatOnInv', 'whtPay', 'grossup', 'ledger'],
+      note: 'A payment has no P&amp;L line, so document splitting <b>inherits</b> the characteristics of the invoice it clears rather than deriving new ones.'
+    },
+    fb70: {
+      app: 'Create Customer Invoice', tcode: 'FB70', blart: 'DR', range: 1800000000,
+      sub: 'A customer invoice. Output tax is owed to the state the moment this posts.',
+      cfg: ['amount', 'currency', 'taxcodeOut', 'split', 'ledger'],
+      taxcodes: ['O7', 'V0'],
+      note: 'Output tax posts to its own account via account key <code>MWS</code>, while revenue is determined by <code>ERL</code> in <span class="f-src">VKOA</span>. Neither account is chosen by the user.'
+    },
+    migo: {
+      app: 'Post Goods Receipt', tcode: 'MIGO', blart: 'WE', range: 5000000000,
+      sub: 'Receiving the goods. Movement type 101 — stock against GR/IR clearing.',
+      cfg: ['amount', 'ledger'],
+      note: 'A goods receipt posts <b>no tax at all</b>. If someone reports missing input VAT on a GR, the answer is that tax belongs to the invoice — this is standard behaviour, not a defect.'
+    },
+    pp36: {
+      app: 'Create Supplier Invoice — imported service', tcode: 'FB60', blart: 'KR', range: 1900000000,
+      sub: 'A service bought from abroad. The buyer self-assesses the VAT instead of the supplier charging it.',
+      cfg: ['amount', 'currencyFx', 'whtForeign', 'split', 'ledger'],
+      note: 'Reverse charge posts an <code>ESE</code>/<code>ESA</code> pair: input tax you may reclaim and output tax you owe, same base. Net cash effect is nil — which is exactly why it gets missed.'
+    }
+  };
+
+  /* ---------------- config control schema ---------------- */
+
+  var CTRL = {
+    amount:    { label: 'Net amount', src: 'user entry → WRBTR', type: 'number', val: 100000, step: 1000 },
+    currency:  { label: 'Document currency', src: 'BKPF-WAERS · rate from OB08', type: 'select', val: 'THB',
+                 opts: [['THB','THB — company-code currency'],['USD','USD — rate 36.50'],['EUR','EUR — rate 39.80']] },
+    currencyFx:{ label: 'Document currency', src: 'BKPF-WAERS · rate from OB08', type: 'select', val: 'USD',
+                 opts: [['USD','USD — rate 36.50'],['EUR','EUR — rate 39.80'],['THB','THB — company-code currency']] },
+    taxcode:   { label: 'Tax code', src: 'FTXP · T007A → OB40', type: 'select', val: 'V7',
+                 opts: [['V7','V7 — input VAT 7%, deductible'],['V0','V0 — zero-rated 0%'],['VN','VN — input VAT 7%, non-deductible']] },
+    taxcodeOut:{ label: 'Tax code', src: 'FTXP · T007A → OB40', type: 'select', val: 'O7',
+                 opts: [['O7','O7 — output VAT 7%'],['V0','V0 — zero-rated 0%']] },
+    wht:       { label: 'Withholding tax on the vendor', src: 'LFBW → T059P / T059Z', type: 'select', val: 'W53',
+                 opts: [['none','Not liable — no withholding'],['W53','Type B / code 53 — 3%, at payment'],['WA53','Type A / code 53 — 3%, at invoice'],['W01','Type B / code 01 — rent 5%']] },
+    whtPay:    { label: 'Withholding tax code', src: 'LFBW → T059Z (QSATZ)', type: 'select', val: 'W53',
+                 opts: [['W53','53 — services 3%, company payee'],['W03','03 — services 3%, individual payee'],['W01','01 — rent 5%'],['W54','54 — foreign company 15%'],['none','Not liable — no withholding']] },
+    whtForeign:{ label: 'Withholding tax code', src: 'LFBW → T059Z (QSATZ)', type: 'select', val: 'W54',
+                 opts: [['W54','54 — foreign company 15%'],['none','Treaty relief — no withholding']] },
+    vatOnInv:  { label: 'Input VAT on the invoice being paid', src: 'BSET of the cleared document', type: 'select', val: 'yes',
+                 opts: [['yes','7% VAT was charged'],['no','No VAT — zero-rated']] },
+    grossup:   { label: 'Gross up — the company bears the tax so the supplier receives the full amount', src: 'WHT type · offsetting account in OBWW', type: 'check', val: false },
+    split:     { label: 'Document splitting across two profit centres (60 / 40)', src: 'SPRO · G/L document splitting', type: 'check', val: false },
+    ledger:    { label: 'Show the non-leading ledger L1 as well as 0L', src: 'FINSC_LEDGER', type: 'check', val: false }
+  };
+
+  /* ---------------- state ---------------- */
+
+  var state = { sc: 'fb60', cfg: {}, posted: false, doc: null, tbl: 'BKPF', view: 'entry', dict: null, seq: 11 };
+
+  function resetCfg() {
+    state.cfg = {};
+    SCEN[state.sc].cfg.forEach(function (k) { state.cfg[k] = CTRL[k].val; });
+  }
+
+  /* ---------------- helpers ---------------- */
+
+  /* Round to cents and normalise negative zero, so a balanced total reads 0.00 rather than -0.00. */
+  function r2(n) { var v = Math.round(n * 100) / 100; return v === 0 ? 0 : v; }
+  function fmt(n) {
+    if (n === null || n === undefined || n === '') return '';
+    return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function conv(amt, curr) {
+    var rate = RATE[curr];
+    return { wsl: r2(amt), hsl: r2(amt * rate), ksl: r2(amt * rate / RATE[GROUP]) };
+  }
+
+  /* ---------------- the posting engine ----------------
+     Builds an internal line list, then projects it into the five tables.
+     line = { pk, acct, dc, amt, ktosl, mwskz, pc, bs, lifnr, kunnr, txt }
+  ---------------------------------------------------- */
+
+  function build() {
+    var sc   = state.sc, S = SCEN[sc], c = state.cfg;
+    var net  = Number(c.amount) || 0;
+    var curr = c.currency || c.currencyFx || LC1;
+    var rate = RATE[curr];
+    var split = !!c.split;
+    var lines = [], bset = [], witem = [], teach = '';
+
+    /* profit-centre distribution of the P&L side */
+    var dist = split ? PC : [{ pc: PC[0].pc, seg: PC[0].seg, share: 1 }];
+
+    function pnl(acctKey, amt, dc, mwskz, ktosl, txt) {
+      dist.forEach(function (d) {
+        lines.push({ pk: dc === 'S' ? '40' : '50', acct: GL[acctKey], dc: dc, amt: r2(amt * d.share),
+                     mwskz: mwskz || '', ktosl: ktosl || '', pc: d.pc, seg: d.seg, bs: false, txt: txt || '' });
+      });
+    }
+    function bsLine(o) { o.bs = true; o.pc = o.pc || ''; lines.push(o); }
+
+    /* ---------- scenario builders ---------- */
+
+    if (sc === 'fb60') {
+      var t   = TAXC[c.taxcode];
+      var vat = r2(net * t.rate / 100);
+      var ded = t.ded;
+      var gross = r2(net + vat);
+
+      /* vendor line — credit, balance sheet */
+      bsLine({ pk: '31', acct: GL.vendor, dc: 'H', amt: gross, mwskz: '', ktosl: '',
+               lifnr: '0001000234', txt: 'Professional services Q3' });
+      /* expense — debit; non-deductible tax is added into it */
+      pnl('exp', ded ? net : gross, 'S', c.taxcode, '', 'Professional services Q3');
+      /* separate tax line only when deductible */
+      if (ded && vat > 0) {
+        bsLine({ pk: '40', acct: GL.vatIn, dc: 'S', amt: vat, mwskz: c.taxcode, ktosl: t.ktosl, txt: 'Input VAT' });
+      }
+      if (t.rate > 0) {
+        bset.push({ mwskz: c.taxcode, ktosl: t.ktosl, kschl: ded ? 'MWVS' : 'MWVN',
+                    hkont: ded ? GL.vatIn[0] : GL.exp[0], kbetr: t.rate, base: net, tax: vat,
+                    stbkz: ded ? '2' : '3' });
+      }
+      if (!ded) {
+        teach = 'Account key <code>NVV</code> is <b>non-deductible</b>: the 7% is pushed into the expense line, so BSEG has no tax line at all — but BSET still records the base and the amount. Read BSET, not the line items.';
+      }
+      if (c.wht !== 'none') {
+        var w = WHTC[c.wht];
+        var atInv = w.when === 'invoice';
+        witem.push({ buzei: '001', witht: w.witht, code: w.code, rec: w.rec,
+                     base: net, amt: atInv ? r2(net * w.rate / 100) : 0 });
+        if (!atInv) {
+          teach = teach || 'The withholding row carries the type, the code and the base — but <b>amount 0.00</b>. That is a deduct-at-payment type: the amount appears on the payment document. Switch to the <b>F-53</b> tab to see it.';
+        } else {
+          teach = teach || 'Type <b>A</b> withholds at the <b>invoice</b>, so the amount is on this document and the supplier line is already net of tax in the statutory sense. Type decides timing; code decides the number.';
+        }
+      }
+
+    } else if (sc === 'f53') {
+      var vatInv = c.vatOnInv === 'yes' ? r2(net * 7 / 100) : 0;
+      var payable = r2(net + vatInv);
+      var w2 = WHTC[c.whtPay];
+      var wht = 0, gu = !!c.grossup;
+      if (w2) {
+        /* withholding base excludes VAT */
+        wht = gu ? r2(net * w2.rate / (100 - w2.rate)) : r2(net * w2.rate / 100);
+      }
+      /* vendor — debit, clearing the open item */
+      bsLine({ pk: '25', acct: GL.vendor, dc: 'S', amt: payable, lifnr: '0001000234',
+               ktosl: '', txt: 'Payment of invoice', augbl: String(SCEN.f53.range + state.seq) });
+      if (gu && wht > 0) {
+        pnl('whtExp', wht, 'S', '', 'WIT', 'Withholding tax borne by company');
+      }
+      bsLine({ pk: '50', acct: GL.bank, dc: 'H', amt: gu ? payable : r2(payable - wht), ktosl: '', txt: 'Bank transfer' });
+      if (wht > 0) {
+        bsLine({ pk: '50', acct: GL.wht, dc: 'H', amt: wht, ktosl: 'WIT', txt: 'WHT payable to the revenue department' });
+        witem.push({ buzei: '001', witht: w2.witht, code: w2.code, rec: w2.rec, base: net, amt: wht, cert: 1 });
+      }
+      if (gu && wht > 0) {
+        teach = 'True gross-up: the tax is <code>base × r / (100 − r)</code>, not <code>base × r</code>. At 3% on ' +
+                fmt(net) + ' that is <b>' + fmt(wht) + '</b>, not ' + fmt(r2(net * 3 / 100)) +
+                ' — because the company is paying the tax on the tax. The supplier receives the full amount and the company carries the cost.';
+      } else if (wht > 0) {
+        teach = 'The withholding base is <b>' + fmt(net) + '</b> — the net amount. VAT is excluded from the withholding base, so the tax is not calculated on ' +
+                fmt(payable) + '. Getting this wrong overstates every certificate.';
+      }
+
+    } else if (sc === 'fb70') {
+      var to  = TAXC[c.taxcodeOut];
+      var ovat = r2(net * to.rate / 100);
+      bsLine({ pk: '01', acct: GL.cust, dc: 'S', amt: r2(net + ovat), kunnr: '0002000118', txt: 'Service invoice' });
+      pnl('rev', net, 'H', c.taxcodeOut, '', 'Service revenue');
+      if (ovat > 0) {
+        bsLine({ pk: '50', acct: GL.vatOut, dc: 'H', amt: ovat, mwskz: c.taxcodeOut, ktosl: to.ktosl, txt: 'Output VAT' });
+        bset.push({ mwskz: c.taxcodeOut, ktosl: to.ktosl, kschl: 'MWAS', hkont: GL.vatOut[0],
+                    kbetr: to.rate, base: net, tax: ovat, stbkz: '2' });
+      }
+      teach = 'Output tax is a <b>liability the moment the invoice posts</b> — before any cash arrives. That timing difference between the VAT return and the cash position is a normal feature of accrual VAT, not a reconciliation error.';
+
+    } else if (sc === 'migo') {
+      bsLine({ pk: '89', acct: GL.stock, dc: 'S', amt: net, ktosl: 'BSX', pc: PC[0].pc, seg: PC[0].seg, pcEntry: 1, txt: 'GR for purchase order' });
+      bsLine({ pk: '96', acct: GL.grir,  dc: 'H', amt: net, ktosl: 'WRX', pc: PC[0].pc, seg: PC[0].seg, pcEntry: 1, txt: 'GR/IR clearing' });
+      teach = 'No BSET row, no WITH_ITEM row — a goods receipt posts <b>no tax</b>. The accounts were not typed either: <code>BSX</code> found the stock account from the material\'s valuation class and <code>WRX</code> the GR/IR account, both in <span class="f-src">OBYC</span>.';
+
+    } else if (sc === 'pp36') {
+      var rvat = r2(net * TAXC.RC.rate / 100);
+      bsLine({ pk: '31', acct: GL.vendorF, dc: 'H', amt: net, lifnr: '0001009907', txt: 'Imported consulting service' });
+      pnl('exp', net, 'S', 'RC', '', 'Imported consulting service');
+      bsLine({ pk: '40', acct: GL.vatRcIn,  dc: 'S', amt: rvat, mwskz: 'RC', ktosl: 'ESE', txt: 'Input VAT — self-assessed' });
+      bsLine({ pk: '50', acct: GL.vatRcOut, dc: 'H', amt: rvat, mwskz: 'RC', ktosl: 'ESA', txt: 'Output VAT — self-assessed' });
+      bset.push({ mwskz: 'RC', ktosl: 'ESE', kschl: 'MWVS', hkont: GL.vatRcIn[0],  kbetr: 7, base: net, tax: rvat, stbkz: '2' });
+      bset.push({ mwskz: 'RC', ktosl: 'ESA', kschl: 'MWAS', hkont: GL.vatRcOut[0], kbetr: 7, base: net, tax: rvat, stbkz: '2' });
+      if (c.whtForeign !== 'none') {
+        var w3 = WHTC[c.whtForeign];
+        witem.push({ buzei: '001', witht: w3.witht, code: w3.code, rec: w3.rec, base: net, amt: 0 });
+      }
+      teach = 'Two BSET rows from one tax code: <code>ESE</code> the input tax you may reclaim, <code>ESA</code> the output tax you owe. The buyer self-assesses, pays it on the reverse-charge return, then claims it as input tax on the next VAT return — recipient type <code>FO</code> on the withholding row is what routes the WHT to the foreign-company return.';
+    }
+
+    /* ---------- header ---------- */
+    var docno = String(S.range + state.seq);
+    var hdr = {
+      BUKRS: CC, BELNR: docno, GJAHR: YEAR, BLART: S.blart,
+      BLDAT: '12.09.2026', BUDAT: '15.09.2026', MONAT: '9',
+      WAERS: curr, KURSF: curr === LC1 ? '' : rate.toFixed(5),
+      XBLNR: sc === 'migo' ? '' : 'INV-2026-0' + state.seq,
+      TCODE: S.tcode, USNAM: 'CKENGPIPAT',
+      AWTYP: sc === 'migo' ? 'MKPF' : '', AWKEY: sc === 'migo' ? '49000012' + YEAR : ''
+    };
+
+    /* ---------- BSEG projection (entry view) ---------- */
+    var bsegRows = lines.map(function (l, i) {
+      var cv = conv(l.amt, curr);
+      return {
+        BUZEI: ('00' + (i + 1)).slice(-3),
+        BSCHL: l.pk,
+        KOART: l.lifnr ? 'K' : (l.kunnr ? 'D' : 'S'),
+        SHKZG: l.dc,
+        HKONT: l.acct[0],
+        LIFNR: l.lifnr || '',
+        KUNNR: l.kunnr || '',
+        WRBTR: cv.wsl,
+        DMBTR: cv.hsl,
+        MWSKZ: l.mwskz || '',
+        KTOSL: l.ktosl || '',
+        /* balance-sheet lines carry no characteristic in the entry view unless the
+           source document assigned one directly (a goods receipt does) */
+        PRCTR: (l.pc && (!l.bs || l.pcEntry)) ? l.pc : '',
+        SGTXT: l.txt || '',
+        AUGBL: l.augbl || '',
+        _acctTxt: l.acct[1]
+      };
+    });
+
+    /* ---------- ACDOCA projection (general ledger view) ---------- */
+    var glLines = [];
+    lines.forEach(function (l) {
+      if (!l.bs || !split) {
+        glLines.push({ l: l, amt: l.amt, pc: l.pc || PC[0].pc, seg: l.seg || PC[0].seg });
+      } else {
+        /* document splitting: distribute the balance-sheet line over the P&L characteristics */
+        PC.forEach(function (d) {
+          glLines.push({ l: l, amt: r2(l.amt * d.share), pc: d.pc, seg: d.seg });
+        });
+      }
+    });
+
+    var ledgers = state.cfg.ledger ? ['0L', 'L1'] : ['0L'];
+    var acdocaRows = [];
+    ledgers.forEach(function (ld) {
+      glLines.forEach(function (g, i) {
+        var cv = conv(g.amt, curr);
+        var sgn = g.l.dc === 'S' ? 1 : -1;
+        acdocaRows.push({
+          RLDNR: ld, RBUKRS: CC, GJAHR: YEAR, BELNR: docno,
+          DOCLN: ('00000' + (i + 1)).slice(-6),
+          RACCT: g.l.acct[0],
+          KTOSL: g.l.ktosl || '',
+          MWSKZ: g.l.mwskz || '',
+          RCNTR: g.l.bs ? '' : 'CC-' + g.pc,
+          PRCTR: g.pc,
+          SEGMENT: g.seg,
+          RWCUR: curr,
+          WSL: r2(cv.wsl * sgn),
+          HSL: r2(cv.hsl * sgn),
+          KSL: r2(cv.ksl * sgn),
+          DRCRK: g.l.dc,
+          _acctTxt: g.l.acct[1]
+        });
+      });
+    });
+
+    /* Rounding residual. Converting each split line independently can leave a cent
+       over in a derived currency (60/40 of a THB amount divided into group currency,
+       for example). SAP assigns that difference to a line rather than leaving the
+       document unbalanced, so we do the same: push the residual onto the largest row
+       of each ledger. Without this the integrity check the page teaches — Σ per
+       currency = 0 — would read as false on perfectly correct arithmetic. */
+    ['WSL', 'HSL', 'KSL'].forEach(function (fld) {
+      ledgers.forEach(function (ld) {
+        var grp = acdocaRows.filter(function (r) { return r.RLDNR === ld; });
+        if (!grp.length) return;
+        var resid = r2(grp.reduce(function (s, r) { return s + r[fld]; }, 0));
+        if (resid === 0) return;
+        var big = grp.reduce(function (a, b) { return Math.abs(b[fld]) > Math.abs(a[fld]) ? b : a; });
+        big[fld] = r2(big[fld] - resid);
+      });
+    });
+
+    /* ---------- BSET projection ---------- */
+    var bsetRows = bset.map(function (b, i) {
+      var cb = conv(b.base, curr), ct = conv(b.tax, curr);
+      return {
+        BUKRS: CC, BELNR: docno, GJAHR: YEAR, BUZEI: ('00' + (i + 1)).slice(-3),
+        MWSKZ: b.mwskz, KTOSL: b.ktosl, KSCHL: b.kschl, HKONT: b.hkont,
+        KBETR: b.kbetr.toFixed(2),
+        FWBAS: cb.wsl, FWSTE: ct.wsl, HWBAS: cb.hsl, HWSTE: ct.hsl,
+        STBKZ: b.stbkz
+      };
+    });
+
+    /* ---------- WITH_ITEM projection ---------- */
+    var witemRows = witem.map(function (w, i) {
+      var cb = conv(w.base, curr), ca = conv(w.amt, curr);
+      return {
+        BUKRS: CC, BELNR: docno, GJAHR: YEAR, BUZEI: w.buzei,
+        WITHT: w.witht, WT_WITHCD: w.code, QSREC: w.rec,
+        WT_QSSHB: cb.wsl, WT_QBSHB: ca.wsl,
+        WT_QSSHH: cb.hsl, WT_QBSHH: ca.hsl,
+        CTNUMBER: w.cert ? 'C' + YEAR + '-0' + (4100 + state.seq) : ''
+      };
+    });
+
+    return {
+      docno: docno, curr: curr, rate: rate, split: split, ledgers: ledgers,
+      hdr: hdr, rows: { BKPF: [hdr], BSEG: bsegRows, ACDOCA: acdocaRows, BSET: bsetRows, WITH_ITEM: witemRows },
+      teach: teach, nPnl: dist.length
+    };
+  }
+
+  /* ---------------- DOM ---------------- */
+
+  var el = {};
+  ['fAppTitle','fAppSub','fTabs','fCfg','fCfgNote','fPost','fReset','fMsg','fMsgText','fPipe','fBusy','fLog',
+   'fDocNo','fDocStatus','fDocSub','fFacts','fTtabs','fVrow','fViewEntry','fViewGl','fVnote',
+   'fThead','fTbody','fTot','fDict','fDictF','fDictTbl','fDictClose','fDictBody','fTeach','fCaption']
+    .forEach(function (id) { el[id] = document.getElementById(id); });
+  if (!el.fTabs) return;
+
+  /* ---------- render the config pane ---------- */
+  function renderCfg() {
+    var S = SCEN[state.sc], html = '';
+    S.cfg.forEach(function (k) {
+      var C = CTRL[k], v = state.cfg[k];
+      if (C.type === 'check') {
+        html += '<div class="f-check"><input type="checkbox" id="c_' + k + '" data-cfg="' + k + '"' + (v ? ' checked' : '') + '>' +
+                '<label for="c_' + k + '">' + C.label + '<span class="f-src">' + C.src + '</span></label></div>';
+      } else if (C.type === 'number') {
+        html += '<div class="f-field"><label for="c_' + k + '">' + C.label +
+                '<span class="f-src">' + C.src + '</span></label>' +
+                '<input type="number" id="c_' + k + '" data-cfg="' + k + '" value="' + v + '" step="' + (C.step || 1) + '" min="0"></div>';
+      } else {
+        html += '<div class="f-field"><label for="c_' + k + '">' + C.label +
+                '<span class="f-src">' + C.src + '</span></label><select id="c_' + k + '" data-cfg="' + k + '">' +
+                C.opts.map(function (o) {
+                  return '<option value="' + o[0] + '"' + (o[0] === v ? ' selected' : '') + '>' + esc(o[1]) + '</option>';
+                }).join('') + '</select></div>';
+      }
+    });
+    el.fCfg.innerHTML = html;
+    el.fCfgNote.innerHTML = S.note;
+  }
+
+  /* ---------- render the object header ---------- */
+  function renderHead(d) {
+    if (!d) {
+      el.fDocNo.textContent = '—';
+      el.fDocNo.classList.add('is-empty');
+      el.fDocStatus.className = 'f-status f-status--none';
+      el.fDocStatus.textContent = 'Not posted';
+      el.fDocSub.textContent = 'Press Post to assign a document number from the number range.';
+      el.fFacts.innerHTML = '';
+      return;
+    }
+    el.fDocNo.textContent = d.docno;
+    el.fDocNo.classList.remove('is-empty');
+    el.fDocStatus.className = 'f-status f-status--pos';
+    el.fDocStatus.textContent = '✓ Posted';
+    el.fDocSub.textContent = SCEN[state.sc].sub;
+    var facts = [
+      ['Company code', CC], ['Document type', d.hdr.BLART], ['Posting date', d.hdr.BUDAT],
+      ['Period', d.hdr.MONAT + ' / ' + YEAR], ['Currency', d.curr],
+      ['Rate', d.hdr.KURSF || '1.00000'], ['Ledgers', d.ledgers.join(' · ')],
+      ['Splitting', d.split ? 'active' : 'off']
+    ];
+    el.fFacts.innerHTML = facts.map(function (f) {
+      return '<div class="f-fact"><dt>' + f[0] + '</dt><dd>' + esc(f[1]) + '</dd></div>';
+    }).join('');
+  }
+
+  /* ---------- render the table tab strip ---------- */
+  function renderTtabs(d) {
+    el.fTtabs.innerHTML = TABLES.map(function (t) {
+      var n = d ? d.rows[t.id].length : 0;
+      return '<button type="button" class="f-ttab' + (n ? '' : ' f-ttab--empty') + '" role="tab" data-tbl="' + t.id +
+             '" aria-selected="' + (t.id === state.tbl) + '">' + t.id +
+             '<span class="f-ttab__n">' + n + '</span></button>';
+    }).join('');
+  }
+
+  /* ---------- render the data table ---------- */
+  function renderTable(d) {
+    var tid = state.tbl;
+    /* ACDOCA is the general ledger view; BSEG is the entry view */
+    if (tid === 'ACDOCA') { state.view = 'gl'; } else if (tid === 'BSEG') { state.view = 'entry'; }
+    el.fVrow.hidden = !(tid === 'BSEG' || tid === 'ACDOCA');
+    el.fViewEntry.setAttribute('aria-pressed', String(tid === 'BSEG'));
+    el.fViewGl.setAttribute('aria-pressed', String(tid === 'ACDOCA'));
+    if (d) {
+      el.fVnote.innerHTML = tid === 'ACDOCA'
+        ? 'After splitting · ' + d.rows.ACDOCA.length + ' rows over ' + d.ledgers.length + ' ledger' + (d.ledgers.length > 1 ? 's' : '')
+        : 'As entered · ' + d.rows.BSEG.length + ' rows, amounts unsigned';
+    }
+
+    var def = TABLES.filter(function (t) { return t.id === tid; })[0];
+    var cols = def.cols;
+    el.fCaption.textContent = tid + ' — posted rows';
+
+    el.fThead.innerHTML = '<tr>' + cols.map(function (cn) {
+      var fd = F[cn];
+      return '<th scope="col" data-col="' + cn + '"><button type="button" class="f-col" data-field="' + cn +
+             '" aria-describedby="fDictBody">' + (fd ? fd.f : cn) + '</button></th>';
+    }).join('') + '</tr>';
+
+    if (!d) {
+      el.fTbody.innerHTML = '<tr><td colspan="' + cols.length + '" style="color:#6a6d70;white-space:normal">' +
+        'Nothing posted yet. Set the configuration on the left and press <b>Post</b>.</td></tr>';
+      el.fTot.innerHTML = '';
+      return;
+    }
+
+    var rows = d.rows[tid];
+    if (!rows.length) {
+      var why = tid === 'BSET'
+        ? 'No tax line: this event posts no tax, or the tax code has a zero rate. A goods receipt never posts tax — tax belongs to the invoice.'
+        : 'No withholding line: the supplier is not liable for this withholding type, or the event is not a withholding-relevant payment. Check the <b>liable</b> flag in <code>LFBW</code> first.';
+      el.fTbody.innerHTML = '<tr><td colspan="' + cols.length + '" style="color:#6a6d70;white-space:normal">' + why + '</td></tr>';
+      el.fTot.innerHTML = '<span class="f-tot__i">0 rows written to ' + tid + '</span>';
+      return;
+    }
+
+    el.fTbody.innerHTML = rows.map(function (r, i) {
+      return '<tr' + (reduce ? '' : ' class="f-row-in" style="animation-delay:' + (i * 45) + 'ms"') + '>' +
+        cols.map(function (cn) {
+          var fd = F[cn] || {}, v = r[cn];
+          var cls = [];
+          if (fd.num) cls.push('num');
+          if (v === '' || v === null || v === undefined) {
+            return '<td data-col="' + cn + '" class="' + cls.join(' ') + '"><span class="empty">—</span></td>';
+          }
+          var txt = fd.num ? fmt(v) : esc(v);
+          var inner = fd.k ? '<span class="k">' + txt + '</span>'
+                    : (fd.d ? '<span class="derived">' + txt + '</span>' : txt);
+          if (fd.num && Number(v) === 0) cls.push('zero');
+          var title = (cn === 'HKONT' || cn === 'RACCT') && r._acctTxt ? ' title="' + esc(r._acctTxt) + '"' : '';
+          return '<td data-col="' + cn + '" class="' + cls.join(' ') + '"' + title + '>' + inner + '</td>';
+        }).join('') + '</tr>';
+    }).join('');
+
+    renderTot(d);
+    if (state.dict) litColumn(state.dict);
+  }
+
+  /* ---------- totals / balance check ---------- */
+  function renderTot(d) {
+    var tid = state.tbl, rows = d.rows[tid], html = '';
+    if (tid === 'ACDOCA') {
+      var byLed = {};
+      d.ledgers.forEach(function (L) { byLed[L] = { w: 0, h: 0, k: 0 }; });
+      rows.forEach(function (r) {
+        var b = byLed[r.RLDNR];
+        b.w += r.WSL; b.h += r.HSL; b.k += r.KSL;
+      });
+      var ok = true;
+      d.ledgers.forEach(function (L) {
+        var b = byLed[L];
+        if (r2(b.w) !== 0 || r2(b.h) !== 0 || r2(b.k) !== 0) ok = false;
+        html += '<span class="f-tot__i">' + L + ' &nbsp;Σ WSL <b>' + fmt(r2(b.w)) + '</b> &nbsp;Σ HSL <b>' +
+                fmt(r2(b.h)) + '</b> &nbsp;Σ KSL <b>' + fmt(r2(b.k)) + '</b></span>';
+      });
+      html += '<span class="f-tot__flag ' + (ok ? 'ok' : 'bad') + '">' +
+              (ok ? '✓ balanced in every currency, every ledger' : '✕ out of balance') + '</span>';
+    } else if (tid === 'BSEG') {
+      var dr = 0, cr = 0;
+      rows.forEach(function (r) { if (r.SHKZG === 'S') dr += r.WRBTR; else cr += r.WRBTR; });
+      var ok2 = r2(dr) === r2(cr);
+      html = '<span class="f-tot__i">Debit <b>' + fmt(r2(dr)) + '</b> ' + d.curr + '</span>' +
+             '<span class="f-tot__i">Credit <b>' + fmt(r2(cr)) + '</b> ' + d.curr + '</span>' +
+             '<span class="f-tot__flag ' + (ok2 ? 'ok' : 'bad') + '">' + (ok2 ? '✓ Dr = Cr' : '✕ out of balance') + '</span>';
+    } else if (tid === 'BSET') {
+      var b1 = 0, t1 = 0;
+      rows.forEach(function (r) { b1 += r.HWBAS; t1 += r.HWSTE; });
+      html = '<span class="f-tot__i">Σ base <b>' + fmt(r2(b1)) + '</b> ' + LC1 + '</span>' +
+             '<span class="f-tot__i">Σ tax <b>' + fmt(r2(t1)) + '</b> ' + LC1 + '</span>' +
+             '<span class="f-tot__i">this is what the VAT return reads</span>';
+    } else if (tid === 'WITH_ITEM') {
+      var b2 = 0, t2 = 0;
+      rows.forEach(function (r) { b2 += r.WT_QSSHH; t2 += r.WT_QBSHH; });
+      html = '<span class="f-tot__i">Σ base <b>' + fmt(r2(b2)) + '</b> ' + LC1 + '</span>' +
+             '<span class="f-tot__i">Σ withheld <b>' + fmt(r2(t2)) + '</b> ' + LC1 + '</span>' +
+             '<span class="f-tot__i">this is what the certificate reads</span>';
+    } else {
+      html = '<span class="f-tot__i">1 header row · the facts that apply to the whole document</span>';
+    }
+    el.fTot.innerHTML = html;
+  }
+
+  /* ---------- field dictionary ---------- */
+  function litColumn(cn) {
+    Array.prototype.forEach.call(el.fTable_q(), function (c) { c.classList.remove('is-lit'); });
+    Array.prototype.forEach.call(document.querySelectorAll('#fTable [data-col="' + cn + '"]'), function (c) {
+      c.classList.add('is-lit');
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.f-col'), function (b) {
+      b.classList.toggle('is-open', b.getAttribute('data-field') === cn);
+    });
+  }
+  el.fTable_q = function () { return document.querySelectorAll('#fTable [data-col]'); };
+
+  function showDict(cn) {
+    var fd = F[cn];
+    if (!fd) return;
+    state.dict = cn;
+    el.fDictF.textContent = fd.f;
+    el.fDictTbl.textContent = state.tbl + (fd.k ? ' · part of the key' : (fd.d ? ' · derived by SAP' : ''));
+    el.fDictClose.hidden = false;
+    var rows = '<dl class="f-dict__rows">' +
+      '<div class="f-dict__row is-src"><dt>Source</dt><dd>' + fd.s + '</dd></div>' +
+      (fd.c ? '<div class="f-dict__row is-care"><dt>Why it matters</dt><dd>' + fd.c + '</dd></div>' : '') +
+      '</dl>';
+    el.fDictBody.innerHTML = '<div class="f-dict__name">' + fd.n + '</div>' +
+                             '<div class="f-dict__what">' + fd.w + '</div>' + rows;
+    litColumn(cn);
+  }
+
+  function clearDict() {
+    state.dict = null;
+    el.fDictF.textContent = 'Field dictionary';
+    el.fDictTbl.textContent = '';
+    el.fDictClose.hidden = true;
+    el.fDictBody.innerHTML = '<p class="f-dict__what" style="margin:0;color:#6a6d70">Click any <b>column header</b> above to see what that field holds, where SAP gets it from, and which configuration decides it.</p>';
+    Array.prototype.forEach.call(el.fTable_q(), function (c) { c.classList.remove('is-lit'); });
+    Array.prototype.forEach.call(document.querySelectorAll('.f-col'), function (b) { b.classList.remove('is-open'); });
+  }
+
+  /* ---------- the posting motion ---------- */
+  var timers = [];
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  function steps(d) {
+    var S = SCEN[state.sc], out = [];
+    out.push(['Document check — balance, mandatory fields, period ' + d.hdr.MONAT + '/' + YEAR + ' open', '']);
+    out.push(['Number range RF_BELEG · type ' + d.hdr.BLART + ' → BELNR assigned', d.docno]);
+    out.push(['BKPF — document header written', '1 row']);
+    out.push(['BSEG — entry view written', d.rows.BSEG.length + ' rows']);
+    if (d.rows.BSET.length) {
+      out.push(['Tax determination — procedure TAXTH · code ' + d.rows.BSET[0].MWSKZ + ' → OB40', '']);
+      out.push(['BSET — tax lines written', d.rows.BSET.length + ' row' + (d.rows.BSET.length > 1 ? 's' : '')]);
+    }
+    if (d.rows.WITH_ITEM.length) {
+      out.push(['Extended withholding tax — type ' + d.rows.WITH_ITEM[0].WITHT + ' · code ' + d.rows.WITH_ITEM[0].WT_WITHCD, '']);
+      out.push(['WITH_ITEM — withholding lines written', d.rows.WITH_ITEM.length + ' row' + (d.rows.WITH_ITEM.length > 1 ? 's' : '')]);
+    }
+    if (d.split) { out.push(['Document splitting — PRCTR, SEGMENT onto balance-sheet lines', '']); }
+    if (d.curr !== LC1) { out.push(['Currency translation — TCURR rate type M @ ' + d.hdr.KURSF, '']); }
+    out.push(['ACDOCA — universal journal written', d.rows.ACDOCA.length + ' rows · ' + d.ledgers.join(', ')]);
+    out.push(['Document ' + d.docno + ' posted in company code ' + CC, 'done']);
+    return out;
+  }
+
+  function runMotion(d, done) {
+    clearTimers();
+    var list = steps(d);
+    el.fLog.innerHTML = list.map(function (s) {
+      return '<div class="f-step f-step--wait"><span class="f-step__ico">·</span>' +
+             '<span class="f-step__t">' + esc(s[0]) + '</span><span class="f-step__n">' + esc(s[1]) + '</span></div>';
+    }).join('');
+    var nodes = el.fLog.querySelectorAll('.f-step');
+    el.fBusy.hidden = false;
+
+    if (reduce) {
+      Array.prototype.forEach.call(nodes, function (n) {
+        n.className = 'f-step f-step--done';
+        n.querySelector('.f-step__ico').textContent = '✓';
+      });
+      el.fBusy.hidden = true;
+      done();
+      return;
+    }
+
+    var i = 0;
+    function tick() {
+      if (i > 0) {
+        var prev = nodes[i - 1];
+        prev.className = 'f-step f-step--done';
+        prev.querySelector('.f-step__ico').textContent = '✓';
+      }
+      if (i >= nodes.length) {
+        el.fBusy.hidden = true;
+        done();
+        return;
+      }
+      var cur = nodes[i];
+      cur.className = 'f-step f-step--run';
+      cur.querySelector('.f-step__ico').textContent = '▸';
+      i++;
+      timers.push(setTimeout(tick, i === 1 ? 260 : 150));
+    }
+    tick();
+  }
+
+  /* ---------- post / reset ---------- */
+  function post() {
+    state.seq++;
+    var d = build();
+    state.doc = d;
+    state.posted = true;
+    el.fPost.disabled = true;
+    el.fMsg.hidden = true;
+    renderHead(null);
+    el.fTbody.innerHTML = '';
+    el.fTot.innerHTML = '';
+
+    runMotion(d, function () {
+      renderHead(d);
+      renderTtabs(d);
+      renderTable(d);
+      el.fMsgText.innerHTML = 'Document <code>' + d.docno + '</code> was posted in company code ' + CC +
+        ' — <b>' + d.rows.BSEG.length + '</b> entry-view lines became <b>' + d.rows.ACDOCA.length +
+        '</b> universal-journal rows.';
+      el.fMsg.hidden = false;
+      el.fTeach.innerHTML = d.teach || SCEN[state.sc].note;
+      el.fPost.disabled = false;
+    });
+  }
+
+  function softRebuild() {
+    /* config changed after a post: rebuild the tables without replaying the motion */
+    if (!state.posted) return;
+    var d = build();
+    state.doc = d;
+    renderHead(d);
+    renderTtabs(d);
+    renderTable(d);
+    el.fTeach.innerHTML = d.teach || SCEN[state.sc].note;
+    el.fMsgText.innerHTML = 'Document <code>' + d.docno + '</code> rebuilt from the changed configuration — <b>' +
+      d.rows.BSEG.length + '</b> entry-view lines, <b>' + d.rows.ACDOCA.length + '</b> universal-journal rows.';
+    el.fMsg.hidden = false;
+  }
+
+  function reset() {
+    clearTimers();
+    state.posted = false;
+    state.doc = null;
+    state.tbl = 'BKPF';
+    resetCfg();
+    renderCfg();
+    renderHead(null);
+    renderTtabs(null);
+    renderTable(null);
+    clearDict();
+    el.fMsg.hidden = true;
+    el.fBusy.hidden = true;
+    el.fLog.innerHTML = '<div class="f-step f-step--wait"><span class="f-step__ico">·</span>' +
+      '<span class="f-step__t">Idle — press Post to run the document through the posting engine</span></div>';
+    el.fTeach.innerHTML = SCEN[state.sc].note;
+    el.fPost.disabled = false;
+  }
+
+  function selectScenario(sc) {
+    state.sc = sc;
+    Array.prototype.forEach.call(el.fTabs.querySelectorAll('.f-tab'), function (b) {
+      b.setAttribute('aria-selected', String(b.getAttribute('data-sc') === sc));
+    });
+    el.fAppTitle.textContent = SCEN[sc].app;
+    el.fAppSub.textContent = 'Financial Accounting · company code ' + CC + ' · ' + SCEN[sc].tcode;
+    document.getElementById('fPanel').setAttribute('aria-labelledby', 'tab-' + sc);
+    reset();
+  }
+
+  /* ---------------- events ---------------- */
+
+  el.fTabs.addEventListener('click', function (e) {
+    var b = e.target.closest('.f-tab');
+    if (b) selectScenario(b.getAttribute('data-sc'));
+  });
+  el.fTabs.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var tabs = Array.prototype.slice.call(el.fTabs.querySelectorAll('.f-tab'));
+    var i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    e.preventDefault();
+    var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    n.focus();
+    selectScenario(n.getAttribute('data-sc'));
+  });
+
+  el.fCfg.addEventListener('change', function (e) {
+    var k = e.target.getAttribute('data-cfg');
+    if (!k) return;
+    state.cfg[k] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    softRebuild();
+  });
+  el.fCfg.addEventListener('input', function (e) {
+    if (e.target.type === 'number' && e.target.getAttribute('data-cfg')) {
+      state.cfg[e.target.getAttribute('data-cfg')] = e.target.value;
+      softRebuild();
+    }
+  });
+
+  el.fPost.addEventListener('click', post);
+  el.fReset.addEventListener('click', reset);
+
+  el.fTtabs.addEventListener('click', function (e) {
+    var b = e.target.closest('.f-ttab');
+    if (!b) return;
+    state.tbl = b.getAttribute('data-tbl');
+    Array.prototype.forEach.call(el.fTtabs.querySelectorAll('.f-ttab'), function (x) {
+      x.setAttribute('aria-selected', String(x === b));
+    });
+    renderTable(state.doc);
+  });
+
+  el.fViewEntry.addEventListener('click', function () { state.tbl = 'BSEG';   renderTtabs(state.doc); syncTtab(); renderTable(state.doc); });
+  el.fViewGl.addEventListener('click',    function () { state.tbl = 'ACDOCA'; renderTtabs(state.doc); syncTtab(); renderTable(state.doc); });
+  function syncTtab() {
+    Array.prototype.forEach.call(el.fTtabs.querySelectorAll('.f-ttab'), function (x) {
+      x.setAttribute('aria-selected', String(x.getAttribute('data-tbl') === state.tbl));
+    });
+  }
+
+  document.getElementById('fThead').addEventListener('click', function (e) {
+    var b = e.target.closest('.f-col');
+    if (!b) return;
+    var cn = b.getAttribute('data-field');
+    if (state.dict === cn) { clearDict(); } else { showDict(cn); }
+  });
+  document.getElementById('fThead').addEventListener('mouseover', function (e) {
+    var b = e.target.closest('.f-col');
+    if (b && !state.dict) showDict(b.getAttribute('data-field'));
+  });
+  el.fDictClose.addEventListener('click', clearDict);
+
+  /* ---------------- boot ---------------- */
+  resetCfg();
+  renderCfg();
+  reset();
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Scroll-reveal choreography ---- */
+  var blocks = [];
+  document.querySelectorAll('main .chapter').forEach(function (ch) {
+    if (ch.id === 'hero') return;                 // hero shows immediately
+    Array.prototype.forEach.call(ch.children, function (k, i) {
+      blocks.push(k);
+      k.style.setProperty('--rvd', Math.min(i, 6) * 60 + 'ms');
+    });
+  });
+  function reveal(b) { if (!b.classList.contains('rv-in')) b.classList.add('rv-in'); }
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    blocks.forEach(function (b) { b.classList.add('rv'); });   // arm only now
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    blocks.forEach(function (b) { io.observe(b); });
+    requestAnimationFrame(function () {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      blocks.forEach(function (b) { if (b.getBoundingClientRect().top < vh * 0.94) reveal(b); });
+    });
+    setTimeout(function () { blocks.forEach(reveal); }, 1800);  // safety net
+  } else {
+    blocks.forEach(reveal);
+  }
+
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var bar = document.createElement('div');
+  bar.className = 'scrollprog';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(bar);
+  var ticking = false;
+  function upd() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? window.pageYOffset / h : 0;
+    bar.style.transform = 'scaleX(' + Math.min(1, Math.max(0, p)) + ')';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(upd); ticking = true; }
+  }, { passive: true });
+  window.addEventListener('resize', upd);
+  upd();
+})();
+</script>
+<script src="search.js?v=8" defer></script>
+</body>
+</html>

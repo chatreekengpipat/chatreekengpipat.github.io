@@ -36,3 +36,6 @@ QA-*.md
 # The site ships BUILT HTML only. Never publish this folder on a public Pages site.
 fitax-kit/
 fi-module-overview.md
+
+# Build scratch for page assembly + verification harness — local only
+.build/

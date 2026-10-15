@@ -49,6 +49,7 @@
     { t: 'Metrics, Audited', u: 'metrics.html', c: 'SAP Reference', k: 'metrics kpi reconcile transparency' },
     // FI Tax
     { t: 'Functional Module of Finance — SAP FI', u: 'finance-functional-module.html', c: 'SAP FI Tax', k: 'fi tax vat wht close journal gl acdoca bset ledger currency' },
+    { t: 'FI Document Simulator — every table, every column', u: 'fi-document-simulator.html', c: 'SAP FI Tax', k: 'fi document simulator posting bkpf bseg acdoca bset with_item universal journal posting key transaction key ktosl bschl document splitting entry view general ledger view currency wsl hsl ksl field dictionary fiori ob40 ftxp obyc obcn withholding gross up reverse charge pp36 number range' },
     { t: 'FI Tax Consultant — Scope of Work', u: 'fi-tax-consultant-scope.html', c: 'SAP FI Tax', k: 'fi tax scope petroleum pita hypercare readiness' },
     // Projects
     { t: 'Inventory & Procurement (P2P)', u: 'project1.html', c: 'Project', k: 'procurement inventory p2p mm' },
