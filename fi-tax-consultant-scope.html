@@ -69,6 +69,10 @@
   h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; text-wrap: balance; }
   p { margin: 0 0 1rem; text-wrap: pretty; }
   .chapter p:not(.caption), .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
+
+  /* Narrow columns are too tight to justify — ragged right reads better there. */
+  .chapter .card p, .chapter .tbls__c p, .chapter .method__i p,
+  .chapter .trace__what, .chapter li { text-align: left; -webkit-hyphens: none; hyphens: none; }
   a { color: var(--gas); }
 
   .mono { font-family: var(--mono); }
@@ -1011,8 +1015,9 @@
     <li><a class="rail__link" href="#legal" data-spy><span class="num">09</span><span class="name">Legal watch-list</span></a></li>
     <li><a class="rail__link" href="#s4" data-spy><span class="num">10</span><span class="name">S/4HANA platform</span></a></li>
     <li><a class="rail__link" href="#programme" data-spy><span class="num">11</span><span class="name">Programme &amp; impact</span></a></li>
-    <li><a class="rail__link" href="#readiness" data-spy><span class="num">12</span><span class="name">Ready on day one</span></a></li>
-    <li><a class="rail__link" href="#honest" data-spy><span class="num">13</span><span class="name">Where my depth comes from</span></a></li>
+    <li><a class="rail__link" href="#proof" data-spy><span class="num">12</span><span class="name">Proving it works</span></a></li>
+    <li><a class="rail__link" href="#readiness" data-spy><span class="num">13</span><span class="name">Ready on day one</span></a></li>
+    <li><a class="rail__link" href="#honest" data-spy><span class="num">14</span><span class="name">Where my depth comes from</span></a></li>
   </ol>
   <a class="rail__companion" href="finance-functional-module.html">Companion module →<br><b>SAP FI · GL · Tax</b> essentials</a>
   <a class="rail__back" href="index.html">Back to portfolio →</a>
@@ -1996,8 +2001,107 @@
   </section>
 
   <!-- 12 READINESS & HYPERCARE -->
+
+  <!-- 12 PROVING IT WORKS -->
+  <section class="chapter" id="proof">
+    <div class="eyebrow"><span class="dot"></span>12 · Proving it works</div>
+    <h2>Configuring it is the easy half. <span style="color:var(--gas)">Proving</span> it is the job.</h2>
+
+    <p class="lede">Anyone can set a rate in <span class="tcode">FTXP</span>. What a client is actually
+      buying is the evidence that every document, in every scenario, across every integration, posts
+      the tax correctly — and the discipline to tell the difference between a defect and a design
+      decision when it does not.</p>
+
+    <h3 style="font-size:1.05rem;margin-top:1.8rem">The ladder each object climbs</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Who runs it</th><th>What it proves</th><th>What I produce</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>UT</b></td>
+            <td>Developer</td>
+            <td>The code does what the <i>technical</i> design says.</td>
+            <td>Nothing — I review the evidence, I don't produce it.</td>
+          </tr>
+          <tr>
+            <td><b>FUT</b><br><span class="caption">functional unit test</span></td>
+            <td><b>Me</b></td>
+            <td>The object meets the <i>functional</i> design — one object at a time, in isolation.</td>
+            <td>Numbered test cases against each FD requirement, with a posted document and a table trace per case.</td>
+          </tr>
+          <tr>
+            <td><b>SIT</b><br><span class="caption">system integration test</span></td>
+            <td>Cross-workstream team</td>
+            <td>End-to-end business scenarios hold together across MM, SD, FI and the interfaces.</td>
+            <td>My steps in the E2E script, with evidence captured at each tax-relevant point.</td>
+          </tr>
+          <tr>
+            <td><b>UAT</b></td>
+            <td>Business users</td>
+            <td>The business accepts it.</td>
+            <td>Support, triage and fast turnaround on anything tax-shaped.</td>
+          </tr>
+          <tr>
+            <td><b>Regression</b></td>
+            <td>Team</td>
+            <td>The fixes did not break anything that already worked.</td>
+            <td>A re-run set for the tax scenarios most likely to be disturbed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> The distinction that defines the role</div>
+      <p style="margin:0"><b>FUT proves the object. SIT proves the business process.</b> An object can
+        pass FUT perfectly and still fail SIT, because SIT is where the tax code arrives from a
+        purchase order rather than from my hand, and where the document that reaches FI was created
+        by someone else's transaction. Most of the genuinely interesting tax defects live in that gap.</p>
+    </div>
+
+    <h3 style="font-size:1.05rem;margin-top:2rem">How I work a defect</h3>
+    <div class="grid grid-3" style="margin:1.3rem 0">
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem">1 · Evidence before action</h4>
+        <p style="margin:0;font-size:0.9rem">Table trace (<span class="tcode">SE16N</span>), the
+          document (<span class="tcode">FB03</span> in the general ledger view), then the
+          configuration. Only then do I raise anything. A ticket without a document number is an
+          opinion.</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem">2 · Isolate with a pair</h4>
+        <p style="margin:0;font-size:0.9rem">Find two documents differing in exactly one variable —
+          one tax code, one currency, one profit centre. The difference between them is the cause.
+          One document is an anecdote; a pair is an argument.</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem">3 · Three layers, in order</h4>
+        <p style="margin:0;font-size:0.9rem">Does the <b>master data</b> exist? Is the
+          <b>configuration</b> right <i>for this company code</i>? What was <b>actually posted</b>?
+          Working them out of order is the most reliable way to lose a day.</p>
+      </div>
+    </div>
+
+    <p>One defect, one document, one discriminating argument. A ticket that says "WHT is wrong" gets
+      bounced; a ticket that says "document 19&hellip;12 withheld on the gross 107,000 instead of the
+      net 100,000, while document 19&hellip;13 with the same vendor and no VAT withheld correctly, so
+      the base type on the WHT type is including tax" gets fixed.</p>
+
+    <div class="saythis">
+      <b>The line that protects a project</b>
+      "Never raise as a defect what the signed design says is intended." Half of what looks wrong in
+      test is a locked design decision somebody has forgotten. Checking the design first costs five
+      minutes; raising it costs a developer a day and costs you credibility.
+    </div>
+
+    <p class="note">Root causes are categorised for a reason — <b>data, configuration, coding error,
+      environment, design gap</b>. Being able to say which one you are looking at, early and
+      confidently, is most of what separates a consultant from a tester.
+      The mechanics of actually reading the document are on the
+      <a href="fi-document-simulator.html#method">FI Document Simulator</a>.</p>
+  </section>
   <section class="chapter" id="readiness">
-    <div class="eyebrow"><span class="dot"></span>12 · Ready on day one</div>
+    <div class="eyebrow"><span class="dot"></span>13 · Ready on day one</div>
     <h2>What I can do now — and how I behave when it breaks.</h2>
     <p class="lede">Two honest views of readiness. First a competency matrix that separates what I&rsquo;ve
       <b style="color:var(--gas)">delivered on a live ERP</b> from what I hold as
@@ -2093,7 +2197,7 @@
 
   <!-- 13 HONEST -->
   <section class="chapter" id="honest">
-    <div class="eyebrow"><span class="dot"></span>13 · Where my depth comes from</div>
+    <div class="eyebrow"><span class="dot"></span>14 · Where my depth comes from</div>
     <h2>Where my depth actually comes from.</h2>
     <p class="lede">XeerSoft isn't SAP — but four full-lifecycle ERP go-lives map cleanly onto these SAP
       concepts. I bring the concept understanding and the real delivery experience, and I stay precise

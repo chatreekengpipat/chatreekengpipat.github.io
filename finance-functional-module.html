@@ -72,6 +72,10 @@
   h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; text-wrap: balance; }
   p { margin: 0 0 1rem; text-wrap: pretty; }
   .chapter p:not(.caption), .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
+
+  /* Narrow columns are too tight to justify — ragged right reads better there. */
+  .chapter .card p, .chapter .tbls__c p, .chapter .method__i p,
+  .chapter .trace__what, .chapter li { text-align: left; -webkit-hyphens: none; hyphens: none; }
   a { color: var(--gas); }
 
   .mono { font-family: var(--mono); }
@@ -400,6 +404,8 @@
   .tab[aria-selected="true"] { color: var(--abyss); background: var(--gas); border-color: var(--gas); font-weight: 600; }
   .tabpanel[hidden] { display: none; }
 
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.2rem 0; }
+  .table-wrap > table { min-width: 520px; }
   table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
   th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--steel); vertical-align: top; }
   th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); font-weight: 500; }
@@ -1067,11 +1073,13 @@
   <ol>
     <li><a class="rail__link" href="#hero" data-spy><span class="num">00</span><span class="name">Where you stand</span></a></li>
     <li><a class="rail__link" href="#essentials" data-spy><span class="num">01</span><span class="name">FI &amp; tax engine</span></a></li>
-    <li><a class="rail__link" href="#scope" data-spy><span class="num">02</span><span class="name">Your scope</span></a></li>
-    <li><a class="rail__link" href="#taxcfg" data-spy><span class="num">03</span><span class="name">Configure a tax code</span></a></li>
-    <li><a class="rail__link" href="#r2r" data-spy><span class="num">04</span><span class="name">Month-end close</span></a></li>
-    <li><a class="rail__link" href="#petroleum" data-spy><span class="num">05</span><span class="name">Petroleum tax layer</span></a></li>
-    <li><a class="rail__link" href="#recall" data-spy><span class="num">06</span><span class="name">Lock it in</span></a></li>
+    <li><a class="rail__link" href="#orgdata" data-spy><span class="num">02</span><span class="name">Org units &amp; master data</span></a></li>
+    <li><a class="rail__link" href="#scope" data-spy><span class="num">03</span><span class="name">Your scope</span></a></li>
+    <li><a class="rail__link" href="#taxcfg" data-spy><span class="num">04</span><span class="name">Configure a tax code</span></a></li>
+    <li><a class="rail__link" href="#r2r" data-spy><span class="num">05</span><span class="name">Month-end close</span></a></li>
+    <li><a class="rail__link" href="#statutory" data-spy><span class="num">06</span><span class="name">Statutory returns</span></a></li>
+    <li><a class="rail__link" href="#petroleum" data-spy><span class="num">07</span><span class="name">Petroleum tax layer</span></a></li>
+    <li><a class="rail__link" href="#recall" data-spy><span class="num">08</span><span class="name">Lock it in</span></a></li>
   </ol>
   <a class="rail__back" href="index.html">Back to portfolio →</a>
 </nav>
@@ -1183,8 +1191,135 @@
   </section>
 
   <!-- 02 SCOPE -->
+
+  <!-- 02 ORGANISATIONAL UNITS & MASTER DATA -->
+  <section class="chapter" id="orgdata">
+    <div class="eyebrow"><span class="dot"></span>02 · Where everything hangs</div>
+    <h2>Before the postings: the structure they hang on.</h2>
+
+    <p class="lede">Every number in FI is the child of an organisational unit and a master record.
+      Get those wrong and no amount of correct configuration saves you — which is why this is the
+      first thing to establish on an unfamiliar system, and the first thing to ask about in a defect.</p>
+
+    <h3 style="font-size:1.05rem;margin-top:1.8rem">Organisational units</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Unit</th><th>What it is</th><th>Why a tax consultant cares</th><th>Table</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Client</b></td>
+            <td>The whole SAP system instance.</td>
+            <td>Configuration is usually client-wide — a change you make is a change everyone sees.</td>
+            <td><code>T000</code></td>
+          </tr>
+          <tr>
+            <td><b>Company code</b></td>
+            <td>The legal entity that files its own financial statements.</td>
+            <td>Carries the <b>country</b> (<code>LAND1</code>) that decides the tax procedure, and the company-code currency the return is filed in.</td>
+            <td><code>T001</code></td>
+          </tr>
+          <tr>
+            <td><b>Chart of accounts</b></td>
+            <td>The list of G/L accounts shared by company codes.</td>
+            <td>Tax accounts live here; one chart serves many company codes, so an account change is rarely local.</td>
+            <td><code>T004</code> / <code>SKA1</code></td>
+          </tr>
+          <tr>
+            <td><b>Controlling area</b></td>
+            <td>The Controlling umbrella, with one currency.</td>
+            <td>Binds cost objects to company codes — relevant when a tax line needs a cost assignment.</td>
+            <td><code>TKA01</code></td>
+          </tr>
+          <tr>
+            <td><b>Segment</b></td>
+            <td>The IFRS 8 reporting dimension, usually derived from the profit centre.</td>
+            <td>What document splitting pushes onto balance-sheet lines so a balance sheet can be produced per dimension.</td>
+            <td><code>FAGL_SEGM</code></td>
+          </tr>
+          <tr>
+            <td><b>Business place</b></td>
+            <td>The branch used for tax filing in Thailand and India.</td>
+            <td>Thai VAT is reported <b>per registered branch</b>, printed as five digits — 00000 is head office.</td>
+            <td><code>J_1BBRANCH</code></td>
+          </tr>
+          <tr>
+            <td><b>Plant / purchasing org / sales org</b></td>
+            <td>Logistics units attached to the company code.</td>
+            <td>Where the tax code on a purchase or a sale is first determined, before FI ever sees it.</td>
+            <td><code>T001W</code> etc.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> The rule that catches people out</div>
+      <p style="margin:0">A <b>tax code belongs to a country, not to a company code</b>. The chain is
+        company code → <code>T001-LAND1</code> → tax procedure → tax code. Every company code in the
+        same country shares one set of codes, so "can we have a different V7 for this entity?" has a
+        one-word answer, and the real solution is a different code, not a different rate on the same one.</p>
+    </div>
+
+    <h3 style="font-size:1.05rem;margin-top:2rem">Master data</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Object</th><th>What it carries that matters to tax</th><th>App</th><th>Tables</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>G/L account</b></td>
+            <td>Two levels: chart-of-accounts (type, P&amp;L vs balance sheet) and company-code
+              (currency, <b>tax category</b>, open-item and line-item management, reconciliation type).
+              The tax category is what permits — or refuses — a tax code on a posting.</td>
+            <td><span class="tcode">FS00</span></td>
+            <td><code>SKA1</code>, <code>SKB1</code></td>
+          </tr>
+          <tr>
+            <td><b>Business Partner</b></td>
+            <td>One master carrying both supplier and customer roles, with tax numbers, bank details
+              and — per company code — the <b>withholding data</b>: types allowed, the liable flag,
+              default code and recipient type.</td>
+            <td><span class="tcode">BP</span></td>
+            <td><code>BUT000</code>, <code>LFA1</code>/<code>LFB1</code>, <code>KNA1</code>/<code>KNB1</code>, <b><code>LFBW</code></b></td>
+          </tr>
+          <tr>
+            <td><b>Cost centre / profit centre</b></td>
+            <td>The Controlling objects a P&amp;L line is assigned to. The profit centre carries the
+              <b>segment</b>, so it is the usual origin of the reporting dimension on a split line.</td>
+            <td><span class="tcode">KS01</span> / <span class="tcode">KE51</span></td>
+            <td><code>CSKS</code>, <code>CEPC</code></td>
+          </tr>
+          <tr>
+            <td><b>Asset</b></td>
+            <td>Asset class, depreciation areas (book, local GAAP and <b>tax</b>, each in its own
+              currency or ledger), useful life, cost centre.</td>
+            <td><span class="tcode">AS01</span> / <span class="tcode">AS03</span></td>
+            <td><code>ANLA</code>, <code>ANLB</code>, <code>ANLZ</code></td>
+          </tr>
+          <tr>
+            <td><b>House bank</b></td>
+            <td>Used by the payment programme and bank statement — and, for electronic withholding,
+              the bank that remits the tax and reports it to the authority.</td>
+            <td><span class="tcode">FI12</span></td>
+            <td><code>T012</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="saythis">
+      <b>The first question on any tax defect</b>
+      "Is the vendor <b>liable</b> for this withholding type in <i>this</i> company code?" The flag
+      lives in <code>LFBW</code>, it is maintained per company code, and when it is off nothing is
+      withheld no matter how correct the type, the code and the accounts are.
+    </div>
+
+    <p class="note">Structure first, configuration second, posting third. That is also the order to
+      debug in — master data exists → configuration is right for this company code → what was
+      actually posted. Working it in any other order is the most reliable way to waste a day.
+      See the <a href="fi-document-simulator.html#method">reading method</a> on the document simulator.</p>
+  </section>
   <section class="chapter" id="scope">
-    <div class="eyebrow"><span class="dot"></span>02 · Your scope — FI Tax consultant</div>
+    <div class="eyebrow"><span class="dot"></span>03 · Your scope — FI Tax consultant</div>
     <h2>What you configure, when you operate, how you frame it.</h2>
     <p class="lede">Three views of the role: the things you set up, the project phases you support, and the honest bridge from your XeerSoft delivery to SAP language.</p>
 
@@ -1239,7 +1374,7 @@
 
   <!-- 03 TAX-CODE CONFIG WALKTHROUGH -->
   <section class="chapter" id="taxcfg">
-    <div class="eyebrow"><span class="dot"></span>03 · Configure it — a tax code, end to end</div>
+    <div class="eyebrow"><span class="dot"></span>04 · Configure it — a tax code, end to end</div>
     <h2>Build a Thai VAT code the way SAP wants it.</h2>
     <p class="lede">Understanding tax is one thing; making SAP <b>post</b> it correctly is the job. This is the chain every FI tax consultant walks — define the code, point it at a GL account, post with it, then file it. Step through it.</p>
 
@@ -1307,7 +1442,7 @@
 
   <!-- 04 RECORD-TO-REPORT / MONTH-END CLOSE -->
   <section class="chapter" id="r2r">
-    <div class="eyebrow"><span class="dot"></span>04 · Record-to-Report — the close I'll run</div>
+    <div class="eyebrow"><span class="dot"></span>05 · Record-to-Report — the close I'll run</div>
     <h2>Month-end close, the FI consultant's core cycle.</h2>
     <p class="lede">Tax config is where you start; the <b>close</b> is where an FI consultant lives every period. From sub-ledger close to signed financial statements — press <b>Run close ▸</b> to walk the sequence, or tick items yourself.</p>
 
@@ -1345,9 +1480,109 @@
     <p class="note">A representative FI close sequence for S/4HANA; the exact steps and cadence vary by client. Tax filing (PP30 / PND) is the tax consultant's line in it.</p>
   </section>
 
+
+  <!-- 06 THAI STATUTORY RETURNS -->
+  <section class="chapter" id="statutory">
+    <div class="eyebrow"><span class="dot"></span>06 · Statutory output</div>
+    <h2>Which return does this posting end up on?</h2>
+
+    <p class="lede">Configuration is only half the job. The other half is knowing which form the
+      amount lands on — because the same service, at the same rate, goes to three different returns
+      depending on <b>who was paid</b>. That single fact decides more of a Thai tax design than the
+      rate ever does.</p>
+
+    <h3 style="font-size:1.05rem;margin-top:1.8rem">Withholding: the payee decides the form</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Form</th><th>Payee</th><th>Typical income</th><th>Frequency</th></tr></thead>
+        <tbody>
+          <tr><td><b>ภ.ง.ด.1</b> · PND1</td><td>Employees and individuals under s.40(1)(2)</td><td>Salary, fees</td><td>Monthly</td></tr>
+          <tr><td><b>ภ.ง.ด.1ก</b> · PND1 Kor</td><td>Same, annual summary</td><td>Year totals</td><td>Annual, by end February</td></tr>
+          <tr><td><b>ภ.ง.ด.2</b> · PND2</td><td>Individuals under s.40(3)(4)</td><td>Royalties, interest, dividends</td><td>Monthly</td></tr>
+          <tr><td><b>ภ.ง.ด.2ก</b> · PND2 Kor</td><td>Same, annual summary</td><td>Year totals</td><td>Annual</td></tr>
+          <tr><td><b>ภ.ง.ด.3</b> · PND3</td><td>Thai <b>individuals</b></td><td>Services, rent</td><td>Monthly</td></tr>
+          <tr><td><b>ภ.ง.ด.53</b> · PND53</td><td>Thai <b>juristic persons</b></td><td>Services, rent</td><td>Monthly</td></tr>
+          <tr><td><b>ภ.ง.ด.54</b> · PND54</td><td><b>Foreign</b> companies not carrying on business in Thailand</td><td>Services, royalties, interest</td><td>Monthly</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="label"><span>◆</span> Where this lives in SAP</div>
+      <p style="margin:0">The payee type is the <b>recipient type</b> (<code>QSREC</code>) on the
+        withholding line, defaulted from the business partner's company-code withholding data in
+        <code>LFBW</code>. The income type sits on the withholding <b>code</b> (<code>T059Z</code>).
+        Between them they route the amount to the right form — so a return that is missing amounts is
+        usually a recipient-type or income-type problem, not a rate problem.
+        <a href="fi-document-simulator.html#withitem">See the withholding line field by field →</a></p>
+    </div>
+
+    <h3 style="font-size:1.05rem;margin-top:2rem">VAT: two returns, one of which surprises people</h3>
+    <div class="grid grid-3" style="margin:1.3rem 0">
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem;font-family:var(--mono);color:var(--gas)">ภ.พ.30 · P.P.30</h4>
+        <p style="margin:0;font-size:0.9rem">The monthly VAT return, filed <b>per registered branch</b>.
+          Output VAT less input VAT. Standard rate <b>7%</b>, set by decree and extended
+          periodically — always confirm the current decree rather than assuming.</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem;font-family:var(--mono);color:var(--flare)">ภ.พ.36 · P.P.36</h4>
+        <p style="margin:0;font-size:0.9rem"><b>Reverse charge on imported services.</b> The Thai
+          payer self-assesses the VAT, pays it, and may then claim it as input VAT on the next P.P.30.
+          Net cost nil, two filings, easy to miss entirely.</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 0.4rem;font-family:var(--mono);color:var(--gold)">50 ทวิ · 50 Tawi</h4>
+        <p style="margin:0;font-size:0.9rem">The withholding <b>certificate</b> handed to the payee,
+          with an attachment listing each payee on the return. Under e-withholding the bank deducts,
+          remits and reports electronically, and no paper certificate is issued.</p>
+      </div>
+    </div>
+
+    <p>Two mechanical rules sit underneath all of this and are worth committing to memory:</p>
+    <ul>
+      <li>The <b>withholding base excludes VAT</b>. On a 100,000 invoice with 7% VAT, 3% withholding
+        is 3,000 — not 3,210. Calculating it on the gross overstates every certificate you issue.</li>
+      <li>Foreign-currency amounts are converted to baht at the <b>Bank of Thailand rate of the
+        previous business day</b> (T&#8209;1) for Thai tax reporting. That is a different rate from the
+        one the document posted with, which is why a tax report and a G/L balance can disagree by a
+        few baht and both be right.</li>
+    </ul>
+
+    <h3 style="font-size:1.05rem;margin-top:2rem">Gross-up: when the company absorbs the tax</h3>
+    <p>Sometimes a contract promises the supplier a net amount, so the company bears the withholding
+      itself. The arithmetic is not what most people guess — you are paying tax on the tax:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>On an invoice of 100, WHT 3%</th><th>Normal</th><th>&ldquo;One cycle&rdquo; (wrong)</th><th>True gross-up</th></tr></thead>
+        <tbody>
+          <tr><td>Withholding</td><td>100 × 3% = <b>3.00</b></td><td>100 × 3/100 = <b>3.00</b></td><td>100 × 3/(100&nbsp;−&nbsp;3) = <b>3.09</b></td></tr>
+          <tr><td>Supplier receives</td><td>97</td><td>100</td><td><b>100</b></td></tr>
+          <tr><td>Who bears it</td><td>The supplier</td><td>&mdash;</td><td><b>The company</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note">The offsetting account for the tax the company bears is configured in
+      <span class="tcode">OBWW</span> alongside the withholding payable account.
+      <a href="fi-document-simulator.html">Run a payment with gross-up on the document simulator →</a>
+      and watch the withheld amount move from 3,000 to 3,092.78 while the supplier still receives the
+      full invoice.</p>
+
+    <div class="saythis">
+      <b>Say this when a deadline is being planned</b>
+      "Monthly withholding returns are due by the <b>7th</b> on paper and the <b>15th</b> for
+      e-filing of the following month — but confirm the current Revenue Department extension before
+      we commit a cut-off date to the close calendar."
+    </div>
+
+    <p class="caption">Thai tax points here are summarised for study. Rates, deadlines and decrees
+      change — verify against the current Revenue Department rules before relying on any of them.</p>
+  </section>
   <!-- 05 PETROLEUM TAX LAYER -->
   <section class="chapter" id="petroleum">
-    <div class="eyebrow"><span class="dot"></span>05 · Why petroleum tax is special</div>
+    <div class="eyebrow"><span class="dot"></span>07 · Why petroleum tax is special</div>
     <h2>Upstream oil &amp; gas is taxed under its own Act.</h2>
     <p class="lede">An <b>upstream</b> operator — Exploration &amp; Production — is not taxed like a normal company; it carries a stack of petroleum-specific levies instead of ordinary corporate income tax. Pick a stage of the value chain to see who sits there and which taxes apply.</p>
 
@@ -1449,7 +1684,7 @@
 
   <!-- 04 RECALL -->
   <section class="chapter" id="recall">
-    <div class="eyebrow"><span class="dot"></span>06 · Lock it in — active recall</div>
+    <div class="eyebrow"><span class="dot"></span>08 · Lock it in — active recall</div>
     <h2>Eight cards. Answer before you flip.</h2>
     <p class="lede">Tap the card (or focus + Space/Enter) to reveal the answer. Use ◂ ▸ or the arrow keys to move through the deck.</p>
 

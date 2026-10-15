@@ -645,6 +645,10 @@
     .jrow { animation: none; }
   }
 
+  /* Wide prose tables scroll inside their own box so the page never does. */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.2rem 0; }
+  .table-wrap > table { min-width: 520px; }
+
   /* The workbench needs more room than the reading column. The .chapter rule
      derives both its width and its centring from --content-w, so overriding
      that one property widens the section without duplicating the formula. */
@@ -687,6 +691,9 @@
     margin: 1.6rem 0;
   }
   .fiori *, .fiori *::before, .fiori *::after { box-sizing: border-box; }
+  /* Several elements in here are toggled with the hidden attribute but carry a
+     display of their own, which would otherwise win. Make hidden authoritative. */
+  .fiori [hidden] { display: none !important; }
   .fiori p { margin: 0 0 0.6rem; text-align: left; hyphens: none; }
   .fiori b { font-weight: 600; }
 
@@ -1189,6 +1196,10 @@
   .method__i p { margin: 0; font-size: 0.88rem; color: var(--haze); }
 
   /* inline code in page prose */
+  /* Narrow columns are too tight to justify — ragged right reads better there. */
+  .chapter .card p, .chapter .tbls__c p, .chapter .method__i p,
+  .chapter .trace__what, .chapter li { text-align: left; -webkit-hyphens: none; hyphens: none; }
+
   .chapter p code, .chapter li code, .method__i p code, .trace__what code, .f-vnote code {
     font-family: var(--mono); font-size: 0.9em;
     color: var(--gas); background: rgba(59, 130, 246, 0.1);
