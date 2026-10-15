@@ -48,8 +48,8 @@
     { t: 'RICEFW Register', u: 'ricefw-register.html', c: 'SAP Reference', k: 'ricefw report interface conversion enhancement form workflow' },
     { t: 'Metrics, Audited', u: 'metrics.html', c: 'SAP Reference', k: 'metrics kpi reconcile transparency' },
     // FI Tax
-    { t: 'Functional Module of Finance — SAP FI', u: 'finance-functional-module.html', c: 'SAP FI Tax', k: 'fi tax vat wht close pttep journal' },
-    { t: 'FI Tax Consultant — Scope of Work', u: 'fi-tax-consultant-scope.html', c: 'SAP FI Tax', k: 'fi tax scope pttep petroleum hypercare readiness' },
+    { t: 'Functional Module of Finance — SAP FI', u: 'finance-functional-module.html', c: 'SAP FI Tax', k: 'fi tax vat wht close journal gl acdoca bset ledger currency' },
+    { t: 'FI Tax Consultant — Scope of Work', u: 'fi-tax-consultant-scope.html', c: 'SAP FI Tax', k: 'fi tax scope petroleum pita hypercare readiness' },
     // Projects
     { t: 'Inventory & Procurement (P2P)', u: 'project1.html', c: 'Project', k: 'procurement inventory p2p mm' },
     { t: 'Strategic Pricing & AR', u: 'project2.html', c: 'Project', k: 'pricing ar receivables sd' },

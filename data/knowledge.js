@@ -110,7 +110,7 @@ window.CK_KNOWLEDGE = {
     ['Dunning','concept','The process of reminding customers of overdue items, escalated by dunning level.'],
     ['GR/IR','concept','Goods-Receipt / Invoice-Receipt clearing — the account bridging an MM receipt and its invoice.'],
     ['3-way match','concept','Reconciling purchase order ↔ goods receipt ↔ invoice before a vendor is paid.'],
-    ['Royalty / SRB / PITA','concept','Thai petroleum taxes: royalty on gross, Special Remuneratory Benefit (windfall), and Petroleum Income Tax.',['fi-tax-consultant-scope.html','PTTEP tax engine']]
+    ['Royalty / SRB / PITA','concept','Thai petroleum taxes: royalty on gross, Special Remuneratory Benefit (windfall), and Petroleum Income Tax.',['fi-tax-consultant-scope.html','Petroleum tax engine']]
   ]
     },
     ba: {
