@@ -7,13 +7,13 @@
    Edit terms HERE and nowhere else.
    ============================================================ */
 window.CK_KNOWLEDGE = {
-  version: "1.0",
-  updated: "2026-07-11",
+  version: "1.1",
+  updated: "2026-10-16",
   sets: {
     sap: {
       label: "SAP FI/CO reference — T-codes, tables, keys & concepts",
       page: "glossary.html",
-      cats: { cfg:'Config', post:'Posting', rep:'Reporting', md:'Master data', tax:'Tax/WHT', tbl:'Table', key:'Acct key', mig:'Migration', intg:'Integration', concept:'Concept' },
+      cats: { cfg:'Config', post:'Posting', rep:'Reporting', md:'Master data', tax:'Tax/WHT', tbl:'Table', key:'Acct key', fld:'Field', life:'Lifecycle', mig:'Migration', intg:'Integration', concept:'Concept' },
       entries: [
     // Config / IMG
     ['SPRO','cfg','The Implementation Guide (IMG) — SAP’s central customizing tree. Every configuration path lives here.'],
@@ -110,7 +110,80 @@ window.CK_KNOWLEDGE = {
     ['Dunning','concept','The process of reminding customers of overdue items, escalated by dunning level.'],
     ['GR/IR','concept','Goods-Receipt / Invoice-Receipt clearing — the account bridging an MM receipt and its invoice.'],
     ['3-way match','concept','Reconciling purchase order ↔ goods receipt ↔ invoice before a vendor is paid.'],
-    ['Royalty / SRB / PITA','concept','Thai petroleum taxes: royalty on gross, Special Remuneratory Benefit (windfall), and Petroleum Income Tax.',['fi-tax-consultant-scope.html','Petroleum tax engine']]
+    ['Royalty / SRB / PITA','concept','Thai petroleum taxes: royalty on gross, Special Remuneratory Benefit (windfall), and Petroleum Income Tax.',['fi-tax-consultant-scope.html','Petroleum tax engine']],
+
+    // ---- Document tables (what a posting actually writes) ----
+    ['BSET','tbl','The <b>tax lines</b>. One row per <i>tax code</i> per document — not per line item — carrying base and tax in every currency. This is what the VAT return reads.',['fi-document-simulator.html','See a BSET row']],
+    ['WITH_ITEM','tbl','The <b>withholding tax lines</b>. One row per line item per WHT type, with base, withheld amount, code, recipient type and certificate number.',['fi-document-simulator.html','See a WITH_ITEM row']],
+    ['BSIK / BSAK','tbl','Vendor open / cleared items. In S/4HANA these are <b>views over ACDOCA</b>, not separate tables.'],
+    ['BSAD / BSIS / BSAS','tbl','Customer cleared, and G/L open / cleared items — likewise views over ACDOCA in S/4HANA.'],
+    ['BSEC','tbl','One-time-account and alternative-payee details carried on the document itself.'],
+    ['T001','tbl','Company code master: its currency (<code>WAERS</code>) and country (<code>LAND1</code>) — the country that decides which tax procedure applies.'],
+    ['SKA1 / SKB1','tbl','G/L account master at chart-of-accounts level and company-code level (currency, tax category, open-item management).'],
+    ['T007A','tbl','Tax codes per calculation procedure — the table behind <span class="tcode">FTXP</span>.'],
+    ['T030K','tbl','Tax account determination: account key → G/L account, maintained in <span class="tcode">OB40</span>.'],
+    ['T059P / T059Z','tbl','Withholding tax <b>types</b> (when and how it is calculated) and <b>codes</b> (the rate <code>QSATZ</code> and income type).'],
+    ['LFBW','tbl','Vendor withholding data per company code: which types apply, the <b>liable</b> flag, default code and recipient type. Liable off means nothing is withheld.'],
+    ['TCURR','tbl','Exchange rates by rate type (<code>KURST</code>) and valid-from date (<code>GDATU</code>, stored inverted). Maintained in <span class="tcode">OB08</span>.'],
+    ['CEPC','tbl','Profit centre master — where the <b>segment</b> is normally derived from.'],
+    ['EKBE','tbl','Purchase-order history: which goods receipts and invoices have been posted against a PO line.'],
+
+    // ---- Document fields (reading a posting) ----
+    ['BSCHL — posting key','fld','What the <b>user</b> chose. Fixes account type and debit/credit together: 40/50 G/L, 31/21 vendor, 01/11 customer, 70/75 asset, 89/96 stock and GR/IR.',['fi-document-simulator.html','Post one and look']],
+    ['KTOSL — transaction key','fld','Why <b>SAP</b> generated a line: VST input tax, MWS output tax, NVV non-deductible, ESA/ESE reverse charge, WIT withholding, WRX GR/IR, BSX stock, KDF rate difference. The single most useful field when reading an unfamiliar document.',['fi-document-simulator.html','Read it down the lines']],
+    ['SHKZG','fld','Debit (<code>S</code>) or credit (<code>H</code>). BSEG amounts are stored <b>unsigned</b>, so the sign lives here — ACDOCA stores signed amounts instead.'],
+    ['BUDAT vs BLDAT','fld','Posting date decides the <b>period</b> and therefore the tax return; document date is the supplier&rsquo;s invoice date and drives payment terms. Confusing them is the usual cause of a VAT report disagreeing with the ledger.'],
+    ['AWTYP / AWKEY','fld','The reference pair pointing back to the source object — <code>MKPF</code> material document, <code>RMRP</code> logistics invoice, <code>VBRK</code> billing. How you prove an FI document came from MM or SD rather than a manual journal.'],
+    ['AUGBL / AUGDT','fld','The clearing document and date. Empty means the item is still <b>open</b> — that is the whole definition.'],
+    ['WSL / HSL / KSL / OSL','fld','ACDOCA amounts in transaction, company-code, group and freely-defined currency. Per ledger each must sum to zero — the fastest integrity check on any document.',['fi-document-simulator.html','Watch them balance']],
+    ['RLDNR','fld','The ledger on an ACDOCA row. The key starts with it because one line exists <b>once per ledger</b> — query without a ledger filter and every total is multiplied.'],
+    ['FWBAS / FWSTE','fld','Tax base and tax amount in document currency on a BSET row; <code>HWBAS</code> / <code>HWSTE</code> are the same in company-code currency, which is what the statutory return reports.'],
+    ['QSREC — recipient type','fld','Who is being paid: individual, juristic person or foreign entity. In Thailand this decides PND3 vs PND53 vs PND54 — same service, same rate, three different returns.'],
+
+    // ---- Tax & withholding ----
+    ['NVV','key','Non-deductible input tax. The amount is added into the expense or GR/IR line, so there is <b>no separate tax line</b> — but BSET still records base and tax.'],
+    ['ESA / ESE','key','The reverse-charge pair. One tax code self-assesses both the output tax you owe and the input tax you may reclaim, so the net cash effect is nil.'],
+    ['WIT','key','The transaction key on a withholding tax line. Accounts are set in <span class="tcode">OBWW</span>.'],
+    ['KDF','key','Exchange-rate difference — the key on a line SAP generated because a rate moved between posting and clearing.'],
+    ['ERL','key','Revenue account key in SD account determination (<span class="tcode">VKOA</span>) — how billing finds the right revenue line.'],
+    ['WHT type vs WHT code','tax','<b>Type</b> (<code>T059P</code>) decides <i>when and how</i> — at invoice or at payment. <b>Code</b> (<code>T059Z</code>) decides <i>how much</i> and which return. Type changes timing; code changes the number.'],
+    ['Deduct at payment','tax','A WHT type calculated at payment. The invoice writes a WITH_ITEM row with the base but <b>amount zero</b>; the amount appears on the payment document. Not a defect — the invoice half of a two-document story.'],
+    ['Gross-up','tax','The company bears the withholding so the supplier receives the full amount. True gross-up is <code>base × r / (100 − r)</code> — 3% on 100,000 is <b>3,092.78</b>, not 3,000, because you pay tax on the tax.',['fi-document-simulator.html','Toggle it on a payment']],
+    ['PND 1 / 1Kor / 2','tax','Thai withholding returns for employment income (monthly and the annual summary) and for royalties, interest and dividends.'],
+    ['50 Tawi (50 ทวิ)','tax','The Thai withholding tax certificate handed to the payee; the attachment lists each payee on the return.'],
+    ['e-WHT','tax','The bank deducts and remits withholding tax and reports it to the Revenue Department electronically — no paper certificate.'],
+    ['Output group','tax','Decides which forms, lists and e-filing files a withholding run produces. A report that &ldquo;runs but produces nothing&rdquo; is usually the wrong output group.'],
+    ['Business place (BUPLA)','tax','The branch used for Thai tax filing, printed as five digits (00000 = head office). A tax invoice must show both parties&rsquo; tax ID and branch.'],
+    ['Tax procedure','tax','The calculation chain: company code → country (<code>T001-LAND1</code>) → procedure → tax code → condition and rate → account key → G/L account. A tax code belongs to a <b>country</b>, never to a company code.'],
+    ['DTA','tax','Double tax agreement — a treaty that can reduce or remove the withholding rate on a cross-border payment.'],
+    ['CIT','tax','Corporate income tax. In Thailand 20% on ordinary company profit — distinct from the petroleum regime, which is taxed under its own Act.'],
+    ['RFIDYYWT','rep','Generic Withholding Tax Reporting (<span class="tcode">S_P00_07000134</span>) — one selection screen produces forms, lists and e-filing files, chosen by output group.'],
+    ['FBL3N','rep','G/L account line-item display — the third of the line-item trio with FBL1N and FBL5N.'],
+
+    // ---- Document structure concepts ----
+    ['Document splitting','concept','Pushes the characteristics of the P&amp;L lines (profit centre, segment) onto balance-sheet lines so a balance sheet can be produced per dimension. One invoice over two profit centres produces <b>two tax lines and two vendor lines</b> in the general ledger view.',['fi-document-simulator.html','Toggle it and count rows']],
+    ['Entry view vs GL view','concept','Entry view (BSEG) is what the user posted; general ledger view (ACDOCA) is the document after splitting. Always read tax and segment in the <b>GL view</b> — arguing from the entry view is arguing about a document that does not exist in the ledger.',['fi-document-simulator.html','Switch between them']],
+    ['Leading ledger (0L)','concept','The ledger always present and integrated with Controlling. Non-leading ledgers carry parallel valuations — local GAAP, a tax view, IFRS adjustments — and a ledger group sends one posting to a subset.'],
+    ['LC1 / LC2 / LC3','concept','Local currency 1 (company code, the statutory books), 2 (usually group) and 3 (often a tax-specific currency). Each is converted at posting and frozen there.'],
+    ['Number range','concept','Per document type and fiscal year (<span class="tcode">FBN1</span>). The range a document sits in tells you which type was used, even when nobody remembers choosing it.'],
+    ['Segment','concept','The IFRS 8 reporting dimension, normally derived from the profit centre master and in some designs overwritten by a substitution at posting. Establish <i>which</i> before debugging a wrong one.'],
+    ['Special G/L indicator','concept','Posts a subledger item to a different reconciliation account — down payments, guarantees, bills of exchange.'],
+    ['Recovery indicator','concept','In Joint Venture Accounting, the flag on every line saying who bears the cost and whether it is recoverable from partners.'],
+    ['JVA','concept','Joint Venture Accounting — partner cost sharing in oil and gas: venture, equity group and recovery indicator on every line, with cutback and cash calls.'],
+    ['Three-layer diagnosis','concept','The order that saves the most time on an FI defect: does the <b>master data</b> exist, is the <b>configuration</b> right for this company code, and what was <b>actually posted</b>?',['fi-document-simulator.html','The reading method']],
+    ['Discriminating pair','concept','Two documents differing in exactly one variable. The difference between them is the cause — one document is an anecdote, a pair is an argument.'],
+
+    // ---- Lifecycle & testing ----
+    ['FD / TD','life','Functional design (what and why) and technical design (how). Every custom object goes FD → TD → build → UT → FUT → SIT → UAT.'],
+    ['UT','life','Unit test — the developer proves the code does what the technical design says.'],
+    ['FUT','life','Functional unit test — the functional consultant proves the object meets the <b>functional design</b>, one object at a time, against written test cases.'],
+    ['SIT','life','System integration test — cross-workstream, end-to-end business scenarios across modules and interfaces, with evidence per step.'],
+    ['UAT','life','User acceptance test — the business accepts the solution and signs off.'],
+    ['Regression','life','Re-running an existing set to prove fixes did not break anything else.'],
+    ['KUT / EUT','life','Key-user training (consultants train the client&rsquo;s key users) and end-user training (key users train everyone else).'],
+    ['CR','life','Change request — changes scope or design <i>after</i> sign-off. Not the same as a defect.'],
+    ['Defect lifecycle','life','New → In Analysis → In Progress → Info Required → Retest → Closed or Reopened. Root causes: data, config, coding error, environment, or design gap.'],
+    ['Evidence before action','life','Table trace (<span class="tcode">SE16N</span>), document (<span class="tcode">FB03</span>), configuration — <i>then</i> raise it. And never raise as a defect what the signed design says is intended.']
   ]
     },
     ba: {
