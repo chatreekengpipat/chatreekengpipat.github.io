@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FI-TAX Quiz — Active Recall · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--good:#2563EB;--bad:#9A3412;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:20px;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+
+  .quiz{margin-top:32px;}
+
+  /* buttons */
+  .btn{font-family:'IBM Plex Sans Thai',sans-serif;font-size:14.5px;font-weight:600;border:none;border-radius:10px;padding:12px 22px;cursor:pointer;transition:.15s;background:var(--petrol);color:var(--paper);}
+  .btn:hover{background:var(--petrol-deep);}
+  .btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+  .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--petrol);color:var(--petrol);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  /* start card */
+  .startcard{border:1.5px solid var(--line);border-radius:14px;padding:22px 22px 24px;background:var(--card);}
+  .startcard h2{font-size:19px;font-weight:700;margin-bottom:6px;}
+  .startcard p.sub{font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;}
+  .fldlbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin:16px 0 8px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);border-radius:20px;padding:7px 15px;cursor:pointer;transition:.15s;}
+  .chip:hover{border-color:var(--petrol);color:var(--petrol);}
+  .chip.active{background:var(--petrol);border-color:var(--petrol);color:var(--paper);}
+  .chip:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+  .opts{display:flex;align-items:center;gap:10px;margin:18px 0 4px;font-size:13.5px;color:var(--ink-soft);}
+  .opts input{width:17px;height:17px;accent-color:var(--petrol);cursor:pointer;}
+  .startcard .go{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .best{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--brass);}
+
+  /* progress */
+  .q-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .q-top .tp{color:var(--brass);font-weight:600;}
+  .pbar{height:7px;border-radius:5px;background:var(--line);overflow:hidden;margin-bottom:22px;}
+  .pbar>span{display:block;height:100%;background:var(--petrol);border-radius:5px;transition:width .3s ease;}
+
+  .q-text{font-size:17px;font-weight:600;line-height:1.5;margin-bottom:18px;}
+  .choices{display:flex;flex-direction:column;gap:10px;}
+  .choice{display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--card);border-radius:11px;padding:13px 15px;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--ink);transition:.14s;line-height:1.45;}
+  .choice:hover:not(:disabled){border-color:var(--petrol);background:rgba(37,99,235,.04);}
+  .choice:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+  .choice .kbd{flex:0 0 24px;height:24px;border-radius:6px;background:var(--chip);color:var(--chip-text);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .choice.correct{border-color:var(--good);background:rgba(37,99,235,.10);}
+  .choice.correct .kbd{background:var(--good);color:#fff;}
+  .choice.wrong{border-color:var(--bad);background:rgba(185,28,28,.09);}
+  .choice.wrong .kbd{background:var(--bad);color:#fff;}
+  .choice:disabled{cursor:default;}
+  .choice.dim{opacity:.55;}
+  .choice .mk{margin-left:auto;font-weight:700;font-size:15px;padding-left:8px;}
+  .choice.correct .mk{color:var(--good);}
+  .choice.wrong .mk{color:var(--bad);}
+
+  .explain{border-left:3px solid var(--brass);background:rgba(180,83,9,.06);border-radius:0 10px 10px 0;padding:12px 16px;margin-top:16px;font-size:14px;}
+  .explain .vt{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:4px;}
+  .explain.ok .vt{color:var(--good);}
+  .explain.no .vt{color:var(--bad);}
+  .q-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap;}
+  .hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+  /* result */
+  .result{text-align:center;border:1.5px solid var(--line);border-radius:16px;padding:28px 22px;background:var(--card);}
+  .ring{width:150px;height:150px;border-radius:50%;margin:6px auto 16px;display:flex;align-items:center;justify-content:center;position:relative;}
+  .ring::after{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--card);}
+  .ring .pct{position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:600;color:var(--ink);}
+  .verdict{font-size:20px;font-weight:700;margin-bottom:4px;}
+  .verdict.pass{color:var(--good);}
+  .verdict.fail{color:var(--bad);}
+  .result .line{font-size:14px;color:var(--ink-soft);margin-bottom:20px;}
+  .result .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+  .wronglist{text-align:left;margin-top:26px;}
+  .wronglist h3{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--bad);font-weight:600;margin-bottom:10px;}
+  .wq{border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:0 10px 10px 0;padding:12px 15px;margin-bottom:10px;background:var(--paper);}
+  .wq .qq{font-size:14px;font-weight:600;margin-bottom:6px;}
+  .wq .ln{font-size:13px;margin:2px 0;}
+  .wq .ln b.you{color:var(--bad);}
+  .wq .ln b.cor{color:var(--good);}
+  .wq .ex{font-size:12.5px;color:var(--ink-soft);margin-top:6px;}
+
+  .empty{border:1.5px dashed var(--warn);border-radius:12px;padding:18px;font-size:14px;color:var(--warn);background:rgba(185,28,28,.05);}
+
+  footer{margin-top:50px;padding-top:18px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @media(prefers-reduced-motion:reduce){.pbar>span,.choice{transition:none;}}
+  @media print{.crumb,.q-actions,.startcard .go,.result .acts{display:none;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+<script src="data/quiz-bank.js"></script>
+</head>
+<body data-page="tax-quiz">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Quiz Engine</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>Active Recall</span>
+    </div>
+    <h1>FI-TAX Quiz<br><span class="accent">วัดความเข้าใจ — เกณฑ์ผ่าน 80% เหมือน post-test จริง</span></h1>
+    <div class="meta">
+      <span>Bank · <b id="mBank">–</b></span>
+      <span>Pass · <b>80%</b></span>
+      <span>คีย์ลัด · <b>1–4 ตอบ · Enter ถัดไป</b></span>
+    </div>
+  </header>
+
+  <div class="quiz" id="quizApp" aria-live="polite"><!-- rendered by JS --></div>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · Quiz · 20 official questions</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var NS = (window.KitTheme && window.KitTheme.ns) || "kit:v1:";
+  var PAGE = "tax-quiz";
+  var PASS = 0.8;
+  var BANK = Array.isArray(window.QUIZ_BANK) ? window.QUIZ_BANK : [];
+  var app = document.getElementById("quizApp");
+  var mBank = document.getElementById("mBank");
+  if (mBank) mBank.textContent = BANK.length + " ข้อ";
+
+  var S = { screen:"start", filter:"ALL", shuffle:false, qs:[], i:0, chosen:[], mode:"all" };
+
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function pct(c,t){ return t ? Math.round(c/t*100) : 0; }
+  function ls(g,k,v){ try{ return g?localStorage.getItem(k):localStorage.setItem(k,v);}catch(e){return null;} }
+
+  function topics(){ var seen={}, out=[]; BANK.forEach(function(q){ if(q.topic&&!seen[q.topic]){seen[q.topic]=1;out.push(q.topic);} }); return out; }
+  function baseSet(){ return S.filter==="ALL" ? BANK.slice() : BANK.filter(function(q){return q.topic===S.filter;}); }
+  function shuffle(a){ a=a.slice(); for(var k=a.length-1;k>0;k--){ var j=Math.floor(Math.random()*(k+1)); var t=a[k];a[k]=a[j];a[j]=t; } return a; }
+
+  function readBest(){ try{ var o=JSON.parse(ls(true,NS+PAGE+":best")||"null"); return (o&&typeof o.pct==="number")?o:null; }catch(e){ return null; } }
+  function saveBest(c,t){
+    var p=pct(c,t), prev=readBest();
+    if(!prev || p>=prev.pct){ ls(false,NS+PAGE+":best",JSON.stringify({c:c,t:t,pct:p})); }
+    /* hub progress bar reads :summary {c,t} */
+    ls(false,NS+PAGE+":summary",JSON.stringify({c:c,t:t}));
+  }
+
+  /* ---------- START ---------- */
+  function renderStart(){
+    S.screen="start";
+    if(!BANK.length){
+      app.innerHTML='<div class="empty"><b>โหลด question bank ไม่สำเร็จ</b> — ตรวจว่าไฟล์ <code>data/quiz-bank.js</code> อยู่ครบ (window.QUIZ_BANK)</div>';
+      return;
+    }
+    var best=readBest();
+    var chips='<button class="chip'+(S.filter==="ALL"?" active":"")+'" data-topic="ALL">ทั้งหมด ('+BANK.length+')</button>';
+    topics().forEach(function(tp){
+      var n=BANK.filter(function(q){return q.topic===tp;}).length;
+      chips+='<button class="chip'+(S.filter===tp?" active":"")+'" data-topic="'+esc(tp)+'">'+esc(tp)+' ('+n+')</button>';
+    });
+    app.innerHTML=
+      '<div class="startcard">'+
+        '<h2>พร้อมวัดผลหรือยัง?</h2>'+
+        '<p class="sub">ตอบทีละข้อ มีเฉลย + คำอธิบายทันที · จบแล้วดูคะแนน + โหมด "ทำเฉพาะข้อผิด"</p>'+
+        '<div class="fldlbl">เลือกหัวข้อ (topic filter)</div>'+
+        '<div class="chips" id="chips">'+chips+'</div>'+
+        '<label class="opts"><input type="checkbox" id="shuf"'+(S.shuffle?" checked":"")+'> สลับลำดับข้อ (shuffle)</label>'+
+        '<div class="go">'+
+          '<button class="btn" id="startBtn">เริ่มทำ ('+baseSet().length+' ข้อ) →</button>'+
+          (best?'<span class="best">คะแนนดีที่สุด '+best.pct+'% ('+best.c+'/'+best.t+')</span>':'')+
+        '</div>'+
+      '</div>';
+    document.getElementById("chips").addEventListener("click",function(e){
+      var b=e.target.closest(".chip"); if(!b) return;
+      S.filter=b.getAttribute("data-topic");
+      renderStart();
+    });
+    document.getElementById("shuf").addEventListener("change",function(e){ S.shuffle=e.target.checked; });
+    document.getElementById("startBtn").addEventListener("click",startRun);
+  }
+
+  function startRun(){
+    var set=baseSet();
+    S.qs = S.shuffle ? shuffle(set) : set;
+    S.i=0; S.chosen=S.qs.map(function(){return null;}); S.mode="all";
+    renderQuestion();
+  }
+
+  /* ---------- QUESTION ---------- */
+  function renderQuestion(){
+    S.screen="quiz";
+    var q=S.qs[S.i], total=S.qs.length, answered=S.chosen[S.i]!==null;
+    var labels=["1","2","3","4","5","6"];
+    var ch="";
+    q.choices.forEach(function(c,idx){
+      var cls="choice", mk="";
+      if(answered){
+        if(idx===q.answerIndex){ cls+=" correct"; mk='<span class="mk">✓</span>'; }
+        else if(idx===S.chosen[S.i]){ cls+=" wrong"; mk='<span class="mk">✗</span>'; }
+        else cls+=" dim";
+      }
+      ch+='<button class="'+cls+'" data-idx="'+idx+'"'+(answered?" disabled":"")+'>'+
+            '<span class="kbd">'+labels[idx]+'</span><span>'+esc(c)+'</span>'+mk+'</button>';
+    });
+    var expl="";
+    if(answered){
+      var ok=S.chosen[S.i]===q.answerIndex;
+      expl='<div class="explain '+(ok?"ok":"no")+'">'+
+             '<div class="vt">'+(ok?"ถูกต้อง":"ยังไม่ถูก")+'</div>'+esc(q.explanation)+'</div>';
+    }
+    var progressPct=Math.round((S.i+(answered?1:0))/total*100);
+    app.innerHTML=
+      '<div class="q-top"><span class="tp">'+esc(q.topic)+(S.mode==="retry"?" · retry":"")+'</span>'+
+        '<span>ข้อ '+(S.i+1)+' / '+total+'</span></div>'+
+      '<div class="pbar"><span style="width:'+progressPct+'%"></span></div>'+
+      '<div class="q-text">'+esc(q.question)+'</div>'+
+      '<div class="choices" id="choices">'+ch+'</div>'+
+      expl+
+      '<div class="q-actions">'+
+        '<span class="hint">'+(answered?"กด Enter / → เพื่อไปต่อ":"กด 1–"+q.choices.length+" หรือคลิกเพื่อตอบ")+'</span>'+
+        (answered?'<button class="btn" id="nextBtn">'+(S.i+1<total?"ถัดไป →":"ดูผล →")+'</button>':'')+
+      '</div>';
+    var cs=document.getElementById("choices");
+    cs.addEventListener("click",function(e){ var b=e.target.closest(".choice"); if(!b||b.disabled) return; choose(parseInt(b.getAttribute("data-idx"),10)); });
+    var nb=document.getElementById("nextBtn"); if(nb) nb.addEventListener("click",next);
+  }
+
+  function choose(idx){
+    if(S.chosen[S.i]!==null) return;
+    S.chosen[S.i]=idx;
+    renderQuestion();
+  }
+  function next(){
+    if(S.chosen[S.i]===null) return;
+    if(S.i+1<S.qs.length){ S.i++; renderQuestion(); }
+    else renderResult();
+  }
+
+  /* ---------- RESULT ---------- */
+  function renderResult(){
+    S.screen="result";
+    var total=S.qs.length, correct=0, wrong=[];
+    S.qs.forEach(function(q,idx){
+      if(S.chosen[idx]===q.answerIndex) correct++;
+      else wrong.push({q:q,chosen:S.chosen[idx]});
+    });
+    var p=pct(correct,total), passed=correct/total>=PASS;
+    if(S.mode==="all") saveBest(correct,total);
+    var deg=Math.round(p*3.6);
+    var ringCol=passed?"var(--good)":"var(--brass)";
+    var wl="";
+    if(wrong.length){
+      wl='<div class="wronglist"><h3>ข้อที่ตอบผิด ('+wrong.length+')</h3>';
+      wrong.forEach(function(w){
+        var yi=w.chosen, you=(yi==null)?"(ไม่ได้ตอบ)":w.q.choices[yi];
+        wl+='<div class="wq"><div class="qq">'+esc(w.q.question)+'</div>'+
+              '<div class="ln">คำตอบคุณ: <b class="you">'+esc(you)+'</b></div>'+
+              '<div class="ln">คำตอบที่ถูก: <b class="cor">'+esc(w.q.choices[w.q.answerIndex])+'</b></div>'+
+              '<div class="ex">'+esc(w.q.explanation)+'</div></div>';
+      });
+      wl+='</div>';
+    }
+    app.innerHTML=
+      '<div class="result">'+
+        '<div class="ring" style="background:conic-gradient('+ringCol+' '+deg+'deg, var(--line) 0)"><span class="pct">'+p+'%</span></div>'+
+        '<div class="verdict '+(passed?"pass":"fail")+'">'+(passed?"ผ่าน 🎉":"ยังไม่ผ่าน")+'</div>'+
+        '<div class="line">'+correct+' / '+total+' ข้อ · เกณฑ์ผ่าน '+(PASS*100)+'%'+(S.mode==="retry"?" · (โหมด retry)":"")+'</div>'+
+        '<div class="acts">'+
+          (wrong.length?'<button class="btn" id="retryBtn">ทำเฉพาะข้อผิด ('+wrong.length+') ↻</button>':'')+
+          '<button class="btn ghost" id="restartBtn">เริ่มใหม่ทั้งชุด</button>'+
+        '</div>'+
+        wl+
+      '</div>';
+    var rb=document.getElementById("retryBtn");
+    if(rb) rb.addEventListener("click",function(){ startRetry(wrong.map(function(w){return w.q;})); });
+    document.getElementById("restartBtn").addEventListener("click",renderStart);
+  }
+
+  function startRetry(list){
+    S.qs = S.shuffle ? shuffle(list) : list.slice();
+    S.i=0; S.chosen=S.qs.map(function(){return null;}); S.mode="retry";
+    renderQuestion();
+  }
+
+  /* ---------- KEYBOARD ---------- */
+  document.addEventListener("keydown",function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey) return;
+    var tag=(e.target&&e.target.tagName)||"";
+    if(S.screen==="start"){
+      if(e.key==="Enter"){ var sb=document.getElementById("startBtn"); if(sb){ e.preventDefault(); sb.click(); } }
+      return;
+    }
+    if(S.screen==="quiz"){
+      var q=S.qs[S.i], answered=S.chosen[S.i]!==null;
+      if(!answered){
+        var n=parseInt(e.key,10);
+        if(n>=1 && n<=q.choices.length){ e.preventDefault(); choose(n-1); }
+      } else {
+        if(e.key==="Enter"||e.key==="ArrowRight"||e.key===" "){ e.preventDefault(); next(); }
+      }
+      return;
+    }
+    if(S.screen==="result"){
+      if((e.key==="r"||e.key==="R")){ var r=document.getElementById("retryBtn"); if(r){ e.preventDefault(); r.click(); } }
+      else if(e.key==="Enter"){ var rs=document.getElementById("restartBtn"); if(rs){ e.preventDefault(); rs.click(); } }
+    }
+  });
+
+  renderStart();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tables &amp; Q&amp;A — Expert Reference · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:960px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:22px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  .sec-num.r044{background:var(--petrol);} .sec-num.r074{background:var(--petrol-deep);} .sec-num.f008{background:var(--brass);}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:22px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
+  thead th{text-align:left;font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  table.dict td:first-child code{background:var(--petrol);color:var(--paper);}
+  .why{color:var(--ink-soft);font-style:italic;}
+
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 22px;position:relative;font-size:13.6px;}
+  .keybox li::before{content:"★";position:absolute;left:0;color:var(--brass);font-weight:700;font-size:12px;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:16px 0;font-size:13.6px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+  .obj{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:12px 0;background:rgba(29,78,216,.05);font-size:14px;}
+  .obj b{color:var(--petrol-deep);}
+
+  /* object banner */
+  .obanner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-radius:12px;padding:12px 16px;margin:4px 0 10px;background:var(--card);border:1.5px solid var(--line);}
+  .obanner .oid{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--paper);padding:3px 10px;border-radius:6px;}
+  .obanner.r044 .oid{background:var(--petrol);} .obanner.r074 .oid{background:var(--petrol-deep);} .obanner.f008 .oid{background:var(--brass);}
+  .obanner .owhere{font-size:13px;color:var(--ink-soft);}
+  .obanner .owhere b{color:var(--ink);}
+
+  /* KTOSL chips */
+  .ktchips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+  .ktchip{border:1.5px solid var(--line);border-left:4px solid var(--brass);border-radius:9px;padding:8px 12px;font-size:12.5px;background:var(--card);flex:1 1 200px;}
+  .ktchip code{font-size:12px;}
+  .ktchip b{color:var(--petrol-deep);}
+
+  /* Q&A drill */
+  .ask{border:1.5px solid var(--line);border-radius:12px;margin:10px 0;background:var(--card);overflow:hidden;}
+  .ask .q{padding:13px 16px;font-size:14px;font-weight:600;display:flex;gap:10px;align-items:flex-start;}
+  .ask .q .qi{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--paper);background:var(--warn);border-radius:5px;padding:2px 7px;flex:0 0 auto;margin-top:1px;}
+  details.ans{border-top:1px solid var(--line-soft);}
+  details.ans>summary{cursor:pointer;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{padding:0 16px 14px;font-size:13.5px;color:var(--ink);line-height:1.6;}
+  details.ans .a b{color:var(--petrol-deep);}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media(max-width:560px){ code,.code{white-space:normal;overflow-wrap:anywhere;} table td,table th{overflow-wrap:anywhere;} }
+  @media print{body{background:#fff;padding:0;font-size:10pt;}.masthead{animation:none;}.keybox,.callout,.trap,.obj,.ask,section,.ktchip{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}details.ans .a{display:block!important;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-mastery">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Reference</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>Expert Reference</span>
+    </div>
+    <h1>Tables &amp; Q&amp;A — Expert Reference<br><span class="accent">ตารางไหนเก็บอะไร · ACDOCA vs BSEG · ซ้อมตอบแบบสัมภาษณ์</span></h1>
+    <div class="meta">
+      <span>Objects · <b>RPT-1 · RPT-2 · FRM-1 · ENH-1 · FRM-2</b></span>
+      <span>Field-level sources · <b>อยู่ในหน้าของแต่ละ object</b></span>
+    </div>
+  </header>
+
+  <p class="lede">
+    หน้านี้ทำให้ <b>ตอบเวลาเขาถาม</b> ได้แม่น — พจนานุกรมตารางที่โปรแกรมภาษีอ่าน, ทำไม S/4 อ่าน <code>ACDOCA</code> แต่บาง field ยังต้องใช้ <code>BSEG</code>, และ <b>Q&amp;A drill</b> · ส่วน “ดึงจากตารางไหน ต่อ field” และ “ECC → S/4 delta” ของแต่ละโปรแกรมย้ายไปอยู่ในหน้าของ object นั้นแล้ว (
+    <a href="rpt1-wht-vat-recon.html#columns" style="color:var(--petrol);font-weight:600">RPT-1</a> ·
+    <a href="rpt2-oman-vat.html#tables" style="color:var(--petrol);font-weight:600">RPT-2</a> ·
+    <a href="frm1-wht-attachment.html#fields" style="color:var(--petrol);font-weight:600">FRM-1</a> ·
+    <a href="enh1-rd-text-files.html#layout" style="color:var(--petrol);font-weight:600">ENH-1</a> ·
+    <a href="frm2-mm-wht-certificate.html#mapping" style="color:var(--petrol);font-weight:600">FRM-2</a>)
+  </p>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#dict">1 · Table Dictionary</a>
+    <a href="#dict2">1.5 · Dictionary ภาค 2</a>
+    <a href="#acdoca">2 · ACDOCA vs BSEG</a>
+    <a href="#drill">3 · Q&amp;A Drill</a>
+  </nav>
+
+  <div class="keybox">
+    <b>9 สิ่งที่ Expert ต้องแม่น</b>
+    <ul>
+      <li><b>ACDOCA</b> = Universal Journal (S/4 line-item เดียวรวม FI+CO+ML) = แหล่งจริงของ <b>PC · RI · segment · VAT code</b> — อ่านด้วย <code>RLDNR='0L'</code> + <code>KTOSL</code></li>
+      <li><b>KTOSL</b> (transaction key) แยกบรรทัด: <code>WIT</code>=WHT · <code>VST</code>=input VAT · <code>XST</code>=PC/RI ฝั่ง invoice · <code>MWS</code>=output VAT</li>
+      <li><b>BSEG</b> = classic FI line items ยังอยู่ — ใช้บาง field เช่น <b>clearing doc (AUGBL)</b> บน WIT line (RPT-1 field 4)</li>
+      <li><b>BSAK</b> = สะพานเชื่อม payment↔invoice ผ่าน <code>AUGBL</code> (clearing) — แกน join ของ RPT-1</li>
+      <li><b>BSET</b> = tax segment (base/amount ภาษี) · <b>BKPF</b> = doc header (currency/rate/date)</li>
+      <li><b>WITH_ITEM</b> = WHT amounts; suffix <code>HB</code>=doc · <code>HH</code>=LC1 · <code>H2</code>=LC2 (หัวใจของ FRM-2)</li>
+      <li><b>rate</b>: WHT rate = <code>T059Z-QSATZ</code> · exchange = <code>TCURR-UKURS</code> · rate type per country = <code>T005-KURST</code></li>
+      <li><b>validate master</b>: PC↔<code>CEPC</code> · RI↔<code>T8JJ</code> · BP tax no↔<code>DFKKBPTAXNUM</code></li>
+      <li><b>delta discipline</b>: รู้ชัดว่าอะไร “Same as ECC” และอะไรคือ retrofit (GL renumber · doc type · +PC/RI · source-table shift → ACDOCA) — ตารางเทียบอยู่ในหน้าของแต่ละ object</li>
+    </ul>
+  </div>
+
+  <!-- 1 · TABLE DICTIONARY -->
+  <section id="dict">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Table Dictionary — ตารางไหน เก็บอะไร ทำไมโปรแกรมภาษีอ่าน</h2></div>
+    <p class="sec-sub">จำตารางเหล่านี้ = ตอบ “ดึงมาจากไหน” ได้เกือบทุกเคส</p>
+    <div class="tblwrap">
+    <table class="dict">
+      <thead><tr><th style="width:150px">Table</th><th>เก็บอะไร</th><th>ใช้กับ (field เด่น)</th></tr></thead>
+      <tbody>
+        <tr><td><code>ACDOCA</code></td><td><b>Universal Journal</b> — line item เดียวรวม FI+CO+ML (S/4) · มี RLDNR, KTOSL, PRCTR, RECID, SEGMENT, MWSKZ</td><td>PC/RI (RPT-2/RPT-1) · VAT code · segment <span class="why">(source of truth)</span></td></tr>
+        <tr><td><code>BSEG</code></td><td>classic FI document line items (ยังอยู่ใน S/4)</td><td>clearing doc <code>AUGBL</code> บน WIT line (RPT-1 f.4) · cash-call vendor line <code>DMBE2</code> = LC2 (RPT-2) · <b>อย่าใช้เป็นแหล่ง PRCTR ใน S/4</b></td></tr>
+        <tr><td><code>BKPF</code></td><td>accounting document <b>header</b></td><td>currency <code>WAERS</code> · rate <code>KURSF</code> · posting date <code>BUDAT</code></td></tr>
+        <tr><td><code>BSET</code></td><td>tax data <b>segment</b> (บรรทัดภาษีต่อเอกสาร)</td><td>tax base <code>FWBAS</code> · amount <code>FWSTE</code> · <code>MWSKZ</code></td></tr>
+        <tr><td><code>BSAK</code></td><td>cleared <b>vendor (AP)</b> items</td><td>join payment→invoice: <code>AUGBL</code>→<code>BELNR</code> · <code>LIFNR</code></td></tr>
+        <tr><td><code>WITH_ITEM</code></td><td>withholding tax ต่อเอกสาร</td><td>WT base/amt <code>QSSHB/QBSHB</code> (doc) · <code>QSSHH/QSSH2</code> (LC1/LC2) · <code>WT_WITHCD</code> · <code>WT_ACCO</code></td></tr>
+        <tr><td><code>T059Z</code></td><td>WHT tax <b>code master</b></td><td>rate <code>QSATZ</code> · ชื่อ <code>TEXT40</code> (by LAND1/WITHT/WT_WITHCD)</td></tr>
+        <tr><td><code>TCURR</code></td><td>exchange rate table</td><td><code>UKURS</code> ที่ <code>GDATU</code> (valid-from) · FCURR/TCURR</td></tr>
+        <tr><td><code>T005 / T005T</code></td><td>country + ชื่อประเทศ · rate type per tax procedure</td><td>rate type <code>KURST</code> (RPT-2 ZOM) · <code>LANDX</code> (ชื่อประเทศ)</td></tr>
+        <tr><td><code>CEPC</code></td><td>profit center master</td><td>validate <b>Profit Center</b> (<code>PRCTR</code>)</td></tr>
+        <tr><td><code>T8JJ</code></td><td>JVA recovery indicator master</td><td>validate <b>Recovery Indicator</b> (BUKRS+<code>RECID</code>)</td></tr>
+        <tr><td><code>DFKKBPTAXNUM</code></td><td>business partner tax numbers</td><td>vendor Tax ID: <code>TAXNUM/TAXNUMXL</code> (PARTNER, TAXTYPE)</td></tr>
+        <tr><td><code>T001</code></td><td>company code</td><td>agent Tax ID <code>STCEG</code> (VAT reg no)</td></tr>
+        <tr><td><code>LFA1 / KNA1</code></td><td>vendor / customer master</td><td>tax id <code>STCD3/STCD1</code> · country <code>LAND1</code></td></tr>
+        <tr><td><code>/OPT/VIM_1HEAD</code></td><td>OpenText VIM header</td><td>Tax Invoice Received Date <code>SCAN_DATE</code> (RPT-2)</td></tr>
+        <tr><td><code>ZTAXA_T13/036</code></td><td>custom Z-tables</td><td>branch (PC↔company) · signature name/position (FRM-2)</td></tr>
+        <tr><td><code>BSIK</code></td><td>open vendor items (คู่ของ BSAK)</td><td>invoice ที่ยังไม่จ่าย = ไม่โผล่ใน RPT-1</td></tr>
+        <tr><td><code>BSEC</code></td><td>one-time / alternative payee บนเอกสาร</td><td><code>STCD3</code> → <code>STCD1</code> (FRM-1 alternative payee defect)</td></tr>
+        <tr><td><code>T059ID01</code></td><td>output group config ของ Generic WHT</td><td>source, form names, output group (<code>R03</code> = WT_OG_REP_DOC)</td></tr>
+        <tr><td><code>ZCAX_P01</code></td><td>whitelist WHT type ของ RPT-1</td><td><code>PROGRAM_NAME</code> · <code>PARAM</code> (WHT_TYPE_PND54) · <code>LOW</code></td></tr>
+        <tr><td><code>CEPC_BUKRS</code></td><td>profit center ที่ authorized ต่อ CoCd</td><td>ชั้นที่ 2 ของ three-layer check</td></tr>
+        <tr><td><code>ZTAXB_T04 / 010</code></td><td>segment substitution TAX-ENH-4</td><td>G/L → segment · CoCd + CC (+ IO) → segment</td></tr>
+        <tr><td><code>ZGLX_T02 / 010</code></td><td>LC enhancement GL-ENH-1</td><td>กฎ rate รายบรรทัด · override ตาม doc type</td></tr>
+        <tr><td><code>EKBE</code></td><td>PO history</td><td>GR / IR รับ segment จากกัน (KTOSL <code>WRX</code>)</td></tr>
+        <tr><td><code>ADRC</code></td><td>addresses</td><td>Tambon อยู่ใน street fields (ENH-1, G11)</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <p class="body" style="font-size:13px;color:var(--ink-soft);margin-top:-30px">T-codes ที่ใช้คู่กัน: FB03 · FB60 · F-53 / FBZ2 · FBVB · SE16N / SE16H / SE11 · SE38 / SE80 · FTXP · OB08 · OB22 · OB40 · OB07 · FINSC_LEDGER · S_P00_07000134 · DMEEX · SE78 · ST05 · SM37</p>
+
+  <!-- 1.5 · TABLE DICTIONARY PART 2 -->
+  <section id="dict2">
+    <div class="sec-head"><span class="sec-num">1.5</span><h2>Table Dictionary ภาค 2 — Current Tax · LCF · e-Filing</h2></div>
+    <p class="sec-sub">ตารางจาก FD ชุดใหม่ (TAX-RPT-3 / RPT-4 / RPT-5 / FRM-1 / ENH-1) — รู้ครบ = ตอบได้ทั้ง workstream ไม่ใช่แค่ 5 objects ของตัวเอง</p>
+
+    <div class="callout"><b>วิธีอ่านตารางชุดนี้:</b> ตระกูล <code>ZTAXA_T*</code> = ของเดิมจาก ECC (retrofit) ·
+      ตระกูล <code>ZTAXB_T*</code> = <b>สร้างใหม่ใน S/4HANA</b> · ตัวเลขท้ายไม่เรียงตามลำดับการใช้งาน
+      ให้จำเป็น “กลุ่มหน้าที่” แทน</div>
+
+    <h3 style="font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:22px 0 9px">กลุ่ม A · โครงรายงาน (node / layout / mapping)</h3>
+    <div class="tblwrap">
+    <table class="dict">
+      <thead><tr><th style="width:150px">Table</th><th>เก็บอะไร</th><th>ใช้กับ (field เด่น)</th></tr></thead>
+      <tbody>
+        <tr><td><code>ZTAXA_T05</code></td><td>Node master</td><td>+ flag <b>Overseas</b> เพื่อแยกชุดไทย/ต่างประเทศ <span class="why">(RPT-3 · RPT-4)</span></td></tr>
+        <tr><td><code>ZTAXA_T06</code></td><td>Define node + description</td><td>+ <b>Proportion/Fixed</b> (CHAR 1) · <b>Fixed Rate</b> (CHAR 5) · <b>Overseas</b></td></tr>
+        <tr><td><code>ZTAXA_T01</code></td><td><b>GL account mapping (ไทย)</b></td><td>From GL–To GL · Exclude · + <b>Valid From/To</b> (DATS 8) · ใช้ <code>*999999999</code> รวม prefix A/B/C</td></tr>
+        <tr><td><code>ZTAXA_T07</code></td><td>Define report layout</td><td>+ <b>Valid From/To</b> · <b>Proportion/Fixed</b> · layout ใหม่ <b>BOI</b> และ <b>IBCTC</b></td></tr>
+        <tr><td><code>ZTAXB_T02</code></td><td><b>GL mapping (ต่างประเทศ)</b> — ตารางใหม่ของ RPT-4</td><td>Layout · <b>Com code</b> · GL (range/<code>*</code>/exclude) · <b>%Add back per GL</b> · <b>%Add back per NODE</b> · Profit center · <b>Capped amount</b> + CCY · Valid from/to</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:22px 0 9px">กลุ่ม B · ข้อมูลนำเข้า / อัตราภาษี / asset</h3>
+    <div class="tblwrap">
+    <table class="dict">
+      <thead><tr><th style="width:150px">Table</th><th>เก็บอะไร</th><th>ใช้กับ (field เด่น)</th></tr></thead>
+      <tbody>
+        <tr><td><code>ZTAXA_T03</code></td><td>Upload data — manual adjustment (flat file)</td><td>+ <b>RLDNR</b> (CHAR 2) · check table <code>FINSC_LD_CMP</code> · item type ต่างประเทศใช้ prefix <b><code>OS_*</code></b> <span class="why">(TAX-ENH-10 เป็นตัวอัปโหลด)</span></td></tr>
+        <tr><td><code>ZTAXA_T08</code></td><td>Asset class include/exclude</td><td><b>ยุบรวม T029+T030+T031+T032</b> · + <b>Segment (custom)</b> CHAR 10 · <b>Include/Exclude</b> CHAR 1</td></tr>
+        <tr><td><code>ZTAXA_T11</code></td><td>Tax rate for tax filing</td><td>ไม่เปลี่ยนจาก ECC</td></tr>
+        <tr><td><code>ZTAXA_T04</code></td><td>Trading partner ต่อ tax rate (IBC-TC)</td><td>+ <b>Valid From/To</b> · เปลี่ยนชื่อ field <b>Partner PC → Trading Partner</b> · intercompany = <code>R001</code></td></tr>
+        <tr><td><code>ZTAXA_T02</code></td><td><b>Master tax rate</b> + company code สำหรับ IBC/BOI</td><td>COMCODE · TYPE · Segment · PROFIT CENTER · <b>TAX_INFO</b> · <b>TAX RATE %</b> · Valid from/to <span class="why">(ใช้ทั้ง RPT-3 และ RPT-4)</span></td></tr>
+        <tr><td><code>ZTAXA_T10</code></td><td>IBC tax rate + trading partner จาก customers</td><td>cost center ที่ไม่ระบุ → ใช้อัตรา default (3%)</td></tr>
+        <tr><td><code>ZTAXB_T07</code></td><td><b>Specific asset classes</b> (TAX-RPT-9)</td><td>Country · Com code · Segment · Profit center · Asset Class · Asset type <span class="why">(IDC · QEE — กติกา “include” ไม่ใช่ exclude)</span></td></tr>
+        <tr><td><code>ZTAXB_T09</code></td><td><b>Depreciation &amp; NBV</b> (TAX-RPT-9)</td><td>DD&amp;A ที่ item type “PPE: DD&amp;A PER TAX (TAX AA REPORT)” ดึงไปใช้</td></tr>
+        <tr><td><code>ZTAXB_T06</code></td><td><b>CR%</b> (SAC-RPT-1)</td><td>Period/Year · Comp Code · CR% — <b>ใช้ค่างวดล่าสุดที่ไม่เกินงวดที่เลือก</b></td></tr>
+        <tr><td><code>ZTAXB_T08</code></td><td><b>ITD cost recovery balance</b> (SAC-RPT-1)</td><td>field <b>“Less: Utilised during the year”</b> — ใช้ใน PSC_MM / PSC_VN / PSC_OM</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:22px 0 9px">กลุ่ม C · Loss Carried Forward + มาตรฐานที่ใช้ validate</h3>
+    <div class="tblwrap">
+    <table class="dict">
+      <thead><tr><th style="width:150px">Table</th><th>เก็บอะไร</th><th>ใช้กับ (field เด่น)</th></tr></thead>
+      <tbody>
+        <tr><td><code>ZTAXB_T03</code></td><td><b>Exchange rate type ต่อ company code</b></td><td><code>BUKRS</code> CHAR 4 · <code>KURST</code> CHAR 9 · <b>ไม่มีในตาราง = ไม่แปลง LC2</b></td></tr>
+        <tr><td><code>ZTAXB_T01</code></td><td><b>Loss Carried Forward store</b> (TAX-RPT-5)</td><td>key ครบทุกมิติ + <b>Tax rate</b> + <b>TAX_INFO</b> · ยอด 3 ชุด: Original / Conversion / Movement · <b>Type of report</b> = LCF หรือ Unabsorbed CA · <b>ต้องเปิด change log</b></td></tr>
+        <tr><td><code>T093B</code></td><td>Depreciation areas ต่อ company code</td><td>validate <b>Depreciation area</b> (<code>AFABE</code>) <b>คู่กับ <code>BUKRS</code></b> <span class="why">(RPT-4)</span></td></tr>
+        <tr><td><code>FAGL_SEGM</code></td><td>Segment master</td><td>validate <b>Segment</b> (<code>SEGMENT</code>)</td></tr>
+        <tr><td><code>FINSC_LD_CMP</code></td><td>Ledger ต่อ company code</td><td>check table ของ <code>ZTAXA_T03-RLDNR</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="keybox">
+      <b>6 ข้อที่ทำให้ตอบคำถามระดับ expert ได้</b>
+      <ul>
+        <li><b>ทำไมต้องมี Valid From/To</b> — เพื่อรันย้อนหลังแล้วได้ config <b>ของปีนั้น</b> ไม่ใช่ปีปัจจุบัน (T026 · T027 · T034 · ZTAXB_T02)</li>
+        <li><b><code>*999999999</code></b> — ดอกจันแทน prefix A/B/C ของผังบัญชี S/4 → 1 แถวแทน 3 แถว</li>
+        <li><b>flag “Overseas”</b> ใน T024/T025 — node code ซ้ำกันได้ แยกด้วย checkbox</li>
+        <li><b>prefix <code>OS_*</code></b> ใน T028 — แยก manual adjustment ต่างประเทศออกจากของไทยในตารางเดียว</li>
+        <li><b>TAX_INFO</b> — แยกไทย/ต่างประเทศเมื่อ company + profit center + segment ซ้ำกัน (<code>MTJDA_MY</code> · <code>CITTH_MM</code>)</li>
+        <li><b>Tax rate เป็น key ของ <code>ZTAXB_T01</code></b> — เพราะ IBCTC/IBCSVCS เก็บ LCF <b>ตามอัตรา</b> ไม่ใช่ตาม company segment</li>
+      </ul>
+    </div>
+
+    <h3 style="font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:22px 0 9px">LC1 / LC2 / LC3 — คู่ field ที่ต้องท่อง</h3>
+    <div class="tblwrap">
+    <table class="dict">
+      <thead><tr><th style="width:110px">Currency</th><th style="width:150px">Amount / Currency field</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td><b>LC1</b></td><td><code>ACDOCA-HSL</code> / <code>RHCUR</code></td><td>Company code currency <span class="why">(H = Home)</span></td></tr>
+        <tr><td><b>LC2</b></td><td><code>ACDOCA-KSL</code> / <code>RKCUR</code></td><td>Global currency <span class="why">(K = Konzern/กลุ่ม)</span></td></tr>
+        <tr><td><b>LC3</b></td><td><code>ACDOCA-OSL</code> / <code>ROCUR</code></td><td>Freely defined currency 1 <span class="why">(O = Other — เก็บค่าที่ตีราคาใหม่)</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout"><b>🧰 ฝึกมือ:</b> ทุกตารางข้างบนเปิดดูได้ด้วย
+      <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N</a> —
+      หน้านั้นมี 12 recipes ที่ผูกกับตารางเหล่านี้โดยตรง (R06 = ดู GL mapping · R08 = ตรวจ LCF · R12 = ไล่ trading partner)</div>
+  </section>
+
+  <!-- 2 · ACDOCA vs BSEG -->
+  <section id="acdoca">
+    <div class="sec-head"><span class="sec-num">2</span><h2>ACDOCA vs BSEG — คำถามยอดฮิต</h2></div>
+    <p class="sec-sub">ถ้าตอบอันนี้ได้คม = ดูโปรเหนือคนอื่นทันที</p>
+    <div class="callout"><b>ACDOCA (Universal Journal)</b> คือหัวใจของ S/4HANA — รวม FI + CO + Material Ledger + asset ไว้ใน <b>line-item table เดียว</b> เป็น <b>source of truth</b> สำหรับ reporting และ analytic dimensions (Profit Center, Recovery Indicator, Segment, VAT code). <b>BSEG</b> (classic FI line items) ยัง generate อยู่เพื่อ compatibility แต่ report ยุค S/4 อ่าน <b>ACDOCA</b> เป็นหลัก</div>
+
+    <h3>อ่าน ACDOCA ยังไง — RLDNR + KTOSL</h3>
+    <p class="body">ทุกครั้งที่ดึงจาก ACDOCA จะ fix <code>RLDNR='0L'</code> (leading ledger) แล้วกรอง <b>KTOSL</b> (transaction key) เพื่อเลือก “บรรทัดที่ต้องการ”:</p>
+    <div class="ktchips">
+      <div class="ktchip"><code>KTOSL='WIT'</code><br><b>Withholding</b> — บรรทัด WHT · ดึง PC/RI ฝั่งจ่าย</div>
+      <div class="ktchip"><code>KTOSL='VST'</code><br><b>Input VAT</b> — ดึง VAT code (<code>MWSKZ</code>)</div>
+      <div class="ktchip"><code>KTOSL='XST'</code><br><b>Invoice side</b> — ดึง PC/RI ฝั่ง invoice</div>
+      <div class="ktchip"><code>KTOSL='MWS'</code><br><b>Output VAT</b> — ฝั่งขาย</div>
+    </div>
+
+    <h3>แล้วทำไมบาง field ใช้ BSEG?</h3>
+    <p class="body">RPT-1 field “<b>Doc WHT FX Adj</b>” FSD ระบุอ่าน <code>BSEG</code> (BELNR/GJAHR/BUKRS ของเอกสารจ่าย, <code>KTOSL='WIT'</code>) เพื่อดึง <code>AUGBL</code> (clearing document) ของบรรทัด WHT — เป็นการหยิบ <b>line-level clearing linkage</b> ที่ระบุไว้ที่ BSEG · ส่วน PC/RI/VAT code (field 17/18/32/33/34) หยิบจาก <b>ACDOCA</b></p>
+    <div class="trap"><b>ประเด็นตอบ:</b> “S/4 อ่าน analytic dims (PC/RI/segment/MWSKZ) จาก <b>ACDOCA</b> · ส่วน BSEG ใช้เมื่อต้องการ line-level field เฉพาะ (เช่น clearing AUGBL ของ WIT line) — FSD ของ RPT-1 mix ทั้งสองตัวโดยตั้งใจ”</div>
+  </section>
+
+  <!-- 7 · DRILL -->
+  <section id="drill">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Q&amp;A Drill — “ถ้าเขาถามว่า…”</h2></div>
+    <p class="sec-sub">อ่านคำถาม → ตอบในใจ → กดเฉลย · ทำซ้ำจน reflex</p>
+
+    <div class="ask"><div class="q"><span class="qi">Q1</span>RPT-1 ดึง Profit Center / Recovery Indicator จากตารางไหน อย่างไร?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">จาก <b>ACDOCA</b> (<code>RLDNR='0L'</code>) กรอง <b>KTOSL='WIT'</b> สำหรับฝั่งจ่าย และ <b>KTOSL='XST'</b> สำหรับฝั่ง invoice → fetch <code>PRCTR</code> / <code>RECID</code></div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q2</span>ทำไม field “Doc WHT FX Adj” ใช้ <code>BSEG</code> ไม่ใช่ ACDOCA?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">FSD ระบุอ่าน <b>BSEG</b> (BELNR/GJAHR/BUKRS ของเอกสารจ่าย, <code>KTOSL='WIT'</code>) เพื่อดึง <code>AUGBL</code> (clearing document) ของบรรทัด WHT — เป็น line-level clearing linkage · ส่วน analytic dims (PC/RI/VAT code) หยิบจาก ACDOCA</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q3</span>ACDOCA คืออะไร ต่างจาก BSEG อย่างไร?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a"><b>ACDOCA = Universal Journal</b> — line-item table เดียวของ S/4 รวม FI+CO+ML = source of truth สำหรับ reporting/analytic (PC/RI/segment/MWSKZ) · <b>BSEG</b> = classic FI line items ยัง generate อยู่ ใช้บาง field เฉพาะ</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q4</span>RPT-1 เชื่อมเอกสารจ่าย → invoice ด้วยตารางอะไร?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a"><b>BSAK</b> — <code>AUGBL</code> (clearing) = เลขเอกสารจ่าย แล้วคืน <code>BELNR</code> ที่ <b>BELNR ≠ AUGBL</b> (+ BUKRS, GJAHR) = เลข invoice</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q5</span>WHT rate ของ RPT-1 กับ FRM-2 มาจากที่เดียวกันไหม?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a"><b>ไม่</b> — RPT-1 อ่าน <code>T059Z-QSATZ</code> (by LAND1=TH, WITHT, WT_WITHCD) · FRM-2 <b>hardcode</b> อัตรา DTA ตาม tax code (<code>D1</code>=8%…<code>H4</code>=10%) โดยอ่าน code จาก <code>WITH_ITEM-WT_WITHCD</code></div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q6</span>RPT-2 ดึงข้อมูลภาษีหลักจากตารางไหน และ Tax ID คู่ค้าจากไหน?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">ภาษีหลักจาก <b>BSET</b> (ฐาน RFUMSV00) + <b>BKPF/BSEG</b> · Tax ID คู่ค้าจาก <b>LFA1/KNA1</b> → <code>STCD3</code> (นิติบุคคล) / <code>STCD1</code> (บุคคล)</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q7</span>RPT-2 retrofit อะไรจาก ECC บ้าง (ตอบเร็ว 4 ข้อ)?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">(1) GL renumber 21500020→<code>A213X025</code> · (2) doc <code>CC</code>→<code>JD/JK</code> · (3) user exit <code>EJVA017</code> (substitute tax code cash-call) retrofit เข้าโปรแกรม · (4) selection +PC(CEPC)/RI-further + output +Alt Ref +VIM scan date (<code>/OPT/VIM_1HEAD</code>) → 36 คอลัมน์</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q8</span>RPT-2 แปลงเป็นสกุลอะไร ด้วย rate type ใด มาจากตารางไหน?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">CoCd OM01: LC1 = <b>OMR</b> (3 ทศนิยม) · LC2 = USD · ไม่มี LC3 · exchange rate type ของรายงาน = <code>ZOM</code> (Oman avg daily) จาก <code>T005-KURST</code> → อัตราใน <code>TCURR</code> <span style="color:var(--warn)">(ZOM vs mid ยังเปิด — G10 / C18)</span></div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q9</span>FRM-2 ตัดสินใจพิมพ์ MMK หรือ USD จาก field ไหน และยอดจาก field อะไร?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">ตัดสินจาก <code>BKPF-WAERS</code> (=MMK → MMK, else USD) · ยอดจาก <code>WITH_ITEM</code>: MMK=<code>QSSHH/QBSHH</code>, USD=<code>QSSH2/QBSH2</code>, doc=<code>QSSHB/QBSHB</code></div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q10</span>FRM-2 หา Tax ID ทั้ง 2 ฝ่าย และชื่อประเทศ vendor ยังไง?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">Tax ID ผู้ถูกหัก = <code>DFKKBPTAXNUM</code> (PARTNER=WT_ACCO, TAXTYPE MM3/MM0 → TAXNUM/TAXNUMXL) · ผู้หัก = <code>T001-STCEG</code> · ประเทศ = <code>BSAK→LIFNR→LFA1(LAND1)→T005T(LANDX)</code></div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q11</span>KTOSL แต่ละค่าใน ACDOCA หมายถึงอะไร?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a"><code>WIT</code>=withholding · <code>VST</code>=input VAT · <code>XST</code>=ใช้ดึง PC/RI ฝั่ง invoice · <code>MWS</code>=output VAT — fix <code>RLDNR='0L'</code> เสมอ</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q12</span>document splitting / segment เกี่ยวกับ report พวกนี้ยังไง?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">Segment = tax regime ถูก derive ด้วย substitution <b>TAX-ENH-4</b> (GGB1): <code>ZTAXB_T04</code> (G/L) → <code>ZTAXB_T05</code> (CC + IO) → segment ของ profit center · document splitting แตกบรรทัด BS (vendor / tax / WHT) ตาม PC / segment ของบรรทัด P&amp;L → ACDOCA จึงมี WIT line หลายบรรทัดต่อเอกสาร multi-PC (ต้นเรื่อง TKT-01) · segment ยังตัดสิน rate ของ LC3</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q13</span>RPT-2 มีกี่ data path และ cash call มาจากตารางไหน?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">สอง path: standard = <code>BKPF → BSET</code> · cash call = <code>BKPF → BSEG</code> บรรทัด vendor (I0 ไม่มีบรรทัดภาษี) · LC2 base = <code>BSEG-DMBE2</code> · attribute JVA จาก ACDOCA แถวเดียวที่ match ด้วย key เต็ม (<code>ACDOCA-DOCLN = BSEG-BUZEI</code>)</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q14</span>FRM-1 หา Tax ID ผู้ขายจากไหน และ defect alternative payee คืออะไร?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a"><code>WITH_ITEM-WT_ACCO</code> → <code>DFKKBPTAXNUM</code> (TAXTYPE TH1 บุคคล / TH3 บริษัท → TAXNUM/TAXNUMXL) · defect: เมื่อมี payee บนเอกสาร FRM-1 ยังพิมพ์ BP master แทน <code>BSEC</code> (certificate ZTAXA_F02 ใช้ STCD3 → STCD1 แล้ว)</div></details></div>
+
+    <div class="ask"><div class="q"><span class="qi">Q15</span>ENH-1 สร้างไฟล์ด้วยอะไร และต้องมีเอกสารอะไรก่อนเทสระดับ field?</div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">DMEEX format trees <code>ZWHTFILE_*</code> + exits <code>ZDMEE_EXIT_WHT_BASE/_AMT</code> + enhancement <code>ZTAXA_E01</code> (sum partner PND1A, sort) · ต้องมี DMEEX mapping workbook (positions, lengths, constants, วันที่ พ.ศ.)</div></details></div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · Tables &amp; Q&amp;A (expert reference)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+</div>
+</body>
+</html>

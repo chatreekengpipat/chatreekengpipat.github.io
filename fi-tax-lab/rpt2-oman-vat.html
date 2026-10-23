@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-RPT-2 — Oman VAT Report incl. JVA Cash Call (ZTAXA_R04) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  [hidden]{display:none!important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  a{color:var(--petrol);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin:0 6px 22px 0;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(27px,5.2vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .easy{margin:18px 0 6px;border-radius:12px;padding:14px 18px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.22);font-size:14px;}
+  .easy::before{content:"อธิบายง่าย";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:15px;font-weight:700;margin:2px 0 8px;color:var(--petrol-deep);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  .small{font-size:12.5px;color:var(--ink-soft);}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+  .tblwrap table{margin:0;}
+  @media(max-width:600px){.tblwrap table{min-width:540px;}.tblwrap table td,.tblwrap table th{word-break:normal;overflow-wrap:normal;}}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .num{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:11px 0 11px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  ol.flow>li b{font-weight:600;}
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;margin:12px 0;background:var(--card);}
+  .card .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .grid2>.card,.grid3>.card{margin:0;}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(185,28,28,.05);font-size:13.8px;}
+  .trap b{color:var(--warn);}
+  .lock{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(29,78,216,.06);font-size:13.8px;}
+  .lock::before{content:"🔒 Locked design — ไม่ใช่ defect";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 18px 16px;font-size:14px;}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  /* evidence tags (knowledge-base convention) */
+  .ev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:1px;white-space:nowrap;border:1px solid transparent;}
+  .ev.std{color:var(--ink-soft);border-color:var(--line);}
+  .ev.bp{color:var(--petrol-deep);background:rgba(37,99,235,.10);}
+  .ev.fd{color:var(--petrol);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+  .ev.sys{color:#fff;background:var(--petrol);}
+  .ev.agreed{color:#fff;background:var(--petrol-deep);}
+  .ev.infer{color:var(--brass);border:1px dashed var(--brass);}
+  .ev.tbc{color:var(--warn);border:1px dashed var(--warn);background:rgba(185,28,28,.06);}
+  :root[data-theme="dark"] .ev.sys,:root[data-theme="dark"] .ev.agreed{color:var(--paper);}
+  .evlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;}
+  .evlegend .ev{margin-left:0;margin-right:4px;}
+  /* status pills */
+  .st{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;border-radius:20px;padding:1px 8px;white-space:nowrap;}
+  .st.open{color:var(--warn);background:rgba(185,28,28,.09);}
+  .st.block{color:#fff;background:var(--warn);}
+  .st.wip{color:var(--brass);background:rgba(180,83,9,.13);}
+  .st.done{color:var(--petrol-deep);background:rgba(37,99,235,.12);}
+  :root[data-theme="dark"] .st.block{color:var(--paper);}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .seealso{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;font-size:12.5px;align-items:center;}
+  .seealso>span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .seealso a{text-decoration:none;border:1.3px solid var(--line);border-radius:20px;padding:3px 11px;color:var(--petrol-deep);background:var(--card);}
+  .seealso a:hover{border-color:var(--petrol);}
+  /* interactive tools (T39) — state in memory only */
+  .tool{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;margin:18px 0;background:linear-gradient(160deg,rgba(37,99,235,.06),rgba(180,83,9,.04));}
+  .tool-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tool-h b{font-size:15px;}
+  .tool-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:5px;padding:2px 7px;}
+  .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;}
+  @media(max-width:640px){.fgrid{grid-template-columns:1fr;}}
+  .fld{display:flex;flex-direction:column;gap:5px;margin:7px 0;}
+  .fld>.lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;}
+  .seg button{font:inherit;font-size:12.5px;border:1.4px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.3;}
+  .seg button:hover{border-color:var(--petrol);}
+  .seg button[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol);color:#fff;}
+  .seg button:disabled{opacity:.4;cursor:not-allowed;}
+  .tool input,.tool textarea,.tool select{font:inherit;font-size:13.5px;color:var(--ink);background:var(--card);border:1.4px solid var(--line);border-radius:8px;padding:6px 9px;width:100%;}
+  .tool textarea{min-height:56px;resize:vertical;}
+  .tool input:focus,.tool textarea:focus,.tool select:focus,.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  .outs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+  .outs.two{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:640px){.outs,.outs.two{grid-template-columns:1fr;}}
+  .out{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:11px;padding:10px 12px;background:var(--card);}
+  .out.b{--_c:var(--brass);} .out.d{--_c:var(--petrol-deep);} .out.w{--_c:var(--warn);}
+  .out .k{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--_c,var(--petrol));}
+  .out .v{font-size:15px;font-weight:700;margin:3px 0;line-height:1.35;}
+  .out .why{font-size:12px;color:var(--ink-soft);}
+  .notes{margin-top:10px;font-size:13px;}
+  .notes li{margin:4px 0 4px 18px;}
+  .copyout{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:12px 14px;margin-top:10px;}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .btn{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--petrol);background:var(--petrol);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--petrol);}
+  .btnmsg{font-size:12px;color:var(--petrol-deep);}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .btn:not(.ghost),:root[data-theme="dark"] .tool-h .tg{color:var(--paper);}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.lock,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb,.seealso{display:none;}details.fold,details.ans{border-color:#ccc;}.tblwrap{overflow:visible;}}
+  /* page-specific */
+  .path2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  @media(max-width:640px){.path2{grid-template-columns:1fr;}}
+  .pathc{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:12px;padding:14px 16px;background:var(--card);}
+  .pathc.cc{--_c:var(--brass);}
+  .pathc .pt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--_c,var(--petrol));}
+  .pathc .chain{font-family:'JetBrains Mono',monospace;font-size:12px;margin:8px 0;color:var(--ink);line-height:1.6;}
+  .pathc ul.clean li{font-size:13px;}
+  .objhead td:first-child{width:200px;color:var(--ink-soft);}
+  .r44tl{list-style:none;display:flex;gap:0;overflow-x:auto;margin:10px 0 4px;padding-bottom:6px;}
+  .r44tl li{flex:1 0 128px;position:relative;padding:22px 8px 0;font-size:12px;color:var(--ink-soft);line-height:1.4;}
+  .r44tl li::before{content:"";position:absolute;top:7px;left:0;right:0;height:2px;background:var(--line);}
+  .r44tl li::after{content:"";position:absolute;top:2px;left:8px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--brass);}
+  .r44tl li b{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--petrol-deep);margin-bottom:2px;}
+  .bridge{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:10px 0;}
+  .bridge .bx{flex:1 1 200px;border:1.5px solid var(--line);border-left:4px solid var(--petrol);border-radius:11px;padding:10px 12px;background:var(--card);display:flex;flex-direction:column;gap:3px;}
+  .bridge .bx.ok{border-left-color:var(--petrol-deep);background:rgba(37,99,235,.06);}
+  .bridge .bx.bad{border-left-color:var(--warn);background:rgba(185,28,28,.06);}
+  .bridge .bk{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);}
+  .bridge .bv{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;}
+  .bridge .bs{font-size:12px;color:var(--ink-soft);}
+  .bridge .op{align-self:center;font-size:22px;font-weight:700;color:var(--brass);}
+  .codegrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+  .codegrid .c{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;border-radius:8px;padding:6px 10px;border:1.5px solid var(--line);}
+  .codegrid .c.ok{background:rgba(37,99,235,.12);border-color:var(--petrol);color:var(--petrol-deep);}
+  .codegrid .c.no{border-style:dashed;color:var(--ink-soft);}
+  .tcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:10px 0;}
+  .tcc{border:1.5px solid var(--line);border-radius:11px;padding:9px 10px;background:var(--card);display:flex;flex-direction:column;gap:5px;}
+  .tcc .o{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--brass);text-transform:uppercase;letter-spacing:.04em;}
+  .tcc .t{font-size:12px;border:1px solid var(--line);border-radius:6px;padding:3px 7px;}
+  .tcc .t.done{background:rgba(37,99,235,.12);border-color:var(--petrol);}
+  .tcc .t.wip{background:rgba(180,83,9,.14);border-color:var(--brass);}
+  .tcc .t.blk{background:rgba(185,28,28,.12);border-color:var(--warn);}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-r044">
+<div class="wrap">
+<a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">TAX-RPT-2</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>★ my object · Report</span>
+    </div>
+    <h1>TAX-RPT-2 — Oman VAT Report<br><span class="accent">“OMAN Tax Report – Cash Call Included” · สอง data path ในโปรแกรมเดียว</span></h1>
+    <div class="meta">
+      <span>Program · <b>ZTAXA_R04</b> (copy of RFUMSV00)</span>
+      <span>CoCd · <b>OM01 OM</b> · OMR 3 dp</span>
+      <span>L4 · <b>01.01.07.02 Indirect</b></span>
+      <span>Status · <b>FUT exit → SIT</b></span>
+    </div>
+    <p class="src">Source: FSD TAX-RPT-2 v1.0 · FUT notes (content v2, 7-Sep) · knowledge base <code>20-role-wricef-owner §2</code> (16-Oct) · ABAP = RPT-2 developer (SI)</p>
+  </header>
+
+  <div class="easy">รายงาน VAT ของ Oman ที่ต้อง “เห็น” ธุรกรรม JVA cash call ด้วย — แต่ cash call ไม่มีบรรทัดภาษีใน BSET (tax code <code>I0</code> = 0%) โปรแกรมจึงมี <b>สองทางเดิน</b>: ทางปกติอ่าน BSET · ทาง cash call อ่าน BSEG บรรทัด vendor · กุญแจของ object นี้คือ <b>ทุกครั้งที่อ่าน defect ให้ถามก่อนว่าเป็น path ไหน</b> — แก้ path เดียวแล้วอีก path จะกลับมาพังเสมอ</div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">Overview</a>
+    <a href="#paths">Two data paths</a>
+    <a href="#jva">JVA lookup</a>
+    <a href="#tables">ดึงจากตารางไหน</a>
+    <a href="#delta">ECC → S/4</a>
+    <a href="#run">Run step-by-step</a>
+    <a href="#evidence">FUT evidence</a>
+    <a href="#defects">Defects &amp; decisions</a>
+    <a href="#tests">Tests</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key takeaways</b>
+    <ul>
+      <li>ถาม <b>path ไหน</b> ก่อนอ่าน defect: standard (BSET) vs cash call (BSEG vendor line)</li>
+      <li><b>อ่านค่าที่ post แล้ว ห้ามคำนวณภาษีใหม่</b> — สูตร 5% ตอน runtime เคยสร้างภาษีผีและเศษปัดเพี้ยน (Bug 1)</li>
+      <li>attribute JVA ทุกตัวต้องมาจาก <b>ACDOCA แถวเดียวกันที่ match</b> · lookup ต้องมี <code>BUKRS + BELNR + GJAHR + RLDNR '0L'</code> — profit center ไม่เคย unique (Bug 2)</li>
+      <li>Report only ไม่ post · venture filter มีผลเมื่อติ๊ก “Activate JVA Splitting” เท่านั้น</li>
+      <li>เปิดอยู่: Total/Balance ของเอกสาร multi-PC (root cause เดียวกับ <b>TAX-RPT-6</b>) · cash call ไม่เข้า “Balance of all company codes”</li>
+    </ul>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Object overview</h2></div>
+    <div class="tblwrap"><table class="objhead"><tbody>
+      <tr><td>Title</td><td>OMAN Tax Report – Cash Call Included</td></tr>
+      <tr><td>Type / nature</td><td>Report · Retrofit (Change) · P1 · Medium</td></tr>
+      <tr><td>Program</td><td><code>ZTAXA_R04</code> — สร้างปี 2021 · HANA fix TR <code>DEVK900001</code> (Sep 2025) · includes <code>ZTAXA_R04_TOP</code> / <code>_PARAM</code> / <code>_F01</code> <span class="ev sys">SYS</span></td></tr>
+      <tr><td>JVA split</td><td><code>CL_JVA_ENRICH_TAX_LINES=&gt;split</code> ทำงานเมื่อ <code>par_xjvs</code> (Activate JVA Splitting) <span class="ev sys">SYS</span></td></tr>
+      <tr><td>Company code</td><td>OM01 Oman · LC1 OMR (3 dp) · LC2 USD · ไม่มี LC3</td></tr>
+      <tr><td>Tax GL</td><td><code>A149X017</code> input · <code>A212X020</code> output</td></tr>
+      <tr><td>Oman tax codes (11)</td><td>I0 · I1 5% · IX · IY · O0 · O1 5% · OX · OY · R3 RC service · R4 RC goods · U1 unclaimable</td></tr>
+      <tr><td>Geography</td><td>“overseas” (เดิม Oman-specific · อาจขยาย UAE)</td></tr>
+      <tr><td>KUT</td><td>ไม่อยู่ในคอร์สใด — เสนอ segment สั้นใน TAX-402 / TAX-408</td></tr>
+      <tr><td>Sister object</td><td><b>TAX-RPT-6</b> (Thai VAT report + net VAT clearing) — bug multi-PC Total ตัวเดียวกัน</td></tr>
+    </tbody></table></div>
+    <h3>Six key changes (FD) <span class="ev fd">FD</span></h3>
+    <ol class="flow">
+      <li>PC + RI filter</li>
+      <li>PC + RI ใน output</li>
+      <li>ดึงธุรกรรม JVA cash call</li>
+      <li>Output columns ตาม S/4 design (รวม 36 คอลัมน์ · เพิ่ม Alternative Reference)</li>
+      <li>อัปเดต exchange-rate type (<code>ZOM</code> ผ่าน <code>T005-KURST</code>) — ZOM vs mid ยังเปิด (G10 / C18)</li>
+      <li>คอลัมน์ใหม่ <b>Tax Invoice Received Date</b> จาก VIM <code>/OPT/VIM_1HEAD-SCAN_DATE</code></li>
+    </ol>
+  </section>
+
+  <!-- PATHS -->
+  <section id="paths">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Two data paths — master key ของ object นี้</h2></div>
+    <p class="sec-sub">Cash call ไม่ได้ใช้ standard SAP cash call — มาจาก Excel upload <b>JVA-ENH-1</b> + workflow <b>JVA-WFL-1</b> · เอกสาร JD/JK ไม่มีบรรทัดภาษี → Oman ต้องได้ tax code <code>I0</code> ผ่าน substitution (user exit <code>EJVA017</code>) <span class="ev bp">BP</span></p>
+    <div class="path2">
+      <div class="pathc"><span class="pt">Standard path</span>
+        <div class="chain">BKPF → BSET → (JVA split) → ALV</div>
+        <ul class="clean">
+          <li>เอกสาร series 2xxx / 3xxx · Trs <code>VST</code> / <code>MWS</code></li>
+          <li>venture <code>VEN_C1</code> · PC <code>C_PC29</code> · RI CP / NN</li>
+          <li>ค่าภาษีจาก BSET · LC2 = ค่าที่ post แล้ว</li>
+          <li>Acceptance variant <code>ZVAR_FULL</code></li>
+        </ul>
+      </div>
+      <div class="pathc cc"><span class="pt">Cash-call path</span>
+        <div class="chain">END-OF-SELECTION → get_tax_data_from_bseg<br>BKPF → BSEG vendor line → ALV</div>
+        <ul class="clean">
+          <li>JD / JK <code>708xxxxxxx</code> · GL <code>A213X025</code> / <code>A213X026</code> · tax code <code>I0</code></li>
+          <li>venture <code>VEN_N2</code> · PC <code>N_PC39</code> · RI NN · <b>Trs ว่าง</b> · พิมพ์ Curr USD 2 dp</li>
+          <li>LC2 base = <code>BSEG-DMBE2</code> · tax LC2 = 0.00 (ไม่มี BSET)</li>
+          <li>Acceptance variant <code>ZVAR_CC</code></li>
+        </ul>
+      </div>
+    </div>
+    <div class="trap"><b>Golden thread E — negative test:</b> เอกสาร <b>F-02</b> ที่ clear offset ของ cash call กับ suspense (doc type <code>SA</code>) <b>ต้องไม่</b> ได้ tax code I0 · และ G1: SET ใน EJVA017 อ่าน GL 8 หลักแต่ S/4 ใช้ 10 → I0 อาจไม่ถูกเติม — เช็ก <code>BSEG-MWSKZ</code> ของ JD/JK บน A213X025 + GGB1</div>
+  </section>
+
+  <!-- JVA LOOKUP -->
+  <section id="jva">
+    <div class="sec-head"><span class="sec-num">3</span><h2>JVA lookup — three layers (finalised)</h2></div>
+    <ol class="flow">
+      <li><b>Tax row:</b> KTOSL ใน <code>MWS / VST / ESA / ESE / NVV</code> + MWSKZ ตรง + venture PC ตรง — ห้ามใช้ “KTOSL ไม่ว่าง” เพราะจะติด special GL key เช่น AGD</li>
+      <li><b>Fallback base row:</b> PRCTR + MWSKZ, KTOSL ว่าง, ตัด LINETYPE <code>02*</code> / <code>03*</code></li>
+      <li><b>Cash-call direct link:</b> <code>ACDOCA-DOCLN = BSEG-BUZEI</code></li>
+    </ol>
+    <div class="callout"><b>กฎเหล็ก:</b> copy <code>VNAME</code>, <code>EGRUP</code>, <code>RECID</code>, <code>PRCTR</code>, <code>KSL</code> จาก <b>แถวเดียวกัน</b> ที่ match · ทุก read ต้องมี key เต็ม <code>BUKRS + BELNR + GJAHR</code>, <code>RLDNR = '0L'</code></div>
+    <h3>Selection screen</h3>
+    <ul class="clean">
+      <li>ช่องมาตรฐานของ RFUMSV00 + Oman country, native currency option, JVA split, joint venture, equity group, recovery indicator</li>
+      <li>Further selections: <b>Profit Center</b> (validate <code>CEPC</code>) · <b>Recovery Indicator</b> (validate <code>T8JJ</code>)</li>
+      <li>Venture / equity range มีผลเฉพาะเมื่อติ๊ก <b>Activate JVA Splitting</b> · บรรทัด cash call ไม่สนใจ venture filter เลย</li>
+    </ul>
+    <div class="trap"><b>Safety:</b> ห้ามติ๊ก <b>Update run</b> ตอนเทส · SE16N แสดง OMR <b>โดยไม่ shift 3 ทศนิยม</b> — “1,000.00” ใน SE16N = 100.000 OMR · อย่าอ่าน screenshot ผิด</div>
+  </section>
+
+  <!-- TABLES -->
+  <section id="tables">
+    <div class="sec-head"><span class="sec-num">4</span><h2>ดึงจากตารางไหน</h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th>ข้อมูล</th><th>ตาราง</th><th>field / เหตุผล</th></tr></thead>
+      <tbody>
+        <tr><td>ฐาน / ยอดภาษี, tax code (standard)</td><td><code>BSET</code></td><td>tax segment ของเอกสาร (ฐานของ RFUMSV00)</td></tr>
+        <tr><td>Cash call base</td><td><code>BSEG</code></td><td>บรรทัด vendor · <code>DMBE2</code> = LC2</td></tr>
+        <tr><td>Header</td><td><code>BKPF</code></td><td>วันที่ · เลขเอกสาร · สกุล</td></tr>
+        <tr><td>Venture / equity / RI / PC / KSL</td><td><code>ACDOCA</code> (0L)</td><td>three-layer lookup ด้านบน</td></tr>
+        <tr><td>Tax ID คู่ค้า</td><td><code>LFA1</code> / <code>KNA1</code></td><td><code>STCD3</code> (นิติบุคคล) / <code>STCD1</code> (บุคคล)</td></tr>
+        <tr><td>Exchange rate</td><td><code>T005</code> → <code>TCURR</code></td><td>rate type <code>KURST</code> = ZOM</td></tr>
+        <tr><td>Tax Invoice Received Date</td><td><code>/OPT/VIM_1HEAD</code></td><td><code>SCAN_DATE</code> (ส่ง BELNR / BUKRS / GJAHR)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- DELTA -->
+  <section id="delta">
+    <div class="sec-head"><span class="sec-num">5</span><h2>ECC → S/4 delta</h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th>รายการ</th><th>ECC</th><th>S/4HANA</th></tr></thead>
+      <tbody>
+        <tr><td>GL cash call</td><td><code>21500020</code></td><td><code>A213X025</code> RCN-JVA-Vendor Cash Call</td></tr>
+        <tr><td>GL</td><td><code>21500030</code></td><td><code>A213X026</code></td></tr>
+        <tr><td>Document type</td><td><code>CC</code></td><td><code>JD</code> &amp; <code>JK</code></td></tr>
+        <tr><td>Tax code</td><td><code>I0</code></td><td><code>I0</code> (ไม่เปลี่ยน) — substitute ด้วย EJVA017</td></tr>
+        <tr><td>Selection</td><td>—</td><td>+ PC (CEPC) · RI ย้ายไป Further selections</td></tr>
+        <tr><td>Output</td><td>—</td><td>+ Alternative Reference · + VIM scan date → 36 คอลัมน์ (ที่เหลือ “Same as ECC”)</td></tr>
+        <tr><td>Source</td><td>classic tables</td><td>PC / segment / JVA attributes จาก ACDOCA</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- RUN -->
+  <section id="run">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Run step-by-step</h2></div>
+    <ol class="flow">
+      <li>ธุรกรรมภาษีในงวดถูก post — รวม JVA cash call (JD/JK, <code>A213X025</code>, I0) · VIM จับ tax invoice + scan date</li>
+      <li>รัน <code>ZTAXA_R04</code> → Company Code <b>OM01</b> + งวด</li>
+      <li>Further Selections → Profit Center และ/หรือ Recovery Indicator · ติ๊ก Activate JVA Splitting ถ้าจะกรอง venture</li>
+      <li>เลือก Output / Input tax → <b>Execute</b> (ไม่ติ๊ก Update run)</li>
+      <li>ตรวจ line items, Balance per company code, Balance of all company codes · export</li>
+      <li>กระทบกับ GL ภาษี (A149X017 / A212X020) → ใช้เป็นฐาน Oman VAT return</li>
+    </ol>
+    <p class="small">Cash call ที่เทสจริงมี RI 2 ค่า: บรรทัด customer = NN · บรรทัด revenue = CP · segment <code>CIT_OM</code> — ตรวจทั้งคู่</p>
+  </section>
+
+  <!-- EVIDENCE -->
+  <section id="evidence">
+    <div class="sec-head"><span class="sec-num">6.5</span><h2>FUT evidence — เห็นภาพจากงานจริง (Jul 2026)</h2></div>
+    <p class="sec-sub">จาก UT scripts (21-Jul), FUT verification workbook (24-Jul), test evidence + findings pack (27-Jul) และ KT sheet · ชื่อคนแทนด้วย role · ตัวเลขทั้งหมดเป็น OMR ยกเว้นระบุ</p>
+
+    <h3>Timeline ของ object นี้</h3>
+    <ol class="r44tl">
+      <li><b>20–21 Jul</b>สำรวจ UT client → test-data inventory (708x cash call, 30xx O1, KY 807x non-tax control set)</li>
+      <li><b>23 Jul</b>KT: blocker ที่บันทึกไว้ = “PC and RI-JVA splitting”</li>
+      <li><b>24 Jul</b>FUT plan 16 TCs · TC-004 <span class="st block">blocked</span> TKT-05</li>
+      <li><b>27 Jul</b>Test run: TC-004 <span class="st done">pass</span> · D1 proven (High) · D2 (Medium) — สรุปว่า blocker เดิม “ไม่ตรงกับผลเทส”</li>
+      <li><b>14 Aug</b>FUT exit target met · Bug 1 / Bug 2 ปิด</li>
+      <li><b>17 Sep</b>Multi-PC Total (เจอบน RPT-6 ก่อน)</li>
+      <li><b>Oct</b>SIT next · ยังเปิด: multi-PC Total, cash call ใน “all company codes”</li>
+    </ol>
+
+    <h3>Amount bridge — CoCd OM01, 01.01–27.07.2026, ledger 0L</h3>
+    <div class="bridge">
+      <div class="bx"><span class="bk">Output tax total</span><span class="bv">482,428.571-</span><span class="bs">O0 200.000- · O1 481,028.571- · OX 1,000.000- · OY 200.000- · tax 24,076.429-</span></div>
+      <div class="op">−</div>
+      <div class="bx"><span class="bk">Input tax (standard path)</span><span class="bv">3,311.619</span><span class="bs">I0 100.000 · I1 2,211.619 · IX 1,000.000 · tax 110.581</span></div>
+      <div class="op">=</div>
+      <div class="bx ok"><span class="bk">Balance of all company codes</span><span class="bv">479,116.952-</span><span class="bs">page 6 · OMR เท่านั้น</span></div>
+    </div>
+    <div class="bridge">
+      <div class="bx bad"><span class="bk">Cash-call block (path B) — D1</span><span class="bv">6,930.00 USD</span><span class="bs">15 lines 7084321988–7084322041 · I0 · Trs <b>ว่าง</b> · Curr <b>USD 2 ทศนิยม</b> แทน OMR 3 · ไม่เข้า page 6 (≈ 2,668.050 OMR ที่ 0.38500 — คำนวณเอง)</span></div>
+    </div>
+    <p class="small">PC / RI แสดงถูกทุก run: standard = <code>C_PC29</code> / CP · cash call = <code>N_PC39</code> / NN · ข้อสังเกตของเรา: 5% × 481,028.571 = 24,051.429 แต่รายงานแสดง tax O1 24,076.429 (ต่าง 25.000) — ยังไม่ได้ตรวจ <span class="ev infer">INFER</span></p>
+
+    <h3>Tax-code coverage (11 codes ของ ZTXP_OM)</h3>
+    <div class="codegrid">
+      <span class="c ok">I0</span><span class="c ok">I1</span><span class="c ok">IX</span><span class="c no">IY</span><span class="c ok">O0</span><span class="c ok">O1</span><span class="c ok">OX</span><span class="c ok">OY</span><span class="c no">R3</span><span class="c no">R4</span><span class="c no">U1</span>
+    </div>
+    <p class="small">7 / 11 มีข้อมูลทดสอบ · IY, R3, R4, U1 ยังไม่มีเอกสาร · R3/R4 (reverse charge) ควรลงทั้ง ESA ในฝั่ง output และ ESE ในฝั่ง input → run ครบควรเห็น 13 บรรทัดภาษี ไม่ใช่ 11 · U1 ควรมี account key NVV (ลงคอลัมน์ non-deductible)</p>
+
+    <h3>JVA flag run matrix</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Run</th><th>Period</th><th>JVA split</th><th>JV filter</th><th>ผล</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>01.01–27.07</td><td>No</td><td>—</td><td>ครบ: output 482,428.571- · input 3,311.619 · cash call 6,930.00</td></tr>
+        <tr><td>B</td><td>01.01–27.07</td><td>Yes</td><td>VEN_C1</td><td>เหมือน A ทุกตัว (equity 100% ของ VEN_C1) — ไม่ error</td></tr>
+        <tr><td>C</td><td>18.05</td><td>No</td><td>VEN_C1</td><td>output ว่าง · cash call 15 บรรทัด 6,930.00</td></tr>
+        <tr style="background:rgba(185,28,28,.08)"><td>D</td><td>18.05</td><td>Yes</td><td>VEN_C1</td><td>เหมือน C — cash call ยังโชว์ venture <b>VEN_N2</b> ทั้งที่กรอง VEN_C1 → <b>D2</b>: path B ไม่อ่าน selection screen</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Trace เอกสาร cash call 7084321988 — ทำไมต้องมี path B</h3>
+    <div class="kit-dfd" role="group" aria-label="Table trace of document 7084321988">
+      <div class="kit-dfd__in">
+        <div class="dfd-stage"><div class="dfd-slabel">BSET</div><div class="dfd-node out"><div class="dt">0 rows</div><div class="dsub">ไม่มีบรรทัดภาษี → RFUMSV00 logic มองไม่เห็น</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">BKPF</div><div class="dfd-node src"><div class="dt">1 row</div><div class="dsub">doc type JK · period 5 / 2026 · T-code FB01</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">BSEG</div><div class="dfd-node tbl"><div class="dt">2 vendor lines (K)</div><div class="dsub">Dr partner L key <b>2J</b> A213X026 · Cr partner K key <b>3J</b> A213X025 · ทั้งคู่ I0</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">ACDOCA</div><div class="dfd-node gl"><div class="dt">6 rows</div><div class="dsub">DOCLN 1–2 × ledger 0L / S1 / S2 · join RLDNR '0L' ไม่ทำให้หาย</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">Link</div><div class="dfd-node prog"><div class="dt">BUZEI = DOCLN</div><div class="dsub">1 → 000001 · 2 → 000002 (ใช้ได้ทั้ง 0% และ 5%)</div></div></div>
+      </div>
+    </div>
+
+    <h3>Root cause ของ TKT-05 (TC-004 เคย blocked)</h3>
+    <div class="callout"><b>SETLEAF</b> ของ set <code>JV_CC_AP_MWSKZ</code> / <code>JV_CC_AR_MWSKZ</code> ต้องมีค่า S/4 <code>JD_A213X025_I0</code> / <code>JK_A213X025_I0</code> — ถ้ายังเป็นค่า ECC <code>CC_21500020_I0</code> แปลว่า substitution (ECC: exit ZJV_EXIT, substitution ZSUB_L step 257) ไม่เติม I0 · เชื่อมกับ <b>G1</b>: SET อ่าน GL 8 หลักแต่ S/4 ใช้ 10 หลัก · ตรวจ: นับ JD/JK จาก dynamic selection เทียบจำนวนแถว cash call ในรายงาน</div>
+
+    <h3>FUT plan 16 TCs (24-Jul) — จัดตาม objective</h3>
+    <div class="tcgrid">
+      <div class="tcc"><span class="o">OBJ1 · PC / RI filter</span><span class="t done">001 PC</span><span class="t wip">002 RI · re-test</span><span class="t">005 mixed-RI doc</span><span class="t">006 Σ buckets = total</span><span class="t">007 S-lines vs D/K</span></div>
+      <div class="tcc"><span class="o">OBJ2 · PC / RI display</span><span class="t wip">008 doc 3104321987</span><span class="t">009 split ON vs OFF</span></div>
+      <div class="tcc"><span class="o">OBJ3 · cash call</span><span class="t blk">004 JD/JK + I0</span><span class="t">010 SETLEAF S4 values</span><span class="t">011 count JD/JK vs rows</span></div>
+      <div class="tcc"><span class="o">OBJ4 · columns</span><span class="t done">003 fields + period</span><span class="t">012 Alt Ref (col 35)</span><span class="t">013 Tax ID STCD3/STCD1</span></div>
+      <div class="tcc"><span class="o">OBJ5 · rate type</span><span class="t">014 col 23 = ZOM @ translation date</span></div>
+      <div class="tcc"><span class="o">OBJ6 · VIM</span><span class="t">015 SCAN_DATE · no VIM → blank</span></div>
+      <div class="tcc"><span class="o">Gap</span><span class="t">016 reversal pair same period excluded</span></div>
+    </div>
+    <p class="small">สีเขียว = passed · น้ำตาล = in progress / re-test · แดง = blocked · ขาว = not started (ณ 24-Jul) · key risk ของ OBJ1: “mixed-RI document อาจหายจากทุก bucket ของ RI filter = compliance risk” — ดูด้วย Σ(buckets) = unfiltered total</p>
+  </section>
+
+  <!-- DEFECTS -->
+  <section id="defects">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Defects &amp; decisions</h2></div>
+    <h3>ปิดแล้วใน FUT (target 14-Aug met)</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Item</th><th>Root cause / outcome</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>F2 / D1</td><td>สกุลและ transaction key ของ cash call ไม่ถูก assign</td><td><span class="st done">fixed</span></td></tr>
+        <tr><td>F4 / F5 / F8 / F9</td><td>equity group หาย · scope JD/JK · tax reporting date · L-line</td><td><span class="st done">delivered</span></td></tr>
+        <tr><td>Bug 1</td><td>LC2 ของภาษีถูก <b>คำนวณ</b> (5%) แทนที่จะ <b>อ่าน</b> → ภาษีผีบนบรรทัด 0% + เศษปัดเพี้ยน · ลบสูตรทิ้ง</td><td><span class="st done">closed</span></td></tr>
+        <tr><td>Bug 2</td><td>ACDOCA lookup ไม่มี BELNR → สะสมหลายเอกสาร cash call (<code>7084321991</code> โชว์ 3,000.00- แทน 1,500.00) · เปลี่ยนเป็น <code>BSEG-DMBE2</code> + sign handling</td><td><span class="st done">closed</span></td></tr>
+        <tr><td>TKT-04</td><td>RTF header — ECC เหมือนกันและ WordPad อ่านได้ → reclassify เป็น <b>improvement</b>: compact layouts <code>/RTFOUT</code>, <code>/RTFIN</code> (≤132 chars) + plain WRITE header</td><td><span class="st wip">improvement</span></td></tr>
+      </tbody>
+    </table></div>
+    <h3>ยังเปิด (16-Oct)</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>#</th><th>Item</th><th>Next</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>Cash call</b> (6,930.00) เข้า “Balance per company code” แต่ <b>ไม่เข้า</b> “Balance of all company codes” — reproduce ด้วย run 18.05.2026 ทั้งเปิด/ปิด JVA splitting</td><td><span class="st open">open</span> RPT-2 ABAP</td></tr>
+        <tr><td>2</td><td><b>Multi-PC Total</b> (17-Sep, พบครั้งแรกบน RPT-6): กรอง PC แล้ว line items ถูกกรองต่อ tax line แต่ Total/Balance รวมทั้งเอกสารเมื่อมีบรรทัดใดตรง · repro doc <code>3004322020</code> (O1; <code>C_PC29</code> 952.379-/47.619- + <code>N_PC38</code> 1,142.859-/57.143-; ทั้งใบ 2,095.238-/104.762-)</td><td><span class="st open">open</span> fix ต้องเหมือน RPT-6 (ที่ Total ขับ clearing posting) · ถามทีม RPT-6</td></tr>
+        <tr><td>3</td><td>TKT-06 — PC filter บนเอกสาร JVA split</td><td><span class="st open">SIT</span></td></tr>
+        <tr><td>4</td><td>Tab “Tax payable posting” error เพราะ GL net VAT clearing <code>A212X023</code> ไม่ได้ extend ไป OM01</td><td>D5: ซ่อน vs negative test</td></tr>
+        <tr><td>5</td><td>PC ของเอกสาร multi-PC (tax line vs document) · total แบบไม่กรอง PC อิง BSET หรือ Σ ACDOCA split</td><td>D4 (ผูกกับ TKT-01)</td></tr>
+        <tr><td>6</td><td>Rate type ZOM vs mid</td><td>G10 / C18</td></tr>
+      </tbody>
+    </table></div>
+    <div class="lock">Report only ไม่ post · venture/equity filter มีผลเมื่อติ๊ก Activate JVA Splitting · รันว่างเพราะ placeholder “SEL_VN” / “SEL” = test-setup error · ชื่อชน: <b>JVA-RPT-1</b> (Statement of account) ≠ TAX-RPT-2 — ใช้ prefix เสมอ</div>
+  </section>
+
+  <!-- TESTS -->
+  <section id="tests">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Tests</h2></div>
+    <h3>TestRail TC-001..004</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>TC</th><th>Purpose</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>TC-001</td><td>Standard input/output VAT run</td><td><span class="st done">passed</span></td></tr>
+        <tr><td>TC-002</td><td>Currency และ LC2 columns</td><td><span class="st done">passed after Bug 1/2</span></td></tr>
+        <tr><td>TC-003</td><td>Balance per company code และ all companies</td><td><span class="st wip">passed in FUT · residual open #1</span></td></tr>
+        <tr><td>TC-004</td><td>JVA cash call I0 ทั้ง JD และ JK</td><td><span class="st wip">passed · JD evidence <span class="ev tbc">TBC</span></span></td></tr>
+        <tr><td>Regression</td><td>PC/RI filters · JVA split · RTF export</td><td>SIT</td></tr>
+      </tbody>
+    </table></div>
+    <h3>FSD test conditions (4) <span class="ev fd">FD</span></h3>
+    <ul class="clean">
+      <li>ใส่ Profit Center → ได้ข้อมูลตาม PC</li>
+      <li>ใส่ Recovery Indicator → ได้ข้อมูลตาม RI</li>
+      <li>ใส่ fields + period → ดึงถูก</li>
+      <li>Execute → cash call JVA ด้วย tax code I0 + doc type JD/JK</li>
+    </ul>
+    <div class="callout"><b>Discriminating pairs ที่ใช้กับ RPT-2:</b> zero-tax vs 5% document → แยก “คำนวณ” vs “อ่าน” (Bug 1) · PC เดียวกันข้ามหลายเอกสาร → ตรวจความครบของ key (Bug 2)</div>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">✓</span><h2>Self-check</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. ทำไม cash call ไม่เคยอยู่ใน BSET?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">EJVA017 substitute I0 (0%) และไม่มีบรรทัดภาษีถูก post — ต้องใช้ custom BSEG path</div></details></div>
+      <div class="selfq"><p>2. อะไรทำให้ 7084321991 โชว์ 3,000.00- แทน 1,500.00?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ACDOCA lookup ที่ key แค่ profit center (ไม่มี BELNR) สะสมแถวข้ามเอกสาร</div></details></div>
+      <div class="selfq"><p>3. Variant ไหนใช้ตัดสินแต่ละ path?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ZVAR_CC = cash call (18,000.00 USD = 6,930.000 OMR) · ZVAR_FULL = standard / split</div></details></div>
+      <div class="selfq"><p>4. Bug multi-PC Total ของ RPT-2 ต้องแก้ร่วมกับ object ไหน และทำไม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">TAX-RPT-6 — root cause เดียวกัน และบน RPT-6 ยอด Total ขับ clearing posting จึงต้องแก้แบบเดียวกัน</div></details></div>
+      <div class="selfq"><p>5. KTOSL ห้าตัวที่ระบุว่าเป็นแถวภาษีคืออะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">MWS, VST, ESA, ESE, NVV</div></details></div>
+    </div>
+    <div class="seealso"><span>ดูต่อ</span>
+      <a href="wricef-portfolio.html">My 5 WRICEFs</a>
+      <a href="indirect-tax.html">Indirect tax</a>
+      <a href="decisions.html#waiting">D4 / D5</a>
+      <a href="tables-qa.html">Tables &amp; Q&amp;A</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · TAX-RPT-2 Oman VAT (cash call)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

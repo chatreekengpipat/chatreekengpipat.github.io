@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Withholding Tax — engine · TH flow · FX adjustment (TAX-301) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  [hidden]{display:none!important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  a{color:var(--petrol);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin:0 6px 22px 0;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(27px,5.2vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .easy{margin:18px 0 6px;border-radius:12px;padding:14px 18px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.22);font-size:14px;}
+  .easy::before{content:"อธิบายง่าย";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:15px;font-weight:700;margin:2px 0 8px;color:var(--petrol-deep);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  .small{font-size:12.5px;color:var(--ink-soft);}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+  .tblwrap table{margin:0;}
+  @media(max-width:600px){.tblwrap table{min-width:540px;}.tblwrap table td,.tblwrap table th{word-break:normal;overflow-wrap:normal;}}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .num{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:11px 0 11px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  ol.flow>li b{font-weight:600;}
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;margin:12px 0;background:var(--card);}
+  .card .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .grid2>.card,.grid3>.card{margin:0;}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(185,28,28,.05);font-size:13.8px;}
+  .trap b{color:var(--warn);}
+  .lock{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(29,78,216,.06);font-size:13.8px;}
+  .lock::before{content:"🔒 Locked design — ไม่ใช่ defect";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 18px 16px;font-size:14px;}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  /* evidence tags (knowledge-base convention) */
+  .ev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:1px;white-space:nowrap;border:1px solid transparent;}
+  .ev.std{color:var(--ink-soft);border-color:var(--line);}
+  .ev.bp{color:var(--petrol-deep);background:rgba(37,99,235,.10);}
+  .ev.fd{color:var(--petrol);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+  .ev.sys{color:#fff;background:var(--petrol);}
+  .ev.agreed{color:#fff;background:var(--petrol-deep);}
+  .ev.infer{color:var(--brass);border:1px dashed var(--brass);}
+  .ev.tbc{color:var(--warn);border:1px dashed var(--warn);background:rgba(185,28,28,.06);}
+  :root[data-theme="dark"] .ev.sys,:root[data-theme="dark"] .ev.agreed{color:var(--paper);}
+  .evlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;}
+  .evlegend .ev{margin-left:0;margin-right:4px;}
+  /* status pills */
+  .st{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;border-radius:20px;padding:1px 8px;white-space:nowrap;}
+  .st.open{color:var(--warn);background:rgba(185,28,28,.09);}
+  .st.block{color:#fff;background:var(--warn);}
+  .st.wip{color:var(--brass);background:rgba(180,83,9,.13);}
+  .st.done{color:var(--petrol-deep);background:rgba(37,99,235,.12);}
+  :root[data-theme="dark"] .st.block{color:var(--paper);}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .seealso{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;font-size:12.5px;align-items:center;}
+  .seealso>span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .seealso a{text-decoration:none;border:1.3px solid var(--line);border-radius:20px;padding:3px 11px;color:var(--petrol-deep);background:var(--card);}
+  .seealso a:hover{border-color:var(--petrol);}
+  /* interactive tools (T39) — state in memory only */
+  .tool{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;margin:18px 0;background:linear-gradient(160deg,rgba(37,99,235,.06),rgba(180,83,9,.04));}
+  .tool-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tool-h b{font-size:15px;}
+  .tool-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:5px;padding:2px 7px;}
+  .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;}
+  @media(max-width:640px){.fgrid{grid-template-columns:1fr;}}
+  .fld{display:flex;flex-direction:column;gap:5px;margin:7px 0;}
+  .fld>.lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;}
+  .seg button{font:inherit;font-size:12.5px;border:1.4px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.3;}
+  .seg button:hover{border-color:var(--petrol);}
+  .seg button[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol);color:#fff;}
+  .seg button:disabled{opacity:.4;cursor:not-allowed;}
+  .tool input,.tool textarea,.tool select{font:inherit;font-size:13.5px;color:var(--ink);background:var(--card);border:1.4px solid var(--line);border-radius:8px;padding:6px 9px;width:100%;}
+  .tool textarea{min-height:56px;resize:vertical;}
+  .tool input:focus,.tool textarea:focus,.tool select:focus,.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  .outs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+  .outs.two{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:640px){.outs,.outs.two{grid-template-columns:1fr;}}
+  .out{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:11px;padding:10px 12px;background:var(--card);}
+  .out.b{--_c:var(--brass);} .out.d{--_c:var(--petrol-deep);} .out.w{--_c:var(--warn);}
+  .out .k{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--_c,var(--petrol));}
+  .out .v{font-size:15px;font-weight:700;margin:3px 0;line-height:1.35;}
+  .out .why{font-size:12px;color:var(--ink-soft);}
+  .notes{margin-top:10px;font-size:13px;}
+  .notes li{margin:4px 0 4px 18px;}
+  .copyout{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:12px 14px;margin-top:10px;}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .btn{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--petrol);background:var(--petrol);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--petrol);}
+  .btnmsg{font-size:12px;color:var(--petrol-deep);}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .btn:not(.ghost),:root[data-theme="dark"] .tool-h .tg{color:var(--paper);}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.lock,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb,.seealso{display:none;}details.fold,details.ans{border-color:#ccc;}.tblwrap{overflow:visible;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-wht">
+<div class="wrap">
+<a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="overview.html">Client FI design →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Foundation</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>covers TAX-301</span>
+    </div>
+    <h1>Withholding Tax<br><span class="accent">Extended WHT engine · TH flow · e-WHT · WHT FX adjustment</span></h1>
+    <div class="meta">
+      <span>L4 · <b>01.01.07.03</b></span>
+      <span>Scope · <b>TH · MY · MM</b></span>
+      <span>Objects · <b>RPT-1 · FRM-1 · ENH-1 · FRM-2</b></span>
+    </div>
+    <p class="src">Source: knowledge base <code>tax-fundamentals</code> (STD) · <code>10-client-fi-design §8</code> · BPE KDS · course TAX-301 (4-Jun-2026) · <code>20-role-wricef-owner</code> (shared engine)</p>
+  </header>
+
+  <div class="easy">ภาษีใน SAP มีสองเครื่องยนต์: <b>tax code</b> (VAT คิดตอน invoice → BSET) และ <b>Extended Withholding Tax</b> (หัก ณ ที่จ่าย ส่วนใหญ่คิดตอนจ่าย → WITH_ITEM) · หน้านี้คือเครื่องยนต์ตัวที่สอง — ตั้งค่าอะไร, ไหลยังไง, ออกแบบ/ไฟล์จากไหน และทำไมต้องมีโปรแกรมปรับ FX (ENH-2)</div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#engine">Engine</a>
+    <a href="#codes">Types &amp; codes</a>
+    <a href="#grossup">Gross-up</a>
+    <a href="#flow">TH flow</a>
+    <a href="#outputs">Output groups</a>
+    <a href="#ewht">e-WHT</a>
+    <a href="#entries">Posting chain</a>
+    <a href="#fx">FX adjustment</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key takeaways</b>
+    <ul>
+      <li><b>WHT type</b> = เมื่อไร/อย่างไร (invoice หรือ payment) · <b>WHT code</b> = อัตรา + ประเภทเงินได้ · <b>recipient type</b> = จ่ายให้ใคร → แบบไหน</li>
+      <li>บรรทัด WHT ใน ACDOCA มี <code>KTOSL = WIT</code> · type ที่หักตอนจ่ายจะมี amount 0 ที่ invoice</li>
+      <li>แบบ / ใบแนบ / ไฟล์ WHT ไทยออกจาก <b>โปรแกรมเดียว</b> (<code>ZTAXB_R01</code> บน Generic WHT Reporting) แยกด้วย <b>output group</b> — ไม่ใช่ DRC</li>
+      <li>FX adjustment <b>TAX-ENH-2</b> (<code>ZTAXA_R03</code>) batch ปรับ WHT ให้ตรงวันจ่าย · doc <code>SW</code> · GL <code>A212X021</code></li>
+      <li>ยอดต้องผูกกัน: 50 ทวิ = ใบแนบ = text file = RPT-7 = WHT payable GL credit = ยอดนำส่ง</li>
+    </ul>
+  </div>
+
+  <!-- ENGINE -->
+  <section id="engine">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Extended WHT engine <span class="ev std">STD</span></h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Object</th><th>ความหมาย</th><th>Table</th></tr></thead>
+      <tbody>
+        <tr><td><b>WHT type</b></td><td><i>เมื่อไร/อย่างไร</i>: ที่ invoice หรือ payment · base type · rounding · posting</td><td><code>T059P</code></td></tr>
+        <tr><td><b>WHT code</b></td><td>อัตรา (QSATZ) · ประเภทเงินได้ (QEKAR) · text</td><td><code>T059Z</code> / <code>T059ZT</code></td></tr>
+        <tr><td><b>Recipient type</b></td><td>ผู้รับเป็นใคร (บุคคล · บริษัท · ต่างประเทศ) → แบบไหน</td><td><code>WITH_ITEM-QSREC</code>, <code>LFBW</code></td></tr>
+        <tr><td>Vendor WHT data</td><td>type ที่อนุญาต · liable flag · default code · recipient type ต่อ CoCd</td><td><code>LFBW</code></td></tr>
+      </tbody>
+    </table></div>
+    <ul class="clean">
+      <li><code>WITH_ITEM</code> key: <code>BUKRS + GJAHR + BELNR + BUZEI + WITHT</code> · amounts <code>WT_QSSHB/WT_QBSHB</code> (doc ccy) · <code>WT_QSSHH/WT_QBSHH</code> (LC1) · <code>WT_QSSH2/WT_QBSH2</code> (LC2) · LC3 field names <span class="ev tbc">verify SE11</span> · <code>WT_WITHCD</code> · <code>CTNUMBER</code> (certificate no.) · <code>WT_ACCO</code> (vendor)</li>
+      <li>Vendor มีได้หลาย type — บรรทัดที่มี <b>WHT code และ amount</b> เท่านั้นที่เป็นการหักจริง</li>
+      <li>บรรทัด GL ของ WHT มี <code>KTOSL = WIT</code> · บัญชี WHT payable ตั้งที่ OBWW (+ gross-up offsetting account)</li>
+      <li>Type ที่หักตอนจ่าย: ที่ invoice WITH_ITEM มี type/code/base แต่ <b>amount 0</b> — amount อยู่บนเอกสาร payment</li>
+      <li>Reporting engine มาตรฐาน: <code>RFIDYYWT</code> = Generic Withholding Tax Reporting (<code>S_P00_07000134</code>) — output เลือกด้วย <b>output group</b> (<code>T059ID01</code>) · e-filing text ใช้ <b>DMEEX</b> format trees + exits</li>
+    </ul>
+  </section>
+
+  <!-- CODES -->
+  <section id="codes">
+    <div class="sec-head"><span class="sec-num">2</span><h2>WHT types &amp; codes ของ Client <span class="ev bp">BP KDS</span></h2></div>
+    <div class="grid2">
+      <div class="card"><span class="ct">Global digit map (ใช้กับ MY / MM / overseas)</span>
+        <div class="tblwrap"><table>
+          <tbody>
+            <tr><td>WHT type · หลัก 1</td><td><b>A</b> = deduct at invoice · <b>B</b> = deduct at payment</td></tr>
+            <tr><td>WHT type · หลัก 2</td><td>recipient: 0 res-corp · 1 res-ind · 2 non-res-corp · 3 non-res-ind (MY/MM ใช้ nature of payment)</td></tr>
+            <tr><td>WHT code · หลัก 1</td><td><b>A</b> standard · <b>D</b> DTA · <b>G</b> gross-up std · <b>H</b> gross-up DTA · <b>I</b> gross-up 1-cycle std · <b>J</b> gross-up 1-cycle DTA</td></tr>
+            <tr><td>WHT code · หลัก 2</td><td>ลำดับตาม nature of payment (rate %)</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card"><span class="ct">Thailand (ตั้งตามเลขแบบ ภ.ง.ด.)</span>
+        <ul class="clean">
+          <li>PND1 <code>1A/1B/1D/1E</code> · PND2 <code>2A</code> · PND3 <code>3A–3F</code> · PND53 <code>4A–4F</code> · PND54 <code>5A/5D</code> (+ <code>5G</code> gross-up บนเอกสาร <span class="ev tbc">TBC</span>)</li>
+          <li>Recipient type: 01 PND1 · 02 PND2 · 03 PND3 · 53 PND53 · 54 PND54</li>
+          <li>WHT codes กำลัง redesign — list สุดท้ายในคอร์ส TAX-405 (G5)</li>
+        </ul>
+        <div class="seealso"><span>type → แบบ</span><a href="statutory.html#mapping">ระบบรู้ได้ยังไงว่ายื่นแบบไหน</a></div>
+      </div>
+    </div>
+    <h3>กฎออกแบบ type / code (WHT design deck s2–5) <span class="ev bp">BP</span></h3>
+    <div class="grid2">
+      <div class="card"><span class="ct">WHT TYPE = 1 ตัวต่อ 1 ชุดของ 3 มิติ</span>
+        <ol class="wtax">
+          <li><b>จุดหัก</b> — invoice หรือ payment</li>
+          <li><b>e-WHT?</b> — ใช่ = type แยก <b>ไม่มี certificate numbering</b></li>
+          <li><b>Recipient type / PND</b> — 01 · 02 · 03 · 53 · 54</li>
+        </ol>
+        <p class="small">เก็บที่ <b>BP</b> พร้อม recipient type · BP มีได้หลาย type แต่ <b>ไม่เก็บ WHT code</b></p></div>
+      <div class="card"><span class="ct">WHT CODE = 1 ตัวต่อ income type</span>
+        <ol class="wtax">
+          <li><b>Income type</b> — 1 code ต่อ 1 ประเภทเงินได้</li>
+          <li><b>Posting indicator</b> — “Deducted &amp; Gross Up” กับ “Gross Up – One Cycle” แยก type + code กัน</li>
+        </ol>
+        <p class="small">กรอกตอน <b>AP invoice (tab WHT)</b> → SAP คำนวณยอดแล้ว post · open point: code ที่แยก 01/02/03 มี setting เหมือนกันต่อ income type — “for further discussion”</p></div>
+    </div>
+
+    <div class="tool" id="wtTool">
+      <div class="tool-h"><span class="tg">Interactive</span><b>Type × Code builder — เลือกมิติ แล้วดูว่าอะไรอยู่ที่ BP อะไรกรอกตอน invoice และ downstream ได้อะไร</b></div>
+      <div class="fgrid">
+        <div class="fld"><span class="lbl">Type ① จุดหัก</span><div class="seg" data-name="pt">
+          <button type="button" data-v="INV">Invoice</button><button type="button" data-v="PAY" aria-pressed="true">Payment</button></div></div>
+        <div class="fld"><span class="lbl">Type ② e-WHT</span><div class="seg" data-name="ew">
+          <button type="button" data-v="N" aria-pressed="true">ไม่ใช่ (paper)</button><button type="button" data-v="Y">ใช่ (e-WHT)</button></div></div>
+        <div class="fld"><span class="lbl">Type ③ Recipient type</span><div class="seg" data-name="rt">
+          <button type="button" data-v="01">01 · PND1</button><button type="button" data-v="02">02 · PND2</button><button type="button" data-v="03">03 · PND3</button><button type="button" data-v="53" aria-pressed="true">53 · PND53</button><button type="button" data-v="54">54 · PND54</button></div></div>
+        <div class="fld"><span class="lbl">Code · Posting indicator</span><div class="seg" data-name="pi">
+          <button type="button" data-v="STD" aria-pressed="true">หักปกติ</button><button type="button" data-v="GU">Deducted &amp; Gross Up</button><button type="button" data-v="OC">Gross Up – One Cycle</button></div></div>
+      </div>
+      <div class="wtkey" id="wtKey" aria-hidden="true"></div>
+      <div class="outs" aria-live="polite">
+        <div class="out"><div class="k">อยู่ที่ BP</div><div class="v" id="wtBp"></div><div class="why" id="wtBpW"></div></div>
+        <div class="out b"><div class="k">กรอกตอน AP invoice</div><div class="v" id="wtInv"></div><div class="why" id="wtInvW"></div></div>
+        <div class="out d"><div class="k">Downstream</div><div class="v" id="wtOut"></div><div class="why" id="wtOutW"></div></div>
+      </div>
+      <ul class="notes" id="wtNotes"></ul>
+      <p class="small">ไม่ได้บอกเลข type / code จริง — เลขตัวจริงดูที่ <a href="#codes">ตารางด้านบน</a> และ list สุดท้ายของคอร์ส TAX-405 · แบบ / ไฟล์ตามเลข recipient มาจาก DRC forms deck + FUT board (Jul-2026)</p>
+    </div>
+<style>
+  .wtax{margin:6px 0 6px 20px;font-size:13.5px;} .wtax li{margin:3px 0;}
+  .wtkey{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 2px;font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .wtkey span{border:1.5px solid var(--line);border-radius:7px;padding:4px 8px;background:var(--card);}
+  .wtkey span.t{border-color:var(--petrol);color:var(--petrol);} .wtkey span.c{border-color:var(--brass);color:var(--brass);}
+  .wtkey i{font-style:normal;font-weight:700;color:var(--ink-soft);}
+</style>
+<script>
+(function(){
+  var root=document.getElementById("wtTool"); if(!root) return;
+  var st={pt:"PAY",ew:"N",rt:"53",pi:"STD"};
+  var $=function(id){return document.getElementById(id);};
+  var FORM={
+    "01":["PND1","แนบ TAX-FRM-4 · text ENH-1 · SWC ENH-5 (+ 1ก รายปี)"],
+    "02":["PND2","แนบ TAX-FRM-4 · SWC ENH-5 (+ 2ก รายปี)"],
+    "03":["PND3","แนบ TAX-FRM-1 · text ENH-1 · SWC ENH-6"],
+    "53":["PND53","แนบ TAX-FRM-1 · text ENH-1 · SWC ENH-6"],
+    "54":["PND54","แบบ PND54 = TAX-FRM-3 · แนบ FRM-1 · recon VAT36 ใน RPT-1"]};
+  function render(){
+    var pt=st.pt, ew=st.ew, rt=st.rt, pi=st.pi, n=[];
+    var PI={STD:"หักปกติ",GU:"Deducted & Gross Up",OC:"Gross Up – One Cycle"}[pi];
+    $("wtKey").innerHTML='<span class="t">'+(pt==="INV"?"หักที่ invoice":"หักที่ payment")+'</span><i>×</i><span class="t">'+(ew==="Y"?"e-WHT":"paper")+'</span><i>×</i><span class="t">recipient '+rt+'</span><i>=</i><span class="t"><b>1 WHT type</b></span><i>+</i><span class="c">income type</span><i>×</i><span class="c">'+PI+'</span><i>=</i><span class="c"><b>1 WHT code</b></span>';
+    $("wtBp").innerHTML="WHT type + recipient type <b>"+rt+"</b>";
+    $("wtBpW").innerHTML="BP ถือได้หลาย type · <b>ไม่มี code</b> ที่ BP · type ที่ไม่ถูกเลือกตอน invoice = ไม่หัก";
+    $("wtInv").innerHTML="WHT code ตาม income type"+(pi==="STD"?"":" · "+PI);
+    $("wtInvW").innerHTML=pt==="PAY"?"ที่ invoice: <code>WITH_ITEM</code> มี type / code / base แต่ <b>amount 0</b> → ยอดเกิดตอน payment (F110 / F-53)":"ยอด WHT เกิดที่ invoice เลย → LC1 ของบรรทัด WHT = M @ posting date −1";
+    $("wtOut").innerHTML=FORM[rt][0]+(ew==="Y"?" · <b>ธนาคารออกหลักฐาน</b>":" · 50 ทวิ จาก FRM-3 (AP1)");
+    $("wtOutW").innerHTML=FORM[rt][1];
+    if(ew==="Y"){ n.push("e-WHT: HSBC / BOFA นำส่ง RD ใน 4 วัน · type แยกเพราะ <b>ไม่มี certificate numbering</b> (ไม่ออกเลข 50 ทวิ) · FX ของ ENH-2 = BOT <b>T-2</b>");
+      n.push(rt==="03"||rt==="53"?"บัญชี e-WHT pay = <code>A212X022</code> (PND3 &amp; 53)":"แหล่งข้อมูลระบุบัญชี e-WHT pay เฉพาะ PND3 &amp; 53 — e-WHT กับ recipient "+rt+" ต้องยืนยันก่อนใช้ <span class=\"ev tbc\">TBC</span>"); }
+    if(ew==="Y"&&pt==="INV") n.push("e-WHT หักและนำส่งตอนจ่ายผ่านธนาคาร — ชุด “หักที่ invoice × e-WHT” จึงไม่น่าเกิดจริง <span class=\"ev infer\">INFER</span>");
+    else if(ew==="N") n.push("Paper: FX ของ ENH-2 = <b>T-1</b> · บัญชีปรับ <code>A212X021</code> (doc SW)");
+    if(pi!=="STD") n.push("Gross-up = บริษัทรับภาระภาษีแทน → GRU = gross-up offsetting entry · code letter แบบ global: G / H gross-up · I / J one-cycle · ดู <a href=\"#grossup\">gross-up</a>");
+    if(rt==="54") n.push("PND54 มักมาคู่ VAT36 → ภ.พ.36 · DRC มีแบบ P.N.D.54 มาตรฐาน แต่โปรเจกต์ใช้ FRM-3 (FRM-5 ยกเลิก)");
+    if(rt==="01") n.push("PND1 ไม่อยู่ในชุด DRC form มาตรฐาน — ใบแนบมาจาก FRM-4");
+    if(rt==="01"||rt==="02") n.push("ENH-1 ตาม deck = PND1, 1ก, 2ก, 3, 53 (ไม่มี PND2 ธรรมดา) — ต่างจากที่หน้านี้เคยเขียน <span class=\"ev tbc\">TBC</span>");
+    $("wtNotes").innerHTML=n.map(function(x){return "<li>"+x+"</li>";}).join("");
+  }
+  root.addEventListener("click",function(e){
+    var b=e.target.closest(".seg button"); if(!b) return;
+    var g=b.parentNode; st[g.getAttribute("data-name")]=b.getAttribute("data-v");
+    Array.prototype.forEach.call(g.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});
+    render();
+  });
+  render();
+})();
+</script>
+
+    <div class="tblwrap"><table>
+      <thead><tr><th>Country</th><th>WHT</th><th>เมื่อไร</th><th>หมายเหตุ</th></tr></thead>
+      <tbody>
+        <tr><td>MY MY01</td><td><code>BA–BE</code></td><td>at payment</td><td>MY resident คาดว่าไม่มี WHT <span class="ev tbc">verify BP</span></td></tr>
+        <tr><td>MM MM01</td><td><code>B0</code> resident · <code>B2</code> non-resident</td><td>at payment</td><td>DTA codes <code>D1 8%</code> · <code>D2 10%</code> · <code>D3 5%</code> · <code>D4 10%</code> · <code>H1 8%</code> · <code>H2 10%</code> · <code>H3 5%</code> · <code>H4 10%</code> → certificate <a href="frm2-mm-wht-certificate.html">TAX-FRM-2</a></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- GROSS-UP -->
+  <section id="grossup">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Normal vs gross-up (invoice 100, WHT 3%) <span class="ev std">STD</span></h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th></th><th>Normal</th><th>Gross-up “one cycle”</th><th>Gross-up (true)</th></tr></thead>
+      <tbody>
+        <tr><td>WHT</td><td class="num">100 × 3% = 3.00</td><td class="num">100 × 3/100 = 3.00</td><td class="num">100 × 3/(100 − 3) = 3.09</td></tr>
+        <tr><td>Vendor ได้รับ</td><td class="num">97</td><td class="num">100</td><td class="num">100</td></tr>
+        <tr><td>Payment JE</td><td>Dr Vendor 100 / Cr Bank 97 / Cr WHT payable 3</td><td>Dr Vendor 100, Dr WHT expense 3 / Cr Bank 100, Cr WHT payable 3</td><td>เหมือนกันด้วย 3.09</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tool" id="guTool">
+      <div class="tool-h"><span class="tg">Interactive</span><b>Gross-up calculator — ลองเปลี่ยนตัวเลขแล้วดู JE ตอนจ่าย</b></div>
+      <div class="fgrid">
+        <div class="fld"><span class="lbl">ยอดก่อน WHT (ไม่รวม VAT)</span><input type="number" id="guAmt" value="100000" min="0" step="0.01" inputmode="decimal" aria-label="ยอดฐาน"></div>
+        <div class="fld"><span class="lbl">อัตรา WHT %</span><input type="number" id="guRate" value="3" min="0" max="99" step="0.5" inputmode="decimal" aria-label="อัตรา WHT"></div>
+      </div>
+      <div class="fld"><span class="lbl">วิธี (posting indicator)</span><div class="seg" data-name="m">
+        <button type="button" data-v="N" aria-pressed="true">Normal · code A / D</button>
+        <button type="button" data-v="I">Gross-up one cycle · code I / J</button>
+        <button type="button" data-v="G">Gross-up (true) · code G / H</button></div></div>
+      <div class="outs" aria-live="polite">
+        <div class="out"><div class="k">WHT</div><div class="v" id="guW"></div><div class="why" id="guWf"></div></div>
+        <div class="out b"><div class="k">Vendor ได้รับ</div><div class="v" id="guV"></div><div class="why">เงินออกจาก bank ให้ vendor</div></div>
+        <div class="out d"><div class="k">ต้นทุนรวมของบริษัท</div><div class="v" id="guC"></div><div class="why">bank ให้ vendor + WHT ที่นำส่ง RD</div></div>
+      </div>
+      <div class="tblwrap"><table aria-label="Payment journal entry">
+        <thead><tr><th style="width:50px"></th><th>Account</th><th class="num">Amount</th><th>หมายเหตุ</th></tr></thead>
+        <tbody id="guJE"></tbody>
+      </table></div>
+      <p class="small">WHT base ไม่รวม VAT · เดือนถัดไปตอนนำส่ง: Dr WHT payable / Cr Bank (RD) · บัญชี: WIT = WHT payable (OBWW) · GRU = gross-up offsetting entry · ปัดเศษ 2 ตำแหน่ง</p>
+    </div>
+<script>
+(function(){
+  var root=document.getElementById("guTool"); if(!root) return;
+  var m="N", $=function(id){return document.getElementById(id);};
+  var f=function(x){return x.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});};
+  var r2=function(x){return Math.round((x+1e-9)*100)/100;};
+  function render(){
+    var a=parseFloat($("guAmt").value)||0, r=(parseFloat($("guRate").value)||0)/100, w, ven, rows;
+    if(m==="N"){ w=r2(a*r); ven=r2(a-w); $("guWf").textContent="ฐาน × อัตรา = "+f(a)+" × "+(r*100)+"%";
+      rows=[["Dr","Vendor (AP)",a,""],["Cr","Bank",ven,"vendor รับสุทธิ"],["Cr","WHT payable (WIT)",w,"นำส่ง RD เดือนถัดไป"]]; }
+    else if(m==="I"){ w=r2(a*r); ven=a; $("guWf").textContent="one cycle: ฐาน × อัตรา (ไม่คิดภาษีซ้อน)";
+      rows=[["Dr","Vendor (AP)",a,""],["Dr","WHT expense (gross-up)",w,"บริษัทรับภาระ"],["Cr","Bank",ven,"vendor ได้เต็ม"],["Cr","WHT payable (WIT)",w,""]]; }
+    else { w=r2(r<1?a*r/(1-r):0); ven=a; $("guWf").textContent="true: ฐาน × อัตรา ÷ (1 − อัตรา)";
+      rows=[["Dr","Vendor (AP)",a,""],["Dr","WHT expense (gross-up)",w,"บริษัทรับภาระ รวมภาษีของภาษี"],["Cr","Bank",ven,"vendor ได้เต็ม"],["Cr","WHT payable (WIT)",w,""]]; }
+    $("guW").textContent=f(w); $("guV").textContent=f(ven); $("guC").textContent=f(r2(ven+w));
+    $("guJE").innerHTML=rows.map(function(x){return '<tr><td class="'+(x[0]==="Dr"?"dr":"cr")+'">'+x[0]+'</td><td>'+x[1]+'</td><td class="num">'+f(x[2])+'</td><td class="small">'+x[3]+'</td></tr>';}).join("");
+  }
+  root.addEventListener("click",function(e){ var b=e.target.closest(".seg button"); if(!b) return;
+    Array.prototype.forEach.call(b.parentNode.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});
+    m=b.getAttribute("data-v"); render(); });
+  root.addEventListener("input",render);
+  render();
+})();
+</script>
+    <p class="small">Gross-up = บริษัทรับภาระ WHT แทน vendor → เกิดขา <b>Dr WHT expense</b> · ใน code ตระกูล G / H (true) และ I / J (one cycle) · ไทย PND1/1A ใช้ GA/G1 · PND3/53 ใช้ GB–GE, G2–G5</p>
+  </section>
+
+  <!-- FLOW -->
+  <section id="flow">
+    <div class="sec-head"><span class="sec-num">4</span><h2>TH WHT process flow</h2></div>
+    <p class="sec-sub">Swimlane ตามบทบาท (6 ขั้นตามคอร์ส · เส้นสีน้ำตาล = handoff)</p>
+    <div class="kit-swim" role="group" aria-label="TH WHT process swimlane — System, Bank/e-WHT, Tax Team, Revenue Department">
+      <div class="kit-swim__in" style="--lanes:4">
+        <div class="kit-swim__head">
+          <div class="swim-lane la1"><span class="dotc"></span>System (SAP)</div>
+          <div class="swim-lane la2"><span class="dotc"></span>Bank / e-WHT</div>
+          <div class="swim-lane la3"><span class="dotc"></span>Tax Team</div>
+          <div class="swim-lane la4"><span class="dotc"></span>Revenue Dept</div>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"><div class="swim-node la1"><span class="sn">1</span><div class="st">Auto WHT exchange-rate update</div><div class="sd">batch ปรับ rate ตามวันจ่ายจริง</div><span class="sc">ZTAXA_R03</span><span class="sc">doc SW</span><span class="sc">A212X021</span></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link">
+          <span class="swim-v" style="grid-column:1"></span>
+          <span class="swim-h" style="grid-column:1 / 3"></span>
+          <span class="swim-down" style="grid-column:2"></span>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"><div class="swim-node la1"><span class="sn">2</span><div class="st">Paper → ออก 50 ทวิ</div><div class="sd">FRM-3 output group AP1 · ส่งให้ vendor</div></div></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">2</span><div class="st">e-WHT → ธนาคารออกหลักฐาน</div><div class="sd">HSBC / BOFA · ไม่ออก 50 ทวิ ผ่าน DRC</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link">
+          <span class="swim-h" style="grid-column:1 / 4"></span>
+          <span class="swim-down" style="grid-column:3"></span>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la3"><span class="sn">3</span><div class="st">รวบรวมรายเดือน</div><div class="sd">ตาม vendor + code</div></div></div>
+          <div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:3"></span></div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la3"><span class="sn">4</span><div class="st">รายงาน / ใบแนบ / text files</div><div class="sd">RPT-7 · FRM-4 · <b>FRM-1 · ENH-1 · RPT-1</b> · ENH-6/079</div></div></div>
+          <div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:3"></span></div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la3"><span class="sn">5</span><div class="st">กระทบยอด GL → review / approve (DAS)</div></div></div>
+          <div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link">
+          <span class="swim-h" style="grid-column:3 / 5"></span>
+          <span class="swim-down" style="grid-column:4"></span>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la4"><span class="sn">6</span><div class="st">ยื่น RD (paper / e-filing) → archive</div></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="small">เลื่อนแนวนอนได้บนจอแคบ · ขั้นที่ 2 แยกสองทาง (paper ↔ e-WHT) แล้วมารวมที่ทีม Tax · คอร์ส TAX-405 ใช้ flow Blueprint 01.01.07.03 TH-specific (3.3.1) ไม่มีขั้น VIM tax-screening</p>
+  </section>
+
+  <!-- OUTPUTS -->
+  <section id="outputs">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Shared engine — หนึ่งจอเลือก หลาย output group</h2></div>
+    <p class="sec-sub"><code>ZTAXB_R01</code> (โปรแกรม <code>ZTAXA_R01</code> = enhanced copy ของ <code>RFIDYYWT</code>) คือ <b>selection screen เดียว</b> · output group ตัดสินว่าออกอะไร <span class="ev sys">SYS</span> · เอ็กซ์เรย์โค้ดจริงที่ <a href="wht-engine-xray.html">ZTAXA_R01 X-ray</a></p>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Output group</th><th>Output</th><th>WRICEF</th></tr></thead>
+      <tbody>
+        <tr><td><code>AP1</code></td><td>50 ทวิ + แบบ PND54 (Print form 2)</td><td>FRM-3</td></tr>
+        <tr><td><code>AP2</code></td><td>WHT Certificate for Thailand &amp; Form No. 54 — ในโค้ดคือค่าคงที่ <code>wht_54</code> <span class="ev sys">SYS</span> (knowledge base เคยเขียนว่า PND1 Kor)</td><td>ENH-7 (validation)</td></tr>
+        <tr><td><code>AP3</code></td><td>PND1 Kor — ค่าคงที่ <code>wht_pnd1k</code> · รวมยอดต่อ CoCd / business place / vendor</td><td>ENH-7</td></tr>
+        <tr><td><code>E05</code> / <code>E06</code> · <code>E07</code>–<code>E10</code></td><td>SWC text PND3 / PND53 · PND1 / 1K / 2 / 2K (กรองตามหลักแรกของ WITHT)</td><td>ENH-6 · ENH-5</td></tr>
+        <tr><td><code>E01</code>–<code>E04</code> · <code>E1K</code> · <code>E2K</code></td><td>ใบแนบ + RD e-filing text PND1 / 2 / 3 / 53 / 1A / 2A</td><td><a href="enh1-rd-text-files.html">ENH-1</a></td></tr>
+        <tr><td><code>R03</code></td><td>ใบแนบ PND3 / 53 / 54 (+ ALV recon PND54 ↔ VAT36)</td><td><a href="frm1-wht-attachment.html">FRM-1</a> · <a href="rpt1-wht-vat-recon.html">RPT-1</a></td></tr>
+        <tr><td><code>R21</code> / <code>R22</code></td><td>legacy</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <div class="trap"><b>ทำไม bug หนึ่งพังทุกอย่าง:</b> PC/RI bug ใน selection จะโผล่ใน RPT-1, FRM-1, ENH-1 และ FRM-3 พร้อมกัน → เทสด้วยกัน · RPT-7 รันบนแอป Generic WHT Reporting มาตรฐานตาม FD — อย่าสรุปว่าเป็น ZTAXB_R01 · พูดว่า <b>output group</b> ไม่ใช่ “output code”</div>
+  </section>
+
+  <!-- e-WHT -->
+  <section id="ewht">
+    <div class="sec-head"><span class="sec-num">6</span><h2>e-WHT &amp; 50 ทวิ</h2></div>
+    <ul class="clean">
+      <li><b>e-WHT:</b> ธนาคาร (HSBC / BOFA) หักและนำส่ง RD ภายใน <b>4 วัน</b> · FX ใช้ BOT rate <b>T-2</b> · ธนาคารเป็นผู้ออกหลักฐาน → ธุรกรรม e-WHT <b>ไม่ generate 50 ทวิ ผ่าน DRC</b> · implement ตาม bank readiness <span class="ev bp">BP</span></li>
+      <li>Paper WHT กับ e-WHT ใช้ <b>บัญชี WHT แยกกัน</b> (<code>A212X021</code> / <code>A212X022</code>) — กระทบยอด/นำส่งให้ถูกสาย (course TAX-301)</li>
+      <li>TO-BE (คอร์ส TAX-405): 50 ทวิ, แบบ PND54, ใบแนบ, ไฟล์ RD / SWC <b>แยกตาม PC &amp; RI จาก ZTAXB_R01</b> — <b>ไม่ใช่ DRC</b> (TAX-FRM-5 ถูกยกเลิก แม้ Blueprint ยังเขียนว่า DRC) · WHT / e-WHT ใน payment file ผ่าน DMEE</li>
+      <li>อัตรา e-WHT 1% (Ministerial Reg. 389) หมดอายุ <b>31-Dec-2025</b> — ยืนยันอัตราปัจจุบัน (G6) <span class="ev tbc">TBC</span></li>
+    </ul>
+    <h3>Paper vs e-WHT — ต่างกันตรงไหนในระบบ</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th></th><th>Paper WHT</th><th>e-WHT</th></tr></thead>
+      <tbody>
+        <tr><td>ใครนำส่ง RD</td><td>บริษัท (ยื่นแบบภายในวันที่ 7 / e-filing 15)</td><td>ธนาคาร HSBC / BOFA ภายใน 4 วัน</td></tr>
+        <tr><td>หลักฐานให้ผู้ถูกหัก</td><td>50 ทวิ จาก FRM-3 (output group <code>AP1</code>)</td><td>ธนาคารออกให้ · type แยก <b>ไม่มี certificate numbering</b></td></tr>
+        <tr><td>FX date ใน ENH-2</td><td>BOT <b>T-1</b></td><td>BOT <b>T-2</b> (2 วันทำการก่อนนำส่ง)</td></tr>
+        <tr><td>บัญชี</td><td><code>A212X021</code> WHT foreign adj (paper)</td><td><code>A212X022</code> e-WHT pay (PND3 &amp; 53)</td></tr>
+        <tr><td>Doc types ที่เจอ</td><td colspan="2"><code>SW</code> ENH-2 adjustment · <code>SR</code> unrealised FX-WHT → realised · <code>K1</code> vendor clearing สำหรับ 50 ทวิ</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><b>e-WHT ฝั่ง AR (เราเป็นผู้ถูกหัก):</b> design meeting 29-May (AR · SD · AP · working team · KPDO) → alternative-solution meeting 24-Jun → เลือก <b>Option 1B</b> = substitution user exit แทนที่ WHT type + code บนเอกสาร AR · <b>CR-B</b> in progress (ณ 23-Jul-2026) · AP WHT config + test เสร็จแล้ว <span class="ev agreed">Cadence</span></div>
+  </section>
+
+  <!-- ENTRIES -->
+  <section id="entries">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Posting chain — THB, PND53 3% <span class="ev infer">INFER — verify in FB03</span></h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Doc</th><th>Debit</th><th>Credit</th></tr></thead>
+      <tbody>
+        <tr><td>Invoice (FB60 / MIRO)</td><td><span class="dr">Dr</span> Expense 100,000 + Input VAT 7,000</td><td><span class="cr">Cr</span> Vendor 107,000</td></tr>
+        <tr><td>Payment (F110 / F-53)</td><td><span class="dr">Dr</span> Vendor 107,000</td><td><span class="cr">Cr</span> Bank 104,000 · WHT payable 3,000 (<b>WIT</b>)</td></tr>
+        <tr><td>Remittance</td><td><span class="dr">Dr</span> WHT payable 3,000</td><td><span class="cr">Cr</span> Bank 3,000</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">WHT base ไม่รวม VAT · “วันที่จ่าย” บน 50 ทวิ = วันจ่าย / clearing · กรณีบริษัทรับภาระดู <a href="#grossup">gross-up</a></p>
+  </section>
+
+  <!-- FX -->
+  <section id="fx">
+    <div class="sec-head"><span class="sec-num">8</span><h2>WHT FX adjustment — TAX-ENH-2 (หัวใจของ TAX-301)</h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th style="width:110px">ประเทศ</th><th>AS-IS</th><th>TO-BE (S/4HANA)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Thailand</b></td><td>ทีม tax รันโปรแกรมปรับ rate เองทุกเช้า</td><td rowspan="2"><b>scheduled batch job</b> อิงวันจ่ายจริง — มาตรฐานเดียวกัน TH + MY (lift &amp; shift)</td></tr>
+        <tr><td><b>Malaysia</b></td><td>คำนวณ WHT มือจาก BNM rate 17:00 ของวันจ่าย</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grid2">
+      <div class="card"><span class="ct">Adjustment posting</span>
+        <ul class="clean">
+          <li>G/L <code>A212X021</code> · doc type <code>SW</code> (ตั้งบน selection screen)</li>
+          <li>ผ่าน = สถานะเขียว + เลขเอกสารปรับคลิกเปิดได้</li>
+          <li><b>Test run ไม่ post</b> เอกสารจริง</li>
+          <li>Reversal คืนค่า <code>WITH_ITEM</code> เดิมครบ LC1/LC2/LC3 · reversal เมื่อ payment ถูก reverse = TAX-ENH-16</li>
+          <li>Realized FX ฝั่ง direct tax = <code>A490X034</code> — cost object ยังต้อง discuss · ENH-8 / ENH-2 พึ่ง LC3 จาก GL-ENH-1</li>
+        </ul></div>
+      <div class="card"><span class="ct">FX date rules (course)</span>
+        <ul class="clean">
+          <li>TH paper = <b>T-1</b> · TH e-WHT = <b>T-2</b> · MY = posting date (<b>T</b>)</li>
+          <li>Condition field = <b>Posting Date</b></li>
+          <li>เสาร์–อาทิตย์ไม่มี rate → ใช้ rate ล่าสุด (จ่ายจันทร์ → rate ศุกร์)</li>
+          <li>เอกสาร FC ในบริษัทไทย → update ครบ LC1, LC2, LC3 · WHT payable ใน LC3 ต่าง rate ตาม segment</li>
+        </ul></div>
+    </div>
+    <div class="callout"><b>ทำไมต้องมี ENH-2:</b> GL post ด้วย rate <b>M @ T</b> (หลักบัญชี) แต่เกณฑ์สรรพากรใช้ BOT ของวันทำการก่อนหน้า — ช่องว่างนี้คือเหตุผลของ ENH-2 และของสอง FX columns ใน <a href="rpt1-wht-vat-recon.html">RPT-1</a> · กฎ LC1 ของบรรทัด WHT (M @ posting date −1 ที่ invoice / M @ posting date ที่ payment) อยู่ที่ <a href="doc-verification.html#lc">LC rules</a></div>
+    <h3>Issues ที่รู้แล้ว (routed ให้ ENH-2 owner / GL)</h3>
+    <ul class="clean">
+      <li>Same-day doc “Data not found” (doc 558) · LC3 post fail “Balance in Hard currency USDTH” (doc 580) · label “M9” ค้าง</li>
+      <li><b>GL-ENH-1:</b> <code>WITH_ITEM</code> ไม่ถูก update ด้วยยอด WHT ของ GL ตอน post (8084322568 aux 38,000.70 / 5,700.11 vs GL 38,108.97 / 5,716.35, adj 8084322578) — กระทบ RPT-1 และ FRM-1 ที่อ่าน WITH_ITEM</li>
+    </ul>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">✓</span><h2>Self-check</h2></div>
+    <p class="sec-sub">ชุดคำถามจริงอยู่ที่ <a href="quiz.html">Quiz</a> (หัวข้อ TAX-301)</p>
+    <div class="qbox">
+      <div class="selfq"><p>1. เอกสารปรับ WHT FX ใช้ doc type และ G/L อะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">SW · A212X021 (ตั้งบน selection screen)</div></details></div>
+      <div class="selfq"><p>2. Invoice ของ vendor MM มี WITH_ITEM แต่ amount 0 — ผิดไหม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ไม่ผิด — B0/B2 หักตอนจ่าย amount จะอยู่บน payment</div></details></div>
+      <div class="selfq"><p>3. Gross-up true ของ 100 ที่ 3% เท่าไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">100 × 3/97 = 3.09</div></details></div>
+      <div class="selfq"><p>4. Output group ไหนออกใบแนบ PND3/53/54 และใช้ร่วมกับ object ไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">R03 — FRM-1 (ใบแนบ) และ RPT-1 (recon) บน ZTAXB_R01</div></details></div>
+      <div class="selfq"><p>5. จ่ายวันจันทร์ — โปรแกรม ENH-2 ใช้ rate วันไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">rate วันศุกร์ (ล่าสุดที่ maintain) เพราะเสาร์–อาทิตย์ไม่มี rate</div></details></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · Withholding Tax (TAX-301)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

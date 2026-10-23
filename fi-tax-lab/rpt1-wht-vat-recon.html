@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-RPT-1 Deep-Dive (จาก FSD) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:22px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .src{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+
+  section{margin-top:46px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .num{font-family:'JetBrains Mono',monospace;color:var(--ink-soft);text-align:center;}
+
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:18px 20px;margin:14px 0;background:var(--card);}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+
+  /* meta table (object overview) */
+  table.kv td:first-child{width:200px;font-weight:600;color:var(--petrol-deep);}
+
+  /* FX 3-rule cards */
+  .fxrules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0;}
+  @media(max-width:720px){.fxrules{grid-template-columns:1fr;}}
+  .fxr{border:1.5px solid var(--line);border-top:3px solid var(--brass);border-radius:12px;padding:14px 15px;background:var(--card);}
+  .fxr .n{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);font-weight:600;}
+  .fxr .case{font-size:13.5px;font-weight:700;margin:4px 0 8px;}
+  .fxr .rule{font-size:12.8px;color:var(--ink-soft);line-height:1.5;}
+  .fxr .rule b{color:var(--ink);}
+
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:14px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 16px 14px;font-size:14px;overflow-x:auto;}
+
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.fxr,section,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}details.fold[open] .fold-body{overflow:visible;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-r074">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+  <a class="crumb" href="rpt1-fut-evidence.html">RPT-1 testing (FUT) →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">TAX-RPT-1 · FSD Deep-Dive</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>PND54 ↔ VAT36</span>
+    </div>
+    <h1>TAX-RPT-1 — Reconciliation Report<br><span class="accent">PND.54 ↔ VAT PP36 (รวม Profit Center) · อ่านจาก FSD จริง</span></h1>
+    <div class="meta">
+      <span>T-code · <b>ZTAXB_R01</b></span>
+      <span>Main prog · <b>SAPLZTAXA_R01</b></span>
+      <span>Base · <b>S_P00_07000134</b></span>
+      <span>Output grp · <b>R03</b></span>
+      <span>CoCd · <b>TH01 · TH</b></span>
+    </div>
+    <div class="src">Source: FSD TAX-RPT-1 v0.1 (23/10/2025) · Business Owner: Client Tax team · Geography: Thailand only</div>
+  </header>
+
+  <p class="lede">
+    สรุปแบบ <b>เข้าใจง่าย</b> จาก FSD ตัวจริง — รายงานนี้เอา <b>PND54</b> (WHT จ่ายไปต่างประเทศ) มากระทบยอดกับ
+    <b>VAT36 / PP36</b> (reverse-charge VAT) ที่มักเกิดจากธุรกรรมเดียวกัน (จ่ายค่าบริการต่างประเทศ)
+    · FD เขียนว่าใช้ standard report <code>S_P00_07000134</code> แล้วเพิ่ม field ในจอเลือก — ในระบบจริงคือ <b><code>ZTAXA_R01</code> = enhanced copy ของ <code>RFIDYYWT</code></b> เรียกด้วย T-code <code>ZTAXB_R01</code> และ design หลายข้อถูกตกลงใหม่หลัง FD v0.1 (ดู <a href="#agreed" style="color:var(--petrol);font-weight:600">§2.5</a>)
+  </p>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">Object Overview</a>
+    <a href="#objective">Objective + FX Rules</a>
+    <a href="#agreed">Agreed design (หลัง FD)</a>
+    <a href="#flow">Process Flow</a>
+    <a href="#program">Program + Selection</a>
+    <a href="#join">Logic การ Join</a>
+    <a href="#columns">Report Columns (34)</a>
+    <a href="#test">Test Conditions</a>
+    <a href="#usage">Usage</a>
+    <a href="#neighbours">FRM-1 &amp; ENH-1</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways</b>
+    <ul>
+      <li>FD: standard <code>S_P00_07000134</code> + 2 field ใน <b>Further Selections</b> (Profit Center &amp; Recovery Indicator) · ระบบ: <code>ZTAXB_R01</code> → <code>ZTAXA_R01</code> (Z-copy ของ RFIDYYWT) · output group <code>R03</code></li>
+      <li><b>Step 28 ของ FD v0.1 ถูกแทน</b> ด้วย design 3-Sep (TCURR type M · VAT36 FC → USD → THB) และ multi-PC = <b>split lines</b> (TKT-01) — ดู §2.5</li>
+      <li>แปลงค่าเงินตาม <b>Section 9</b> — 3 กฎ: จ่าย FC→ใช้สกุลจ่าย · invoice THB→ไม่แปลง · invoice FC จ่าย THB→ใช้สกุล invoice</li>
+      <li>ฝั่ง VAT36 (invoice) ใช้ rate <b>T-1</b> (posting date ของวันทำการก่อนหน้า) จาก <code>TCURR-UKURS</code></li>
+      <li>ลำดับก่อนรัน: AP posting → <code>ZTAXA_R03</code> (WHT adj) → month-end <code>ZTAXA_R02</code> (VAT36) → รัน recon</li>
+      <li>Join แกนหลัก: เอกสารจ่าย → <code>BSAK</code> (clearing) → invoice → <code>BKPF/BSET/ACDOCA/WITH_ITEM</code></li>
+    </ul>
+  </div>
+
+  <div class="callout"><b>🧪 ความรู้จากการทำ FUT จริง (31.07–02.08.2026):</b> ID ที่ยืนยันแล้ว — T-code <code>ZTAXB_R01</code> · main program <code>SAPLZTAXA_R01</code> · engine <code>RFIDYYWT</code> · output group ทางการ <b><code>R03</code></b> (FD ไม่ระบุ) · CoCd <code>TH01</code> · รายงาน <b>read-only run ได้เสมอ</b> · defect 3 ตัว + ระบบ unit test 9 TC + ทักษะ post/อ่าน document ทั้งหมดอยู่ที่ <a href="rpt1-fut-evidence.html" style="color:var(--petrol);font-weight:600">TAX-RPT-1 FUT Field Notes →</a></div>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Object Overview</h2></div>
+    <table class="kv"><tbody>
+      <tr><td>WRICEF ID</td><td><code>TAX-RPT-1</code></td></tr>
+      <tr><td>Title</td><td>Reconciliation Report for PND.54 (including profit center)</td></tr>
+      <tr><td>T-code / Main program</td><td><code>ZTAXB_R01</code> / <code>SAPLZTAXA_R01</code> <span style="font-size:11px;color:var(--ink-soft)">(ยืนยันจาก FUT)</span></td></tr>
+      <tr><td>Standard base / engine</td><td><code>S_P00_07000134</code> · <code>RFIDYYWT</code> (Generic WHT Reporting)</td></tr>
+      <tr><td>Output group</td><td><code>R03</code> — Attachment P.N.D. 3/53/54 <span style="font-size:11px;color:var(--ink-soft)">(ทางการ · FD ไม่ระบุ)</span></td></tr>
+      <tr><td>Company code</td><td><code>TH01</code> · TH</td></tr>
+      <tr><td>Module</td><td>SAP Finance — Tax Accounting</td></tr>
+      <tr><td>Description</td><td>สร้างรายงานกระทบยอด PND.54 และ VAT PP36</td></tr>
+      <tr><td>Type</td><td>Report</td></tr>
+      <tr><td>Nature</td><td>Retrofit from ECC (Change)</td></tr>
+      <tr><td>Business Process</td><td><code>01.01.07.03</code> Withholding Tax</td></tr>
+      <tr><td>Complexity / Priority</td><td>Medium · P1</td></tr>
+      <tr><td>Business Owner</td><td>Client Tax team</td></tr>
+      <tr><td>Geography</td><td>Thailand เท่านั้น</td></tr>
+    </tbody></table>
+    <div class="callout"><b>Related docs:</b> BPE = <code>[S/4 Program]_D2.1_Blueprint_01.01.07 Tax Accounting</code> · Previous FS = <code>65_undefined PND54 Attachment</code></div>
+  </section>
+
+  <!-- OBJECTIVE + FX -->
+  <section id="objective">
+    <div class="sec-head"><span class="sec-num">2</span><h2>วัตถุประสงค์ + กฎแปลงค่าเงิน (Section 9)</h2></div>
+    <p class="sec-sub">รายงานเอา WHT (ฝั่ง PND54) มาเทียบกับ VAT36 (ฝั่ง invoice) — ต้องแปลง FC เป็น THB ตามมาตรา 9 ของประมวลรัษฎากร</p>
+    <p class="body"><b>เข้าใจง่าย ๆ:</b> เวลาจ่ายค่าบริการให้ต่างชาติ มักเกิด 2 ภาระพร้อมกัน — หัก <b>WHT (ยื่น PND54)</b> และตั้ง <b>VAT แทน (VAT36 → PP36)</b> รายงานนี้ดึงทั้งสองฝั่งมาวางคู่กัน + แนบ <b>Profit Center / Recovery Indicator</b> เพื่อตรวจว่ายอดตรงกัน</p>
+    <h3>3 กฎแปลงค่าเป็น THB</h3>
+    <div class="fxrules">
+      <div class="fxr"><span class="n">Rule 1</span><div class="case">Invoice FC + Payment FC</div><div class="rule">invoice + จ่าย เป็นสกุลต่างประเทศ (USD/EUR/GBP) → ใช้ <b>สกุลที่จ่าย (payment currency)</b> แปลงเป็น THB</div></div>
+      <div class="fxr"><span class="n">Rule 2</span><div class="case">Invoice THB + Payment USD</div><div class="rule">invoice เป็น THB, จ่ายเป็น USD → ใช้ <b>สกุล invoice (THB)</b> → <b>ไม่ต้องแปลง</b></div></div>
+      <div class="fxr"><span class="n">Rule 3</span><div class="case">Invoice FC + Payment THB</div><div class="rule">invoice เป็นสกุลต่างประเทศ, จ่ายเป็น THB → ใช้ <b>สกุล invoice</b> แปลงเป็น THB</div></div>
+    </div>
+    <div class="callout"><b>สรุปกฎ:</b> ถ้าจ่ายเป็นเงินตราต่างประเทศ ให้ยึด <b>สกุลที่จ่าย</b> · ถ้าจ่ายเป็น THB ให้ยึด <b>สกุล invoice</b> · ถ้า invoice เป็น THB อยู่แล้ว = ไม่แปลง</div>
+  </section>
+
+  <!-- FLOW -->
+
+  <!-- AGREED DESIGN -->
+  <section id="agreed">
+    <div class="sec-head"><span class="sec-num">2.5</span><h2>Design ที่ตกลงหลัง FD v0.1 + สถาปัตยกรรมจริง</h2></div>
+    <p class="sec-sub">FD v0.1 (23/10/2025) ไม่ใช่คำตอบสุดท้าย — ส่วนนี้คือสิ่งที่ <b>ตกลงแล้ว</b> (AGREED) และสิ่งที่ <b>เห็นในระบบ</b> (SYS) · ช่องว่างระหว่าง FD กับ design นี้ต้องปิดด้วย FD v0.2 / CR ก่อน UAT sign-off (G3)</p>
+
+    <h3>สอง FX columns — ห้ามปน</h3>
+    <table>
+      <thead><tr><th>Column</th><th>FD step</th><th>Source</th><th>Date</th><th>Serves</th></tr></thead>
+      <tbody>
+        <tr><td><b>Fx on TaxPmt</b></td><td>22</td><td><code>BKPF-KURSF</code> ของ payment ที่ post แล้ว</td><td>T</td><td>WHT / ภ.ง.ด.54</td></tr>
+        <tr><td><b>Fx on Posting date</b></td><td>28</td><td>รายงาน lookup <code>TCURR</code> เอง</td><td>T-1 (≤ fallback)</td><td>VAT / ภ.พ.36</td></tr>
+      </tbody>
+    </table>
+
+    <style>
+      .tool{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;margin:18px 0;background:linear-gradient(160deg,rgba(37,99,235,.06),rgba(180,83,9,.04));}
+      .tool-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+      .tool-h b{font-size:15px;}
+      .tool-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:5px;padding:2px 7px;}
+      .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;}
+      @media(max-width:640px){.fgrid{grid-template-columns:1fr;}}
+      .fld{display:flex;flex-direction:column;gap:5px;margin:7px 0;}
+      .fld>.lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+      .seg{display:flex;flex-wrap:wrap;gap:6px;}
+      .seg button{font:inherit;font-size:12.5px;border:1.4px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;}
+      .seg button[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol);color:#fff;}
+      .tool input{font:inherit;font-size:13.5px;color:var(--ink);background:var(--card);border:1.4px solid var(--line);border-radius:8px;padding:6px 9px;}
+      .outs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+      @media(max-width:640px){.outs{grid-template-columns:1fr;}}
+      .out{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:11px;padding:10px 12px;background:var(--card);}
+      .out.b{--_c:var(--brass);} .out.w{--_c:var(--warn);}
+      .out .k{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--_c,var(--petrol));}
+      .out .v{font-size:15px;font-weight:700;margin:3px 0;}
+      .out .why{font-size:12px;color:var(--ink-soft);}
+      .days{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;margin:12px 0 4px;}
+      @media(max-width:640px){.days{grid-template-columns:repeat(6,minmax(0,1fr));}}
+      .day{border:1.4px solid var(--line);border-radius:8px;padding:5px 3px;text-align:center;background:var(--card);cursor:pointer;font-size:11px;line-height:1.25;position:relative;min-height:62px;}
+      .day .dw{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);}
+      .day .dd{font-weight:700;font-size:13px;}
+      .day.off{background:repeating-linear-gradient(135deg,var(--line-soft),var(--line-soft) 4px,transparent 4px,transparent 8px);color:var(--ink-soft);}
+      .day.t{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);}
+      .day .mk{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;margin-top:2px;border-radius:4px;padding:0 2px;}
+      .mk.p{background:var(--petrol);color:#fff;} .mk.b{background:var(--brass);color:#fff;} .mk.d{background:var(--petrol-deep);color:#fff;} .mk.w{background:var(--warn);color:#fff;}
+      :root[data-theme="dark"] .mk,:root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .tool-h .tg{color:var(--paper);}
+      .notes{margin-top:8px;font-size:13px;} .notes li{margin:4px 0 4px 18px;}
+    </style>
+    <div class="tool" id="fxTool">
+      <div class="tool-h"><span class="tg">Interactive</span><b>TCURR date simulator — วันจ่ายวันไหน แต่ละคอลัมน์ใช้ rate ของวันไหน</b></div>
+      <div class="fgrid">
+        <div class="fld"><span class="lbl">Payment posting date (T)</span><input type="date" id="fxT" value="2026-08-03" aria-label="วันที่ posting ของ payment"></div>
+        <div class="fld"><span class="lbl">Invoice currency</span><div class="seg" data-name="cur">
+          <button type="button" data-v="THB">THB</button><button type="button" data-v="USD" aria-pressed="true">USD</button><button type="button" data-v="EUR">EUR / GBP</button></div></div>
+      </div>
+      <p class="small" style="font-size:12px;color:var(--ink-soft)">คลิกวันในแถบด้านล่างเพื่อทำเป็น “วันหยุด” (ไม่มี rate ใน TCURR) · เสาร์–อาทิตย์ไม่มี rate อยู่แล้ว</p>
+      <div class="days" id="fxDays" role="group" aria-label="ปฏิทิน 12 วันก่อนถึงวันจ่าย"></div>
+      <div class="outs" aria-live="polite">
+        <div class="out"><div class="k">Fx on TaxPmt · step 22</div><div class="v" id="fxA"></div><div class="why">BKPF-KURSF ของ payment ที่ post แล้ว (rate M ล่าสุด ≤ T) → ภ.ง.ด.54</div></div>
+        <div class="out b"><div class="k">Fx on posting date · step 28</div><div class="v" id="fxB"></div><div class="why" id="fxBw"></div></div>
+        <div class="out w"><div class="k">ถ้า code ใช้ exact match</div><div class="v" id="fxC"></div><div class="why">KT ข้อ 3: GDATU = BUDAT − 1 แบบตรงตัว ไม่มี ≤ fallback</div></div>
+      </div>
+      <ul class="notes" id="fxN"></ul>
+    </div>
+<script>
+(function(){
+  var root=document.getElementById("fxTool"); if(!root) return;
+  var cur="USD", hol={}, $=function(id){return document.getElementById(id);};
+  var DW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var key=function(d){return d.toISOString().slice(0,10);};
+  var add=function(d,n){var x=new Date(d.getTime());x.setUTCDate(x.getUTCDate()+n);return x;};
+  var biz=function(d){var w=d.getUTCDay();return w!==0&&w!==6&&!hol[key(d)];};
+  var le=function(d){var x=d;for(var i=0;i<15;i++){if(biz(x))return x;x=add(x,-1);}return null;};
+  var fmt=function(d){return d?(DW[d.getUTCDay()]+" "+d.toISOString().slice(8,10)+"."+d.toISOString().slice(5,7)+"."+d.toISOString().slice(0,4)):"—";};
+  function render(){
+    var v=$("fxT").value; if(!v) return;
+    var T=new Date(v+"T00:00:00Z"), tm1=add(T,-1);
+    var a=le(T), b=le(tm1), bizBefore=[], x=add(T,-1);
+    while(bizBefore.length<2){ if(biz(x)) bizBefore.push(x); x=add(x,-1); }
+    var g5=bizBefore[1];
+    $("fxA").textContent=fmt(a);
+    $("fxB").textContent=fmt(b);
+    $("fxBw").innerHTML="GDATU = T − 1 = "+fmt(tm1)+" แล้ว ≤ fallback"+(key(b)!==key(tm1)?" → <b>ถอยไปวันทำการล่าสุด</b>":"")+" · rate type M";
+    var exact=biz(tm1);
+    $("fxC").textContent=exact?"เหมือนกัน ("+fmt(tm1)+")":"BLANK — ไม่มี rate วันที่ "+fmt(tm1);
+    var n=[];
+    if(cur==="THB") n.push("Invoice THB → VAT36 ไม่ต้องแปลง: rate ต้องเป็น <b>1.00000</b> (same-currency guard) — ถ้าคอลัมน์ว่าง / VAT36 THB = 0.00 คืออาการ TC-003");
+    else if(cur==="USD") n.push("VAT36 THB = FC × TCURR M (USD:THB) @ "+fmt(b)+" · 5 ทศนิยม · guard UKURS / FFACT = 0");
+    else n.push("VAT36 สองขั้น: (EUR:USD) × (USD:THB) ทั้งคู่ TCURR M @ "+fmt(b)+" — คอลัมน์ VAT36 เท่านั้น ไม่แตะคอลัมน์ WHT · ผล: VAT36 base ≠ WT base ได้ by design");
+    n.push("แถว <b>5G</b> (e-WHT): TCURR entry วันทำการที่สองก่อนวันจ่าย = "+fmt(g5)+" · แถว <b>5A</b>: ใช้ KURSF ของเอกสารตัวเอง");
+    n.push("ENH-2 (TH e-WHT) ใช้ T-2 · MY ใช้ T — คนละเรื่องกับสองคอลัมน์นี้ · ห้ามพูด “T-1” กับ GL team");
+    $("fxN").innerHTML=n.map(function(s){return "<li>"+s+"</li>";}).join("");
+    var h="";
+    for(var i=-10;i<=1;i++){
+      var d=add(T,i), k=key(d), cls="day"+(biz(d)?"":" off")+(i===0?" t":""), mk="";
+      if(i===0) mk+='<span class="mk d">T</span>';
+      if(a&&key(a)===k) mk+='<span class="mk p">TaxPmt</span>';
+      if(b&&key(b)===k) mk+='<span class="mk b">VAT36</span>';
+      if(g5&&key(g5)===k) mk+='<span class="mk w">5G</span>';
+      h+='<button type="button" class="'+cls+'" data-k="'+k+'" aria-label="'+fmt(d)+(hol[k]?" วันหยุด":"")+'"><span class="dw">'+DW[d.getUTCDay()]+'</span><span class="dd">'+k.slice(8,10)+'.'+k.slice(5,7)+'</span>'+mk+'</button>';
+    }
+    $("fxDays").innerHTML=h;
+  }
+  root.addEventListener("click",function(e){
+    var d=e.target.closest(".day"); if(d){ var k=d.getAttribute("data-k"), w=new Date(k+"T00:00:00Z").getUTCDay(); if(w!==0&&w!==6){ if(hol[k]) delete hol[k]; else hol[k]=1; render(); } return; }
+    var b=e.target.closest(".seg button"); if(!b) return;
+    Array.prototype.forEach.call(b.parentNode.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});
+    cur=b.getAttribute("data-v"); render();
+  });
+  $("fxT").addEventListener("input",render);
+  render();
+})();
+</script>
+    <h3>Step 28 final (3-Sep-2026)</h3>
+    <ul class="clean">
+      <li>เลิก ratio approach → <b>TCURR rate type <code>M</code> เท่านั้น</b> · FCURR = สกุล invoice (<code>BSAK-WAERS</code>) → THB · GDATU = วัน posting ของ payment − 1 แบบ ≤ fallback · guard UKURS/FFACT = 0 · 5 ทศนิยม</li>
+      <li><b>VAT36 FC → THB สองขั้น</b> (invoice ccy → USD → THB) เขียนเป็นการคูณ rate สองตัว — ใช้กับคอลัมน์ VAT36 เท่านั้น</li>
+      <li>แถว <b>5A</b> ใช้ KURSF ของเอกสารตัวเอง (5A ที่ยังไม่จ่าย = provisional) · <b>5G</b> ใช้ TCURR entry ที่สองก่อนวันจ่าย (T-2 วันทำการ) และการรวมใน R03 ยังรอคำตัดสิน</li>
+      <li>ผล: <b>VAT36 base ≠ WT base บนแถวที่จ่าย FC — by design</b> · sign: <code>abs(FC) × sign(RC)</code></li>
+      <li>Steps 11/12 อ่าน WITH_ITEM ของ payment · steps 20/21 อ่าน WITH_ITEM ของ invoice ตาม FD — accepted 16-Sep (เปลี่ยน = CR)</li>
+    </ul>
+
+    <h3>Multi-PC / multi-invoice</h3>
+    <ul class="clean">
+      <li><b>Split lines (TKT-01):</b> 1 แถวต่อ ACDOCA WIT line (HSL ≠ 0) · WHT = HSL ของบรรทัด · base prorate ตาม WIT ratio บรรทัดสุดท้ายรับเศษ · payment หลาย vendor ไม่ split · VAT36 บนแถว split + partial payment ยังเปิด (D2)</li>
+      <li><b>Multi-invoice payment (14-Sep, defect เปิด):</b> รายงาน resolve AP voucher ตัวเดียวแล้ว stamp ทุกแถว · การอ่าน FD ที่ตกลง: <b>หนึ่งแถวต่อ invoice ที่ถูก clear</b> ซึ่ง WITH_ITEM ของตัวเอง match vendor + WHT type + code ของแถว payment (loop ไม่ใช่ first hit) · แบ่ง WHT ตาม invoice (<code>WT_QBSHB</code>) หรือ prorate ตาม base — รอ team lead (D3)</li>
+    </ul>
+
+    <h3>สถาปัตยกรรมและจุดที่แถวหายได้ <span class="todo" style="color:var(--petrol-deep);border-color:var(--petrol-deep);background:rgba(37,99,235,.08)">SYS</span></h3>
+    <table>
+      <thead><tr><th style="width:200px">ชั้น</th><th>รายละเอียด</th></tr></thead>
+      <tbody>
+        <tr><td>Output group</td><td><code>R03</code> ผ่าน <code>T059ID01</code> WT_OG_REP_DOC · โค้ดจริงไม่ใช้ <code>sy-tcode</code> (เงื่อนไข sy-tcode ถูก comment ทิ้ง) — ส่ง output group ผ่าน memory ID <code>ZTAXA_R01_OUTPUTGROUP</code> ก่อนเรียก <code>ZTAXA_R01_DISPATCHER</code> (TAX-ENH-7, 03-Aug-2026) · ดู <a href="wht-engine-xray.html" style="color:var(--petrol);font-weight:600">ZTAXA_R01 X-ray</a></td></tr>
+        <tr><td>Standard data source</td><td>FM มาตรฐานของ RFIDYYWT</td></tr>
+        <tr><td>TH BAdI</td><td><code>DELETE_EWHT_DOCUMENTS</code></td></tr>
+        <tr><td><code>ZTAXA_R01_I02</code></td><td>FORM <code>check_witht</code> อ่าน whitelist <code>ZCAX_P01</code> param <code>WHT_TYPE_PND54</code> · DELETE ไม่มี key GJAHR/BUKRS + เสี่ยง sort ของ BINARY SEARCH — ผู้ต้องสงสัยหลักของ doc <code>8084322612</code> (5G/B8) ที่หาย</td></tr>
+        <tr><td><code>ZTAXA_R01_I01</code></td><td>PC/RI filter ลบที่ <b>ระดับ document</b> ใน <code>i01_select_wt_data</code></td></tr>
+        <tr><td>Output</td><td><code>ZTAXA_R01_DISPATCHER</code> / <code>ZTAX_PRINT_ALV</code> (ALV)</td></tr>
+      </tbody>
+    </table>
+    <div class="trap"><b>FD gaps ที่รู้แล้ว:</b> steps 17/18 (PC/RI จากเอกสาร WHT) บอก KTOSL = WIT แต่ไม่บอกวิธีเลือกบรรทัด · step 34 (RI ของ invoice) บอก KTOSL = XST · เคยสรุปว่า step 33 “ไม่มี KTOSL” — <b>ถอนแล้ว</b> (เงื่อนไขอยู่หน้าถัดไปของ FD) · FD ไม่ระบุ output group (R03 ได้รับการยืนยันด้วยวาจา)</div>
+    <p class="body" style="font-size:13px;color:var(--ink-soft)">ทั้งหมดนี้เป็น locked decisions — รายการเต็มและคำถามที่รอคำตัดสินอยู่ที่ <a href="decisions.html#locked" style="color:var(--petrol);font-weight:600">Decisions &amp; Open Points</a> · หลักฐาน FUT อยู่ที่ <a href="rpt1-fut-evidence.html" style="color:var(--petrol);font-weight:600">RPT-1 testing</a></p>
+  </section>
+
+  <section id="flow">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Processing Flow</h2></div>
+    <p class="sec-sub">ต้องรันตามลำดับ — รายงานจะครบก็ต่อเมื่อ 2 โปรแกรมก่อนหน้ารันแล้ว</p>
+
+    <div class="kit-dfd" role="group" aria-label="TAX-RPT-1 processing flow">
+      <div class="kit-dfd__in">
+        <div class="dfd-stage"><div class="dfd-slabel">1 · Posting</div><div class="dfd-node src"><div class="dt">AP Invoice Posting</div><div class="dsub">post VAT36 (บางเคสมีแต่ PND54) · จ่ายด้วย PND54 WHT code</div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">2 · WHT Adj</div><div class="dfd-node prog"><div class="dt">ZTAXA_R03</div><div class="dsub">ปรับ WHT (FX adjustment)</div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">3 · VAT36 (month-end)</div><div class="dfd-node prog"><div class="dt">ZTAXA_R02</div><div class="dsub">รันทุก payment doc → สร้าง VAT liability line items (WRICEF TAX-ENH-3)</div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">4 · Recon</div><div class="dfd-node out"><div class="dt">S_P00_07000134</div><div class="dsub">รายงานกระทบ PND54 ↔ VAT36 (+ PC)</div></div></div>
+      </div>
+      <div class="dfd-legend">
+        <span><i style="background:var(--ink-soft)"></i>posting</span>
+        <span><i style="background:var(--petrol)"></i>program</span>
+        <span><i style="background:var(--warn)"></i>report</span>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th style="width:40px">Ref</th><th>ขั้นตอน</th><th>รายละเอียด</th></tr></thead>
+      <tbody>
+        <tr><td class="num">01</td><td>AP Invoice Posting</td><td>ลง AP invoice พร้อม VAT36 · บางเคส invoice ไม่มี VAT36 แต่มี PND54 · การจ่ายใช้ PND54 WHT code</td></tr>
+        <tr><td class="num">02</td><td>Run WHT Adjustment</td><td>รัน <code>ZTAXA_R03</code> เพื่อปรับ WHT</td></tr>
+        <tr><td class="num">03</td><td>Generate VAT36</td><td>หลังปิดงวด รันทุก payment doc ด้วย <code>ZTAXA_R02 – VAT36</code> → สร้าง VAT liability line items สำหรับยื่น</td></tr>
+        <tr><td class="num">04</td><td>Reconciliation Report</td><td>รันรายงานกระทบยอด PND54 ↔ VAT36 เพื่อตรวจความถูกต้อง/ครบถ้วน</td></tr>
+      </tbody>
+    </table>
+    <div class="trap"><b>ชื่อโปรแกรมในเอกสารไม่นิ่ง:</b> flow เขียน <code>ZTAXA_R03</code> แต่ TC-006 เขียน <code>ZTAXA_E02</code> · field 29 เขียน <code>ZTAXA_R02</code> (WRICEF TAX-ENH-3) ส่วน flow เขียน <code>ZTAXA_R02</code> <span class="todo">TODO: verify ชื่อโปรแกรมที่ถูกต้องกับทีม</span></div>
+  </section>
+
+  <!-- PROGRAM + SELECTION -->
+  <section id="program">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Program &amp; Selection Screen</h2></div>
+    <p class="sec-sub">FD: ใช้ standard แล้วเพิ่ม 2 field ใต้ปุ่ม “Further Selections” · ระบบ: <code>ZTAXA_R01</code> Z-copy (ดู §2.5)</p>
+    <p class="body">Report ใช้ <code>S_P00_07000134</code> (Generic Withholding Tax Reporting) แสดงผลแบบ <b>ALV</b> · Data source = withholding transactions ใน SAP · Module = FI-TAX, FI-AP</p>
+    <table>
+      <thead><tr><th style="width:150px">Field ที่เพิ่ม</th><th>คุณสมบัติ</th><th>Validation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Profit Center</b></td><td>Alphanumeric · Optional · From/To/Multiple</td><td>Validate กับ <code>CEPC</code> (field <code>PRCTR</code>)</td></tr>
+        <tr><td><b>Recovery Indicator</b></td><td>Alphanumeric · Optional · Multiple</td><td>ดึงจาก <code>T8JJ</code> (field <code>RECID</code>) · validate ด้วยคู่ company code (<code>BUKRS</code>) + <code>RECID</code> ใน <code>T8JJ</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- JOIN LOGIC -->
+  <section id="join">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Logic การ Join ข้อมูล (แกนหลัก)</h2></div>
+    <p class="sec-sub">เข้าใจอันนี้อันเดียว แล้วตาราง 34 fields จะอ่านง่ายขึ้นมาก</p>
+    <p class="body"><b>ไอเดีย:</b> เริ่มจาก <b>เอกสารการจ่าย (PND54)</b> → ใช้เลขเอกสารไปหา <b>invoice</b> ผ่านตาราง <code>BSAK</code> (เอกสาร clearing) → แล้วดึงข้อมูลฝั่ง VAT36 จากตารางต่าง ๆ ของ invoice นั้น</p>
+
+    <div class="kit-dfd" role="group" aria-label="TAX-RPT-1 table join logic">
+      <div class="kit-dfd__in">
+        <div class="dfd-stage"><div class="dfd-slabel">เริ่ม · Payment</div><div class="dfd-node src"><div class="dt">เอกสารจ่าย (PND54)</div><div class="dsub">Doc No · Company Code · Fiscal Year</div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">เชื่อม · Clearing</div><div class="dfd-node tbl"><div class="dt">BSAK</div><div class="dsub">AUGBL = เลขเอกสารจ่าย → คืน BELNR (invoice) ที่ BELNR ≠ AUGBL</div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">ดึง · Invoice (VAT36)</div>
+          <div class="dfd-node gl"><div class="dt">BKPF</div><div class="dsub">FX rate (KURSF) · currency (WAERS) · posting date (BUDAT)</div></div>
+          <div class="dfd-node tbl"><div class="dt">BSET</div><div class="dsub">VAT36 base (FWBAS) · amount (FWSTE)</div></div>
+          <div class="dfd-node prog"><div class="dt">ACDOCA (0L)</div><div class="dsub">Profit Center · Recovery Ind · VAT code (KTOSL = VST/XST)</div></div>
+          <div class="dfd-node src"><div class="dt">WITH_ITEM</div><div class="dsub">WT base (WT_QSSHB) · WT amt (WT_QBSHB)</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout"><b>เกร็ด KTOSL (Transaction key ใน ACDOCA):</b> <code>WIT</code> = withholding · <code>VST</code> = input VAT · <code>XST</code> = (ใช้ดึง PC/Recovery ฝั่ง invoice) · rate/ชื่อ WHT มาจาก <code>T059Z</code> · rate แปลงค่ามาจาก <code>TCURR</code></div>
+  </section>
+
+  <!-- COLUMNS -->
+  <section id="columns">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Report Columns ทั้ง 34 (แยก 2 ฝั่ง)</h2></div>
+    <p class="sec-sub">ส่วนใหญ่ “Same as ECC” — ที่น่าสนใจคือ field ที่มี logic ดึงข้ามตาราง (ไฮไลต์ด้านล่าง)</p>
+
+    <details class="fold" open>
+      <summary>ฝั่งจ่าย — Payment Document (PND.54) · fields 1–22</summary>
+      <div class="fold-body">
+        <table>
+          <thead><tr><th style="width:34px">#</th><th style="width:170px">Field</th><th>ความหมาย / ที่มา</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>Cert. No</td><td>เลขที่หนังสือรับรอง — same as ECC</td></tr>
+            <tr><td class="num">2</td><td>Business Place</td><td>สาขาภาษี — same as ECC</td></tr>
+            <tr><td class="num">3</td><td>Document No.</td><td><b>เลขเอกสารการจ่าย (แกนอ้างอิง)</b> — same as ECC</td></tr>
+            <tr><td class="num">4</td><td>Doc WHT FX ADJ</td><td>เอกสารปรับ FX ของ WHT: <code>BSEG</code> (KTOSL=<code>WIT</code>, ตรง BELNR/GJAHR/BUKRS ของขั้น 3) → คืน <code>AUGBL</code> (clearing doc)</td></tr>
+            <tr><td class="num">5–14</td><td>WHT Code / Type / Posting date / Recipient Type / Address / Payment Curr. / WT base-amt / WT amt in RC / Bus Area / Payment Date</td><td>same as ECC</td></tr>
+            <tr><td class="num">15</td><td>WHT rate</td><td><code>T059Z</code> (LAND1=<code>TH</code>, WITHT=type, WT_WITHCD=code) → <code>QSATZ</code></td></tr>
+            <tr><td class="num">16</td><td>WHT Descp</td><td><code>T059Z</code> เงื่อนไขเดียวกัน → <code>TEXT40</code> (ชื่อ)</td></tr>
+            <tr><td class="num">17</td><td>Profit Center</td><td><code>ACDOCA</code> (RLDNR=<code>0L</code>, KTOSL=<code>WIT</code>, ตรงเอกสารขั้น 3) → <code>PRCTR</code></td></tr>
+            <tr><td class="num">18</td><td>Recovery Indicator</td><td><code>ACDOCA</code> (0L, KTOSL=<code>WIT</code>) → <code>RECID</code></td></tr>
+            <tr><td class="num">19</td><td>AP Voucher No.</td><td><b>ตัวเชื่อมไป invoice:</b> <code>BSAK</code> (AUGBL=เลขจ่ายขั้น 3) → <code>BELNR</code> ที่ BELNR ≠ AUGBL (+ BUKRS, GJAHR)</td></tr>
+            <tr><td class="num">20</td><td>WT base/amt FC</td><td><code>WITH_ITEM</code> (ตรง BUKRS/GJAHR/BELNR ของขั้น 19) → <code>WT_QSSHB</code></td></tr>
+            <tr><td class="num">21</td><td>WT amt in FC</td><td><code>WITH_ITEM</code> → <code>WT_QBSHB</code></td></tr>
+            <tr><td class="num">22</td><td>Fx. On TaxPmt</td><td><code>BKPF</code> (เอกสารจ่ายขั้น 3) → <code>KURSF</code> (exchange rate)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>ฝั่ง invoice — Invoice Document (VAT 36) · fields 23–34</summary>
+      <div class="fold-body">
+        <table>
+          <thead><tr><th style="width:34px">#</th><th style="width:170px">Field</th><th>ความหมาย / ที่มา</th></tr></thead>
+          <tbody>
+            <tr><td class="num">23</td><td>AP Voucher No.</td><td>= ขั้น 19 (<code>BSAK-BELNR</code>)</td></tr>
+            <tr><td class="num">24</td><td>Posting Date</td><td><code>BKPF</code> (BELNR=invoice ขั้น 19) → <code>BUDAT</code></td></tr>
+            <tr><td class="num">25</td><td>VAT36 base/amt FC</td><td><code>BSET</code> (invoice ขั้น 19) → <code>FWBAS</code> (tax base)</td></tr>
+            <tr><td class="num">26</td><td>VAT36 amt FC</td><td><code>BSET</code> → <code>FWSTE</code> (amount)</td></tr>
+            <tr><td class="num">27</td><td>Invoice doc curr</td><td><code>BKPF</code> → <code>WAERS</code> (สกุลเงิน invoice)</td></tr>
+            <tr><td class="num">28</td><td>Fx on Posting date</td><td>LC1 ใช้ rate <b>วันทำการก่อนหน้า (T-1)</b> → <code>TCURR-UKURS</code> ที่ <code>GDATU</code> = <code>BUDAT</code> − 1 · เลือกสกุลตาม 3 กฎ Section 9</td></tr>
+            <tr><td class="num">29</td><td>VAT36 Doc No.</td><td>ดึงจากโปรแกรม <code>ZTAXA_R02</code> (WRICEF <code>TAX-ENH-3</code>) ด้วย AP voucher no + company code + fiscal year</td></tr>
+            <tr><td class="num">30</td><td>VAT36 base (THB)</td><td>= <code>BSET-FWBAS</code> (ขั้น 25) × <code>TCURR-UKURS</code> (ขั้น 28)</td></tr>
+            <tr><td class="num">31</td><td>VAT36 PmtAmt (THB)</td><td>= <code>BSET-FWSTE</code> (ขั้น 26) × <code>TCURR-UKURS</code> (ขั้น 28)</td></tr>
+            <tr><td class="num">32</td><td>VAT code</td><td><code>ACDOCA</code> (0L, KTOSL=<code>VST</code>) → <code>MWSKZ</code></td></tr>
+            <tr><td class="num">33</td><td>Profit center</td><td><code>ACDOCA</code> (0L, KTOSL=<code>XST</code>) → <code>PRCTR</code></td></tr>
+            <tr><td class="num">34</td><td>Recovery Indicator (Invoice)</td><td><code>ACDOCA</code> (0L, KTOSL=<code>XST</code>) → <code>RECID</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <p class="body" style="font-size:12.5px;color:var(--ink-soft)">RC = Reporting Currency · FC = Foreign Currency · fields 5–14 เป็น “same as ECC” จึงย่อรวมไว้</p>
+  </section>
+
+  <!-- TEST -->
+  <section id="test">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Test Scenarios (Given / When / Then)</h2></div>
+    <p class="sec-sub">9 เคสจาก FSD จริง + validation อีก 2 · จัดกลุ่ม: สกุลเงิน (FX) · selection · dependency · edge/negative</p>
+    <p class="body" style="font-size:12.5px;color:var(--ink-soft)"><b>Badge:</b> <span style="color:var(--petrol-deep);font-weight:600">FSD</span> = จากเอกสารจริง · <span style="color:var(--warn);font-weight:600">PROPOSED</span> = ผม derive ต้อง verify</p>
+    <p class="body" style="font-size:13px"><b>ก่อนทดสอบ (precondition):</b> ต้องมี WHT ของ recipient type “54” posted แล้ว · invoice ต้อง post ด้วย VAT PP36 tax code (บางเคสอาจมีแต่ PND54)</p>
+    <div class="kit-tc">
+      <div class="tc fx">
+        <div class="tc-h"><span class="tc-id">TC-001</span><span class="tc-cat">FX · จ่าย FC</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">Vendor invoice + VAT36 + PND54 code เป็น <b>FC</b> (invoice EUR/GBP) และจ่ายเป็น <b>USD</b></span>
+          <span class="l">When</span><span class="v">รันรายงาน reconciliation</span>
+          <span class="l">Then</span><span class="v">ใช้ <b>payment currency</b> แปลงเป็น THB · base amounts reconcile</span>
+        </div>
+      </div>
+      <div class="tc fx">
+        <div class="tc-h"><span class="tc-id">TC-002</span><span class="tc-cat">FX · THB ล้วน</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">invoice + จ่าย เป็น <b>THB</b> ทั้งคู่</span>
+          <span class="l">When</span><span class="v">รันรายงาน</span>
+          <span class="l">Then</span><span class="v">ใช้สกุล invoice (THB) · <b>ไม่ต้องแปลง</b></span>
+        </div>
+      </div>
+      <div class="tc fx">
+        <div class="tc-h"><span class="tc-id">TC-003</span><span class="tc-cat">FX · invoice THB</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">invoice <b>THB</b>, จ่าย <b>USD</b></span>
+          <span class="l">When</span><span class="v">รันรายงาน</span>
+          <span class="l">Then</span><span class="v">ใช้ document currency (THB) · base amounts reconcile</span>
+        </div>
+      </div>
+      <div class="tc fx">
+        <div class="tc-h"><span class="tc-id">TC-004</span><span class="tc-cat">FX · จ่าย THB</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">invoice <b>USD</b>, จ่าย <b>THB</b></span>
+          <span class="l">When</span><span class="v">รันรายงาน</span>
+          <span class="l">Then</span><span class="v">ใช้ document currency (USD) แปลงเป็น THB · base amounts reconcile</span>
+        </div>
+      </div>
+      <div class="tc sel">
+        <div class="tc-h"><span class="tc-id">TC-005</span><span class="tc-cat">Selection</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">ธุรกรรมหลาย Profit Center / Recovery Indicator</span>
+          <span class="l">When</span><span class="v">ใส่ <b>Profit Center</b> + <b>Recovery Indicator</b> ในจอเลือก</span>
+          <span class="l">Then</span><span class="v">รายงานเลือกรายการตาม PC &amp; RI ที่ระบุ</span>
+        </div>
+      </div>
+      <div class="tc dep">
+        <div class="tc-h"><span class="tc-id">TC-006</span><span class="tc-cat">Dependency</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">มีการสร้าง WHT tax adjustment ด้วย <code>ZTAXA_E02</code> (= ZTAXA_R03)</span>
+          <span class="l">When</span><span class="v">รัน adjustment <b>ก่อน</b> recon</span>
+          <span class="l">Then</span><span class="v">column <b>Doc WHT FX Adj</b> มีค่าในรายงาน</span>
+        </div>
+      </div>
+      <div class="tc dep">
+        <div class="tc-h"><span class="tc-id">TC-007</span><span class="tc-cat">Dependency</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">มีการรัน <code>ZTAXA_R02</code> (VAT36)</span>
+          <span class="l">When</span><span class="v">รัน <b>ก่อน</b> recon</span>
+          <span class="l">Then</span><span class="v">column <b>VAT36 Doc No.</b> มีค่าในรายงาน</span>
+        </div>
+      </div>
+      <div class="tc map">
+        <div class="tc-h"><span class="tc-id">TC-008</span><span class="tc-cat">Edge · PND54 only</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">invoice มีแต่ <b>PND54</b> ไม่มี VAT36 (invoice USD, จ่าย THB)</span>
+          <span class="l">When</span><span class="v">รันรายงาน</span>
+          <span class="l">Then</span><span class="v">column ฝั่ง <b>VAT36 ต้องว่าง</b></span>
+        </div>
+      </div>
+      <div class="tc neg">
+        <div class="tc-h"><span class="tc-id">TC-009</span><span class="tc-cat">Negative</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">มีแต่ <b>VAT36</b> ไม่มี PND54</span>
+          <span class="l">When</span><span class="v">รันรายงาน</span>
+          <span class="l">Then</span><span class="v">รายการ <b>ต้องไม่</b> ปรากฏในรายงาน</span>
+        </div>
+      </div>
+      <div class="tc sel">
+        <div class="tc-h"><span class="tc-id">TC-010</span><span class="tc-cat">Selection · validate</span><span class="tc-src prop">Proposed</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">ใส่ <b>Profit Center</b> ที่ไม่มีใน <code>CEPC</code> ของ company code นั้น</span>
+          <span class="l">When</span><span class="v">ยืนยันในจอเลือก</span>
+          <span class="l">Then</span><span class="v">validation <b>ไม่ผ่าน</b> (ตรวจกับ CEPC-PRCTR)</span>
+        </div>
+      </div>
+      <div class="tc sel">
+        <div class="tc-h"><span class="tc-id">TC-011</span><span class="tc-cat">Selection · validate</span><span class="tc-src prop">Proposed</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">ใส่ <b>Recovery Indicator</b> ที่ไม่ valid สำหรับ company code (ตาม <code>T8JJ</code>)</span>
+          <span class="l">When</span><span class="v">ยืนยันใน Further Selections</span>
+          <span class="l">Then</span><span class="v">validation <b>ไม่ผ่าน</b> (ตรวจคู่ BUKRS + RECID ใน T8JJ)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USAGE -->
+  <section id="usage">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Usage &amp; Roles</h2></div>
+    <table class="kv"><tbody>
+      <tr><td>Frequency</td><td>Monthly · Ad Hoc</td></tr>
+      <tr><td>Trigger</td><td>Manual execution (T-code → list output)</td></tr>
+      <tr><td>Volume</td><td>~800–1,000 records</td></tr>
+      <tr><td>Output</td><td>ALV · Online + File Download (Summary + Detail)</td></tr>
+      <tr><td>Roles (display)</td><td>Accountant · Tax Accountant · AP Accountant · Business Analyst</td></tr>
+      <tr><td>Error handling</td><td>ไม่มี exception ใหม่ (No new exception)</td></tr>
+    </tbody></table>
+  </section>
+
+  <!-- NEIGHBOURS -->
+  <section id="neighbours">
+    <div class="sec-head"><span class="sec-num">8.5</span><h2>พี่น้องบนโปรแกรมเดียวกัน — TAX-FRM-1 &amp; TAX-ENH-1 (ของซีทั้งคู่)</h2></div>
+    <p class="sec-sub">3 objects ของซีนั่งอยู่บน <b>selection screen เดียวกัน</b> (+ FRM-3 ของเพื่อนร่วมทีม)</p>
+
+    <div class="callout"><b>ทำไมส่วนนี้สำคัญ:</b> ซีเป็นเจ้าของ <b>ทั้ง RPT-1, FRM-1 และ ENH-1</b> ซึ่งใช้ wrapper / filter เดียวกัน —
+      เวลาแก้ selection screen หรือ logic การกรอง <b>ต้อง regression ทั้งสามตัว</b> (และ FRM-3)
+      และเวลารายงาน defect ต้องระบุให้ชัดว่าพังที่ <b>ALV / ฟอร์ม / ไฟล์</b></div>
+
+    <table class="kv"><tbody>
+      <tr><td><b>ตัวเรียกร่วม</b></td><td><code>ZTAXB_R01</code> → <code>ZTAXA_R01</code> (Z-copy ของ RFIDYYWT / Generic Withholding Tax Reporting)</td></tr>
+      <tr><td><b>Field ที่เพิ่มร่วมกัน</b></td><td>Profit Center (validate <code>CEPC-PRCTR</code>) · Recovery Indicator (validate <code>T8JJ-RECID</code> คู่กับ <code>BUKRS</code>) — ทั้ง 3 objects ใช้กติกาเดียวกันเป๊ะ</td></tr>
+      <tr><td><b>Output group</b></td><td><code>R03</code> คือประตูที่เรียก <b>ฟอร์มใบแนบของ TAX-FRM-1</b> — ตรงกับที่คุณเห็นตอน FUT</td></tr>
+    </tbody></table>
+
+    <table class="sticky-head" style="margin-top:14px">
+      <thead><tr><th style="width:120px">Object</th><th style="width:130px">Output</th><th>WHT Type ที่ครอบคลุม</th><th style="width:110px">เจ้าของ</th></tr></thead>
+      <tbody>
+        <tr style="background:rgba(180,83,9,.10)"><td><b><code>TAX-RPT-1</code></b></td><td>ALV — recon ภ.ง.ด.54 ↔ ภ.พ.36</td><td>ฝั่ง 54 (<code>5A</code> / <code>5D</code>)</td><td><b>★ คุณ</b></td></tr>
+        <tr><td><code>TAX-FRM-1</code></td><td>Adobe Form — <b>ใบแนบ PDF</b></td><td><code>3A–3F</code> (ภ.ง.ด.3) · <code>4A–4F</code> (53) · <code>5A</code>,<code>5D</code> (54)</td><td><b>★ ซี</b></td></tr>
+        <tr><td><code>TAX-ENH-1</code></td><td>DMEEX — <b>text file e-Filing</b></td><td><code>1A–1E</code> · <code>2A</code> · <code>3A–3F</code> · <code>4A–4F</code></td><td><b>★ ซี</b></td></tr>
+      </tbody>
+    </table>
+
+    <p class="body" style="margin-top:12px">
+      <b>ข้อสังเกตที่ทำให้เห็นภาพทั้งกระบวนการยื่นภาษี:</b>
+    </p>
+    <ul class="clean">
+      <li><b>ภ.ง.ด. 54</b> มี <b>ใบแนบ (FRM-1)</b> และ <b>รายงานกระทบยอด (RPT-1)</b> แต่ <b>ไม่มี text file</b></li>
+      <li><b>ภ.ง.ด. 1 / 1ก / 2 / 2ก</b> มี <b>text file (ENH-1)</b> แต่ <b>ไม่มีใบแนบใน FRM-1</b></li>
+      <li><b>ภ.ง.ด. 3 / 53</b> มีครบทั้ง <b>ใบแนบ + text file</b></li>
+    </ul>
+
+    <div class="callout"><b>Dependency ที่ FD ของ FRM-1 เขียนไว้ตรง ๆ:</b>
+      “<b>Dependency on WRICEF TAX-RPT-1 to execute the report</b>”
+      → ถ้า RPT-1 ยังมี defect ค้าง FRM-1 ก็เทสต่อไม่ได้ — ทั้งสองเป็นของซี จึงต้องวางลำดับ FUT เอง (RPT-1 ก่อน)
+      · กฎการแบ่งยอดต่อ PC ของ FRM-1 ต้องใช้คำตัดสินเดียวกับ TKT-01</div>
+
+    <p class="body" style="margin-top:10px">
+      → <a href="frm1-wht-attachment.html" style="color:var(--petrol);font-weight:600">เปิด TAX-FRM-1 deep-dive</a> ·
+      <a href="enh1-rd-text-files.html" style="color:var(--petrol);font-weight:600">เปิด TAX-ENH-1 deep-dive</a> ·
+      <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N — วิธีพิสูจน์ข้อมูลด้วยตัวเอง</a>
+    </p>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Self-check</h2></div>
+    <p class="sec-sub">ตอบในใจก่อนกดเฉลย — โฟกัสจุดที่ออกสอบ/ทดสอบบ่อย</p>
+    <div class="qbox">
+      <div class="selfq"><p>1. TAX-RPT-1 ใช้โปรแกรมอะไร และเพิ่ม field อะไรในจอเลือก?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">T-code <b>ZTAXB_R01</b> → <b>ZTAXA_R01</b> (Z-copy ของ RFIDYYWT / S_P00_07000134 ตามที่ FD อ้าง) · เพิ่ม <b>Profit Center</b> (validate กับ CEPC) และ <b>Recovery Indicator</b> (จาก T8JJ) ใต้ Further Selections</div></details></div>
+      <div class="selfq"><p>2. Invoice เป็น USD จ่ายเป็น THB — ใช้สกุลไหนแปลงเป็น THB?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ใช้ <b>สกุล invoice (USD)</b> แปลงเป็น THB (Rule 3 / TC-004)</div></details></div>
+      <div class="selfq"><p>3. ฝั่ง VAT36 (invoice) ใช้ rate ของวันไหน และจากตารางใด?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">Posting date <b>T-1</b> (วันทำการก่อนหน้า) · จาก <b>TCURR-UKURS</b> ที่ GDATU = BUDAT − 1</div></details></div>
+      <div class="selfq"><p>4. ต้องรันโปรแกรมใดก่อน recon จึงจะได้ column WHT FX Adj และ VAT36 Doc No.?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>ZTAXA_R03</b> (WHT adj → Doc WHT FX Adj) และ <b>ZTAXA_R02</b> (VAT36 → VAT36 Doc No.)</div></details></div>
+      <div class="selfq"><p>5. เชื่อมเอกสารจ่ายไป invoice ผ่านตารางอะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>BSAK</b> — AUGBL (clearing) = เลขเอกสารจ่าย แล้วคืน BELNR (invoice) ที่ BELNR ≠ AUGBL</div></details></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · TAX-RPT-1 Deep-Dive (จาก FSD v0.1)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+</div>
+</body>
+</html>

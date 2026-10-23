@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-RPT-3 — Current Tax Report ไทย (ZTAXA_R05) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:960px;margin:0 auto;padding:40px 0 90px;}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.1;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:21px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:26px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:14px;font-weight:700;margin:18px 0 6px;color:var(--ink);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;white-space:nowrap;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  tbody td.n{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
+  tbody td.num{text-align:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;white-space:nowrap;}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .arrow{color:var(--brass);font-weight:700;}
+  .attrs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 6px;}
+  @media(max-width:640px){.attrs{grid-template-columns:1fr 1fr;}}
+  .attr{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:var(--paper);}
+  .attr .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .attr .v{font-size:13.5px;font-weight:600;margin-top:2px;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:12px 0 12px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:11px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  .fx{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.9;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:14px 16px;margin:12px 0;overflow-x:auto;white-space:pre-wrap;}
+  .fx b{color:#F2C57C;}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);}
+  .chain .node{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;border:1.3px solid var(--petrol);color:var(--petrol-deep);border-radius:8px;padding:6px 10px;background:rgba(37,99,235,.06);}
+  .chain .node.out{border-color:var(--brass);color:var(--brass);background:rgba(180,83,9,.07);}
+  .chain .sep{color:var(--brass);font-weight:700;}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:11pt;}.masthead{animation:none;}.keybox,.callout,.trap,section,.chain,.fx{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}.tw{overflow:visible;}.fx{background:#f0f0f0;color:#111;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-r028">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">FD Deep-Dive · Report</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>01.01.07.04 Period-End Tax Reporting</span>
+    </div>
+    <h1>TAX-RPT-3 — <span class="accent">Current Tax Report ประเทศไทย (ZTAXA_R05)</span></h1>
+    <div class="meta">
+      <span>Type · <b>Report</b></span>
+      <span>Nature · <b>Retrofit with change</b></span>
+      <span>T-code · <b>ZTAXA_R05</b></span>
+      <span>Output · <b>ALV Grid</b></span>
+      <span>Complexity · <b>Complex</b></span>
+      <span>Priority · <b>P1</b></span>
+      <span>Geo · <b>Thailand</b></span>
+    </div>
+  </header>
+
+  <p class="lede">
+    รายงานนี้คือ <b>“เครื่องคำนวณภาษีเงินได้นิติบุคคลรายเดือน”</b> — เอางบการเงินตั้งต้น แล้วบวก/ลบรายการปรับปรุงทางภาษี
+    จนได้กำไรทางภาษี × อัตรา = ภาษีที่ต้องตั้งค้างจ่าย ทุกบรรทัดในรายงานมาจาก <b>3 แหล่งเท่านั้น</b> —
+    <b>GL node</b> (ยอดจากระบบ) · <b>UP node</b> (ไฟล์อัปโหลด) · <b>CL node</b> (สูตรคำนวณ)
+    FD ฉบับนี้เป็น <b>delta document</b> — เขียนเฉพาะสิ่งที่เปลี่ยนจาก ECC → S/4HANA
+  </p>
+
+  <div class="attrs">
+    <div class="attr"><div class="k">Business process</div><div class="v">01.01.07.04</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">Period-End Tax Reporting</div></div>
+    <div class="attr"><div class="k">Frequency</div><div class="v">Monthly + Ad Hoc</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">มี option รัน background</div></div>
+    <div class="attr"><div class="k">Users</div><div class="v">6 users</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">Accountant / Tax / BA</div></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px"><b>🔗 อ่านเป็นชุด — “Current Tax Suite” 3 objects:</b>
+    <b>TAX-RPT-3</b> (ไทย · หน้านี้) ·
+    <a href="rel-current-tax-intl.html" style="color:var(--petrol);font-weight:600">TAX-RPT-4 (ต่างประเทศ)</a> ·
+    <a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5 (Loss Carried Forward)</a>
+    — ทั้งสามใช้ตารางชุดเดียวกัน (<code>ZTAXA_T05–037</code>) และส่งค่าให้กันผ่าน <code>ZTAXB_T01</code>
+  </div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">1 · ภาพรวม + 3 node</a>
+    <a href="#segments">2 · Segment &amp; layout</a>
+    <a href="#tables">3 · ตาราง 13 ตัว</a>
+    <a href="#screen">4 · Selection screen</a>
+    <a href="#currency">5 · LC1/LC2/LC3</a>
+    <a href="#manual">6 · Manual adj จากระบบ</a>
+    <a href="#ibcsvcs">7 · IBCSVCS (1013)</a>
+    <a href="#ibctc">8 · IBCTC (1086)</a>
+    <a href="#boi">9 · BOI (1126)</a>
+    <a href="#test">10 · Test</a>
+    <a href="#expert">11 · Expert notes</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways — 8 ข้อที่ตอบได้ = เข้าใจ object นี้</b>
+    <ul>
+      <li>โครงข้อมูล = <b>GL node</b> (จาก ACDOCA) + <b>UP node</b> (flat file → <code>ZTAXA_T03</code>) + <b>CL node</b> (สูตร)</li>
+      <li>Segment เปลี่ยนชื่อ: <code>CIT_RC→CIT_TH</code> · <code>PITA1→PITA1_TH</code> · <code>PITA3→PITA3_TH</code> · <code>PITA4→PSC_TH</code> · <code>MTJDA</code> เท่าเดิม</li>
+      <li>Layout เพิ่ม <b>BOI (ใหม่)</b> และเปลี่ยน <code>IHQ → IBC-TC</code> → รวมเป็น <b>8 layouts</b></li>
+      <li>สูตรกลาง: <b>ANNUAL (P/L) AFTER LCF = ANNUAL (P/L) − ALLOWANCES − LCF − LCF adjustment</b> ใช้กับ <b>ทุก layout</b></li>
+      <li><b>เลิกใช้ “Exclude profit center O*”</b> ของ ECC — S/4 ต้องรวม profit center O* ด้วย</li>
+      <li>Default ใหม่: <b>Depreciation area 32</b> · <b>Ledger T1</b> (สาขาใช้ <b>02</b> / <b>0L</b>)</li>
+      <li>Manual adjustment 5 รายการถูกดึงจาก GL แทน flat file แล้ว (ลดงาน manual)</li>
+      <li>IBC = <b>3% กับ intercompany · 20% กับ non-intercompany</b> — ตัดสินด้วย <b>trading partner (<code>VBUND</code>)</b></li>
+    </ul>
+  </div>
+
+  <!-- 1 -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>ภาพรวม — รายงานนี้คำนวณอะไร</h2></div>
+    <p class="sec-sub">เครื่องมือคำนวณและประมาณการ “ภาษีเงินได้นิติบุคคลค้างจ่าย” รายเดือน</p>
+
+    <p class="body">
+      หลักการทางภาษี: <b>กำไรทางบัญชี ≠ กำไรทางภาษี</b> — ต้องปรับด้วย 2 ตระกูลรายการ
+    </p>
+    <ul class="clean">
+      <li><b>Permanent difference</b> — ต่างถาวร ไม่กลับรายการ (เช่น ค่าปรับ · เงินบริจาคเกินเกณฑ์ · รายจ่ายต้องห้าม)</li>
+      <li><b>Temporary difference</b> — ต่างชั่วคราว กลับรายการในอนาคต (เช่น ค่าเสื่อมบัญชี vs ค่าเสื่อมภาษี · ประมาณการหนี้สิน)</li>
+    </ul>
+
+    <div class="chain">
+      <span class="node">กำไรทางบัญชี<br><span style="font-weight:400">GL node</span></span>
+      <span class="sep">±</span>
+      <span class="node">Permanent diff</span>
+      <span class="sep">±</span>
+      <span class="node">Temporary diff</span>
+      <span class="sep">−</span>
+      <span class="node">Allowances / LCF</span>
+      <span class="sep">×</span>
+      <span class="node">Tax rate</span>
+      <span class="sep">=</span>
+      <span class="node out">ภาษีค้างจ่าย</span>
+    </div>
+
+    <h3>3 ประเภท node — จำให้ขึ้นใจ</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Node</th><th>ชื่อเต็ม</th><th>แหล่งข้อมูล</th><th>แก้ไขยังไง</th></tr></thead>
+      <tbody>
+        <tr><td><code>GL</code></td><td>General Ledger node</td><td>ยอดจาก <code>ACDOCA</code> ผ่าน mapping <code>ZTAXA_T01</code></td><td>แก้ที่ mapping table หรือแก้เอกสาร</td></tr>
+        <tr><td><code>UP</code></td><td>Upload node</td><td>flat file (โปรแกรม <code>ZTAXA_R06</code>) → เก็บใน <code>ZTAXA_T03</code></td><td>อัปโหลดใหม่ทับ</td></tr>
+        <tr><td><code>CL</code></td><td>Calculation node</td><td>สูตรจาก node อื่น</td><td>แก้ไม่ได้โดยตรง — ต้องแก้ต้นทาง</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>ประโยชน์ตอน debug:</b> เวลามีคนบอกว่า “ตัวเลขผิด” ให้ถามก่อนว่า
+      <b>บรรทัดนั้นเป็น node ประเภทไหน</b> — ถ้าเป็น GL ให้ไล่ mapping + ACDOCA ·
+      ถ้าเป็น UP ให้ไปดูไฟล์ที่อัปโหลด · ถ้าเป็น CL ให้ไล่ node ต้นทางที่ป้อนเข้าสูตร
+      ไม่ต้องเดา — ประเภท node ระบุอยู่ใน <code>ZTAXA_T06</code></div>
+
+    <h3>Assumption สำคัญของ FD</h3>
+    <p class="body">
+      “<b>Revaluated information will be based on LC3</b> — ข้อมูลที่ตีราคาใหม่สำหรับ current tax TH report
+      จะอยู่ใน <code>ACDOCA</code> field ของ LC3 <b>ไม่ว่าจะเป็น standard หรือ custom solution ฝั่ง GL</b>”
+      → แปลว่าถ้าทีม GL เปลี่ยนวิธีทำ revaluation รายงานนี้ไม่ต้องแก้ ตราบใดที่ค่ายังลงที่ LC3
+    </p>
+  </section>
+
+  <!-- 2 -->
+  <section id="segments">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Segment ที่เปลี่ยนชื่อ + Layout ทั้ง 8</h2></div>
+    <p class="sec-sub">การเปลี่ยนชื่อ segment ดูเล็ก แต่กระทบทุก config ที่อ้างชื่อเดิม</p>
+
+    <h3>Segment code — ECC → S/4HANA</h3>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>ECC (เดิม)</th><th>S/4HANA (ใหม่)</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><code>CIT_RC</code></td><td><b><code>CIT_TH</code></b></td><td>Corporate Income Tax — ธุรกิจปกติในไทย</td></tr>
+        <tr><td class="n">2</td><td><code>PITA1</code></td><td><b><code>PITA1_TH</code></b></td><td>Petroleum Income Tax Act — ระบบสัมปทาน (ชุดที่ 1)</td></tr>
+        <tr><td class="n">3</td><td><code>PITA3</code></td><td><b><code>PITA3_TH</code></b></td><td>PITA ชุดที่ 3</td></tr>
+        <tr><td class="n">4</td><td><code>PITA4</code></td><td><b><code>PSC_TH</code></b></td><td><b>เปลี่ยนความหมายชัดเจนขึ้น</b> — Production Sharing Contract</td></tr>
+        <tr><td class="n">5</td><td><code>MTJDA</code></td><td><code>MTJDA</code></td><td>Malaysia–Thailand Joint Development Area (ไม่เปลี่ยน)</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>ทำไม PITA4 → PSC_TH ถึงสำคัญกว่าที่คิด:</b> ชื่อเดิมสื่อว่าเป็น “PITA ตัวที่ 4”
+      แต่จริง ๆ เป็น <b>ระบบภาษีคนละแบบ</b> (แบ่งปันผลผลิต ไม่ใช่สัมปทาน) การเปลี่ยนชื่อทำให้
+      คนอ่านรายงานเข้าใจถูกทันที และสอดคล้องกับ segment ต่างประเทศที่ใช้ <code>PSC_*</code> เหมือนกัน
+      (<a href="rel-current-tax-intl.html" style="color:var(--petrol);font-weight:600">ดู TAX-RPT-4</a> — <code>PSC_DZ</code>, <code>PSC_MM</code>, <code>PSC_VN</code>, <code>PSC_OM</code>, <code>PSC_MY</code>)</div>
+
+    <h3>Report layout ทั้งหมดใน S/4HANA</h3>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>ECC</th><th>S/4HANA</th><th>Company code ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td>CIT_RC</td><td><code>CIT_TH</code></td><td>TH01 Client · XB01 (สาขาต่างประเทศ)</td></tr>
+        <tr><td class="n">2</td><td>PITA1</td><td><code>PITA1_TH</code></td><td>—</td></tr>
+        <tr><td class="n">3</td><td>PITA3</td><td><code>PITA3_TH</code></td><td>—</td></tr>
+        <tr><td class="n">4</td><td>PITA4</td><td><code>PSC_TH</code></td><td>—</td></tr>
+        <tr><td class="n">5</td><td>IBC-SVCS</td><td><code>IBC-SVCS</code></td><td><b>1013</b> Client SERVICES</td></tr>
+        <tr><td class="n">6</td><td><b>IHQ</b></td><td><b><code>IBC-TC</code></b> <span style="color:var(--warn)">(เปลี่ยน)</span></td><td><b>1086</b> Client TC</td></tr>
+        <tr><td class="n">7</td><td>—</td><td><b><code>BOI</code></b> <span style="color:var(--warn)">(ใหม่)</span></td><td><b>1126</b> FST</td></tr>
+        <tr><td class="n">8</td><td>MTJDA</td><td><code>MTJDA</code></td><td>—</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      <b>IHQ (International Headquarters)</b> เป็นสิทธิประโยชน์ทางภาษีรุ่นเก่าที่ถูกยกเลิก และแทนที่ด้วย
+      <b>IBC (International Business Center)</b> — จึงต้องเปลี่ยนทั้งชื่อ layout, ชื่อตาราง และ checkbox บนหน้าจอ
+    </p>
+  </section>
+
+  <!-- 3 -->
+  <section id="tables">
+    <div class="sec-head"><span class="sec-num">3</span><h2>ตาราง custom 13 ตัว — อะไรเปลี่ยน อะไรไม่เปลี่ยน</h2></div>
+    <p class="sec-sub">ตารางชุดนี้คือ “สมอง” ของรายงาน · ถูกใช้ร่วมกับ ZTAXA_R06/038/039 และ interface ไป BI</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">Table</th><th>หน้าที่</th><th>Delta ใน S/4HANA</th><th>Field type</th></tr></thead>
+      <tbody>
+        <tr><td><code>ZTAXA_T05</code></td><td>Node master</td><td>ไม่เปลี่ยนโครงสร้าง (ข้อมูล node เปลี่ยนได้)</td><td class="n">—</td></tr>
+        <tr><td><code>ZTAXA_T06</code></td><td>Define node + description</td><td>เพิ่ม <b>Proportion/Fixed</b> และ <b>Fixed Rate</b></td><td class="n">CHAR 1 · CHAR 5</td></tr>
+        <tr><td><code>ZTAXA_T01</code></td><td><b>GL account mapping</b></td><td>เพิ่ม <b>Valid From / Valid To</b></td><td class="n">DATS 8</td></tr>
+        <tr><td><code>ZTAXA_T07</code></td><td>Define report layout</td><td>เพิ่ม <b>Valid From / Valid To / Proportion-Fixed</b> + layout <b>BOI</b> + layout <b>IBCTC</b></td><td class="n">DATS 8 · DATS 8 · CHAR 1</td></tr>
+        <tr><td><code>ZTAXA_T03</code></td><td>Upload data (flat file)</td><td>เพิ่ม <b>RLDNR (Ledger)</b> · check table = <code>FINSC_LD_CMP</code></td><td class="n">CHAR 2</td></tr>
+        <tr><td><code>ZTAXA_T08</code></td><td>Exclude asset class</td><td><b>รวม 029+030+031+032 เป็นตารางเดียว</b> · เพิ่ม <b>Segment (custom)</b> + <b>Include/Exclude</b></td><td class="n">CHAR 10 · CHAR 1 · CHAR 1</td></tr>
+        <tr><td><code>ZTAXA_T14</code></td><td>(เดิม: exclude asset class PITA1/PITA3)</td><td><b>ยุบเข้า T029</b></td><td class="n">—</td></tr>
+        <tr><td><code>ZTAXA_T15</code></td><td>(เดิม: exclude asset class MTJDA)</td><td><b>ยุบเข้า T029</b></td><td class="n">—</td></tr>
+        <tr><td><code>ZTAXA_T16</code></td><td>(เดิม: asset class Pre-OP)</td><td><b>ยุบเข้า T029</b></td><td class="n">—</td></tr>
+        <tr><td><code>ZTAXA_T11</code></td><td>Tax rate for tax filing</td><td>ไม่เปลี่ยน</td><td class="n">—</td></tr>
+        <tr><td><code>ZTAXA_T04</code></td><td>Trading partner ต่อ tax rate (IBC-TC)</td><td>เพิ่ม <b>Valid From / Valid To</b> · เปลี่ยนชื่อ field <b>Partner PC → Trading Partner</b></td><td class="n">DATS 8</td></tr>
+        <tr><td><code>ZTAXA_T02</code></td><td>Company code สำหรับ IBC/BOI</td><td>โครงสร้างไม่เปลี่ยน · <b>เปลี่ยนชื่อตาราง IHQ → IBC/BOI</b></td><td class="n">—</td></tr>
+        <tr><td><code>ZTAXA_T10</code></td><td>IBC tax rate + trading partner จาก customers</td><td>โครงสร้างไม่เปลี่ยน · <b>เปลี่ยนชื่อ IHQ → IBC</b></td><td class="n">—</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>3 delta ที่ต้องเข้าใจ “ทำไม” ไม่ใช่แค่ “อะไร”</h3>
+
+    <h4>ก) Valid From / Valid To — ทำไมต้องมี</h4>
+    <p class="body">
+      รายงานภาษีต้องรันย้อนหลังได้ (ตรวจสอบ/แก้ไขแบบยื่นเก่า) ถ้า mapping หรือ layout เปลี่ยนกลางทาง
+      การรันปีเก่าจะได้ผลลัพธ์ตาม config ปัจจุบัน = <b>ผิด</b>
+      Valid From/To ทำให้โปรแกรม <b>เลือก config ที่ใช้อยู่ ณ ปีที่รายงาน</b> — FD ระบุว่า
+      “Report should display same data as per the reporting year … with historical values and layout”
+    </p>
+
+    <h4>ข) GL account prefix A/B/C — เคล็ดลับ <code>*999999999</code></h4>
+    <p class="body">
+      ผังบัญชี S/4HANA ของ Client ขึ้นต้นด้วย <b>A, B หรือ C</b> (เช่น <code>A999X042</code>, <code>B_PC07</code>, <code>C_PC34</code>)
+      ถ้า map ทีละตัวอักษรจะได้ 3 แถวต่อ 1 บัญชี → บวม
+      FD จึงกำหนดให้ใช้ <b><code>*999999999</code></b> — <b>ดอกจันแทนตัวอักษรนำหน้า</b> เพื่อ “รวมยอดของทั้ง 3 ตัวในแถวเดียว”
+    </p>
+    <div class="fx">ตัวอย่าง:  ต้องการยอดรวมของ  A999X042 + B_PC07 + C_PC34
+maintain ใน ZTAXA_T01 เป็น   <b>*999999999</b>   (1 แถว แทน 3 แถว)</div>
+
+    <h4>ค) RLDNR ใน upload table — ทำไมเพิ่งมามี</h4>
+    <p class="body">
+      ECC มี ledger เดียวในบริบทนี้ แต่ S/4HANA มี <b>หลาย ledger</b> (0L, T1 …)
+      รายการปรับปรุงที่อัปโหลดจึงต้องระบุว่า “ปรับที่ ledger ไหน”
+      check table <code>FINSC_LD_CMP</code> คือ <b>ตารางกำหนด ledger ต่อ company code</b> → กันไม่ให้ใส่ ledger ที่บริษัทนั้นไม่มี
+    </p>
+
+    <div class="callout"><b>ผลกระทบข้ามระบบที่ FD เตือนไว้:</b> การเปลี่ยนโครงสร้างตารางชุดนี้กระทบ
+      <b>(ก) Annual Tax Report (P2)</b> และ <b>(ข) Interface ส่งข้อมูลไป BI (<code>ZTAXA_I01</code>)</b>
+      → เวลาแก้ตารางต้องแจ้ง 2 ทีมนี้เสมอ · นี่คือเหตุผลที่ FD ลงตารางว่าตารางไหนถูกใช้โดยโปรแกรมใดบ้าง</div>
+  </section>
+
+  <!-- 4 -->
+  <section id="screen">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Selection screen — delta ทุกช่อง</h2></div>
+    <p class="sec-sub">หน้าจอ TO-BE แบ่ง 4 block: General Selection (Main) · Display Report · General Selection (Branch) · Display Currency</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Field</th><th>Delta</th><th>Default</th><th>Validation / หมายเหตุ</th></tr></thead>
+      <tbody>
+        <tr><td><b>Company code (Main)</b></td><td>เพิ่ม <b>multiple selection</b></td><td>—</td><td>ใส่หลาย company code ได้พร้อมกัน</td></tr>
+        <tr><td>Reporting Year / Period</td><td>ไม่เปลี่ยน</td><td>—</td><td>—</td></tr>
+        <tr><td>Profit center</td><td>ไม่เปลี่ยน</td><td>—</td><td>—</td></tr>
+        <tr><td><b>Recovery Indicator</b></td><td><b>ใหม่</b></td><td>Blank</td><td>จาก <code>T8JJ-RECID</code> · validate คู่กับ <code>BUKRS</code></td></tr>
+        <tr style="background:rgba(185,28,28,.09)"><td><b>Exclude profit center O*</b></td><td><b>ถูกลบออก</b></td><td>—</td><td><b>S/4 ต้องรวม profit center ที่ขึ้นต้นด้วย O ด้วย</b></td></tr>
+        <tr><td>Depreciation Area (Main)</td><td>เปลี่ยน default</td><td><b>32</b></td><td>แก้ไขได้ (editable)</td></tr>
+        <tr><td>Ledger (Main)</td><td>เปลี่ยน default</td><td><b>T1</b></td><td>แก้ไขได้</td></tr>
+        <tr><td>Segment (Main)</td><td>ไม่เปลี่ยน</td><td>—</td><td>—</td></tr>
+        <tr><td><b>BOI</b> (checkbox)</td><td><b>ใหม่</b> — มาแทน IHQ</td><td>Blank</td><td>validate กับ <code>ZTAXA_T02</code> — ถ้า company code ผูก BOI อยู่ต้องติ๊ก มิฉะนั้น error “please select BOI checkbox”</td></tr>
+        <tr><td><b>IBC</b> (checkbox)</td><td>ไม่เปลี่ยนโครง · เพิ่ม validation</td><td>—</td><td>ติ๊กแต่ไม่มีใน T035 → error “Please do not select IBC” · มีใน T035 แต่ไม่ติ๊ก → error “Please select IBC”</td></tr>
+        <tr><td><b>Company code (Branch)</b></td><td><b>ใหม่</b></td><td>None</td><td>optional · multiple · <b>ไม่มี validation กับ main</b> · ถ้า main ใส่หลายตัว → field นี้ถูก <b>grey out</b></td></tr>
+        <tr><td>Profit Center (Branch)</td><td><b>ใหม่</b></td><td>None</td><td>multiple selection</td></tr>
+        <tr><td>Recovery Indicator (Branch)</td><td><b>ใหม่</b></td><td>None</td><td>validate <code>T8JJ</code> คู่กับ <b>branch</b> company code</td></tr>
+        <tr><td>Depreciation area (Branch)</td><td><b>ใหม่</b></td><td><b>02</b></td><td>default เมื่อใส่ branch company code · editable</td></tr>
+        <tr><td>Ledger (Branch)</td><td><b>ใหม่</b></td><td><b>0L</b></td><td>default เมื่อใส่ branch company code · editable</td></tr>
+        <tr><td>Segment (Branch)</td><td><b>ใหม่</b></td><td>None</td><td>ใช้เมื่อใส่ branch เท่านั้น</td></tr>
+        <tr><td>Display currency</td><td>ไม่เปลี่ยน</td><td><b>LC2</b></td><td>radio LC1 / LC2 / LC3 · เปลี่ยนได้</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="keybox">
+      <b>Default 4 ตัวที่ต้องท่อง (ถูกถามบ่อยใน KT)</b>
+      <ul>
+        <li>Main → <b>Depreciation area 32 · Ledger T1</b> (มุมมองภาษี)</li>
+        <li>Branch → <b>Depreciation area 02 · Ledger 0L</b> (มุมมองบัญชีมาตรฐาน)</li>
+        <li>สกุลเงินแสดงผล → <b>LC2</b></li>
+        <li>ต้องมี <b>option รัน background</b> เพราะข้อมูลใหญ่</li>
+      </ul>
+    </div>
+
+    <div class="trap"><b>⚠ Authorization ที่ FD สั่งไว้ตรง ๆ:</b>
+      “Must add authorization to company code <b>XB01 Client (overseas branch)</b> which is a branch of registered company in Thailand.”
+      → XB01 <b>อยู่ที่แอลจีเรีย แต่ทางภาษีเป็นสาขาของบริษัทไทย</b> จึงต้องรวมยอดในรายงานไทย (TC-004)
+      นี่คือเหตุผลที่ต้องมี block “Branch” ทั้งชุด</div>
+  </section>
+
+  <!-- 5 -->
+  <section id="currency">
+    <div class="sec-head"><span class="sec-num">5</span><h2>LC1 / LC2 / LC3 — ดึงจาก field ไหนของ ACDOCA</h2></div>
+    <p class="sec-sub">ECC ใช้แค่ LC2 · S/4HANA เพิ่ม LC3 เข้ามา</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Currency</th><th>Table</th><th>Amount field</th><th>Currency field</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td><b>LC1</b></td><td><code>ACDOCA</code></td><td><code>HSL</code></td><td><code>RHCUR</code></td><td>Company code currency (สกุลของบริษัท)</td></tr>
+        <tr><td><b>LC2</b></td><td><code>ACDOCA</code></td><td><code>KSL</code></td><td><code>RKCUR</code></td><td>Global currency (สกุลกลุ่ม)</td></tr>
+        <tr><td><b>LC3</b></td><td><code>ACDOCA</code></td><td><code>OSL</code></td><td><code>ROCUR</code></td><td>Freely defined currency 1 (สกุลอิสระ — ใช้เก็บค่าที่ตีราคาใหม่)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>ลำดับการทำงาน</h3>
+    <ol class="flow">
+      <li>รับ parameter จากหน้าจอ: company code, reporting year, period, profit center, recovery indicator, depreciation area, ledger, segment, LC1/2/3</li>
+      <li>ส่งค่าทั้งหมดเข้า <code>ACDOCA</code></li>
+      <li>หา <b>เลขบัญชี <code>RACCT</code></b> จาก mapping table <code>ZTAXA_T01</code> ผ่าน item type ใน layout</li>
+      <li>ดึงยอดตามคู่ field ของสกุลที่เลือก (HSL/RHCUR · KSL/RKCUR · OSL/ROCUR)</li>
+    </ol>
+
+    <div class="callout"><b>วิธีจำ 3 คู่นี้:</b> <b>H</b>SL = <b>H</b>ome (บริษัท) · <b>K</b>SL = <b>K</b>onzern (กลุ่ม/global) ·
+      <b>O</b>SL = <b>O</b>ther (freely defined) · ส่วนสกุลเงินคือ <code>R + ตัวอักษรเดิม + CUR</code>
+      → เป็นชุดเดียวกับที่ <a href="rel-current-tax-intl.html" style="color:var(--petrol);font-weight:600">TAX-RPT-4</a> ใช้ ไม่ต้องจำใหม่</div>
+  </section>
+
+  <!-- 6 -->
+  <section id="manual">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Manual adjustment ที่ย้ายมาดึงจากระบบ (5 รายการ)</h2></div>
+    <p class="sec-sub">เจตนา: “Client wants to minimize the manual data which comes from uploading flat files”</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:38px">#</th><th>Item type</th><th>สูตร</th><th>ใช้กับ layout</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><b>LOSS CARRIED FORWARD</b></td><td>ดึงจากตารางของ <a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5</a> (<code>ZTAXB_T01</code>) แทนอัปโหลด</td><td><b>ทุก layout</b></td></tr>
+        <tr><td class="n">2</td><td>UNREALIZED GAIN/LOSS ON FINANCIAL DERIVATIVES ผ่าน OCI</td><td><code>A490X036</code> + <code>A490X037</code> + <code>A490X038</code> · <b>กลับเครื่องหมาย</b></td><td>CIT_TH · PITA1_TH · PITA3_TH · PSC_TH</td></tr>
+        <tr><td class="n">3</td><td>ACCRUED INTEREST FROM FINANCIAL DERIVATIVES</td><td><code>A460X032</code> + <code>A560X041</code> · <b>กลับเครื่องหมาย</b></td><td>CIT_TH · PITA1_TH · PITA3_TH · PSC_TH</td></tr>
+        <tr><td class="n">4</td><td>ADJUST WRITE-OFF FROM IDC</td><td><code>A520X040</code> · <b>กลับเครื่องหมาย</b></td><td>PITA1_TH · PITA3_TH · PSC_TH</td></tr>
+        <tr><td class="n">5</td><td>RETIREMENT RESERVE — COVENTURERS / JCE</td><td><b>movement</b> ของ <code>A254X027</code> = <b>ยอดต้นงวด − ยอดปลายงวด</b></td><td>PITA1_TH · PITA3_TH · PSC_TH</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>สูตรกลางที่ใช้กับ “ทุก layout”</h3>
+    <div class="fx"><b>ANNUAL (PROFIT)/LOSS AFTER LCF</b>
+   =  ANNUAL (PROFIT)/LOSS
+   −  ALLOWANCES
+   −  <b>Loss carried forward</b>        (ดึงจาก custom table ZTAXB_T01)
+   −  <b>Loss carried forward adjustment</b>  (ปรับด้วย flat file)
+
+ใช้กับ: CIT_TH · PITA1_TH · PITA3_TH · PSC_TH · MTJDA · IBCSVCS · IBC-TC · BOI</div>
+
+    <div class="chain">
+      <span class="node">ปีก่อน<br><span style="font-weight:400">ANNUAL (P/L) AFTER LCF</span></span>
+      <span class="sep">→</span>
+      <span class="node">ถ้าเป็น <b>ยอดเดบิต</b> = ขาดทุน<br><span style="font-weight:400">เก็บลง ZTAXB_T01</span></span>
+      <span class="sep">→</span>
+      <span class="node out">ปีนี้<br><span style="font-weight:400">โผล่เป็น “Loss carried forward”</span></span>
+    </div>
+
+    <div class="trap"><b>⚠ “กลับเครื่องหมาย (reverse sign)” คืออะไร และทำไมต้องทำ:</b>
+      ยอดใน GL ใช้ convention เดบิต/เครดิตของบัญชี ส่วนรายงานภาษีใช้ convention
+      <b>“บวก = เพิ่มกำไรทางภาษี”</b> ซึ่งอาจตรงข้ามกัน
+      ถ้าลืมกลับเครื่องหมาย → กำไรทางภาษีจะผิดทิศ และภาษีที่คำนวณได้จะผิดทั้งก้อน
+      <b>ให้เช็คทุกครั้งว่าบรรทัดนั้นระบุ reverse sign หรือไม่</b> — 3 ใน 5 รายการข้างบนระบุไว้ชัด</div>
+
+    <div class="callout"><b>ข้อสังเกตเชิงวิเคราะห์:</b> รายการที่ 4 และ 5 ใช้กับ <b>PITA1_TH / PITA3_TH / PSC_TH</b>
+      แต่ <b>ไม่ใช้กับ CIT_TH</b> — เพราะ IDC (Intangible Drilling Cost) และ retirement reserve เป็นเรื่องของ
+      <b>ธุรกิจปิโตรเลียมโดยเฉพาะ</b> ไม่มีในบริษัททั่วไป · การรู้ว่ารายการไหนใช้กับ layout ไหน
+      ทำให้คุณตอบได้ทันทีว่า “ทำไมบรรทัดนี้ไม่โผล่ในรายงานของบริษัท A”</div>
+  </section>
+
+  <!-- 7 -->
+  <section id="ibcsvcs">
+    <div class="sec-head"><span class="sec-num">7</span><h2>IBCSVCS — company code 1013 (Client SERVICES)</h2></div>
+    <p class="sec-sub">การเปลี่ยน 2 รายการจาก “proportion” เป็น “fixed rate”</p>
+
+    <h3>หลักการพื้นฐานของ IBC</h3>
+    <ul class="clean">
+      <li>ระบบอ่าน <code>ZTAXA_T02</code> (company code ผูก IBC) + <code>ZTAXA_T04</code> (trading partner ต่ออัตรา)</li>
+      <li>ธุรกรรมกับ <b>trading partner ที่เป็น intercompany</b> <span class="arrow">→</span> ตกคอลัมน์ <b>3%</b></li>
+      <li>ธุรกรรมที่ <b>ไม่ใช่ intercompany</b> <span class="arrow">→</span> ตกคอลัมน์ <b>20%</b></li>
+    </ul>
+
+    <h3>ข้อยกเว้น 2 รายการที่ FD สั่งให้ทำ “fixed”</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Item type</th><th>Node</th><th>Item type code</th><th>เปลี่ยนเป็น</th></tr></thead>
+      <tbody>
+        <tr><td><b>EXPENSE POOL COST</b> → “EXPENSES SPECIFIC 20%”</td><td><code>HGL4</code></td><td><code>HG6</code></td><td><b>Fixed 20%</b> — ลงคอลัมน์ 20% ทั้งก้อน ไม่แบ่งสัดส่วน</td></tr>
+        <tr><td><b>ACTUAL PAYMENT FOR PENSION FUND</b></td><td><code>TCL1</code></td><td><code>TG21</code></td><td><b>Fixed 3%</b> — ย้ายจาก 20% มา 3% ทั้งก้อน</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>กลไก: field “Proportion/Fixed” + “Fixed Rate”</h3>
+    <div class="fx">ZTAXA_T06 / ZTAXA_T07  →  field  <b>Proportion/Fixed</b>
+   ค่า  <b>F</b>      = Fixed rate  → ต้องกรอก <b>Fixed Rate</b> ด้วย (เช่น 20% / 3%)
+   ค่า  <b>P</b>      = Proportion  → คำนวณตามสัดส่วน
+   ค่า  <b>Blank</b>  = ใช้กับ layout อื่น (MTJDA / CIT / PITA)
+
+ตัวอย่างแถวจริง:
+   Node = TCL1 · Type = TG21 · Description = ACTUAL PAYMENT FOR PENSION FUND
+   Order = 1 · Proportion/Fixed = <b>F</b> · Fixed Rate = <b>3%</b></div>
+
+    <h3>Logic การดึงยอด</h3>
+    <ol class="flow">
+      <li>อ่าน G/L accounts ที่ผูกกับ item type จาก <code>ZTAXA_T01</code></li>
+      <li>ส่ง G/L account เข้า <code>ACDOCA</code> ดึงยอด</li>
+      <li>แสดง <b>ยอดรวมของ item type</b> และ <b>ยอดแยกราย G/L account</b> (กรณีมีหลายบัญชีผูกกับ item type เดียว)</li>
+      <li>ลงคอลัมน์ตาม fixed rate ที่กำหนด (ไม่ผ่านกติกา intercompany)</li>
+    </ol>
+
+    <div class="callout"><b>Design ที่ควรชม:</b> แทนที่จะ hard-code “20%” ลงในโค้ด FD เลือกใส่ไว้ใน
+      <b>ตาราง config (Proportion/Fixed + Fixed Rate)</b> → ถ้ากฎหมายเปลี่ยนอัตรา แค่แก้ตาราง ไม่ต้องแก้โปรแกรม
+      และ FD ยังเผื่อไว้ว่า “ในอนาคตเมื่อสิทธิ IBC หมดอายุ ให้ปรับ validity ใน <code>ZTAXA_T02</code>
+      แล้ว output กลับไปใช้ layout <b>CIT_TH</b> ปกติ”</div>
+  </section>
+
+  <!-- 8 -->
+  <section id="ibctc">
+    <div class="sec-head"><span class="sec-num">8</span><h2>IBCTC — company code 1086 (Client TC · Treasury Centre)</h2></div>
+    <p class="sec-sub">ธุรกิจการเงิน — รายได้ 4 ประเภท และการปันสัดส่วน 3% / 20%</p>
+
+    <h3>รายได้ของ Client TC</h3>
+    <ul class="clean">
+      <li>Interest Income (ดอกเบี้ยรับ)</li>
+      <li>Service income (ค่าบริการ)</li>
+      <li>Gain from trading investment (กำไรจากเงินลงทุน)</li>
+      <li>Gain from derivative instrument (กำไรจากตราสารอนุพันธ์)</li>
+    </ul>
+
+    <h3>Layout เปลี่ยน — คอลัมน์ที่หายและที่เพิ่ม</h3>
+    <div class="tw"><table>
+      <thead><tr><th>คอลัมน์</th><th>ECC</th><th>S/4HANA</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td>0%</td><td>มี</td><td><b>ลบออก</b></td><td>ไม่ใช้แล้ว</td></tr>
+        <tr><td>10%</td><td>มี</td><td><b>ลบออก</b></td><td>ไม่ใช้แล้ว</td></tr>
+        <tr><td><b>A — IBC 3%</b></td><td>มี</td><td>มี</td><td>ธุรกรรม <b>intercompany</b> · ระบุด้วย <code>R001</code> ใน <code>ZTAXA_T04</code> ผ่าน trading partner</td></tr>
+        <tr><td><b>B — Non-IBC 20%</b></td><td>มี</td><td>มี</td><td>ธุรกรรม <b>ไม่ใช่ intercompany</b></td></tr>
+        <tr><td><b>C — Total</b></td><td>—</td><td><b>เพิ่มใหม่</b></td><td><b>C = A + B</b></td></tr>
+        <tr><td><b>D — ยอดต่อ Profit Center</b></td><td>มี</td><td>มี (ขยายได้หลายคอลัมน์)</td><td>ยอด G/L จาก <code>ZTAXA_T01</code> ราย profit center</td></tr>
+        <tr><td><b>Check difference</b></td><td>มี</td><td>มี</td><td><b>= D − C</b> · ควรเป็น 0</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>คอลัมน์ “Check difference” คือ built-in control:</b>
+      D คือยอดจริงจาก GL · C คือยอดที่ถูกปันเข้า 3%/20% แล้ว
+      ถ้า <b>D − C ≠ 0</b> แปลว่า <b>มีบางรายการปันไม่เข้าคอลัมน์ไหนเลย</b> (เช่น trading partner ไม่มีใน <code>ZTAXA_T04</code>)
+      → เป็นจุดแรกที่ต้องดูตอนกระทบยอด ไม่ต้องไล่ทีละบรรทัด</div>
+
+    <h3>Logic การจัดคอลัมน์ (จาก ACDOCA line-item)</h3>
+    <ol class="flow">
+      <li>หา G/L account ที่ผูกกับ item type จาก <code>ZTAXA_T01</code></li>
+      <li>ดึงยอดจาก <code>ACDOCA</code> ตาม selection (company code, fiscal year, ledger, period …)</li>
+      <li>อ่าน <b>trading partner = <code>VBUND</code></b> ที่ระดับ line item</li>
+      <li>ตรวจกับ <code>ZTAXA_T04</code> → intercompany ลง <b>3%</b> · ไม่ใช่ ลง <b>20%</b> · แยกตาม profit center ด้วย</li>
+    </ol>
+
+    <h3>สูตรสำคัญ (node/type formula)</h3>
+    <div class="fx"><b>HCL4</b>  (Total Revenue)
+   = (HG3 หรือ HG3.1) + HG3.2 + HG3.4 + HG3.5
+     ดอกเบี้ยรับ + ค่าบริการ + กำไรเงินลงทุน + กำไรอนุพันธ์
+
+<b>HUP</b>   = (HG3 หรือ HG3.1) + HG3.2 + HG3.4 + HG3.5 + PU8
+<b>HCL5</b>  (Revenue adjustment uploaded) = HCL4 + HUP
+<b>HC4</b>   (Revenue After Adjustment)     = HG3 + PU8
+
+<b>HCL0 / HC3</b>  = % Portion of Interest Income
+   คอลัมน์ 3%  = ดอกเบี้ยรับในคอลัมน์ 3%  ÷ ดอกเบี้ยรับทั้งหมด
+   คอลัมน์ 20% = ดอกเบี้ยรับในคอลัมน์ 20% ÷ ดอกเบี้ยรับทั้งหมด
+
+<b>HCL3 / HC6</b>  = % Proportion of Revenue
+   คอลัมน์ 3%  = Total Revenue ในคอลัมน์ 3%  ÷ Total Revenue ทั้งหมด
+   คอลัมน์ 20% = Total Revenue ในคอลัมน์ 20% ÷ Total Revenue ทั้งหมด</div>
+
+    <h3>รายการที่ปันตามสัดส่วน (proportion) แทนการดูที่ trading partner</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Item type</th><th>ปันตามอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>Admin employee expenses · Admin selling expenses</td><td><b>% Proportion of Revenue</b></td></tr>
+        <tr><td>Interest Expense</td><td><b>% Portion of Interest Income</b> (ไม่ใช่ revenue)</td></tr>
+        <tr><td>Others</td><td><b>% Ratio of Revenue</b></td></tr>
+        <tr><td>Expense แต่ละบรรทัด</td><td>ยอดในบรรทัด × % Proportion of revenue ของคอลัมน์นั้น</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>กำไร/ขาดทุนจากเงินลงทุนและอนุพันธ์ — ดึงจากด้านไหน</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Item type</th><th>ดึงจากด้าน</th><th>Field</th></tr></thead>
+      <tbody>
+        <tr><td>Gain from Trading investment</td><td><b>เครดิต</b></td><td><code>ACDOCA-SHKZG = 'H'</code></td></tr>
+        <tr><td>Gain from Derivative instrument</td><td><b>เครดิต</b></td><td><code>SHKZG = 'H'</code></td></tr>
+        <tr><td>Loss from Trading investment</td><td><b>เดบิต</b></td><td><code>SHKZG = 'S'</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><b>⚠ ทำไมต้องแยก H / S แทนที่จะใช้เครื่องหมายของยอด:</b>
+      บัญชีเดียวกันอาจมีทั้งบรรทัดกำไรและขาดทุนปนกัน — ถ้าเอายอดสุทธิ จะได้ “กำไรสุทธิ” ซึ่ง <b>ไม่ใช่สิ่งที่กฎหมายภาษีต้องการ</b>
+      (กำไรกับขาดทุนอาจถูกปฏิบัติต่างกัน) จึงต้องแยกอ่านด้วย <code>SHKZG</code> ที่ระดับ line item
+      → เป็นเหตุผลว่าทำไมรายงานนี้ต้องอ่าน ACDOCA ระดับบรรทัด ไม่ใช่ยอดสรุป</div>
+  </section>
+
+  <!-- 9 -->
+  <section id="boi">
+    <div class="sec-head"><span class="sec-num">9</span><h2>BOI — layout ใหม่ · company code 1126 (FST)</h2></div>
+    <p class="sec-sub">สิทธิประโยชน์ BOI แยกด้วย profit center · มีเพดาน 2% ที่ต้องคำนวณเอง</p>
+
+    <h3>โครงสร้าง profit center ที่ใช้แยก BOI / Non-BOI</h3>
+    <div class="tw"><table>
+      <thead><tr><th>กลุ่ม</th><th>ตัวอย่าง Profit Center</th></tr></thead>
+      <tbody>
+        <tr><td>Corporate</td><td><code>B_PC01</code></td></tr>
+        <tr><td>BOI 1</td><td><code>B_PC02</code></td></tr>
+        <tr><td>BOI 2</td><td><code>B_PC04</code></td></tr>
+        <tr><td>Non-BOI 1</td><td><code>B_PC03</code></td></tr>
+        <tr><td>Non-BOI 2</td><td><code>B_PC05</code></td></tr>
+      </tbody>
+    </table></div>
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      ถ้ามี BOI/Non-BOI ใหม่ <b>เลข <u>หลักที่ 8 และ 9</u> จะเดินต่อ</b> — สังเกตว่า
+      หลักสุดท้าย <code>1</code> = BOI · <code>2</code> = Non-BOI
+    </p>
+
+    <h3>โครงคอลัมน์ของรายงาน BOI</h3>
+    <div class="tw"><table>
+      <thead><tr><th>ฝั่ง</th><th>คอลัมน์</th></tr></thead>
+      <tbody>
+        <tr><td><b>TB</b> (Trial Balance — ตามที่ระบบบันทึกจริง)</td><td>Profit Ctr-Corp · Profit Ctr-BOI 1 · Profit Ctr-BOI 2 · Profit Ctr-Non BOI 1 · Profit Ctr-Non BOI 2 · Total</td></tr>
+        <tr><td><b>Tax closing</b> (หลังปันส่วนตามกติกาภาษี)</td><td>BOI 1 · BOI 2 · Non BOI 1 · Non BOI 2 · Total per Tax Closing</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>แนวคิดหลักของ layout นี้:</b> ฝั่งซ้าย (TB) = <b>ความจริงทางบัญชี</b> ·
+      ฝั่งขวา (Tax closing) = <b>ความจริงทางภาษีหลังปันส่วน</b> — สองฝั่งไม่จำเป็นต้องเท่ากันในระดับคอลัมน์
+      แต่ <b>ยอดรวมต้องเท่ากัน</b> · นี่คือ control ที่ผู้ใช้ต้องดูทุกเดือน</div>
+
+    <h3>กติกา 6 ข้อ</h3>
+    <ol class="flow">
+      <li><b>Direct Income แยก BOI/Non-BOI ตาม profit center</b> · % สัดส่วนคำนวณจาก <b>Direct Income เท่านั้น</b> — ไม่นับ other income, FX gain/loss, interest income · <span style="color:var(--ink-soft)">Total Revenue = Total Direct income (TB) + Total others income (TB)</span></li>
+      <li><b>ดอกเบี้ยรับจากเงินกู้ intercompany / เงินฝากประจำ → เข้า Non-BOI เสมอ</b> ที่ฝั่ง Tax closing · ยอดที่อยู่ใต้ Corporate ให้ยกไปรวมที่ Non-BOI · <b>Total (Tax closing) = Corporate + Non-BOI จาก TB</b></li>
+      <li><b>ดอกเบี้ยรับจากเงินฝากออมทรัพย์ มีเพดาน 2% ของ Direct Income ของ BOI แต่ละตัว</b> (ดูตัวอย่างคำนวณข้างล่าง)</li>
+      <li><b>FX Gain/Loss:</b> ถ้า Non-BOI ไม่มีรายได้ (Direct income = 0 ตาม TB) → <b>ผลขาดทุน (เดบิต) ไปลง BOI</b> · <b>ผลกำไร (เครดิต) ไปลง Non-BOI</b> · ถ้า Non-BOI มีรายได้ → ปันตามสัดส่วนปกติ</li>
+      <li><b>Operating cost/expenses ของ corporate profit center</b> → ปันระหว่าง BOI/Non-BOI ตามสัดส่วนรายได้ในข้อ 1</li>
+      <li><b>Expense adjustments</b> → มาจาก flat file ตาม tax rate ที่ระบุในไฟล์</li>
+    </ol>
+
+    <div class="trap"><b>⚠ ข้อ 4 คือกติกาที่ “ดูไม่สมมาตร” และคนมักคิดว่าเป็นบั๊ก:</b>
+      ขาดทุนไป BOI แต่กำไรไป Non-BOI — <b>เพราะเป็นหลักภาษีที่อนุรักษ์นิยม</b>
+      (กำไรควรถูกเก็บภาษี = ไปฝั่งที่เสียภาษี · ขาดทุนไม่ควรใช้ลดภาษี = ไปฝั่งที่ยกเว้นภาษีอยู่แล้ว)
+      ถ้าไม่รู้ที่มา จะรายงานเป็น defect ผิด ๆ</div>
+
+    <h3>ตัวอย่างคำนวณเพดาน 2% (ตัวเลขจาก FD)</h3>
+
+    <h4>ขั้นที่ 1 — Direct Income ตาม TB</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Profit center</th><th class="num">Direct income</th><th class="num">% ของ Total DI</th><th class="num">เพดาน 2%</th></tr></thead>
+      <tbody>
+        <tr><td>Corporate</td><td class="num">0</td><td class="num">—</td><td class="num">—</td></tr>
+        <tr><td>BOI 1</td><td class="num">1,000,000</td><td class="num">27.027%</td><td class="num"><b>20,000</b></td></tr>
+        <tr><td>BOI 2</td><td class="num">2,000,000</td><td class="num">54.054%</td><td class="num"><b>40,000</b></td></tr>
+        <tr><td>Non-BOI 1</td><td class="num">200,000</td><td class="num">5.4054%</td><td class="num">—</td></tr>
+        <tr><td>Non-BOI 2</td><td class="num">500,000</td><td class="num">13.5135%</td><td class="num">—</td></tr>
+        <tr style="font-weight:700"><td>Total DI</td><td class="num">3,700,000</td><td class="num">100%</td><td class="num">60,000</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>ขั้นที่ 2 — ดอกเบี้ยรับออมทรัพย์ตาม TB และการปันของ Corporate</h4>
+    <div class="tw"><table>
+      <thead><tr><th>Profit center</th><th class="num">ตาม TB</th><th class="num">ได้รับปันจาก Corporate (30,000)</th></tr></thead>
+      <tbody>
+        <tr><td>Corporate</td><td class="num">30,000</td><td class="num">→ กระจายออก</td></tr>
+        <tr><td>BOI 1</td><td class="num">25,000</td><td class="num">27.027% × 30,000 = <b>8,108.1</b></td></tr>
+        <tr><td>BOI 2</td><td class="num">30,000</td><td class="num">54.054% × 30,000 = <b>16,216.2</b></td></tr>
+        <tr><td>Non-BOI 1</td><td class="num">5,000</td><td class="num">5.4054% × 30,000 = <b>1,621.62</b></td></tr>
+        <tr><td>Non-BOI 2</td><td class="num">7,000</td><td class="num">13.5135% × 30,000 = <b>4,054.05</b></td></tr>
+        <tr style="font-weight:700"><td>รวม</td><td class="num">97,000</td><td class="num">30,000</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>ขั้นที่ 3 — ใส่เพดาน แล้วโยนส่วนเกินไป Non-BOI</h4>
+    <div class="fx"><b>BOI 1</b>: ควรได้ 25,000 + 8,108.1 = 33,108.1  แต่เพดาน = <b>20,000</b>
+        → Tax closing BOI 1 = <b>20,000</b>
+        → ส่วนเกิน = 5,000 (จาก BOI1) + 8,108.1 (จาก corporate) = 13,108.1
+
+<b>Non-BOI 1</b> = 5,000 (TB) + 1,621.62 (ปัน) + 5,000 + 8,108.1 (ส่วนเกินจาก BOI1)
+             = <b>19,729.72</b>
+
+<b>BOI 2</b>: ควรได้ 30,000 + 16,216.2 = 46,216.2  แต่เพดาน = <b>40,000</b>
+        → Tax closing BOI 2 = <b>40,000</b>
+        → ส่วนเกิน = 6,216.2 (จาก corporate)
+
+<b>Non-BOI 2</b> = 7,000 (TB) + 4,054.05 (ปัน) + 6,216.2 (ส่วนเกินจาก BOI2)
+             = <b>17,270.25</b>
+
+ตรวจยอดรวม: 20,000 + 40,000 + 19,729.72 + 17,270.25 = <b>97,000</b> ✔ เท่ากับ TB</div>
+
+    <div class="keybox">
+      <b>3 บทเรียนจากตัวอย่างนี้</b>
+      <ul>
+        <li><b>สัดส่วนคำนวณจาก Direct Income</b> แต่ <b>เอาไปปันดอกเบี้ยรับ</b> — คนละฐาน อย่าสับสน</li>
+        <li><b>เพดานคิดจาก DI ของ BOI นั้น ๆ</b> ไม่ใช่จากยอดดอกเบี้ยที่ได้รับ (2% × 1,000,000 = 20,000)</li>
+        <li><b>ยอดรวมต้องไม่เปลี่ยน</b> — ส่วนเกินไม่ได้หายไป แต่ถูกโยนไป Non-BOI คู่ของมัน (BOI1→Non-BOI1, BOI2→Non-BOI2)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section id="test">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Key Test Conditions — TC-001 ถึง TC-015</h2></div>
+    <p class="sec-sub">Precondition ของทั้งชุด: “Ensure that the necessary non-SAP data has been uploaded prior to executing this report”</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:74px">Test ID</th><th>Condition</th><th>Expected result</th></tr></thead>
+      <tbody>
+        <tr><td class="n">TC-001</td><td>เลือก segment CIT_TH / PITA1_TH / PITA3_TH / PSC_TH / MTJDA</td><td>แสดง layout ตาม segment ที่เลือก</td></tr>
+        <tr><td class="n">TC-002</td><td>Layout <b>IBCSVCS</b> ของ 1013</td><td>ค่าออกตาม calculation logic ใหม่ (fixed 20% / 3%)</td></tr>
+        <tr><td class="n">TC-003</td><td>Layout <b>IBCTC</b> ของ 1086</td><td>แสดงคอลัมน์ <b>3% และ 20% เท่านั้น</b> — 0% และ 10% ต้องหายไป</td></tr>
+        <tr><td class="n">TC-004</td><td>เลือกหลาย company code — <b>XB01 (สาขาต่างประเทศ) + TH01 Client</b> segment CIT_TH</td><td>แสดงข้อมูลรวมของทั้งสอง</td></tr>
+        <tr><td class="n">TC-005</td><td>ใส่เงื่อนไขบน selection screen</td><td>รายงานตรงกับเงื่อนไขที่ใส่</td></tr>
+        <tr><td class="n">TC-006</td><td>Branch company code</td><td>มี field สำหรับ branch ให้กรอกครบ</td></tr>
+        <tr><td class="n">TC-007</td><td><b>BOI checkbox</b></td><td>มี checkbox บนหน้าจอ · ดึง layout BOI ให้ company code <b>1126</b></td></tr>
+        <tr><td class="n">TC-008</td><td>BOI Layout</td><td>รายงานแสดง layout BOI ถูกต้อง</td></tr>
+        <tr><td class="n">TC-009</td><td><b>BOI report logic</b></td><td>ค่าฝั่ง Tax closing (BOI / Non-BOI) คำนวณถูก</td></tr>
+        <tr><td class="n">TC-010</td><td><code>ZTAXA_T10</code> logic</td><td>cost center ที่ไม่ได้ระบุในตาราง → ใช้อัตรา default (ปัจจุบัน 3%) · ที่ระบุไว้ → ใช้อัตราในตาราง</td></tr>
+        <tr><td class="n">TC-011</td><td>Manual adjustment ที่ดึงจากระบบ</td><td>ค่าถูกดึงจาก GL ตามสูตร ไม่ต้องอัปโหลด</td></tr>
+        <tr><td class="n">TC-012</td><td><b>Loss carried forward</b></td><td>ดึงยอดปีก่อนจาก custom table มาแสดงเป็น LCF ของปีปัจจุบัน</td></tr>
+        <tr><td class="n">TC-013</td><td><b>Performance</b></td><td>ข้อมูลใหญ่ — ต้องเร็ว และมี option รัน background</td></tr>
+        <tr><td class="n">TC-014</td><td>Proportion / Fixed Rate logic ของ IBC</td><td>ค่าออกตามที่ maintain ใน <code>ZTAXA_T06</code> และ <code>ZTAXA_T07</code></td></tr>
+        <tr><td class="n">TC-015</td><td>Validation ทั้งหมด</td><td>ทุก validation ทำงาน (BOI/IBC checkbox, recovery indicator ฯลฯ)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 11 -->
+  <section id="expert">
+    <div class="sec-head"><span class="sec-num">11</span><h2>Expert notes</h2></div>
+
+    <h3>1) “Retrofit with change” + “delta document” = ต้องอ่าน 2 เอกสาร</h3>
+    <p class="body">
+      FD นี้เขียนเฉพาะสิ่งที่เปลี่ยน — logic เดิมทั้งหมดอยู่ใน <code>FS ZTAXA_R05 Current Tax V0.1.docx</code> ของ ECC
+      <b>เวลาทำ FUT ห้ามเทสต์แค่ delta</b> เพราะ regression มักเกิดที่ส่วนที่ “ไม่ได้เปลี่ยน”
+      แต่ถูกกระทบจากการยุบตาราง T029–T032 และการเพิ่ม Valid From/To
+    </p>
+
+    <h3>2) ความสัมพันธ์ 3 objects ในชุด Current Tax</h3>
+    <div class="chain">
+      <span class="node">TAX-RPT-3<br><span style="font-weight:400">Current Tax · ไทย</span></span>
+      <span class="sep">↘</span>
+      <span class="node out">ZTAXB_T01<br><span style="font-weight:400">LCF store (TAX-RPT-5)</span></span>
+      <span class="sep">↙</span>
+      <span class="node">TAX-RPT-4<br><span style="font-weight:400">Current Tax · ต่างประเทศ</span></span>
+    </div>
+    <ul class="clean">
+      <li>RPT-3 และ RPT-4 ต่างมีปุ่ม <b>“Update table for LCF”</b> บนหน้า output → เขียนค่าลง <code>ZTAXB_T01</code></li>
+      <li>RPT-5 คือ <b>รายงานอ่านค่าจากตารางนั้น</b> + จัดการ conversion LC1→LC2</li>
+      <li>RPT-4 <b>ยืมตาราง <code>ZTAXA_T05/025/027/028/029/035</code> ของ RPT-3</b> โดยเพิ่ม flag <b>“Overseas”</b> เพื่อแยกข้อมูล</li>
+    </ul>
+
+    <h3>3) การยุบตาราง T029–T032 กระทบอะไร</h3>
+    <p class="body">
+      FD เตือนไว้ตรง ๆ ว่า “<b>As we combine these tables, logic in the backend also need to be adjusted accordingly</b>”
+      กติกาใหม่คือ: asset class ที่เหมือนกันทั้ง <code>PITA1_TH</code>/<code>PITA3_TH</code>/<code>PSC_TH</code>
+      ให้ maintain ครั้งเดียวใต้ <b><code>PITA_TH</code></b> (segment รวมที่เก็บใน constants table)
+      ส่วน asset class ที่เป็นของ segment ใด segment หนึ่งโดยเฉพาะ ให้แยกบรรทัด
+    </p>
+
+    <h3>4) ทำไมต้องเลิก “Exclude profit center O*”</h3>
+    <p class="body">
+      ใน ECC profit center ที่ขึ้นต้นด้วย <code>O</code> ถูกกันออกจากรายงานภาษีโดยอัตโนมัติ
+      แต่ใน S/4HANA <b>ผังบัญชี/ผัง profit center ถูกออกแบบใหม่</b> ทำให้ prefix นั้นไม่ได้แปลว่า “ไม่เกี่ยวกับภาษี” อีกต่อไป
+      → การเก็บ validation เดิมไว้จะทำให้ <b>ยอดหาย</b> อย่างเงียบ ๆ
+      <b>นี่คือ delta ที่อันตรายที่สุดในหน้าจอ</b> เพราะไม่มี error ให้เห็น
+    </p>
+
+    <h3>5) Checklist กระทบยอดรายเดือน (ใช้ได้จริง)</h3>
+    <div class="qbox">
+      <div class="selfq"><p>5 จุดที่ต้องดูก่อนส่งตัวเลขให้ทีมภาษี</p>
+        <div class="a" style="font-size:13.5px;color:var(--ink-soft)">
+          (1) node CL ทุกตัวมีต้นทางครบไหม (ไม่มีศูนย์ที่ไม่ควรเป็นศูนย์) ·
+          (2) IBCTC — <b>Check difference = 0</b> ทุกบรรทัด ·
+          (3) BOI — ยอดรวมฝั่ง TB = ยอดรวมฝั่ง Tax closing ·
+          (4) LCF ที่ดึงมาตรงกับที่ <a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">RPT-5</a> แสดง ·
+          (5) manual adjustment 5 รายการ — เครื่องหมายถูกทิศไหม
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- self-check -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">Self-check</span><h2>ทวนความเข้าใจ</h2></div>
+    <div class="qbox">
+      <div class="selfq">
+        <p>1. Segment <code>PITA4</code> ใน ECC กลายเป็นอะไรใน S/4HANA และทำไม?</p>
+        <details class="ans"><summary></summary><div class="a">
+          กลายเป็น <b><code>PSC_TH</code></b> — เพราะจริง ๆ แล้วเป็นระบบ <b>Production Sharing Contract</b>
+          ไม่ใช่ PITA ตัวที่ 4 · ชื่อใหม่สอดคล้องกับ segment ต่างประเทศ (<code>PSC_DZ</code>, <code>PSC_MM</code>, <code>PSC_VN</code>, <code>PSC_OM</code>, <code>PSC_MY</code>)
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>2. เขียนสูตร ANNUAL (PROFIT)/LOSS AFTER LCF</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>= ANNUAL (PROFIT)/LOSS − ALLOWANCES − Loss carried forward (จาก custom table) − Loss carried forward adjustment</b>
+          · ใช้กับทุก layout: CIT_TH, PITA1_TH, PITA3_TH, PSC_TH, MTJDA, IBCSVCS, IBC-TC, BOI
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>3. Default ของ Depreciation area และ Ledger ต่างกันอย่างไรระหว่าง Main กับ Branch?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>Main: Dep. area 32 · Ledger T1</b> (มุมมองภาษี) ·
+          <b>Branch: Dep. area 02 · Ledger 0L</b> (มุมมองบัญชีมาตรฐาน)
+          ทั้งคู่ editable · เหตุผลคือสาขาถูกบันทึกในระบบตามมาตรฐานบัญชี แล้วค่อยนำมารวมทางภาษี
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>4. IBCTC ตัดสินว่ารายการไหนเป็น 3% จากอะไร?</p>
+        <details class="ans"><summary></summary><div class="a">
+          จาก <b>trading partner</b> — field <code>VBUND</code> ใน <code>ACDOCA</code> ที่ระดับ line item
+          แล้ว validate กับ <code>ZTAXA_T04</code> (intercompany = <code>R001</code>)
+          intercompany → คอลัมน์ <b>3%</b> · ไม่ใช่ → คอลัมน์ <b>20%</b>
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>5. BOI — เพดานดอกเบี้ยออมทรัพย์คำนวณจากอะไร และส่วนเกินไปไหน?</p>
+        <details class="ans"><summary></summary><div class="a">
+          เพดาน = <b>2% × Direct Income ของ BOI นั้น</b> (ตาม TB) ·
+          ส่วนที่เกินเพดาน <b>ไม่หายไป</b> แต่ถูกโยนไป <b>Non-BOI คู่ของมัน</b>
+          (BOI1 → Non-BOI1 · BOI2 → Non-BOI2) ยอดรวมจึงเท่าเดิมเสมอ
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>6. ทำไม <code>ZTAXA_T01</code> ต้องมี Valid From / Valid To?</p>
+        <details class="ans"><summary></summary><div class="a">
+          เพื่อให้รันย้อนหลังได้ถูกต้อง — เมื่อ GL mapping เปลี่ยน การรันปีเก่าต้องใช้ mapping <b>ของปีนั้น</b>
+          ไม่ใช่ mapping ปัจจุบัน · FD ระบุว่า “report should display same data as per the reporting year with historical values and layout”
+          (<code>ZTAXA_T07</code> ก็มีเหตุผลเดียวกันสำหรับ layout)
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>7. <code>*999999999</code> ใน GL mapping หมายความว่าอะไร?</p>
+        <details class="ans"><summary></summary><div class="a">
+          ให้รวมยอดของ <b><code>A999X042</code> + <code>B_PC07</code> + <code>C_PC34</code></b> ในแถวเดียว
+          — ดอกจันแทนตัวอักษรนำหน้าของผังบัญชี S/4HANA เพื่อลดจำนวนแถวที่ต้อง maintain ลง 3 เท่า
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>8. รายงานนี้ส่งข้อมูลต่อให้ใครบ้าง?</p>
+        <details class="ans"><summary></summary><div class="a">
+          (1) <b>Annual Tax Report</b> (P2 · <code>ZTAXA_R07</code>) ·
+          (2) <b>BI Interface</b> ผ่าน <code>ZTAXA_I01</code> ·
+          (3) <b><a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5 LCF</a></b> ผ่านปุ่ม “Update table for LCF” → <code>ZTAXB_T01</code>
+          — เพราะแบบนี้การแก้โครงตารางจึงต้องแจ้งหลายทีม
+        </div></details>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>TAX-RPT-3 · FD deep-dive · Current Tax (Thailand)</span>
+    <span>Chatree K. · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

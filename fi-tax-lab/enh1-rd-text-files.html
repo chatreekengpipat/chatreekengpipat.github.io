@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-ENH-1 — Text file PND1/1A/2/2A/3/53 (e-Filing RD) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.1;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:21px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:26px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:14px;font-weight:700;margin:18px 0 6px;color:var(--ink);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;font-size:13.2px;}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;white-space:nowrap;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  tbody td.n{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .arrow{color:var(--brass);font-weight:700;}
+
+  .attrs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 6px;}
+  @media(max-width:640px){.attrs{grid-template-columns:1fr 1fr;}}
+  .attr{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:var(--paper);}
+  .attr .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .attr .v{font-size:13.5px;font-weight:600;margin-top:2px;}
+
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:12px 0 12px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:11px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+
+  /* data-flow chain */
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);}
+  .chain .node{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;border:1.3px solid var(--petrol);color:var(--petrol-deep);border-radius:8px;padding:6px 10px;background:rgba(37,99,235,.06);}
+  .chain .node.out{border-color:var(--brass);color:var(--brass);background:rgba(180,83,9,.07);}
+  .chain .sep{color:var(--brass);font-weight:700;}
+
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:11pt;}.masthead{animation:none;}.keybox,.callout,.trap,section,.chain{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}.tw{overflow:visible;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-e075">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">★ my object · Enhancement</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>01.01.07.03 Withholding Tax</span>
+    </div>
+    <h1>TAX-ENH-1 — <span class="accent">Text file สำหรับ ภ.ง.ด. 1 / 1ก / 2 / 2ก / 3 / 53</span></h1>
+    <div class="meta">
+      <span>Type · <b>Enhancement</b></span>
+      <span>Nature · <b>Retrofit from ECC (Change)</b></span>
+      <span>T-code · <b>ZTAXB_R01</b></span>
+      <span>Built with · <b>DMEEX + ABAP</b></span>
+      <span>Complexity · <b>Medium</b></span>
+      <span>Priority · <b>P1</b></span>
+      <span>Geo · <b>Thailand only</b></span>
+    </div>
+  </header>
+
+  <p class="lede">
+    Object นี้คือ <b>“ตัวออกไฟล์ e-Filing”</b> — ไม่ใช่รายงานให้คนอ่าน แต่เป็น <b>text file ที่กรมสรรพากร (RD) อ่าน</b>
+    สร้างจาก <b>DMEEX format tree</b> 6 ต้น (ต้นละ 1 แบบยื่น) เกาะอยู่บน standard program
+    <b>Generic Withholding Tax Reporting</b> เดียวกับที่ TAX-RPT-1 และ TAX-FRM-1 ใช้
+    <b>delta ของ S/4HANA คือ Profit Center + Recovery Indicator</b> ที่ทำให้ 1 การรัน แตกออกเป็นหลายไฟล์
+  </p>
+
+  <div class="attrs">
+    <div class="attr"><div class="k">Business process</div><div class="v">01.01.07.03</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">Withholding Tax</div></div>
+    <div class="attr"><div class="k">Volume</div><div class="v">&gt; 1,000 / เดือน</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">Monthly + Ad Hoc</div></div>
+    <div class="attr"><div class="k">Trigger</div><div class="v">Manual execution</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">ไม่มี batch/event</div></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px"><b>🔗 อ่านคู่กัน:</b>
+    <a href="rpt1-wht-vat-recon.html" style="color:var(--petrol);font-weight:600">TAX-RPT-1 (โปรแกรมแม่ · PND54↔VAT36)</a> ·
+    <a href="frm1-wht-attachment.html" style="color:var(--petrol);font-weight:600">TAX-FRM-1 (ใบแนบ PDF ของ ภ.ง.ด. 3/53/54)</a> ·
+    <a href="statutory.html" style="color:var(--petrol);font-weight:600">Statutory Filing Guide (แบบไหนยื่นอะไร)</a> ·
+    <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N (วิธีพิสูจน์ข้อมูลก่อน/หลังรัน)</a>
+  </div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">1 · ภาพรวม</a>
+    <a href="#routing">2 · กติกาแยกแบบยื่น</a>
+    <a href="#screen">3 · Selection screen</a>
+    <a href="#logic">4 · Logic delta</a>
+    <a href="#dmee">5 · DMEEX + EXIT</a>
+    <a href="#layout">6 · Layout ทั้ง 6 แบบ</a>
+    <a href="#legacy">7 · ECC → S/4</a>
+    <a href="#test">8 · Test conditions</a>
+    <a href="#fut">8.5 · FUT status</a>
+    <a href="#expert">9 · Expert notes</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways — จำ 6 ข้อนี้พอ</b>
+    <ul>
+      <li><b>ตัวชี้ขาดว่าบรรทัดไหนคือ WHT</b> = ค่าคงที่ข้อความ <code>WIT</code> (Withholding tax transaction line-item identifier)</li>
+      <li><b>WHT Type</b> บอกว่าเป็น “ภาษีอะไร” <span class="arrow">→</span> <b>Recipient Type</b> ยืนยัน “ยื่นแบบไหน” <span class="arrow">→</span> <b>WHT Code</b> ระบุ “ประเภทเงินได้ในช่อง 5”</li>
+      <li>DMEEX <b>6 ต้น</b> = 6 แบบยื่น · ใช้ EXIT ร่วมกัน 2 ตัวสำหรับ <b>ฐานภาษี</b> และ <b>ภาษีหัก</b></li>
+      <li>Delta S/4 = <b>Profit Center</b> (validate <code>CEPC-PRCTR</code>) + <b>Recovery Indicator</b> (validate <code>T8JJ-RECID</code> คู่กับ <code>BUKRS</code>)</li>
+      <li>ไม่ว่าจะเลือกอะไร <b>ไฟล์ยังแยกตาม Business Place (สาขา) เสมอ</b> — เพราะ RD ยื่นเป็นรายสาขา</li>
+      <li><b>เอกสารกลับรายการ (reversal) ต้องไม่ออกไฟล์</b> — นี่คือ TC-007 และเป็นบั๊กคลาสสิกของงานตระกูลนี้</li>
+    </ul>
+  </div>
+
+  <!-- 1 -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>ภาพรวม — object นี้ทำอะไร และอยู่ตรงไหนของ process</h2></div>
+    <p class="sec-sub">Enhancement (ไม่ใช่ Report) ที่ต่อยอด standard program เพื่อ “พ่นไฟล์” ให้ RD</p>
+
+    <p class="body">
+      ในกระบวนการยื่นภาษีหัก ณ ที่จ่ายของไทย งานมี 3 ชิ้นที่ต้องออกมาพร้อมกันทุกเดือน —
+      <b>(1) ตัวแบบยื่น</b> (ภ.ง.ด.) <b>(2) ใบแนบ</b> (attachment) และ <b>(3) ไฟล์ e-Filing</b> ที่อัปโหลดเข้าระบบ RD
+      TAX-ENH-1 รับผิดชอบชิ้นที่ 3 สำหรับ <b>6 แบบ</b> คือ ภ.ง.ด. 1, 1ก, 2, 2ก, 3 และ 53
+      (ภ.ง.ด. 54 ไม่อยู่ใน object นี้ — 54 เป็นเรื่องของ TAX-RPT-1 / TAX-FRM-1)
+    </p>
+
+    <div class="chain">
+      <span class="node">FB60 / MIRO / F-53<br><span style="font-weight:400">ตั้งหนี้–จ่ายเงิน มี WHT</span></span>
+      <span class="sep">→</span>
+      <span class="node">WITH_ITEM + ACDOCA<br><span style="font-weight:400">KTOSL = WIT</span></span>
+      <span class="sep">→</span>
+      <span class="node">ZTAXB_R01<br><span style="font-weight:400">Generic WHT Reporting</span></span>
+      <span class="sep">→</span>
+      <span class="node">DMEEX tree<br><span style="font-weight:400">ZWHTFILE_*</span></span>
+      <span class="sep">→</span>
+      <span class="node out">.txt ต่อสาขา<br><span style="font-weight:400">อัปโหลดเข้า RD</span></span>
+    </div>
+
+    <h3>ทำไมต้องเป็น Enhancement ไม่ใช่ Report</h3>
+    <ul class="clean">
+      <li><b>โครงไฟล์อยู่ใน config ไม่ใช่โค้ด</b> — DMEEX (Extended Data Medium Exchange Engine) ให้ maintain mapping/attribute/constant/condition ผ่าน format tree ได้ ไม่ต้องแก้ ABAP ทุกครั้งที่ RD เปลี่ยน layout</li>
+      <li><b>ตัวเรียก (driver) เป็น standard</b> — Generic Withholding Tax Reporting เป็นตัวอ่าน <code>WITH_ITEM</code> อยู่แล้ว งานที่เหลือคือ “ต่อท่อ” ให้ไปออก DMEEX ตัวที่ถูก</li>
+      <li>ส่วนที่ DMEEX ทำไม่ได้ (เช่น <b>รวมยอดต่อ partner ของ ภ.ง.ด.1ก</b> และการ sort) ถึงจะไปอยู่ใน ABAP enhancement <code>ZTAXA_E01</code></li>
+    </ul>
+
+    <div class="callout"><b>มุมมอง consultant:</b> เวลามีคนถามว่า “ทำไม ENH-1 เป็น Medium ไม่ใช่ Complex ทั้งที่มีตั้ง 6 แบบ?”
+      คำตอบคือ <b>ความซับซ้อนกระจายอยู่ใน configuration ไม่ใช่ logic</b> — 6 ต้น DMEEX คือ 6 ชุด mapping,
+      logic จริง ๆ ที่เขียนใหม่มีแค่ 2 เรื่อง (แตกไฟล์ตาม PC / RECID) + 1 enhancement เดิมที่ retrofit มา</div>
+  </section>
+
+  <!-- 2 -->
+  <section id="routing">
+    <div class="sec-head"><span class="sec-num">2</span><h2>กติกาแยกแบบยื่น — WHT Type / Recipient Type / WHT Code</h2></div>
+    <p class="sec-sub">นี่คือหัวใจของ object · จำ 3 ชั้นนี้ได้ = ตอบได้ทุกคำถามว่าธุรกรรมหนึ่งจะไปโผล่แบบไหน</p>
+
+    <h3>ชั้นที่ 0 — ตัวชี้ว่าเป็นบรรทัด WHT</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Field</th><th>ค่า</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td>Text (transaction key)</td><td><code>WIT</code></td><td>Withholding tax transaction line-item identifier — ใช้คัดว่าบรรทัดใน <code>ACDOCA</code> คือรายการ WHT (field <code>KTOSL</code>)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>ชั้นที่ 1 — WHT Type (Extended Withholding Tax Type · <code>WITH_ITEM-WITHT</code>)</h3>
+    <div class="tw"><table>
+      <thead><tr><th>WHT Type</th><th>ไปแบบยื่น</th><th>ตีความ</th></tr></thead>
+      <tbody>
+        <tr><td><code>1A</code> <code>1B</code> <code>1D</code> <code>1E</code></td><td><b>ภ.ง.ด. 1</b> และ <b>ภ.ง.ด. 1ก</b></td><td>เงินได้จากการจ้างแรงงาน — บุคคลธรรมดา (เงินเดือน/ค่าจ้าง)</td></tr>
+        <tr><td><code>2A</code></td><td><b>ภ.ง.ด. 2</b> และ <b>ภ.ง.ด. 2ก</b></td><td>เงินได้ประเภทดอกเบี้ย/เงินปันผล ฯลฯ ของบุคคลธรรมดา</td></tr>
+        <tr><td><code>3A</code>–<code>3F</code></td><td><b>ภ.ง.ด. 3</b></td><td>จ่ายให้ <b>บุคคลธรรมดา</b> (ค่าบริการ/ค่าจ้างทำของ/ค่าเช่า ฯลฯ)</td></tr>
+        <tr><td><code>4A</code>–<code>4F</code></td><td><b>ภ.ง.ด. 53</b></td><td>จ่ายให้ <b>นิติบุคคล</b> ในประเทศ</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>ชั้นที่ 2 — Recipient Type (<code>WITH_ITEM-QSREC</code>) · ตัวยืนยันซ้ำ</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Recipient Type</th><th>แบบยื่น</th></tr></thead>
+      <tbody>
+        <tr><td><code>01</code></td><td>ภ.ง.ด. 1 / 1ก</td></tr>
+        <tr><td><code>02</code></td><td>ภ.ง.ด. 2 / 2ก</td></tr>
+        <tr><td><code>03</code></td><td>ภ.ง.ด. 3</td></tr>
+        <tr><td><code>53</code></td><td>ภ.ง.ด. 53</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>ทำไมต้องมีทั้ง 2 ชั้น?</b> WHT Type ผูกกับ <b>config การคำนวณ</b> (ฐาน/อัตรา/จังหวะหัก)
+      ส่วน Recipient Type ผูกกับ <b>ผู้รับเงินและแบบยื่น</b> — ในทางปฏิบัติ master data ที่ผิดจะทำให้ 2 ชั้นนี้ “ไม่ตรงกัน”
+      แล้วรายการจะหายไปจากไฟล์เงียบ ๆ นี่คือจุดที่ต้องไล่ด้วย <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N บน WITH_ITEM</a> ก่อนโทษโปรแกรม</div>
+
+    <h3>ชั้นที่ 3 — Withholding Tax Code (<code>WITH_ITEM-WT_WITHCD</code>) · ประเภทเงินได้</h3>
+    <div class="tw"><table>
+      <thead><tr><th>ใช้กับ</th><th>WHT Codes</th><th>หมายเหตุ</th></tr></thead>
+      <tbody>
+        <tr><td><b>ภ.ง.ด. 1 / 1ก</b></td><td><code>01</code> <code>02</code> <code>03</code> <code>GA</code> <code>G1</code></td><td>รหัสตระกูล G* = กรณีพิเศษ/gross-up</td></tr>
+        <tr><td><b>ภ.ง.ด. 2 / 2ก</b></td><td><code>04</code> <code>05</code> <code>06</code> <code>07</code> <code>08</code></td><td>—</td></tr>
+        <tr><td><b>ภ.ง.ด. 3 และ 53</b><br><span style="font-size:12px;color:var(--ink-soft)">(ช่อง 5 ของแบบ)</span></td>
+            <td><code>09</code> <code>11</code> <code>12</code> <code>13</code> <code>14</code> <code>15</code> <code>23</code> <code>24</code> <code>25</code> <code>27</code> <code>28</code> <code>29</code> <code>31</code> <code>33</code> <code>34</code> <code>GB</code> <code>GC</code> <code>GD</code> <code>GE</code> <code>G2</code> <code>G3</code> <code>G4</code> <code>G5</code></td>
+            <td>ชุดเดียวกันทั้ง 3 และ 53 — แยกกันด้วย WHT Type/Recipient Type ไม่ใช่ด้วย code</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><b>⚠ กับดักที่เจอบ่อย:</b> ถ้า user บอกว่า “ยอดในไฟล์ไม่ครบ” ให้ไล่ย้อน 3 ชั้นนี้ตามลำดับ —
+      (1) บรรทัดนั้นมี <code>KTOSL = WIT</code> ไหม → (2) <code>WITHT</code> อยู่ในลิสต์ของแบบนั้นไหม →
+      (3) <code>QSREC</code> ตรงกับแบบไหม → (4) <code>WT_WITHCD</code> ว่างหรือเปล่า
+      ส่วนใหญ่ 80% หลุดที่ข้อ 3 หรือ 4 ซึ่งเป็น <b>master data ของ vendor</b> ไม่ใช่โค้ด</div>
+  </section>
+
+  <!-- 3 -->
+  <section id="screen">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Selection screen — Generic Withholding Tax Reporting</h2></div>
+    <p class="sec-sub">หน้าจอเดิมของ standard + 2 field ใหม่ใน block “Further Selections”</p>
+
+    <h3>โครงหน้าจอ (block ต่อ block)</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Block</th><th>Field</th><th>ใช้ทำอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>Output Groups</td><td>Process Type · Output Groups</td><td>เลือกว่าจะให้ออก output อะไร (ไฟล์/ฟอร์ม/list)</td></tr>
+        <tr><td>Mandatory Selections</td><td>Country Key · Reporting Period</td><td><code>TH</code> + ช่วงงวดยื่น</td></tr>
+        <tr><td>General Selections</td><td>Company Code · Fiscal Year · Extended WH Tax Type · Extended WH Tax Code · Classic WH Tax Code · Suppliers · Customers</td><td>ตัวกรองหลัก — <b>ทุกตัวเป็นช่วง/หลายค่าและ exclude ได้</b></td></tr>
+        <tr><td>General Control</td><td>(standard)</td><td>คุมพฤติกรรมการรัน</td></tr>
+        <tr><td><b>Further Selections</b></td><td><b>Profit Center</b> · <b>Recovery Indicator</b></td><td><b>← 2 ตัวนี้คือ delta ของ S/4HANA</b></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Validation ของ 2 field ใหม่ (ต้องจำ)</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Attribute</th><th>Parameter</th><th>Default</th><th>Validation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Profit Center</b></td><td><code>CHAR(10)</code></td><td>Optional</td><td>From, To + multiple selection</td><td>None</td><td>เช็คกับ <code>CEPC-PRCTR</code></td></tr>
+        <tr><td><b>Recovery Indicator</b></td><td><code>CHAR(2)</code></td><td>Optional</td><td>Multiple selection</td><td>None</td><td>เช็คกับ <code>T8JJ-RECID</code> โดย <b>ส่งคู่กับ Company Code (<code>BUKRS</code>)</b></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>ทำไม Recovery Indicator ต้อง validate เป็นคู่กับ BUKRS?</b>
+      เพราะ <code>T8JJ</code> เป็นตาราง <b>JVA (Joint Venture Accounting)</b> — recovery indicator ตัวเดียวกัน
+      อาจมีความหมาย/ใช้ได้ต่างกันในแต่ละ company code การ validate ลอย ๆ จะปล่อยค่าที่ไม่ควรใช้ผ่านเข้ามา
+      แล้วได้ไฟล์เปล่า (ไม่ error แต่ไม่มีข้อมูล) ซึ่งแย่กว่า error</div>
+  </section>
+
+  <!-- 4 -->
+  <section id="logic">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Logic delta — 1 การรัน แตกเป็นกี่ไฟล์</h2></div>
+    <p class="sec-sub">ส่วนเดียวที่เป็น “ตรรกะใหม่” จริง ๆ ในเอกสารฉบับนี้</p>
+
+    <ol class="flow">
+      <li><b>ถ้าเลือก Profit Center</b> — ให้ generate text file <b>แยกตาม profit center</b> ที่เลือก</li>
+      <li><b>ถ้าเลือก Recovery Indicator</b> — ให้ generate text file <b>แยกตาม recovery indicator</b></li>
+      <li><b>ทุกกรณี ไฟล์ยังคงถูกแยกตาม Business Place (สาขา)</b> — ข้อนี้เป็นพฤติกรรมพื้นฐาน ไม่ใช่ทางเลือก</li>
+    </ol>
+
+    <div class="keybox">
+      <b>สูตรจำนวนไฟล์ (mental model)</b>
+      <p class="body" style="margin-top:8px">
+        จำนวนไฟล์ ≈ <b>(แบบยื่นที่มีข้อมูล) × (Business Place) × (Profit Center ที่เลือก | Recovery Indicator ที่เลือก)</b>
+      </p>
+      <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+        → ถ้าไม่เลือกทั้ง PC และ RECID ก็เหลือแค่ (แบบยื่น × สาขา) เหมือน ECC เดิม
+        → นี่คือเหตุผลที่ volume ระบุไว้ว่า <b>&gt;1,000 records/เดือน</b> แต่จำนวน “ไฟล์” อาจสูงกว่าที่คนคาดมาก
+      </p>
+    </div>
+
+    <div class="trap"><b>⚠ TC-004 คือ test ที่คนมักคิดไม่ถึง:</b> เลือก <b>Profit Center และ Recovery Indicator พร้อมกัน</b>
+      FD ระบุว่าต้องออกไฟล์ได้ตามทั้งสองเงื่อนไขพร้อมกัน — ไม่ใช่ “อันใดอันหนึ่ง”
+      ตอนเทสต์ให้เตรียมข้อมูลที่ profit center หนึ่งมีหลาย recovery indicator เพื่อดูว่าโปรแกรมแตกไฟล์ถูกจริง</div>
+  </section>
+
+  <!-- 5 -->
+  <section id="dmee">
+    <div class="sec-head"><span class="sec-num">5</span><h2>DMEEX format tree + EXIT + ABAP enhancement</h2></div>
+    <p class="sec-sub">object ทางเทคนิคทั้งหมดที่ต้องส่งมอบ</p>
+
+    <h3>Format tree — 1 แบบยื่น = 1 ต้น</h3>
+    <div class="tw"><table>
+      <thead><tr><th>แบบยื่น</th><th>DMEEX Format Tree</th><th>จำนวน field ใน layout</th></tr></thead>
+      <tbody>
+        <tr><td>ภ.ง.ด. 1</td><td><code>ZWHTFILE_PND1</code></td><td class="n">13</td></tr>
+        <tr><td>ภ.ง.ด. 1ก</td><td><code>ZWHTFILE_P01A</code></td><td class="n">15</td></tr>
+        <tr><td>ภ.ง.ด. 2</td><td><code>ZWHTFILE_P02</code></td><td class="n">13</td></tr>
+        <tr><td>ภ.ง.ด. 2ก</td><td><code>ZWHTFILE_P02A</code></td><td class="n">18</td></tr>
+        <tr><td>ภ.ง.ด. 3</td><td><code>ZWHTFILE_P03</code></td><td class="n">16</td></tr>
+        <tr><td>ภ.ง.ด. 53</td><td><code>ZWHTFILE_P53</code></td><td class="n">14</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      สังเกต naming: prefix <code>ZWHTFILE_</code> คงที่ ส่วนท้ายคือรหัสแบบ —
+      ต้นที่ยาวสุด (<code>P02A</code>, 18 field) คือ ภ.ง.ด.2ก เพราะเป็นแบบ “สรุปทั้งปี + ที่อยู่เต็ม + อัตราภาษี”
+    </p>
+
+    <h3>Use exits — ใช้ร่วมกันทุกต้น</h3>
+    <div class="tw"><table>
+      <thead><tr><th>EXIT Function Module</th><th>คำนวณอะไร</th></tr></thead>
+      <tbody>
+        <tr><td><code>ZDMEE_EXIT_WHT_BASE</code></td><td><b>WHT Base</b> — ฐานภาษีที่ใช้คำนวณหัก ณ ที่จ่าย</td></tr>
+        <tr><td><code>ZDMEE_EXIT_WHT_AMT</code></td><td><b>WHT Amount</b> — ยอดภาษีที่หักและนำส่ง</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><b>ทำไม 2 ตัวนี้ต้องเป็น EXIT ไม่ใช่ mapping ตรง ๆ?</b>
+      เพราะยอดในไฟล์ไม่ใช่ค่าดิบจาก <code>WITH_ITEM</code> เสมอไป — มีเรื่อง <b>สกุลเงิน / การปัดเศษ / รูปแบบตัวเลขที่ RD บังคับ</b>
+      และกรณี gross-up (รหัส G*) ที่ฐานต้องถูกคำนวณย้อน DMEEX ทำ arithmetic ซับซ้อนได้จำกัด จึงโยนออกมาเป็น FM</div>
+
+    <h3>ABAP Enhancement — <code>ZTAXA_E01</code> (retrofit จาก ECC)</h3>
+    <ul class="clean">
+      <li><b>Sum partner สำหรับ ภ.ง.ด. 1ก</b> — 1ก เป็นแบบสรุป “ทั้งปี ต่อคน” จึงต้องยุบหลายบรรทัดของ partner เดียวกันเป็นบรรทัดเดียว</li>
+      <li><b>Sort ตาม Company Code → Partner → WHT Code</b> — ลำดับในไฟล์มีผลกับการตรวจของ RD และกับการกระทบยอดของทีมภาษี</li>
+    </ul>
+
+    <div class="attrs" style="margin-top:18px">
+      <div class="attr"><div class="k">Enhancement hook</div><div class="v">ตอนรัน ZTAXB_R01</div></div>
+      <div class="attr"><div class="k">Enhancement type</div><div class="v">Program</div></div>
+      <div class="attr"><div class="k">Business context</div><div class="v">Text file for PND forms</div></div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section id="layout">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Layout ทั้ง 6 แบบ — field ต่อ field</h2></div>
+    <p class="sec-sub">อ่านเป็น “ผัง” ไม่ต้องท่อง — แต่ต้องรู้ว่าแบบไหนมีอะไรที่แบบอื่นไม่มี</p>
+
+    <div class="keybox">
+      <b>อ่านตารางข้างล่างให้เร็ว — จับ 4 ความต่างนี้</b>
+      <ul>
+        <li><b>มี “Company Tax ID + Business Place + Page No”</b> = แบบรายเดือน (1, 2, 2ก, 3, 53) · <b>1ก ไม่มี</b> เพราะเป็นใบสรุปแนบท้าย</li>
+        <li><b>มี “Tax Rate”</b> = 2, 2ก, 3, 53 · <b>1 และ 1ก ไม่มี</b> (เงินเดือนใช้วิธีคำนวณตามขั้นบันได ไม่ใช่อัตราคงที่)</li>
+        <li><b>มีที่อยู่เต็ม (House/Street/Tumbon/District/City/Post)</b> = <b>1ก และ 2ก</b> (แบบสรุปรายปี) · 3/53 มีแค่ City + Postal code</li>
+        <li><b>มี “Remarks”</b> = <b>3 และ 53</b> เท่านั้น</li>
+      </ul>
+    </div>
+
+    <h4>ภ.ง.ด. 1 — 13 fields</h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>Field</th><th>คำอธิบาย</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td>Company Tax ID</td><td>เลขประจำตัวผู้เสียภาษีของบริษัท</td></tr>
+        <tr><td class="n">2</td><td>Business Place</td><td>สาขา</td></tr>
+        <tr><td class="n">3</td><td>Income Type</td><td>ประเภทเงินได้</td></tr>
+        <tr><td class="n">4</td><td>Page No</td><td>แผ่นที่</td></tr>
+        <tr><td class="n">5</td><td>Seq. No</td><td>ลำดับที่</td></tr>
+        <tr><td class="n">6</td><td>Tax ID</td><td>เลขประจำตัวผู้เสียภาษีของผู้มีเงินได้</td></tr>
+        <tr><td class="n">7</td><td>Title</td><td>คำนำหน้า</td></tr>
+        <tr><td class="n">8</td><td>Name</td><td>ชื่อผู้มีเงินได้</td></tr>
+        <tr><td class="n">9</td><td>Sur-Name</td><td>นามสกุล</td></tr>
+        <tr><td class="n">10</td><td>Payment Date</td><td>วัน/เดือน/ปี ที่จ่าย</td></tr>
+        <tr><td class="n">11</td><td>Payment Amount</td><td>จำนวนเงินที่จ่าย</td></tr>
+        <tr><td class="n">12</td><td>Withholding tax amount</td><td>ภาษีที่หักและนำส่ง</td></tr>
+        <tr><td class="n">13</td><td>Condition</td><td>เงื่อนไข: 1 หักภาษี ณ ที่จ่าย · 2 ออกให้ตลอดไป · 3 ออกให้ครั้งเดียว</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>ภ.ง.ด. 1ก — 15 fields <span style="font-weight:400;font-size:12.5px;color:var(--ink-soft)">(สรุปรายปี · ไม่มี Company Tax ID/Business Place/Page No · มีที่อยู่เต็ม)</span></h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>Field</th><th>คำอธิบาย</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td>Seq. No</td><td>ลำดับที่</td></tr>
+        <tr><td class="n">2</td><td>Income Type</td><td>ประเภทเงินได้</td></tr>
+        <tr><td class="n">3</td><td>Tax ID</td><td>เลขประจำตัวผู้เสียภาษี</td></tr>
+        <tr><td class="n">4</td><td>Title</td><td>คำนำหน้า</td></tr>
+        <tr><td class="n">5</td><td>Name</td><td>ชื่อ</td></tr>
+        <tr><td class="n">6</td><td>Sur-Name</td><td>นามสกุล</td></tr>
+        <tr><td class="n">7</td><td>House Number</td><td>บ้านเลขที่</td></tr>
+        <tr><td class="n">8</td><td>Street</td><td>ถนน</td></tr>
+        <tr><td class="n">9</td><td>Tumbon</td><td>ตำบล/แขวง</td></tr>
+        <tr><td class="n">10</td><td>District</td><td>อำเภอ/เขต</td></tr>
+        <tr><td class="n">11</td><td>City</td><td>จังหวัด</td></tr>
+        <tr><td class="n">12</td><td>Post Code</td><td>รหัสไปรษณีย์</td></tr>
+        <tr><td class="n">13</td><td>Payment Amount</td><td><b>ยอดรวมที่จ่ายทั้งปี</b></td></tr>
+        <tr><td class="n">14</td><td>Withholding tax amount</td><td>ภาษีที่หักและนำส่ง</td></tr>
+        <tr><td class="n">15</td><td>Condition</td><td>เงื่อนไข 1/2/3</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><b>โยงกลับหา ZTAXA_E01:</b> field ที่ 13 (ยอดรวมทั้งปีต่อคน) คือเหตุผลที่ต้องมี
+      “sum partner” ใน enhancement — ถ้าไม่รวม จะได้ 1ก ที่มีคนเดิมซ้ำหลายบรรทัด ซึ่ง RD ไม่รับ</div>
+
+    <h4>ภ.ง.ด. 2 — 13 fields <span style="font-weight:400;font-size:12.5px;color:var(--ink-soft)">(มี Tax Rate · ชื่อ-นามสกุลรวมช่องเดียว)</span></h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>Field</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td>Company Tax ID</td></tr>
+        <tr><td class="n">2</td><td>Business Place</td></tr>
+        <tr><td class="n">3</td><td>Income Type</td></tr>
+        <tr><td class="n">4</td><td>Page No</td></tr>
+        <tr><td class="n">5</td><td>Seq. No</td></tr>
+        <tr><td class="n">6</td><td>Tax ID</td></tr>
+        <tr><td class="n">7</td><td>Title</td></tr>
+        <tr><td class="n">8</td><td><b>Name and Sur-Name</b> (ช่องเดียว)</td></tr>
+        <tr><td class="n">9</td><td>Payment Date</td></tr>
+        <tr><td class="n">10</td><td><b>Tax Rate</b></td></tr>
+        <tr><td class="n">11</td><td>Payment Amount</td></tr>
+        <tr><td class="n">12</td><td>Withholding tax amount</td></tr>
+        <tr><td class="n">13</td><td>Condition</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>ภ.ง.ด. 2ก — 18 fields <span style="font-weight:400;font-size:12.5px;color:var(--ink-soft)">(ยาวที่สุด · สรุปรายปี + ที่อยู่ + อัตรา)</span></h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>Field</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1–5</td><td>Company Tax ID · Business Place · Income Type · Page No. · Seq. No</td></tr>
+        <tr><td class="n">6–9</td><td>Tax ID · Title · Name · Sur-Name</td></tr>
+        <tr><td class="n">10–14</td><td>House Number · Tumbon · District · City · Post Code <span style="color:var(--ink-soft);font-size:12.5px">(สังเกต: 2ก <b>ไม่มี Street</b> ต่างจาก 1ก)</span></td></tr>
+        <tr><td class="n">15</td><td>Payment Amount — ยอดรวมทั้งปี</td></tr>
+        <tr><td class="n">16</td><td>Tax rate</td></tr>
+        <tr><td class="n">17</td><td>Withholding tax amount</td></tr>
+        <tr><td class="n">18</td><td>Condition</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>ภ.ง.ด. 3 — 16 fields <span style="font-weight:400;font-size:12.5px;color:var(--ink-soft)">(บุคคลธรรมดา · มี Remarks)</span></h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>Field</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1–5</td><td>Company Tax ID · Business Place · <b>Income Type Text</b> · Page No. · Seq. No</td></tr>
+        <tr><td class="n">6–8</td><td>Tax ID · Title · <b>Name and Sur-Name</b></td></tr>
+        <tr><td class="n">9–10</td><td>City · Postal code <span style="color:var(--ink-soft);font-size:12.5px">(ที่อยู่แบบย่อ)</span></td></tr>
+        <tr><td class="n">11–14</td><td>Payment date · Tax rate · Payment Amount · Withholding tax amount</td></tr>
+        <tr><td class="n">15</td><td>Condition</td></tr>
+        <tr><td class="n">16</td><td><b>Remarks</b></td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>ภ.ง.ด. 53 — 14 fields <span style="font-weight:400;font-size:12.5px;color:var(--ink-soft)">(นิติบุคคล · ไม่มี Page No · ไม่มี Title)</span></h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:44px">#</th><th>Field</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1–4</td><td>Company Tax ID · Business Place · Income Type Text · <b>Seq. No</b> <span style="color:var(--ink-soft);font-size:12.5px">(ข้าม Page No)</span></td></tr>
+        <tr><td class="n">5–6</td><td>Tax ID · <b>Name</b> <span style="color:var(--ink-soft);font-size:12.5px">(นิติบุคคลไม่มีคำนำหน้า/นามสกุล)</span></td></tr>
+        <tr><td class="n">7–8</td><td>City · Postal code</td></tr>
+        <tr><td class="n">9–12</td><td>Payment date · Tax rate · Payment Amount · Withholding tax amount</td></tr>
+        <tr><td class="n">13</td><td>Condition</td></tr>
+        <tr><td class="n">14</td><td>Remarks</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>เทคนิคจำ:</b> “<b>1 ไม่มีอัตรา · ก ไม่มีวันจ่าย · 53 ไม่มีชื่อคน</b>” —
+      แบบ 1/1ก ไม่มี Tax Rate เพราะเงินเดือนคำนวณตามขั้น · แบบ “ก” (1ก/2ก) เป็นสรุปทั้งปี จึงไม่มี Payment Date รายรายการ ·
+      แบบ 53 จ่ายให้นิติบุคคล จึงไม่มี Title/Sur-Name</div>
+  </section>
+
+  <!-- 7 -->
+  <section id="legacy">
+    <div class="sec-head"><span class="sec-num">7</span><h2>ECC → S/4HANA — ของเดิมอยู่ตรงไหน</h2></div>
+    <p class="sec-sub">Retrofit หมายถึง “ยกของเดิมมา แล้วเพิ่ม delta” — ต้องรู้ว่าของเดิมคืออะไร</p>
+
+    <h3>เมนู/T-code เดิมใน ECC (แยกกัน 6 ตัว)</h3>
+    <div class="tw"><table>
+      <thead><tr><th>T-code เดิม</th><th>ชื่อเมนู</th><th>แบบยื่น</th></tr></thead>
+      <tbody>
+        <tr><td><code>E01</code></td><td>AP Attach P.N.D. 1 &amp; E-Filing</td><td>ภ.ง.ด. 1</td></tr>
+        <tr><td><code>E1K</code></td><td>AP Attach P.N.D. 1A &amp; E-Filing</td><td>ภ.ง.ด. 1ก</td></tr>
+        <tr><td><code>E02</code></td><td>AP Attach P.N.D. 2 &amp; E-Filing</td><td>ภ.ง.ด. 2</td></tr>
+        <tr><td><code>E2K</code></td><td>AP Attach P.N.D. 2A &amp; E-Filing</td><td>ภ.ง.ด. 2ก</td></tr>
+        <tr><td><code>E03</code></td><td>AP Attach P.N.D. 3 &amp; E-Filing</td><td>ภ.ง.ด. 3</td></tr>
+        <tr><td><code>E04</code></td><td>AP Attach P.N.D. 53 &amp; E-Filing</td><td>ภ.ง.ด. 53</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="keybox">
+      <b>Delta สรุปเป็น 3 บรรทัด</b>
+      <ul>
+        <li><b>รวมทางเข้า</b> — จาก 6 T-code ใน ECC เหลือ <b>ZTAXB_R01 ตัวเดียว</b> ใน S/4 (ตัวเดียวกับที่ TAX-RPT-1 ใช้)</li>
+        <li><b>เพิ่ม 2 มิติการแตกไฟล์</b> — Profit Center และ Recovery Indicator</li>
+        <li><b>โครงไฟล์และ EXIT ไม่เปลี่ยน</b> — DMEEX tree + EXIT FM ยกมาตรง ๆ (retrofit)</li>
+      </ul>
+    </div>
+
+    <p class="body">
+      เอกสารอ้างอิง FS เดิมของ ECC ระบุเป็น 6 ไฟล์ ตามหมายเลข object เดิม —
+      <code>1722_ZWHTFILE_P01</code> (PND1) · <code>1726_..._P01KOR</code> (PND1A) ·
+      <code>1723_..._P02</code> · <code>1727_..._P02K</code> (PND2A) · <code>1724_..._P03</code> · <code>1725_..._P53</code>
+      สังเกตว่า naming เดิมใช้ <b>“KOR”</b> แทน “ก” ส่วน S/4 เปลี่ยนมาใช้ <b>“A”</b>
+    </p>
+  </section>
+
+  <!-- 8 -->
+  <section id="test">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Key Test Conditions (FAT) — TC-001 ถึง TC-007</h2></div>
+    <p class="sec-sub">ชุดนี้จะถูก upload เข้า TestRail แล้วขยายเป็น test script พร้อม expected result</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:74px">Test ID</th><th>Condition</th><th>Expected result</th></tr></thead>
+      <tbody>
+        <tr><td class="n">TC-001</td><td>ดึงข้อมูลตามที่ระบุใน sec 2.2.3 และสร้าง text file</td><td>ได้ text file ครบตามข้อมูลที่กำหนด</td></tr>
+        <tr><td class="n">TC-002</td><td>เลือก <b>Profit Center</b> บน selection screen</td><td>ไฟล์ถูกแตกตาม profit center ที่เลือก</td></tr>
+        <tr><td class="n">TC-003</td><td>เลือก <b>Recovery Indicator</b></td><td>ไฟล์ถูกแตกตาม recovery indicator</td></tr>
+        <tr><td class="n">TC-004</td><td>เลือก <b>ทั้ง PC และ RECID พร้อมกัน</b></td><td>ไฟล์ถูกแตกตามทั้งสองเงื่อนไขพร้อมกัน</td></tr>
+        <tr><td class="n">TC-005</td><td>รันตาม <b>Company Code + Business Place</b></td><td>ผลลัพธ์ออกตาม company code และสาขา</td></tr>
+        <tr><td class="n">TC-006</td><td><b>Negative:</b> exclude WHT code / WHT type บน selection screen</td><td>ไฟล์ของ code/type ที่ถูก exclude <b>ต้องไม่ถูกสร้าง</b></td></tr>
+        <tr><td class="n">TC-007</td><td><b>เอกสารกลับรายการ (reversal document)</b></td><td><b>ต้องไม่มีไฟล์ออกมา</b> สำหรับเอกสาร reversal</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><b>⚠ TC-007 อธิบายให้ลึก:</b> การกลับรายการ WHT ทำให้เกิดคู่เอกสาร (ตัวจริง + ตัวกลับ)
+      ถ้าโปรแกรมนับทั้งคู่ ยอดในไฟล์จะเป็น 0 แต่ <b>จำนวนบรรทัดจะเกิน</b> — RD จะเห็นรายการที่ไม่ควรมี
+      ตอนเทสต์ให้เตรียม 3 เคส: (ก) กลับรายการในงวดเดียวกัน (ข) กลับรายการข้ามงวด (ค) กลับแล้วตั้งใหม่
+      เคส (ข) คือตัวที่ทำให้โปรแกรมพลาดบ่อยที่สุด</div>
+  </section>
+
+  <!-- 8.5 FUT STATUS -->
+  <section id="fut">
+    <div class="sec-head"><span class="sec-num">8.5</span><h2>FUT status &amp; gaps (mid-Oct-2026)</h2></div>
+    <p class="sec-sub">ของซี — สอนในคอร์ส TAX-405 (slides 28 และ 33 upper)</p>
+    <div class="trap"><b>G11 — Tambon (ตำบล):</b> ใน BP เก็บกระจายอยู่ใน street fields ของ <code>ADRC</code> ไม่ได้อยู่ใน field คงที่ → กระทบ logic ที่อยู่ใน text file · <b>ทำ ADRC trace ใน SE16N ก่อนเขียน mapping rules</b> (owner: BP/MDG team + ENH-6 owner) · ownership ทับกันระหว่าง ENH-1 กับ ENH-6</div>
+    <h3>Output groups ↔ แบบ</h3>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>แบบ</th><th>Output group</th><th>WHT type / QSREC</th></tr></thead>
+      <tbody>
+        <tr><td>PND1</td><td><code>E01</code></td><td>1A, 1B, 1D, 1E / 01</td></tr>
+        <tr><td>PND1A (1ก)</td><td><code>E1K</code></td><td>1A, 1B, 1D, 1E / 01</td></tr>
+        <tr><td>PND2</td><td><code>E02</code></td><td>2A / 02</td></tr>
+        <tr><td>PND2A (2ก)</td><td><code>E2K</code></td><td>2A / 02</td></tr>
+        <tr><td>PND3</td><td><code>E03</code></td><td>3A–3F / 03</td></tr>
+        <tr><td>PND53</td><td><code>E04</code></td><td>4A–4F / 53</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body" style="font-size:13px;color:var(--ink-soft)">E01/E02 = ใบแนบ + e-filing PND1/2 · E03/E04 = PND3/53 · E1K/E2K = PND1A/2A · PND54 ไม่อยู่ใน ENH-1 (เป็นของ RPT-1 / FRM-1) · WHT codes กำลัง redesign (G5) → ต้องอัปเดต constants</p>
+    <h3>ต้องมีก่อนเทสระดับ field</h3>
+    <ul class="clean">
+      <li><b>DMEEX mapping workbook</b> — field positions, lengths, padding, constants, วันที่แบบปี พ.ศ., รูปแบบทศนิยม (FD ไม่ได้ฝังไว้)</li>
+      <li>ยืนยันชื่อ format tree / exits ใน S/4 (อาจต่างจาก ECC)</li>
+    </ul>
+    <h3>Gaps</h3>
+    <ul class="clean">
+      <li>กลไก PC/RI และ key ไม่ได้ระบุ — คาดว่า inherit จาก ACDOCA 0L KTOSL WIT <span class="todo">TBC</span></li>
+      <li>Business place + PC/RI รวมกันแล้วได้กี่ไฟล์ — ไม่ได้กำหนด</li>
+      <li>วิธีตัดเอกสาร reversed ไม่ได้ระบุ — เช็ก <code>BKPF-STBLG</code> / XREVERSAL</li>
+      <li>หมายเหตุ config ของ PND53 และช่อง Business Place ของ TC-005 ไม่ครบ</li>
+    </ul>
+    <h3>Test approach</h3>
+    <ol class="flow" style="list-style:none">
+      <li>Baseline ทุก process type → control totals เทียบ <code>WITH_ITEM</code> ต่อ WITHT / QSREC</li>
+      <li>PND3 / PND53 amounts เทียบ <code>WT_QSSHH</code> / <code>WT_QBSHH</code> แล้วบันทึกผลกระทบ GL-ENH-1</li>
+      <li>ไม่กรอง / PC / RI / ทั้งคู่ → นับบรรทัดเทียบ ACDOCA WIT rows · <b>regression บังคับหลัง TKT-01</b> (split lines เปลี่ยนจำนวนบรรทัดได้)</li>
+      <li>คู่ original / reversal ต้องไม่ออกในไฟล์ · ตรวจ 1 record ต่อ file type เทียบ workbook · PND1A partner summation</li>
+      <li>Multi-invoice payment TC-010..016</li>
+    </ol>
+    <h3>Sister objects (ไม่ใช่ของซี)</h3>
+    <ul class="clean">
+      <li><b>TAX-ENH-6</b> SWC PND3/53 — exception path · tree type WTRE · header H + detail D · gross-up exits</li>
+      <li><b>TAX-ENH-5</b> SWC PND1 / 1A / 2 / 2A</li>
+    </ul>
+  </section>
+
+  <!-- 9 -->
+  <section id="expert">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Expert notes — สิ่งที่ FD ไม่ได้เขียน แต่ต้องรู้</h2></div>
+    <p class="sec-sub">มุมที่ทำให้ตอบ review/KT ได้เหนือกว่าการอ่านเอกสาร</p>
+
+    <h3>1) object นี้อยู่บนโปรแกรมเดียวกับอีก 2 objects ของซี — ต้องระวัง regression</h3>
+    <p class="body">
+      <code>ZTAXB_R01</code> ถูกใช้โดย <b>TAX-RPT-1</b> (recon PND54↔VAT36), <b>TAX-FRM-1</b> (ใบแนบ PDF) และ <b>TAX-ENH-1</b> (text file) พร้อมกัน
+      แปลว่า <b>การแก้ selection screen ของตัวหนึ่ง กระทบทั้งสามตัว</b>
+      เวลารายงาน defect ต้องระบุ output group ให้ชัดว่าพังที่ไฟล์ ที่ฟอร์ม หรือที่รายงาน
+    </p>
+    <div class="chain">
+      <span class="node">ZTAXB_R01<br><span style="font-weight:400">selection screen ร่วม</span></span>
+      <span class="sep">→</span>
+      <span class="node out">TAX-RPT-1<br><span style="font-weight:400">ALV recon</span></span>
+      <span class="node out">TAX-FRM-1<br><span style="font-weight:400">Adobe PDF</span></span>
+      <span class="node out">TAX-ENH-1<br><span style="font-weight:400">DMEEX .txt</span></span>
+    </div>
+
+    <h3>2) Profit Center ใน object ตระกูล tax = “มิติที่ ECC ไม่เคยมี”</h3>
+    <p class="body">
+      ทั้ง ENH-1 / FRM-1 / RPT-1 ต่างเพิ่ม Profit Center พร้อมกัน — นี่ไม่ใช่ความบังเอิญ
+      แต่เป็น <b>Key Design Decision ระดับ blueprint</b> ที่ตัดสินว่างานภาษีของ Client ใน S/4 ต้องมองเห็นได้ระดับ profit center
+      (สอดคล้องกับที่ TAX-RPT-3 เลิกใช้กติกา “Exclude profit center O*” ของ ECC)
+      → ผลคือ <b>ทุก object ในกลุ่มนี้ validate Profit Center จาก <code>CEPC</code> เหมือนกันหมด</b>
+    </p>
+
+    <h3>3) ทำไมไฟล์ต้องแยกตาม Business Place เสมอ</h3>
+    <p class="body">
+      เพราะภาษีหัก ณ ที่จ่ายของไทยยื่น <b>รายสาขา</b> (สำนักงานใหญ่/สาขา มีเลขสาขาต่างกัน)
+      ใน SAP เลขสาขาผูกกับ <b>Business Place</b> และปรากฏเป็น field ที่ 2 ของแทบทุก layout
+      ถ้าไฟล์รวมสาขา จะยื่นไม่ได้เลย — นี่คือข้อบังคับทางกฎหมาย ไม่ใช่ทางเลือกของ design
+    </p>
+
+    <h3>4) Error handling ที่ FD กำหนด</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Ref</th><th>Notification level</th><th>สิ่งที่ควรใช้กับอะไร (ตีความ)</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><b>Error</b></td><td>เงื่อนไขที่ทำให้ไฟล์ผิดกฎหมาย — เช่น profit center / recovery indicator ที่ไม่มีในตาราง</td></tr>
+        <tr><td class="n">2</td><td><b>Warning</b></td><td>เงื่อนไขที่ยังรันต่อได้แต่ต้องรู้ — เช่น ไม่พบข้อมูลของบางสาขา</td></tr>
+        <tr><td class="n">3</td><td><b>Info</b></td><td>สรุปผล — จำนวนไฟล์/บรรทัดที่สร้าง</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body"><span class="todo">TODO: verify</span> ข้อความ exception จริง ๆ ยังเป็น N/A ใน FD v0.1 — ต้องตามจาก technical design หรือระบบจริง</p>
+
+    <h3>5) Checklist ก่อนขึ้น FUT (ทำเองได้)</h3>
+    <div class="qbox">
+      <div class="selfq"><p>ก่อนรัน — เตรียมข้อมูลด้วย SE16N 4 ตาราง</p>
+        <div class="a" style="font-size:13.5px;color:var(--ink-soft)">
+          <code>WITH_ITEM</code> (มี WITHT/QSREC/WT_WITHCD ที่ต้องการไหม) →
+          <code>ACDOCA</code> (บรรทัดนั้น KTOSL = WIT และมี PRCTR/RECID ที่จะใช้ทดสอบไหม) →
+          <code>CEPC</code> (profit center ที่จะใส่มีจริงไหม) →
+          <code>T8JJ</code> (recovery indicator ใช้กับ company code นั้นได้ไหม)
+        </div>
+      </div>
+      <div class="selfq"><p>หลังรัน — ตรวจไฟล์ 4 จุด</p>
+        <div class="a" style="font-size:13.5px;color:var(--ink-soft)">
+          จำนวนไฟล์ตรงกับ (แบบยื่น × สาขา × PC/RECID) ไหม → field ที่ 1–2 (Tax ID บริษัท + สาขา) ถูกไหม →
+          ยอดรวม WHT ในไฟล์ = ยอดใน ALV ของ RPT-1 ไหม → เอกสาร reversal หลุดเข้ามาไหม
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- self-check -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">Self-check</span><h2>ทวนความเข้าใจ</h2></div>
+    <p class="sec-sub">ตอบในใจก่อนกดดูเฉลย</p>
+
+    <div class="qbox">
+      <div class="selfq">
+        <p>1. ธุรกรรมหนึ่งมี WHT Type = <code>4C</code> แต่ Recipient Type = <code>03</code> จะออกในไฟล์ไหน?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>ไม่ควรออกที่ไหนเลย และนี่คือ master data ผิด</b> — <code>4C</code> อยู่ในกลุ่ม ภ.ง.ด.53 (นิติบุคคล)
+          แต่ <code>03</code> คือ recipient type ของ ภ.ง.ด.3 (บุคคลธรรมดา) เงื่อนไขทั้งสองต้องสอดคล้องกัน
+          รายการนี้จะหลุดจากทั้งสองไฟล์แบบเงียบ ๆ → ต้องแก้ที่ vendor master / WHT type ของเอกสาร ไม่ใช่แก้โปรแกรม
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>2. Recovery Indicator validate จากตารางอะไร และทำไมต้องส่ง company code ไปด้วย?</p>
+        <details class="ans"><summary></summary><div class="a">
+          จาก <code>T8JJ-RECID</code> (ตาราง JVA) และต้องส่งคู่กับ <code>BUKRS</code>
+          เพราะ recovery indicator เป็นค่าที่นิยามภายใต้บริบทของ joint venture ในแต่ละ company code —
+          validate ลอย ๆ จะยอมรับค่าที่ใช้ไม่ได้จริง แล้วได้ไฟล์เปล่าโดยไม่มี error
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>3. ทำไม ภ.ง.ด. 1ก ต้องพึ่ง enhancement <code>ZTAXA_E01</code> ในขณะที่แบบอื่นไม่ต้อง?</p>
+        <details class="ans"><summary></summary><div class="a">
+          เพราะ 1ก เป็น <b>ใบสรุปทั้งปีต่อผู้มีเงินได้ 1 คน = 1 บรรทัด</b> (field 13 = “Total amount paid per year”)
+          ในขณะที่ WITH_ITEM เก็บเป็นรายเอกสาร → ต้อง sum ตาม partner ก่อน DMEEX จะ map
+          นอกจากนี้ enhancement ยัง sort ตาม company code → partner → WHT code ให้ด้วย
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>4. ถ้าเลือก Profit Center แล้ว ไฟล์จะยังแยกตามสาขาอยู่ไหม?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>ยังแยก</b> — FD ระบุชัดว่า “files separated by business place” เป็นพฤติกรรมพื้นฐาน
+          ส่วน PC / RECID เป็น <b>มิติเพิ่ม</b> ไม่ใช่มิติแทนที่ ดังนั้นเลือก PC = ยิ่งได้ไฟล์เยอะขึ้น ไม่ใช่น้อยลง
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>5. EXIT 2 ตัวชื่ออะไร และทำหน้าที่ต่างกันอย่างไร?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <code>ZDMEE_EXIT_WHT_BASE</code> = คำนวณ <b>ฐานภาษี</b> (WHT base) ·
+          <code>ZDMEE_EXIT_WHT_AMT</code> = คำนวณ <b>ยอดภาษีที่หัก</b> (WHT amount)
+          ทั้งคู่ถูกเรียกจาก DMEEX tree ทุกต้น (ทั้ง PND3 และ PND53 ระบุไว้ตรง ๆ ใน FD)
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>6. Object นี้ครอบคลุม ภ.ง.ด. 54 หรือไม่?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>ไม่</b> — ENH-1 มีแค่ 1, 1ก, 2, 2ก, 3, 53 · ภ.ง.ด. 54 (จ่ายไปต่างประเทศ) อยู่ใน
+          <a href="frm1-wht-attachment.html" style="color:var(--petrol);font-weight:600">TAX-FRM-1</a> (ใบแนบ) และ
+          <a href="rpt1-wht-vat-recon.html" style="color:var(--petrol);font-weight:600">TAX-RPT-1</a> (กระทบยอดกับ ภ.พ.36)
+        </div></details>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>TAX-ENH-1 · FD deep-dive · Enhancement</span>
+    <span>Chatree K. · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

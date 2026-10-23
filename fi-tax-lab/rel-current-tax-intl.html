@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-RPT-4 — Current Tax Report ต่างประเทศ (ZTAXB_R02) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:960px;margin:0 auto;padding:40px 0 90px;}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.1;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:21px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:26px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:14px;font-weight:700;margin:18px 0 6px;color:var(--ink);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;white-space:nowrap;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  tbody td.n{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
+  tbody td.num{text-align:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;white-space:nowrap;}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .arrow{color:var(--brass);font-weight:700;}
+  .attrs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 6px;}
+  @media(max-width:640px){.attrs{grid-template-columns:1fr 1fr;}}
+  .attr{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:var(--paper);}
+  .attr .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .attr .v{font-size:13.5px;font-weight:600;margin-top:2px;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:12px 0 12px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:11px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  .fx{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.9;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:14px 16px;margin:12px 0;overflow-x:auto;white-space:pre-wrap;}
+  .fx b{color:#F2C57C;}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);}
+  .chain .node{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;border:1.3px solid var(--petrol);color:var(--petrol-deep);border-radius:8px;padding:6px 10px;background:rgba(37,99,235,.06);}
+  .chain .node.out{border-color:var(--brass);color:var(--brass);background:rgba(180,83,9,.07);}
+  .chain .sep{color:var(--brass);font-weight:700;}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:11pt;}.masthead{animation:none;}.keybox,.callout,.trap,section,.chain,.fx{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}.tw{overflow:visible;}.fx{background:#f0f0f0;color:#111;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-r020">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">FD Deep-Dive · Report (New)</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>01.01.07.04 Period-End Tax Reporting</span>
+    </div>
+    <h1>TAX-RPT-4 — <span class="accent">Current Tax Report ต่างประเทศ (ZTAXB_R02)</span></h1>
+    <div class="meta">
+      <span>Type · <b>Report</b></span>
+      <span>Nature · <b>New</b></span>
+      <span>T-code · <b>ZTAXB_R02</b></span>
+      <span>Output · <b>FIORI custom report</b></span>
+      <span>Complexity · <b>Complex</b></span>
+      <span>Priority · <b>P1</b></span>
+      <span>Geo · <b>Overseas (12+ ประเทศ)</b></span>
+    </div>
+  </header>
+
+  <p class="lede">
+    ตัวเดียวกับ <a href="rel-current-tax-th.html" style="color:var(--petrol);font-weight:600">TAX-RPT-3</a> ในเชิงแนวคิด
+    แต่ต้องรองรับ <b>กฎหมายภาษีของหลายประเทศพร้อมกัน</b> —
+    วิธีแก้คือ <b>“Standard layout 3 ต้น (CIT / PITA / PSC) + country overlay”</b>
+    โดยความต่างรายประเทศถูกผลักลงไปอยู่ใน <b>ตาราง GL mapping ตัวใหม่ <code>ZTAXB_T02</code></b>
+    ไม่ใช่ในโค้ด · นี่คือ design decision ที่สำคัญที่สุดของ object นี้
+  </p>
+
+  <div class="attrs">
+    <div class="attr"><div class="k">Data source</div><div class="v">SAP + non-SAP</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">flat file เข้า custom table</div></div>
+    <div class="attr"><div class="k">Frequency</div><div class="v">M / Q / Y / Ad hoc</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">รายเดือน–รายปี</div></div>
+    <div class="attr"><div class="k">Users</div><div class="v">Accountant · Tax Compliance</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">+ Business Analyst (display)</div></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px"><b>🔗 อ่านเป็นชุด:</b>
+    <a href="rel-current-tax-th.html" style="color:var(--petrol);font-weight:600">TAX-RPT-3 (ไทย)</a> ·
+    <b>TAX-RPT-4 (ต่างประเทศ · หน้านี้)</b> ·
+    <a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5 (LCF)</a> ·
+    <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N (ไล่ตาราง ZTAXB_T* ด้วยตัวเอง)</a>
+  </div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">1 · ภาพรวม</a>
+    <a href="#deps">2 · Dependencies</a>
+    <a href="#tables">3 · ตาราง 12 ตัว</a>
+    <a href="#t023">4 · ZTAXB_T02</a>
+    <a href="#screen">5 · Selection screen</a>
+    <a href="#flow">6 · Processing flow</a>
+    <a href="#sources">7 · 6 แหล่งข้อมูล</a>
+    <a href="#nodes">8 · Node chain</a>
+    <a href="#layouts">9 · Layout รายประเทศ</a>
+    <a href="#special">10 · สูตรพิเศษ</a>
+    <a href="#malaysia">11 · มาเลเซีย</a>
+    <a href="#test">12 · Test</a>
+    <a href="#expert">13 · Expert notes</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways — 8 ข้อ</b>
+    <ul>
+      <li><b>Standard layout 3 ต้น</b> — <code>CIT_Standard</code> · <code>PITA_Standard</code> · <code>PSC_Standard</code> · ประเทศต่าง ๆ = standard + overlay</li>
+      <li><b>ยกเว้น 2 ตัวที่ไม่ใช้ standard layout เลย</b> — <code>PSC_MY</code> และ <code>MTJDA_MY</code></li>
+      <li><b><code>ZTAXB_T02</code></b> คือตารางใหม่ที่รวม “ความต่างรายประเทศ” ไว้ทั้งหมด (GL mapping + % + capped + profit center + validity)</li>
+      <li>บริษัทเดียวกัน layout เดียวกัน <b>ยัง map GL คนละชุดได้</b> (เช่น <code>PSC_OM</code> ของ OM01 กับ OM02)</li>
+      <li>ยืมตารางของ <a href="rel-current-tax-th.html" style="color:var(--petrol);font-weight:600">RPT-3</a> 6 ตัว โดยเพิ่ม flag <b>“Overseas”</b> ใน <code>ZTAXA_T05</code>/<code>ZTAXA_T06</code></li>
+      <li>Manual adjustment ของต่างประเทศใช้ prefix <b><code>OS_*</code></b> เพื่อแยกจากของไทยในตารางเดียวกัน</li>
+      <li><b>TAX_INFO</b> = field แก้ปัญหา “บริษัท/PC/segment เดียวกันแต่คนละประเทศ”</li>
+      <li>ปลายทางเหมือนกันหมด: <b>ACL3 → ACL4 (tax rate) → ACL5 → ACL</b> · ขาดทุนเก็บลง LCF</li>
+    </ul>
+  </div>
+
+  <!-- 1 -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>ภาพรวม — โจทย์และวิธีแก้</h2></div>
+
+    <h3>โจทย์</h3>
+    <p class="body">
+      Client มีกิจการใน <b>แอลจีเรีย · โอมาน · คาซัคสถาน · UAE · ไซปรัส · โมซัมบิก · เมียนมา · เวียดนาม · มาเลเซีย</b> ฯลฯ
+      แต่ละประเทศมี (ก) กฎหมายภาษีต่างกัน (ข) ผังบัญชี/GL ที่ใช้ต่างกัน (ค) ระบบภาษีปิโตรเลียมคนละแบบ
+      จะเขียนรายงานแยกประเทศละตัว = 12+ โปรแกรม = maintain ไม่ไหว
+    </p>
+
+    <h3>วิธีแก้ — 2 ชั้น</h3>
+    <div class="chain">
+      <span class="node">ชั้นที่ 1<br><b>Standard layout</b><br><span style="font-weight:400">CIT / PITA / PSC</span></span>
+      <span class="sep">+</span>
+      <span class="node">ชั้นที่ 2<br><b>Country overlay</b><br><span style="font-weight:400">item type เฉพาะประเทศ</span></span>
+      <span class="sep">+</span>
+      <span class="node">ZTAXB_T02<br><span style="font-weight:400">GL mapping ต่อ layout × com code</span></span>
+      <span class="sep">→</span>
+      <span class="node out">รายงาน 1 ประเทศ</span>
+    </div>
+
+    <p class="body">
+      ตัวอย่างที่ FD ยกมา: user เลือก <b>segment report = <code>PSC_OM</code></b> และใส่ company code โอมาน
+      → โปรแกรมแสดง item type ทั้งหมดของ <code>PSC_Standard</code> ก่อน
+      → แล้วไปดู <code>ZTAXB_T02</code> ว่า company code นั้น map GL ตัวไหน
+      → ถ้าเป็น <b>OM01</b> ใช้ <code>GL1xxx</code> · ถ้าเป็น <b>OM02</b> ใช้ <code>GL2xxx</code>
+    </p>
+
+    <div class="fx">Selection: Com OM01 · Layout PSC_OM       Selection: Com OM02 · Layout PSC_OM
+   GL1001      500  &gt;&gt; Standard              GL1001      500  &gt;&gt; Standard
+   GL2001      600  &gt;&gt; Standard              GL2001      600  &gt;&gt; Standard
+   GL3001      250  &gt;&gt; Standard              GL3001      250  &gt;&gt; Standard
+   GL1999      482  &gt;&gt; Standard              GL1999      482  &gt;&gt; Standard
+   GL2999      650  &gt;&gt; Standard              GL2999      650  &gt;&gt; Standard
+   GL3999      140  &gt;&gt; Standard              GL3999      140  &gt;&gt; Standard
+   <b>GL1         200  &gt;&gt; Specific</b>              <b>GL2        5,750 &gt;&gt; Specific</b>
+   ────────────────                        ────────────────
+   Total     2,822.00                      Total     8,372.00</div>
+
+    <div class="callout"><b>Assumption ของ FD:</b> “Revaluated information will be based on <b>LC3</b> …
+      จะอยู่ใน <code>ACDOCA</code> field ของ LC3 <b>ไม่ว่าฝั่ง GL จะใช้ standard หรือ custom solution</b>”
+      → เหมือนกับ <a href="rel-current-tax-th.html" style="color:var(--petrol);font-weight:600">RPT-3</a> ทุกประการ — เป็นข้อตกลงระดับ workstream</div>
+  </section>
+
+  <!-- 2 -->
+  <section id="deps">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Dependencies — object นี้พึ่งใครบ้าง</h2></div>
+    <p class="sec-sub">RPT-4 เป็น “ปลายน้ำ” ที่รวบข้อมูลจาก WRICEF อื่นถึง 4 ตัว</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:38px">#</th><th>WRICEF</th><th>ให้อะไร</th><th>ผ่านตาราง</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><b>TAX-ENH-10</b></td><td>อัปโหลด manual adjustment เข้า SAP</td><td><code>ZTAXA_T03</code></td></tr>
+        <tr><td class="n">2</td><td><b><a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5</a></b></td><td>เก็บ/คืนค่า <b>Loss carried forward</b> ปีก่อน</td><td><code>ZTAXB_T01</code></td></tr>
+        <tr><td class="n">3</td><td><b>SAC-RPT-1</b></td><td>ค่า <b>%CR</b> และ <b>ITD cost recovery balance</b></td><td><code>ZTAXB_T06</code> · <code>ZTAXB_T08</code></td></tr>
+        <tr><td class="n">4</td><td><b>TAX-RPT-9</b></td><td><b>asset class พิเศษ</b> และค่า <b>DD&amp;A (depreciation)</b></td><td><code>ZTAXB_T07</code> · <code>ZTAXB_T09</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>ผลกระทบย้อนกลับ (constraint ข้อ 5)</h3>
+    <p class="body">
+      การเปลี่ยนโครงตารางของ current tax report <b>กระทบ (ก) Annual Tax Report (P2) และ (ข) interface ส่งข้อมูลไป BI</b>
+      FD ลงตารางไว้ว่าตารางแต่ละตัวถูกใช้โดยโปรแกรมไหน:
+    </p>
+    <div class="tw"><table>
+      <thead><tr><th>ตาราง</th><th>ถูกใช้โดย</th></tr></thead>
+      <tbody>
+        <tr><td><code>ZTAXA_T05</code></td><td><code>ZTAXA_R05</code> · <code>ZTAXA_I01</code> (BI interface)</td></tr>
+        <tr><td><code>ZTAXA_T06</code></td><td><code>ZTAXA_R05</code> · <code>ZTAXA_I01</code> · <code>ZTAXA_R06</code> (upload) · <code>ZTAXA_R08</code></td></tr>
+        <tr><td><code>ZTAXA_T07</code></td><td><code>ZTAXA_R05</code></td></tr>
+        <tr><td><code>ZTAXA_T03</code></td><td><code>ZTAXA_R05</code> · <code>ZTAXA_R06</code> · <code>ZTAXA_R07</code> (annual) · <code>ZTAXA_R08</code></td></tr>
+        <tr><td><code>ZTAXA_T08</code></td><td><code>ZTAXA_R05</code> · <code>ZTAXA_R07</code></td></tr>
+        <tr><td><code>ZTAXA_T02</code></td><td><code>ZTAXA_R05</code> · <code>ZTAXA_R06</code> · <code>ZTAXA_R07</code> · <code>ZTAXA_R08</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><b>⚠ นี่คือเหตุผลว่าทำไม RPT-4 ถึงเป็น “Complex”:</b>
+      ไม่ใช่เพราะสูตรยาก แต่เพราะ <b>ต้องแชร์ตารางกับรายงานไทยที่ใช้งานอยู่แล้ว</b>
+      การเพิ่ม field “Overseas” จึงเป็นทางเลือกที่ปลอดภัยกว่าการสร้างตารางใหม่ทั้งชุด —
+      แต่แลกมาด้วย <b>ความเสี่ยง regression กับรายงานไทย</b> ทุกครั้งที่แก้</div>
+  </section>
+
+  <!-- 3 -->
+  <section id="tables">
+    <div class="sec-head"><span class="sec-num">3</span><h2>ตารางที่เกี่ยวข้อง 12 ตัว</h2></div>
+    <p class="sec-sub">6 ตัวยืมจาก RPT-3 · 6 ตัวใหม่จาก WRICEF อื่น (รวม 1 ตัวที่ RPT-4 สร้างเอง)</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:38px">#</th><th>Table</th><th>หน้าที่</th><th>ที่มา</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><code>ZTAXA_T05</code></td><td>Node master</td><td>เดิมจาก <b>TAX-RPT-3</b> · <b>เพิ่ม field “Overseas”</b></td></tr>
+        <tr><td class="n">2</td><td><code>ZTAXA_T06</code></td><td>Define node + description</td><td>เดิมจาก TAX-RPT-3 · <b>เพิ่ม “Overseas”</b></td></tr>
+        <tr><td class="n">3</td><td><code>ZTAXA_T07</code></td><td>Define report layout</td><td>เดิมจาก TAX-RPT-3</td></tr>
+        <tr><td class="n">4</td><td><code>ZTAXA_T03</code></td><td>Upload data (flat file)</td><td>เดิมจาก TAX-RPT-3</td></tr>
+        <tr><td class="n">5</td><td><code>ZTAXA_T08</code></td><td>Asset class (include/exclude)</td><td>เดิมจาก TAX-RPT-3</td></tr>
+        <tr><td class="n">6</td><td><code>ZTAXA_T02</code></td><td>Master table — <b>tax rate</b></td><td>เดิมจาก TAX-RPT-3</td></tr>
+        <tr style="background:rgba(180,83,9,.10)"><td class="n">7</td><td><b><code>ZTAXB_T02</code></b></td><td><b>GL mapping สำหรับ OS-CTR</b></td><td><b>ใหม่ — สร้างโดย TAX-RPT-4</b></td></tr>
+        <tr><td class="n">8</td><td><code>ZTAXB_T01</code></td><td>Loss carried forward store</td><td>ใหม่จาก <b>TAX-RPT-5</b></td></tr>
+        <tr><td class="n">9</td><td><code>ZTAXB_T06</code></td><td>Manual adjustment สำหรับ <b>CR%</b></td><td>ใหม่จาก <b>SAC-RPT-1</b></td></tr>
+        <tr><td class="n">10</td><td><code>ZTAXB_T08</code></td><td><b>ITD cost recovery balance</b></td><td>ใหม่จาก SAC-RPT-1</td></tr>
+        <tr><td class="n">11</td><td><code>ZTAXB_T07</code></td><td><b>Specific asset classes</b> (เช่น IDC, QEE)</td><td>ใหม่จาก <b>TAX-RPT-9</b></td></tr>
+        <tr><td class="n">12</td><td><code>ZTAXB_T09</code></td><td><b>Depreciation &amp; NBV</b> (DD&amp;A)</td><td>ใหม่จาก TAX-RPT-9</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>field “Overseas” ทำงานยังไง</h3>
+    <div class="fx">ZTAXA_T05 (Node master)
+   Node Code   Description             <b>Overseas</b>
+   ACL         ANNUAL CALCULATION      (blank)   ← ใช้กับ current tax ไทย
+   ACL         ANNUAL CALCULATION      <b>x</b>         ← ใช้กับ current tax ต่างประเทศ</div>
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      → node code ซ้ำกันได้ แต่ <b>ติ๊ก checkbox Overseas เพื่อแยกชุดข้อมูล</b>
+      (<code>ZTAXA_T06</code> ก็มี field เดียวกัน พร้อมกับ Proportion/Fixed · Fixed Rate ที่ retrofit มาจาก RPT-3)
+    </p>
+
+    <h3>ZTAXB_T06 — กติกาการเลือก CR% (สำคัญตอนกระทบยอด)</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Period/Year</th><th>Comp Code</th><th class="num">CR%</th></tr></thead>
+      <tbody>
+        <tr><td>1.2024</td><td>1010</td><td class="num">15</td></tr>
+        <tr><td>2.2024</td><td>1010</td><td class="num">10</td></tr>
+        <tr><td>4.2024</td><td>1010</td><td class="num">20</td></tr>
+      </tbody>
+    </table></div>
+    <div class="fx">Scenario 1: เลือกงวด <b>3.2024</b> → ใช้ <b>10%</b> (จาก 2.2024 = งวดล่าสุดที่มีในตาราง)
+Scenario 2: เลือกงวด <b>4.2024</b> → ใช้ <b>20%</b> (จาก 4.2024 ตรง ๆ)
+
+กติกา: <b>ใช้ค่า CR% ของงวดล่าสุดที่ไม่เกินงวดที่เลือก</b> — ไม่ใช่ค่าล่าสุดในตาราง</div>
+  </section>
+
+  <!-- 4 -->
+  <section id="t023">
+    <div class="sec-head"><span class="sec-num">4</span><h2><code>ZTAXB_T02</code> — ตารางที่ทำให้ object นี้เป็นไปได้</h2></div>
+    <p class="sec-sub">GL mapping table สำหรับ overseas · 14 คอลัมน์ · เก็บทั้ง mapping และ “กติกาเฉพาะประเทศ”</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:38px">#</th><th>Column</th><th>ทำหน้าที่</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><b>Layout</b></td><td>ผูกกับ tax regime (เช่น <code>PSC_OM</code>, <code>CIT_DZ</code>)</td></tr>
+        <tr><td class="n">2</td><td><b>Com code</b></td><td><b>ตัวที่ทำให้ layout เดียวกันมี mapping ต่างกันได้</b></td></tr>
+        <tr><td class="n">3</td><td>Segment</td><td>Segment ทางบัญชี</td></tr>
+        <tr><td class="n">4</td><td>Node</td><td>Node ในรายงาน</td></tr>
+        <tr><td class="n">5</td><td>Type</td><td>Item type</td></tr>
+        <tr><td class="n">6</td><td>Description</td><td>คำอธิบายบรรทัด</td></tr>
+        <tr><td class="n">7</td><td><b>GL Account</b></td><td>เลขบัญชี · รองรับ <b>ช่วง (from–to)</b> และ <b>ดอกจัน</b></td></tr>
+        <tr><td class="n">8</td><td><b>%Add back from Each GL account</b></td><td>คูณ % <b>รายบัญชี</b> (แต่ละบัญชี % ต่างกันได้)</td></tr>
+        <tr><td class="n">9</td><td><b>%Add back from total GL NODE</b></td><td>คูณ % กับ <b>ผลรวมทั้ง node</b></td></tr>
+        <tr><td class="n">10</td><td><b>Profit center</b></td><td>ถ้าใส่ = ดึงเฉพาะ profit center นั้น</td></tr>
+        <tr><td class="n">11</td><td><b>Capped amount</b></td><td>ยอดเพดานคงที่ (ใช้กับ <b>แอลจีเรีย</b>)</td></tr>
+        <tr><td class="n">12</td><td>CCY</td><td>สกุลเงินของ capped amount</td></tr>
+        <tr><td class="n">13–14</td><td><b>Valid from / Valid to</b></td><td>ควบคุมช่วงเวลาที่ mapping มีผล</td></tr>
+        <tr><td class="n">15</td><td><b>Exclude GL</b></td><td>ตัดบัญชีบางตัวออกจากช่วงที่ระบุ</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>4 กติกาการเขียน GL account (ต้องจำ)</h3>
+    <div class="fx"><b>1) ช่วง (from–to)</b>
+   From = A100000   To = A100099
+   → ได้ A100000 ถึง A100099 ทั้งหมด
+
+<b>2) Exclude</b>
+   From = A100000   To = A100099   Exclude GL = A100059
+   → ได้ทุกบัญชี <b>ยกเว้น</b> A100059
+
+<b>3) ดอกจัน (star)</b>
+   GL = A212*     → A2120000 ถึง A2129999
+   GL = A1*       → A100000 ถึง A199999
+
+<b>4) Profit center condition</b>
+   ถ้าคอลัมน์ Profit center มีค่า เช่น C_PC31
+   → ดึงยอดของ GL นั้น <b>เฉพาะ profit center ดังกล่าว</b> (ส่งเข้า ACDOCA-PRCTR)</div>
+
+    <h3>%Add back — สองแบบที่คนสับสนบ่อย</h3>
+    <div class="tw"><table>
+      <thead><tr><th>คอลัมน์</th><th>คูณกับอะไร</th><th>ตัวอย่างการใช้</th></tr></thead>
+      <tbody>
+        <tr><td><b>%Add back from Each GL account</b></td><td><b>ยอดของแต่ละบัญชี</b> แล้วค่อยรวม</td><td>แอลจีเรีย — “REPRESENTATION EXPENSES” แต่ละบัญชีมี % ไม่เท่ากัน (%Actual non-deduction ของ 3 ปีก่อน)</td></tr>
+        <tr><td><b>%Add back from total GL NODE</b></td><td><b>ยอดรวมทั้ง node</b> ครั้งเดียว</td><td>UAE — “Abu Dhabi administrative costs” × 20% · โมซัมบิก — 80% / 50% · คาซัคสถาน — “Non-deductible OPEX”</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>ทำไมต้องมี 2 แบบ:</b> กฎหมายบางประเทศกำหนดสัดส่วนรายจ่ายต้องห้าม <b>ต่อประเภทรายจ่าย</b>
+      (จึงต้องคูณรายบัญชี) ขณะที่บางประเทศกำหนด <b>ต่อกลุ่มรายจ่ายทั้งก้อน</b> (จึงคูณที่ node)
+      ถ้าใช้ผิดแบบ ผลลัพธ์จะต่างกันเมื่อบัญชีในกลุ่มมี % ไม่เท่ากัน</div>
+
+    <div class="trap"><b>⚠ ชื่อตารางใน FD ไม่นิ่ง:</b> เนื้อความบางจุดอ้างถึง <code>ZTAXB_T10</code> และ <code>ZTAXA_T01</code>
+      แทนที่จะเป็น <code>ZTAXB_T02</code> — จากบริบททั้งฉบับ <b>ตารางที่ถูกต้องคือ <code>ZTAXB_T02</code></b>
+      (ทั้งหัวข้อ 2.1.3.7 และ TC-045 ยืนยัน) <span class="todo">TODO: verify</span> กับทีม functional ก่อนส่ง technical design</div>
+  </section>
+
+  <!-- 5 -->
+  <section id="screen">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Selection screen — 2 บล็อกหลัก + display report</h2></div>
+    <p class="sec-sub">แบ่งเป็น General Selection (Main) · General Selection (Branch) · Display Report · Display Currency</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Field</th><th>Attr</th><th>Default</th><th>Validation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Company code (Main)</b></td><td>Mandatory</td><td>—</td><td><code>T001-BUKRS</code> · <b>multiple selection</b></td></tr>
+        <tr><td><b>Reporting Year</b></td><td>Mandatory</td><td>—</td><td>บังคับกรอก</td></tr>
+        <tr><td>Reporting Period</td><td>Input</td><td><b>From: 1</b></td><td>ต้องมีทั้ง From และ To</td></tr>
+        <tr><td>Profit center</td><td>Input</td><td>—</td><td><code>CEPC-PRCTR</code> · from–to</td></tr>
+        <tr><td>Recovery Indicator</td><td>Input</td><td>—</td><td><code>T8JJ-RECID</code> · <b>คู่กับ <code>BUKRS</code></b> · multiple</td></tr>
+        <tr><td>Depreciation Area (Main)</td><td>Input</td><td>—</td><td><code>T093B-AFABE</code> · <b>ตรวจคู่กับ <code>BUKRS</code></b></td></tr>
+        <tr><td>Ledger (Main)</td><td>Input</td><td>—</td><td>N/A</td></tr>
+        <tr><td>Segment (Main)</td><td>Input</td><td>—</td><td><code>FAGL_SEGM-SEGMENT</code> · multiple</td></tr>
+        <tr style="background:rgba(180,83,9,.10)"><td><b>Segment Report</b></td><td><b>Mandatory</b></td><td>—</td><td><b>ตัวกำหนด layout + tax regime</b> · <code>ZTAXA_T07-REPORT</code></td></tr>
+        <tr style="background:rgba(180,83,9,.10)"><td><b>TAX_INFO</b></td><td>Input</td><td>—</td><td>ดึง <b>tax rate</b> จาก <code>ZTAXA_T02</code> กรณี profit center เดียวกันแต่ต้องคำนวณ 2 ประเทศ</td></tr>
+        <tr><td>Company code (Branch)</td><td>Input</td><td>—</td><td><code>T001-BUKRS</code> · multiple</td></tr>
+        <tr><td>Profit center (Branch)</td><td>Input</td><td>—</td><td><code>CEPC-PRCTR</code></td></tr>
+        <tr><td>Recovery indicator (Branch)</td><td>Input</td><td>—</td><td><code>T8JJ</code> คู่กับ company code</td></tr>
+        <tr><td>Depreciation area (Branch)</td><td>Input</td><td>—</td><td><code>T093B-AFABE</code> คู่กับ <code>BUKRS</code></td></tr>
+        <tr><td>Ledger (Branch)</td><td>Input</td><td>—</td><td>N/A</td></tr>
+        <tr><td>Segment (Branch)</td><td>Input</td><td>—</td><td><code>FAGL_SEGM-SEGMENT</code></td></tr>
+        <tr><td><b>Display currency</b></td><td>Mandatory</td><td><b>LC2</b></td><td>radio LC1 / LC2 / LC3 · เปลี่ยนได้</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>ตารางที่ใช้ validate — สรุปให้จำ</h3>
+    <div class="tw"><table>
+      <thead><tr><th>สิ่งที่ validate</th><th>ตาราง</th><th>Field</th><th>เงื่อนไขพิเศษ</th></tr></thead>
+      <tbody>
+        <tr><td>Company code</td><td><code>T001</code></td><td><code>BUKRS</code></td><td>—</td></tr>
+        <tr><td>Profit center</td><td><code>CEPC</code></td><td><code>PRCTR</code></td><td>—</td></tr>
+        <tr><td>Recovery indicator</td><td><code>T8JJ</code></td><td><code>RECID</code></td><td><b>คู่กับ <code>BUKRS</code></b></td></tr>
+        <tr><td>Depreciation area</td><td><code>T093B</code></td><td><code>AFABE</code></td><td><b>คู่กับ <code>BUKRS</code></b></td></tr>
+        <tr><td>Segment</td><td><code>FAGL_SEGM</code></td><td><code>SEGMENT</code></td><td>—</td></tr>
+        <tr><td>Segment Report (layout)</td><td><code>ZTAXA_T07</code></td><td><code>REPORT</code></td><td>—</td></tr>
+        <tr><td>Tax rate (ผ่าน TAX_INFO)</td><td><code>ZTAXA_T02</code></td><td>Tax rate %</td><td>ใช้ร่วมกับ company code + segment</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>TAX_INFO — field ที่ต้องเข้าใจให้ลึก</h3>
+    <p class="body">
+      ปัญหา: บางกรณี <b>company code เดียวกัน · profit center เดียวกัน · segment เดียวกัน</b>
+      แต่ต้องคำนวณภาษีตามกฎของ <b>สองประเทศ</b> (เช่น กิจการร่วมไทย–มาเลเซีย)
+      → ระบบแยกไม่ออกว่าจะใช้ tax rate ตัวไหน
+    </p>
+    <div class="fx">ตัวอย่างค่าใน ZTAXA_T02:
+   COMCODE  TYPE   Segment   PROFIT CENTER  <b>TAX_INFO</b>   TAX RATE%   VALID FROM   VALID TO
+   TH02                CIT_TH    10000x                              20      01.06.2019   31.12.9999
+   TH02                CIT_TH    10000x        <b>CIT_THMM</b>          25                   (MM)
+   TH02     MTJDA      MTJDA     *             <b>MTJDA_TH</b>          10      01.01.2024   31.12.9999
+   TH02     MTJDA      MTJDA     *             <b>MTJDA_MY</b>          10      01.01.2024   31.12.9999
+
+<b>MTJDA_MY</b> = segment MTJDA + ประเทศ MY → ใช้กฎมาเลเซีย
+<b>MTJDA_TH</b> = segment MTJDA + ประเทศ TH → ใช้กฎไทย</div>
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      TAX_INFO ยังถูกส่งต่อไปที่ <a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5</a>
+      เพื่อแยก LCF ของสองประเทศไม่ให้ปนกัน — ดังนั้น <b>ถ้ารัน RPT-4 โดยไม่ใส่ TAX_INFO ในเคสเหล่านี้ LCF จะผิด</b>
+    </p>
+  </section>
+
+  <!-- 6 -->
+  <section id="flow">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Processing flow 010 → 110</h2></div>
+    <p class="sec-sub">อ่านครั้งเดียวแล้วเห็นภาพทั้ง object</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:52px">Ref#</th><th>Process step</th><th>Data</th></tr></thead>
+      <tbody>
+        <tr><td class="n">010</td><td>บันทึกรายการ Asset และ Tax ใน S/4HANA</td><td>Asset transactions · Tax postings</td></tr>
+        <tr><td class="n">020</td><td>รายการ Asset ปรากฏใน <b>Asset History Sheet</b></td><td><code>S_ALR_87011990</code></td></tr>
+        <tr><td class="n">030</td><td>รายการภาษีลง G/L → trial balance</td><td><code>ACDOCA</code></td></tr>
+        <tr><td class="n">040</td><td>Manual adjustment ผ่าน flat file</td><td><code>ZTAXA_T03</code> (ผ่าน <b>TAX-ENH-10</b>)</td></tr>
+        <tr><td class="n">050</td><td>User รันรายงาน</td><td>selection screen input</td></tr>
+        <tr><td class="n">060</td><td>ดึงข้อมูล 3 ทาง: trial balance · asset history sheet · flat file</td><td>ACDOCA · AHS · custom table</td></tr>
+        <tr><td class="n">070</td><td>ดึงจาก custom table ของ WRICEF อื่น</td><td><code>ZTAXB_T01</code> · <code>012</code> · <code>014</code> · <code>016</code> · <code>018</code></td></tr>
+        <tr><td class="n">080</td><td>แสดงค่าตาม <b>tax regime</b> ที่เลือก</td><td>—</td></tr>
+        <tr><td class="n">090</td><td>แสดงราย <b>node</b> · คอลัมน์แยกตาม <b>segment + profit center</b> · มีคอลัมน์ Total</td><td>—</td></tr>
+        <tr><td class="n">100</td><td>กด <b>“Update LCF table”</b> → เก็บผลขาดทุนลงตาราง</td><td><code>ZTAXB_T01</code> (<b>TAX-RPT-5</b>)</td></tr>
+        <tr><td class="n">110</td><td>ปีถัดไป ดึงกลับมาเป็นยอดยกมา</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>รูปแบบการแสดงผล</h3>
+    <div class="tw"><table>
+      <thead><tr><th rowspan="2">Item Type description</th><th colspan="2" style="text-align:center">Segment 1</th><th style="text-align:center">Segment 2</th><th rowspan="2" style="text-align:right">Total</th></tr>
+             <tr><th>Profit center 1</th><th>Profit center 2</th><th>Profit center 3</th></tr></thead>
+      <tbody>
+        <tr><td><b>TEST</b></td><td class="num">460</td><td class="num">300</td><td class="num">440</td><td class="num"><b>1,200</b></td></tr>
+        <tr><td>GL Account 1</td><td class="num">110</td><td class="num">50</td><td class="num">140</td><td class="num">300</td></tr>
+        <tr><td>GL Account 2</td><td class="num">300</td><td class="num">100</td><td class="num">100</td><td class="num">500</td></tr>
+        <tr><td>GL Account 3</td><td class="num">50</td><td class="num">150</td><td class="num">200</td><td class="num">400</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      → 1 item type ที่ผูกกับหลาย GL จะแสดง <b>ยอดรวม (grouping)</b> และ <b>กางราย GL (ungrouping)</b> ได้
+      พร้อมแตกคอลัมน์ตาม profit center และปิดท้ายด้วย Total
+    </p>
+  </section>
+
+  <!-- 7 -->
+  <section id="sources">
+    <div class="sec-head"><span class="sec-num">7</span><h2>6 แหล่งข้อมูล — บรรทัดหนึ่งในรายงานมาจากไหนได้บ้าง</h2></div>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:160px">Source</th><th>วิธีทำงาน</th><th>ตัวอย่าง item type</th></tr></thead>
+      <tbody>
+        <tr><td><b>GL</b></td><td>ดึงยอด trial balance จาก <code>ACDOCA</code> ตรง ๆ ผ่าน <code>ZTAXB_T02</code></td><td>HG1 · HG2 · DONATION · TAX PENALTY</td></tr>
+        <tr><td><b>GL with condition</b></td><td>ดึงจาก GL แต่มีเงื่อนไขเพิ่ม — <b>%</b> · <b>profit center</b> · <b>segment</b> · <b>movement (C/F − B/F)</b> · <b>SHKZG</b></td><td>ROU: UNREALIZED FX GAIN/LOSS (REVAL) · DECOM FUND - ACTUAL PAID</td></tr>
+        <tr><td><b>GL with calculation</b></td><td>เฉพาะ <code>PSC_Standard</code> — ยอด GL <b>ลบ</b> ทุก node ที่อยู่หลัง node <code>CL_N</code> ก่อนหน้า</td><td>OTHER INCOME · OPERATING COST · FINANCE COST</td></tr>
+        <tr><td><b>Formula</b></td><td>คำนวณจาก node อื่น</td><td>HC3 = HG1 − HG2 · ACL3 · ACL</td></tr>
+        <tr><td><b>Flat file</b></td><td>อ่านจาก <code>ZTAXA_T03</code> · item type ต่างประเทศใช้ prefix <b><code>OS_*</code></b></td><td>OS_PU1–28 · OS_TU1–18 · OS_AU1–2</td></tr>
+        <tr><td><b>Asset history sheet / custom table</b></td><td><code>S_ALR_87011990</code> หรือ <code>ZTAXB_T09</code> (จาก TAX-RPT-9)</td><td>PPE: DD&amp;A PER TAX (3 แบบ)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>“GL movement” — C/F − B/F</h3>
+    <div class="fx"><b>GL movement</b> = ยอดยกไป (carried forward) − ยอดยกมา (brought forward)
+                = การเคลื่อนไหวของบัญชีงบดุลในงวด
+
+ใช้กับ item type ที่มาจาก <b>บัญชีงบดุล</b> ไม่ใช่บัญชีกำไรขาดทุน เช่น
+   - ROU: UNREALIZED FX GAIN/LOSS (REVAL)      → <b>ไม่กลับเครื่องหมาย</b>
+   - DECOM LIAB: UNREALIZED FX GAIN/LOSS       → <b>ไม่กลับเครื่องหมาย</b>
+   - DECOM FUND - ACTUAL PAID                  → (deductible)
+   - INTANGIBLE DRILLING COSTS: PER TAX        → (deductible)</div>
+
+    <div class="callout"><b>ทำไมบัญชีงบดุลต้องใช้ movement:</b> บัญชี P&amp;L ยอดในงวด = การเคลื่อนไหวอยู่แล้ว
+      แต่บัญชีงบดุลเก็บ <b>ยอดสะสม</b> — ถ้าเอายอดคงเหลือมาใส่รายงานภาษี จะได้ยอดสะสมทั้งชีวิตของบัญชี ไม่ใช่ของงวดนี้
+      → นี่คือเหตุผลที่ item type เดียวกันอาจถูกระบุเป็น “GL” ในที่หนึ่ง แต่ “GL with condition” ในอีกที่</div>
+
+    <h3>PPE: DD&amp;A PER TAX — 3 ทางที่ต่างกัน</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Item type</th><th>Source</th><th>กติกา asset class</th></tr></thead>
+      <tbody>
+        <tr><td>PPE: DD&amp;A PER TAX <b>(ASSET HISTORY SHEET)</b></td><td>AHS <code>S_ALR_87011990</code></td><td><b>Exclude</b> asset class ตาม <code>ZTAXA_T08</code></td></tr>
+        <tr><td>PPE: DD&amp;A PER TAX <b>(PRE-OPERATING)</b></td><td>AHS</td><td><b>Include</b> เฉพาะ asset class ที่กำหนด เช่น <code>N999910</code>, <code>N999920</code></td></tr>
+        <tr><td>PPE: DD&amp;A PER TAX <b>(TAX AA REPORT)</b></td><td><code>ZTAXB_T09</code> (TAX-RPT-9)</td><td>ค่าถูกคำนวณมาแล้วจากรายงาน AA</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      กรณีพิเศษ (เช่น IDC, QEE) ใช้ <code>ZTAXB_T07</code> ซึ่งเก็บ Country · Com code · Segment · Profit center · Asset class · Asset type
+      → กติกากลับด้าน: <b>“include แทน exclude”</b>
+    </p>
+  </section>
+
+  <!-- 8 -->
+  <section id="nodes">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Node chain — โครงกระดูกที่ทุก layout ใช้ร่วมกัน</h2></div>
+    <p class="sec-sub">จำ chain นี้ได้ = อ่านรายงานของทุกประเทศออก</p>
+
+    <div class="fx"><b>HG1</b>   NET (INCOME) LOSS PER ACCOUNTING          [GL]
+<b>HG2</b>   INCOME TAXES                              [GL]
+<b>HC3</b>   NET (INCOME) LOSS BEFORE TAX              [Formula]  = <b>HG1 − HG2</b>
+
+<b>PMD</b>   PERMANENT DIFFERENCE                      = PGL_N + PGL_T + OS_PU
+  <b>PGL_N</b>  Permanent · non-deductible items        [GL · <b>reverse sign</b>]
+  <b>PGL_T</b>  Permanent · taxable items               [GL / GL with condition]
+  <b>OS_PU</b>  Permanent · manual adjustment           [Flat file · OS_PU1…OS_PU28]
+
+<b>TMD</b>   TEMPORARY DIFFERENCE                      = TGL-N + TGL-T + OS_TU
+  <b>TGL-N</b>  Temporary · non-deductible items        [GL / GL with condition]
+  <b>TGL-T</b>  Temporary · taxable items
+     <b>TCL_T</b>  PPE: DD&amp;A PER TAX (AHS / Pre-op / AA report)
+  <b>OS_TU</b>  Temporary · manual adjustment           [Flat file · OS_TU1…OS_TU18]
+
+<b>ACL1</b>  TAXABLE (INCOME) LOSS − BEFORE LCF        [Calculation] = ผลรวมทุก node ตั้งแต่ HC3
+<b>ACL2</b>  LOSS CARRIED FORWARD                      [ZTAXB_T01 · <b>TAX-RPT-5</b>]
+<b>OS_AU1</b> MANUAL ADJUSTMENT: LOSS CARRIED FORWARD  [Flat file]
+<b>ACL3</b>  TAXABLE (INCOME) LOSS − AFTER LCF         [Calculation] = <b>ACL1 + ACL2 + OS_AU1</b>
+<b>ACL4</b>  TAX RATE                                  [ZTAXA_T02]
+<b>ACL5</b>  INCOME TAX EXPENSE (SAVING): YTD − CURRENT MONTH   [Calculation]
+<b>ACL6</b>  INCOME TAX EXPENSE (SAVING): YTD − PREVIOUS MONTH  [GL]
+<b>OS_AU2</b> MANUAL ADJUSTMENT: INCOME TAX − TRUE UP  [Flat file]
+<b>ACL</b>   INCOME TAX EXPENSE (SAVING): MTD          [Calculation] = <b>ACL5 − ACL6 − OS_AU2</b></div>
+
+    <h3>ACL5 — จุดที่ตรรกะ “ขาดทุน = ไม่มีภาษี” อยู่</h3>
+    <div class="fx">ถ้า TAXABLE INCOME AFTER LCF (Total) เป็น <b>ยอดเดบิต (&gt;= 0)</b> → <b>ขาดทุน</b>
+   → ACL5 = <b>0</b>  และ  <b>เก็บผลขาดทุนลง LCF table ZTAXB_T01</b>
+
+ถ้า TAXABLE INCOME AFTER LCF (Total) เป็น <b>ยอดเครดิต (&lt; 0)</b> → <b>กำไร</b>
+   → ACL5 = ACL3 × ACL4  <b>กลับเครื่องหมาย</b></div>
+
+    <div class="trap"><b>⚠ อย่าสับสนเรื่องเครื่องหมาย:</b> ในรายงานนี้ <b>เดบิต = ขาดทุน · เครดิต = กำไร</b>
+      ซึ่งตรงข้ามกับสัญชาตญาณของคนที่คุ้นกับงบกำไรขาดทุน (ที่รายได้อยู่เครดิต ค่าใช้จ่ายอยู่เดบิต — จึงถูกต้องแล้ว)
+      สิ่งที่ต้องระวังคือ <b>เงื่อนไข “&gt;= 0” หมายถึงเดบิต</b> ตามที่ FD เขียน — เวลาเทสต์ให้ทำทั้งเคสกำไรและขาดทุน</div>
+
+    <h3>PSC_Standard — โครงที่ต่างจาก CIT/PITA</h3>
+    <p class="body">
+      <code>PSC_Standard</code> ไม่แบ่งเป็น permanent/temporary แต่แบ่งเป็น
+      <b>TX (Taxable items)</b> และ <b>NT (Non-deductible items)</b> พร้อม node สรุป <code>CL_T</code> / <code>NCL</code>
+      และมี item type ที่เป็น <b>“GL with calculation”</b> ซึ่งใช้สูตรพิเศษ:
+    </p>
+    <div class="fx"><b>OTHER INCOME</b>               = [A4*] + [B4*]           − node ทั้งหมดหลัง CL_N ก่อนหน้า
+<b>UTILITIES AND OFFICE COST</b>  = [A5005*] + [B5005*]     − node ทั้งหมดหลัง CL_N ก่อนหน้า
+<b>OPERATING COST</b>             = A51*                    − node ทั้งหมดหลัง CL_N ก่อนหน้า
+<b>ADMINISTRATIVE EXPENSE (G&amp;A)</b> = A53*                  − node ทั้งหมดหลัง CL_N ก่อนหน้า
+<b>PPE: DDA PER AC</b>            = [A5401*]+[A5402*]+[A5404*] − node ทั้งหมดหลัง CL_N ก่อนหน้า
+<b>IMPAIRMENT LOSS ON ASSETS</b>  = A5403*                  − node ทั้งหมดหลัง CL_N ก่อนหน้า
+<b>FINANCE COST</b>               = A56*                    − node ทั้งหมดหลัง CL_N ก่อนหน้า
+<b>OTHER EXPENSES</b>             = [A58*] + [A59*]         − node ทั้งหมดหลัง CL_N ก่อนหน้า</div>
+    <div class="callout"><b>อ่านสูตร “ลบ node ที่อยู่ระหว่างกลาง” ยังไง:</b> แนวคิดคือ
+      <b>CL_N คือยอด “ที่เหลือ” ของกลุ่มบัญชีนั้น หลังหักรายการที่ถูกแยกออกไปแสดงเป็น GL_N ทีละบรรทัดแล้ว</b>
+      → กันไม่ให้ยอดถูกนับซ้ำสองรอบ (รอบแรกในบรรทัดย่อย รอบสองในยอดกลุ่ม)
+      ลำดับ node จึงสำคัญมาก — ต้องดูตาราง PSC_Standard ประกอบเสมอ</div>
+  </section>
+
+  <!-- 9 -->
+  <section id="layouts">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Layout รายประเทศ — overlay ทั้ง 14 ตัว</h2></div>
+    <p class="sec-sub">“Standard + สิ่งที่ประเทศนั้นมีเพิ่ม” · company code เป็นตัวชี้ GL mapping</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Layout</th><th>ประเทศ</th><th>Com code</th><th>ต่อยอดจาก</th><th>จุดเด่นที่ต้องจำ</th></tr></thead>
+      <tbody>
+        <tr><td><code>CIT_DZ</code></td><td>แอลจีเรีย</td><td class="n">XB01</td><td>CIT_Standard</td><td><b>Capped amount</b> ค่าเช่ารถ 200,000 DZD · REPRESENTATION EXPENSES %รายบัญชี · TRP tax expense เฉพาะ segment <code>PITA_DZ</code> งวดปัจจุบัน</td></tr>
+        <tr><td><code>PITA_OM</code></td><td>โอมาน (Block 6)</td><td class="n">OM02</td><td>PITA_Standard</td><td>ADDITIONAL MAKE-UP PAYMENT · MUKHAIZNA differential revenue · HO ALLOCATION CHARGED · OS_PU26/27 (%MEC)</td></tr>
+        <tr><td><code>PITA_KZ</code></td><td>คาซัคสถาน</td><td class="n">1119</td><td>PITA_Standard</td><td>เงื่อนไข <b>profit center เฉพาะ <code>C_PC31</code></b> (HO / PGH / realized FX) · NON-DEDUCTIBLE OPEX ×%</td></tr>
+        <tr><td><code>PITA_UAE</code></td><td>UAE (AGP)</td><td class="n">1110</td><td>PITA_Standard</td><td><b>ABU DHABI ADMIN COSTS ×20% non-deductible</b> · ROU กลุ่มหนึ่งใช้ <b>Formula reverse sign</b> · PPE DD&amp;A PER TAX (TB) เฉพาะ PC <code>N_PC35</code></td></tr>
+        <tr><td><code>CIT_CY</code></td><td>ไซปรัส</td><td class="n">1074</td><td>CIT_Standard</td><td>COMPANY REGISTRATION FEE · REVOLVING INTEREST TO INTERCO · pre-op asset class <code>N999910</code>/<code>N999920</code> (ใช้ทั้ง 1074 และ 1081)</td></tr>
+        <tr><td><code>PITA_MZ</code></td><td>โมซัมบิก</td><td class="n">1081</td><td>PITA_Standard</td><td><b>3 อัตรา %:</b> REPRESENTATION 80% · TRAVEL ALLOWANCES 50% · VEHICLE (rental/repair/fuel) 50%</td></tr>
+        <tr><td><code>CIT_MM</code></td><td>เมียนมา</td><td class="n">—</td><td>CIT_Standard</td><td>PROVISION FOR PENSION &amp; SEVERANCE PAY (+ accretion + unrealized FX reval)</td></tr>
+        <tr><td><code>PSC_DZ</code></td><td>แอลจีเรีย</td><td class="n">1012</td><td>PSC_Standard</td><td><b>DEEMED SALES</b> — สูตร 3 ขั้นเทียบกับ LCF (ดู §10)</td></tr>
+        <tr><td><code>PSC_MM</code></td><td>เมียนมา</td><td class="n">TH02</td><td>PSC_Standard</td><td>SALE PER TAX · TRANSPORTATION FEE · ROYALTY · COST RECOVERED จาก <code>ZTAXB_T08</code></td></tr>
+        <tr><td><code>PSC_VN</code></td><td>เวียดนาม</td><td class="n">1009 · 1010</td><td>PSC_Standard</td><td>เหมือน PSC_MM แต่ <b>ไม่มี TRANSPORTATION FEE</b> ในตาราง node</td></tr>
+        <tr><td><code>PSC_OM</code></td><td>โอมาน</td><td class="n">OM01 · OM02</td><td>PSC_Standard</td><td><b>OM01 เท่านั้น</b> มี SALE PER TAX–GL · <b>OM02 เท่านั้น</b> มี SALE PER TAX–TAX CR REPORT · DEEMED SALES ใช้ทั้งคู่</td></tr>
+        <tr><td><code>MTJDA_MY</code></td><td>ไทย–มาเลเซีย JDA</td><td class="n">—</td><td><b>ไม่ใช้ standard</b></td><td>โครง ACL7–ACL16 (ดู §11)</td></tr>
+        <tr><td><code>PSC_MY</code></td><td>มาเลเซีย</td><td class="n">1102</td><td><b>ไม่ใช้ standard</b></td><td>Entertainment 50%/100% ตาม text · abandonment cess (doc type <code>KR</code>) · FPS lease (SNP/GK) · marginal 25% / non-marginal 38%</td></tr>
+        <tr><td><code>CIT_MY</code></td><td>มาเลเซีย</td><td class="n">—</td><td>—</td><td>Interest income (<code>75090100</code> interco · <code>75000100</code>) · <b>Tax at 15%</b></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="trap"><b>⚠ ประโยคที่ต้องขีดเส้นใต้ใน FD:</b>
+      “<b>Noted: The standard layout will <u>not</u> apply to PSC_MY, MTJDA_MY</b>”
+      → สอง layout นี้ต้องอ่าน spec ของตัวเองล้วน ๆ ห้าม assume ว่าต่อยอดจาก PSC_Standard
+      เป็นจุดที่ทำให้ประเมิน effort ผิดได้ง่ายที่สุด</div>
+
+    <h3>PITA_KZ — ตัวอย่างพฤติกรรม segment/profit center บนหน้าจอ</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Case</th><th>Input</th><th>ผลลัพธ์</th></tr></thead>
+      <tbody>
+        <tr><td><b>Case 1</b></td><td>Com 1119 · profit center <b>blank</b> · segment <b>blank</b> · report <code>PITA_KZ</code></td><td>แสดง <b>ทุก segment และทุก profit center</b> (เช่น <code>CIT_KZ</code> / <code>C_PC31</code> = 5,000 และ <code>PSC_KZ</code> / <code>N_PC36</code> = 1,000)</td></tr>
+        <tr><td><b>Case 2</b></td><td>Com 1119 · profit center <b>blank</b> · segment <b><code>PSC_KZ</code></b></td><td>แสดง <b>เฉพาะ segment นั้น</b> และ profit center ที่ผูกกับ segment นั้น</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 10 -->
+  <section id="special">
+    <div class="sec-head"><span class="sec-num">10</span><h2>สูตรพิเศษ 2 ตัวที่ถามบ่อยที่สุด</h2></div>
+
+    <h3>ก) Capped amount — แอลจีเรีย (CIT_DZ)</h3>
+    <div class="fx">Item type: <b>PCL_T — Car rental expense (Capped amount)</b>
+ดึงค่าจากคอลัมน์ <b>Capped amount</b> ใน ZTAXB_T02
+
+<b>LC1</b> → ใช้ค่าตรง ๆ = <b>200,000 DZD</b>
+<b>LC2</b> → แปลงจาก LC1 ด้วย <b>exchange rate type ZTH</b> (standard setup)
+<b>LC3</b> → แสดงยอดเท่ากับ capped amount ในตาราง</div>
+    <div class="callout"><b>ทำไม LC3 ไม่แปลง:</b> LC3 คือ freely-defined currency ที่เก็บค่าที่ตีราคาแล้ว —
+      เพดานตามกฎหมายเป็นจำนวนเงินคงที่ในสกุลท้องถิ่น จึงไม่ควรถูกตีราคาใหม่
+      · ส่วน LC2 (สกุลกลุ่ม) ต้องแปลงเพื่อให้เทียบกับรายการอื่นได้ → นี่คือเหตุผลที่ TC-011/012/013 แยกเทสต์ LC1/LC2/LC3 ของแอลจีเรียโดยเฉพาะ</div>
+
+    <h3>ข) Deemed sales — แอลจีเรีย (PSC_DZ) · สูตร 3 ขั้น</h3>
+    <div class="fx"><b>ขั้นที่ 1 — เช็ค LCF ก่อน</b>
+   มี LCF (จาก TAX-RPT-5) ?  → <b>Deemed sale = 0</b>  (จบ)
+   ไม่มี                     → ไปขั้นที่ 2
+
+<b>ขั้นที่ 2 — เทียบ EBT กับ LCF</b>
+   EBT &gt; 0  (ขาดทุน)                → <b>Deemed sale = 0</b>
+   EBT &lt; 0  (กำไร) และ &gt; LCF-R022   → ไปขั้นที่ 3
+   EBT &lt; LCF-R022                   → <b>Deemed sale = 0</b>
+
+<b>ขั้นที่ 3 — คำนวณ</b>
+   X = [ (Manual Adj SALE PER TAX)
+       + (Manual Adj OPEX)
+       + (PPE: DD&amp;A PER TAX)
+       + (Manual Adj DD&amp;A)
+       + (Manual Adj Other Perm diff)
+       + (Manual Adj Other Temp diff) ]  ÷ (1 − tax rate) × tax rate
+
+   Deemed sales = <b>[X] − [GL A410X031 Domestic Sales: Deemed Inc_Tax Pay by Gov YTD − PREVIOUS MONTH]</b></div>
+
+    <h4>PSC_OM (โอมาน) — สูตรเดียวกันแต่ฐานต่างกัน</h4>
+    <div class="fx">X = [ (Sale per tax)
+    + (Cost recovered − Utilised during the year)
+    + (Manual Adj OPEX)
+    + (Manual Adj DD&amp;A)
+    + (Manual Adj Other Perm diff)
+    + (Manual Adj Other Temp diff) ]  ÷ (1 − tax rate) × tax rate
+
+Deemed sales = [X] − [GL A410X031 … YTD − PREVIOUS MONTH]
+ใช้ได้ทั้ง <b>OM01 และ OM02</b>  (PSC_OM <b>ไม่ต้องเช็ค LCF ก่อน</b> ต่างจาก PSC_DZ)</div>
+
+    <div class="callout"><b>“Deemed sales tax paid by government” คืออะไร:</b>
+      ในสัญญาแบ่งปันผลผลิตบางฉบับ <b>รัฐเป็นผู้ชำระภาษีแทนผู้รับสัมปทาน</b>
+      แต่ทางภาษีถือว่าเงินภาษีนั้นเป็น <b>รายได้เพิ่มของผู้รับสัมปทาน</b> → ต้อง gross-up กลับเข้าไปในฐานภาษี
+      สูตร <code>÷ (1 − rate) × rate</code> คือสูตร gross-up มาตรฐาน
+      ส่วนการลบ GL <code>A410X031</code> คือ <b>หักส่วนที่บันทึกไปแล้วในเดือนก่อน</b> (กันนับซ้ำ)</div>
+
+    <h3>ค) SALE PER TAX — TAX CR REPORT (PSC_OM · OM02 เท่านั้น)</h3>
+    <div class="fx">= Cost recovered: Utilised during the year  ÷  %CR
+= คำนวณ <b>รายเดือน</b> แล้วรวม 12 เดือน (เพราะ %CR เปลี่ยนทุกเดือน)
+= <b>กลับเครื่องหมาย</b> แสดงเป็นค่าติดลบ
+
+Source:
+   Utilised during the year  →  ZTAXB_T08
+   %CR                      →  ZTAXB_T06  (ถ้าเดือนนั้นไม่มี ใช้ค่าล่าสุดที่ไม่เกินงวดที่เลือก)</div>
+  </section>
+
+  <!-- 11 -->
+  <section id="malaysia">
+    <div class="sec-head"><span class="sec-num">11</span><h2>มาเลเซีย — โครง ACL7 → ACL16 (ต่างจากที่อื่นทั้งหมด)</h2></div>
+    <p class="sec-sub">ใช้กับ <code>MTJDA_MY</code> และ <code>PSC_MY</code> · มี 2 ชั้นการหักขาดทุน</p>
+
+    <div class="fx"><b>ACL7</b>   Current year: ADJUSTED (Income)/Loss
+         = ผลรวมของ perm non-deductible + perm taxable + temp non-deductible
+           + temp taxable + perm manual adj + temp manual adj + net (income) loss before tax
+
+<b>ชั้นที่ 1 — Capital Allowance</b>
+<b>ACL8</b>   B/F: Unabsorbed capital allowances        [TAX-RPT-5]
+  +    ADD: PPE − DD&amp;A PER TAX (TAX AA REPORT)      [TAX-RPT-9]
+  +    ADD: PPE − DD&amp;A PER TAX (ASSET HISTORY SHEET)
+  +    OS_TU2 ADD: MANUAL ADJUSTMENT − PPE: DD&amp;A PER TAX  [Flat file]
+<b>ACL9</b>   Less: Utilised during the year            [Formula]
+<b>ACL10</b>  C/F: Unabsorbed capital allowances        [TAX-RPT-5]
+         = ACL8 + Current year CA + Adj + ACL9
+
+<b>ACL11</b>  Statutory (income)/Loss
+<b>OS_PU25</b> Manual Adjustment − Investment allowance  [Flat file]
+
+<b>ชั้นที่ 2 — Business Loss</b>
+<b>ACL12</b>  B/F: Unabsorbed business loss             [TAX-RPT-5]
+<b>ACL13</b>  Add: Current year business loss           [Formula]
+<b>OS_AU1</b> MANUAL ADJUSTMENT: LOSS CARRIED FORWARD   [Flat file]
+<b>ACL14</b>  Less: Utilised during the year            [Formula]
+<b>ACL15</b>  C/F: Unabsorbed business loss             [TAX-RPT-5]
+
+<b>ACL16</b>  Assessable (Income)/Loss
+         = ACL11 + OS_PU25 − ACL14
+
+<b>ACL4</b>   TAX RATE  → PSC_MY: <b>marginal 25% · non-marginal 38%</b></div>
+
+    <h3>ACL9 — Less: Utilised during the year (capital allowance)</h3>
+    <div class="fx"><b>Case 1)</b> ACL7 &gt;= 0  (ขาดทุน)          → Utilised = <b>0</b>
+
+<b>Case 2)</b> ACL7 &lt; 0   (กำไร)
+   ให้ CA_total = ACL8 + PPE DD&amp;A (AA report) + PPE DD&amp;A (AHS) + Manual adj PPE DD&amp;A
+
+   <b>2.1)</b> ถ้า  (ACL7 × −1)  &lt;  CA_total
+        → Utilised = <b>ACL7</b>            (ใช้ได้แค่เท่าที่มีกำไร)
+
+   <b>2.2)</b> ถ้า  (ACL7 × −1)  &gt;  CA_total
+        → Utilised = <b>CA_total × (−1)</b>  (ใช้ CA ได้หมดแต่ไม่พอหักกำไร)</div>
+
+    <h3>ACL11 / ACL13 / ACL14</h3>
+    <div class="fx"><b>ACL11 Statutory (income)/Loss</b>
+   ถ้า (ACL7 − ACL9) &gt;= 0  → แสดง <b>0</b>
+   ถ้า (ACL7 − ACL9) &lt;  0  → แสดงค่าตามจริง
+
+<b>ACL13 Add: Current year business loss</b>
+   Case 1) ACL11 = 0 (ขาดทุน)
+        ACL7 &gt;= 0 (ขาดทุน) → ACL13 = ACL7
+        ACL7 &lt;  0 (กำไร)   → ACL13 = 0
+   Case 2) ACL11 &lt; 0 (กำไร)  → ACL13 = 0
+
+<b>ACL14 Less: Utilised during the year</b> (business loss)
+   Case 1) ACL11 &lt; 0 (กำไร)
+        ให้ BL_total = ACL12 + ACL13 + OS_AU1
+        1.1) ถ้า ((ACL11 + OS_PU25) × −1) &lt; BL_total
+             → Utilised = (ACL11 + OS_PU25)
+        1.2) ถ้า ((ACL11 + OS_PU25) × −1) &gt; BL_total
+             → Utilised = BL_total × (−1)
+   Case 2) ACL11 &gt;= 0 (ขาดทุน) → Utilised = <b>0</b></div>
+
+    <div class="keybox">
+      <b>รูปแบบที่ซ้ำกันใน 2 ชั้น — จำ pattern เดียวใช้ได้ทั้งคู่</b>
+      <ul>
+        <li><b>ขาดทุน → ใช้สิทธิไม่ได้ (Utilised = 0)</b></li>
+        <li><b>กำไร → ใช้สิทธิได้ แต่ไม่เกิน 2 ค่า:</b> (ก) จำนวนกำไรที่มี (ข) จำนวนสิทธิที่เหลือ — เอาตัวที่น้อยกว่า</li>
+        <li><b>ที่เหลือยกไปปีหน้า</b> (C/F) → เก็บลง <a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5</a></li>
+      </ul>
+    </div>
+
+    <h3>PSC_MY — เงื่อนไขเฉพาะที่ต้องรู้</h3>
+    <ul class="clean">
+      <li><b>Entertainment</b> — อ่าน <b>text ของบรรทัด</b>: ถ้าเป็น <code>"BUSS ENT"</code> คิด <b>50%</b> · ถ้าเป็น <code>"OTHER ENT"</code> คิด <b>100%</b> · <b>ไม่ต้องกลับเครื่องหมาย</b></li>
+      <li><b>Abandonment cess payment paid</b> — ดึงจาก ACDOCA (BUKRS, GJAHR, POPER, SEGMENT, PRCTR, RLDNR) แล้วกรอง <b>document type <code>KR</code></b></li>
+      <li><b>FPS Lease Payment–SNP</b> — เหมือนข้างบนแต่กรองด้วย <b>text “SNP FPS:Lease pymt”</b> ไม่ใช่ doc type</li>
+      <li><b>FPS Lease Payment–GK</b> — กรองด้วย <b>document type <code>RE</code></b> (<code>BLART</code>)</li>
+      <li><b>IDC per tax และ First schedule allowance (QEE)</b> — ใช้ <code>ZTAXA_T12</code> เพื่อ <b>include</b> asset class แล้วดึงจาก AHS <span class="todo">TODO: verify</span> <span style="font-size:12.5px;color:var(--ink-soft)">(FD สะกด ZTAXA_T12 — น่าจะหมายถึง ZTAXB_T07)</span></li>
+      <li><b>C/F unabsorbed มี 4 ประเภท</b> — marginal / non-marginal / investment / non-investment · <b>โอนข้ามประเภทไม่ได้</b> (marginal ใช้ได้เฉพาะกับ marginal)</li>
+    </ul>
+
+    <div class="trap"><b>⚠ กติกา “ห้ามข้ามประเภท” คือกับดักตอนออกแบบตาราง:</b>
+      LCF ของ marginal ต้องเก็บแยกจาก non-marginal ตั้งแต่ต้น — ถ้าเก็บรวมแล้วค่อยแยกทีหลัง จะแยกไม่ออก
+      ดังนั้นต้องดูให้แน่ว่า <code>ZTAXB_T01</code> มีมิติพอที่จะแยก 4 ประเภทได้
+      (ผ่าน tax rate / TAX_INFO) <span class="todo">TODO: verify</span></div>
+  </section>
+
+  <!-- 12 -->
+  <section id="test">
+    <div class="sec-head"><span class="sec-num">12</span><h2>Key Test Conditions — TC-001 ถึง TC-045 (จัดกลุ่ม)</h2></div>
+    <p class="sec-sub">45 เคส · แบ่งเป็น 4 กลุ่มใหญ่ จำเป็นกลุ่มง่ายกว่าจำเป็นข้อ</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:96px">กลุ่ม</th><th>Test ID</th><th>ทดสอบอะไร</th></tr></thead>
+      <tbody>
+        <tr><td><b>A · พื้นฐาน</b></td><td class="n">TC-001 – TC-003</td><td>selection screen · ledger field · เคส main + branch company code (เช่น main CY 1074 + branch MZ 1081 แต่เลือก layout CY → ต้องแสดงตาม CY)</td></tr>
+        <tr><td><b>B · ตาราง</b></td><td class="n">TC-004 – TC-009 · TC-045</td><td><code>ZTAXB_T02</code> (GL mapping ต่าง com code) · <code>ZTAXB_T09</code> (DD&amp;A) · <code>ZTAXB_T07</code> (asset class) · <code>ZTAXB_T01</code> (LCF) · <code>ZTAXB_T06</code> (CR%) · <code>ZTAXB_T08</code> (cost recovery)</td></tr>
+        <tr><td><b>C · Layout</b></td><td class="n">TC-010 · 014 · 017 · 020 · 023 · 026 · 029 · 032 · 033 · 035 · 038 · 039 · 043 · 044</td><td>ทุก layout ต้องแสดงถูกต้องพร้อม calculation logic — CIT_DZ · PITA_OM · PITA_KZ · PITA_UAE · CIT_CY · PITA_MZ · CIT_MM · PSC_DZ · PSC_MM · PSC_VN · PSC_OM · MTJDA_MY · PSC_MY · CIT_MY</td></tr>
+        <tr><td><b>D · สกุลเงิน</b></td><td class="n">TC-011 – 013 · 015 – 016 · 018 – 019 · 021 – 022 · 024 – 025 · 027 – 028 · 030 – 031 · 036 – 037 · 040 – 041</td><td>LC1 / LC2 (และ LC3 เฉพาะแอลจีเรีย) ของแต่ละประเทศ</td></tr>
+        <tr><td><b>E · เฉพาะเคส</b></td><td class="n">TC-034 · TC-042</td><td>TC-034: ดึง tax rate จาก <code>ZTAXA_T02</code> ผ่าน <b>TAX_INFO</b> (เคสเมียนมา) · TC-042: <b>ledger S1</b> สำหรับนิติบุคคลมาเลเซีย</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>สังเกต pattern ของ test:</b> ทุก layout มี “คู่แฝด” — <b>1 เคสทดสอบ layout · 2 เคสทดสอบสกุลเงิน</b>
+      ยกเว้นแอลจีเรียที่มี 3 (LC1/LC2/LC3 เพราะมี capped amount)
+      → เวลาวางแผน FUT ให้เตรียมข้อมูลทดสอบ <b>ต่อประเทศ</b> ไม่ใช่ต่อเคส จะประหยัดเวลามาก</div>
+  </section>
+
+  <!-- 13 -->
+  <section id="expert">
+    <div class="sec-head"><span class="sec-num">13</span><h2>Expert notes</h2></div>
+
+    <h3>1) design pattern ที่ควรจดจำ — “config over code”</h3>
+    <p class="body">
+      ความต่างของ 12+ ประเทศ ถูกผลักลงไปอยู่ใน <b>ตาราง</b> เกือบทั้งหมด (mapping · % · capped · profit center · validity)
+      สิ่งที่เหลือในโค้ดคือ <b>โครง node chain</b> และ <b>สูตรพิเศษไม่กี่ตัว</b> (deemed sales, Malaysia ACL9/13/14)
+      → ผลคือ <b>เพิ่มประเทศใหม่โดยไม่ต้องแก้โปรแกรม</b> ตราบใดที่กฎหมายเข้าโครงเดิมได้
+      นี่คือคำตอบที่ดีมากเมื่อถูกถามว่า “ทำไมออกแบบแบบนี้”
+    </p>
+
+    <h3>2) จุดที่ design นี้ “แตก” — และ FD ก็ยอมรับ</h3>
+    <p class="body">
+      <code>PSC_MY</code> และ <code>MTJDA_MY</code> <b>ไม่ใช้ standard layout</b> เพราะกฎหมายมาเลเซีย
+      มีโครงการหักขาดทุน 2 ชั้น (capital allowance → business loss) ที่ยัดเข้าโครง permanent/temporary ไม่ได้
+      → บทเรียน: <b>pattern ที่ดีไม่ได้แปลว่าครอบคลุม 100%</b> · การยอมรับข้อยกเว้นแต่เนิ่น ๆ ดีกว่าฝืนบิด standard
+    </p>
+
+    <h3>3) การอ่าน “reverse sign” ให้ถูก</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Node</th><th>Reverse sign?</th><th>เหตุผล</th></tr></thead>
+      <tbody>
+        <tr><td>PERMANENT DIFFERENCE: NON-DEDUCTIBLE ITEMS</td><td><b>ใช่</b></td><td>ดึง 100 → แสดง −100 (FD ยกตัวอย่างตรง ๆ)</td></tr>
+        <tr><td>TEMPORARY DIFFERENCE: NON-DEDUCTIBLE ITEMS</td><td><b>ใช่</b></td><td>เหตุผลเดียวกัน</td></tr>
+        <tr><td>GL movement (ROU / DECOM LIAB unrealized FX reval)</td><td><b>ไม่</b></td><td>FD ย้ำ “with no reversed sign” ทุกประเทศ</td></tr>
+        <tr><td>ACL5 (income tax expense)</td><td><b>ใช่</b></td><td>ผลคูณ ACL3 × ACL4 ต้องกลับเครื่องหมาย</td></tr>
+        <tr><td>PSC_MY Entertainment</td><td><b>ไม่</b></td><td>FD ระบุ “For this sign reverse is not required”</td></tr>
+        <tr><td>PITA_UAE — ROU กลุ่ม Formula</td><td><b>ใช่</b></td><td>“Reversed sign of GL Node”</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>4) ข้อควรระวังเรื่องเอกสาร (สำหรับคนที่ต้อง review FD)</h3>
+    <ul class="clean">
+      <li>ชื่อตาราง GL mapping ปรากฏ 3 แบบ: <code>ZTAXB_T02</code> (ถูก) · <code>ZTAXB_T10</code> · <code>ZTAXA_T01</code> <span class="todo">TODO: verify</span></li>
+      <li>Processing flow ref 070 เขียน <code>ZTAXB_R05/013/014/016/018</code> (ตัว R) แต่ควรเป็น <code>ZTAXB_T*</code> (ตัว T = table) <span class="todo">TODO: verify</span></li>
+      <li>บาง item type อ้าง <code>ZTAXA_R05</code> เป็นแหล่ง tax rate ทั้งที่ควรเป็นตาราง <code>ZTAXA_T02</code> <span class="todo">TODO: verify</span></li>
+      <li>คำว่า “Node” ถูก find-replace ทับคำว่า “Under” ในหลายจุดของ FD — อ่านแล้วสะดุด แต่ความหมายคือ “under”</li>
+    </ul>
+    <div class="callout"><b>ทำไมต้องจดพวกนี้ไว้:</b> การชี้จุดพิมพ์ผิดใน FD <b>อย่างสุภาพและมีหลักฐาน</b>
+      คือวิธีสร้างความน่าเชื่อถือที่เร็วที่สุดสำหรับ consultant ใหม่ — และมันช่วยทีม dev จริง ๆ
+      เพราะถ้าปล่อยไป dev จะไปหา table ที่ไม่มีอยู่จริง</div>
+
+    <h3>5) แผนที่ความรู้ — เชื่อมกับสิ่งที่คุณรู้อยู่แล้ว</h3>
+    <div class="tw"><table>
+      <thead><tr><th>สิ่งที่รู้แล้วจาก RPT-3 / งานเดิม</th><th>ใช้ต่อได้ทันทีใน RPT-4</th></tr></thead>
+      <tbody>
+        <tr><td>LC1/LC2/LC3 = HSL/KSL/OSL + RHCUR/RKCUR/ROCUR</td><td>เหมือนกัน 100%</td></tr>
+        <tr><td>ACDOCA เป็น Universal Journal (line item)</td><td>แหล่งหลักของทุก GL node</td></tr>
+        <tr><td>Validation: CEPC / T8JJ+BUKRS</td><td>เหมือนกัน + เพิ่ม T093B, FAGL_SEGM</td></tr>
+        <tr><td>สูตร ANNUAL (P/L) AFTER LCF ของไทย</td><td>เทียบเท่า ACL3 ของ overseas</td></tr>
+        <tr><td>ปุ่ม “Update table for LCF”</td><td>มีทั้งใน RPT-3 และ RPT-4 → เขียนลงตารางเดียวกัน</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- self-check -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">Self-check</span><h2>ทวนความเข้าใจ</h2></div>
+    <div class="qbox">
+      <div class="selfq">
+        <p>1. Standard layout มีกี่ต้น และมี layout ไหนที่ไม่ใช้ standard เลย?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>3 ต้น</b> — <code>CIT_Standard</code> · <code>PITA_Standard</code> · <code>PSC_Standard</code> ·
+          layout ที่ <b>ไม่ใช้ standard</b> คือ <b><code>PSC_MY</code></b> และ <b><code>MTJDA_MY</code></b>
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>2. บริษัท OM01 และ OM02 ใช้ layout <code>PSC_OM</code> เหมือนกัน แต่ผลลัพธ์ต่างกันได้อย่างไร?</p>
+        <details class="ans"><summary></summary><div class="a">
+          เพราะ <code>ZTAXB_T02</code> มีคอลัมน์ <b>Com code</b> → map GL คนละชุดได้
+          (OM01 ใช้ <code>GL1xxx</code> · OM02 ใช้ <code>GL2xxx</code>) และยังมี item type ที่ใช้ได้เฉพาะบางบริษัท —
+          เช่น <b>SALE PER TAX – GL เฉพาะ OM01</b> · <b>SALE PER TAX – TAX CR REPORT เฉพาะ OM02</b>
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>3. TAX_INFO ใช้แก้ปัญหาอะไร ยกตัวอย่าง</p>
+        <details class="ans"><summary></summary><div class="a">
+          แก้กรณีที่ <b>company code + profit center + segment เหมือนกัน แต่ต้องคำนวณตามกฎ 2 ประเทศ</b>
+          เช่น <code>MTJDA_MY</code> (มาเลเซีย) vs <code>MTJDA_TH</code> (ไทย) หรือ <code>CIT_THMM</code> —
+          ระบบจะใช้ TAX_INFO เลือก tax rate จาก <code>ZTAXA_T02</code> และแยก LCF ใน
+          <a href="rel-loss-carryforward.html" style="color:var(--petrol);font-weight:600">TAX-RPT-5</a> ไม่ให้ปนกัน
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>4. เขียนสูตร ACL3 และ ACL</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>ACL3 = ACL1 + ACL2 + OS_AU1</b> (taxable income/loss ก่อน LCF + LCF + manual adj LCF) ·
+          <b>ACL = ACL5 − ACL6 − OS_AU2</b> (ภาษี YTD เดือนนี้ − YTD เดือนก่อน − true-up = ภาษีของเดือนนี้ MTD)
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>5. ถ้า TAXABLE INCOME AFTER LCF เป็นยอดเดบิต ACL5 เท่ากับเท่าไร?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>เท่ากับ 0</b> — เพราะเดบิต = ขาดทุน จึงไม่มีภาษี · และโปรแกรมต้อง <b>เก็บผลขาดทุนลง <code>ZTAXB_T01</code></b>
+          เพื่อยกไปใช้ปีหน้า · ถ้าเป็นเครดิต (กำไร) → ACL5 = ACL3 × ACL4 กลับเครื่องหมาย
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>6. <code>A212*</code> ใน GL mapping แปลว่าอะไร?</p>
+        <details class="ans"><summary></summary><div class="a">
+          แปลว่าบัญชี <b><code>A2120000</code> ถึง <code>A2129999</code></b> — ใช้ดอกจันแทนการพิมพ์ช่วง
+          (เช่นเดียวกับ <code>A1*</code> = <code>A100000</code>–<code>A199999</code>)
+          ใช้คู่กับคอลัมน์ <b>Exclude GL</b> เพื่อตัดบัญชีบางตัวออกจากช่วงได้
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>7. Deemed sales ของ PSC_DZ ต่างจาก PSC_OM ตรงไหน?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>PSC_DZ ต้องเช็ค LCF และเทียบ EBT ก่อน 2 ขั้น</b> — ถ้ามี LCF หรือขาดทุน → deemed sale = 0 ·
+          ส่วน <b>PSC_OM คำนวณตรง ๆ</b> ไม่มีขั้นเช็ค LCF · นอกจากนี้ฐานการคำนวณต่างกัน
+          (DZ ใช้ Manual Adj SALE PER TAX · OM ใช้ Sale per tax + Cost recovered − Utilised)
+          ทั้งคู่ปิดท้ายด้วยการหัก GL <code>A410X031</code> ของเดือนก่อน
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>8. มาเลเซียมีการหักขาดทุนกี่ชั้น อะไรบ้าง?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>2 ชั้น</b> — ชั้นที่ 1 <b>Unabsorbed capital allowances</b> (ACL8→ACL10 · หักด้วย ACL9)
+          ชั้นที่ 2 <b>Unabsorbed business loss</b> (ACL12→ACL15 · หักด้วย ACL14)
+          ปิดท้ายที่ <b>ACL16 Assessable (Income)/Loss</b> = ACL11 + OS_PU25 − ACL14 ·
+          และ C/F ทั้ง 4 ประเภท (marginal / non-marginal / investment / non-investment) <b>โอนข้ามประเภทไม่ได้</b>
+        </div></details>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>TAX-RPT-4 · FD deep-dive · Current Tax (Overseas)</span>
+    <span>Chatree K. · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

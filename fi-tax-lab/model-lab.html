@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP Model Lab — 5 interactive models (split lines · payee · multi-invoice · realized FX · PC × RI) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  [hidden]{display:none!important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  a{color:var(--petrol);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin:0 6px 22px 0;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(27px,5.2vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .easy{margin:18px 0 6px;border-radius:12px;padding:14px 18px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.22);font-size:14px;}
+  .easy::before{content:"อธิบายง่าย";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:15px;font-weight:700;margin:2px 0 8px;color:var(--petrol-deep);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  .small{font-size:12.5px;color:var(--ink-soft);}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+  .tblwrap table{margin:0;}
+  @media(max-width:600px){.tblwrap table{min-width:540px;}.tblwrap table td,.tblwrap table th{word-break:normal;overflow-wrap:normal;}}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .num{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:11px 0 11px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  ol.flow>li b{font-weight:600;}
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;margin:12px 0;background:var(--card);}
+  .card .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .grid2>.card,.grid3>.card{margin:0;}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(185,28,28,.05);font-size:13.8px;}
+  .trap b{color:var(--warn);}
+  .lock{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(29,78,216,.06);font-size:13.8px;}
+  .lock::before{content:"🔒 Locked design — ไม่ใช่ defect";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 18px 16px;font-size:14px;}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  /* evidence tags (knowledge-base convention) */
+  .ev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:1px;white-space:nowrap;border:1px solid transparent;}
+  .ev.std{color:var(--ink-soft);border-color:var(--line);}
+  .ev.bp{color:var(--petrol-deep);background:rgba(37,99,235,.10);}
+  .ev.fd{color:var(--petrol);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+  .ev.sys{color:#fff;background:var(--petrol);}
+  .ev.agreed{color:#fff;background:var(--petrol-deep);}
+  .ev.infer{color:var(--brass);border:1px dashed var(--brass);}
+  .ev.tbc{color:var(--warn);border:1px dashed var(--warn);background:rgba(185,28,28,.06);}
+  :root[data-theme="dark"] .ev.sys,:root[data-theme="dark"] .ev.agreed{color:var(--paper);}
+  .evlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;}
+  .evlegend .ev{margin-left:0;margin-right:4px;}
+  /* status pills */
+  .st{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;border-radius:20px;padding:1px 8px;white-space:nowrap;}
+  .st.open{color:var(--warn);background:rgba(185,28,28,.09);}
+  .st.block{color:#fff;background:var(--warn);}
+  .st.wip{color:var(--brass);background:rgba(180,83,9,.13);}
+  .st.done{color:var(--petrol-deep);background:rgba(37,99,235,.12);}
+  :root[data-theme="dark"] .st.block{color:var(--paper);}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .seealso{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;font-size:12.5px;align-items:center;}
+  .seealso>span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .seealso a{text-decoration:none;border:1.3px solid var(--line);border-radius:20px;padding:3px 11px;color:var(--petrol-deep);background:var(--card);}
+  .seealso a:hover{border-color:var(--petrol);}
+  /* interactive tools (T39) — state in memory only */
+  .tool{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;margin:18px 0;background:linear-gradient(160deg,rgba(37,99,235,.06),rgba(180,83,9,.04));}
+  .tool-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tool-h b{font-size:15px;}
+  .tool-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:5px;padding:2px 7px;}
+  .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;}
+  @media(max-width:640px){.fgrid{grid-template-columns:1fr;}}
+  .fld{display:flex;flex-direction:column;gap:5px;margin:7px 0;}
+  .fld>.lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;}
+  .seg button{font:inherit;font-size:12.5px;border:1.4px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.3;}
+  .seg button:hover{border-color:var(--petrol);}
+  .seg button[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol);color:#fff;}
+  .seg button:disabled{opacity:.4;cursor:not-allowed;}
+  .tool input,.tool textarea,.tool select{font:inherit;font-size:13.5px;color:var(--ink);background:var(--card);border:1.4px solid var(--line);border-radius:8px;padding:6px 9px;width:100%;}
+  .tool textarea{min-height:56px;resize:vertical;}
+  .tool input:focus,.tool textarea:focus,.tool select:focus,.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  .outs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+  .outs.two{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:640px){.outs,.outs.two{grid-template-columns:1fr;}}
+  .out{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:11px;padding:10px 12px;background:var(--card);}
+  .out.b{--_c:var(--brass);} .out.d{--_c:var(--petrol-deep);} .out.w{--_c:var(--warn);}
+  .out .k{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--_c,var(--petrol));}
+  .out .v{font-size:15px;font-weight:700;margin:3px 0;line-height:1.35;}
+  .out .why{font-size:12px;color:var(--ink-soft);}
+  .notes{margin-top:10px;font-size:13px;}
+  .notes li{margin:4px 0 4px 18px;}
+  .copyout{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:12px 14px;margin-top:10px;}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .btn{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--petrol);background:var(--petrol);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--petrol);}
+  .btnmsg{font-size:12px;color:var(--petrol-deep);}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .btn:not(.ghost),:root[data-theme="dark"] .tool-h .tg{color:var(--paper);}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.lock,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb,.seealso{display:none;}details.fold,details.ans{border-color:#ccc;}.tblwrap{overflow:visible;}}
+  /* page-specific · T45 SAP Model Lab */
+  .lab{border:1.5px solid var(--line);border-radius:16px;background:var(--card);margin:18px 0 8px;overflow:hidden;}
+  .lab-h{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:linear-gradient(160deg,rgba(var(--petrol-rgb),.08),rgba(var(--brass-rgb),.05));}
+  .lab-h b{font-size:14.5px;margin-right:auto;}
+  .lab-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);background:var(--petrol);border-radius:5px;padding:2px 7px;white-space:nowrap;}
+  .lab-h .tg.b{background:var(--brass);} .lab-h .tg.d{background:var(--petrol-deep);}
+  .lab-b{padding:4px 16px 16px;}
+  .step{display:flex;align-items:center;gap:9px;margin:18px 0 9px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);}
+  .step i{font-style:normal;display:inline-grid;place-items:center;width:21px;height:21px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:10.5px;letter-spacing:0;}
+  .step::after{content:"";flex:1;height:1px;background:var(--line);}
+  .ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:4px 16px;}
+  .ctl .fld>.lbl{display:flex;gap:6px;align-items:center;}
+  .presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px;}
+  .presets>span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-right:2px;}
+  .presets button{font:inherit;font-size:12px;border:1.3px dashed var(--brass);background:transparent;color:var(--ink);border-radius:999px;padding:3px 11px;cursor:pointer;}
+  .presets button:hover,.presets button[aria-pressed="true"]{border-style:solid;background:rgba(var(--brass-rgb),.12);}
+  .lab input.n,.lab input.t,.lab select.s{font:inherit;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink);background:var(--paper);border:1.3px solid var(--line);border-radius:7px;padding:4px 7px;width:100%;min-width:0;}
+  .lab input.n{text-align:right;font-variant-numeric:tabular-nums;}
+  .lab input:focus,.lab select:focus,.lab button:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  .xbtn{font:inherit;font-size:12px;line-height:1;border:1.3px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:7px;padding:5px 8px;cursor:pointer;}
+  .xbtn:hover{border-color:var(--warn);color:var(--warn);}
+  .addbtn{font:inherit;font-size:12px;border:1.3px dashed var(--petrol);background:transparent;color:var(--petrol);border-radius:8px;padding:5px 11px;cursor:pointer;margin-top:6px;}
+  .addbtn:disabled{opacity:.4;cursor:not-allowed;}
+  /* SAP-style document / ALV */
+  .sapdoc{border:1.5px solid var(--line);border-radius:12px;overflow:hidden;margin:8px 0 4px;background:var(--card);}
+  .sap-hd{display:flex;flex-wrap:wrap;gap:3px 18px;padding:7px 12px;background:var(--chip);color:var(--chip-text);font-family:'JetBrains Mono',monospace;font-size:11px;}
+  .sap-hd b{color:#fff;font-weight:600;} :root[data-theme="dark"] .sap-hd b{color:var(--chip-text);}
+  .sap-hd .t{margin-left:auto;opacity:.75;}
+  .sapdoc .tblwrap{margin:0;}
+  table.sap{margin:0;font-family:'JetBrains Mono',monospace;font-size:11.8px;}
+  table.sap thead th{font-size:9.8px;padding:7px 8px;white-space:nowrap;}
+  table.sap tbody td{padding:6px 8px;white-space:nowrap;}
+  table.sap td.n,table.sap th.n{text-align:right;font-variant-numeric:tabular-nums;}
+  table.sap tr.tot td{font-weight:700;border-top:2px solid var(--ink);background:rgba(var(--petrol-rgb),.05);}
+  table.sap tr.sub td{font-weight:600;background:rgba(var(--brass-rgb),.07);}
+  table.sap tr.bad td{background:rgba(185,28,28,.08);}
+  table.sap tr.skip td{color:var(--ink-soft);text-decoration:line-through;}
+  table.sap tr.fx td{background:rgba(var(--brass-rgb),.10);}
+  table.sap td.hl{color:var(--warn);font-weight:700;}
+  table.sap .fid{display:inline-block;min-width:16px;padding:0 4px;margin-right:4px;border-radius:4px;background:rgba(var(--petrol-rgb),.12);color:var(--petrol-deep);font-size:9.5px;font-weight:700;text-align:center;}
+  .pos{color:var(--petrol-deep);} .neg{color:var(--warn);}
+  .soft{color:var(--ink-soft);}
+  .sap-hd .ev.std{color:var(--chip-text);border-color:rgba(255,255,255,.35);}
+  .chks{list-style:none;margin:6px 0 0;}
+  .chks li{position:relative;padding:6px 0 6px 28px;font-size:13px;line-height:1.5;border-bottom:1px dotted var(--line);}
+  .chks li:last-child{border-bottom:none;}
+  .chks li::before{position:absolute;left:0;top:6px;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+  .chks li.ok::before{content:"✓";background:rgba(var(--petrol-rgb),.15);color:var(--petrol-deep);}
+  .chks li.no::before{content:"✗";background:rgba(185,28,28,.14);color:var(--warn);}
+  .chks li.tbc::before{content:"?";background:rgba(var(--brass-rgb),.18);color:var(--brass);}
+  .chks li.info::before{content:"i";background:var(--line-soft);color:var(--ink-soft);}
+  .bar3{display:flex;height:22px;border-radius:7px;overflow:hidden;margin:10px 0 2px;border:1px solid var(--line);}
+  .bar3>span{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:#fff;min-width:0;overflow:hidden;white-space:nowrap;transition:flex-grow .35s var(--ease-out,ease);}
+  :root[data-theme="dark"] .bar3>span{color:var(--paper);}
+  .c0{background:var(--petrol);} .c1{background:var(--brass);} .c2{background:var(--petrol-deep);} .c3{background:#6b7f86;} .c4{background:var(--warn);} .c5{background:#8a7a3a;}
+  .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0;}
+  .cmp3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:8px;}
+  @media(max-width:760px){.cmp3{grid-template-columns:1fr;}}
+  .formcard{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:12px;padding:10px 12px 8px;background:var(--card);}
+  .formcard.b{--_c:var(--brass);} .formcard.w{--_c:var(--warn);}
+  .formcard .fk{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.05em;color:var(--_c,var(--petrol));text-transform:uppercase;}
+  .formcard .fs{font-size:11.5px;color:var(--ink-soft);margin-bottom:6px;}
+  .ff{padding:6px 0;border-top:1px dotted var(--line);}
+  .ff .fl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);}
+  .ff .fv{font-size:13px;font-weight:600;overflow-wrap:anywhere;}
+  .ff .fv.empty{color:var(--warn);font-style:italic;font-weight:500;}
+  .ff .src{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--petrol-deep);background:rgba(var(--petrol-rgb),.09);border-radius:4px;padding:0 5px;margin-left:4px;font-weight:600;}
+  .ff.mis{background:rgba(185,28,28,.07);border-radius:6px;padding-left:6px;padding-right:6px;}
+  .ff.mis .fl::after{content:" · ไม่ตรง 50 ทวิ";color:var(--warn);font-weight:700;}
+  .chain{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:6px 0 2px;font-family:'JetBrains Mono',monospace;font-size:11.5px;}
+  .chain span.k{border:1.4px solid var(--line);border-radius:8px;padding:4px 9px;color:var(--ink-soft);}
+  .chain span.k.on{border-color:var(--petrol);background:var(--petrol);color:var(--paper);font-weight:700;}
+  .chain span.k.skip{text-decoration:line-through;color:var(--ink-soft);border-style:dashed;}
+  .chain .ar{color:var(--brass);font-weight:700;}
+  .rtab{font-family:'JetBrains Mono',monospace;font-size:11.8px;}
+  .rtab td{padding:4px 6px;vertical-align:middle;}
+  .rtab td:first-child{white-space:nowrap;}
+  .rtab input.n{max-width:110px;}
+  .rtab .rt{font-weight:700;color:var(--petrol-deep);}
+  .rtab .rn{font-size:10.5px;color:var(--ink-soft);font-family:'IBM Plex Sans Thai',sans-serif;}
+  .insight{border-left:3px solid var(--brass);background:rgba(var(--brass-rgb),.06);border-radius:0 10px 10px 0;padding:9px 12px;margin:10px 0 0;font-size:13.2px;}
+  .insight b{color:var(--ink);}
+  .pivot td.n{min-width:92px;}
+  .pivot td.h{background:rgba(var(--petrol-rgb),var(--a,0));}
+  .selscr{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--paper);}
+  .selscr .sh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .chips button{font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1.3px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:3px 10px;cursor:pointer;}
+  .chips button[aria-pressed="true"]{border-color:var(--petrol);background:rgba(var(--petrol-rgb),.14);color:var(--petrol-deep);font-weight:700;}
+  .kpis5{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 2px;}
+  @media(max-width:700px){.kpis5{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  .k5{border:1.5px solid var(--line);border-radius:11px;padding:8px 11px;background:var(--card);}
+  .k5 .l{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);}
+  .k5 .v{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums;}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 9px;}
+  .badge.ok{background:rgba(var(--petrol-rgb),.14);color:var(--petrol-deep);}
+  .badge.no{background:rgba(185,28,28,.13);color:var(--warn);}
+  .regmap td:first-child{font-weight:600;}
+  @media print{.lab{break-inside:auto;}.presets,.addbtn,.xbtn,.btnrow{display:none!important;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-models">
+<div class="wrap">
+<a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+<a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Role 1 · Model Lab</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>5 interactive SAP models</span>
+    </div>
+    <h1>SAP Model Lab<br><span class="accent">5 กลไกเบื้องหลัง WRICEF ของ Client — ปรับตัวเลขแล้วดู SAP คิดยังไง</span></h1>
+    <div class="meta">
+      <span>Objects · <b>RPT-1 · FRM-1 · ENH-1 · RPT-2 · ENH-2</b></span>
+      <span>As at · <b>23-Oct-2026</b></span>
+      <span>Owner · <b>Chatree K.</b></span>
+    </div>
+    <p class="src">Source: knowledge base <code>80-locked-decisions</code> · <code>85-open-points</code> · <code>20-role-wricef-owner</code> · <code>30-role-fi-doc-verification</code> · <code>10-client-fi-design</code> + FUT evidence ในหน้า object · ชื่อบุคคลถูกแทนด้วย role</p>
+  </header>
+
+  <div class="easy">ห้าเรื่องที่ถูกถามบ่อยที่สุดตอน FUT / SIT / KUT — แต่ละเรื่องมี <b>โมเดลที่กดเล่นได้</b>: ใส่สถานการณ์ → ดู <b>เอกสาร SAP</b> ที่เกิดขึ้นจริง (ACDOCA / BSAK / WITH_ITEM / BSEC) → ดู <b>แถวในรายงาน</b> → ระบบ <b>เช็กให้</b> ว่ายอดผูกกันไหม · <b>กฎ</b> มาจาก design ที่ตกลงแล้วและหลักฐาน FUT · <b>ตัวเลข</b> เป็น sample แก้ได้ทุกช่อง</div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#split">1 · Split lines หลาย PC</a>
+    <a href="#payee">2 · Alternative payee</a>
+    <a href="#multiinv">3 · 1 payment หลาย invoice</a>
+    <a href="#fx">4 · Realized FX ข้ามสกุล</a>
+    <a href="#pcri">5 · รายงาน PC × RI</a>
+    <a href="#regress">6 · Regression map</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>อ่านทุกโมเดลแบบเดียวกัน — 4 ขั้น</b>
+    <ul>
+      <li><b>① Scenario</b> — preset จากเคส FUT จริง หรือแก้ตัวเลขเอง (state อยู่ในหน้านี้เท่านั้น รีเฟรชแล้วรีเซ็ต)</li>
+      <li><b>② SAP document</b> — บรรทัดที่ระบบสร้าง/อ่าน พร้อมชื่อ field จริง (<code>KTOSL</code> · <code>HSL</code> · <code>PRCTR</code> · <code>RECID</code> · <code>WT_QBSHB</code> · <code>BSEC-STCD3</code>)</li>
+      <li><b>③ Output</b> — แถวที่รายงาน / ฟอร์มพิมพ์ออกมา (เลข field ตาม FD เช่น <span class="mono">17</span> PC · <span class="mono">18</span> RI ของ RPT-1)</li>
+      <li><b>④ Checks</b> — ✓ ผูกยอดได้ · ✗ ผิดกฎ / defect · <b>?</b> รอคำตัดสิน (D2 / D3 / D4) — ห้ามพูดเหมือนเป็นข้อเท็จจริง</li>
+    </ul>
+    <div class="evlegend">
+      <span><span class="ev std">STD</span>standard SAP</span>
+      <span><span class="ev bp">BP</span>Blueprint / LC concept</span>
+      <span><span class="ev sys">SYS</span>เห็นในระบบ / FUT</span>
+      <span><span class="ev agreed">AGREED</span>ตกลงแล้ว</span>
+      <span><span class="ev infer">INFER</span>อนุมาน — verify</span>
+      <span><span class="ev tbc">TBC</span>ยังเปิด</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ 1 · SPLIT LINES -->
+  <section id="split">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Split lines — payment เดียวแตะหลาย Profit Center</h2><span class="ev agreed">AGREED</span></div>
+    <p class="sec-sub">TAX-RPT-1 · TKT-01 (ตกลง 3-Sep) — เอกสาร WHT ที่ document splitting แตก <code>WIT</code> ออกเป็นหลายบรรทัดตาม PC ต้องออกรายงาน <b>หนึ่งแถวต่อ WIT line</b> ไม่ใช่แถวเดียวที่หยิบ PC แรกมา</p>
+    <div class="lab" id="m1">
+      <div class="lab-h"><b>Model 1 · Split-line engine</b><span class="tg">RPT-1</span><span class="tg b">FRM-1</span><span class="tg b">ENH-1</span><span class="tg d">TKT-01</span></div>
+      <div class="lab-b">
+        <div class="step"><i>1</i>Scenario</div>
+        <div class="presets" data-preset="m1"><span>Preset</span>
+          <button type="button" data-p="even" aria-pressed="true">3 PCs เท่ากัน · เห็นเศษปัด</button>
+          <button type="button" data-p="spec">รูปแบบ 2004328305 · WIT 90 / 45 / 15</button>
+          <button type="button" data-p="zero">มี WIT 0.00 เป็น record แรก</button>
+        </div>
+        <div class="ctl">
+          <div class="fld"><span class="lbl">WT base ที่ยื่น (THB)</span><input class="n" id="m1base" inputmode="decimal" aria-label="WT base"></div>
+          <div class="fld"><span class="lbl">มุมมอง</span><div class="seg" data-g="mode"><button type="button" data-v="agreed" aria-pressed="true">Design ที่ตกลง</button><button type="button" data-v="before" aria-pressed="false">ก่อนแก้ (FUT 2-Oct)</button></div></div>
+          <div class="fld"><span class="lbl">Payment มี vendor</span><div class="seg" data-g="vend"><button type="button" data-v="one" aria-pressed="true">vendor เดียว</button><button type="button" data-v="multi" aria-pressed="false">หลาย vendor</button></div></div>
+        </div>
+        <div class="step"><i>2</i>ACDOCA · RLDNR 0L · KTOSL WIT <span class="ev std" style="margin-left:0">document splitting</span></div>
+        <div class="sapdoc"><div class="sap-hd"><span>CoCd <b>TH01</b></span><span>Doc <b>2004330988</b> <span style="opacity:.7">(sample)</span></span><span>WHT type <b>5A</b> · PND54</span><span class="t">amounts = HSL (THB)</span></div>
+          <div class="tblwrap"><table class="sap"><thead><tr><th>BUZEI</th><th>KTOSL</th><th>PRCTR</th><th>RECID</th><th class="n">HSL</th><th>ใช้ทำแถว?</th><th></th></tr></thead><tbody id="m1in"></tbody></table></div>
+        </div>
+        <button type="button" class="addbtn" id="m1add">+ เพิ่ม WIT line</button>
+        <div class="bar3" id="m1bar" aria-hidden="true"></div><div class="legend" id="m1leg"></div>
+        <div class="step"><i>3</i>RPT-1 output · ฝั่ง PND54</div>
+        <div class="sapdoc"><div class="sap-hd"><span>ZTAXB_R01</span><span>output group <b>R03</b> / ALV</span><span class="t" id="m1mode"></span></div>
+          <div class="tblwrap"><table class="sap"><thead><tr><th>#</th><th><span class="fid">3</span>Doc no.</th><th><span class="fid">17</span>PC</th><th><span class="fid">18</span>RI</th><th class="n">WT base</th><th class="n">WT amt</th><th class="n">WIT ratio</th><th><span class="fid">30</span>VAT36</th></tr></thead><tbody id="m1out"></tbody></table></div>
+        </div>
+        <div class="step"><i>4</i>Checks</div>
+        <ul class="chks" id="m1chk" aria-live="polite"></ul>
+      </div>
+    </div>
+    <ul class="clean">
+      <li><b>กฎที่ตกลง</b> <span class="ev agreed">AGREED</span>: หนึ่งแถวต่อ ACDOCA WIT line ที่ <code>HSL ≠ 0</code> (ไม่ต่อ comma) · WHT ของแถว = HSL ของบรรทัดนั้น (ไม่ prorate) · base prorate ตาม WIT ratio <b>แถวสุดท้ายรับเศษ</b> เพื่อให้ยอดรวมผูกกับยอดที่ยื่น · payment หลาย vendor ไม่เข้า PC split</li>
+      <li><b>สิ่งที่เห็นตอน FUT</b> <span class="ev sys">SYS</span>: WHT@payment หยิบ ACDOCA WIT record <b>แรก</b> แม้เป็น 0.00 — 2004328305 (5A/39, 3 WIT lines 90/45/15) · 2004327460 (USD, WIT 10/5) · ส่ง expected-result workbook แล้ว</li>
+      <li><b>ยังเปิด</b> <span class="ev tbc">TBC</span>: คอลัมน์ VAT36 (fields 23–34) บนแถว split + partial payment → <b>D2</b> (team lead) · หลังแก้ split ต้องรัน variant เดียวกันผ่าน <a href="frm1-wht-attachment.html#fut">FRM-1</a> และ <a href="enh1-rd-text-files.html">ENH-1</a> แล้วเทียบ WHT ต่อ PC</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 2 · ALTERNATIVE PAYEE -->
+  <section id="payee">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Alternative payee — ใครคือ “ผู้ถูกหัก” บน 50 ทวิ และใบแนบ</h2><span class="ev sys">SYS</span></div>
+    <p class="sec-sub">TAX-FRM-1 defect 21-Sep — ถ้าเอกสารมี payee ของตัวเอง (<code>BSEC</code>) แต่ใบแนบ ภ.ง.ด.3/53 พิมพ์ข้อมูลจาก BP master ผู้รับ 50 ทวิ กับรายชื่อในแบบยื่นจะเป็น <b>คนละคน</b> — golden thread A พังตรงนี้</p>
+    <div class="lab" id="m2">
+      <div class="lab-h"><b>Model 2 · Payee resolver</b><span class="tg">FRM-1</span><span class="tg b">ZTAXA_F02</span><span class="tg b">ENH-1</span></div>
+      <div class="lab-b">
+        <div class="step"><i>1</i>Scenario</div>
+        <div class="presets" data-preset="m2"><span>Preset</span>
+          <button type="button" data-p="payee" aria-pressed="true">Payee ในเอกสาร · มี STCD3</button>
+          <button type="button" data-p="stcd1">STCD3 ว่าง → STCD1</button>
+          <button type="button" data-p="blank">ไม่มีเลขภาษีเลย</button>
+          <button type="button" data-p="normal">Vendor ปกติ (ไม่มี BSEC)</button>
+        </div>
+        <div class="ctl">
+          <div class="fld"><span class="lbl">เอกสารมี payee ของตัวเอง (BSEC)</span><div class="seg" data-g="bsec"><button type="button" data-v="y" aria-pressed="true">มี</button><button type="button" data-v="n" aria-pressed="false">ไม่มี</button></div></div>
+          <div class="fld"><span class="lbl">BP tax category (DFKKBPTAXNUM)</span><div class="seg" data-g="cat"><button type="button" data-v="TH1" aria-pressed="true">TH1 บุคคล</button><button type="button" data-v="TH3" aria-pressed="false">TH3 นิติบุคคล</button></div></div>
+        </div>
+        <div class="step"><i>2</i>Master vs document</div>
+        <div class="grid2">
+          <div class="sapdoc"><div class="sap-hd"><span>BP master</span><span>vendor <b>VTEST0001</b> · “payee in document” = <b>X</b></span></div>
+            <div style="padding:8px 12px">
+              <div class="fld"><span class="lbl">Name (BP)</span><input class="t" id="m2bpn" aria-label="Name (BP)"></div>
+              <div class="fld"><span class="lbl">Address (BP)</span><input class="t" id="m2bpa" aria-label="Address (BP)"></div>
+              <div class="fld"><span class="lbl">Tax no. · DFKKBPTAXNUM</span><input class="t" id="m2bpt" aria-label="Tax no. DFKKBPTAXNUM"></div>
+            </div></div>
+          <div class="sapdoc"><div class="sap-hd"><span>BSEC</span><span>one-time / alternative payee data บนเอกสาร <span class="ev std" style="vertical-align:0">STD</span></span></div>
+            <div style="padding:8px 12px" id="m2bsecbox">
+              <div class="fld"><span class="lbl">Name (BSEC)</span><input class="t" id="m2bn" aria-label="Name (BSEC)"></div>
+              <div class="fld"><span class="lbl">Address (BSEC)</span><input class="t" id="m2ba" aria-label="Address (BSEC)"></div>
+              <div class="ctl" style="grid-template-columns:1fr 1fr"><div class="fld"><span class="lbl">BSEC-STCD3</span><input class="t" id="m2s3" aria-label="BSEC-STCD3"></div><div class="fld"><span class="lbl">BSEC-STCD1</span><input class="t" id="m2s1" aria-label="BSEC-STCD1"></div></div>
+            </div></div>
+        </div>
+        <div class="chain" id="m2chain" aria-label="Tax ID resolution chain"></div>
+        <div class="step"><i>3</i>สิ่งที่พิมพ์ออกมา</div>
+        <div class="cmp3" id="m2out"></div>
+        <div class="step"><i>4</i>Checks</div>
+        <ul class="chks" id="m2chk" aria-live="polite"></ul>
+      </div>
+    </div>
+    <ul class="clean">
+      <li><b>Certificate ZTAXA_F02</b> <span class="ev sys">SYS</span> ถูกแก้แล้ว (8-Jul): เลขภาษีผู้ถูกหัก = <code>BSEC-STCD3</code> → <code>STCD1</code> → blank · test vendor <code>VTEST0001</code> (“payee in document” = X) · specimens 2004325075 / 3641 / 3642 / 3643</li>
+      <li><b>FRM-1 ตอนนี้</b> <span class="ev sys">SYS</span>: พิมพ์ชื่อ / ที่อยู่ / Tax ID จาก BP master (<code>DFKKBPTAXNUM</code>, category TH1) แทน payee บนเอกสาร — raise พร้อม specimens · <b>expected</b> = ใช้กฎเดียวกับ certificate <span class="ev infer">INFER</span> ให้ 50 ทวิ = ใบแนบ</li>
+      <li>ENH-1 (RD text file) อ่าน payee จากไหน <span class="ev tbc">TBC</span> — รัน specimens ชุดเดียวกันผ่าน ENH-1 · defect แยก: เลขลำดับ attachment 070002 vs certificate 070000 (doc 2004325629) · <a href="frm1-wht-attachment.html#fut">FRM-1 §7.5</a></li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 3 · MULTI-INVOICE PAYMENT -->
+  <section id="multiinv">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Payment เดียว clear หลาย invoice — AP voucher ของใคร?</h2><span class="ev tbc">D3</span></div>
+    <p class="sec-sub">TAX-RPT-1 defect 14-Sep — รายงาน resolve AP voucher ตัวเดียวแล้ว <b>stamp ทุกแถว</b> ฝั่ง VAT36 (fields 19–34) จึงชี้ invoice ผิดใบ · dev fix = loop หา invoice ที่ WITH_ITEM ตรง vendor + WHT type + code · <b>วิธีแบ่ง WHT</b> ยังรอ team lead (D3)</p>
+    <div class="lab" id="m3">
+      <div class="lab-h"><b>Model 3 · Clearing resolver</b><span class="tg">RPT-1</span><span class="tg b">FRM-1</span><span class="tg b">ENH-1</span><span class="tg d">TC-010..016</span></div>
+      <div class="lab-b">
+        <div class="step"><i>1</i>Scenario</div>
+        <div class="presets" data-preset="m3"><span>Preset</span>
+          <button type="button" data-p="p650" aria-pressed="true">รูปแบบ 8084322637 · USD · 1 vendor · 6 invoices · 2 WHT sets</button>
+          <button type="button" data-p="p649">รูปแบบ 8084322636 · THB · 3 vendors</button>
+        </div>
+        <div class="ctl">
+          <div class="fld"><span class="lbl">มุมมอง</span><div class="seg" data-g="view"><button type="button" data-v="fix" aria-pressed="true">หลังแก้ (loop match)</button><button type="button" data-v="bug" aria-pressed="false">defect 14-Sep</button></div></div>
+          <div class="fld"><span class="lbl">D3 · แบ่ง WHT ของ payment</span><div class="seg" data-g="alloc"><button type="button" data-v="inv" aria-pressed="true">A · ตาม invoice (WT_QBSHB)</button><button type="button" data-v="pro" aria-pressed="false">B · prorate ตาม base</button></div></div>
+        </div>
+        <div class="step"><i>2</i>BSAK (AUGBL = payment) ⋈ WITH_ITEM ของแต่ละ invoice</div>
+        <div class="sapdoc"><div class="sap-hd"><span>Payment <b id="m3pay"></b></span><span>Currency <b id="m3cur"></b></span><span class="t">amounts sample · แก้ base / rate ได้</span></div>
+          <div class="tblwrap"><table class="sap"><thead><tr><th>BELNR (AP voucher)</th><th>LIFNR</th><th>WITHT</th><th>WT_WITHCD</th><th class="n">rate %</th><th class="n">WT_QSSHB</th><th class="n">WT_QBSHB</th></tr></thead><tbody id="m3in"></tbody></table></div>
+        </div>
+        <div class="step"><i>2b</i>WITH_ITEM ของ payment (WHT at payment) — 1 set ต่อ vendor + type + code</div>
+        <div class="sapdoc"><div class="tblwrap"><table class="sap"><thead><tr><th>Set</th><th>WT_ACCO</th><th>type / code</th><th class="n">Σ base</th><th class="n">Σ invoice WHT</th><th class="n">payment WHT (posted)</th><th class="n">Δ</th></tr></thead><tbody id="m3sets"></tbody></table></div></div>
+        <div class="step"><i>3</i>RPT-1 output</div>
+        <div class="sapdoc"><div class="sap-hd"><span>ZTAXB_R01</span><span class="t" id="m3mode"></span></div>
+          <div class="tblwrap"><table class="sap"><thead><tr><th>#</th><th>Set</th><th><span class="fid">19</span>AP voucher</th><th>match key</th><th class="n"><span class="fid">20</span>WT base FC</th><th class="n"><span class="fid">21</span>WT amt FC</th><th class="n">WHT ในแถว (D3)</th></tr></thead><tbody id="m3out"></tbody></table></div>
+        </div>
+        <div class="step"><i>4</i>Checks</div>
+        <ul class="chks" id="m3chk" aria-live="polite"></ul>
+      </div>
+    </div>
+    <ul class="clean">
+      <li><b>Defect</b> <span class="ev sys">SYS</span>: 8084322636 (THB, 3 vendors) · 8084322637 (USD, vendor เดียว, 6 invoices รวมเป็น 2 WHT sets) — ทุกแถวได้ AP voucher ใบเดียวกัน</li>
+      <li><b>Dev fix ต่อแถว</b> <span class="ev agreed">AGREED</span> (การอ่าน FD ที่ตกลง): <code>BSAK-LIFNR = WT_ACCO</code> + match WITH_ITEM ของ invoice ด้วย vendor + type + code — <b>loop ไม่ใช่ first hit</b> · steps 20/21 อ่าน WITH_ITEM ของ invoice (accepted 16-Sep)</li>
+      <li><b>D3</b> <span class="ev tbc">TBC</span>: ทางเลือก A ทำให้แต่ละแถว = WITH_ITEM ของ invoice แต่ยอดรวมอาจไม่ผูกกับ WHT ที่ยื่น · ทางเลือก B ผูกยอดรวมเสมอ แต่แถวอาจต่างจาก invoice ไม่กี่สตางค์ — โมเดลแสดงทั้งสองด้านเพื่อใช้คุยกับ team lead · TC-010..016 ต้องรันบน FRM-1 / ENH-1 ด้วย</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 4 · REALIZED FX -->
+  <section id="fx">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Realized FX gain / loss — ข้ามสกุล LC1 · LC2 · LC3</h2><span class="ev bp">BP</span></div>
+    <p class="sec-sub">บริษัทไทยถือ 3 สกุลพร้อมกัน: <b>LC1 THB · LC2 USD · LC3 USDTH</b> — ตอนจ่าย invoice สกุลต่างประเทศ แต่ละชั้นคำนวณ realized FX <b>แยกกัน</b> และ <b>อาจคนละทิศ</b> · บวก 2 แหล่ง FX เฉพาะ Client: บรรทัด Realized FX (from VAT) และ WHT FX adjustment (ENH-2)</p>
+    <div class="lab" id="m4">
+      <div class="lab-h"><b>Model 4 · FX engine (invoice → payment)</b><span class="tg">GL-ENH-1</span><span class="tg b">ENH-2</span><span class="tg b">RPT-1</span><span class="tg d">LC concept</span></div>
+      <div class="lab-b">
+        <div class="step"><i>1</i>Scenario</div>
+        <div class="presets" data-preset="m4"><span>Preset</span>
+          <button type="button" data-p="eur" aria-pressed="true">EUR invoice · จ่าย EUR · CIT_TH</button>
+          <button type="button" data-p="eurusd">EUR invoice · จ่ายจากบัญชี USD</button>
+          <button type="button" data-p="usdvat">USD + VAT 7% · จ่าย USD</button>
+          <button type="button" data-p="wht">USD service · PND54 · ENH-2</button>
+          <button type="button" data-p="thbpita">THB invoice · PITA segment</button>
+        </div>
+        <div class="ctl">
+          <div class="fld"><span class="lbl">Invoice currency</span><div class="seg" data-g="cur"><button type="button" data-v="EUR" aria-pressed="true">EUR</button><button type="button" data-v="USD" aria-pressed="false">USD</button><button type="button" data-v="THB" aria-pressed="false">THB</button></div></div>
+          <div class="fld"><span class="lbl">Payment currency</span><div class="seg" data-g="pay"><button type="button" data-v="same" aria-pressed="true">เท่ากับ invoice</button><button type="button" data-v="USD" aria-pressed="false">USD</button><button type="button" data-v="THB" aria-pressed="false">THB</button></div></div>
+          <div class="fld"><span class="lbl">Segment (ตัดสิน LC3)</span><div class="seg" data-g="seg"><button type="button" data-v="CIT" aria-pressed="true">CIT_TH</button><button type="button" data-v="PITA" aria-pressed="false">PITA / PSC / MTJDA</button></div></div>
+          <div class="fld"><span class="lbl">Net amount (doc currency)</span><input class="n" id="m4amt" aria-label="Net amount (document currency)" inputmode="decimal"></div>
+          <div class="fld"><span class="lbl">Input VAT / VAT36</span><div class="seg" data-g="vat"><button type="button" data-v="0" aria-pressed="true">ไม่มี</button><button type="button" data-v="7" aria-pressed="false">7%</button></div></div>
+          <div class="fld"><span class="lbl">WHT at payment</span><div class="seg" data-g="wht"><button type="button" data-v="0" aria-pressed="true">ไม่มี</button><button type="button" data-v="paper" aria-pressed="false">paper · T-1</button><button type="button" data-v="ewht" aria-pressed="false">e-WHT · T-2</button></div></div>
+          <div class="fld"><span class="lbl">WHT rate %</span><input class="n" id="m4whtr" aria-label="WHT rate %" inputmode="decimal"></div>
+        </div>
+        <div class="step"><i>1b</i>TCURR (sample rates — แก้เป็นของจริงได้)</div>
+        <div class="tblwrap"><table class="rtab" id="m4rates"></table></div>
+        <div class="step"><i>2</i>Invoice (FB60 / MIRO) · posting date</div>
+        <div class="sapdoc"><div class="sap-hd"><span>CoCd <b>TH01</b></span><span>Invoice · <b id="m4ic"></b></span><span class="t">LC1 THB · LC2 USD · LC3 USDTH</span></div>
+          <div class="tblwrap"><table class="sap"><thead><tr><th>Line</th><th>KTOSL / GL</th><th>LC1 rule</th><th class="n">DC</th><th class="n">LC1 THB</th><th class="n">LC2 USD</th><th class="n">LC3 USDTH</th></tr></thead><tbody id="m4inv"></tbody></table></div></div>
+        <div class="step"><i>3</i>Payment (F110 / F-53) · clearing</div>
+        <div class="sapdoc"><div class="sap-hd"><span>Payment · <b id="m4pc"></b></span><span class="t">clearing line = historical · KDF = realized</span></div>
+          <div class="tblwrap"><table class="sap"><thead><tr><th>Line</th><th>KTOSL / GL</th><th>rate</th><th class="n">DC</th><th class="n">LC1 THB</th><th class="n">LC2 USD</th><th class="n">LC3 USDTH</th></tr></thead><tbody id="m4pay"></tbody></table></div></div>
+        <div id="m4e032"></div>
+        <div class="outs" id="m4sum"></div>
+        <div id="m4ins"></div>
+        <div class="step"><i>4</i>Checks</div>
+        <ul class="chks" id="m4chk" aria-live="polite"></ul>
+      </div>
+    </div>
+    <ul class="clean">
+      <li><b>กฎ 1 — สกุลเอกสาร</b> <span class="ev bp">BP</span>: THB doc → LC1 = doc amount · USD doc → LC2 = LC3 = doc amount · FC อื่น → แปลงทั้งสามชั้น โดย LC2/LC3 เป็น cross rate ผ่าน THB = <code>DC × ZTH(FC:THB) ÷ ZTH(USD:THB)</code></li>
+      <li><b>กฎ 2 — segment ตัดสิน LC3</b> <span class="ev bp">BP</span>: CIT_TH → LC3 = LC2 · PITA / PSC / MTJDA → PITB (ฝั่งซื้อ) รายเดือน · ตัวหาร PITM แม้ฝั่งซื้อ <span class="ev tbc">TBC</span> · <b>กฎ 3 — ประเภทบรรทัด</b>: expense / AP = M @ posting date · input VAT = B @ document date −1 · WHT at payment = M @ posting date · clearing = historical</li>
+      <li><b>Realized FX ตอน clear</b> <span class="ev std">STD</span>: บรรทัด vendor ใน payment ใช้ค่า LC เดิม (historical) ส่วน bank / WHT ใช้ rate วันจ่าย → ส่วนต่างโพสต์เป็นบรรทัด <code>KDF</code> แยกต่อสกุล (DC = 0) · บัญชี AP realized FX ของ Client (OBA1) <span class="ev tbc">TBC</span> · rate ของบรรทัด bank <span class="ev infer">INFER</span></li>
+      <li><b>Realized FX (from VAT)</b> <span class="ev bp">BP</span>: LC1 เท่านั้น = DC × rate(doc date −1) − DC × rate(posting date) → <code>A490X035</code> (Option 1, non-operating) · error F5A49 ผ่าน FB60/FB70 ยังเปิดกับ SAP · <b>ENH-2</b>: GL post WHT ด้วย M @ T แต่สรรพากรใช้ BOT ของวันทำการก่อนหน้า (paper T-1 · e-WHT T-2) → เอกสาร SW ปรับ <code>A212X021</code> · realized FX ฝั่ง direct tax <code>A490X034</code> (ทิศ Dr/Cr <span class="ev infer">INFER</span>) · ดู <a href="doc-verification.html#lc">LC rules</a> · <a href="wht.html#fx">ENH-2</a></li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 5 · PC × RI REPORT -->
+  <section id="pcri">
+    <div class="sec-head"><span class="sec-num">5</span><h2>รายงาน Profit Center × Recovery Indicator — แบบที่ผูกยอดได้</h2><span class="ev sys">SYS</span></div>
+    <p class="sec-sub">“PC + RI filter / PC + RI on output” คือ key change ของ RPT-1, RPT-2, FRM-1 และ ENH-1 พร้อมกัน — โมเดลนี้ใช้ข้อมูล Oman VAT (CoCd OM01, OMR 3 ทศนิยม) รวม <b>doc 3004322020 จาก FUT จริง</b> เพื่อดูว่าการกรอง “ระดับบรรทัด vs ระดับเอกสาร” และ “Total” เปลี่ยนตัวเลขยังไง</p>
+    <div class="lab" id="m5">
+      <div class="lab-h"><b>Model 5 · PC × RI report engine</b><span class="tg">RPT-2</span><span class="tg b">RPT-6</span><span class="tg b">RPT-1</span><span class="tg d">OBJ1</span></div>
+      <div class="lab-b">
+        <div class="step"><i>1</i>Selection screen</div>
+        <div class="selscr">
+          <div class="ctl" style="grid-template-columns:1fr 1fr">
+            <div><div class="sh">Profit Center (ว่าง = ทั้งหมด)</div><div class="chips" id="m5pc"></div></div>
+            <div><div class="sh">Recovery Indicator (ว่าง = ทั้งหมด)</div><div class="chips" id="m5ri"></div></div>
+          </div>
+          <div class="ctl" style="margin-top:8px">
+            <div class="fld"><span class="lbl">ระดับการกรอง</span><div class="seg" data-g="lvl"><button type="button" data-v="line" aria-pressed="true">บรรทัด (tax line)</button><button type="button" data-v="any" aria-pressed="false">เอกสาร · มีบรรทัดไหนตรง</button><button type="button" data-v="all" aria-pressed="false">เอกสาร · ต้องตรงทุกบรรทัด</button></div></div>
+            <div class="fld"><span class="lbl">Total / Balance</span><div class="seg" data-g="tot"><button type="button" data-v="fix" aria-pressed="true">Σ บรรทัดที่แสดง</button><button type="button" data-v="bug" aria-pressed="false">ทั้งเอกสาร (bug 17-Sep)</button></div></div>
+            <div class="fld"><span class="lbl">Subtotal by</span><div class="seg" data-g="grp"><button type="button" data-v="pc" aria-pressed="true">PC</button><button type="button" data-v="ri" aria-pressed="false">RI</button><button type="button" data-v="tc" aria-pressed="false">Tax code</button></div></div>
+          </div>
+        </div>
+        <div class="kpis5" id="m5k"></div>
+        <div class="step"><i>2</i>ALV output · line items</div>
+        <div class="sapdoc"><div class="sap-hd"><span>ZTAXA_R04 · RPT-2</span><span>CoCd <b>OM01</b></span><span>OMR · 3 dp · sign SAP-style</span><span class="t" id="m5n"></span></div>
+          <div class="tblwrap"><table class="sap"><thead><tr><th>Doc</th><th>Ln</th><th>Tax</th><th>PRCTR</th><th>RECID</th><th>Venture</th><th class="n">Base</th><th class="n">Tax amt</th><th>src</th></tr></thead><tbody id="m5out"></tbody></table></div>
+        </div>
+        <div class="step"><i>3</i>Pivot · tax amount by PC × RI (หลังกรอง)</div>
+        <div class="tblwrap"><table class="sap pivot" id="m5pv"></table></div>
+        <div class="btnrow"><button type="button" class="btn ghost" id="m5csv">ดาวน์โหลด CSV</button><button type="button" class="btn ghost" id="m5tsv">คัดลอกไป Excel</button><span class="btnmsg" id="m5msg" role="status"></span></div>
+        <div class="step"><i>4</i>Checks · control ของ OBJ1</div>
+        <ul class="chks" id="m5chk" aria-live="polite"></ul>
+      </div>
+    </div>
+    <ul class="clean">
+      <li><b>Bug 2 (17-Sep, เจอบน RPT-6 ก่อน)</b> <span class="ev sys">SYS</span>: กรอง PC แล้ว line items ถูกกรองต่อ tax line แต่ <b>Total / Balance รวมทั้งเอกสาร</b> เมื่อมีบรรทัดใดตรง · repro doc 3004322020 (O1; C_PC29 952.379- / 47.619- + N_PC38 1,142.859- / 57.143-; ทั้งใบ 2,095.238- / 104.762-) · บน RPT-6 Total ขับ clearing posting → ต้องแก้เหมือนกัน</li>
+      <li><b>Key risk OBJ1</b> <span class="ev sys">SYS</span>: เอกสาร mixed-RI อาจหายจาก <b>ทุก</b> bucket ของ RI filter = compliance risk → control คือ <code>Σ(buckets) = unfiltered total</code> · ฝั่ง RPT-1 filter PC/RI ลบที่ <b>ระดับเอกสาร</b> ใน <code>i01_select_wt_data</code> — ความหมาย “any / all” ต้องอ่านโค้ดยืนยัน <span class="ev tbc">TBC</span></li>
+      <li>RI ของ Client <span class="ev bp">BP</span>: BR, BN (operated) · NR (non-op) · NN · CR, CN (cutback) · CP (corporate) · master <code>T8JJ</code> · <b>RI ของ doc 3004322020 ใน evidence ไม่ได้ระบุ</b> — โมเดลใส่ CP / NN ให้ <span class="ev infer">INFER</span> · PC ของเอกสาร multi-PC (tax line vs document) และ total ไม่กรองจาก BSET หรือ Σ ACDOCA → <b>D4</b> (project lead)</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 6 · REGRESSION MAP -->
+  <section id="regress">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Regression map — แก้ตรงไหน ต้องรันอะไรซ้ำ</h2></div>
+    <p class="sec-sub">ZTAXB_R01 / RFIDYYWT เป็น <b>selection screen เดียว</b> — output group เป็นตัวตัดสิน output · bug PC/RI ใน selection จึงโผล่ใน RPT-1, FRM-1, ENH-1 และ FRM-3 พร้อมกัน <span class="ev sys">SYS</span></p>
+    <div class="tblwrap"><table class="regmap">
+      <thead><tr><th>ถ้าเปลี่ยน…</th><th>โมเดล</th><th>รันซ้ำ</th><th>เช็กอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>Split lines (TKT-01)</td><td>1 · 5</td><td>RPT-1 → FRM-1 → ENH-1 ด้วย variant เดียวกัน</td><td>WHT ต่อ PC เท่ากันทุก output · Σ แถว = ยอดยื่น</td></tr>
+        <tr><td>Multi-invoice fix + D3</td><td>3</td><td>TC-010..016 บน RPT-1, FRM-1, ENH-1</td><td>AP voucher ต่อแถว · Σ WHT ต่อ set = WITH_ITEM payment</td></tr>
+        <tr><td>Alternative payee บน FRM-1</td><td>2</td><td>FRM-1 + ZTAXA_F02 + ENH-1 · specimens 2004325075 / 3641 / 3642 / 3643</td><td>ชื่อ / Tax ID บนใบแนบ = 50 ทวิ</td></tr>
+        <tr><td>LC rules / ENH-2 / GL-ENH-1</td><td>4</td><td>ENH-2 ก่อน แล้ว RPT-1 (TC-006/007) · SE16N layout /LC_CHECK</td><td>LC1/LC2/LC3 ต่อบรรทัด · WITH_ITEM = GL (8084322568)</td></tr>
+        <tr><td>PC / RI filter (i01) · Total logic</td><td>5</td><td>RPT-1, FRM-1, ENH-1, FRM-3 · RPT-2 + RPT-6 คู่กัน</td><td>Σ(buckets) = unfiltered total · Total = Σ บรรทัดที่แสดง</td></tr>
+      </tbody>
+    </table></div>
+    <div class="seealso"><span>ดูต่อ</span><a href="rpt1-wht-vat-recon.html#agreed">RPT-1 §2.5</a><a href="rpt1-fut-evidence.html">RPT-1 FUT</a><a href="frm1-wht-attachment.html#logic">FRM-1 6 paths</a><a href="rpt2-oman-vat.html#defects">RPT-2 defects</a><a href="doc-verification.html#lc">LC rules</a><a href="decisions.html#waiting">D2 · D3 · D4</a></div>
+  </section>
+
+  <!-- ============================================================ SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">✓</span><h2>Self-check — อธิบายได้ใน 30 วินาทีไหม</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. เอกสาร WHT มี WIT 3 บรรทัด 5,000 / 5,000 / 5,000 base 100,000 — RPT-1 ควรออกกี่แถว base เท่าไร?</p><details class="ans"><summary></summary><div class="a">3 แถว WHT = HSL ของแต่ละบรรทัด · base 33,333.33 / 33,333.33 / 33,333.34 (แถวสุดท้ายรับเศษ) ยอดรวมผูก 100,000.00 · ถ้ามีบรรทัด HSL 0.00 ให้ข้าม</div></details></div>
+      <div class="selfq"><p>2. ทำไม FRM-1 ต้องใช้ BSEC แทน BP master เมื่อเอกสารมี payee?</p><details class="ans"><summary></summary><div class="a">คนที่ถูกหักจริงคือ payee บนเอกสาร — certificate ZTAXA_F02 ใช้ BSEC-STCD3 → STCD1 → blank แล้ว ถ้าใบแนบใช้ BP master ชื่อ / Tax ID ในแบบยื่นจะไม่ตรง 50 ทวิ</div></details></div>
+      <div class="selfq"><p>3. D3 ทางเลือก A กับ B ต่างกันตรงไหน?</p><details class="ans"><summary></summary><div class="a">A ใช้ WT_QBSHB ของแต่ละ invoice — แถวตรง invoice แต่ยอดรวมอาจห่าง WHT ที่ post ตอนจ่ายด้วยเศษปัด · B prorate WHT ของ payment ตาม base — ยอดรวมผูกเสมอ แต่บางแถวต่างจาก invoice ไม่กี่สตางค์ · ยังไม่ตัดสิน (team lead)</div></details></div>
+      <div class="selfq"><p>4. จ่าย invoice EUR จากบัญชี USD — ทำไม LC2 realized FX ไม่เหมือนจ่ายด้วย EUR?</p><details class="ans"><summary></summary><div class="a">เอกสาร USD → LC2 = LC3 = doc amount (กฎ 1) ค่า LC2 ของบรรทัด bank จึงเท่ากับยอด USD ที่จ่ายจริง ส่วนเอกสาร EUR ใช้ cross rate ZTH(EUR:THB) ÷ ZTH(USD:THB) · บรรทัด vendor ใช้ historical ทั้งสองแบบ</div></details></div>
+      <div class="selfq"><p>5. control อะไรพิสูจน์ว่า RI filter ไม่ทำเอกสารหาย?</p><details class="ans"><summary></summary><div class="a">รันทีละ RI แล้วรวมทุก bucket ต้องเท่ากับรันแบบไม่กรอง — Σ(buckets) = unfiltered total · ถ้าน้อยกว่า = เอกสาร mixed-RI หาย ถ้ามากกว่า = นับซ้ำ</div></details></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · SAP Model Lab (T45)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   SAP Model Lab (T45) · five interactive models · state in memory only
+   Rules = knowledge base / FD / FUT evidence (see tags on the page).
+   Numbers = editable samples, except Model 5 doc 3004322020 (FUT).
+   ============================================================ */
+(function(){
+  "use strict";
+  var d=document;
+  function $(id){ return d.getElementById(id); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  /* commercial rounding (half away from zero), guarded against binary noise */
+  function rnd(n,dp){ dp=dp==null?2:dp; var f=Math.pow(10,dp), s=n<0?-1:1; return s*Math.round(Math.abs(n)*f*(1+1e-12)+1e-9)/f; }
+  var NF={};
+  function fmt(n,dp){ dp=dp==null?2:dp; if(!NF[dp]) NF[dp]=new Intl.NumberFormat("en-US",{minimumFractionDigits:dp,maximumFractionDigits:dp}); var v=rnd(n,dp); return NF[dp].format(v===0?0:v); }
+  function sap(n,dp){ var v=rnd(n,dp==null?2:dp); return v<0?fmt(-v,dp)+"-":fmt(v,dp); }
+  function num(v){ var x=parseFloat(String(v==null?"":v).replace(/,/g,"")); return isFinite(x)?x:0; }
+  function eq(a,b,dp){ return Math.abs(rnd(a,dp)-rnd(b,dp))<Math.pow(10,-(dp==null?2:dp))/2; }
+  function li(cls,html){ return '<li class="'+cls+'">'+html+"</li>"; }
+  function pressSeg(btn){ Array.prototype.forEach.call(btn.parentNode.querySelectorAll("button"),function(x){ x.setAttribute("aria-pressed",x===btn?"true":"false"); }); }
+  function setSeg(root,g,v){ var b=root.querySelector('[data-g="'+g+'"] [data-v="'+v+'"]'); if(b) pressSeg(b); }
+  /* one wiring for seg buttons + presets inside a model */
+  function wire(root,S,render,onPreset){
+    root.addEventListener("click",function(e){
+      var b=e.target.closest("button"); if(!b||!root.contains(b)) return;
+      var g=b.parentNode.getAttribute("data-g");
+      if(g&&b.hasAttribute("data-v")){ if(b.disabled) return; pressSeg(b); S[g]=b.getAttribute("data-v"); render(); return; }
+      var p=b.getAttribute("data-p");
+      if(p&&onPreset){ pressSeg(b); onPreset(p); }
+    });
+  }
+  var RI_LIST=["BR","BN","NR","NN","CR","CN","CP"];
+
+  /* =========================================================
+     MODEL 1 · split lines (RPT-1 · TKT-01)
+     ========================================================= */
+  (function(){
+    var root=$("m1"); if(!root) return;
+    var PRE={
+      even:{base:100000,lines:[["PC_A","BR",5000],["PC_B","BN",5000],["PC_C","NR",5000]]},
+      spec:{base:1000,lines:[["PC_A","BR",90],["PC_B","BN",45],["PC_C","CP",15]]},
+      zero:{base:100,lines:[["PC_Z","NN",0],["PC_A","BR",10],["PC_B","BN",5]]}
+    };
+    var S={mode:"agreed",vend:"one",base:0,lines:[]};
+    function load(k){
+      var p=PRE[k]; S.base=p.base;
+      S.lines=p.lines.map(function(l){ return {pc:l[0],ri:l[1],hsl:l[2]}; });
+      $("m1base").value=fmt(S.base); drawInputs(); render();
+    }
+    function drawInputs(){
+      $("m1in").innerHTML=S.lines.map(function(l,i){
+        return "<tr><td>"+String(i+1).padStart(3,"0")+"</td><td>WIT</td>"+
+          '<td><input class="t" data-i="'+i+'" data-f="pc" value="'+esc(l.pc)+'" aria-label="PRCTR line '+(i+1)+'"></td>'+
+          '<td><select class="s" data-i="'+i+'" data-f="ri" aria-label="RECID line '+(i+1)+'">'+RI_LIST.map(function(r){ return "<option"+(r===l.ri?" selected":"")+">"+r+"</option>"; }).join("")+"</select></td>"+
+          '<td class="n"><input class="n" data-i="'+i+'" data-f="hsl" value="'+fmt(l.hsl)+'" inputmode="decimal" aria-label="HSL line '+(i+1)+'"></td>'+
+          '<td id="m1use'+i+'"></td><td><button type="button" class="xbtn" data-del="'+i+'" aria-label="ลบบรรทัด '+(i+1)+'"'+(S.lines.length<=1?" disabled":"")+">✕</button></td></tr>";
+      }).join("");
+      $("m1add").disabled=S.lines.length>=6;
+    }
+    function render(){
+      var lines=S.lines, base=S.base, sumAll=0, nz=[], sw=0, rows=[], chk=[];
+      lines.forEach(function(l){ sumAll+=l.hsl; if(rnd(l.hsl)!==0){ nz.push(l); sw+=l.hsl; } });
+      sumAll=rnd(sumAll); sw=rnd(sw);
+      lines.forEach(function(l,i){
+        var c=$("m1use"+i); if(!c) return;
+        var used=S.mode==="agreed"&&S.vend==="one"?rnd(l.hsl)!==0:(i===0);
+        c.innerHTML=S.mode==="agreed"&&S.vend==="one"?(used?'<span class="pos">✓ แถว</span>':'<span class="neg">ข้าม (0.00)</span>'):(i===0?'<span class="neg">record แรก → PC/RI</span>':'<span class="soft">—</span>');
+        c.parentNode.className=(S.mode==="agreed"&&S.vend==="one"&&!used)?"skip":"";
+      });
+      /* proportion bar */
+      $("m1bar").innerHTML=nz.map(function(l,i){ return '<span class="c'+(i%6)+'" style="flex-grow:'+(sw?l.hsl/sw:1)+'">'+(sw&&l.hsl/sw>.12?esc(l.pc):"")+"</span>"; }).join("")||'<span class="c3" style="flex-grow:1">—</span>';
+      $("m1leg").innerHTML=nz.map(function(l,i){ return '<span><i class="c'+(i%6)+'"></i>'+esc(l.pc)+" · "+(sw?fmt(l.hsl/sw*100,1):"0.0")+"%</span>"; }).join("");
+      if(S.mode==="agreed"&&S.vend==="one"){
+        var acc=0;
+        nz.forEach(function(l,i){
+          var b=i<nz.length-1?rnd(base*l.hsl/sw):rnd(base-acc);
+          acc=rnd(acc+b);
+          rows.push({pc:l.pc,ri:l.ri,base:b,wht:l.hsl,ratio:sw?l.hsl/sw:0,last:i===nz.length-1&&nz.length>1});
+        });
+        $("m1mode").textContent="Design ที่ตกลง · 1 แถว / WIT line";
+      } else if(S.mode==="agreed"){
+        rows.push({pc:"— ไม่ split",ri:"—",base:base,wht:sumAll,ratio:1,note:true});
+        $("m1mode").textContent="หลาย vendor · ไม่เข้า PC split";
+      } else {
+        var f=lines[0]||{pc:"",ri:""};
+        rows.push({pc:f.pc,ri:f.ri,base:base,wht:sumAll,ratio:1,first:true,zero:rnd(f.hsl||0)===0});
+        $("m1mode").textContent="ก่อนแก้ · แถวเดียว";
+      }
+      var tb=0, tw=0;
+      $("m1out").innerHTML=rows.map(function(r,i){
+        tb+=r.base; tw+=r.wht;
+        return '<tr class="'+(r.zero?"bad":"")+'"><td>'+(i+1)+"</td><td>2004330988</td><td"+(r.zero?' class="hl"':"")+">"+esc(r.pc)+"</td><td"+(r.zero?' class="hl"':"")+">"+esc(r.ri)+'</td><td class="n">'+fmt(r.base)+(r.last?' <span title="แถวสุดท้ายรับเศษ" class="neg">◂</span>':"")+'</td><td class="n">'+fmt(r.wht)+'</td><td class="n">'+fmt(r.ratio*100,2)+'%</td><td><span class="ev tbc" style="margin:0">D2</span></td></tr>';
+      }).join("")+'<tr class="tot"><td colspan="4">Σ</td><td class="n">'+fmt(tb)+'</td><td class="n">'+fmt(tw)+'</td><td class="n"></td><td></td></tr>';
+      /* checks */
+      var nPC={}; nz.forEach(function(l){ nPC[l.pc]=1; }); var cntPC=Object.keys(nPC).length;
+      chk.push(li(eq(tw,sumAll)?"ok":"no","Σ WT amt ของแถว <b>"+fmt(tw)+"</b> = Σ WIT HSL ที่ยื่น <b>"+fmt(sumAll)+"</b>"));
+      chk.push(li(eq(tb,base)?"ok":"no","Σ WT base ของแถว <b>"+fmt(tb)+"</b> = base ที่ยื่น <b>"+fmt(base)+"</b>"+(rows.some(function(r){return r.last;})?" — แถวสุดท้ายรับเศษจากการ prorate":"")));
+      if(S.mode==="agreed"&&S.vend==="one"){
+        var skipped=lines.length-nz.length;
+        chk.push(li(skipped?"info":"ok",skipped?"ข้าม WIT line ที่ HSL = 0.00 จำนวน <b>"+skipped+"</b> บรรทัด — ไม่ออกเป็นแถวเปล่า":"ทุก WIT line มียอด → ทุกบรรทัดเป็นแถว"));
+        chk.push(li(cntPC===rows.length?"ok":"info","PC / RI ในรายงานครบ <b>"+rows.length+"</b> แถว จาก "+cntPC+" profit center → FRM-1 / ENH-1 แยกต่อ PC ได้ตรงกัน"));
+        if(!sw) chk.push(li("no","ไม่มี WIT line ที่มียอด — prorate base ไม่ได้"));
+      } else if(S.mode==="agreed"){
+        chk.push(li("info","payment หลาย vendor <b>ไม่เข้า PC split</b> ตามที่ตกลง — PC บนแถวนี้มาจาก logic เดิม (รูปแบบแสดงผล TBC)"));
+      } else {
+        if(cntPC>1) chk.push(li("no","รายงานเห็นแค่ <b>1</b> จาก "+cntPC+" profit center — ยอดต่อ PC ใน FRM-1 / ENH-1 จะไม่ตรง"));
+        if(rows[0]&&rows[0].zero) chk.push(li("no","PC / RI มาจาก WIT record ที่เป็น <b>0.00</b> — เคสที่เจอตอน FUT (WHT@payment หยิบ record แรก)"));
+      }
+      chk.push(li("tbc","คอลัมน์ VAT36 (fields 23–34) บนแถว split และ partial payment → <b>D2</b> · team lead"));
+      $("m1chk").innerHTML=chk.join("");
+    }
+    root.addEventListener("input",function(e){
+      var t=e.target;
+      if(t.id==="m1base"){ S.base=num(t.value); render(); return; }
+      var i=t.getAttribute("data-i"), f=t.getAttribute("data-f"); if(i==null||!S.lines[i]) return;
+      S.lines[i][f]=f==="hsl"?num(t.value):t.value; render();
+    });
+    root.addEventListener("change",function(e){
+      var t=e.target;
+      if(t.id==="m1base"){ t.value=fmt(S.base); return; }
+      if(t.getAttribute("data-f")==="hsl") t.value=fmt(num(t.value));
+    });
+    root.addEventListener("click",function(e){
+      var x=e.target.closest("[data-del]");
+      if(x&&!x.disabled){ S.lines.splice(+x.getAttribute("data-del"),1); drawInputs(); render(); }
+    });
+    $("m1add").addEventListener("click",function(){
+      if(S.lines.length>=6) return;
+      var n=S.lines.length; S.lines.push({pc:"PC_"+"ABCDEFG".charAt(n),ri:"BR",hsl:1000}); drawInputs(); render();
+    });
+    wire(root,S,render,load);
+    load("even");
+  })();
+
+  /* =========================================================
+     MODEL 2 · alternative payee (FRM-1 vs ZTAXA_F02)
+     ========================================================= */
+  (function(){
+    var root=$("m2"); if(!root) return;
+    var BP={n:"Vendor VTEST0001 — ชื่อตาม BP master",a:"ที่อยู่ตาม BP master (sample)",t:"9-9999-99999-12-3"};
+    var BS={n:"Payee A — ผู้รับเงินตามเอกสาร (sample)",a:"ที่อยู่ผู้รับเงินบนเอกสาร (sample)",s3:"1-TH01-00001-01-1",s1:"1-TH01-00001-01-9"};
+    var S={bsec:"y",cat:"TH1",bp:{},bs:{}};
+    function fill(){ $("m2bpn").value=S.bp.n; $("m2bpa").value=S.bp.a; $("m2bpt").value=S.bp.t; $("m2bn").value=S.bs.n; $("m2ba").value=S.bs.a; $("m2s3").value=S.bs.s3; $("m2s1").value=S.bs.s1; }
+    function load(k){
+      S.bp={n:BP.n,a:BP.a,t:BP.t}; S.bs={n:BS.n,a:BS.a,s3:BS.s3,s1:BS.s1}; S.bsec="y";
+      if(k==="stcd1") S.bs.s3="";
+      if(k==="blank"){ S.bs.s3=""; S.bs.s1=""; }
+      if(k==="normal") S.bsec="n";
+      setSeg(root,"bsec",S.bsec); fill(); render();
+    }
+    function field(label,val,src,mis){
+      return '<div class="ff'+(mis?" mis":"")+'"><div class="fl">'+label+'</div><div class="fv'+(val?"":" empty")+'">'+(val?esc(val):"(ว่าง)")+(src?'<span class="src">'+esc(src)+"</span>":"")+"</div></div>";
+    }
+    function render(){
+      var useB=S.bsec==="y";
+      $("m2bsecbox").style.opacity=useB?"1":".45";
+      Array.prototype.forEach.call($("m2bsecbox").querySelectorAll("input"),function(x){ x.disabled=!useB; });
+      var tax=S.bs.s3?[S.bs.s3,"BSEC-STCD3",0]:S.bs.s1?[S.bs.s1,"BSEC-STCD1",1]:["","blank",2];
+      var bpSrc="DFKKBPTAXNUM ("+S.cat+")";
+      var cert=useB?{n:[S.bs.n,"BSEC"],a:[S.bs.a,"BSEC"],t:[tax[0],tax[1]]}:{n:[S.bp.n,"BP master"],a:[S.bp.a,"BP master"],t:[S.bp.t,bpSrc]};
+      var now={n:[S.bp.n,"BP master"],a:[S.bp.a,"BP master"],t:[S.bp.t,bpSrc]};
+      var exp=cert;
+      /* chain */
+      $("m2chain").innerHTML=useB?
+        '<span style="font-family:inherit;color:var(--ink-soft);margin-right:2px">Tax ID ผู้ถูกหัก:</span>'+
+        ["BSEC-STCD3","BSEC-STCD1","blank"].map(function(k,i){ var cls=i===tax[2]?" on":(i<tax[2]?" skip":""); return '<span class="k'+cls+'">'+k+"</span>"; }).join('<span class="ar">→</span>'):
+        '<span style="font-family:inherit;color:var(--ink-soft)">ไม่มี BSEC → ทุก output ใช้ BP master (<code>'+esc(bpSrc)+"</code>)</span>";
+      function card(cls,title,sub,o,ref){
+        return '<div class="formcard '+cls+'"><div class="fk">'+title+'</div><div class="fs">'+sub+"</div>"+
+          field("ชื่อผู้ถูกหักภาษี",o.n[0],o.n[1],ref&&o.n[0]!==ref.n[0])+
+          field("ที่อยู่",o.a[0],o.a[1],ref&&o.a[0]!==ref.a[0])+
+          field("เลขประจำตัวผู้เสียภาษี",o.t[0],o.t[1],ref&&o.t[0]!==ref.t[0])+"</div>";
+      }
+      var nowMis=now.n[0]!==cert.n[0]||now.t[0]!==cert.t[0]||now.a[0]!==cert.a[0];
+      $("m2out").innerHTML=
+        card("","50 ทวิ · ZTAXA_F02",'certificate ที่ผู้ถูกหักได้รับ <span class="ev sys">SYS</span>',cert,null)+
+        card(nowMis?"w":"","ใบแนบ · FRM-1 ตอนนี้",'R03 · FUT 21-Sep <span class="ev sys">SYS</span>',now,cert)+
+        card("b","ใบแนบ · FRM-1 expected",'กฎเดียวกับ certificate <span class="ev infer">INFER</span>',exp,cert);
+      var c=[];
+      c.push(li(nowMis?"no":"ok",nowMis?"FRM-1 ตอนนี้ ≠ 50 ทวิ — ชื่อ / Tax ID ในแบบยื่นไม่ใช่คนที่ได้ certificate → raise พร้อม specimens 2004325075 / 3641 / 3642 / 3643":"FRM-1 ตอนนี้ = 50 ทวิ (ไม่มี payee บนเอกสาร defect นี้ไม่แสดงอาการ)"));
+      c.push(li("ok","FRM-1 expected = 50 ทวิ ทุก field (ใช้ BSEC เมื่อเอกสารมี payee)"));
+      if(useB&&!tax[0]) c.push(li("no","Tax ID ของผู้ถูกหัก <b>ว่าง</b> ทั้ง STCD3 และ STCD1 — ต้องตามข้อมูลก่อนยื่น (แบบยื่น WHT ต้องมีเลขผู้เสียภาษี)"));
+      else if(useB&&tax[2]===1) c.push(li("info","STCD3 ว่าง → ใช้ <b>STCD1</b> ตามลำดับของ certificate"));
+      c.push(li("tbc","ENH-1 (RD text file) อ่าน payee จาก BSEC หรือ BP — <b>TBC</b> · รัน specimens เดียวกันผ่าน ENH-1"));
+      c.push(li("info","defect แยก: เลขลำดับ attachment 070002 vs certificate 070000 (doc 2004325629) · header “แผ่นที่ 1 ในจำนวน 0 แผ่น”"));
+      $("m2chk").innerHTML=c.join("");
+    }
+    root.addEventListener("input",function(e){
+      var t=e.target, map={m2bpn:["bp","n"],m2bpa:["bp","a"],m2bpt:["bp","t"],m2bn:["bs","n"],m2ba:["bs","a"],m2s3:["bs","s3"],m2s1:["bs","s1"]};
+      var m=map[t.id]; if(!m) return; S[m[0]][m[1]]=t.value.trim(); render();
+    });
+    wire(root,S,render,load);
+    load("payee");
+  })();
+
+  /* =========================================================
+     MODEL 3 · one payment, many invoices (RPT-1 · D3)
+     ========================================================= */
+  (function(){
+    var root=$("m3"); if(!root) return;
+    var PRE={
+      p650:{pay:"8084322637",cur:"USD",inv:[
+        ["5104322588","F-100","5A","W1",1000.03,15],["5104322589","F-100","5A","W1",2000.03,15],["5104322590","F-100","5A","W1",3000.03,15],
+        ["5104322591","F-100","5D","W2",1250.05,10],["5104322592","F-100","5D","W2",1250.05,10],["5104322593","F-100","5D","W2",2500.05,10]]},
+      p649:{pay:"8084322636",cur:"THB",inv:[
+        ["5104322688","F-201","5A","W1",120000.03,15],["5104322689","F-201","5A","W1",80000.03,15],
+        ["5104322690","F-202","5A","W1",45000.05,15],["5104322691","F-203","5A","W1",33333.33,15],["5104322692","F-203","5A","W1",66666.67,15]]}
+    };
+    var S={view:"fix",alloc:"inv",pay:"",cur:"",inv:[],ovr:{}};
+    function load(k){
+      var p=PRE[k]; S.pay=p.pay; S.cur=p.cur; S.ovr={};
+      S.inv=p.inv.map(function(r){ return {ap:r[0],v:r[1],t:r[2],c:r[3],base:r[4],rate:r[5]}; });
+      $("m3pay").textContent=S.pay+" (pattern · amounts sample)"; $("m3cur").textContent=S.cur;
+      drawInputs(); drawSets(); render();
+    }
+    function q(i){ return rnd(i.base*i.rate/100); }
+    function drawInputs(){
+      $("m3in").innerHTML=S.inv.map(function(r,i){
+        return "<tr><td>"+esc(r.ap)+"</td><td>"+esc(r.v)+"</td><td>"+esc(r.t)+"</td><td>"+esc(r.c)+'</td><td class="n"><input class="n" style="max-width:70px" data-i="'+i+'" data-f="rate" value="'+r.rate+'" inputmode="decimal" aria-label="rate '+r.ap+'"></td>'+
+          '<td class="n"><input class="n" style="max-width:130px" data-i="'+i+'" data-f="base" value="'+fmt(r.base)+'" inputmode="decimal" aria-label="base '+r.ap+'"></td><td class="n" id="m3q'+i+'"></td></tr>';
+      }).join("");
+    }
+    function sets(){
+      var m={}, order=[];
+      S.inv.forEach(function(r){
+        var key=r.v+"|"+r.t+"|"+r.c;
+        if(!m[key]){ m[key]={key:key,v:r.v,t:r.t,c:r.c,rate:r.rate,base:0,qsum:0,inv:[]}; order.push(key); }
+        var s=m[key]; s.base=rnd(s.base+r.base); s.qsum=rnd(s.qsum+q(r)); s.inv.push(r);
+      });
+      return order.map(function(k,i){ var s=m[k]; s.no=i+1; s.calc=rnd(s.base*s.rate/100); s.wht=S.ovr[k]!=null?S.ovr[k]:s.calc; return s; });
+    }
+    /* structure (with the editable payment-WHT cells) is drawn only when the invoice set changes */
+    function drawSets(){
+      $("m3sets").innerHTML=sets().map(function(s,i){
+        return "<tr><td>"+s.no+"</td><td>"+esc(s.v)+"</td><td>"+esc(s.t)+" / "+esc(s.c)+'</td><td class="n" id="m3sb'+i+'"></td><td class="n" id="m3sq'+i+'"></td><td class="n"><input class="n" style="max-width:130px" data-set="'+esc(s.key)+'" value="'+fmt(s.wht)+'" inputmode="decimal" aria-label="payment WHT set '+s.no+'"></td><td class="n" id="m3sd'+i+'"></td></tr>';
+      }).join("");
+    }
+    function render(){
+      S.inv.forEach(function(r,i){ var c=$("m3q"+i); if(c) c.textContent=fmt(q(r)); });
+      var SS=sets(), c=[];
+      SS.forEach(function(s,i){
+        var dl=rnd(s.wht-s.qsum), dc=$("m3sd"+i);
+        if($("m3sb"+i)) $("m3sb"+i).textContent=fmt(s.base);
+        if($("m3sq"+i)) $("m3sq"+i).textContent=fmt(s.qsum);
+        if(dc){ dc.textContent=(dl>0?"+":"")+fmt(dl); dc.className="n"+(dl?" hl":""); }
+      });
+      var rows=[], first=S.inv[0];
+      if(S.view==="bug"){
+        SS.forEach(function(s){
+          var inSet=s.inv.indexOf(first)>=0;
+          rows.push({set:s.no,ap:first.ap,key:"first hit",b:first.base,q:q(first),w:s.wht,bad:!inSet,stamp:true});
+        });
+        $("m3mode").textContent="defect 14-Sep · AP voucher เดียว stamp ทุกแถว";
+      } else {
+        SS.forEach(function(s){
+          var acc=0;
+          s.inv.forEach(function(r,i){
+            var w;
+            if(S.alloc==="inv") w=q(r);
+            else { w=i<s.inv.length-1?rnd(s.wht*r.base/s.base):rnd(s.wht-acc); acc=rnd(acc+w); }
+            rows.push({set:s.no,ap:r.ap,key:"LIFNR=WT_ACCO · "+r.t+" · "+r.c,b:r.base,q:q(r),w:w,diff:!eq(w,q(r))});
+          });
+        });
+        $("m3mode").textContent="หลังแก้ · 1 แถว / invoice · D3 = "+(S.alloc==="inv"?"A ตาม invoice":"B prorate");
+      }
+      var lastSet=0;
+      $("m3out").innerHTML=rows.map(function(r,i){
+        var sep=r.set!==lastSet&&i>0?' style="border-top:2px solid var(--line)"':""; lastSet=r.set;
+        return '<tr class="'+(r.bad?"bad":"")+'"'+sep+"><td>"+(i+1)+"</td><td>"+r.set+"</td><td"+(r.bad?' class="hl"':"")+">"+esc(r.ap)+(r.stamp?" ⟲":"")+"</td><td>"+esc(r.key)+'</td><td class="n">'+fmt(r.b)+'</td><td class="n">'+fmt(r.q)+'</td><td class="n'+(r.diff?" hl":"")+'">'+fmt(r.w)+"</td></tr>";
+      }).join("");
+      /* checks */
+      if(S.view==="bug"){
+        var wrong=rows.filter(function(r){ return r.bad; }).length;
+        c.push(li("no","ทุกแถวได้ AP voucher <b>"+esc(first.ap)+"</b> — "+(SS.length>1?wrong+" ใน "+rows.length+" แถว ชี้ invoice ที่ไม่ได้อยู่ใน set ของตัวเอง":"แถวเดียวแทน "+S.inv.length+" invoices")+" · ฝั่ง VAT36 (23–34) อ่านผิดใบตาม"));
+        c.push(li("no","invoice ที่หายจากรายงาน: <b>"+(S.inv.length-1)+"</b> ใบ — reconcile PND54 ↔ VAT36 ไม่ได้"));
+      } else {
+        c.push(li("ok","ทุกแถวมี AP voucher ของตัวเอง (<b>"+rows.length+"</b> แถว = "+S.inv.length+" invoices) · match ด้วย vendor + type + code แบบ loop"));
+        SS.forEach(function(s){
+          var sum=0; rows.forEach(function(r){ if(r.set===s.no) sum+=r.w; }); sum=rnd(sum);
+          var tie=eq(sum,s.wht);
+          c.push(li(tie?"ok":"no","Set "+s.no+" ("+esc(s.t)+"/"+esc(s.c)+"): Σ WHT ในแถว <b>"+fmt(sum)+"</b> "+(tie?"=":"≠")+" WHT ของ payment ที่ยื่น <b>"+fmt(s.wht)+"</b>"+(tie?"":" · ต่าง "+fmt(rnd(sum-s.wht)))));
+        });
+        var off=rows.filter(function(r){ return r.diff; }).length;
+        c.push(li(off?"no":"ok",off?"<b>"+off+"</b> แถว WHT ≠ WT_QBSHB ของ invoice ตัวเอง (ส่วนต่างจากการ prorate)":"ทุกแถว WHT = WT_QBSHB ของ invoice ตัวเอง"));
+      }
+      c.push(li("tbc","<b>D3</b> — A (ตาม invoice) หรือ B (prorate ตาม base) · team lead ตัดสิน · ลองแก้ “payment WHT (posted)” เพื่อจำลองเศษปัดหรือยอดหลัง ENH-2"));
+      c.push(li("info","TC-010..016 (multi-invoice) ต้องรันบน FRM-1 และ ENH-1 ด้วย — ใช้ selection screen เดียวกัน"));
+      $("m3chk").innerHTML=c.join("");
+    }
+    root.addEventListener("input",function(e){
+      var t=e.target;
+      if(t.hasAttribute("data-set")){ S.ovr[t.getAttribute("data-set")]=num(t.value); render(); return; }
+      var i=t.getAttribute("data-i"), f=t.getAttribute("data-f"); if(i==null||!S.inv[i]) return;
+      S.inv[i][f]=num(t.value); S.ovr={}; drawSets(); render();
+    });
+    root.addEventListener("change",function(e){ var t=e.target; if(t.classList.contains("n")&&t.getAttribute("data-f")!=="rate") t.value=fmt(num(t.value)); });
+    wire(root,S,render,load);
+    load("p650");
+  })();
+
+  /* =========================================================
+     MODEL 4 · realized FX across LC1 / LC2 / LC3
+     ========================================================= */
+  (function(){
+    var root=$("m4"); if(!root) return;
+    function baseRates(){ return {
+      inv:{M:{EUR:37.90,USD:33.60},ZTH:{EUR:37.85,USD:33.58},B:{EUR:37.88,USD:33.59},PITB:{EUR:37.60,USD:33.40},PITM:{USD:33.45}},
+      pay:{M:{EUR:38.65,USD:33.90},ZTH:{EUR:38.60,USD:33.88},PITB:{EUR:38.20,USD:33.70},PITM:{USD:33.75},RD:{EUR:38.58,USD:33.86}}
+    }; }
+    var PRE={
+      eur:{cur:"EUR",pay:"same",seg:"CIT",amt:100000,vat:"0",wht:"0"},
+      eurusd:{cur:"EUR",pay:"USD",seg:"CIT",amt:100000,vat:"0",wht:"0"},
+      usdvat:{cur:"USD",pay:"same",seg:"CIT",amt:50000,vat:"7",wht:"0"},
+      wht:{cur:"USD",pay:"same",seg:"CIT",amt:80000,vat:"0",wht:"paper"},
+      thbpita:{cur:"THB",pay:"same",seg:"PITA",amt:3500000,vat:"0",wht:"0"}
+    };
+    var S={cur:"EUR",pay:"same",seg:"CIT",amt:100000,vat:"0",wht:"0",whtRate:15,R:baseRates()};
+    var ROWS=[
+      ["M","inv","rate M · invoice posting date","LC1 expense / AP (กฎ 3)",["EUR","USD"]],
+      ["ZTH","inv","ZTH · invoice date","LC2 cross rate (กฎ 1) · LC3 ถ้า CIT_TH",["EUR","USD"]],
+      ["B","inv","B · document date −1","LC1 ของบรรทัด input VAT",["EUR","USD"],"vat"],
+      ["PITB","inv","PITB · เดือนของ invoice","LC3 ฝั่งซื้อ (กฎ 2)",["EUR","USD"],"pita"],
+      ["PITM","inv","PITM · เดือนของ invoice","ตัวหาร LC3 (TBC)",["USD"],"pita"],
+      ["M","pay","rate M · payment date (T)","LC1 bank / WHT at payment",["EUR","USD"]],
+      ["ZTH","pay","ZTH · payment date","LC2 / LC3 ของบรรทัด bank",["EUR","USD"]],
+      ["PITB","pay","PITB · เดือนที่จ่าย","LC3 ฝั่งซื้อ (เดือนเดียวกัน = rate เดียวกัน)",["EUR","USD"],"pita"],
+      ["PITM","pay","PITM · เดือนที่จ่าย","ตัวหาร LC3 (TBC)",["USD"],"pita"],
+      ["RD","pay","BOT · T-1 paper / T-2 e-WHT","เป้าหมายของ ENH-2",["EUR","USD"],"wht"]
+    ];
+    function drawRates(){
+      var h='<thead><tr><th>Rate type · date</th><th class="n">EUR → THB</th><th class="n">USD → THB</th><th>ใช้กับ</th></tr></thead><tbody>';
+      ROWS.forEach(function(r){
+        if(r[5]==="vat"&&S.vat==="0") return;
+        if(r[5]==="pita"&&S.seg!=="PITA") return;
+        if(r[5]==="wht"&&S.wht==="0") return;
+        h+='<tr><td><span class="rt">'+r[0]+'</span> <span class="rn">'+r[2]+"</span></td>";
+        ["EUR","USD"].forEach(function(c){
+          h+='<td class="n">'+(r[4].indexOf(c)>=0?'<input class="n" data-rt="'+r[0]+'" data-dt="'+r[1]+'" data-c="'+c+'" value="'+S.R[r[1]][r[0]][c].toFixed(4)+'" inputmode="decimal" aria-label="'+r[0]+" "+r[1]+" "+c+'">':'<span class="rn">—</span>')+"</td>";
+        });
+        h+='<td class="rn">'+r[3]+"</td></tr>";
+      });
+      $("m4rates").innerHTML=h+"</tbody>";
+    }
+    function load(k){
+      var p=PRE[k]; S.cur=p.cur; S.pay=p.pay; S.seg=p.seg; S.amt=p.amt; S.vat=p.vat; S.wht=p.wht; S.whtRate=15; S.R=baseRates();
+      ["cur","pay","seg","vat","wht"].forEach(function(g){ setSeg(root,g,S[g]); });
+      $("m4amt").value=fmt(S.amt); $("m4whtr").value=S.whtRate;
+      full();
+    }
+    /* rate inputs are redrawn only when the visible rows change (segment / VAT / WHT toggles, presets) */
+    function full(){ drawRates(); render(); }
+    /* LC values of an AP/bank-type amount (dc in currency cur) at date dt — LC concept rules 1 + 2 */
+    function lc(dc,cur,dt){
+      var R=S.R[dt], l1, l2, l3;
+      l1=cur==="THB"?dc:dc*R.M[cur];
+      l2=cur==="USD"?dc:(cur==="THB"?dc/R.ZTH.USD:dc*R.ZTH[cur]/R.ZTH.USD);
+      if(cur==="USD") l3=dc;
+      else if(S.seg==="CIT") l3=l2;
+      else l3=cur==="THB"?dc/R.PITB.USD:dc*R.PITB[cur]/R.PITM.USD;
+      return [rnd(l1),rnd(l2),rnd(l3)];
+    }
+    function conv(dc,from,to){ /* payment-currency amount, translated through THB at rate M of the payment date (INFER) */
+      if(from===to) return dc;
+      var M=S.R.pay.M, thb=from==="THB"?dc:dc*M[from];
+      return rnd(to==="THB"?thb:thb/M[to]);
+    }
+    function cell(v,cls){ return '<td class="n'+(cls?" "+cls:"")+'">'+sap(v)+"</td>"; }
+    function row(name,key,rule,dc,l,cls,dcCur){ return '<tr class="'+(cls||"")+'"><td>'+name+"</td><td>"+key+'</td><td style="font-size:10.5px">'+rule+'</td><td class="n">'+(dc==null?"0.00":sap(dc))+(dcCur?' <span class="soft">'+dcCur+"</span>":"")+"</td>"+cell(l[0])+cell(l[1])+cell(l[2])+"</tr>"; }
+    function gl(v,label){ /* AP context: Dr (positive) = loss, Cr (negative) = gain */
+      var r=rnd(v); if(!r) return '<span>0.00</span>';
+      return '<span class="'+(r>0?"neg":"pos")+'">'+fmt(Math.abs(r))+" "+(r>0?"loss":"gain")+"</span>"+(label?" "+label:"");
+    }
+    function render(){
+      $("m4whtr").disabled=S.wht==="0";
+      var cur=S.cur, amt=rnd(S.amt), R=S.R, pc=S.pay==="same"?cur:S.pay, c=[], ins=[];
+      $("m4ic").textContent=cur+" · "+(S.seg==="CIT"?"CIT_TH":"PITA / PSC / MTJDA");
+      $("m4pc").textContent=pc+(pc!==cur?" (ข้ามสกุลจาก "+cur+")":"");
+      /* ---- invoice ---- */
+      var vatDC=S.vat==="0"?0:rnd(amt*num(S.vat)/100);
+      var exp=lc(amt,cur,"inv");
+      var vat=null, fxv=[0,0,0];
+      if(vatDC){
+        var v=lc(vatDC,cur,"inv");
+        v[0]=cur==="THB"?vatDC:rnd(vatDC*R.inv.B[cur]);
+        vat=v;
+      }
+      var openDC=rnd(amt+vatDC);
+      var vend=[ -(exp[0]+(vat?vat[0]:0)), -(exp[1]+(vat?vat[1]:0)), -(exp[2]+(vat?vat[2]:0)) ];
+      if(cur!=="THB") vend[0]=-rnd(openDC*R.inv.M[cur]);   /* vendor LC1 at M @ posting date */
+      vend=vend.map(function(x){ return rnd(x); });
+      for(var i=0;i<3;i++) fxv[i]=rnd(-((exp[i])+(vat?vat[i]:0)+vend[i]));
+      var hInv=row("Expense","— · expense GL","M @ posting",amt,exp,"",cur);
+      if(vat) hInv+=row("Input VAT","VST · tax GL",cur==="THB"?"= doc":"B @ doc date −1",vatDC,vat,"",cur);
+      if(rnd(fxv[0])||rnd(fxv[1])||rnd(fxv[2])) hInv+=row("Realized FX (from VAT)","A490X035","LC1 only",null,fxv,"fx");
+      hInv+=row("Vendor (AP)","K · open item","M @ posting",-openDC,vend,"",cur);
+      var tI=[0,0,0]; [exp,vat||[0,0,0],fxv,vend].forEach(function(a){ for(var j=0;j<3;j++) tI[j]+=a[j]; });
+      hInv+='<tr class="tot"><td colspan="3">Σ (ต้อง = 0)</td><td class="n"></td>'+cell(tI[0])+cell(tI[1])+cell(tI[2])+"</tr>";
+      $("m4inv").innerHTML=hInv;
+      /* ---- payment ---- */
+      var hist=[-vend[0],-vend[1],-vend[2]];
+      var payDC=conv(openDC,cur,pc);
+      var whtDC=0;
+      if(S.wht!=="0") whtDC=rnd(conv(rnd(amt*num(S.whtRate)/100),cur,pc));
+      var bankDC=rnd(payDC-whtDC);
+      var bank=lc(bankDC,pc,"pay").map(function(x){ return -x; });
+      var whtL=whtDC?lc(whtDC,pc,"pay").map(function(x){ return -x; }):[0,0,0];
+      var kdf=[0,0,0]; for(i=0;i<3;i++) kdf[i]=rnd(-(hist[i]+bank[i]+whtL[i]));
+      var hP=row("Vendor clearing","K · AUGBL","historical",payDC,hist,"",pc);
+      hP+=row("Bank","bank GL","M / ZTH @ T",-bankDC,bank,"",pc);
+      if(whtDC) hP+=row("WHT payable","WIT · A212X021","M @ T (M9)",-whtDC,whtL,"",pc);
+      hP+=row("Realized FX","KDF · OBA1 (GL TBC)","= ส่วนต่าง",null,kdf,"fx");
+      var tP=[0,0,0]; [hist,bank,whtL,kdf].forEach(function(a){ for(var j=0;j<3;j++) tP[j]+=a[j]; });
+      hP+='<tr class="tot"><td colspan="3">Σ (ต้อง = 0)</td><td class="n"></td>'+cell(tP[0])+cell(tP[1])+cell(tP[2])+"</tr>";
+      $("m4pay").innerHTML=hP;
+      /* ---- ENH-2 ---- */
+      var adj=0;
+      if(whtDC&&pc!=="THB"){
+        adj=rnd(whtDC*(R.pay.RD[pc]-R.pay.M[pc]));
+        $("m4e032").innerHTML='<div class="step"><i>3b</i>ENH-2 · WHT FX adjustment (doc type SW, batch ทุกเช้า)</div>'+
+          '<div class="sapdoc"><div class="sap-hd"><span>Doc type <b>SW</b></span><span>'+(S.wht==="ewht"?"e-WHT · BOT T-2":"paper · BOT T-1")+'</span><span class="t">LC1 · ทิศ Dr/Cr INFER</span></div><div class="tblwrap"><table class="sap"><thead><tr><th>Line</th><th>GL</th><th>คำนวณ</th><th class="n">LC1 THB</th></tr></thead><tbody>'+
+          '<tr><td>WHT payable</td><td>A212X021</td><td>'+fmt(whtDC)+" "+pc+" × ("+R.pay.RD[pc].toFixed(4)+" − "+R.pay.M[pc].toFixed(4)+')</td><td class="n">'+sap(-adj)+"</td></tr>"+
+          '<tr class="fx"><td>Realized FX · direct tax</td><td>A490X034</td><td>cost object TBC</td><td class="n">'+sap(adj)+"</td></tr></tbody></table></div></div>";
+      } else $("m4e032").innerHTML="";
+      /* ---- summary ---- */
+      var tot1=rnd(kdf[0]+fxv[0]+adj);
+      $("m4sum").innerHTML=
+        '<div class="out"><div class="k">REALIZED ตอน CLEAR · KDF</div><div class="v">LC1 '+gl(kdf[0])+"</div><div class=\"why\">LC2 "+gl(kdf[1])+" · LC3 "+gl(kdf[2])+"</div></div>"+
+        '<div class="out b"><div class="k">FROM VAT · A490X035</div><div class="v">LC1 '+gl(fxv[0])+'</div><div class="why">'+(vat?"เกิดตอน post invoice · LC1 เท่านั้น":"ไม่มี VAT บน invoice")+"</div></div>"+
+        '<div class="out d"><div class="k">ENH-2 · A490X034</div><div class="v">LC1 '+gl(adj)+'</div><div class="why">'+(whtDC?(pc==="THB"?"จ่าย THB → ไม่มีการปรับ":"BOT − M@T บนยอด WHT"):"ไม่มี WHT at payment")+"</div></div>";
+      /* ---- insights ---- */
+      var s1=Math.sign(rnd(kdf[0])), s2=Math.sign(rnd(kdf[1]));
+      if(s1&&s2&&s1!==s2) ins.push("<b>LC1 กับ LC2 คนละทิศ</b> — ค่า "+(cur==="THB"?"THB":cur)+" เทียบ THB กับเทียบ USD ขยับไม่เท่ากัน ระบบจึง post realized "+(s1>0?"loss":"gain")+" ใน LC1 แต่ "+(s2>0?"loss":"gain")+" ใน LC2 ในเอกสารเดียวกัน");
+      if(cur==="USD"&&pc==="USD") ins.push("<b>USD ทั้งสองฝั่ง</b> → LC2 = LC3 = doc amount (กฎ 1) — realized FX เกิดเฉพาะ LC1");
+      if(cur==="THB"&&pc==="THB") ins.push("<b>THB invoice จ่าย THB</b> → LC1 ไม่มี FX เลย แต่ LC2/LC3 (USD) มี realized FX จากการที่ rate USD เปลี่ยนระหว่างวัน invoice กับวันจ่าย");
+      if(pc!==cur) ins.push("<b>จ่ายข้ามสกุล</b> ("+cur+" → "+pc+"): ยอด "+pc+" = "+fmt(payDC)+" แปลงผ่าน THB ด้วย rate M วันจ่าย <span class=\"ev infer\">INFER</span>"+(pc==="USD"?" · เอกสาร USD → LC2 ของบรรทัด bank = ยอด USD ที่จ่ายจริง (กฎ 1)":""));
+      if(S.seg==="PITA"&&cur!=="USD"&&R.inv.PITB.USD===R.pay.PITB.USD&&(cur==="THB"||R.inv.PITB[cur]===R.pay.PITB[cur])&&R.inv.PITM.USD===R.pay.PITM.USD) ins.push("<b>PIT เป็น rate รายเดือน</b> — จ่ายในเดือนเดียวกับ invoice จึงไม่มี realized FX ใน LC3");
+      if(S.seg==="CIT"&&cur!=="USD") ins.push("<b>CIT_TH</b> → LC3 = LC2 (ZTH) ทุกบรรทัด — ตัวเลข LC3 จึงเท่ากับ LC2");
+      $("m4ins").innerHTML=ins.map(function(t){ return '<div class="insight">'+t+"</div>"; }).join("");
+      /* ---- checks ---- */
+      c.push(li(eq(tI[0],0)&&eq(tI[1],0)&&eq(tI[2],0)?"ok":"no","Invoice balance = 0 ทั้ง LC1 / LC2 / LC3"+(vat&&cur!=="THB"?" — LC1 balance ได้เพราะบรรทัด Realized FX (from VAT)":"")));
+      c.push(li(eq(tP[0],0)&&eq(tP[1],0)&&eq(tP[2],0)?"ok":"no","Payment balance = 0 ทั้งสามชั้น — บรรทัด KDF ปิดส่วนต่าง (DC = 0.00)"));
+      c.push(li("info","Realized ต่อชั้น = ค่าวันจ่าย − ค่า historical: LC1 "+sap(kdf[0])+" · LC2 "+sap(kdf[1])+" · LC3 "+sap(kdf[2])+" (บวก = Dr loss · ลบ = Cr gain)"));
+      if(S.seg==="PITA"&&cur!=="USD") c.push(li("tbc","LC3 ของ PITA ใช้ PITB(FC:THB) ÷ <b>PITM</b>(USD:THB) ตาม Verification Bible — ตัวหารเป็น PITM แม้ฝั่งซื้อ <b>TBC</b> · ชื่อ PITB/PITS ใน GL BPE (C3)"));
+      if(vat&&cur!=="THB"){
+        var fv=rnd(vatDC*R.inv.B[cur]-vatDC*R.inv.M[cur]);
+        c.push(li("info","สูตร LC concept: VAT × B(doc date −1) − VAT × M(posting) = "+fmt(vatDC)+" × "+R.inv.B[cur].toFixed(4)+" − "+fmt(vatDC)+" × "+R.inv.M[cur].toFixed(4)+" = <b>"+sap(fv)+"</b> → บรรทัด A490X035 ลง "+(fxv[0]>0?"Dr":"Cr")+" "+fmt(Math.abs(fxv[0]))+" ("+(fxv[0]>0?"loss":"gain")+") เพื่อให้ LC1 balance · ทิศ Dr/Cr <span class=\"ev infer\">INFER</span>"));
+      }
+      if(vat&&cur!=="THB") c.push(li("tbc","post FB60 / FB70 แล้วเจอ F5A49 “Item 005 must be corrected” — SAP case ยังเปิด · ผ่าน TAX-ENH-3 หรือ F-04 ไม่เกิด"));
+      c.push(li("tbc","GL ของ realized FX ฝั่ง AP clearing (OBA1) ไม่อยู่ในหลักฐาน — <b>TBC</b> · “M9” ใน LC concept ยังไม่รู้ความหมาย"));
+      $("m4chk").innerHTML=c.join("");
+    }
+    root.addEventListener("input",function(e){
+      var t=e.target;
+      if(t.id==="m4amt"){ S.amt=num(t.value); render(); return; }
+      if(t.id==="m4whtr"){ S.whtRate=num(t.value); render(); return; }
+      var rt=t.getAttribute("data-rt"); if(!rt) return;
+      var v=num(t.value); if(v>0){ S.R[t.getAttribute("data-dt")][rt][t.getAttribute("data-c")]=v; render(); }
+    });
+    root.addEventListener("change",function(e){
+      var t=e.target;
+      if(t.id==="m4amt") t.value=fmt(S.amt);
+      else if(t.getAttribute("data-rt")) t.value=S.R[t.getAttribute("data-dt")][t.getAttribute("data-rt")][t.getAttribute("data-c")].toFixed(4);
+    });
+    wire(root,S,full,load);
+    load("eur");
+  })();
+
+  /* =========================================================
+     MODEL 5 · PC × RI report (RPT-2 data · OBJ1 control)
+     ========================================================= */
+  (function(){
+    var root=$("m5"); if(!root) return;
+    /* doc 3004322020 = FUT repro (PC + amounts real; RI assumed) · others = samples */
+    var DATA=[
+      {doc:"3004322020",ln:1,tc:"O1",pc:"C_PC29",ri:"CP",ven:"VEN_C1",base:-952.379,tax:-47.619,src:"FUT"},
+      {doc:"3004322020",ln:2,tc:"O1",pc:"N_PC38",ri:"NN",ven:"VEN_N3",base:-1142.859,tax:-57.143,src:"FUT"},
+      {doc:"3004322027",ln:1,tc:"O1",pc:"C_PC29",ri:"CP",ven:"VEN_C1",base:-2000,tax:-100,src:"sample"},
+      {doc:"2004322188",ln:1,tc:"I1",pc:"C_PC29",ri:"CP",ven:"VEN_C1",base:4000,tax:200,src:"sample"},
+      {doc:"2004322189",ln:1,tc:"I1",pc:"N_PC38",ri:"NN",ven:"VEN_N3",base:1200,tax:60,src:"sample"},
+      {doc:"2004322189",ln:2,tc:"I1",pc:"N_PC38",ri:"NR",ven:"VEN_N3",base:800,tax:40,src:"sample"}
+    ];
+    var PCS=[], RIS=[];
+    DATA.forEach(function(r){ if(PCS.indexOf(r.pc)<0) PCS.push(r.pc); if(RIS.indexOf(r.ri)<0) RIS.push(r.ri); });
+    var S={pc:{},ri:{},lvl:"line",tot:"fix",grp:"pc"};
+    function chips(id,list,key){
+      $(id).innerHTML=list.map(function(v){ return '<button type="button" data-chip="'+key+'" data-val="'+v+'" aria-pressed="'+(S[key][v]?"true":"false")+'">'+v+"</button>"; }).join("");
+    }
+    function sel(key){ return Object.keys(S[key]).filter(function(k){ return S[key][k]; }); }
+    function lineMatch(r,pcs,ris){ return (!pcs.length||pcs.indexOf(r.pc)>=0)&&(!ris.length||ris.indexOf(r.ri)>=0); }
+    function run(pcs,ris,lvl){
+      var docs={}; DATA.forEach(function(r){ (docs[r.doc]=docs[r.doc]||[]).push(r); });
+      var out=[];
+      Object.keys(docs).forEach(function(k){
+        var ls=docs[k], m=ls.filter(function(r){ return lineMatch(r,pcs,ris); });
+        if(lvl==="line") out=out.concat(m);
+        else if(lvl==="any"){ if(m.length) out=out.concat(ls); }
+        else if(m.length===ls.length) out=out.concat(ls);
+      });
+      return out;
+    }
+    function sum(rows,f){ var s=0; rows.forEach(function(r){ s+=r[f]; }); return rnd(s,3); }
+    var last=[];
+    function render(){
+      var pcs=sel("pc"), ris=sel("ri"), rows=run(pcs,ris,S.lvl), c=[];
+      /* totals: fixed = Σ shown lines; bug = whole document when any line matches (RPT-2 / RPT-6) */
+      var totRows=rows;
+      if(S.tot==="bug"){
+        var hit={}; rows.forEach(function(r){ hit[r.doc]=1; });
+        totRows=DATA.filter(function(r){ return hit[r.doc]; });
+      }
+      var tb=sum(totRows,"base"), tt=sum(totRows,"tax");
+      var out=sum(totRows.filter(function(r){ return r.tax<0; }),"tax"), inp=sum(totRows.filter(function(r){ return r.tax>0; }),"tax");
+      $("m5k").innerHTML=
+        '<div class="k5"><div class="l">Output tax</div><div class="v">'+sap(out,3)+"</div></div>"+
+        '<div class="k5"><div class="l">Input tax</div><div class="v">'+sap(inp,3)+"</div></div>"+
+        '<div class="k5"><div class="l">Balance · payable</div><div class="v '+(tt<0?"neg":"pos")+'">'+sap(tt,3)+"</div></div>"+
+        '<div class="k5"><div class="l">Lines · docs</div><div class="v">'+rows.length+" · "+Object.keys(rows.reduce(function(a,r){ a[r.doc]=1; return a; },{})).length+"</div></div>";
+      /* grouped ALV */
+      var gkey=S.grp, groups={}, order=[];
+      rows.forEach(function(r){ var g=r[gkey]; if(!groups[g]){ groups[g]=[]; order.push(g); } groups[g].push(r); });
+      order.sort();
+      var h="";
+      order.forEach(function(g){
+        groups[g].forEach(function(r){
+          var other=lineMatch(r,pcs,ris)?"":" bad";
+          h+='<tr class="'+other+'"><td>'+r.doc+"</td><td>"+r.ln+"</td><td>"+r.tc+"</td><td>"+r.pc+"</td><td>"+r.ri+(r.src==="FUT"?"*":"")+"</td><td>"+r.ven+'</td><td class="n">'+sap(r.base,3)+'</td><td class="n">'+sap(r.tax,3)+"</td><td>"+(r.src==="FUT"?'<span class="ev sys" style="margin:0">FUT</span>':'<span class="soft">sample</span>')+"</td></tr>";
+        });
+        h+='<tr class="sub"><td colspan="6">Subtotal '+gkey.toUpperCase()+" "+g+'</td><td class="n">'+sap(sum(groups[g],"base"),3)+'</td><td class="n">'+sap(sum(groups[g],"tax"),3)+"</td><td></td></tr>";
+      });
+      h+='<tr class="tot"><td colspan="6">Total'+(S.tot==="bug"?" (ทั้งเอกสาร)":"")+'</td><td class="n'+(S.tot==="bug"&&!eq(tb,sum(rows,"base"),3)?" hl":"")+'">'+sap(tb,3)+'</td><td class="n'+(S.tot==="bug"&&!eq(tt,sum(rows,"tax"),3)?" hl":"")+'">'+sap(tt,3)+"</td><td></td></tr>";
+      $("m5out").innerHTML=h||'<tr><td colspan="9">ไม่มีบรรทัดตรงเงื่อนไข</td></tr>';
+      $("m5n").textContent=rows.length+" lines";
+      /* pivot PC × RI */
+      var mx=0, cellv={};
+      rows.forEach(function(r){ var k=r.pc+"|"+r.ri; cellv[k]=rnd((cellv[k]||0)+r.tax,3); });
+      Object.keys(cellv).forEach(function(k){ mx=Math.max(mx,Math.abs(cellv[k])); });
+      var pv='<thead><tr><th>PC \\ RI</th>'+RIS.map(function(r){ return '<th class="n">'+r+"</th>"; }).join("")+'<th class="n">Σ PC</th></tr></thead><tbody>';
+      PCS.forEach(function(p){
+        var rs=0;
+        pv+="<tr><td>"+p+"</td>"+RIS.map(function(r){ var v=cellv[p+"|"+r]; if(v!=null) rs+=v; return v==null?'<td class="n soft">·</td>':'<td class="n h" style="--a:'+(mx?(0.06+0.3*Math.abs(v)/mx).toFixed(3):0)+'">'+sap(v,3)+"</td>"; }).join("")+'<td class="n"><b>'+sap(rs,3)+"</b></td></tr>";
+      });
+      pv+='<tr class="tot"><td>Σ RI</td>'+RIS.map(function(r){ var s=0; PCS.forEach(function(p){ s+=cellv[p+"|"+r]||0; }); return '<td class="n">'+sap(s,3)+"</td>"; }).join("")+'<td class="n">'+sap(sum(rows,"tax"),3)+"</td></tr></tbody>";
+      $("m5pv").innerHTML=pv;
+      /* OBJ1 control: run each RI bucket alone, add them up, compare to the unfiltered run */
+      /* classify by line count, not by signed amount — output tax (−) and input tax (+) share one report */
+      var bsum=0, bcnt=0;
+      RIS.forEach(function(r){ var br=run(pcs,[r],S.lvl); bsum+=sum(br,"tax"); bcnt+=br.length; });
+      bsum=rnd(bsum,3);
+      var unfRows=run(pcs,[],S.lvl), unfPC=sum(unfRows,"tax"), ucnt=unfRows.length;
+      var ok=eq(bsum,unfPC,3)&&bcnt===ucnt;
+      c.push(li(ok?"ok":"no","Σ(RI buckets) <b>"+sap(bsum,3)+"</b> ("+bcnt+" lines) "+(ok?"=":"≠")+" unfiltered total"+(pcs.length?" (ใน PC ที่เลือก)":"")+" <b>"+sap(unfPC,3)+"</b> ("+ucnt+" lines)"+(ok?"":(bcnt<ucnt?" — mixed-RI document <b>หาย</b> จากทุก bucket ("+(ucnt-bcnt)+" lines · compliance risk)":" — mixed-RI document <b>ถูกนับซ้ำ</b> หลาย bucket (+"+(bcnt-ucnt)+" lines)"))));
+      var shown=sum(rows,"tax");
+      c.push(li(eq(tt,shown,3)?"ok":"no","Total / Balance <b>"+sap(tt,3)+"</b> "+(eq(tt,shown,3)?"=":"≠")+" Σ line items ที่แสดง <b>"+sap(shown,3)+"</b>"+(eq(tt,shown,3)?"":" — bug 2: Total รวมทั้งเอกสารเมื่อมีบรรทัดใดตรง (doc 3004322020) · บน RPT-6 Total นี้ขับ clearing posting")));
+      if(S.lvl!=="line") c.push(li("info","กรองระดับเอกสาร ("+(S.lvl==="any"?"มีบรรทัดไหนตรงก็เก็บทั้งใบ":"ต้องตรงทุกบรรทัดถึงเก็บ")+") — แถวสีแดงคือบรรทัดที่ไม่ตรงเงื่อนไขแต่ติดมากับเอกสาร · RPT-1 ลบที่ระดับเอกสารใน i01 ความหมายจริง TBC"));
+      c.push(li("tbc","PC ของเอกสาร multi-PC มาจาก tax line หรือ document และ total แบบไม่กรอง PC อิง BSET หรือ Σ ACDOCA split → <b>D4</b> · project lead"));
+      c.push(li("info","* RI ของ doc 3004322020 เป็นค่าสมมติ — evidence ระบุแค่ PC และยอด · cash-call path (JD/JK, I0, BSEG ⋈ ACDOCA) ไม่อยู่ในชุดข้อมูลนี้"));
+      $("m5chk").innerHTML=c.join("");
+      last=rows;
+    }
+    function toRows(){
+      var hdr=["Doc","Line","TaxCode","ProfitCenter","RecoveryIndicator","Venture","Base_OMR","Tax_OMR","Source"];
+      return [hdr].concat(last.map(function(r){ return [r.doc,r.ln,r.tc,r.pc,r.ri,r.ven,rnd(r.base,3).toFixed(3),rnd(r.tax,3).toFixed(3),r.src]; }));
+    }
+    function msg(t){ $("m5msg").textContent=t; setTimeout(function(){ $("m5msg").textContent=""; },1800); }
+    $("m5csv").addEventListener("click",function(){
+      var csv=toRows().map(function(r){ return r.map(function(v){ v=String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }).join(","); }).join("\r\n");
+      try{
+        var url=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"}));
+        var a=d.createElement("a"); a.href=url; a.download="RPT-2_PCxRI_model.csv"; d.body.appendChild(a); a.click(); d.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); },1500); msg("ดาวน์โหลดแล้ว");
+      }catch(e){ msg("ดาวน์โหลดไม่ได้ในเบราว์เซอร์นี้"); }
+    });
+    $("m5tsv").addEventListener("click",function(){
+      var tsv=toRows().map(function(r){ return r.join("\t"); }).join("\n");
+      if(window.KitTheme&&KitTheme.copy){ KitTheme.copy(tsv); msg("คัดลอกแล้ว — วางใน Excel ได้เลย"); }
+      else if(navigator.clipboard){ navigator.clipboard.writeText(tsv).then(function(){ msg("คัดลอกแล้ว"); }); }
+    });
+    root.addEventListener("click",function(e){
+      var b=e.target.closest("[data-chip]"); if(!b) return;
+      var k=b.getAttribute("data-chip"), v=b.getAttribute("data-val");
+      S[k][v]=!S[k][v]; b.setAttribute("aria-pressed",S[k][v]?"true":"false"); render();
+    });
+    wire(root,S,render,null);
+    chips("m5pc",PCS,"pc"); chips("m5ri",RIS,"ri");
+    render();
+  })();
+})();
+</script>
+</body>
+</html>

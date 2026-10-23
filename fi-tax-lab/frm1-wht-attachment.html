@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-FRM-1 — ใบแนบ ภ.ง.ด. 3 / 53 / 54 (PDF · Profit Center) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.1;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:21px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:26px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:14px;font-weight:700;margin:18px 0 6px;color:var(--ink);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;font-size:13.2px;}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;white-space:nowrap;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  tbody td.n{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .arrow{color:var(--brass);font-weight:700;}
+  .attrs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 6px;}
+  @media(max-width:640px){.attrs{grid-template-columns:1fr 1fr;}}
+  .attr{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:var(--paper);}
+  .attr .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .attr .v{font-size:13.5px;font-weight:600;margin-top:2px;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:12px 0 12px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:11px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);}
+  .chain .node{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;border:1.3px solid var(--petrol);color:var(--petrol-deep);border-radius:8px;padding:6px 10px;background:rgba(37,99,235,.06);}
+  .chain .node.out{border-color:var(--brass);color:var(--brass);background:rgba(180,83,9,.07);}
+  .chain .sep{color:var(--brass);font-weight:700;}
+  .path{border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;background:var(--card);}
+  .path .ph{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:8px;}
+  .path ol{margin-left:18px;font-size:13.6px;}
+  .path ol li{padding:4px 0;}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:11pt;}.masthead{animation:none;}.keybox,.callout,.trap,section,.chain,.path{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}.tw{overflow:visible;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-f078">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">★ my object · Form</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>01.01.07.03 Withholding Tax</span>
+    </div>
+    <h1>TAX-FRM-1 — <span class="accent">ใบแนบ ภ.ง.ด. 3 / 53 / 54 (PDF รวม Profit Center)</span></h1>
+    <div class="meta">
+      <span>Type · <b>Form</b></span>
+      <span>Nature · <b>Retrofit with change</b></span>
+      <span>T-code · <b>S_P00_07000134</b></span>
+      <span>Form type · <b>Adobe Form</b></span>
+      <span>Legacy · <b>R03</b></span>
+      <span>Priority · <b>P1</b></span>
+      <span>Geo · <b>Thailand</b></span>
+    </div>
+  </header>
+
+  <p class="lede">
+    “ใบแนบ” คือ<b>เอกสารรายละเอียดที่แนบท้ายแบบยื่น</b> — รายชื่อผู้ถูกหักภาษี ยอดจ่าย ยอดภาษี ทีละบรรทัด
+    FRM-1 พิมพ์ใบแนบของ <b>ภ.ง.ด. 3</b> (บุคคลธรรมดา) · <b>53</b> (นิติบุคคลในประเทศ) · <b>54</b> (จ่ายไปต่างประเทศ)
+    <b>สิ่งที่ “เปลี่ยน” จริง ๆ มีแค่ 2 อย่าง</b> — เพิ่มมิติ Profit Center / Recovery Indicator บนหน้าจอ
+    และเปลี่ยนวิธีดึง <b>เลขประจำตัวผู้เสียภาษีของผู้ขาย</b> ให้มาจาก <code>DFKKBPTAXNUM</code>
+  </p>
+
+  <div class="attrs">
+    <div class="attr"><div class="k">Trigger</div><div class="v">Manual</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">ผ่าน S_P00_07000134</div></div>
+    <div class="attr"><div class="k">Output channel</div><div class="v">Print (A4)</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">ภาษาไทย · ไม่มี Output Mgmt</div></div>
+    <div class="attr"><div class="k">Volume</div><div class="v">≤ 500 / เดือน</div><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">Monthly + Ad Hoc · on demand</div></div>
+  </div>
+
+  <div class="trap" style="margin-top:14px"><b>⚠ Dependency ที่ต้องรู้ก่อนเทสต์:</b> FD ระบุตรง ๆ ว่า
+    <b>ต้องพึ่ง WRICEF TAX-RPT-1 ในการรันรายงาน</b> — ถ้า RPT-1 ยังไม่พร้อม/มี defect
+    FRM-1 จะเทสต์ไม่ได้เลย เพราะทั้งคู่เกาะ selection screen เดียวกัน
+    → <a href="rpt1-wht-vat-recon.html" style="color:var(--petrol);font-weight:600">เปิด TAX-RPT-1 คู่กัน</a></div>
+
+  <div class="callout"><b>🔗 อ่านคู่กัน:</b>
+    <a href="enh1-rd-text-files.html" style="color:var(--petrol);font-weight:600">TAX-ENH-1 (text file e-Filing ของ 1/1ก/2/2ก/3/53)</a> ·
+    <a href="frm2-mm-wht-certificate.html" style="color:var(--petrol);font-weight:600">TAX-FRM-2 (WHT Certificate เมียนมา — form อีกตัวที่คุณดูแล)</a> ·
+    <a href="statutory.html" style="color:var(--petrol);font-weight:600">Statutory Filing Guide</a> ·
+    <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N (ไล่ join chain ด้วยตัวเอง)</a>
+  </div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">1 · ภาพรวม</a>
+    <a href="#screen">2 · Selection screen</a>
+    <a href="#logic">3 · Logic 6 เส้นทาง</a>
+    <a href="#cond1">4 · Condition 1 (Tax ID)</a>
+    <a href="#fields">5 · 18 fields</a>
+    <a href="#print">6 · Print &amp; roles</a>
+    <a href="#test">7 · Test conditions</a>
+    <a href="#fut">7.5 · FUT status</a>
+    <a href="#expert">8 · Expert notes</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways — 6 ข้อ</b>
+    <ul>
+      <li><b>“Retrofit with change”</b> = ฟอร์มหน้าตาเดิม (No change ทั้ง header/item/summary/footer) แต่ <b>วิธีได้ข้อมูลเปลี่ยน</b></li>
+      <li>ทิศทางการ join <b>กลับด้าน</b> ระหว่าง “เลือก PC” กับ “ไม่เลือก PC” — จำ 2 ทิศนี้ให้ได้คือเข้าใจทั้ง object</li>
+      <li>ไม่เลือก Profit Center = โปรแกรมต้อง <b>ไปหา PRCTR เอง</b> จาก ACDOCA แล้ว <b>แตกใบแนบทีละ profit center</b></li>
+      <li>ACDOCA ที่ใช้ต้องเป็น <code>RLDNR = '0L'</code> และ <code>KTOSL = 'WIT'</code> เสมอ</li>
+      <li>ใน 18 fields <b>มีแค่ field [7] Tax Identification of Vendor ที่เปลี่ยน</b> — ที่เหลือ “No change”</li>
+      <li>Tax ID ผู้ขาย: <code>TAXTYPE = 'TH1'</code> ถ้าเป็นบุคคล, <code>'TH3'</code> ถ้าไม่ใช่ · แล้วหยิบ <code>TAXNUM</code> หรือ <code>TAXNUMXL</code> ตัวที่ <b>ไม่ว่าง</b></li>
+    </ul>
+  </div>
+
+  <!-- 1 -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>ภาพรวม — ใบแนบคืออะไร และ object นี้เปลี่ยนอะไร</h2></div>
+    <p class="sec-sub">Form บน standard transaction เดิม · ผลิตเอกสารกระดาษที่ยื่นจริงต่อกรมสรรพากร</p>
+
+    <p class="body">
+      แบบยื่น ภ.ง.ด. 3 / 53 / 54 มี “หน้าปก” ที่สรุปยอดรวม กับ “ใบแนบ” ที่ลิสต์รายละเอียดผู้ถูกหักภาษีทีละราย
+      TAX-FRM-1 คือตัวพิมพ์ <b>ใบแนบ</b> — ไม่ใช่หน้าปก และไม่ใช่หนังสือรับรองการหักภาษี (50 ทวิ)
+    </p>
+
+    <div class="tw"><table>
+      <thead><tr><th>แบบยื่น</th><th>ใช้กับใคร</th><th>WHT Type</th><th>Recipient Type</th></tr></thead>
+      <tbody>
+        <tr><td><b>ภ.ง.ด. 3</b></td><td>จ่ายให้ <b>บุคคลธรรมดา</b> ในประเทศ</td><td><code>3A</code> <code>3B</code> <code>3C</code> <code>3D</code> <code>3E</code> <code>3F</code></td><td><code>03</code></td></tr>
+        <tr><td><b>ภ.ง.ด. 53</b></td><td>จ่ายให้ <b>นิติบุคคล</b> ในประเทศ</td><td><code>4A</code> <code>4B</code> <code>4C</code> <code>4D</code> <code>4E</code> <code>4F</code></td><td><code>53</code></td></tr>
+        <tr><td><b>ภ.ง.ด. 54</b></td><td>จ่าย <b>ออกไปต่างประเทศ</b> (มาตรา 70)</td><td><code>5A</code> <code>5D</code></td><td><code>54</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>เอกสารต้นทางที่ retrofit มา</h3>
+    <div class="tw"><table>
+      <thead><tr><th>ของเดิม (ECC)</th><th>ครอบคลุม</th></tr></thead>
+      <tbody>
+        <tr><td><code>65_ZTAXA_F03 PND3-53 Attachment</code></td><td>ใบแนบ ภ.ง.ด. 3 และ 53</td></tr>
+        <tr><td><code>65_undefined PND54 Attachment</code></td><td>ใบแนบ ภ.ง.ด. 54</td></tr>
+        <tr><td>Legacy form output <code>R03</code></td><td>“Attachment P.N.D. 3, 53 and 54”</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>R03 คือคำที่คุณเคยเจอมาแล้ว:</b> ใน FUT ของ TAX-RPT-1 คุณเห็น <b>output group R03</b>
+      บนหน้าจอ Generic Withholding Tax Reporting — นั่นคือตัวเดียวกันกับ legacy form number ของ FRM-1
+      พูดอีกแบบ: <b>R03 = ประตูที่ทำให้ standard program รู้ว่าต้องเรียกฟอร์มใบแนบตัวนี้</b></div>
+
+    <h3>Trigger — เอกสารแบบไหนที่ทำให้เกิดใบแนบ</h3>
+    <p class="body">
+      FD ระบุ trigger ว่า “Invoice posting subject to WHT (<b>FB60 / MIRO / FB01</b>) with the WHT code of WHT type (PND3, 53) or (PND54)”
+      → หมายความว่า <b>ใบแนบเกิดจากเอกสารตั้งหนี้/จ่ายเงินที่มี WHT</b> ไม่ได้เกิดจาก event ใด ๆ ในระบบเอง
+      ตัวฟอร์มถูกพิมพ์ทีหลังแบบ manual/on demand
+    </p>
+  </section>
+
+  <!-- 2 -->
+  <section id="screen">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Selection screen ของ S_P00_07000134 (TO-BE)</h2></div>
+    <p class="sec-sub">หน้าจอเดียวกับ TAX-RPT-1 / TAX-ENH-1 — แต่ block “Forms” เป็นของ FRM-1 โดยเฉพาะ</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Block</th><th>Field</th><th>บทบาทกับ FRM-1</th></tr></thead>
+      <tbody>
+        <tr><td>Output Groups</td><td>Process Type · Output Groups</td><td>ต้องเลือกกลุ่มที่ผูกกับ <code>R03</code> ฟอร์มจึงจะออก</td></tr>
+        <tr><td>Mandatory Selections</td><td>Country Key · Reporting Period</td><td><code>TH</code> + งวดที่ยื่น</td></tr>
+        <tr><td>General Selections</td><td>Company Code · Fiscal Year · Ext. WH Tax Type · Ext. WH Tax Code · Classic WH Tax Code · Suppliers · Customers</td><td>ตัวกรองหลัก</td></tr>
+        <tr><td>General Control</td><td>(standard)</td><td>—</td></tr>
+        <tr><td><b>Further Selections</b></td><td><b>Profit Center</b> (from–to + multiple) · <b>Recovery Indicator</b> (multiple)</td><td><b>← delta ของ S/4 (ทั้งคู่ optional)</b></td></tr>
+        <tr><td>Output Control And Lists</td><td>(standard)</td><td>—</td></tr>
+        <tr><td><b>Forms</b></td><td>Sender Variant · <b>Form 1: Attachment</b> (Print form 1 / Print Immediately / Number of copies / Output Device) · <b>Form 2: Attachment</b> (ชุดเดียวกัน)</td><td>คุมการพิมพ์ใบแนบ 2 ชุด</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Validation ของ 2 field ใหม่</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Screen field</th><th>Type</th><th>Attribute</th><th>Parameter</th><th>Validation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Profit Center</b></td><td>Alphanumeric</td><td>Optional</td><td>From, To + multiple selection</td><td>ตรวจกับตาราง <code>CEPC</code> field <code>PRCTR</code></td></tr>
+        <tr><td><b>Recovery Indicator</b></td><td>Alphanumeric</td><td>Optional</td><td>Multiple selection</td><td>ตรวจ <b>คู่</b> ของ <code>BUKRS</code> + <code>RECID</code> ในตาราง <code>T8JJ</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>สังเกตความสอดคล้องข้าม object:</b> validation ชุดนี้ <b>เหมือนกันเป๊ะ</b> กับ TAX-ENH-1
+      และ TAX-RPT-4 / TAX-RPT-5 ก็ใช้กติกาเดียวกัน (CEPC สำหรับ PC, T8JJ+BUKRS สำหรับ RECID)
+      → เวลาอธิบายให้ทีม technical ฟัง ให้พูดครั้งเดียวว่า “มาตรฐานของ tax workstream” ไม่ต้องอธิบายซ้ำ object ต่อ object</div>
+  </section>
+
+  <!-- 3 -->
+  <section id="logic">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Logic — 6 เส้นทางการดึงข้อมูล (3 เงื่อนไข × 2 กลุ่มแบบ)</h2></div>
+    <p class="sec-sub">หัวใจของ FD ฉบับนี้ · ให้ดูที่ “ทิศทางลูกศร” ไม่ใช่ที่ชื่อ field</p>
+
+    <div class="keybox">
+      <b>สรุปทิศทางก่อนอ่านรายละเอียด</b>
+      <ul>
+        <li><b>เลือก PC / เลือก RECID</b> → เริ่มที่ <b>ACDOCA</b> (เพราะ PC และ RECID อยู่ใน ACDOCA) แล้ววิ่งไป WITH_ITEM</li>
+        <li><b>ไม่เลือก PC</b> → เริ่มที่ <b>WITH_ITEM</b> (เพราะมีแค่ BUKRS/GJAHR) แล้ววิ่ง <b>ย้อนกลับ</b> ไป ACDOCA เพื่อ “ขอ PRCTR”</li>
+        <li>ปลายทางเหมือนกันเสมอ: พิมพ์ตาม field 18 ตัวใน section 5</li>
+      </ul>
+    </div>
+
+    <h3>เส้นทาง A — เลือก Profit Center</h3>
+
+    <div class="path">
+      <div class="ph">A1 · ภ.ง.ด. 3 และ 53 (เลือก PC)</div>
+      <ol>
+        <li>ส่ง <code>PRCTR</code> + <code>GJAHR</code> เข้า <b>ACDOCA</b> · เงื่อนไข <code>KTOSL = 'WIT'</code></li>
+        <li>ดึง <b>เลขที่เอกสาร <code>BELNR</code></b> ออกมา</li>
+        <li>ส่ง <code>BELNR</code> + <code>GJAHR</code> เข้า <b>WITH_ITEM</b> · <code>WT_WITHCD</code> ต้อง <b>ไม่ว่าง</b></li>
+        <li>กรอง <code>WITHT ∈ {3A…3F}</code> และ <code>QSREC = '03'</code> → <b>ภ.ง.ด. 3</b><br>
+            กรอง <code>WITHT ∈ {4A…4F}</code> และ <code>QSREC = '53'</code> → <b>ภ.ง.ด. 53</b></li>
+        <li>พิมพ์ฟอร์มตาม field ใน section 2.3.3.6 (18 fields)</li>
+      </ol>
+    </div>
+
+    <div class="path">
+      <div class="ph">A2 · ภ.ง.ด. 54 (เลือก PC)</div>
+      <ol>
+        <li>ขั้น 1–3 เหมือน A1 ทุกประการ</li>
+        <li>กรอง <code>WITHT ∈ {5A, 5D}</code> และ <code>QSREC = '54'</code></li>
+        <li>พิมพ์ฟอร์ม</li>
+      </ol>
+    </div>
+
+    <h3>เส้นทาง B — ไม่เลือก Profit Center (ต้องหา PRCTR เอง)</h3>
+
+    <div class="path">
+      <div class="ph">B1 · ภ.ง.ด. 3 และ 53 (ไม่เลือก PC)</div>
+      <ol>
+        <li>ส่ง <code>BUKRS</code> + <code>GJAHR</code> จาก selection screen เข้า <b>WITH_ITEM</b> · <code>WT_WITHCD</code> ไม่ว่าง</li>
+        <li>กรอง <code>WITHT</code> / <code>QSREC</code> ตามแบบ (3A–3F/'03' หรือ 4A–4F/'53')</li>
+        <li>ดึง <b><code>BELNR</code></b> ออกมา</li>
+        <li>ส่ง <code>BUKRS</code> + <code>GJAHR</code> + <code>BELNR</code> เข้า <b>ACDOCA</b> · <b><code>RLDNR = '0L'</code></b> และ <code>KTOSL = 'WIT'</code></li>
+        <li>ดึง <b><code>PRCTR</code></b> ออกมา</li>
+        <li><b>ถ้าข้อมูลที่ได้มีหลาย profit center → สร้างใบแนบ “แยกใบต่อ profit center”</b></li>
+      </ol>
+    </div>
+
+    <div class="path">
+      <div class="ph">B2 · ภ.ง.ด. 54 (ไม่เลือก PC)</div>
+      <ol>
+        <li>เหมือน B1 แต่กรอง <code>WITHT ∈ {5A, 5D}</code> และ <code>QSREC = '54'</code></li>
+        <li>ปิดท้ายด้วยกติกาเดียวกัน — หลาย PRCTR = หลายใบแนบ</li>
+      </ol>
+    </div>
+
+    <h3>เส้นทาง C — เลือก Recovery Indicator</h3>
+
+    <div class="path">
+      <div class="ph">C1 / C2 · ภ.ง.ด. 3 &amp; 53 และ ภ.ง.ด. 54 (เลือก RECID)</div>
+      <ol>
+        <li>ส่ง <code>RECID</code> + <code>GJAHR</code> เข้า <b>ACDOCA</b> · match <code>KTOSL = 'WIT'</code> · ดึง <code>BELNR</code></li>
+        <li>ส่ง <code>BELNR</code> + <code>GJAHR</code> เข้า <b>WITH_ITEM</b> · <code>WT_WITHCD</code> ไม่ว่าง</li>
+        <li>กรอง <code>WITHT</code>/<code>QSREC</code> ตามแบบ (3/53 หรือ 54)</li>
+        <li>พิมพ์ฟอร์ม</li>
+      </ol>
+    </div>
+
+    <div class="chain">
+      <span class="node">เลือก PC หรือ RECID</span>
+      <span class="sep">→</span>
+      <span class="node">ACDOCA<br><span style="font-weight:400">KTOSL=WIT → BELNR</span></span>
+      <span class="sep">→</span>
+      <span class="node">WITH_ITEM<br><span style="font-weight:400">WITHT + QSREC</span></span>
+      <span class="sep">→</span>
+      <span class="node out">พิมพ์ใบแนบ</span>
+    </div>
+    <div class="chain">
+      <span class="node">ไม่เลือก PC</span>
+      <span class="sep">→</span>
+      <span class="node">WITH_ITEM<br><span style="font-weight:400">BUKRS+GJAHR → BELNR</span></span>
+      <span class="sep">→</span>
+      <span class="node">ACDOCA<br><span style="font-weight:400">RLDNR=0L, KTOSL=WIT → PRCTR</span></span>
+      <span class="sep">→</span>
+      <span class="node out">1 ใบแนบ / 1 profit center</span>
+    </div>
+
+    <div class="trap"><b>⚠ จุดที่ต่างกันเงียบ ๆ:</b> เส้นทาง A และ C <b>ไม่ได้ระบุ <code>RLDNR = '0L'</code></b> ใน FD
+      แต่เส้นทาง B ระบุไว้ชัดเจน — เพราะ B ต้องอ่าน ACDOCA เพื่อ “หา PRCTR” จึงต้องล็อก ledger กันข้อมูลซ้ำจาก ledger อื่น (เช่น <code>T1</code>)
+      ส่วน A/C ค้นด้วย PRCTR/RECID ที่ระบุมาแล้ว จึงเสี่ยงซ้ำน้อยกว่า
+      <b>ในทางปฏิบัติควรล็อก <code>RLDNR</code> ทุกเส้นทาง</b> — ถ้าเจอยอดซ้ำตอนเทสต์ ให้สงสัยจุดนี้ก่อน
+      <span class="todo">TODO: verify</span></div>
+  </section>
+
+  <!-- 4 -->
+  <section id="cond1">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Condition 1 — ที่มาของ “เลขประจำตัวผู้เสียภาษีของผู้ขาย”</h2></div>
+    <p class="sec-sub">field เดียวที่เปลี่ยนใน 18 fields · แต่เป็นตัวที่ทำให้ยื่นผ่าน/ไม่ผ่าน</p>
+
+    <ol class="flow">
+      <li>จาก <b><code>WITH_ITEM</code></b> กรอง <code>WITHT</code>/<code>QSREC</code> ตามแบบ และ <code>WT_WITHCD</code> ต้องไม่ว่าง</li>
+      <li>ดึง <b>เลขผู้ขาย <code>WT_ACCO</code></b> (Vendor Number)</li>
+      <li>ส่ง <code>WT_ACCO</code> เข้าตาราง <b><code>DFKKBPTAXNUM</code></b> ที่ field <b><code>PARTNER</code></b></li>
+      <li>อ่าน <b><code>TAXTYPE</code></b> (Identification Type) — <b>ถ้าผู้ขายเป็นบุคคล ใช้ <code>TH1</code> · ถ้าไม่ใช่ ใช้ <code>TH3</code></b></li>
+      <li>หยิบ <b><code>TAXNUM</code></b> (Tax Number) <b>หรือ</b> <b><code>TAXNUMXL</code></b> (Tax Number Long) — <b>ตัวไหนที่ไม่ว่าง</b></li>
+    </ol>
+
+    <div class="chain">
+      <span class="node">WITH_ITEM<br><span style="font-weight:400">WT_ACCO</span></span>
+      <span class="sep">→</span>
+      <span class="node">DFKKBPTAXNUM<br><span style="font-weight:400">PARTNER</span></span>
+      <span class="sep">→</span>
+      <span class="node">TAXTYPE<br><span style="font-weight:400">TH1 (บุคคล) / TH3</span></span>
+      <span class="sep">→</span>
+      <span class="node out">TAXNUM หรือ TAXNUMXL<br><span style="font-weight:400">field [7] ของฟอร์ม</span></span>
+    </div>
+
+    <h3>ทำไมต้อง DFKKBPTAXNUM ไม่ใช่ LFA1-STCD1?</h3>
+    <ul class="clean">
+      <li><b>S/4HANA ใช้ Business Partner (BP) เป็นแกน</b> — ผู้ขาย/ลูกค้ารวมเป็น BP เดียว เลขประจำตัวผู้เสียภาษีจึงย้ายไปเก็บที่ตาราง tax number ของ BP</li>
+      <li><b>1 BP มีได้หลาย tax number หลาย type</b> — จึงต้องระบุ <code>TAXTYPE</code> ให้ถูก ไม่งั้นอาจได้เลขของประเทศอื่น/ประเภทอื่น</li>
+      <li><b>TAXNUM vs TAXNUMXL</b> — field มาตรฐานยาวจำกัด ส่วน XL ไว้รองรับเลขที่ยาวกว่า → กติกา “ตัวไหนไม่ว่างใช้ตัวนั้น” จึงจำเป็น</li>
+    </ul>
+
+    <div class="trap"><b>⚠ กับดักในการเทสต์:</b> ถ้า field [7] ว่างในใบแนบ อย่าเพิ่งโทษฟอร์ม —
+      ให้ไล่ 3 จุดด้วย <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N</a>:
+      (1) <code>WITH_ITEM-WT_ACCO</code> มีค่าไหม (2) <code>DFKKBPTAXNUM</code> มี record ของ partner นั้นไหม
+      (3) record นั้น <code>TAXTYPE</code> เป็น TH1/TH3 ตรงกับประเภทผู้ขายไหม
+      → ตาม TC-02 ระบบต้องปล่อยช่องว่างไว้ <b>พร้อมขึ้นข้อความ</b> “The field xxx is not available in the table xxx”</div>
+  </section>
+
+  <!-- 5 -->
+  <section id="fields">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Required Data for Form — 18 fields</h2></div>
+    <p class="sec-sub">“No change” ทุกช่อง ยกเว้น [7] — เท่ากับ delta ของ object นี้ทั้งหมดอยู่ที่ 1 บรรทัด</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:52px">#</th><th>Form field</th><th>SAP field</th><th>SAP table</th><th>สถานะ</th></tr></thead>
+      <tbody>
+        <tr><td class="n">[1]</td><td>Tax identification number (Company Tax ID)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[2]</td><td>Branch (สาขา)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[3]</td><td>T-sheets in the number (แผ่นที่)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[4]</td><td>Rank (ลำดับ)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[5]</td><td>Company Name</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[6]</td><td>Company Address</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr style="background:rgba(180,83,9,.12)"><td class="n">[7]</td><td><b>Tax Identification of Vendor</b></td><td class="n"><b>TAXNUM</b> หรือ <b>TAXNUMXL</b></td><td class="n"><b>DFKKBPTAXNUM</b></td><td><b>← เปลี่ยน (Condition 1)</b></td></tr>
+        <tr><td class="n">[7]</td><td>Name — Vendor Name1 &amp; Name2 &amp; Name3</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[8]</td><td>Payee Address</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[9]</td><td>Date of payment</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[10]</td><td>Currency Exchange Document No.</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[11]</td><td>Income type (Income text)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[12]</td><td>WHT Rate (Tax rate)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[13]</td><td>Amount of payment (WHT base amount)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[14]</td><td>Taxes deducted and remitted (WHT tax amount)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[15]</td><td>Paid Condition</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[16]</td><td>Total Earnings (Total WHT Base)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[17]</td><td>Withholding tax Amount (รวม)</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+        <tr><td class="n">[18]</td><td>FI Document No.</td><td class="n">No change</td><td class="n">No change</td><td>เดิม</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>อ่านตารางนี้ให้เป็น:</b> คำว่า “No change” ในคอลัมน์ SAP field/table
+      <b>ไม่ได้แปลว่าไม่สำคัญ</b> — แปลว่า technical team ต้องไปเปิด FS เดิม (<code>65_ZTAXA_F03/undefined</code>) เอาเอง
+      เวลาทำ FUT/FIT คุณจึงต้อง <b>ตรวจครบทั้ง 18 ช่อง</b> ไม่ใช่ตรวจแค่ช่องที่ระบุว่าเปลี่ยน (นี่คือ TC-01)</div>
+
+    <h3>Layout ที่ไม่เปลี่ยน</h3>
+    <div class="tw"><table>
+      <thead><tr><th>ส่วน</th><th>สถานะ</th></tr></thead>
+      <tbody>
+        <tr><td>Header Section · Item Table · Summary · Footer · QR Code/Barcode</td><td><b>No change</b></td></tr>
+        <tr><td>Logos</td><td>No change</td></tr>
+        <tr><td>Page Breaks</td><td><b>No page break</b></td></tr>
+        <tr><td>Sorting</td><td>N/A</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 6 -->
+  <section id="print">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Processing · Printer · Roles</h2></div>
+    <p class="sec-sub">รายละเอียดการรันจริง — ข้อมูลชุดนี้มักถูกถามใน cutover/hypercare</p>
+
+    <div class="tw"><table>
+      <thead><tr><th>Attribute</th><th>ค่า</th></tr></thead>
+      <tbody>
+        <tr><td>Form Type</td><td><b>Adobe Form</b> (ไม่ใช่ SAPScript / Smart Form)</td></tr>
+        <tr><td>Trigger</td><td><b>Manual</b></td></tr>
+        <tr><td>Trigger Event / Batch Program</td><td><code>S_P00_07000134</code></td></tr>
+        <tr><td>Output Channel</td><td><b>Print</b></td></tr>
+        <tr><td>Output Determination</td><td><b>N/A</b> — ไม่มี Output Management (ไม่ใช่ BRF+)</td></tr>
+        <tr><td>Document Type</td><td>Vendor Invoice / AP payment posting</td></tr>
+        <tr><td>Language</td><td><b>Thai</b></td></tr>
+        <tr><td>Execution Frequency</td><td><b>Monthly</b> + <b>Ad hoc</b></td></tr>
+        <tr><td>Processing method</td><td><b>On demand</b></td></tr>
+        <tr><td>Expected Volume</td><td><b>Up to 500 / เดือน</b></td></tr>
+        <tr><td>Printer requirement</td><td>เครื่องพิมพ์ทั่วไป · <b>กระดาษ A4</b></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>User roles &amp; authorisation</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Role</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td>Accountant</td><td>สร้าง/พิมพ์ฟอร์มได้</td></tr>
+        <tr><td>Tax Accountant</td><td>สร้าง/พิมพ์ฟอร์มได้</td></tr>
+        <tr><td>Business Analyst</td><td><b>ดูได้อย่างเดียว</b> (display)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Error / Exception handling</h3>
+    <p class="body">FD ระบุทั้ง 3 ระดับว่า <b>“No new exceptions to be added”</b> — คือ <b>ใช้ข้อความ error เดิมของ standard</b>
+      ยกเว้นข้อความที่ปรากฏใน test conditions (profit center ไม่พบ / recovery indicator ไม่พบ / field ไม่มีในตาราง)
+      ซึ่งเป็น <b>expected behaviour</b> ที่ต้องมีจริงตอนเทสต์</p>
+  </section>
+
+  <!-- 7 -->
+  <section id="test">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Key Test Conditions — TC-01 ถึง TC-08</h2></div>
+    <p class="sec-sub">สังเกตว่าครึ่งหนึ่งเป็น negative test — ฟอร์มที่ดีต้อง “พังอย่างมีมารยาท”</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:66px">Test ID</th><th>Condition</th><th>Expected result</th></tr></thead>
+      <tbody>
+        <tr><td class="n">TC-01</td><td>ดึงข้อมูลครบทุก field ตาม “2.3.3.6 Required data for form”</td><td>ข้อมูลถูกต้องครบทั้ง 18 ช่อง</td></tr>
+        <tr><td class="n">TC-02</td><td><b>Negative:</b> ข้อมูลไม่มีในตารางที่อ้างถึง</td><td>ช่องนั้น <b>เว้นว่าง</b> + ขึ้นข้อความ “The field xxx is not available in the table xxx” ระหว่างรัน</td></tr>
+        <tr><td class="n">TC-03</td><td>พิมพ์ A4 · ภาษาไทย · ข้อมูลเกิน 1 หน้า</td><td>พิมพ์ครบทุกหน้า ข้อมูลไม่ตกหล่นเมื่อข้ามหน้า</td></tr>
+        <tr><td class="n">TC-04</td><td>เลือก <b>Profit Center</b></td><td>ฟอร์มออกตาม profit center ที่เลือก</td></tr>
+        <tr><td class="n">TC-05</td><td><b>Negative:</b> profit center ที่เลือกไม่มีอยู่</td><td>error “profit center xxxxx is not found”</td></tr>
+        <tr><td class="n">TC-06</td><td>เลือก <b>Recovery Indicator</b></td><td>ฟอร์มออกตาม recovery indicator</td></tr>
+        <tr><td class="n">TC-07</td><td><b>Negative:</b> recovery indicator ที่เลือกไม่มีอยู่</td><td>error “recovery indicator xx is not found”</td></tr>
+        <tr><td class="n">TC-08</td><td>พิมพ์เกิน 1 หน้าต่อฟอร์ม</td><td>พิมพ์ได้หลายหน้าถูกต้อง</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout"><b>Test ที่ FD ไม่ได้เขียนแต่ควรทำ:</b>
+      <b>“ไม่เลือก profit center เลย แล้วข้อมูลมีหลาย PC”</b> — ตามเส้นทาง B ต้องได้ <b>ใบแนบหลายใบ ใบละ 1 profit center</b>
+      ไม่ใช่ใบเดียวที่ปนกัน · เคสนี้คือ logic ที่ซับซ้อนที่สุดของ object แต่ไม่มี TC ตรง ๆ ครอบ
+      → เพิ่มเป็น unit test ของตัวเองตอน FUT</div>
+  </section>
+
+  <!-- 7.5 FUT STATUS -->
+  <section id="fut">
+    <div class="sec-head"><span class="sec-num">7.5</span><h2>FUT status &amp; defects (mid-Oct-2026)</h2></div>
+    <p class="sec-sub">สิ่งที่ FD ไม่ได้บอก แต่เจอจริงตอนเทส — ทุกข้อเป็นของซีในฐานะเจ้าของ object</p>
+    <h3>Defects ที่ต้อง raise พร้อม specimens</h3>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>อาการ</th><th>หลักฐาน</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>17-Sep · <b>Multiple Profit Center</b> ใส่ 2 PCs → vendor ของบรรทัดถูก <b>คัดลอกจากบรรทัดก่อนหน้า</b> (root cause ยังไม่ trace)</td><td>run ด้วย PC 2 ตัว</td></tr>
+        <tr><td>2</td><td>21-Sep · <b>Alternative payee</b>: FRM-1 พิมพ์ชื่อ / ที่อยู่ / Tax ID จาก <b>BP master</b> (<code>DFKKBPTAXNUM</code>, BP category TH1) แทนข้อมูล payee บนเอกสาร (<code>BSEC</code>) · certificate <code>ZTAXA_F02</code> ถูกแก้ไปแล้ว (8-Jul) ให้ใช้ <code>BSEC-STCD3</code> → <code>STCD1</code> → blank</td><td>test vendor <code>VTEST0001</code> (“payee in document” = X) · docs <code>2004325075</code> / <code>3641</code> / <code>3642</code> / <code>3643</code></td></tr>
+        <tr><td>3</td><td>Header พิมพ์ “แผ่นที่ 1 ในจำนวน 0 แผ่น”</td><td>—</td></tr>
+        <tr><td>4</td><td>เลขลำดับไม่ตรงกัน: attachment <code>070002</code> vs certificate <code>070000</code></td><td>doc <code>2004325629</code></td></tr>
+      </tbody>
+    </table></div>
+    <h3>Gaps จาก FD (ต้องได้คำตอบก่อนปิด FUT)</h3>
+    <ul class="clean">
+      <li><b>Multi-PC amount rule</b> ไม่ได้กำหนด — <code>2004327460</code> อาจนับซ้ำ · ใช้กฎ split ของ TKT-01 หลังได้ sign-off</li>
+      <li><b>5G</b> ไม่อยู่ใน scope <code>5A/5D</code> ปัจจุบัน → <code>8084322612</code> หาย · ใช้คำตัดสินเดียวกับ RPT-1 <span class="todo">TBC</span></li>
+      <li>ทุก branch ที่อ่าน ACDOCA ต้องมี <code>BUKRS</code> และ <code>RLDNR = '0L'</code></li>
+      <li>ไม่เลือก PC แล้วมี attachment รวมหรือไม่ — FD ไม่ได้อธิบาย <span class="todo">TBC</span> · ชื่อฟอร์มใน S/4 (retrofit จาก <code>ZTAXA_F03/004</code>) และเทคโนโลยี Smart Form vs Adobe อ่านจาก FD ไม่ออก <span class="todo">TBC</span></li>
+    </ul>
+    <h3>Test approach</h3>
+    <ol class="flow" style="list-style:none">
+      <li>TC-01 (18 fields) <b>blocked by GL-ENH-1</b> — ยอดมาจาก <code>WITH_ITEM</code> ที่ไม่ถูก update ด้วยยอด GL (<code>8084322568</code>)</li>
+      <li><code>2004327460</code> ทั้ง 2 PCs + population แบบไม่กรอง · <code>8084322612</code> เพื่อบันทึกพฤติกรรม 5G ปัจจุบัน</li>
+      <li>Baseline → positive PC → negative PC → RI filter (วิธีเดียวกับ RPT-1 TC-005)</li>
+      <li>A4 / ภาษาไทย / หลายหน้า / ยอดรวมต่อหน้า · multi-invoice payment TC-010..016</li>
+      <li>หลังแก้ filter / split ของ RPT-1: รัน variant เดียวกันผ่าน Form แล้วเทียบ WHT total ต่อ PC กับ WT total ของ RPT-1</li>
+    </ol>
+  </section>
+
+  <!-- 8 -->
+  <section id="expert">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Expert notes — อ่านให้ลึกกว่าเอกสาร</h2></div>
+
+    <h3>1) ทำไม “ไม่เลือก PC” ถึงยากกว่า “เลือก PC”</h3>
+    <p class="body">
+      เพราะ <b>Profit Center ไม่ใช่ field ของโลก WHT</b> — <code>WITH_ITEM</code> ไม่มี PRCTR
+      PRCTR อยู่ในโลกบัญชี (<code>ACDOCA</code>) เท่านั้น
+      เมื่อ user ไม่ระบุ PC โปรแกรมจึงต้อง “ยิงกลับ” ไปถาม ACDOCA ว่าเอกสารแต่ละใบตกที่ profit center ไหน
+      แล้วค่อยจัดกลุ่มพิมพ์ — <b>ต้นทุน performance และความเสี่ยงข้อมูลซ้ำอยู่ตรงนี้</b>
+    </p>
+
+    <h3>2) ทำไมต้อง <code>RLDNR = '0L'</code></h3>
+    <p class="body">
+      S/4HANA ของ Client มีหลาย ledger (leading <code>0L</code> + ledger ภาษี เช่น <code>T1</code>)
+      เอกสารเดียวกันจะมีบรรทัดใน ACDOCA <b>หลาย ledger</b> ถ้าไม่ล็อก ledger
+      การหา PRCTR จะได้ record ซ้ำ → ใบแนบซ้ำ/ยอดเบิ้ล
+      <b>0L = ledger หลักตามมาตรฐานบัญชี</b> ซึ่งเป็นตัวที่สะท้อน profit center ที่แท้จริงของรายการ
+    </p>
+
+    <h3>3) ความสัมพันธ์กับอีก 2 objects บน T-code เดียวกัน</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Object</th><th>Output</th><th>ใช้ WHT Type อะไร</th><th>สถานะของคุณ</th></tr></thead>
+      <tbody>
+        <tr><td><a href="rpt1-wht-vat-recon.html" style="color:var(--petrol);font-weight:600">TAX-RPT-1</a></td><td>ALV — กระทบยอด ภ.ง.ด.54 ↔ ภ.พ.36</td><td>ฝั่ง 54 (<code>5A</code>/<code>5D</code>)</td><td><b>★ ของคุณ</b></td></tr>
+        <tr><td><b>TAX-FRM-1</b> (หน้านี้)</td><td>Adobe Form — ใบแนบ PDF</td><td>3A–3F · 4A–4F · 5A/5D</td><td><b>★ ของซี</b></td></tr>
+        <tr><td><a href="enh1-rd-text-files.html" style="color:var(--petrol);font-weight:600">TAX-ENH-1</a></td><td>DMEEX — text file e-Filing</td><td>1A–1E · 2A · 3A–3F · 4A–4F</td><td><b>★ ของซี</b></td></tr>
+      </tbody>
+    </table></div>
+    <p class="body" style="font-size:13.5px;color:var(--ink-soft)">
+      → สังเกต: <b>ภ.ง.ด. 54 มีใบแนบ (FRM-1) และมีรายงานกระทบยอด (RPT-1) แต่ไม่มี text file (ENH-1)</b>
+      เพราะ 54 ยื่นด้วยวิธีต่างจากแบบอื่น · ส่วน <b>ภ.ง.ด. 1/1ก/2/2ก มี text file แต่ไม่มีใบแนบใน FRM-1</b>
+    </p>
+
+    <h3>4) เชื่อมกับสิ่งที่คุณเจอใน FUT ของ RPT-1</h3>
+    <ul class="clean">
+      <li>คุณเคยเห็น <b>output group R03</b> บนหน้าจอ — ตอนนี้รู้แล้วว่ามันคือ “ประตูเรียกใบแนบ FRM-1”</li>
+      <li>คุณเคยเจอ <b>2 FX columns</b> ใน RPT-1 — field [10] “Currency Exchange Document No.” ของ FRM-1 คือญาติของเรื่องเดียวกัน</li>
+      <li>ตอนไล่ defect ให้ระบุเสมอว่า <b>พังที่ ALV (RPT-1) หรือพังที่ฟอร์ม (FRM-1)</b> เพราะ dev คนละคนกัน</li>
+    </ul>
+
+    <h3>5) Checklist ก่อนเซ็นใบแนบส่งทีมภาษี</h3>
+    <div class="qbox">
+      <div class="selfq"><p>4 จุดที่ต้องกระทบยอดทุกครั้ง</p>
+        <div class="a" style="font-size:13.5px;color:var(--ink-soft)">
+          (1) ยอดรวม [16]/[17] ในใบแนบ = ยอดใน ALV ของ RPT-1 ·
+          (2) จำนวนใบแนบ = จำนวน profit center ที่มีข้อมูลจริง ·
+          (3) field [7] ไม่มีช่องว่างที่ไม่ควรว่าง ·
+          (4) field [2] สาขา ตรงกับสาขาที่จะยื่นจริง
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- self-check -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">Self-check</span><h2>ทวนความเข้าใจ</h2></div>
+    <div class="qbox">
+      <div class="selfq">
+        <p>1. ถ้า user ไม่ใส่ Profit Center เลย โปรแกรมเริ่มอ่านตารางไหนก่อน?</p>
+        <details class="ans"><summary></summary><div class="a">
+          เริ่มที่ <b><code>WITH_ITEM</code></b> ด้วย <code>BUKRS</code>+<code>GJAHR</code> จาก selection screen
+          แล้วดึง <code>BELNR</code> ไปถาม <code>ACDOCA</code> (<code>RLDNR='0L'</code>, <code>KTOSL='WIT'</code>) เพื่อขอ <code>PRCTR</code>
+          จากนั้นถ้ามีหลาย PRCTR → แตกใบแนบทีละ profit center
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>2. WHT Type ของ ภ.ง.ด. 54 มีกี่ตัว อะไรบ้าง?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>2 ตัว: <code>5A</code> และ <code>5D</code></b> คู่กับ recipient type <code>'54'</code> —
+          ต่างจาก 3 และ 53 ที่มี 6 ตัว (3A–3F / 4A–4F)
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>3. <code>TAXTYPE</code> = TH1 กับ TH3 ต่างกันยังไง?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>TH1 = ผู้ขายเป็นบุคคล (Person)</b> · <b>TH3 = กรณีอื่น (นิติบุคคล)</b> —
+          ต้องเลือกให้ตรงกับประเภทผู้ขาย เพราะ 1 BP อาจมี tax number หลาย type
+          แล้วค่อยหยิบ <code>TAXNUM</code> หรือ <code>TAXNUMXL</code> ตัวที่ไม่ว่าง
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>4. FRM-1 เป็น Smart Form หรือ Adobe Form? แล้วต่างจาก TAX-FRM-2 อย่างไร?</p>
+        <details class="ans"><summary></summary><div class="a">
+          FRM-1 = <b>Adobe Form</b> · ส่วน <a href="frm2-mm-wht-certificate.html" style="color:var(--petrol);font-weight:600">TAX-FRM-2</a> (WHT cert เมียนมา) = <b>Smart Form</b>
+          → คนละ technology คนละวิธีแก้ layout · เวลาคุยกับ dev ต้องบอกให้ถูก
+        </div></details>
+      </div>
+      <div class="selfq">
+        <p>5. Object นี้มี Output Determination (BRF+) ไหม?</p>
+        <details class="ans"><summary></summary><div class="a">
+          <b>ไม่มี</b> — FD ระบุ “N/A as there is no output management”
+          ฟอร์มถูกเรียกจาก selection screen ของ <code>S_P00_07000134</code> โดยตรงผ่าน block “Forms”
+          (ต่างจากฟอร์ม SD/บิลที่ใช้ BRF+ Output Management)
+        </div></details>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>TAX-FRM-1 · FD deep-dive · Form (Adobe)</span>
+    <span>Chatree K. · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

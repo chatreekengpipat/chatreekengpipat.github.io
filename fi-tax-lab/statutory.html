@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statutory Filing Guide — แต่ละภาษียื่นแบบไหน · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:22px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+
+  section{margin-top:46px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);}
+  p.body{font-size:14.5px;margin:8px 0;}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+
+  /* decision table highlight */
+  table.decide td:first-child{font-weight:600;}
+  table.decide .form{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--petrol-deep);}
+
+  /* form cards */
+  .forms{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+  @media(max-width:720px){.forms{grid-template-columns:1fr;}}
+  .fcard{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:13px;padding:15px 17px;background:var(--card);}
+  .fcard.ind{--_c:var(--petrol);} .fcard.corp{--_c:var(--petrol-deep);} .fcard.intl{--_c:var(--warn);} .fcard.vat{--_c:var(--brass);}
+  .fcard .fh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .fcard .code{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--_c,var(--petrol));}
+  .fcard .freq{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);border:1px solid var(--line);border-radius:5px;padding:1px 6px;}
+  .fcard .tname{font-size:12.5px;color:var(--ink-soft);margin-top:1px;}
+  .fcard .rows{margin:11px 0 0;display:grid;grid-template-columns:auto 1fr;gap:5px 10px;font-size:12.8px;}
+  .fcard .rows .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;padding-top:2px;white-space:nowrap;}
+  .fcard .rows .v{line-height:1.45;}
+  .fcard .rows .v b{font-weight:600;}
+  .fcard .case{background:rgba(180,83,9,.08);border-left:3px solid var(--brass);border-radius:0 8px 8px 0;padding:9px 12px;font-size:12.5px;margin-top:11px;line-height:1.5;}
+  .fcard .case b{color:var(--ink);}
+  .fcard .case .tag{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:3px;}
+
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.fcard,.keybox,.callout,.trap,section{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}}
+  .ok{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--petrol-deep);background:rgba(37,99,235,.10);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-statutory">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Statutory Filing</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>แต่ละภาษี ยื่นแบบไหน</span>
+    </div>
+    <h1>Statutory Filing Guide<br><span class="accent">ภาษีชนิดไหน → ยื่น PND / ภ.พ. อะไร (ครบ scope Client)</span></h1>
+    <div class="meta">
+      <span>Scope · <b>TH หลัก · MY / SG / MM</b></span>
+      <span>Pillars · <b>WHT · VAT · Direct</b></span>
+      <span>Consultant · <b>Chatree K.</b></span>
+    </div>
+  </header>
+
+  <p class="lede">
+    งงว่า “ภาษีตัวนี้ต้องยื่น PND อะไร”? กุญแจคือ <b>2 คำถาม</b> — ① จ่ายให้ <b>ใคร</b> (บุคคล / นิติบุคคลในไทย / ต่างประเทศ)
+    ② เป็น <b>เงินได้ประเภทไหน</b> (มาตรา 40) แล้วแบบยื่นจะตามมาเอง หน้านี้ไล่ทุกแบบพร้อม <b>ตัวอย่างจริง (case)</b> และจุดเชื่อมใน SAP
+    <br><span style="font-size:13px">🇬🇧 <b>EN:</b> Which form to file depends on <b>who you pay</b> (individual / Thai company / foreign) and the <b>income type</b> (Section 40). Full EN reference table below.</span>
+  </p>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#guide">เลือก PND ยังไง</a>
+    <a href="#wht">WHT (PND)</a>
+    <a href="#whtmap">Type/Code mapping</a>
+    <a href="#vat">VAT (ภ.พ.)</a>
+    <a href="#cert">50BIS</a>
+    <a href="#drcmap">DRC vs WRICEF</a>
+    <a href="#sbt">SBT</a>
+    <a href="#direct">Direct / PITA</a>
+    <a href="#intl">MY / SG / MM</a>
+    <a href="#calendar">กำหนดยื่น</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways</b>
+    <ul>
+      <li><b>ผู้รับเงินเป็นใคร</b> คือตัวตัดสินหลัก: บุคคล → PND1/2/3 · นิติบุคคลในไทย → <b>PND53</b> · ต่างประเทศ → <b>PND54</b></li>
+      <li><b>PND54</b> (จ่ายออกนอกประเทศ) มักมาคู่กับ <b>VAT36 → PP36</b> (reverse-charge VAT)</li>
+      <li>VAT รายเดือน = <b>PP30</b> · นำส่ง VAT แทน = <b>PP36</b> · หนังสือรับรองหัก = <b>50BIS (50 ทวิ)</b></li>
+      <li>WHT ทุกแบบ (PND1/2/3/53/54) ยื่น <b>ภายในวันที่ 7</b> ของเดือนถัดไป · PP30 <b>ภายในวันที่ 15</b> (e-filing +8 วัน)</li>
+      <li>Direct tax: CIT = <b>PND50</b> (ปี) / <b>PND51</b> (ครึ่งปี) · Client มี <b>PITA</b> (ปิโตรเลียม) เพิ่ม</li>
+    </ul>
+  </div>
+
+  <!-- DECISION GUIDE -->
+  <section id="guide">
+    <div class="sec-head"><span class="sec-num">1</span><h2>เลือกแบบ WHT ยังไง (decision guide)</h2></div>
+    <p class="sec-sub">อ่านจากซ้ายไปขวา: ผู้รับเงิน + ประเภทเงินได้ → ได้แบบยื่นเลย</p>
+    <table class="decide">
+      <thead><tr><th style="width:180px">ผู้รับเงิน · Payee</th><th>ประเภทเงินได้ · Income type (ม.40)</th><th style="width:120px">รายเดือน · Monthly</th><th style="width:90px">รายปี · Annual</th></tr></thead>
+      <tbody>
+        <tr><td>พนักงาน (ลูกจ้าง)</td><td>40(1) เงินเดือน · 40(2) ค่าจ้าง/นายหน้า</td><td class="form">ภ.ง.ด.1</td><td class="form">ภ.ง.ด.1ก</td></tr>
+        <tr><td>บุคคลธรรมดา</td><td>40(3),(4) royalty / ดอกเบี้ย / เงินปันผล</td><td class="form">ภ.ง.ด.2</td><td class="form">ภ.ง.ด.2ก</td></tr>
+        <tr><td>บุคคลธรรมดา</td><td>40(5)–(8) ค่าเช่า / วิชาชีพ / รับเหมา / บริการ</td><td class="form">ภ.ง.ด.3</td><td>—</td></tr>
+        <tr><td><b>นิติบุคคลในไทย</b></td><td>40(2)–(8) บริการ / เช่า / ขนส่ง / โฆษณา ฯลฯ</td><td class="form">ภ.ง.ด.53</td><td>—</td></tr>
+        <tr><td><b>ผู้รับต่างประเทศ</b> (ไม่มี PE ในไทย)</td><td>ม.70 บริการ / royalty / ดอกเบี้ย / ปันผล จ่ายออกนอก</td><td class="form">ภ.ง.ด.54</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>จำง่าย:</b> คนไทยธรรมดา = <b>1/2/3</b> · บริษัทไทย = <b>53</b> · ต่างชาติ = <b>54</b> (+ PP36) — “ห้าสาม = บริษัท, ห้าสี่ = ต่างชาติ”</div>
+
+    <h3>Form Quick Reference (EN) — ตารางอ้างอิงสองภาษา</h3>
+    <table>
+      <thead><tr><th style="width:150px">Form · แบบ</th><th>English name / purpose</th><th style="width:170px">Applies to · ใช้กับใคร</th></tr></thead>
+      <tbody>
+        <tr><td class="form">PND1 · ภ.ง.ด.1</td><td>Monthly WHT return — employment income [Sec. 40(1),(2)]</td><td>Employees / individuals</td></tr>
+        <tr><td class="form">PND1 Kor · 1ก</td><td>Annual summary of PND1</td><td>— (yearly)</td></tr>
+        <tr><td class="form">PND2 · ภ.ง.ด.2</td><td>Monthly WHT — investment income [40(3),(4): royalty, interest, dividend]</td><td>Individuals</td></tr>
+        <tr><td class="form">PND2 Kor · 2ก</td><td>Annual summary of PND2 (dividends)</td><td>— (yearly)</td></tr>
+        <tr><td class="form">PND3 · ภ.ง.ด.3</td><td>Monthly WHT — payments to individuals [40(5)–(8)]</td><td>Individuals</td></tr>
+        <tr><td class="form">PND53 · ภ.ง.ด.53</td><td>Monthly WHT — payments to Thai juristic persons</td><td>Thai companies</td></tr>
+        <tr><td class="form">PND54 · ภ.ง.ด.54</td><td>Monthly WHT + remittance — payments abroad (Sec. 70)</td><td>Foreign entities (no PE)</td></tr>
+        <tr><td class="form">PP30 · ภ.พ.30</td><td>Monthly VAT return (output − input)</td><td>VAT registrant</td></tr>
+        <tr><td class="form">PP36 · ภ.พ.36</td><td>VAT remittance — reverse charge / self-assessed VAT on payments abroad</td><td>Payer of imported services</td></tr>
+        <tr><td class="form">50BIS · 50 ทวิ</td><td>Withholding Tax Certificate (Sec. 50 bis)</td><td>Issued to the payee</td></tr>
+        <tr><td class="form">PT40 · ภ.ธ.40</td><td>Specific Business Tax (SBT) return</td><td>SBT businesses</td></tr>
+        <tr><td class="form">PND50 · ภ.ง.ด.50</td><td>Annual Corporate Income Tax (CIT) return</td><td>Company (annual)</td></tr>
+        <tr><td class="form">PND51 · ภ.ง.ด.51</td><td>Half-year CIT return</td><td>Company (mid-year)</td></tr>
+      </tbody>
+    </table>
+    <div class="trap"><b>ระวัง:</b> ประเภทเงินได้ + อัตราหักตามกฎหมาย/DTA เป็นตัวกำหนด <b>ตัวเลข</b> ส่วนตัวเลือก <b>แบบยื่น</b> ตัดสินจาก “ผู้รับเป็นใคร” เป็นหลัก — ตารางอัตราจริงอยู่ด้านล่าง</div>
+    <h3 id="rates">WHT rates (TH domestic) — ยืนยันจาก BPE <span class="ok">CONFIRMED</span></h3>
+    <table>
+      <thead><tr><th>ประเภทเงินได้ (ม.40)</th><th>บุคคล</th><th>นิติบุคคล</th><th>ต่างประเทศ</th></tr></thead>
+      <tbody>
+        <tr><td>40(1) เงินเดือน</td><td>5–35%</td><td>—</td><td>ตาม DTA</td></tr>
+        <tr><td>40(2) ค่าจ้าง / นายหน้า</td><td>5–35%</td><td>3%</td><td>15% (ยกเว้นตาม DTA)</td></tr>
+        <tr><td>40(3) royalty</td><td>5–35%</td><td>3%</td><td>15% (DTA 5/8/10/15%)</td></tr>
+        <tr><td>40(4) ดอกเบี้ย</td><td>15%</td><td>1% / exempt</td><td>15%</td></tr>
+        <tr><td>40(4) เงินปันผล</td><td>10%</td><td>10% / exempt</td><td>10%</td></tr>
+        <tr><td>40(5) ค่าเช่า</td><td>5%</td><td>5%</td><td>15% (DTA 10 / exempt)</td></tr>
+        <tr><td>40(6) วิชาชีพ</td><td>3%</td><td>3%</td><td>15% (ยกเว้นตาม DTA)</td></tr>
+        <tr><td>40(7) รับเหมา</td><td>3%</td><td>3% (มี PE) / 5% (ไม่มี PE)</td><td>ยกเว้นตาม DTA</td></tr>
+        <tr><td>40(8) โฆษณา / ขนส่ง / อื่น</td><td>2% / 1% / 3%</td><td>2% / 1% / 3%</td><td>ตาม DTA</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:6px">e-WHT ลดชั่วคราวเป็น 1%: Ministerial Reg. 389 (1-Jan-2023 – 31-Dec-2025) สำหรับ 40(2),(3),(5),(6),(7),(8) — <b>หมดอายุแล้ว ต้องยืนยันอัตราปัจจุบัน (G6)</b> · MTJDA (PSC ใน JDA) ได้ลด WHT 50% ตาม DTA มาเลเซีย-ไทย</p>
+  </section>
+
+  <!-- WHT FORMS -->
+  <section id="wht">
+    <div class="sec-head"><span class="sec-num">2</span><h2>WHT — แบบ ภ.ง.ด. (case ต่อแบบ)</h2></div>
+    <p class="sec-sub">แต่ละแบบพร้อมตัวอย่างในบริบท Client + จุดเชื่อมในระบบ</p>
+    <div class="forms">
+
+      <div class="fcard ind">
+        <div class="fh"><span class="code">ภ.ง.ด.1</span><span class="freq">รายเดือน</span></div>
+        <div class="tname">WHT เงินได้จ้างแรงงาน (PND1)</div>
+        <div class="rows">
+          <span class="k">ผู้รับ</span><span class="v">พนักงาน / บุคคล</span>
+          <span class="k">เงินได้</span><span class="v">40(1) เงินเดือน · 40(2) ค่าจ้าง/นายหน้า</span>
+          <span class="k">อัตรา</span><span class="v">ก้าวหน้า (เงินเดือน) <span class="todo">verify</span></span>
+          <span class="k">ยื่น</span><span class="v">ภายในวันที่ 7 · สรุปปี = 1ก</span>
+        </div>
+        <div class="case"><span class="tag">📌 Case</span>Client จ่าย <b>เงินเดือนพนักงาน</b> → หักตามอัตราก้าวหน้า → ยื่น <b>ภ.ง.ด.1</b> รายเดือน แล้วสรุปทั้งปีด้วย <b>ภ.ง.ด.1ก</b></div>
+      </div>
+
+      <div class="fcard ind">
+        <div class="fh"><span class="code">ภ.ง.ด.2</span><span class="freq">รายเดือน</span></div>
+        <div class="tname">WHT ดอกเบี้ย / เงินปันผล / royalty บุคคล (PND2)</div>
+        <div class="rows">
+          <span class="k">ผู้รับ</span><span class="v">บุคคลธรรมดา</span>
+          <span class="k">เงินได้</span><span class="v">40(3) royalty · 40(4) ดอกเบี้ย / เงินปันผล</span>
+          <span class="k">อัตรา</span><span class="v">เช่น ดอกเบี้ย 15% · ปันผล 10% <span class="todo">verify</span></span>
+          <span class="k">ยื่น</span><span class="v">ภายในวันที่ 7 · สรุปปี = 2ก</span>
+        </div>
+        <div class="case"><span class="tag">📌 Case</span>จ่าย <b>ดอกเบี้ย/เงินปันผล</b> ให้ผู้ถือหุ้น/ผู้ให้กู้ที่เป็นบุคคล → หัก → ยื่น <b>ภ.ง.ด.2</b> (ปันผลสรุปปีด้วย 2ก)</div>
+      </div>
+
+      <div class="fcard ind">
+        <div class="fh"><span class="code">ภ.ง.ด.3</span><span class="freq">รายเดือน</span></div>
+        <div class="tname">WHT จ่ายบุคคลธรรมดา (PND3)</div>
+        <div class="rows">
+          <span class="k">ผู้รับ</span><span class="v">บุคคลธรรมดา</span>
+          <span class="k">เงินได้</span><span class="v">40(5)–(8) เช่า · วิชาชีพ · รับเหมา · บริการ</span>
+          <span class="k">อัตรา</span><span class="v">เช่น บริการ 3% · เช่า 5% <span class="todo">verify</span></span>
+          <span class="k">ยื่น</span><span class="v">ภายในวันที่ 7</span>
+        </div>
+        <div class="case"><span class="tag">📌 Case</span>จ้าง <b>ที่ปรึกษาบุคคล</b> (freelance) ฿50,000 → หัก 3% = ฿1,500 → ออก 50BIS → ยื่น <b>ภ.ง.ด.3</b></div>
+      </div>
+
+      <div class="fcard corp">
+        <div class="fh"><span class="code">ภ.ง.ด.53</span><span class="freq">รายเดือน</span></div>
+        <div class="tname">WHT จ่ายนิติบุคคลในไทย (PND53)</div>
+        <div class="rows">
+          <span class="k">ผู้รับ</span><span class="v"><b>นิติบุคคลในไทย</b> (บริษัท/ห้างฯ)</span>
+          <span class="k">เงินได้</span><span class="v">40(2)–(8) บริการ · เช่า · ขนส่ง · โฆษณา ฯลฯ</span>
+          <span class="k">อัตรา</span><span class="v">บริการ 3% · ขนส่ง 1% · โฆษณา 2% <span class="todo">verify</span></span>
+          <span class="k">ยื่น</span><span class="v">ภายในวันที่ 7</span>
+        </div>
+        <div class="case"><span class="tag">📌 Case</span>จ่าย <b>บริษัทไทย</b> ค่าบริการ 100,000 → หัก 3% = 3,000 (WIT line ตอนจ่าย) → ยื่น <b>ภ.ง.ด.53</b> · WHT type <code>4A–4F</code> + recipient type <code>53</code> ต้องครบ ไม่งั้นบรรทัดหลุดจากใบแนบ TAX-FRM-1 / text file TAX-ENH-1</div>
+      </div>
+
+      <div class="fcard intl">
+        <div class="fh"><span class="code">ภ.ง.ด.54</span><span class="freq">รายเดือน</span></div>
+        <div class="tname">WHT/นำส่ง จ่ายไปต่างประเทศ (PND54)</div>
+        <div class="rows">
+          <span class="k">ผู้รับ</span><span class="v"><b>ต่างประเทศ</b> (ไม่มี PE ในไทย)</span>
+          <span class="k">เงินได้</span><span class="v">ม.70 บริการ / royalty / ดอกเบี้ย · นำส่งกำไร (70 ทวิ)</span>
+          <span class="k">อัตรา</span><span class="v">ตาม ม.70 / <b>DTA</b> (เช่น 15%) <span class="todo">verify</span></span>
+          <span class="k">คู่กับ</span><span class="v"><b>VAT36 → PP36</b> (reverse-charge)</span>
+        </div>
+        <div class="case"><span class="tag">📌 Case</span>จ่ายค่าบริการให้ <b>บริษัทต่างประเทศ</b> → หัก WHT (PND54) <b>และ</b> นำส่ง VAT แทน (VAT36 → PP36) · recon ด้วย <a href="rpt1-wht-vat-recon.html" style="color:var(--warn);font-weight:600">TAX-RPT-1 →</a></div>
+      </div>
+
+      <div class="fcard corp">
+        <div class="fh"><span class="code">ในระบบ SAP</span><span class="freq">อัตโนมัติ</span></div>
+        <div class="tname">WHT ในระบบทำงานยังไง</div>
+        <div class="rows">
+          <span class="k">คำนวณ</span><span class="v">Extended WHT — WHT type (เมื่อไร) + code (อัตรา) + recipient type (แบบไหน)</span>
+          <span class="k">เกิด</span><span class="v">ตอน <b>จ่ายเงิน</b> (F110 / F-53)</span>
+          <span class="k">หนังสือ</span><span class="v"><b>50 ทวิ</b> + แบบ PND54 = FRM-3 output group <code>AP1</code></span>
+          <span class="k">รายงาน</span><span class="v"><code>ZTAXB_R01</code> output groups · RPT-7 (standard Generic WHT app) · FX adj <code>ZTAXA_R03</code></span>
+        </div>
+        <div class="case"><span class="tag">📌 ดูเพิ่ม</span>กลไก WHT + FX + 50BIS เต็ม ๆ ที่ <a href="wht.html" style="color:var(--petrol);font-weight:600">หน้า WHT →</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MAPPING (ยืนยันจาก FD) -->
+  <section id="whtmap">
+    <span id="mapping"></span>
+    <div class="sec-head"><span class="sec-num">2.5</span><h2>ระบบรู้ได้ยังไงว่าต้องยื่นแบบไหน — 3 ชั้นที่ยืนยันจาก FD</h2></div>
+    <p class="sec-sub">เลิกเดา · ค่าจริงจาก FD ของ <b>TAX-ENH-1</b> และ <b>TAX-FRM-1</b> · ทุกค่าใน <code>WITH_ITEM</code></p>
+
+    <div class="keybox">
+      <b>ตรรกะ 3 ชั้น (จำลำดับนี้ = ตอบได้ทุกเคส)</b>
+      <ul>
+        <li><b>ชั้น 0 · ตัวชี้ว่าเป็นบรรทัด WHT</b> — <code>ACDOCA-KTOSL = 'WIT'</code></li>
+        <li><b>ชั้น 1 · WHT Type</b> (<code>WITH_ITEM-WITHT</code>) — บอกว่าเป็น “ภาษีอะไร”</li>
+        <li><b>ชั้น 2 · Recipient Type</b> (<code>WITH_ITEM-QSREC</code>) — ยืนยัน “ยื่นแบบไหน”</li>
+        <li><b>ชั้น 3 · WHT Code</b> (<code>WITH_ITEM-WT_WITHCD</code>) — ระบุ “ประเภทเงินได้” (ช่อง 5 ของแบบ)</li>
+      </ul>
+    </div>
+
+    <h3 style="font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px">ตารางแปลงค่า — WHT Type &amp; Recipient Type</h3>
+    <table>
+      <thead><tr><th style="width:110px">แบบยื่น</th><th style="width:180px">WHT Type (<code>WITHT</code>)</th><th style="width:130px">Recipient (<code>QSREC</code>)</th><th>จ่ายให้ใคร</th></tr></thead>
+      <tbody>
+        <tr><td><b>ภ.ง.ด.1 / 1ก</b></td><td><code>1A</code> <code>1B</code> <code>1D</code> <code>1E</code></td><td><code>01</code></td><td>พนักงาน — เงินได้จากการจ้างแรงงาน</td></tr>
+        <tr><td><b>ภ.ง.ด.2 / 2ก</b></td><td><code>2A</code></td><td><code>02</code></td><td>บุคคลธรรมดา — ดอกเบี้ย/เงินปันผล ฯลฯ</td></tr>
+        <tr><td><b>ภ.ง.ด.3</b></td><td><code>3A</code> <code>3B</code> <code>3C</code> <code>3D</code> <code>3E</code> <code>3F</code></td><td><code>03</code></td><td>บุคคลธรรมดา — บริการ/เช่า/รับเหมา</td></tr>
+        <tr><td><b>ภ.ง.ด.53</b></td><td><code>4A</code> <code>4B</code> <code>4C</code> <code>4D</code> <code>4E</code> <code>4F</code></td><td><code>53</code></td><td>นิติบุคคลในไทย</td></tr>
+        <tr><td><b>ภ.ง.ด.54</b></td><td><code>5A</code> <code>5D</code></td><td><code>54</code></td><td>ต่างประเทศ (ม.70)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px">WHT Code (ประเภทเงินได้ในช่อง 5)</h3>
+    <table>
+      <thead><tr><th style="width:150px">ใช้กับ</th><th>WHT Codes</th></tr></thead>
+      <tbody>
+        <tr><td><b>ภ.ง.ด.1 / 1ก</b></td><td><code>01</code> <code>02</code> <code>03</code> <code>GA</code> <code>G1</code></td></tr>
+        <tr><td><b>ภ.ง.ด.2 / 2ก</b></td><td><code>04</code> <code>05</code> <code>06</code> <code>07</code> <code>08</code></td></tr>
+        <tr><td><b>ภ.ง.ด.3 และ 53</b></td><td><code>09</code> <code>11</code> <code>12</code> <code>13</code> <code>14</code> <code>15</code> <code>23</code> <code>24</code> <code>25</code> <code>27</code> <code>28</code> <code>29</code> <code>31</code> <code>33</code> <code>34</code> <code>GB</code> <code>GC</code> <code>GD</code> <code>GE</code> <code>G2</code> <code>G3</code> <code>G4</code> <code>G5</code></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:6px">
+      สังเกต: ภ.ง.ด. 3 และ 53 <b>ใช้ชุด WHT code เดียวกัน</b> — แยกกันด้วย WHT Type / Recipient Type ไม่ใช่ด้วย code
+      · รหัสตระกูล <code>G*</code> = กรณีพิเศษ / gross-up
+    </p>
+
+    <div class="callout"><b>🔎 ใช้ debug ได้จริง:</b> ถ้ารายการหายจากแบบยื่น ให้ไล่ตามลำดับ —
+      (1) บรรทัดมี <code>KTOSL='WIT'</code> ไหม → (2) <code>WITHT</code> อยู่ในลิสต์ของแบบนั้นไหม →
+      (3) <code>QSREC</code> ตรงกับแบบไหม → (4) <code>WT_WITHCD</code> ว่างหรือเปล่า
+      · ส่วนใหญ่หลุดที่ข้อ 3–4 ซึ่งเป็น <b>master data ของผู้ขาย</b> ไม่ใช่บั๊กโปรแกรม
+      · วิธีเช็คทีละขั้นอยู่ที่ <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N recipe R02 →</a></div>
+
+    <h3 style="font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px">แต่ละแบบยื่น ต้องออกอะไรบ้าง (3 ชิ้นงานทุกเดือน)</h3>
+    <table>
+      <thead><tr><th style="width:110px">แบบยื่น</th><th style="width:170px">ใบแนบ PDF</th><th style="width:190px">Text file e-Filing</th><th>รายงานกระทบยอด</th></tr></thead>
+      <tbody>
+        <tr><td><b>ภ.ง.ด.1 / 1ก</b></td><td>—</td><td><b>✔ TAX-ENH-1</b> <span style="color:var(--ink-soft)">(<code>ZWHTFILE_PND1</code> / <code>P01A</code>)</span></td><td>—</td></tr>
+        <tr><td><b>ภ.ง.ด.2 / 2ก</b></td><td>—</td><td><b>✔ TAX-ENH-1</b> <span style="color:var(--ink-soft)">(<code>P02</code> / <code>P02A</code>)</span></td><td>—</td></tr>
+        <tr><td><b>ภ.ง.ด.3</b></td><td><b>✔ TAX-FRM-1</b></td><td><b>✔ TAX-ENH-1</b> <span style="color:var(--ink-soft)">(<code>P03</code>)</span></td><td>—</td></tr>
+        <tr><td><b>ภ.ง.ด.53</b></td><td><b>✔ TAX-FRM-1</b></td><td><b>✔ TAX-ENH-1</b> <span style="color:var(--ink-soft)">(<code>P53</code>)</span></td><td>—</td></tr>
+        <tr><td><b>ภ.ง.ด.54</b></td><td><b>✔ TAX-FRM-1</b></td><td>—</td><td><b>✔ TAX-RPT-1</b> <span style="color:var(--ink-soft)">(กระทบกับ ภ.พ.36)</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:6px">
+      ทั้งสามชิ้นออกจาก <b>โปรแกรมเดียวกัน</b> — <code>ZTAXB_R01</code> (โปรแกรม <code>ZTAXA_R01</code> = enhanced copy ของ <code>RFIDYYWT</code> / Generic Withholding Tax Reporting)
+      โดยแยกด้วย <b>output group</b>: ใบแนบ + recon ใช้ <code>R03</code> · text files ใช้ <code>E01–E04</code> / <code>E1K</code> / <code>E2K</code> · 50 ทวิ + แบบ PND54 ใช้ <code>AP1</code> (FRM-3) — <b>ไม่ใช่ DRC</b> (TAX-FRM-5 ถูกยกเลิก) · SWC text (ENH-6 / ENH-5) เป็นทาง exception
+    </p>
+
+    <div class="callout"><b>📎 กติกาที่ลืมไม่ได้:</b>
+      <b>ไฟล์และใบแนบแยกตาม “สาขา (Business Place)” เสมอ</b> เพราะภาษีหัก ณ ที่จ่ายของไทยยื่นรายสาขา
+      · ใน S/4HANA เพิ่มมิติ <b>Profit Center</b> และ <b>Recovery Indicator</b> เข้ามาอีก 2 ชั้น
+      → จำนวนไฟล์/ใบแนบต่อเดือนจึงมากกว่าใน ECC
+      · <a href="enh1-rd-text-files.html" style="color:var(--petrol);font-weight:600">TAX-ENH-1 →</a> ·
+      <a href="frm1-wht-attachment.html" style="color:var(--petrol);font-weight:600">TAX-FRM-1 →</a></div>
+  </section>
+
+  <!-- VAT -->
+  <section id="vat">
+    <div class="sec-head"><span class="sec-num">3</span><h2>VAT — แบบ ภ.พ.</h2></div>
+    <div class="forms">
+      <div class="fcard vat">
+        <div class="fh"><span class="code">ภ.พ.30</span><span class="freq">รายเดือน</span></div>
+        <div class="tname">แบบแสดงรายการ VAT (PP30)</div>
+        <div class="rows">
+          <span class="k">คือ</span><span class="v">Output VAT − Input VAT ของงวด</span>
+          <span class="k">ยื่น</span><span class="v">ภายในวันที่ 15 (e-filing +8 วัน)</span>
+          <span class="k">ในระบบ</span><span class="v">RPT-6 VAT report + net VAT clearing (doc SO) → P.P.30 <b>text file</b> ผ่าน DRC (DRC statutory forms ไม่ใช้ — CR-A dropped) · recon TAX-RPT-11 · ยอด = G/L</span>
+        </div>
+        <div class="case"><span class="tag">📌 Case</span>ขายก๊าซ/บริการในไทย → เก็บ output VAT 7% · ซื้อของ/บริการ → input VAT · สุทธินำส่งด้วย <b>ภ.พ.30</b></div>
+      </div>
+      <div class="fcard intl">
+        <div class="fh"><span class="code">ภ.พ.36</span><span class="freq">เมื่อจ่าย</span></div>
+        <div class="tname">นำส่ง VAT แทน — reverse charge (PP36)</div>
+        <div class="rows">
+          <span class="k">คือ</span><span class="v">จ่ายค่าบริการต่างประเทศ → ผู้จ่ายในไทยนำส่ง VAT แทน</span>
+          <span class="k">คู่กับ</span><span class="v"><b>VAT36</b> · จับคู่ <b>PND54</b></span>
+          <span class="k">ยื่น</span><span class="v">ภายในวันที่ 7 ของเดือนถัดไป</span>
+          <span class="k">ในระบบ</span><span class="v"><code>ZTAXA_R02</code> สร้าง VAT36 liability (TAX-ENH-3, doc SA) · แบบ P.P.36 = TAX-FRM-6</span>
+        </div>
+        <div class="case"><span class="tag">📌 Case</span>จ่ายค่า software/บริการให้ต่างชาติ → ตั้ง VAT36 → ยื่น <b>ภ.พ.36</b> · ดู <a href="indirect-tax.html" style="color:var(--brass);font-weight:600">Indirect →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 50BIS -->
+  <section id="cert">
+    <div class="sec-head"><span class="sec-num">4</span><h2>หนังสือรับรองหัก ณ ที่จ่าย (50BIS)</h2></div>
+    <p class="body"><b>50 ทวิ (50BIS)</b> = หนังสือรับรองการหักภาษี ณ ที่จ่าย ตามมาตรา 50 ทวิ ออกให้ <b>ผู้ถูกหัก</b> ทุกครั้งที่หัก (ทุกแบบ PND) · ในระบบพิมพ์จาก FRM-3 output group <code>AP1</code> บน ZTAXB_R01 (แยกตาม PC &amp; RI ได้)</p>
+    <div class="trap"><b>กฎ e-WHT:</b> ธุรกรรม <b>e-WHT</b> ต้อง <b>ไม่</b> generate 50BIS ผ่าน DRC (ธนาคารเป็นผู้ออกหลักฐาน) · paper กับ e-WHT ใช้บัญชี WHT แยกกัน</div>
+  </section>
+
+  <!-- DRC vs WRICEF -->
+  <section id="drcmap">
+    <div class="sec-head"><span class="sec-num">4.5</span><h2>แบบไหนออกจากอะไร — DRC มาตรฐาน vs WRICEF ที่ใช้จริง</h2></div>
+    <p class="sec-sub">DRC forms deck (s2–23) + Weekly Tax Cadence 23-Jul-2026 · DRC มีแบบมาตรฐานให้ แต่โปรเจกต์ <b>ไม่ใช้ DRC statutory forms</b> — ใช้แค่ <b>PP30 text file</b></p>
+    <div class="drclegend"><span class="dl off">DRC form มี แต่ไม่ใช้</span><span class="dl use">ใช้จริง</span><span class="dl none">ไม่มีใน DRC</span></div>
+    <div class="tblwrap"><table class="drcmap">
+      <thead><tr><th>แบบ</th><th>DRC มาตรฐาน</th><th>Form / ใบแนบ (WRICEF)</th><th>Text file / e-filing</th></tr></thead>
+      <tbody>
+        <tr><td><b>PND1</b></td><td class="none">—</td><td class="use">FRM-4 attachment</td><td class="use">ENH-1 · ENH-5 SWC</td></tr>
+        <tr><td><b>PND1 ก</b></td><td class="none">—</td><td class="use">FRM-4 attachment</td><td class="use">ENH-1 · ENH-5 SWC</td></tr>
+        <tr><td><b>PND2</b></td><td class="off">P.N.D.2</td><td class="use">FRM-4 attachment</td><td class="use">ENH-5 SWC</td></tr>
+        <tr><td><b>PND2 ก</b></td><td class="none">—</td><td class="use">FRM-4 attachment</td><td class="use">ENH-1 · ENH-5 SWC</td></tr>
+        <tr><td><b>PND3</b></td><td class="off">P.N.D.3</td><td class="use">FRM-1 attachment</td><td class="use">ENH-1 · ENH-6 SWC</td></tr>
+        <tr><td><b>PND53</b></td><td class="off">P.N.D.53</td><td class="use">FRM-1 attachment</td><td class="use">ENH-1 · ENH-6 SWC</td></tr>
+        <tr><td><b>PND54</b></td><td class="off">P.N.D.54</td><td class="use">FRM-3 form + FRM-1 attachment</td><td class="none">—</td></tr>
+        <tr><td><b>PP30</b></td><td class="off">P.P.30</td><td class="use">RPT-6 “PP30 form and attachment”</td><td class="use"><b>DRC PP30 text file</b> ✓</td></tr>
+        <tr><td><b>PP36</b></td><td class="off">P.P.36</td><td class="use">FRM-6</td><td class="none">—</td></tr>
+        <tr><td><b>50 ทวิ</b></td><td class="off">WHT 50BIS</td><td class="use">FRM-3 (output group <code>AP1</code>)</td><td class="none">— (e-WHT: ธนาคารออก)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><b>การตัดสินใจ (Cadence s3):</b> “UTC completed for statutory forms PP30, PP36 including the updated building name mapping. As per latest confirmation, this <b>CR-A dropped</b> as DRC Statutory forms will not be used. UTC completed and confirmed for <b>DRC PP30 text file</b>.”</div>
+    <div class="trap"><b>ยังเปิด (ณ 23-Jul-2026):</b> FRM-6 ต้องมี CR สำหรับ Alternative Payee (บุคคลที่ระดับบรรทัด invoice) และเทียบ smartform กับ DRC · FRM-3 ยอดภาษีใน 50 ทวิ และเลขเอกสารยังไม่ถูก · ENH-1 มี defect ของ posting indicator</div>
+    <p style="font-size:13px;color:var(--ink-soft)">ช่วง scope ที่ยังไม่ตรงกัน (TBC): deck ให้ ENH-1 = PND1, 1ก, 2ก, 3, 53 (ไม่มี PND2 ธรรมดา — PND2 อยู่ที่ ENH-5) · FUT table ให้ FRM-4 = PND1, 1ก, 2ก แต่ DRC deck s13 มี PND2 ใต้ FRM-4 ด้วย · “ก” (Kor) = แบบรายปี 1ก / 2ก</p>
+  </section>
+<style>
+  .drclegend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;}
+  .drclegend .dl{font-size:12px;border-radius:7px;padding:3px 9px;border:1.4px solid var(--line);}
+  .drcmap td.off,.drclegend .off{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--warn,#B91C1C);background:rgba(185,28,28,.05);}
+  .drcmap td.use,.drclegend .use{background:rgba(37,99,235,.08);font-weight:600;}
+  .drclegend .use{border-color:var(--petrol);color:var(--petrol);}
+  .drcmap td.none,.drclegend .none{color:var(--ink-soft);}
+  .drcmap td:first-child{white-space:nowrap;}
+</style>
+
+  <!-- SBT -->
+  <section id="sbt">
+    <div class="sec-head"><span class="sec-num">5</span><h2>ภาษีธุรกิจเฉพาะ (SBT)</h2></div>
+    <div class="forms">
+      <div class="fcard vat">
+        <div class="fh"><span class="code">ภ.ธ.40</span><span class="freq">รายเดือน</span></div>
+        <div class="tname">แบบ SBT (PT40 / ภ.ธ.40)</div>
+        <div class="rows">
+          <span class="k">ใช้กับ</span><span class="v">ธุรกิจเฉพาะ (เช่น ดอกเบี้ยเงินกู้บางกรณี) <span class="todo">verify scope Client</span></span>
+          <span class="k">ยื่น</span><span class="v">ภายในวันที่ 15 ของเดือนถัดไป</span>
+        </div>
+        <div class="case"><span class="tag">📌 หมายเหตุ</span>SBT เป็นภาษีทางอ้อมอีกชนิด (นอกจาก VAT) — ต้องยืนยันว่าธุรกรรมใดของ Client เข้าข่าย SBT</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIRECT -->
+  <section id="direct">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Direct Tax — CIT / PITA</h2></div>
+    <p class="sec-sub">ภาษีจากกำไร — ยื่นเป็นรอบ ไม่ใช่รายธุรกรรม</p>
+    <table>
+      <thead><tr><th style="width:120px">แบบ</th><th>คือ</th><th style="width:180px">กำหนดยื่น</th></tr></thead>
+      <tbody>
+        <tr><td class="form">ภ.ง.ด.51 (PND51)</td><td>CIT ครึ่งปี (ประมาณการ)</td><td>ภายใน 2 เดือนนับจากครึ่งรอบปี</td></tr>
+        <tr><td class="form">ภ.ง.ด.50 (PND50)</td><td>CIT ประจำปี</td><td>ภายใน 150 วันนับจากสิ้นรอบปี</td></tr>
+        <tr><td class="form">ภ.ง.ป.71 (PNP71)</td><td>PITA ครึ่งปี (petroleum income tax) — เฉพาะ Client</td><td>ภายใน 2 เดือนนับจากครึ่งรอบปี</td></tr>
+        <tr><td class="form">ภ.ง.ป.70 (PNP70)</td><td>PITA ประจำปี (petroleum income tax)</td><td>ภายใน 5 เดือนนับจากสิ้นรอบปี</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>Client-specific (ยืนยันจาก BPE):</b> กลุ่มปิโตรเลียมเสีย <b>PITA</b> ตามระบอบพิเศษ (concession Thailand I/III = 50% · PSC 20% · MTJDA แบบขั้นบันได) ยื่น <b>ภ.ง.ป.70/71</b> · CIT ปกติ = <b>ภ.ง.ด.50/51</b> · WHT rate จริงดู <a href="#rates" style="color:var(--petrol);font-weight:600">ตารางด้านบน</a> · BEPS Pillar Two: CIT / PITA เป็น covered taxes ฐานคือ accounting profit (ไม่ใช่ “คำนวณจาก CIT”)</div>
+  </section>
+
+  <!-- INTERNATIONAL -->
+  <section id="intl">
+    <div class="sec-head"><span class="sec-num">7</span><h2>ต่างประเทศ — MY / MM / Oman</h2></div>
+    <p class="sec-sub">Scope Client ครอบหลายประเทศ — แบบยื่นต่างกันตามกฎหมายท้องถิ่น</p>
+    <table>
+      <thead><tr><th style="width:110px">ประเทศ</th><th>Indirect</th><th>Withholding</th></tr></thead>
+      <tbody>
+        <tr><td><b>Malaysia</b></td><td>SST (SST-02) <span class="todo">verify</span></td><td><code>CP37</code> (royalty/interest/s.4A) · <code>CP37A</code> · <code>CP37D</code> (contract) · WHT codes BA–BE หักตอนจ่าย · TAX-RPT-19</td></tr>
+        <tr><td><b>Myanmar</b> (MM01)</td><td>Commercial Tax (CT) — TAX-RPT-14 / RPT-17 <span class="todo">verify</span></td><td>MM WHT report TAX-RPT-8 + IRD certificate IRD(IT)-05-01 = <a href="frm2-mm-wht-certificate.html" style="color:var(--petrol);font-weight:600">TAX-FRM-2</a></td></tr>
+        <tr><td><b>Oman</b> (OM01)</td><td>VAT 5% — <a href="rpt2-oman-vat.html" style="color:var(--petrol);font-weight:600">TAX-RPT-2</a> (รวม JVA cash call)</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="trap"><b>หมายเหตุความแม่นยำ:</b> รายละเอียดฟอร์ม/ความถี่ของ MY / MM อิงความรู้ทั่วไปบางส่วน (เช่น CP37A ใช้กับ BC/A5 — ระวังสับกับ CP37) — <b>ต้อง verify กับ localization/ทีมประเทศ</b> ก่อนใช้จริง</div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="calendar">
+    <div class="sec-head"><span class="sec-num">8</span><h2>กำหนดยื่น (ไทย) — จำให้แม่น</h2></div>
+    <table>
+      <thead><tr><th>กลุ่ม</th><th>แบบ</th><th style="width:220px">กำหนด (paper)</th></tr></thead>
+      <tbody>
+        <tr><td>WHT</td><td>ภ.ง.ด.1 / 2 / 3 / 53 / 54</td><td><b>ภายในวันที่ 7</b> ของเดือนถัดไป</td></tr>
+        <tr><td>VAT</td><td>ภ.พ.30</td><td><b>ภายในวันที่ 15</b> ของเดือนถัดไป</td></tr>
+        <tr><td>VAT (นำส่งแทน)</td><td>ภ.พ.36</td><td><b>ภายในวันที่ 7</b> ของเดือนถัดไป</td></tr>
+        <tr><td>SBT</td><td>ภ.ธ.40</td><td>ภายในวันที่ 15 ของเดือนถัดไป</td></tr>
+        <tr><td>CIT</td><td>ภ.ง.ด.51 / 50</td><td>ครึ่งปี: 2 เดือน · ปี: 150 วัน</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>e-filing:</b> ยื่นออนไลน์มักได้ <b>+8 วัน</b> จากกำหนด paper — เช็กปฏิทินจริงกับทีมทุกงวด · <b>เดดไลน์สรรพากรเลื่อนไม่ได้</b></div>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Self-check</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. Client จ้าง “บริษัทรับเหมาไทย” ทำงานบริการ — ยื่นแบบอะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>ภ.ง.ด.53</b> (ผู้รับเป็นนิติบุคคลในไทย)</div></details></div>
+      <div class="selfq"><p>2. จ่ายค่าบริการให้ “บริษัทต่างประเทศ (ไม่มี PE)” — ต้องยื่นอะไรบ้าง?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>ภ.ง.ด.54</b> (WHT) <b>และ</b> <b>ภ.พ.36</b> (VAT36 นำส่งแทน)</div></details></div>
+      <div class="selfq"><p>3. จ่ายค่าที่ปรึกษาให้ “บุคคลธรรมดา freelance” — แบบไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>ภ.ง.ด.3</b> (บุคคลธรรมดา เงินได้ 40(5)–(8))</div></details></div>
+      <div class="selfq"><p>4. VAT รายเดือน กับ นำส่ง VAT แทน ใช้แบบอะไร และกำหนดวันไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>ภ.พ.30</b> (วันที่ 15) · <b>ภ.พ.36</b> (วันที่ 7)</div></details></div>
+      <div class="selfq"><p>5. หนังสือรับรองหัก ณ ที่จ่ายเรียกว่าอะไร และ e-WHT มีข้อห้ามอะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>50BIS (50 ทวิ)</b> · e-WHT ต้อง <b>ไม่</b> generate 50BIS ผ่าน DRC (ธนาคารออกให้)</div></details></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · Statutory Filing Guide</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+</div>
+</body>
+</html>

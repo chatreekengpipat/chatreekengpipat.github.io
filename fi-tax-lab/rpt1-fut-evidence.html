@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-RPT-1 · FUT Field Notes (Knowledge Report) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;--good:#2563EB;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:960px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.1em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(25px,4.6vw,36px);line-height:1.1;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:22px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:16px 0 4px;font-size:12px;color:var(--ink-soft);}
+  .lab{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:5px;padding:1px 7px;white-space:nowrap;vertical-align:middle;}
+  .lab.ok{color:var(--paper);background:var(--petrol);}
+  .lab.inf{color:var(--warn);background:rgba(180,83,9,.14);border:1px solid var(--brass);}
+  .lab.open{color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);}
+  .lab.fix{color:var(--paper);background:var(--warn);}
+
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+
+  section{margin-top:46px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:21px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:14.5px;font-weight:700;margin:16px 0 6px;}
+  p.body{font-size:14px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:13.8px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.3px;}
+  thead th{text-align:left;font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:7px 8px;}
+  tbody td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .ok{color:var(--good);font-weight:700;} .bad{color:var(--warn);font-weight:700;}
+
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 22px;position:relative;font-size:13.4px;}
+  .keybox li::before{content:"★";position:absolute;left:0;color:var(--brass);font-weight:700;font-size:11px;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 17px;margin:14px 0;font-size:13.4px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 17px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.4px;}
+  .trap b{color:var(--warn);}
+  .obj{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:13px 17px;margin:12px 0;background:rgba(29,78,216,.05);font-size:13.8px;}
+  .obj b{color:var(--petrol-deep);}
+
+  /* defect card */
+  .dfc{border:1.5px solid var(--line);border-left:5px solid var(--warn);border-radius:13px;padding:16px 18px;margin:16px 0;background:var(--card);}
+  .dfc.rep{border-left-color:var(--warn);}
+  .dfc-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+  .dfc-id{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--warn);}
+  .dfc-t{font-size:15px;font-weight:700;}
+
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 17px;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 16px 14px;font-size:13.6px;}
+
+  ol.acts{list-style:none;counter-reset:a;margin:12px 0;}
+  ol.acts>li{counter-increment:a;position:relative;padding:9px 0 9px 40px;border-bottom:1px solid var(--line-soft);font-size:13.8px;}
+  ol.acts>li:last-child{border-bottom:none;}
+  ol.acts>li::before{content:counter(a);position:absolute;left:0;top:8px;width:26px;height:26px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media(max-width:560px){ code,.code{white-space:normal;overflow-wrap:anywhere;} table td,table th{overflow-wrap:anywhere;} }
+  @media print{body{background:#fff;padding:0;font-size:10pt;}.masthead{animation:none;}.keybox,.callout,.trap,.obj,.dfc,section,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}details.fold .fold-body{display:block!important;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-r074-fut">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="rpt1-wht-vat-recon.html">RPT-1 design →</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">TAX-RPT-1 · FUT Field Notes</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>ความรู้จากการเทสต์จริง</span>
+    </div>
+    <h1>TAX-RPT-1 — FUT Field Notes<br><span class="accent">Knowledge Report · พิสูจน์เองจาก FUT 31.07–02.08.2026</span></h1>
+    <div class="meta">
+      <span>T-code · <b>ZTAXB_R01</b></span>
+      <span>Main prog · <b>SAPLZTAXA_R01</b></span>
+      <span>Engine · <b>RFIDYYWT</b></span>
+      <span>Output grp · <b>R03</b></span>
+      <span>CoCd · <b>TH01 · TH</b></span>
+    </div>
+  </header>
+
+  <p class="lede">
+    หน้านี้ <b>ต่างจาก deep-dive (ที่มาจาก FSD)</b> — เป็นความรู้ที่ <b>พิสูจน์เองกับมือ</b> ตอนทำ FUT: สถาปัตยกรรมที่ยืนยันแล้ว,
+    defect 3 ตัวพร้อมหลักฐาน controlled experiment, ระบบ unit test 9 TC, ทักษะ post/อ่าน document และ correction ของความเข้าใจเดิม ·
+    ทุกจุด<b>ติดป้ายชัด</b>ว่า confirmed / inference / open · <i>ชื่อเพื่อนร่วมทีมในต้นฉบับถูกแทนด้วย role</i>
+  </p>
+  <div class="legend">
+    <span><span class="lab ok">Confirmed</span> พิสูจน์แล้ว (code/FD/screenshot/doc)</span>
+    <span><span class="lab inf">Inference</span> อนุมาน ยังต้อง verify</span>
+    <span><span class="lab open">Open</span> คำถามที่ยังเปิด</span>
+    <span><span class="lab fix">Correction</span> แก้ความเข้าใจเดิม</span>
+  </div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#arch">1 · Architecture</a>
+    <a href="#defects">2 · Defects (3)</a>
+    <a href="#testing">3 · Unit Testing</a>
+    <a href="#kt">4 · KT Questions</a>
+    <a href="#principles">5 · Principles</a>
+    <a href="#next">6 · สถานะ mid-Oct</a>
+  </nav>
+
+  <div class="keybox">
+    <b>10 บรรทัดที่ต้องแม่นจาก FUT</b>
+    <ul>
+      <li><b>ตัวตน</b>: T-code <code>ZTAXB_R01</code> · main program <code>SAPLZTAXA_R01</code> · enhancement ของ standard <code>S_P00_07000134</code> (<code>RFIDYYWT</code> Generic WHT) · CoCd <code>TH01</code> TH</li>
+      <li><b>Output group ทางการ = <code>R03</code></b> (P.N.D. 3/53/54 Attachment) — FD ไม่ได้ระบุ (gap) · <code>AP2</code> ไม่ใช่ตัวใช้งาน</li>
+      <li><b>2 FX columns ขนานกัน ห้ามปน</b>: Fx on TaxPmt = <code>KURSF</code>@<b>T</b> (WHT/ภงด.54) · Fx on posting date = <code>TCURR</code>@<b>T-1</b> (VAT36/ภพ.36)</li>
+      <li>M@T (บัญชี) vs BOT@T-1 (สรรพากร) = เหตุมีอยู่ของ TAX-ENH-2 และของสอง column นี้</li>
+      <li><b>รายงาน read-only, run ได้เสมอ</b> — chain กระทบแค่ 2 column (Doc WHT FX Adj / VAT36 Doc No.)</li>
+      <li>เกาะเส้น <b>WHT (<code>KTOSL='WIT'</code>)</b> เป็นสมอ · VAT36 เป็นผู้โดยสาร · 1 แถว = เย็บสูงสุด 4 ใบด้วย clearing (<code>AUGBL</code>)</li>
+      <li>ช่อง <b>Document Number บน selection = เลข Invoice (AP Voucher)</b> ไม่ใช่เลข payment</li>
+      <li>OB08/TCURR = <b>valid-from</b> + กติกา <b>ล่าสุดที่ ≤ วัน posting</b> (จ่ายอาทิตย์ → ใช้ rate ศุกร์)</li>
+      <li>Rate types = เลนในตารางเดียว: <code>M</code>(post FI) · <code>B</code>(selling≈BOT) · <code>G</code>(buying) · <code>ZTH</code>/<code>ZOM</code>(custom)</li>
+      <li><b>ห้ามพูด “T-1” กับ GL team</b> — ใช้ประโยคเดียว: “bank line must use the payment document’s date”</li>
+    </ul>
+  </div>
+
+  <!-- 1 · ARCHITECTURE -->
+  <section id="arch">
+    <div class="sec-head"><span class="sec-num">1</span><h2>สถาปัตยกรรม (ยืนยันจากการเทสต์)</h2></div>
+
+    <h3>1.1 ตัวตนของรายงาน <span class="lab ok">Confirmed</span></h3>
+    <p class="body"><code>ZTAXB_R01</code> (main program <code>SAPLZTAXA_R01</code>) = Reconciliation Report ภงด.54 ↔ ภพ.36 · เป็น <b>enhancement ของ standard <code>S_P00_07000134</code></b> (<code>RFIDYYWT</code> — Generic Withholding Tax Reporting) สำหรับ CoCd <code>TH01</code> TH · เพิ่ม <b>Profit Center</b> (validate <code>CEPC</code>) + <b>Recovery Indicator</b> (validate <code>T8JJ</code>) ใน Further Selections + column ฝั่ง VAT36</p>
+    <div class="callout"><b>คำว่า “Generic”:</b> <code>RFIDYYWT</code> เป็น <b>เครื่องยนต์กลางตัวเดียว</b> serve WHT reporting หลายประเทศ — ความต่างทั้งหมดย้ายไปเป็น config <b>Process Type + Output Group</b> · โปรแกรมเป็นแค่คนทำตามสูตร</div>
+
+    <h3>1.2 Output Group — config ระดับเครื่องยนต์ <span class="lab ok">Confirmed</span> <span class="lab open">บางแถว</span></h3>
+    <p class="body">Output group เป็น config <b>ระดับ engine ไม่ใช่ระดับรายงาน</b> — ทุก group ของ TH โผล่ใน F4 ของทุกโปรแกรมบน <code>RFIDYYWT</code> · “กดได้” ≠ “ใช่ของเรา” · 1 group = 1 สูตร (อ่านจากไหน + ผลิต List/Forms/Files + render แบบไหน)</p>
+    <div class="tblwrap">
+    <table>
+      <thead><tr><th style="width:70px">Group</th><th>Description (F4)</th><th>สถานะ</th></tr></thead>
+      <tbody>
+        <tr><td><code>R03</code></td><td>Attachment P.N.D. 3, 53 and 54 — Vendors, Original Documents</td><td><span class="lab ok">Official ของ RPT-1</span> — team lead ยืนยัน (วาจา) 02.08</td></tr>
+        <tr><td><code>AP2</code></td><td>WHT Certificate for Thailand &amp; Form No. 54</td><td>ไม่ใช่ตัวใช้งาน — สาย certificate (เคยเข้าใจผิดจากคำว่า “Form 54”)</td></tr>
+        <tr><td><code>E08</code></td><td>Attachment P.N.D. 1 Kor &amp; E-Filing</td><td>คนละกระบวนการ (ภงด.1ก) · render เป็น classic list</td></tr>
+        <tr><td><code>CER</code></td><td>เหมือน AP2 เป๊ะ</td><td><span class="lab open">Open</span> — group ซ้ำ/legacy? ถาม config owner ก่อน UAT</td></tr>
+        <tr><td><code>E01–E10, E1K, E2K</code></td><td>Attachment + E-Filing แยกตามแบบ ภงด.</td><td>สูตรของ objects ตระกูล text file (TAX-ENH-1/077/079)</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="trap"><b>FD gap:</b> FD ของ RPT-1 <b>ไม่ระบุ output group</b> (Variants &amp; Constants = N/A) — ต้องขอ confirm เป็นลายลักษณ์อักษรใน Teams หนึ่งครั้งเพื่อตอกหมุด</div>
+
+    <h3>1.3 สอง FX columns ขนานกัน — ห้าม conflate <span class="lab ok">Confirmed</span></h3>
+    <div class="tblwrap">
+    <table>
+      <thead><tr><th>Column</th><th style="width:60px">FD step</th><th>Source</th><th style="width:70px">วันที่</th><th>Serve</th></tr></thead>
+      <tbody>
+        <tr><td><b>Fx on TaxPmt</b></td><td>22</td><td><code>BKPF-KURSF</code> จาก payment doc ที่ post แล้ว</td><td><b>T</b> (วันจ่าย)</td><td>WHT / ภงด.54</td></tr>
+        <tr><td><b>Fx on Posting date</b></td><td>28</td><td>รายงานเปิด <code>TCURR</code> เอง <code>GDATU=BUDAT−1</code></td><td><b>T-1</b></td><td>VAT36 / ภพ.36</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="body"><b>ที่มาของสองโลก:</b> post เข้า GL ใช้ rate <b>M @ T</b> (หลักบัญชี ค่ากลาง ณ วันเกิดรายการ) · แต่เกณฑ์สรรพากรไทยใช้ rate <b>BOT วันทำการก่อนหน้า (T-1 ≈ เลน B)</b> — ช่องว่าง M@T ↔ B@T-1 คือเหตุผลการมีอยู่ของ <b>TAX-ENH-2</b> (post ส่วนต่างปรับ WHT) และการที่ RPT-1 ต้องโชว์ 2 FX column เทียบกัน</p>
+    <div class="trap"><b>ชื่อ misleading:</b> “Fx on posting date” จริง ๆ คือ rate ของ <b>วันก่อนหน้า</b> posting date (BUDAT−1) ไม่ใช่วัน posting เอง</div>
+    <div class="trap"><b>กติกาสื่อสารเด็ดขาด:</b> <b>ห้ามพูด “T-1” กับ GL team</b> — fix target ของเขาคือฝั่ง TaxPmt เท่านั้น · ประโยคเดียวที่ใช้: <b>“bank line must use the payment document’s date”</b> · เผลอพูด T-1 ปน = เสี่ยง GL แก้ขา bank ไปใช้ T-1 → ผิดบัญชี + defect ใหม่ซ้อน</div>
+
+    <h3>1.4 กลไกเลือก + เย็บเอกสาร <span class="lab ok">Confirmed</span></h3>
+    <p class="body">รายงาน <b>เกาะเส้น WHT ที่จุดจ่าย</b> (<code>ACDOCA KTOSL='WIT'</code>) เป็นสมอ · VAT36 เป็นผู้โดยสาร:</p>
+    <ul class="clean">
+      <li>มี WHT + มี VAT36 → โผล่ครบทุก column</li>
+      <li>มี WHT ไม่มี VAT36 → <b>ยังโผล่</b> · ฝั่ง VAT36 ว่างโดย design (= สาระ TC-008)</li>
+      <li>มี VAT36 ไม่มี WHT → <b>ไม่โผล่เลย</b> (= สาระ TC-009 + ใบ control)</li>
+    </ul>
+    <p class="body"><b>1 แถว = เย็บสูงสุด 4 ใบ:</b> (1) Invoice จาก <code>FB60</code> → base, VAT36 lines, invoice currency, PC/RI · (2) Payment จาก <code>F-53</code> → WHT line, KURSF, วัน T · (3) VAT36 doc <code>9xxxxxxxxx</code> ที่ <code>ZTAXA_R02</code> สร้าง · (4) WHT FX adj doc (type <code>SW</code>) ที่ <code>ZTAXA_R03</code> สร้าง · <b>ตัวเย็บ = clearing (<code>BSAK/BSEG-AUGBL</code>)</b> ที่เกิดตอน activate open item ใน F-53</p>
+    <div class="callout"><b>Precision ที่มักสลับ:</b> ช่อง <b>Document Number บน selection รับเลข “Invoice” (AP Voucher)</b> ไม่ใช่เลข payment · selection กรองที่จุดตั้งต้นฝั่ง invoice แล้วโปรแกรมไต่ clearing ไปหา payment เอง (FD 19/27) · “พร้อมกัน” = “ถูกเย็บถึงกันแล้ว ณ วัน run” · invoice ที่ยังไม่จ่าย = ไม่โผล่ (ภาระเกิด ณ จุดเงินออก)</div>
+
+    <h3>1.5 Execution chain = read-only <span class="lab ok">Confirmed</span></h3>
+    <p class="body">ลำดับ business: (01) AP posting → (02) <code>ZTAXA_R03</code>/TAX-ENH-2 → (03) <code>ZTAXA_R02</code>/TAX-ENH-3 → (04) RPT-1 · ประโยค KT sheet (“report generated after E032 &amp; E040”) = <b>ลำดับงาน user สิ้นเดือน ไม่ใช่เงื่อนไขทางเทคนิค</b></p>
+    <div class="keybox"><b>ข้อเท็จจริงสำคัญ:</b> RPT-1 <b>read-only · run ได้เสมอ ไม่ error ไม่ block</b> — chain กระทบแค่ 2 column: “Doc WHT FX Adj” ว่างจนกว่า E032 run · “VAT36 Doc No.” ว่างจนกว่า E040 run · ที่เหลือ (WHT amounts, 2 FX columns, VAT36 base/amt FC, PC, RI) มาจาก doc + logic เอง<br>→ <b>กฎออกแบบ TC ข้อเดียว:</b> run chain เฉพาะเมื่อ column ที่ TC ตรวจต้องพึ่งมัน</div>
+    <div class="callout"><span class="lab open">Open</span> <b>VAT36 base/amt (FC)</b> น่าจะขึ้นจากฝั่ง invoice โดยไม่รอ R030 — แต่ยังไม่ verify ด้วยตาบน doc ที่ R030 ยังไม่แตะ · TC-007 step 3 (baseline) คือการทดลองที่จะตอบ</div>
+
+    <h3>1.6 ระบบ rate: เลน · valid-from · ความเสี่ยงวันจันทร์ <span class="lab ok">Confirmed</span> <span class="lab open">ครึ่ง</span></h3>
+    <p class="body"><code>OB08/TCURR</code> เก็บแบบ <b>valid-from</b> (แต่ละบรรทัดมีผล “ตั้งแต่วันนั้นจนกว่าจะมีบรรทัดใหม่”) · standard หา rate ด้วย <b>ล่าสุดที่ ≤ วัน posting</b> · เสาร์อาทิตย์/วันหยุดไม่มี rate ใหม่ → ใช้บรรทัดวันทำการล่าสุด (<span class="lab ok">พิสูจน์แล้ว</span>: จ่ายอาทิตย์ 02.08 ระบบดึง <code>32.57230</code> ของศุกร์ 31.07)</p>
+    <p class="body"><b>Rate type = เลนขนานในตารางเดียว:</b> <code>M</code>=middle (post FI ถูกล็อคเลนนี้) · <code>B</code>=selling (≈BOT ฝั่งขาย) · <code>G</code>=buying · custom <code>ZTH</code> (TAX-ENH-2 ฝั่ง LC3) / <code>ZOM</code> (RPT-2 Oman)</p>
+    <div class="trap"><span class="lab open">Open — KT ข้อ 3</span> <b>ความเสี่ยงวันจันทร์:</b> FD step 28 เขียน lookup <code>GDATU=BUDAT−1</code> · <b>ถ้า Z-code เขียน exact match แทน ≤ fallback</b> → payment วันจันทร์/หลังวันหยุดจะได้ Fx on posting date = <b>blank</b> (BUDAT−1=อาทิตย์ ไม่มี GDATU) · อาการเหมือน TC-003 แต่คนละเหตุ · พิสูจน์ฟรีด้วย “การทดลองวันจันทร์” · ฝั่ง GL posting พิสูจน์แล้วว่าใช้ ≤ · เหลือฝั่ง report</div>
+  </section>
+
+  <!-- 2 · DEFECTS -->
+  <section id="defects">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Defect ทั้งหมด — หลักฐาน · กลไก · สถานะ</h2></div>
+    <p class="sec-sub">1 defect 1 ticket — คนละชั้น อย่ายำรวม (report logic vs GL posting vs rendering)</p>
+
+    <div class="dfc rep">
+      <div class="dfc-h"><span class="dfc-id">TKT-02</span><span class="dfc-t">Exchange rate at payment (ขา bank ใน GL)</span></div>
+      <p class="body"><b>Scope <span class="lab ok">ยืนยัน</span>:</b> เกิดเฉพาะ <b>currency case 1</b> (invoice สกุลที่สาม GBP/EUR → payment USD) และเฉพาะ payment ที่ <b>มี WHT line</b> · case 2 (USD→THB) / case 3 (THB invoice) ไม่โดน · root cause อยู่ <b>ฝั่ง posting ไม่ใช่รายงาน</b> — RPT-1 เป็นกระจก read-only</p>
+      <p class="body"><b>Owner:</b> fix = GL team · config = Config owner · comms routing = Comms lead · <b>Acceptance criterion:</b> bank outgoing line converts at the payment document’s date</p>
+
+      <h4>Controlled experiment (02.08) — คู่แฝดต่างตัวแปรเดียว</h4>
+      <p class="body">เงื่อนไข: rate M USD→THB วัน invoice (24.07 = 32.34140) ต้องต่างจากวันจ่าย (02.08 = 32.57230), delta = 0.23090 · ถ้า rate 2 วันเท่ากัน bug ล่องหน (บทเรียนเดียวกับ F6 ของ RPT-2 ที่ flat rate ใน DEV บังไว้)</p>
+      <p class="body"><b>คู่หลัก (มี WHT):</b> invoice <code>2004326539</code> GBP 1,000, V2, backdate 24.07, vendor line 44,060.10 THB · payment <code>8084322489</code> USD 1,140.19 (=85% ของ 1,341.40 หลังหัก WHT 15%), จ่าย 02.08</p>
+      <div class="tblwrap">
+      <table>
+        <thead><tr><th>บรรทัด (doc 502)</th><th style="width:80px">USD</th><th style="width:90px">THB (LC)</th><th>Rate แฝง</th><th style="width:70px">ตัดสิน</th></tr></thead>
+        <tbody>
+          <tr><td>Bank (A102X003)</td><td>1,140.19</td><td>43,679.45</td><td><b>38.31</b> — ไม่มีจริงใน TCURR ทุก type</td><td class="bad">❌ พัง</td></tr>
+          <tr><td>Vendor (clear)</td><td>1,341.40</td><td>44,060.10</td><td>มูลค่าวัน invoice ยกทั้งก้อน</td><td class="ok">✅ ปกติ</td></tr>
+          <tr><td>WHT Pay PND54</td><td>201.21</td><td>6,553.86</td><td>32.5723 = rate วันจ่าย</td><td class="ok">✅ ถูก</td></tr>
+          <tr><td>RealizedFX (2 บรรทัด)</td><td>0.00</td><td>6,173.21 + (15.24-)</td><td>ตัวโปะที่ระบบ post เอง</td><td>อาการตาม</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="body"><b>ที่ถูกต้อง:</b> bank = 1,140.19 × 32.5723 ≈ <b>37,138.6</b> → GL เพี้ยน ≈ <b>6,540.9 THB</b></p>
+      <div class="callout"><b>ความหมายคู่แฝด:</b> ตัวแปรเดียวที่ต่าง = WHT line · ใบไม่มี WHT ถูก / ใบมี WHT พัง = <b>คำตอบ KT ข้อ 1</b> (“ทำไมเกิดเฉพาะ payment ที่มี WHT”) ด้วยหลักฐานสร้างเอง</div>
+      <div class="trap"><b>กลไก (ใบ 502):</b> ขา bank <b>ไม่ได้คูณ rate ผิดวัน — มันไม่ได้คูณอะไรเลย</b> · ยอดบาทถูก derive จากมูลค่าวัน invoice (43,679.45 ≈ 44,060.10 ปรับผล WHT) · เลข <b>38.31 เป็นผลหาร ไม่ใช่ rate</b> · เหมือนเป็นหนี้ตอนทองบาทละ 30,000 จ่ายวันทอง 33,000 แต่สมุดจดว่าเงินที่ออกวันนี้มีค่าเท่าราคาทองวันก่อ</div>
+      <p class="body"><b>สมมติฐานที่ตัดออก:</b> (1) rate type ผิด → USD ทุก type ตระกูล 32.x, 38.31 ไม่ match · (2) rate ไม่มีในตาราง → OB08 ครบทุกวันทำการ · (3) ขั้นตอน post ผิด → control ขั้นตอนเดียวกันออกถูก · <b>ทิศทางหลักฐาน:</b> program logic ของ clearing/WHT path (ฝั่ง b) &gt; config (ฝั่ง a) เพราะ config ผิดจะกระทบทุกใบ ไม่เลือกเฉพาะใบมี WHT</p>
+
+      <h4>ใบ 8084322444 (ของทีม, จ่าย 14.07) + correction</h4>
+      <div class="trap"><span class="lab fix">Correction</span> ระหว่างวิเคราะห์สด เคยสรุปว่า “ใบ 457 ขา bank/WHT ใช้ rate ผิดวัน (32.588 แทน 32.637)” — <b>อ่านผิด</b> เพราะอ่านตาราง OB08 คลาดบรรทัด: rate M USD→THB มีผล 14.07 คือ <b>32.58770</b> ไม่ใช่ 32.637 · ดังนั้นขา bank (37,530.28÷1,151.67=32.588) และ WHT (6,622.95÷203.23=32.589) ของใบ 457 <b>แปลง USD→THB ที่ rate วันจ่ายถูกต้อง</b></div>
+      <p class="body">ความผิดปกติของ 457 อยู่คนละจุด: การแปลง <b>GBP→USD</b> (vendor 1,354.90 / bank net 1,151.67) ใช้ cross rate ของ <b>07.07</b> ทั้งที่จ่าย 14.07 · สอดคล้องกลไกกับ 502: <b>ทั้งคู่ยอดถูก derive จากมูลค่า ณ วันเก่า แทนแปลงจริง ณ วันจ่าย</b> — แค่คนละมิติ (457 เพี้ยนเลน USD, 502 เพี้ยนเลน THB) · การ map กลไกต่อใบเป็นงาน triage ของ GL team · หน้าที่เรา = ส่งเลข observed ครบ</p>
+
+      <details class="fold">
+        <summary>บทเรียนการอ่าน FI doc ที่ได้จากคู่นี้ (3 ข้อ)</summary>
+        <div class="fold-body">
+          <ul class="clean">
+            <li>rate แต่ละบรรทัดของ doc ที่ถูกต้อง <b>ไม่จำเป็นต้องเท่ากัน</b> — vendor ตรึงมูลค่าวัน invoice (อดีต), bank/WHT ใช้วันจ่าย (ปัจจุบัน), ส่วนต่างลง Realized FX · <b>ผิดคือเมื่อขาปัจจุบันไปใช้ค่าอดีต</b></li>
+            <li>จำนวนบรรทัด<b>ไม่ fix</b> — RealizedFX แตก 2 บรรทัดใน 502 (THB 6,173.21 / group 15.24-) เพราะแต่ละเลนสกุลเพี้ยนไม่เท่ากัน · เทียบ doc ให้เทียบ <b>โครงหน้าที่</b> ไม่ใช่นับแถว</li>
+            <li>ขยะจาก bug (FX lines) ลง PC <code>C_PC11</code> / RI <code>CP</code> — ไหลเข้า profit center เดียวกับที่ RPT-1 และ TC-005 answer key อ่าน = เหตุผลต้องแก้ที่ posting ไม่ใช่ปัดที่รายงาน</li>
+          </ul>
+        </div>
+      </details>
+      <div class="trap"><b>สถานะ:</b> ticket เปิด (Fix versions S/4 Program/04 Test), triage ทีมเอียงทาง config · evidence เรา (WHT-line trigger + rate ผี) เป็นข้อมูลสวน ส่งผ่าน Comms lead พร้อม workbook DEFECT_REPRO · <b>Blocked จนกว่า fix transport</b> · <b>ห้ามใช้คู่ repro เป็น TC-001</b> (ค่าผิดติด GL ถาวร ต้อง post ใหม่หลัง fix)</div>
+    </div>
+
+    <div class="dfc">
+      <div class="dfc-h"><span class="dfc-id">TC-003</span><span class="dfc-t">FX on Posting Date blank เมื่อ invoice = THB (ฝั่งรายงาน)</span></div>
+      <p class="body"><b>อาการ:</b> invoice THB + payment FC → “FX on posting date” blank และ VAT36 base/amt (THB) = 0.00 ทั้งคู่ (หลักฐานแรก: doc <code>2004322073</code> / VAT36 <code>9004322999</code>, 31.07)</p>
+      <p class="body"><b>กลไก:</b> FD step 28 case 2 บอก “ไม่ต้อง convert” แต่ dev implement เป็น <b>SELECT TCURR ทุกกรณีโดยไม่มี same-currency guard</b> — ไม่มีใครเมนเทน rate THB→THB → SELECT ไม่เจอ → rate ค้าง initial → domino: THB columns = FC×0 = 0.00 (<b>สองอาการ สาเหตุเดียว</b>)</p>
+      <p class="body"><b>Expected หลัง fix</b> (confirm โดย SI functional 31.07): FX on posting date = 1.00000, VAT36 THB = ยอด DC ตรง ๆ · <b>Proposed fix:</b> ถ้า <code>BKPF-WAERS = THB</code> → hard-set rate = 1.00000 แล้วข้าม TCURR fetch</p>
+      <div class="trap"><b>Scope discipline:</b> แยก ticket จาก 163211 เด็ดขาด (report logic vs GL posting) · อย่าพ่วง GDATU exact-match/Monday (ยัง open ไม่ใช่ observed defect) · owner = TAX ABAP dev (<span class="lab open">ยังต้องได้ contact — KT ข้อ 5</span>) · column นี้อยู่ฝั่ง <b>ภพ.36 ไม่ใช่ ภงด.54</b> — เล่าให้ระบุชั้นตรง</div>
+    </div>
+
+    <div class="dfc">
+      <div class="dfc-h"><span class="dfc-id">GETWA_NOT_ASSIGNED</span><span class="dfc-t">Short dump — output control (ฝั่ง rendering)</span></div>
+      <p class="body"><b>อาการ:</b> untick “Company Codes” ใน List Sections → short dump ใน <code>SAPLZTAXA_R01</code> · <b>Reproduce ยืนยันบนทั้ง <code>R03</code> (official path!) และ <code>AP2</code></b> · <code>E08</code> (classic list) ไม่เป็น</p>
+      <p class="body"><b>กลไก:</b> โปรแกรมถูกแปลงจาก classic list (<code>WRITE</code> — 4 sections ต่อกันในม้วนเดียว ตัดอิสระ) เป็น ALV (1 grid:1 จอ ต้องมีโครงสร้างของแต่ละ section) <b>แบบครึ่ง ๆ กลาง ๆ</b> · code path ALV assume ว่า section ครบ · untick → โครงสร้างไม่ถูกสร้าง แต่ code ยังอ้างถึง → field symbol ไม่ assign → dump · พังทั้ง R03+AP2 = จุดพังอยู่ <b>โค้ดส่วนกลางของ render</b> ไม่ใช่ logic เฉพาะ group</p>
+      <div class="callout"><b>สำคัญหลังรู้ว่า R03 = official:</b> จาก “อาจเป็นแค่ constraint” → <b>defect บน production path ที่ user เจอได้ทุกเดือน</b> — สมควรเปิด JIRA แยกและดันแก้ · <b>Workaround:</b> ติ๊ก List Sections ครบ 4 ทุก run (เขียนเป็น prerequisite แล้ว) · แยก list/ALV ด้วยตา: มี toolbar sort/filter/Σ/export = ALV, ตัวหนังสือเปล่า = classic</div>
+    </div>
+
+    <h3>2.4 Defect/ปัญหาอื่นที่จดทะเบียน</h3>
+    <ul class="clean">
+      <li><b>ID_WT 027</b> — WHT reference number missing สำหรับ CoCd TH01 (config gap, ไม่ block list output)</li>
+      <li><b>CX_DMEE dump</b> — DMEE engine, scope ทีมอื่น</li>
+      <li><b>AP2 vs CER descriptions ซ้ำ</b> — legacy trap · เคลียร์ก่อน UAT (user run ผิด group แล้วพฤติกรรมต่าง = defect ผีตอน SIT)</li>
+    </ul>
+  </section>
+
+  <!-- 3 · UNIT TESTING -->
+  <section id="testing">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Unit Testing — ระบบ · ทักษะ · สถานะ</h2></div>
+
+    <h3>3.1 โครง 9 Test Cases + Document Sets A–H</h3>
+    <p class="body">ทุก TC <b>self-contained: post เอกสารใหม่เอง</b> บน master data ที่ proven · ยอดมาตรฐาน base 1,000 / WHT 15%=150 / VAT36 7%=70 · ใช้ <b>posting date เดียวกันทุกใบเป็น isolation key</b> (E032 เลือกด้วย period → วันเดียวร่วมทำให้ write ครอบเฉพาะจักรวาลเรา ใน shared client)</p>
+    <div class="tblwrap">
+    <table>
+      <thead><tr><th style="width:40px">Set</th><th style="width:70px">TC</th><th>Invoice</th><th>Payment</th><th style="width:80px">WHT/VAT36</th><th>บทบาท</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>TC-002</td><td>THB</td><td>THB</td><td>✓/✓</td><td>No-conversion; E032 pass-through (zero adj)</td></tr>
+        <tr><td>B</td><td>TC-003</td><td>THB</td><td>USD</td><td>✓/✓</td><td>Reproduce defect FX blank</td></tr>
+        <tr><td>C</td><td>TC-004</td><td>USD</td><td>THB</td><td>✓/✓</td><td>Invoice-currency conv @T-1; side-evidence 163211</td></tr>
+        <tr><td>D</td><td>TC-001</td><td>EUR/GBP <b>(post หลัง fix)</b></td><td>USD</td><td>✓/✓</td><td>Case 1 full chain</td></tr>
+        <tr><td>E</td><td>TC-008</td><td>THB</td><td>THB</td><td>✓/✗</td><td>PND54-ไม่มี-VAT36 (ว่างโดย design)</td></tr>
+        <tr><td>F</td><td>TC-006</td><td>THB</td><td><b>USD</b></td><td>✓/✓</td><td>E032 transition (ต้องจ่าย FC ไม่งั้นไม่มี FX diff)</td></tr>
+        <tr><td>G</td><td>TC-007</td><td>THB</td><td>USD</td><td>✓/✓</td><td>E040 transition (VAT36 Doc No. ก่อน/หลัง)</td></tr>
+        <tr><td>H</td><td>TC-009</td><td>THB</td><td>THB</td><td>✗/✓</td><td>Negative — ต้องไม่โผล่</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="body"><b>Stage บังคับ 5 ขั้น:</b> (1) Post ทั้งหมดยกเว้น D → (2) Baselines + read-only ทั้งหมด <b>ก่อน update run ใด ๆ</b> → (3) Chain writes: E032 test→update (=TC-006), R030 test→update ราย doc (=TC-007 + เติม TC-002/004) → (4) Post-chain verifications → (5) Gated: TC-001 หลัง GL fix / TC-003 retest หลัง report fix</p>
+    <div class="callout"><b>Chain → TC mapping:</b> TC-001/002 = เดินครบ chain end-to-end · TC-006 = test ของ E032 โดด ๆ · TC-007 = ของ E040 โดด ๆ · TC-003/004 ตรวจ FX ไม่พึ่ง chain (R030 ใส่เพื่อความครบของ row) · TC-005 filter ไม่พึ่ง chain · TC-008 = E040 ไม่มีอะไรให้ gen นั่นคือ case · TC-009 = run R030 แล้วต้องยังไม่โผล่</div>
+
+    <h3>3.2 Discipline ทุก run</h3>
+    <ul class="clean">
+      <li>Capture selection screen ก่อน Execute เสมอ · เปลี่ยนตัวแปรเดียวต่อ run เทียบ baseline</li>
+      <li>Test run ก่อน Update run เสมอ · ดู proposal ให้เห็นว่ามีแค่ doc เราก่อนกด update · baseline ก่อน write เสมอ</li>
+      <li>ห้ามกรอก manual rate (ทำลาย expected) · ห้ามใช้ Distribute/Charge Off Difference (โยนส่วนต่างลงบัญชีอื่น)</li>
+      <li>expected values เทียบ <b>สูตร</b> ไม่ใช่ตัวเลขดิบ (rate เปลี่ยนได้ สูตรไม่เปลี่ยน) · doc DEFECT-REPRO ติดป้ายใน Evidence Log ห้ามปนกับ TC จริง</li>
+    </ul>
+
+    <h3>3.3 ทักษะ SAP จากการลงมือจริง</h3>
+    <details class="fold" open>
+      <summary>FB60 (Invoice) — 6 จุดที่ต้องรู้</summary>
+      <div class="fold-body"><ul class="clean">
+        <li><b>Branch Code</b> = สาขาสรรพากรของ <b>ผู้ขาย</b> (คนละช่องกับ Bus.Place=สาขาเรา) · บังคับเฉพาะ <b>vendor ไทย</b> · validate กับ branch data ใน BP master (F4 ว่าง = master ไม่มี พิมพ์เองไม่ผ่าน) · foreign vendor ไม่โดน — พอดี scenario ภงด.54/ภพ.36 (จ่ายต่างประเทศ)</li>
+        <li>rate เกาะ <b>Posting Date ไม่ใช่ Invoice date</b> — backdate ต้องเปลี่ยนทั้งคู่</li>
+        <li>tab <b>Withholding tax ต้องแวะดูก่อน Post เสมอ</b> (ถ้าว่างระบบไม่เตือน post ผ่านเงียบ ๆ → doc ใช้กับ RPT-1 ไม่ได้)</li>
+        <li>cost object บน expense line = ตัวกำหนด PC/RI ในรายงาน (chain: Cost Center → Profit Center → Segment) · warning “segment invalid” = ยังไม่ใส่ cost assignment</li>
+        <li>หลักเลือก master data: <b>“doc ใหม่ บน master data ที่ proven”</b> — ลอก vendor/tax code/G-L/cost center จาก doc ที่ผ่าน chain มาแล้ว (FB03) แทนสุ่ม</li>
+        <li>tax code: V1/V2 = 7% ClaimPP36 (ยึด label ในระบบ)</li>
+      </ul></div>
+    </details>
+    <details class="fold">
+      <summary>F-53 (Payment) — Assigned loop + จุดพลาด</summary>
+      <div class="fold-body"><ul class="clean">
+        <li>ขา bank เกิดจาก <b>header เท่านั้น</b> — Bank data ว่าง = doc ไม่มีขาเงินออก (overview โชว์ 0 line / INTERNAL)</li>
+        <li>ช่อง Currency default THB <b>ต้องเปลี่ยนก่อนทำอย่างอื่น</b> · ยอดจ่าย = net หลังหัก WHT ไม่ใช่ยอดเต็ม</li>
+        <li>เทคนิค <b>Assigned loop</b>: ใส่ยอดประมาณ → Process Open Items → อ่านค่า Assigned (=ยอดเป๊ะที่ระบบต้องการ) → back → แก้ Amount → Not Assigned = 0.00</li>
+        <li>activate เฉพาะใบเป้าหมาย (vendor test มี open items ปนหลายใบ) · CashDiscount ปล่อยว่างเสมอ</li>
+        <li>อ่านจอ: <b>Assigned ÷ Gross = 0.85 → WHT 15% ทำงาน</b> โดยไม่ต้องเปิด tab · tab WH Tax = จุด capture evidence ว่า payment มี WHT line</li>
+      </ul></div>
+    </details>
+    <details class="fold">
+      <summary>FB03 (Display) — posting keys + implied rate</summary>
+      <div class="fold-body"><ul class="clean">
+        <li>posting keys: 31 เครดิตเจ้าหนี้ / 25 เดบิตล้างเจ้าหนี้ / 40-50 เดบิต-เครดิต G/L · vendor line โชว์ reconciliation account ไม่ใช่ expense</li>
+        <li><b>LC Amount (THB)</b> = เลนที่รายงานภาษีไทยอ่าน · Group Curr (USD) = LC2 เพื่อ consolidation อ่านข้ามได้</li>
+        <li>เทคนิค <b>implied rate</b>: LC ÷ Amount ของแต่ละบรรทัด บอกทันทีว่าแปลงด้วย rate อะไร (เครื่องมือหลักที่ใช้จับ 163211)</li>
+        <li>Data Entry View = สิ่งที่คนกรอก · General Ledger View = สิ่งที่รายงาน/ACDOCA อ่าน (<code>KTOSL='WIT'</code> อยู่มุมนี้)</li>
+        <li>VAT36 reverse charge = ขาคู่ Def Inp VAT (สิทธิ์) + Inp VAT Pay (หน้าที่) หักล้างศูนย์ รอ R030 ประมวลสิ้นเดือน</li>
+      </ul></div>
+    </details>
+    <div class="trap"><b>Tax codes (client จริง):</b> V1/V2 = 7% ClaimPP36 (สเปรดชีต config เก่าที่ว่า V2=10% <b>outdated</b> — ยึด label ในระบบเสมอ) · <b>V0 ห้ามใช้แทน “ไม่มี VAT36”</b> (ยังเป็น code กลุ่ม VAT36 อัตรา 0% → แยกไม่ออกว่า 0.00 เพราะอัตราหรือ defect) · V3–V6 unclaimable = นอก scope TC หลัก (edge case SIT + ถาม config)</div>
+
+    <h3>3.4 สถานะ ณ 02.08.2026</h3>
+    <div class="tblwrap">
+    <table>
+      <thead><tr><th>รายการ</th><th>สถานะ</th></tr></thead>
+      <tbody>
+        <tr><td>Doc set A (<code>2004326537</code> THB 12,345 + payment)</td><td class="ok">✅ post ครบคู่ — TC-002 พร้อม run บน R03</td></tr>
+        <tr><td>Repro pair (<code>2004326539</code> + <code>8084322489</code>)</td><td>✅ post — ป้าย DEFECT-REPRO ห้ามเป็น TC-001; รอ run R03 เป็น observation</td></tr>
+        <tr><td>Control pair (GBP no-WHT + USD payment)</td><td>⚠️ ยืนยัน post จบ + เก็บเลข doc + capture ขา bank (×32.5723) · ใช้เป็น mini TC-009 FC</td></tr>
+        <tr><td>TC-005 baseline (116 records, 30.07)</td><td>⚠️ re-verify บน R03 + re-export answer key หลัง Stage 1 (population เปลี่ยน)</td></tr>
+        <tr><td>Doc sets B, C, E, F, G, H</td><td>⏳ ยังไม่ post — pattern พร้อม (B/F/G=THB→USD, C=USD→THB)</td></tr>
+        <tr><td>Doc set D (TC-001)</td><td>🔒 Gate: ห้าม post จนกว่า 163211 fix transport</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><b>ไฟล์ที่สร้าง:</b> <code>TAXR074_FUT_Execution_Workbook_TC001-TC009_v2.xlsx</code> · <code>Client_FUT_..._TAX-RPT-1_...xlsx</code> (template ทางการ 9 TC, 50 steps) · <code>DEFECT_REPRO_TKT-02_Summary_20260802.xlsx</code> — <b>ทั้งสามไฟล์ยังเขียน AP2 ต้องอัปเดตเป็น R03</b> (งานค้างอันดับต้น)</div>
+  </section>
+
+  <!-- 4 · KT QUESTIONS -->
+  <section id="kt">
+    <div class="sec-head"><span class="sec-num">4</span><h2>KT Open Questions — สถานะล่าสุด</h2></div>
+    <div class="tblwrap">
+    <table>
+      <thead><tr><th style="width:40px">#</th><th>คำถาม</th><th style="width:150px">สถานะ</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>ทำไม wrong-date เกิดเฉพาะ payment ที่มี WHT line</td><td><span class="lab ok">ตอบแล้ว</span> ด้วยคู่ control/repro</td></tr>
+        <tr><td>2</td><td>Fx on TaxPmt (T) vs E032 (T-1) — ค่าไหนยื่นจริง / E032 ต้อง run ก่อน RPT-1?</td><td>ครึ่งแรก <span class="lab open">เปิด</span> · ครึ่งหลัง <span class="lab ok">ตอบ</span> (business order ไม่ใช่เทคนิค)</td></tr>
+        <tr><td>3</td><td>Step 28 อ่าน TCURR exact GDATU=BUDAT−1 หรือ ≤ fallback</td><td>GL พิสูจน์ ≤ แล้ว · report รอ “ทดลองวันจันทร์” <span class="lab open">เปิด</span></td></tr>
+        <tr><td>4</td><td>OB08 maintenance timing + เจ้าของหลัง go-live</td><td><span class="lab open">เปิด</span> · TCURR = client-wide ห้ามเมนเทนเองโดยไม่ประกาศ</td></tr>
+        <tr><td>5</td><td>Handover artifacts + ABAP dev contact ของ RPT-1</td><td><span class="lab open">เปิด</span> · สำคัญขึ้นเพราะ TC-003 fix ต้องมี dev contact</td></tr>
+        <tr><td>ใหม่</td><td>Official output group</td><td><span class="lab ok">R03</span> (วาจา) — ตอกหมุดเป็นลายลักษณ์อักษร</td></tr>
+        <tr><td>ใหม่</td><td>AP2 vs CER description ซ้ำ</td><td><span class="lab open">เปิด</span> — ถาม config owner ก่อน UAT</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- 5 · PRINCIPLES -->
+  <section id="principles">
+    <div class="sec-head"><span class="sec-num">5</span><h2>หลักการทำงานที่ตกผลึก</h2></div>
+    <div class="obj"><b>Scope discipline:</b> 1 defect 1 ticket — TC-003 blank / 163211 / GETWA dump / Monday-fallback = 4 เรื่องแยกแม้อาการคล้าย · ยำรวม = partial fix ปิด ticket แล้วเรื่องจริงหลุด</div>
+    <div class="obj"><b>Evidence-first:</b> ทุก claim trace กลับ source ได้ (code/FD/screenshot/เลขใน doc) · “เห็นกับตา” ชนะ “มีคนบอก” · evidence ขัดความเชื่อเดิม (R03 vs AP2, ใบ 457) → แก้ความเชื่อ ไม่ใช่เก็บ evidence เข้าลิ้นชัก · จด correction ตรง ๆ</div>
+    <div class="obj"><b>Ownership boundaries:</b> GL posting → GL team · report logic → TAX ABAP dev · config → Config owner · comms → Comms lead · อย่าให้ภาษาทำให้คนแก้ผิดที่ (“แก้ Fx on TaxPmt” ฟังเหมือนแก้รายงาน ทั้งที่ fix อยู่ posting — ยึดภาษา acceptance criterion)</div>
+    <div class="obj"><b>Inference vs Confirmed:</b> ระวังอนุมานจากชื่อ (AP2 มี “Form 54” ≠ group ใช้งาน · “E” ใน E08 เดา e-filing บังเอิญถูก) · inference ตั้งสมมติฐานได้ แต่ปิดด้วย config/คนยืนยัน/การทดลองเสมอ</div>
+    <div class="obj"><b>สื่อสารในทีม:</b> ตอบ senior ให้ระบุ <b>“ขาไหน”</b> ชัด (บทเรียนจากตอบ “Vendor” ทั้งที่ตัวพังคือขา bank) · ประโยคปลอดภัยของ 163211: <b>“bank outgoing line converts at the wrong value when the payment carries a WHT line”</b> — ระบุตัวพัง (bank) + ตัวกระตุ้น (WHT) แยกในประโยคเดียว · route ผ่าน senior ก่อน commit ใน public channel</div>
+  </section>
+
+  <!-- 6 · NEXT ACTIONS -->
+  <section id="next">
+    <div class="sec-head"><span class="sec-num">6</span><h2>สถานะล่าสุด (mid-Oct-2026) — หลังจาก field notes ชุดนี้</h2></div>
+    <p class="sec-sub">ส่วน 1–5 คือสิ่งที่พิสูจน์ช่วง 31.07–02.08 · ส่วนนี้คือสิ่งที่เกิดหลังจากนั้น: RPT-1 <b>ผ่าน review 11-Sep</b> · R03 ถูกใช้เป็น output group ทางการ · split lines (TKT-01) กลับมาทำต่อ 2-Oct</p>
+
+    <h3>Open issues</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th style="width:36px">#</th><th>Issue</th><th>หลักฐาน / ตัวอย่าง</th><th>Next</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>Multi-invoice payment</b> (14-Sep): รายงาน resolve AP voucher ตัวเดียวแล้ว stamp ทุกแถว</td><td><code>8084322636</code> (THB, 3 vendors) · <code>8084322637</code> (USD, vendor เดียว, 6 invoices รวมเป็น 2 WHT sets)</td><td>Dev fix ต่อแถว: <code>BSAK-LIFNR = WT_ACCO</code> + match WITH_ITEM ของ invoice (vendor + type + code) · กฎแบ่งยอด = D3</td></tr>
+        <tr><td>2</td><td>คอลัมน์ WHT Rate โชว์ 15% สำหรับ code 44 ที่ post 10%</td><td>—</td><td>เช็ก <code>T059Z</code></td></tr>
+        <tr><td>3</td><td>FD gap: steps 17/18 บอก KTOSL = WIT แต่ไม่มีการเลือกบรรทัด · step 34 ใช้ KTOSL = XST</td><td>claim เดิมว่า step 33 ไม่มี KTOSL — <b>ถอนแล้ว</b></td><td>FD v0.2 / CR (G3)</td></tr>
+        <tr><td>4</td><td><b>TKT-01 split lines</b>: WHT@payment หยิบ ACDOCA WIT record แรกแม้เป็น 0.00</td><td><code>2004328305</code> (5A/39, 3 WIT lines 90/45/15) · <code>2004327460</code> (USD, WIT 10/5) · <code>2004328295</code> / <code>8084322641</code></td><td>ส่ง expected-result workbook แล้ว (หนึ่งแถวต่อ WIT line ที่ HSL ≠ 0) · เทียบไอเดีย “high-precision portion” ของ senior กับ WIT-ratio · partial payment รอยืนยัน</td></tr>
+        <tr><td>5</td><td><b>TKT-02</b> (GL): invoice สกุลที่สาม (GBP/EUR) → จ่าย USD มี WHT — bank line ใช้ rate วัน invoice</td><td>คู่ control / repro ส่วน 2</td><td>Acceptance = bank line ใช้วันที่ของ payment doc · บล็อก TC-001</td></tr>
+        <tr><td>6</td><td><b>GL-ENH-1</b>: WITH_ITEM ไม่ถูก update ด้วยบรรทัด WHT ของ GL ตอน post</td><td><code>8084322568</code> aux 38,000.70 / 5,700.11 vs GL 38,108.97 / 5,716.35 (adj <code>8084322578</code>) · <code>8084322545</code> same-day gap 4.57</td><td>ประสานกับ ENH-2 owner (dual-write)</td></tr>
+        <tr><td>7</td><td>5G doc <code>8084322612</code> (5G/B8) อยู่ใน WITH_ITEM แต่ไม่ออก R03</td><td>—</td><td>SE16N <code>ZCAX_P01</code> WHT_TYPE_PND54 → BAdI → form-name condition → standard DS FM</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Test cases (current set)</h3>
+    <ul class="clean">
+      <li><b>TC-001</b> FC invoice → USD payment — <span class="st block" style="background:var(--warn);color:#fff;border-radius:20px;padding:1px 8px;font-size:11px">blocked</span> by 163211 · one-shot retest หลัง deploy</li>
+      <li><b>TC-002 / 003 / 004</b> runnable (004 พิสูจน์ว่า USD→THB ไม่โดน)</li>
+      <li><b>TC-005</b> PC/RI 4-run method: baseline → positive → negative (คาดว่าว่าง / ไม่ dump) → RI · rerun หลัง split change</li>
+      <li><b>TC-006 / 007</b> write data (ENH-2 ก่อน / ENH-3 ก่อน) บนเอกสาร dedicated</li>
+      <li><b>TC-008 / 009</b> VAT36-without-PND54 (รวมแบบจ่าย FC)</li>
+      <li><b>TC-010..016</b> draft สำหรับ multi-invoice payment — ต้องรันบน FRM-1 / ENH-1 ด้วย</li>
+    </ul>
+
+    <h3>Specimen registry</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Doc(s)</th><th>ใช้พิสูจน์อะไร</th></tr></thead>
+      <tbody>
+        <tr><td><code>581 / 5184</code></td><td>EUR→USD ผ่าน ENH-2 · step-28 = 38.03240</td></tr>
+        <tr><td><code>558 / 4943</code></td><td>same-day gap</td></tr>
+        <tr><td><code>552 / 4882</code></td><td>USD→THB · กับดัก Sunday fallback (ดูถูกเพราะบังเอิญ)</td></tr>
+        <tr><td><code>568 / 5069</code></td><td>ratio-vs-table discriminator · step-28 = 32.72500</td></tr>
+        <tr><td><code>580</code></td><td>LC3 fail (“Balance in Hard currency USDTH”)</td></tr>
+        <tr><td><code>611</code></td><td>GBP→USD · step-28 = 44.14480</td></tr>
+        <tr><td><code>5473</code></td><td>multi-PC</td></tr>
+        <tr><td><code>4941</code> + <code>5690</code></td><td>5A docs</td></tr>
+        <tr><td><code>8084322636 / 650</code></td><td>multi-invoice payment</td></tr>
+        <tr><td><code>2004328305 / 2004328295</code></td><td>split lines</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><b>Statutory conflict (ไม่ใช่ defect):</b> PND54 = สกุลจ่ายจริง @ T-1 vs VAT36 = ยอด invoice × table rate @ T-1 → doc 581 ต่าง 76.57 THB · รอคำตัดสิน (D1) — ดู <a href="decisions.html#locked" style="color:var(--petrol);font-weight:600">Decisions</a> · backlog ทั้งทีมอยู่ที่ <a href="delivery-fut.html#backlog" style="color:var(--petrol);font-weight:600">FUT backlog</a></div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · TAX-RPT-1 FUT Field Notes (31.07–02.08.2026)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+</div>
+</body>
+</html>

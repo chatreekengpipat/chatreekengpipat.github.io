@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FI Document Verification — LC1/LC2/LC3 · Segment · Tax fields · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  [hidden]{display:none!important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  a{color:var(--petrol);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin:0 6px 22px 0;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(27px,5.2vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .easy{margin:18px 0 6px;border-radius:12px;padding:14px 18px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.22);font-size:14px;}
+  .easy::before{content:"อธิบายง่าย";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:15px;font-weight:700;margin:2px 0 8px;color:var(--petrol-deep);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  .small{font-size:12.5px;color:var(--ink-soft);}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+  .tblwrap table{margin:0;}
+  @media(max-width:600px){.tblwrap table{min-width:540px;}.tblwrap table td,.tblwrap table th{word-break:normal;overflow-wrap:normal;}}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .num{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:11px 0 11px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  ol.flow>li b{font-weight:600;}
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;margin:12px 0;background:var(--card);}
+  .card .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .grid2>.card,.grid3>.card{margin:0;}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(185,28,28,.05);font-size:13.8px;}
+  .trap b{color:var(--warn);}
+  .lock{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(29,78,216,.06);font-size:13.8px;}
+  .lock::before{content:"🔒 Locked design — ไม่ใช่ defect";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 18px 16px;font-size:14px;}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  /* evidence tags (knowledge-base convention) */
+  .ev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:1px;white-space:nowrap;border:1px solid transparent;}
+  .ev.std{color:var(--ink-soft);border-color:var(--line);}
+  .ev.bp{color:var(--petrol-deep);background:rgba(37,99,235,.10);}
+  .ev.fd{color:var(--petrol);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+  .ev.sys{color:#fff;background:var(--petrol);}
+  .ev.agreed{color:#fff;background:var(--petrol-deep);}
+  .ev.infer{color:var(--brass);border:1px dashed var(--brass);}
+  .ev.tbc{color:var(--warn);border:1px dashed var(--warn);background:rgba(185,28,28,.06);}
+  :root[data-theme="dark"] .ev.sys,:root[data-theme="dark"] .ev.agreed{color:var(--paper);}
+  .evlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;}
+  .evlegend .ev{margin-left:0;margin-right:4px;}
+  /* status pills */
+  .st{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;border-radius:20px;padding:1px 8px;white-space:nowrap;}
+  .st.open{color:var(--warn);background:rgba(185,28,28,.09);}
+  .st.block{color:#fff;background:var(--warn);}
+  .st.wip{color:var(--brass);background:rgba(180,83,9,.13);}
+  .st.done{color:var(--petrol-deep);background:rgba(37,99,235,.12);}
+  :root[data-theme="dark"] .st.block{color:var(--paper);}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .seealso{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;font-size:12.5px;align-items:center;}
+  .seealso>span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .seealso a{text-decoration:none;border:1.3px solid var(--line);border-radius:20px;padding:3px 11px;color:var(--petrol-deep);background:var(--card);}
+  .seealso a:hover{border-color:var(--petrol);}
+  /* interactive tools (T39) — state in memory only */
+  .tool{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;margin:18px 0;background:linear-gradient(160deg,rgba(37,99,235,.06),rgba(180,83,9,.04));}
+  .tool-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tool-h b{font-size:15px;}
+  .tool-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:5px;padding:2px 7px;}
+  .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;}
+  @media(max-width:640px){.fgrid{grid-template-columns:1fr;}}
+  .fld{display:flex;flex-direction:column;gap:5px;margin:7px 0;}
+  .fld>.lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;}
+  .seg button{font:inherit;font-size:12.5px;border:1.4px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.3;}
+  .seg button:hover{border-color:var(--petrol);}
+  .seg button[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol);color:#fff;}
+  .seg button:disabled{opacity:.4;cursor:not-allowed;}
+  .tool input,.tool textarea,.tool select{font:inherit;font-size:13.5px;color:var(--ink);background:var(--card);border:1.4px solid var(--line);border-radius:8px;padding:6px 9px;width:100%;}
+  .tool textarea{min-height:56px;resize:vertical;}
+  .tool input:focus,.tool textarea:focus,.tool select:focus,.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  .outs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+  .outs.two{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:640px){.outs,.outs.two{grid-template-columns:1fr;}}
+  .out{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:11px;padding:10px 12px;background:var(--card);}
+  .out.b{--_c:var(--brass);} .out.d{--_c:var(--petrol-deep);} .out.w{--_c:var(--warn);}
+  .out .k{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--_c,var(--petrol));}
+  .out .v{font-size:15px;font-weight:700;margin:3px 0;line-height:1.35;}
+  .out .why{font-size:12px;color:var(--ink-soft);}
+  .notes{margin-top:10px;font-size:13px;}
+  .notes li{margin:4px 0 4px 18px;}
+  .copyout{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:12px 14px;margin-top:10px;}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .btn{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--petrol);background:var(--petrol);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--petrol);}
+  .btnmsg{font-size:12px;color:var(--petrol-deep);}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .btn:not(.ghost),:root[data-theme="dark"] .tool-h .tg{color:var(--paper);}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.lock,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb,.seealso{display:none;}details.fold,details.ans{border-color:#ccc;}.tblwrap{overflow:visible;}}
+  /* page-specific */
+  .rule{border:1.5px solid var(--line);border-left:4px solid var(--petrol);border-radius:12px;padding:14px 16px;background:var(--card);margin:12px 0;}
+  .rule .rn{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol);}
+  .rule p{font-size:14px;margin-top:4px;}
+  .chk11{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+  .chk11 span{font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1.3px solid var(--petrol);color:var(--petrol-deep);border-radius:20px;padding:3px 10px;background:rgba(37,99,235,.05);}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-docverify">
+<div class="wrap">
+<a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="overview.html">Client FI design →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Role 2</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>FI Document Verification</span>
+    </div>
+    <h1>FI Document Verification<br><span class="accent">ตรวจ “ป้ายภาษี” ของทุกเอกสาร FI — LC1/LC2/LC3 · Segment · Tax fields</span></h1>
+    <div class="meta">
+      <span>Used in · <b>SIT (QAS) · FUT</b></span>
+      <span>CoCd · <b>TH · MY MY01 · MM MM01</b></span>
+      <span>Owner · <b>Chatree K.</b></span>
+    </div>
+    <p class="src">Source: LC concept v0.1 (sheet LC-TH company) · BPE 01.01.07 §6.1–6.4 · FD TAX-ENH-4 (CR-TKT-03) · FD ENH-2 / ENH-3 · training TAX-101 / TAX-301 · knowledge session 7-Oct-2026</p>
+  </header>
+
+  <div class="easy">ทุกเอกสาร FI ที่ผ่านมือในงาน SIT ซีเป็น “คนตรวจฉลาก” — เหมือนตรวจฉลากสินค้า 11 ช่อง: สาขา, สาขาคู่ค้า, รหัสภาษี, ฐาน, ยอดภาษี, WHT type / code, Segment และสกุลเงินสามชั้น ถ้าช่องไหนผิด ต้องบอกได้ว่าผิดเพราะ <b>master data</b>, <b>config</b> หรือ <b>โปรแกรม</b></div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#expected">Expected result</a>
+    <a href="#tworef">2 references / field</a>
+    <a href="#layers">4 layers · heatmap</a>
+    <a href="#lc">LC1 / LC2 / LC3</a>
+    <a href="#quick">5 quick checks</a>
+    <a href="#segment">Segment (TAX-ENH-4)</a>
+    <a href="#fields">Field rules</a>
+    <a href="#fb03">FB03 · หาเอกสาร</a>
+    <a href="#country">TH / MY / MM</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <!-- EXPECTED -->
+  <section id="expected">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Expected result ของทุก Tax step</h2></div>
+    <div class="callout"><b>ประโยคมาตรฐานใน SIT script:</b> “Posting with correct Business Place / BP Branch Code / Tax Code / Tax Base Amount / Tax Amount / WHT Type / WHT Code / Segment / LC1 / LC2 / LC3”</div>
+    <div class="chk11">
+      <span>Business Place</span><span>BP Branch Code</span><span>Tax Code</span><span>Tax Base</span><span>Tax Amount</span><span>WHT Type</span><span>WHT Code</span><span>Segment</span><span>LC1</span><span>LC2</span><span>LC3</span>
+    </div>
+    <p class="body">ไม่ใช่ทุกช่องใช้กับทุกเอกสาร — ถ้าไม่เกี่ยว ให้เขียน <b>N/A พร้อมเหตุผล</b> เสมอ (เช่น “LC3 blank – MY CoCd”)</p>
+  </section>
+
+  <!-- TWO REFERENCES -->
+  <section id="tworef">
+    <div class="sec-head"><span class="sec-num">2</span><h2>สองแหล่งอ้างอิงต่อหนึ่งช่อง</h2></div>
+    <p class="sec-sub">① <b>Expected value</b> = เอกสารธุรกิจ (tax invoice, expected ใน script) + KDS · ② <b>System source</b> = master data / config ที่ทำให้ระบบ post ค่านั้น — ถ้า posted ≠ expected ให้ดูข้อ ② ก่อน: master data ผิด = <b>data issue ไม่ใช่ defect</b></p>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Field</th><th>Expected from</th><th>System takes it from</th><th>Posted in</th></tr></thead>
+      <tbody>
+        <tr><td><b>Business Place</b></td><td>KDS BUSINESS PLACE_TH · สาขา Client บน tax invoice</td><td><code>J_1BBRANCH</code> · default ของ CoCd หรือ user กรอก</td><td><code>BSEG-BUPLA</code></td></tr>
+        <tr><td><b>BP Branch Code</b></td><td>สาขาคู่ค้าบน tax invoice (00000 = HO)</td><td>BP master + <code>DFKKBPTAXNUM</code> (TH1/TH3)</td><td>บรรทัด vendor/customer <span class="ev tbc">TBC field ใน SE11</span></td></tr>
+        <tr><td><b>Tax Code</b></td><td>KDS IDT TAX CODE_ALL · script</td><td>PO item (MIRO) · entry (FB60/FB70) · SD condition MWST</td><td><code>BSEG/BSET-MWSKZ</code></td></tr>
+        <tr><td><b>Tax Base / Amount</b></td><td>Tax invoice · rate ใน FTXP</td><td>FTXP · OB40</td><td><code>BSET</code> FWBAS/FWSTE · HWBAS/HWSTE · H2… · H3…</td></tr>
+        <tr><td><b>WHT Type</b></td><td>KDS WHT · TH 3A–3F PND3 · 4A–4F PND53 · 5A/5D PND54</td><td>BP → CoCd → WHT tab · <code>T059P</code></td><td><code>WITH_ITEM-WITHT</code>, <code>QSREC</code></td></tr>
+        <tr><td><b>WHT Code</b></td><td>KDS WHT + ประเภทเงินได้</td><td>BP default / ตอนจ่าย · <code>T059Z</code></td><td><code>WITH_ITEM-WT_WITHCD</code></td></tr>
+        <tr><td><b>Segment</b></td><td><code>ZTAXB_T04</code> → <code>010</code> → CEPC</td><td>GGB1 TAX-ENH-4</td><td><code>ACDOCA-SEGMENT</code></td></tr>
+        <tr><td><b>LC1 / LC2 / LC3</b></td><td>LC concept + TCURR</td><td>GL-ENH-1: OB22 → <code>ZGLX_T02</code> → <code>ZGLX_T01</code></td><td><code>ACDOCA</code> HSL / KSL / OSL</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- LAYERS + HEATMAP -->
+  <section id="layers">
+    <div class="sec-head"><span class="sec-num">2.5</span><h2>4 ชั้นของค่าภาษี — และค่าไหนไปพังรายงานไหน</h2></div>
+    <p class="sec-sub">จาก Tax Posting Field Map (knowledge session 7-Oct-2026) · รู้ว่าผิดที่ชั้นไหน = รู้ว่าต้องส่งใคร</p>
+    <div class="kit-dfd" role="group" aria-label="Four layers of a tax value">
+      <div class="kit-dfd__in">
+        <div class="dfd-stage"><div class="dfd-slabel">Layer 1</div><div class="dfd-node src"><div class="dt">Expected</div><div class="dsub">KDS · tax invoice · expected ใน script</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">Layer 2</div><div class="dfd-node tbl"><div class="dt">System source</div><div class="dsub">config (FTXP, OB40, T059P/Z, OBWW) · BP master</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">Layer 3</div><div class="dfd-node gl"><div class="dt">Posted</div><div class="dsub">BSEG · BSET · WITH_ITEM · ACDOCA</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">Layer 4</div><div class="dfd-node out"><div class="dt">Used downstream</div><div class="dsub">WRICEF · report · ไฟล์ยื่น RD</div></div></div>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="card"><span class="ct">Layer 3 ≠ 1 · master ผิด</span><p class="body">Data issue → แก้ BP / master (CO, BP, MM)</p></div>
+      <div class="card"><span class="ct">Layer 3 ≠ 1 · config ผิด</span><p class="body">Config issue → Tax config owner (FTXP, OB40, T030K, T059Z) · mapping table → Tax team</p></div>
+      <div class="card"><span class="ct">Layer 3 ถูก · Layer 4 ผิด</span><p class="body">Code defect → JIRA ถึง ABAP ของ WRICEF นั้น</p></div>
+    </div>
+
+    <h3>Field × WRICEF — คลิกแถวหรือคอลัมน์</h3>
+    <div class="tblwrap"><table class="hm" id="hm">
+      <thead><tr><th>Field</th><th data-c="0">★ RPT-1</th><th data-c="1">★ FRM-1</th><th data-c="2">★ ENH-1</th><th data-c="3">★ FRM-2</th><th data-c="4">★ RPT-2</th><th data-c="5">RPT-6</th><th data-c="6">ENH-2</th><th data-c="7">ENH-4</th></tr></thead>
+      <tbody>
+        <tr><td>Business Place</td><td></td><td>?</td><td>?</td><td></td><td></td><td>●</td><td></td><td></td></tr>
+        <tr><td>BP Branch / Tax ID</td><td></td><td>●</td><td>?</td><td></td><td></td><td>●</td><td></td><td></td></tr>
+        <tr><td>Tax Code</td><td>●</td><td></td><td></td><td></td><td>●</td><td>●</td><td></td><td></td></tr>
+        <tr><td>Tax Base / Amount</td><td>●</td><td></td><td></td><td></td><td>●</td><td>●</td><td></td><td></td></tr>
+        <tr><td>Tax GL</td><td></td><td></td><td></td><td></td><td>●</td><td>●</td><td></td><td></td></tr>
+        <tr><td>WHT Type</td><td>●</td><td>●</td><td>●</td><td>●</td><td></td><td></td><td>●</td><td></td></tr>
+        <tr><td>WHT Code</td><td>●</td><td>●</td><td>●</td><td>●</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>WHT Amount</td><td>●</td><td>●</td><td>●</td><td>●</td><td></td><td></td><td>●</td><td></td></tr>
+        <tr><td>WHT GL</td><td>●</td><td>●</td><td></td><td></td><td></td><td></td><td>●</td><td></td></tr>
+        <tr><td>Segment</td><td></td><td></td><td></td><td></td><td></td><td></td><td>●</td><td>●</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout" id="hmOut" aria-live="polite"><b>วิธีใช้:</b> คลิกชื่อ field → เห็นว่าถ้าค่านี้ผิด รายงานไหนพัง · คลิกหัวคอลัมน์ → เห็นว่า WRICEF นั้นพึ่ง field อะไร · ● = ใช้ · ? = น่าจะใช้ ต้องยืนยัน</div>
+
+    <h3>Card ต่อ field (Layer 1 → 3)</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Field</th><th>Expected</th><th>System source</th><th>Posted</th></tr></thead>
+      <tbody>
+        <tr><td>Tax GL</td><td>KDS / CoA ที่ตกลง</td><td>account key MWS / VST → OB40 (<code>T030K</code>, ต้องใช้ KTOPL จาก <code>T001-KTOPL</code>)</td><td>ACDOCA tax line</td></tr>
+        <tr><td>WHT Amount</td><td>base × rate (หรือ gross-up)</td><td><code>T059Z</code> · timing ตาม <code>T059P</code></td><td><code>WT_QBSHB</code> / <code>QBSHH</code> (ค่าที่ฟอร์มพิมพ์) / <code>QBSH2</code> / <code>QBSH3</code></td></tr>
+        <tr><td>WHT GL</td><td>KDS</td><td>OBWW (WIT = payable “Paid Over”) + GRU = gross-up offsetting entry</td><td>ACDOCA <code>KTOSL = WIT</code></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+<style>
+  .hm td,.hm th{text-align:center;}
+  .hm td:first-child,.hm th:first-child{text-align:left;cursor:pointer;font-weight:600;}
+  .hm thead th[data-c]{cursor:pointer;}
+  .hm tbody td:not(:first-child){font-size:16px;color:var(--petrol);}
+  .hm.on tbody td:not(:first-child){opacity:.25;}
+  .hm.on td.hl{opacity:1!important;background:rgba(180,83,9,.22);}
+  .hm.on td.hlrow,.hm.on th.hlcol{background:rgba(180,83,9,.16);}
+</style>
+<script>
+(function(){
+  var t=document.getElementById("hm"), out=document.getElementById("hmOut"); if(!t) return;
+  var heads=Array.prototype.map.call(t.querySelectorAll("thead th[data-c]"),function(h){return h.textContent.replace("★ ","");});
+  var rows=t.querySelectorAll("tbody tr");
+  function clear(){ t.classList.add("on"); Array.prototype.forEach.call(t.querySelectorAll(".hl,.hlrow,.hlcol"),function(x){x.classList.remove("hl","hlrow","hlcol");}); }
+  t.addEventListener("click",function(e){
+    var th=e.target.closest("thead th[data-c]"), td=e.target.closest("tbody td:first-child");
+    if(th){ clear(); th.classList.add("hlcol"); var c=+th.getAttribute("data-c"), f=[];
+      Array.prototype.forEach.call(rows,function(r){ var cell=r.children[c+1]; if(cell.textContent.trim()){ cell.classList.add("hl"); f.push(r.children[0].textContent+(cell.textContent.trim()==="?"?" (?)":"")); } });
+      out.innerHTML="<b>TAX-"+heads[c]+"</b> พึ่ง "+f.length+" field: "+f.join(" · ")+" — ถ้า field เหล่านี้ผิดในเอกสาร output ของ "+heads[c]+" จะผิดตาม"; }
+    else if(td){ clear(); td.classList.add("hlrow"); var r=td.parentNode, w=[];
+      Array.prototype.forEach.call(r.children,function(cell,i){ if(i&&cell.textContent.trim()){ cell.classList.add("hl"); w.push(heads[i-1]+(cell.textContent.trim()==="?"?" (?)":"")); } });
+      out.innerHTML="ถ้า <b>"+td.textContent+"</b> ผิด → กระทบ "+w.length+" ตัว: "+w.join(" · ")+" — regression ทุกตัวหลังแก้ master / config"; }
+  });
+})();
+</script>
+  <!-- LC -->
+  <section id="lc">
+    <div class="sec-head"><span class="sec-num">3</span><h2>LC1 / LC2 / LC3 — สามกฎ (LC3 = USDTH เฉพาะไทย)</h2></div>
+    <p class="sec-sub">ตั้งค่าตอน posting โดย <b>GL-ENH-1</b> (LC enhancement): OB22 default → <code>ZGLX_T02</code> กฎรายบรรทัด → <code>ZGLX_T01</code> override ตาม doc type (rate เดียวทั้งเอกสาร) <span class="ev bp">BP</span></p>
+
+    <div class="rule"><span class="rn">กฎ 1 · Document currency ตัดสินว่าอะไร “ไม่ต้องแปลง”</span>
+      <p>THB doc → <b>LC1 = doc amount</b> · USD doc → <b>LC2 = LC3 = doc amount</b> · FC อื่น → แปลงทั้งสามชั้น โดย LC2/LC3 เป็น cross rate ผ่าน THB = DC × ZTH(FC:THB) ÷ ZTH(USD:THB)</p></div>
+    <div class="rule"><span class="rn">กฎ 2 · Segment ตัดสิน rate ของ LC3</span>
+      <p><code>CIT_TH</code> → ZTH ดังนั้น <b>LC3 = LC2 ทุกบรรทัด</b> · <code>PITA1_TH</code> / <code>PITA3_TH</code> / <code>PSC_TH</code> / <code>MTJDA</code> → <b>PITB</b> (ฝั่งซื้อ: expense, AP, liability) หรือ <b>PITM</b> (ฝั่งขาย: revenue, AR) เป็น rate รายเดือน <span class="ev tbc">C3: GL BPE ใช้ชื่อ PITB/PITS</span></p></div>
+    <div class="rule"><span class="rn">กฎ 3 · ประเภทบรรทัดตัดสิน rate/วันที่ของ LC1 (เมื่อ doc ไม่ใช่ THB)</span>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Line</th><th>LC1 rate @ date</th></tr></thead>
+        <tbody>
+          <tr><td>Expense / AP</td><td><b>M</b> @ posting date</td></tr>
+          <tr><td><b>Input VAT / VAT36</b></td><td><b>B @ document date −1</b></td></tr>
+          <tr><td>WHT at invoice</td><td>M @ posting date −1 (“M9”)</td></tr>
+          <tr><td>WHT at payment</td><td>M @ posting date (“M9”)</td></tr>
+          <tr><td>AR / sales, output VAT</td><td>B @ document date −1 (SD: billing date −1)</td></tr>
+          <tr><td>PO invoice GR/IR &amp; GR&lt;IR expense</td><td>@ วันที่ GR เดิม</td></tr>
+          <tr><td>Reversal / clearing</td><td>Historical</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">บรรทัด AP ของ THB doc: LC2/LC3 @ posting date · บรรทัด AR ของ THB doc: @ document date −1 · “M9” ใน LC concept ยังไม่รู้ความหมาย (ไม่ใช่ rate type ใน TCURR) <span class="ev tbc">TBC</span></p>
+    </div>
+
+    <div class="tool" id="lcTool">
+      <div class="tool-h"><span class="tg">Interactive</span><b>LC rule picker — เลือกเงื่อนไข แล้วดูว่าแต่ละสกุลควรเป็นเท่าไร</b></div>
+      <div class="fgrid">
+        <div class="fld"><span class="lbl">Company code</span><div class="seg" data-name="cc">
+          <button type="button" data-v="TH" aria-pressed="true">TH TH01</button><button type="button" data-v="MY">MY MY01</button><button type="button" data-v="MM">MM MM01</button><button type="button" data-v="OM">Oman OM01</button></div></div>
+        <div class="fld"><span class="lbl">Document currency</span><div class="seg" data-name="cur">
+          <button type="button" data-v="LOC" aria-pressed="true">Local (THB)</button><button type="button" data-v="USD">USD</button><button type="button" data-v="FC">FC อื่น (EUR/GBP…)</button></div></div>
+        <div class="fld"><span class="lbl">Segment (TH)</span><div class="seg" data-name="seg">
+          <button type="button" data-v="CIT" aria-pressed="true">CIT_TH</button><button type="button" data-v="PITA">PITA1 / PITA3 / PSC / MTJDA</button></div></div>
+        <div class="fld"><span class="lbl">Line type</span><div class="seg" data-name="line">
+          <button type="button" data-v="EXP" aria-pressed="true">Expense / AP</button><button type="button" data-v="VAT">Input VAT / VAT36</button><button type="button" data-v="WHTI">WHT at invoice</button><button type="button" data-v="WHTP">WHT at payment</button><button type="button" data-v="AR">AR / sales / output VAT</button><button type="button" data-v="GRIR">PO invoice GR/IR</button><button type="button" data-v="REV">Reversal / clearing</button></div></div>
+      </div>
+      <div class="outs" aria-live="polite">
+        <div class="out"><div class="k">LC1</div><div class="v" id="lc1v"></div><div class="why" id="lc1w"></div></div>
+        <div class="out b"><div class="k">LC2</div><div class="v" id="lc2v"></div><div class="why" id="lc2w"></div></div>
+        <div class="out d"><div class="k">LC3</div><div class="v" id="lc3v"></div><div class="why" id="lc3w"></div></div>
+      </div>
+      <ul class="notes" id="lcNotes"></ul>
+      <p class="small">กฎทั้งหมดมาจาก LC concept v0.1 + GL-ENH-1 (หัวข้อด้านบน) · ใช้ตั้ง expected ก่อนเปิด SE16N layout <code>/LC_CHECK</code> — ไม่ได้คำนวณตัวเลขแทนระบบ</p>
+    </div>
+<script>
+(function(){
+  var root=document.getElementById("lcTool"); if(!root) return;
+  var st={cc:"TH",cur:"LOC",seg:"CIT",line:"EXP"};
+  var $=function(id){return document.getElementById(id);};
+  var LC1={EXP:["M @ posting date","Expense / AP"],VAT:["B @ document date −1","Input VAT / VAT36"],WHTI:["M @ posting date −1 (“M9”)","WHT ที่หักตอน invoice"],WHTP:["M @ posting date (“M9”)","WHT ที่หักตอนจ่าย"],AR:["B @ document date −1","AR / sales / output VAT (SD: billing date −1)"],GRIR:["@ วันที่ GR เดิม","PO invoice GR/IR & GR<IR expense"],REV:["Historical","reversal / clearing ใช้ rate ของเอกสารเดิม"]};
+  var LOCCUR={TH:"THB",MY:"MYR",MM:"MMK (TBC T001-WAERS)",OM:"OMR (3 ทศนิยม)"};
+  function set(id,v,w){ $(id+"v").innerHTML=v; $(id+"w").innerHTML=w; }
+  function render(){
+    var cc=st.cc, cur=st.cur, seg=st.seg, line=st.line, notes=[];
+    var loc=LOCCUR[cc];
+    root.querySelector('[data-v="LOC"]').textContent="Local ("+loc.split(" ")[0]+")";
+    Array.prototype.forEach.call(root.querySelectorAll('[data-name="seg"] button'),function(b){ b.disabled=(cc!=="TH"); });
+    var sell=(line==="AR"), rev=(line==="REV");
+    // LC1
+    if(cur==="LOC") set("lc1","= document amount","กฎ 1: เอกสารเป็นสกุล LC1 อยู่แล้ว → ไม่แปลง");
+    else set("lc1",LC1[line][0],"กฎ 3: ประเภทบรรทัดตัดสิน rate/วันของ LC1 — "+LC1[line][1]);
+    // LC2
+    if(cur==="USD") set("lc2","= document amount (USD)","กฎ 1: USD doc → LC2 ไม่แปลง");
+    else if(rev) set("lc2","Historical","reversal / clearing");
+    else if(cc!=="TH") set("lc2","USD — ตามกฎ GL ของประเทศ",cc==="OM"?"RPT-2: LC2 USD · rate type ZOM ยังรอยืนยัน (G10)":"LC concept ไทยไม่ครอบ MY/MM — ถาม GL ก่อนเปิด LC2 variance");
+    else if(cur==="LOC") set("lc2",sell?"ZTH @ document date −1":"ZTH @ posting date","THB doc: บรรทัด "+(sell?"AR":"AP")+" · tax programs (ENH-8/032/040) ใช้ ZTH เช่นกัน");
+    else set("lc2","cross rate ผ่าน THB","= DC × ZTH(FC:THB) ÷ ZTH(USD:THB)");
+    // LC3
+    if(cc!=="TH") set("lc3","— (blank)","LC3 มีเฉพาะ CoCd ไทย · blank = expected ไม่ใช่ defect");
+    else if(cur==="USD") set("lc3","= document amount (USD)","กฎ 1: USD doc → LC2 = LC3 = doc amount (ชนะกฎ segment)");
+    else if(rev) set("lc3","Historical","reversal / clearing");
+    else if(seg==="CIT") set("lc3","= LC2 (ZTH)","กฎ 2: CIT_TH → ZTH ดังนั้น LC3 = LC2 ทุกบรรทัด");
+    else if(cur==="FC") set("lc3","DC × "+(sell?"PITM":"PITB")+"(FC:THB) ÷ PITM(USD:THB)",'กฎ 2 + cross rate: สูตรตาม Verification Bible (GR doc) — ตัวหารเป็น PITM แม้ฝั่งซื้อ <span class="ev tbc">TBC เทสทั้งสองแบบ</span>'+(sell?' · ฝั่งขายใช้ PITM ที่ตัวตั้ง <span class="ev infer">INFER</span>':""));
+    else set("lc3",(sell?"PITM":"PITB")+" (monthly)","กฎ 2: PITA / PSC / MTJDA → "+(sell?"PITM ฝั่งขาย (revenue, AR)":"PITB ฝั่งซื้อ (expense, AP, liability)")+" · C3: GL BPE เรียก PITB/PITS");
+    // notes
+    if(cc==="TH" && cur!=="LOC" && line==="VAT") notes.push("เกิดบรรทัด <b>Realized FX (from VAT)</b> ใน LC1 เท่านั้น = DC × rate(doc date −1) − DC × rate(posting date) · GL ใหม่ <code>A490X035</code> Realized G/L FX Rate – Indirect tax (non-operating, รองรับ document splitting)");
+    if(cc==="TH" && line==="WHTP") notes.push("ยอด WHT ตอนจ่ายจะถูกปรับอีกครั้งโดย <b>TAX-ENH-2</b> (doc SW, GL A212X021) — LC3 ของ WHT payable ต่าง rate ตาม segment");
+    if(cc==="TH" && cur==="LOC" && (line==="VAT"||line==="AR")) notes.push("โปรแกรมภาษีบน THB doc: LC1 = doc amount · LC2 = ZTH · LC3 = ZTH/PITB (deferred output D1 → PITM)");
+    if(cc==="MY" || cc==="MM") notes.push("เอกสาร stock: LC2 มาจาก material valuation — rate ต่อบรรทัดต่างกันได้ (เช่น doc 4034321987: 4.444 vs 4.461) ไม่ใช่ defect อย่างเดียว");
+    if(cc==="TH") notes.push("JVA cash call: <b>JK</b> → LC1 M, LC3 PITB ทุกบรรทัด · <b>JD</b> → LC1 B, LC3 PITM (ZGLX_T01)");
+    if(cc==="OM") notes.push("RPT-2: cash-call path พิมพ์ Curr USD 2 ทศนิยม (D1, 27-Jul) · USD/OMR 0.38500 บนเอกสารทดสอบ");
+    notes.push("ตรวจทุกครั้ง: Σ HSL = Σ KSL = Σ OSL = 0 ต่อเอกสารต่อ ledger · implied rate HSL/KSL ต่อบรรทัด — บรรทัดที่แปลกมักเป็น VAT หรือ WHT");
+    $("lcNotes").innerHTML=notes.map(function(n){return "<li>"+n+"</li>";}).join("");
+  }
+  root.addEventListener("click",function(e){
+    var b=e.target.closest(".seg button"); if(!b||b.disabled) return;
+    var g=b.parentNode, name=g.getAttribute("data-name");
+    Array.prototype.forEach.call(g.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});
+    st[name]=b.getAttribute("data-v"); render();
+  });
+  render();
+})();
+</script>
+    <h3>ผลที่ตามมากับบรรทัดภาษี</h3>
+    <ul class="clean">
+      <li>Input VAT / VAT36 บนเอกสาร FC สร้างบรรทัด <b>Realized FX (from VAT)</b> ใน LC1 เท่านั้น = DC × rate(doc date −1) − DC × rate(posting date)</li>
+      <li>โปรแกรมภาษี <b>ENH-8</b> (doc <code>ST</code>) · <b>ENH-2</b> (<code>SW</code>) · <b>ENH-3</b> (<code>SA</code>): THB doc → LC1 = doc amount, LC2 = ZTH, LC3 = ZTH/PITB (deferred output D1 → PITM) · Net VAT clearing (<code>SO</code>) → historical รายบรรทัด</li>
+      <li>JVA cash call: <b>JK</b> อยู่ใน <code>ZGLX_T01</code> ให้ LC1 = M, LC3 = PITB ทุกบรรทัด · <b>JD</b> ยังไม่ maintain → account type D → LC1 B, LC3 PITM (C13)</li>
+    </ul>
+  </section>
+
+  <!-- QUICK CHECKS -->
+  <section id="quick">
+    <div class="sec-head"><span class="sec-num">4</span><h2>5 quick checks — SE16N ACDOCA (layout <code>/LC_CHECK</code>)</h2></div>
+    <ol class="flow">
+      <li><b>Σ HSL, Σ KSL, Σ OSL = 0</b> ต่อเอกสารต่อ ledger — LC3 ไม่ balance จะ block posting (“Balance in Hard currency USDTH” เช่น ENH-2 doc 580)</li>
+      <li>THB doc: <b>WSL = HSL</b></li>
+      <li>USD doc: <b>WSL = KSL = OSL</b></li>
+      <li><code>CIT_TH</code>: <b>OSL = KSL</b></li>
+      <li><b>Implied rate</b> HSL/KSL ต่อบรรทัด — บรรทัดที่แปลกออกมามักเป็น VAT หรือ WHT</li>
+    </ol>
+    <div class="card"><span class="ct">Layout fields</span>
+      <p class="mono" style="margin-top:6px">DOCLN BUZEI RACCT KOART KTOSL SEGMENT PRCTR MWSKZ RWCUR WSL RHCUR HSL RKCUR KSL ROCUR OSL BUDAT BLDAT BLART</p>
+      <p class="small" style="margin-top:6px">ดู <code>RLDNR</code> = 0L ก่อน แล้วค่อย T1</p>
+    </div>
+    <ul class="clean">
+      <li><b>TCURR</b>: ใช้ GDATU ล่าสุดที่ ≤ วันที่ · UKURS ติดลบ = indirect quote · “−1” ที่ตกเสาร์-อาทิตย์ถอยไปใช้ศุกร์</li>
+      <li><b>MY / MM ไม่มี LC3</b> · LC concept ของไทยไม่ครอบกฎ rate ของ MY/MM — ถาม GL ก่อนเปิด LC2 variance</li>
+      <li>เอกสาร stock เอา LC2 จาก material valuation → rate ต่อบรรทัดต่างกันได้ (เช่น doc 4034321987: 4.444 vs 4.461) — อย่างเดียวไม่ใช่ defect</li>
+      <li>RPT-2 (OM01): ไม่มี LC3 · LC1 OMR 3 ตำแหน่ง · LC2 USD (ZOM pending)</li>
+    </ul>
+  </section>
+
+  <!-- SEGMENT -->
+  <section id="segment">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Segment substitution — TAX-ENH-4</h2></div>
+    <p class="sec-sub">เดิมคือ TAX-ENH-9 → แทนที่ด้วย ENH-4 ผ่าน CR-TKT-03 · สร้างใน <b>GGB1</b> (program substitution) <span class="ev fd">FD</span></p>
+
+    <div class="kit-dfd" role="group" aria-label="Segment derivation order">
+      <div class="kit-dfd__in">
+        <div class="dfd-stage"><div class="dfd-slabel">Priority 1</div>
+          <div class="dfd-node tbl"><div class="dt">ZTAXB_T04</div><div class="dsub">CoCd + <b>G/L account</b> + validity → segment</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">Priority 2</div>
+          <div class="dfd-node tbl"><div class="dt">ZTAXB_T05</div><div class="dsub">CoCd + <b>cost center (+ IO)</b> + validity → segment</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">Fallback</div>
+          <div class="dfd-node gl"><div class="dt">Profit center segment</div><div class="dsub">standard segment ของ PC (<code>CEPC</code> / KE53)</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">Posted</div>
+          <div class="dfd-node out"><div class="dt">ACDOCA-SEGMENT</div><div class="dsub">ตัดสิน LC3 rate (กฎ 2)</div></div></div>
+      </div>
+    </div>
+
+    <div class="tool" id="segTool">
+      <div class="tool-h"><span class="tg">Simulator</span><b>Segment derivation — ข้อมูล QAS จริง (ZTAXB_T04 / 010 / CEPC, 05-Oct-2026)</b></div>
+      <div class="fld"><span class="lbl">ตัวอย่างจาก Segment Simulator workbook</span><div class="seg" id="segEx">
+        <button type="button" data-ex="1">EX-1 G/L ใน 009</button><button type="button" data-ex="2">EX-2 CC + IO</button><button type="button" data-ex="3">EX-3 CC อย่างเดียว</button><button type="button" data-ex="4">EX-4 stock 1096</button><button type="button" data-ex="5">EX-5 MM MM01</button><button type="button" data-ex="6">EX-6 ก่อน valid from</button></div></div>
+      <div class="fgrid">
+        <div class="fld"><span class="lbl">ประเภทเอกสาร / บรรทัด</span><select id="sDoc">
+          <option value="FI">FI posting (FB60 / FB01 / FB70 …)</option>
+          <option value="IR">Invoice receipt ของ PO (MIRO / VIM)</option>
+          <option value="GR">Goods / service receipt ของ PO (MIGO / ML81N)</option>
+          <option value="TRM">TRM / BCM document</option></select></div>
+        <div class="fld" id="sPairF"><span class="lbl">มีเอกสารคู่ที่ยังไม่ reverse ใน PO history?</span><select id="sPair"><option value="Y">มี (GR / IR ก่อนหน้า)</option><option value="N">ไม่มี (เอกสารนี้มาก่อน)</option></select></div>
+        <div class="fld"><span class="lbl">Company code</span><select id="sCc"><option>TH01</option><option>1084</option><option>1096</option><option>MM01</option><option>MY01</option></select></div>
+        <div class="fld"><span class="lbl">Account assignment ของบรรทัด</span><select id="sAa"><option value="CC">Cost center / IO</option><option value="WBS">WBS / Network</option><option value="NONE">ไม่มี (BS line)</option></select></div>
+        <div class="fld"><span class="lbl">G/L account</span><input type="text" id="sGl" placeholder="A104X004" spellcheck="false"></div>
+        <div class="fld"><span class="lbl">Cost center</span><input type="text" id="sCcn" placeholder="C_PC09" spellcheck="false"></div>
+        <div class="fld"><span class="lbl">Internal order</span><input type="text" id="sIo" placeholder="(ว่างได้)" spellcheck="false"></div>
+        <div class="fld"><span class="lbl">Profit center</span><input type="text" id="sPc" placeholder="C_PC11" spellcheck="false"></div>
+        <div class="fld"><span class="lbl">Posting date</span><input type="date" id="sPd" value="2026-10-05"></div>
+        <div class="fld"><span class="lbl">Entry date (วันที่บันทึกจริง)</span><input type="date" id="sEd" value="2026-10-05"></div>
+      </div>
+      <div class="outs two" aria-live="polite">
+        <div class="out d"><div class="k">ACDOCA-SEGMENT (expected)</div><div class="v" id="sRes"></div><div class="why" id="sWhy"></div></div>
+        <div class="out b"><div class="k">ผลต่อ LC3</div><div class="v" id="sLc3"></div><div class="why">กฎ 2 ของ LC — segment ตัดสิน rate ของ LC3</div></div>
+      </div>
+      <ol class="flow" id="sTrace" style="margin-top:10px"></ol>
+      <p class="small">FI postings ตาม README ของ simulator · กฎ IO (exact IO ชนะ → ไม่งั้นแถว IO ว่าง → doc ไม่มี IO ไม่ match แถวที่มี IO) เป็น <b>สมมติฐาน</b> ที่ต้องยืนยันกับ ABAP <span class="ev tbc">TBC</span> · แถวซ้ำใช้แถวแรก · CEPC มีแค่บาง PC ในหน้านี้ — PC อื่นให้ดู KE53</p>
+    </div>
+<script>
+(function(){
+  var root=document.getElementById("segTool"); if(!root) return;
+  var R009=["A101X001-A101X002","A104X004-A104X005","A105X006-A105X007","A106X008-A106X009","A107X010-A107X011","A110X012-A110X013","A113X015-A113X016","A305X028-A305X028","A305X029-A305X029","A305X030-A305X030"];
+  var T009=[]; ["TH01","1084","1096"].forEach(function(c){ R009.forEach(function(r){ var p=r.split("-"); T009.push({cc:c,from:p[0],to:p[1],seg:"CIT_TH"}); }); });
+  var T010=[{cc:"TH01",ccn:"C_PC08",io:"",seg:"CIT_TH"},{cc:"TH01",ccn:"C_PC09",io:"",seg:"PITA1_TH"},{cc:"TH01",ccn:"C_PC09",io:"C40000000141",seg:"CIT_TH"},{cc:"1096",ccn:"C_PC10",io:"",seg:"CIT_TH"}];
+  var VF="2026-09-01", VT="9999-12-31", CR="2026-09-29";
+  var PC={C_PC11:"CIT_TH",C_PC12:"CIT_TH",C_PC13:"PITA1_TH",C_PC14:"CIT_TH",C_PC15:"PSC_MM",C_PC16:"CIT_KY",C_PC17:"PITA3_TH",C_PC18:"PITA1_TH",C_PC19:"PITA1_TH",C_PC20:"PITA3_TH",C_PC21:"CIT_MM",C_PC22:"CIT_MY",C_PC23:"CIT_TH",C_PC24:"PSC_TH",C_PC25:"PSC_TH",C_PC26:"PSC_TH",C_PC27:"CIT_MY",C_PC28:"CIT_MY",C_PC33:"CIT_MY",O_PC42:"PITA1_TH",O_PC43:"PITA1_TH",O_PC44:"PSC_MM",O_PC45:"PSC_MM",O_PC46:"PSC_MM",O_PC48:"PSC_MY",O_PC52:"PSC_TH",N_PC37:"MTJDA",N_PC40:"MTJDA",N_PC41:"MTJDA",C_PC32:"MTJDA",N_PC39:"PSC_OM",O_PC50:"CIT_MM",O_PC51:"PSC_MM",O_PC53:"PSC_MM",T_PC54:"CIT_TH",B_PC01:"CIT_TH",B_PC06:"CIT_SG"};
+  var EX={1:{doc:"FI",cc:"TH01",aa:"NONE",gl:"A104X004",ccn:"",io:"",pc:"C_PC11",pd:"2026-10-05"},
+          2:{doc:"FI",cc:"TH01",aa:"CC",gl:"",ccn:"C_PC09",io:"C40000000141",pc:"C_PC11",pd:"2026-10-05"},
+          3:{doc:"FI",cc:"TH01",aa:"CC",gl:"",ccn:"C_PC09",io:"",pc:"C_PC11",pd:"2026-10-05"},
+          4:{doc:"FI",cc:"1096",aa:"CC",gl:"A111X014",ccn:"C_PC10",io:"",pc:"O_PC52",pd:"2026-10-05"},
+          5:{doc:"FI",cc:"MM01",aa:"CC",gl:"A111X014",ccn:"O_PC47",io:"",pc:"O_PC44",pd:"2026-10-05"},
+          6:{doc:"FI",cc:"TH01",aa:"NONE",gl:"A104X004",ccn:"",io:"",pc:"C_PC11",pd:"2026-08-31"}};
+  var $=function(id){return document.getElementById(id);};
+  var up=function(id){return $(id).value.trim().toUpperCase();};
+  var lc3=function(s){ if(!s||s.charAt(0)==="(") return "—"; if(s==="CIT_TH") return "LC3 = LC2 (ZTH)"; if(/^(PITA1_TH|PITA3_TH|PSC_TH|MTJDA)$/.test(s)) return "PITB (ซื้อ) / PITM (ขาย)"; return "ไม่มี LC3 (ไม่ใช่ CoCd ไทย)"; };
+  function step(ok,txt){ return '<li'+(ok?' style="font-weight:600"':' style="color:var(--ink-soft)"')+'>'+(ok?"✔ ":"✗ ")+txt+'</li>'; }
+  function render(){
+    var doc=$("sDoc").value, cc=$("sCc").value, aa=$("sAa").value, gl=up("sGl"), ccn=up("sCcn"), io=up("sIo"), pc=up("sPc"), pd=$("sPd").value, ed=$("sEd").value||pd, tr=[], seg=null, why="";
+    $("sPairF").hidden=!(doc==="IR"||doc==="GR");
+    var valid=pd>=VF&&pd<=VT, exists=ed>=CR;
+    if(doc==="TRM"){ seg="(ตาม logic ของ WRICEF TRM / BCM)"; why="Rule 4 ของ Verification Bible — ENH-4 ต้องไม่ทับ TRM / BCM · ถาม owner ของ WRICEF นั้น"; tr.push(step(true,"TRM / BCM → ไม่ใช้ ENH-4")); }
+    else if((doc==="IR"||doc==="GR") && $("sPair").value==="Y"){ seg="(copy จาก"+(doc==="IR"?" GR":" IR")+" ใน PO history)"; why="CR-TKT-03: "+(doc==="IR"?"IR รับ segment ของ GR ที่ยังไม่ reverse (EKBE → บรรทัด WRX → BSEG-SEGMENT · key EBELN + EBELP + ZEKKN + XREF3)":"GR รับ segment ของ IR ที่ยังไม่ reverse (RBKP-STBLG ว่าง)")+" — ดูใน ME23N › PO history"; tr.push(step(true,"Procurement copy rule (rule 5)")); }
+    if(seg===null){
+      if(doc==="IR"||doc==="GR") tr.push(step(false,"ไม่มีเอกสารคู่ → derive ใหม่ด้วยข้อมูลบัญชีของ PO (EKKN: SAKTO / KOSTL / AUFNR)"));
+      if(cc==="MM01"||cc==="MY01"){ tr.push(step(false,"CoCd "+cc+" ไม่มีแถวใน ZTAXB_T04 / 010 (QAS) → ข้ามไปที่ PC")); }
+      else {
+        var r9=null; T009.forEach(function(r){ if(!r9 && r.cc===cc && gl && gl>=r.from && gl<=r.to) r9=r; });
+        if(r9 && valid && exists){ seg=r9.seg; why="Rule 1 · ZTAXB_T04: "+cc+" + G/L "+r9.from+"–"+r9.to; tr.push(step(true,"ZTAXB_T04 match "+r9.from+"–"+r9.to+" → "+r9.seg)); }
+        else tr.push(step(false,"ZTAXB_T04: "+(r9?(!valid?"G/L อยู่ในช่วง แต่ posting date นอก validity (01.09.2026–31.12.9999)":"แถวถูกสร้าง 29.09.2026 หลังวันที่บันทึกเอกสาร"):"ไม่มีช่วง G/L ที่ตรงสำหรับ CoCd "+cc)));
+        if(seg===null){
+          if(aa==="WBS"){ tr.push(step(false,"บรรทัด WBS / Network → ข้าม ZTAXB_T05")); }
+          else if(!ccn){ tr.push(step(false,"ไม่มี cost center → ข้าม ZTAXB_T05")); }
+          else {
+            var hit=null, lvl="";
+            if(io){ T010.forEach(function(r){ if(!hit && r.cc===cc && r.ccn===ccn && r.io===io){hit=r;lvl="CC + IO";} }); }
+            if(!hit){ T010.forEach(function(r){ if(!hit && r.cc===cc && r.ccn===ccn && r.io===""){hit=r;lvl="CC (IO ว่าง)";} }); }
+            if(hit && valid && exists){ seg=hit.seg; why="Rule 2 · ZTAXB_T05 ("+lvl+"): "+ccn+(lvl==="CC + IO"?" + "+io:""); tr.push(step(true,"ZTAXB_T05 "+lvl+" → "+hit.seg)); }
+            else tr.push(step(false,"ZTAXB_T05: "+(hit?(!valid?"แถวตรง แต่ posting date นอก validity":"แถวถูกสร้าง 29.09.2026 หลังวันที่บันทึก"):"ไม่มีแถวของ "+ccn+(io?" + "+io:"")+" ใน "+cc)));
+          }
+        }
+      }
+      if(seg===null){
+        if(PC[pc]){ seg=PC[pc]; why="Rule 3 · segment ของ profit center "+pc+" (CEPC / KE53)"; tr.push(step(true,"PC "+pc+" → "+seg)); }
+        else { seg="(ดู KE53 ของ "+(pc||"PC")+")"; why="PC ไม่อยู่ในชุดตัวอย่างของหน้านี้ — CEPC จริงมี 356 PC · ถ้า PC master ผิด = เรื่องของทีม CO ไม่ใช่ defect ENH-4"; tr.push(step(false,"PC "+(pc||"(ว่าง)")+" ไม่อยู่ในชุดตัวอย่าง")); }
+      }
+    }
+    $("sRes").textContent=seg; $("sWhy").textContent=why; $("sLc3").textContent=lc3(seg); $("sTrace").innerHTML=tr.join("");
+  }
+  $("segEx").addEventListener("click",function(e){ var b=e.target.closest("[data-ex]"); if(!b) return; var x=EX[b.getAttribute("data-ex")];
+    Array.prototype.forEach.call(this.querySelectorAll("button"),function(z){z.setAttribute("aria-pressed",z===b?"true":"false");});
+    $("sDoc").value=x.doc; $("sCc").value=x.cc; $("sAa").value=x.aa; $("sGl").value=x.gl; $("sCcn").value=x.ccn; $("sIo").value=x.io; $("sPc").value=x.pc; $("sPd").value=x.pd; $("sEd").value=x.pd; render(); });
+  root.addEventListener("input",render); root.addEventListener("change",render);
+  render();
+})();
+</script>
+    <h3>QAS ณ 05-Oct-2026 <span class="ev sys">SYS</span></h3>
+    <ul class="clean">
+      <li><b>ZTAXB_T04</b> = 30 แถว: 10 ช่วง G/L (A101X001–A101X002 · A104X004–106 · A105X006–406 · A106X008–106 · A107X010–206 · A110X012–406 · A113X015–806 · A305X028 · A305X029 · A305X030) × CoCd TH01 / 1084 / 1096 → <code>CIT_TH</code> ทั้งหมด</li>
+      <li><b>ZTAXB_T05</b> = 4 แถว (ตารางด้านล่าง) · CEPC = 359 แถว / 356 PC / 36 segments (รวมต่างประเทศ เช่น CIT_OM, PSC_OM, PITA_AE, PSC_DZ)</li>
+      <li><b>กับดัก “Created On”</b>: ทุกแถวสร้าง <b>29.09.2026</b> แม้ valid from 01.09.2026 — เอกสารที่บันทึกก่อนหน้านั้นได้ segment จาก PC (เช่น doc 4044322314 / 4024323984 posted 24.09 ได้ PITA1_TH) <b>ไม่ใช่ defect</b> · simulator ของ workbook ตรวจแค่ valid from/to</li>
+      <li>DEV120 ≠ QAS: O_PC44 เป็น PSC_TH ใน DEV120 แต่ PSC_MM ใน QAS → dry-run 22 บรรทัดของ CoCd MM01 จะได้ segment ต่างกัน · C_PC30 เปลี่ยนจาก CIT_AE เป็น PITA_AE</li>
+    </ul>
+    <h3>Segment ไม่ตรง — ไล่แบบนี้</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>อาการ</th><th>สาเหตุที่น่าจะเป็น</th><th>ทำอะไร</th></tr></thead>
+      <tbody>
+        <tr><td>FB03 โชว์ segment ของ PC แต่ Z-table บอกอีกค่า</td><td>แถว Z สร้างหลังเอกสาร หรือ posting date นอก validity</td><td>สร้างทีหลัง = ไม่ใช่ defect · validity ผิด = Tax team แก้ตาราง</td></tr>
+        <tr><td>IR ไม่ตรงกฎ 1–3</td><td>กฎ procurement (copy จาก GR)</td><td>เทียบกับ GR ผ่าน PO history</td></tr>
+        <tr><td>Segment ของ PC ไม่เข้ากับธุรกิจ</td><td>PC master ผิด</td><td>ทีม CO — ไม่ใช่ defect TAX-ENH-4</td></tr>
+        <tr><td>PC ไม่ตรงกับ cost object ตัวจริง</td><td>master ของ CC / WBS / Network</td><td>ทีม JVA / CO</td></tr>
+        <tr><td>บรรทัดในเอกสารเดียวได้ segment ต่างกัน</td><td>cost object ต่างกัน หรือ splitting ต่อบรรทัด</td><td>GL team ถ้าควรเหมือนกัน</td></tr>
+        <tr><td>0L ≠ T1 / S1</td><td>substitution ไม่วิ่งใน ledger นั้น</td><td>Defect TAX-ENH-4 / GL</td></tr>
+        <tr><td>ผิดหลังเช็กทุกข้อแล้ว</td><td>โปรแกรม</td><td>Defect TAX-ENH-4 พร้อม expected / rule / actual</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><b>Quick check 3 ข้อต่อบรรทัด:</b> ① CoCd MM01 หรือ MY01? → ไปข้อ ③ เลย · ② G/L อยู่ในกลุ่ม 009 หรือ CC อยู่ใน 4 แถวของ 010? → ใช้ตารางนั้น (ยกเว้นเอกสารที่บันทึกก่อน 29.09.2026) · ③ ไม่งั้น → KE53 ของ PC บรรทัดนั้น</div>
+    <h3>Procurement (สิ่งที่ CR เพิ่ม)</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Case</th><th>Goods receipt</th><th>Invoice receipt (MIRO)</th></tr></thead>
+      <tbody>
+        <tr><td><b>GR before IR</b> (เดิม)</td><td>009 → 010 → PC</td><td>เอา segment ของ GR ที่ยังไม่ reverse ใน PO history (<code>EKBE</code> → FI GR/IR line KTOSL <code>WRX</code>, <code>BSEG-SEGMENT</code>)</td></tr>
+        <tr><td><b>IR before GR</b> (ใหม่ตาม CR)</td><td>เอา segment ของ IR ที่ยังไม่ reverse ใน PO history</td><td>009 → 010 → PC โดยใช้ CoCd, G/L, cost center, IO ของ PO (<code>EKKN</code>)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>ตัวอย่าง ZTAXB_T05 (QAS, valid 01.09.2026–31.12.9999) <span class="ev sys">SYS</span></h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>CoCd</th><th>Cost center</th><th>IO</th><th>Segment</th></tr></thead>
+      <tbody>
+        <tr><td>TH01</td><td><code>C_PC08</code></td><td>—</td><td><code>CIT_TH</code></td></tr>
+        <tr><td>TH01</td><td><code>C_PC09</code></td><td>—</td><td><code>PITA1_TH</code></td></tr>
+        <tr><td>TH01</td><td><code>C_PC09</code></td><td><code>C40000000141</code></td><td><code>CIT_TH</code></td></tr>
+        <tr><td>1096</td><td><code>C_PC10</code></td><td>—</td><td><code>CIT_TH</code></td></tr>
+      </tbody>
+    </table></div>
+    <ul class="clean">
+      <li>แถวที่ IO ว่าง match บรรทัดที่มีแค่ CC นั้น · แถวที่มี IO match CC + IO · วันที่นอก validity ไม่ match · ตารางมีแต่ CoCd ไทย (MY/MM ตกไปที่ segment ของ PC)</li>
+      <li>CC <code>C_PC09</code> กับ IO <b>อื่น</b> — ตกไปแถว IO ว่าง หรือไปที่ PC? <span class="ev tbc">TBC</span></li>
+      <li><b>G17:</b> JVA-ENH-2 (substitute cost object / RI จาก G/L) กับ TAX-ENH-4 key ด้วย G/L ทั้งคู่ — ลำดับใน GGB1 ไม่ได้ระบุ · เทสเอกสารที่โดนทั้งคู่แล้วอ่าน <code>SEGMENT</code> / <code>RECID</code> <span class="ev tbc">TBC</span></li>
+      <li><b>Cost object rule:</b> แต่ละบรรทัดมี cost object “ตัวจริง” <b>ตัวเดียว</b> (ACCASTY KS / OR / PR / NV — คอลัมน์ AcctAssgmt ใน FB03 เช่น WBS <code>C-ZLK.D.00.26997.01</code> → <code>CZLKD002699701</code>) · segment / PC ต้องมาจากตัวจริงนี้ เว้นแต่แถว CC + IO ใน 010 override</li>
+    </ul>
+  </section>
+
+  <!-- FIELD RULES -->
+  <section id="fields">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Field rules แบบสั้น</h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th style="width:150px">Field</th><th>กฎ</th></tr></thead>
+      <tbody>
+        <tr><td><b>Business Place</b></td><td>TH เท่านั้น · หนึ่งค่าต่อเอกสาร เหมือนกันทุกบรรทัด · ต้องอยู่ใน KDS ของ CoCd · SAP 4 หลัก บนแบบยื่น 5 หลัก · MY/MM = ว่าง · เอกสารไทยไม่มี tax code แต่มี default = ไม่ใช่ defect</td></tr>
+        <tr><td><b>BP Branch</b></td><td>สาขาของ <b>คู่ค้า</b> (ไม่ใช่ Client) · TH เท่านั้น · ส่งต่อให้ RPT-6 (“Head Office” เมื่อ 00000)</td></tr>
+        <tr><td><b>Tax code</b></td><td>ดูว่า <b>เหมาะกับ scenario</b> (goods vs service · claimable หรือไม่ · บริการต่างประเทศ → V*) ไม่ใช่แค่ตรงกับ script · MY U1/U2/U3 เป็น NVV (ภาษีอยู่ในบรรทัด cost) · การกระจาย NVV ของ MM <span class="ev tbc">TBC</span></td></tr>
+        <tr><td><b>Base / amount</b></td><td>base = Σ บรรทัดที่ใช้ code นั้น · amount = base × rate ±0.01 · เช็ก doc currency ก่อน แล้วค่อย LC</td></tr>
+        <tr><td><b>WHT</b></td><td>หา WIT line ที่ invoice หรือ payment ตาม <code>T059P</code> · recipient type ต้องตรงแบบ (03 / 53 / 54) ไม่งั้นหลุดจาก FRM-1 / ENH-1 · base ไม่รวม VAT · MY/MM หักตอนจ่าย (invoice amount 0) · MY resident คาดว่าไม่มี WHT <span class="ev tbc">verify BP</span></td></tr>
+        <tr><td><b>Gross-up 5G</b></td><td>พบบนเอกสาร (8084322612 5G/B8 · 2004328281 5G/O7) — สูตรและการรวมใน filter PND54 ของ RPT-1/FRM-1 <span class="ev tbc">TBC</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- FB03 -->
+  <section id="fb03">
+    <div class="sec-head"><span class="sec-num">7</span><h2>FB03 tips + หาเอกสาร FI ให้เจอ</h2></div>
+    <div class="grid2">
+      <div class="card"><span class="ct">FB03</span>
+        <ul class="clean">
+          <li><b>General Ledger View</b> ledger <b>0L</b> (จอที่ขึ้นว่า “Ledger T1” คือ tax ledger)</li>
+          <li>เพิ่มคอลัมน์ Business Place, Order, Cost Center, WBS, Network, Segment, Profit Center, AcctAssgmt · Σ ที่ Local Crcy Amt</li>
+          <li>“Acct Assignment Cat.” = category ของ PO (K/P/N/F) ไม่ใช่ ACCASTY</li>
+          <li>ห้ามทับ layout กลาง <code>/CHECKDOC</code> — Save As ด้วยชื่อตัวเอง</li>
+          <li>Entry View = ก่อน splitting · GL View = หลัง splitting (segment / PC ต่อบรรทัด)</li>
+        </ul>
+      </div>
+      <div class="card"><span class="ct">หาเอกสาร FI จากต้นทาง</span>
+        <div class="tblwrap"><table>
+          <tbody>
+            <tr><td>Material doc (GR/UD/SES/GI)</td><td>MIGO display → Doc info → FI Documents</td></tr>
+            <tr><td>Supplier invoice</td><td>MIR4 → Follow-on documents</td></tr>
+            <tr><td>Billing</td><td>VF03 → Accounting</td></tr>
+            <tr><td>Receipt / clearing</td><td>FEBAN → Documents (PA1 on-account, PA2 clearing) หรือ FBL5N cleared items</td></tr>
+            <tr><td>จาก PO</td><td>ME23N → PO history</td></tr>
+            <tr><td>ตาราง</td><td><code>BKPF</code> AWTYP MKPF / RMRP / VBRK · AWKEY = doc + year</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <h3>GR หรือ IR? — 5 สัญญาณใน FB03</h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>สัญญาณ</th><th>GR (MIGO)</th><th>IR (MIRO / VIM)</th></tr></thead>
+      <tbody>
+        <tr><td>Doc type</td><td><code>WE</code></td><td><code>RE</code></td></tr>
+        <tr><td>BKPF-AWTYP</td><td><code>MKPF</code></td><td><code>RMRP</code></td></tr>
+        <tr><td>บรรทัด vendor</td><td>ไม่มี</td><td>มี (PK 31)</td></tr>
+        <tr><td>ฝั่ง GR/IR</td><td>Cr (PK 96)</td><td>Dr (PK 86)</td></tr>
+        <tr><td>Assignment ของ GR/IR</td><td>เลข PO</td><td>เลข PO</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Posting keys ที่เจอบ่อย: 40 / 50 G/L · 31 Cr vendor · 21 / 25 Dr vendor · 01 / 15 customer · 89 / 99 stock · 81 / 91 cost · 86 / 96 GR/IR · JVA: 0J / 1J partner · 2J cash-call offset · 3J cash-call request · ตัวอย่าง PO บริการ 100 + VAT 7%: GR = Dr expense 100 / Cr GR/IR 100 → IR = Dr GR/IR 100 + Dr input VAT 7 / Cr vendor 107 → payment = Dr vendor 107 / Cr bank 104, Cr WHT 3</p>
+    <div class="card"><span class="ct">หลักฐาน tax code ใน 3 ภาพ (ใช้แทน FTXP เมื่อไม่มีสิทธิ์)</span>
+      <ol class="flow">
+        <li><b>SE16J join <code>ZCDS_DOC_TAX_WHT</code></b> = BKPF ⟕ BSET ⟕ WITH_ITEM on BUKRS + BELNR + GJAHR (outer join · ห้าม key ด้วย BUZEI) → Tx · G/L · base · tax</li>
+        <li><b>T030K</b> → MWSKZ · KTOSL · KONTS = G/L เดียวกับภาพ 1</li>
+        <li><b>SE16J join <code>ZCDS_TAX_RATE</code></b> = A003 → KONP on KNUMH → KBETR เป็น <b>per mille</b> (70 = 7%) · ไม่มีแถว = 0% · ต้องเท่ากับ tax ÷ base</li>
+      </ol>
+      <p class="small">join definition อยู่เฉพาะระบบที่สร้าง — DEV 120 ≠ QAS (ต้องสร้างใหม่ใน QAS) · ตัวอย่าง OX ของ MY: doc 3364322036 base 1,891,555.18 tax 0.00 GL A212X024 · T007S ZTXP_MY/OX “Non-Taxable Output Service Tax”</p>
+    </div>
+    <div class="trap"><b>ก่อนเช็กทุกครั้ง:</b> AWKEY ชี้ไปเอกสารต้นทางของ step นั้นจริงไหม · CoCd และ posting date ตรงไหม · เป็น JE ตัวเดียวกับที่ JVA / GL review ใน block เดียวกันไหม</div>
+  </section>
+
+  <!-- COUNTRY -->
+  <section id="country">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Country reference — TH / MY MY01 / MM MM01</h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th></th><th>TH</th><th>MY MY01</th><th>MM MM01</th></tr></thead>
+      <tbody>
+        <tr><td>Business place / BP branch</td><td>Required</td><td>Blank</td><td>Blank</td></tr>
+        <tr><td>Output codes</td><td>O*, DB, S1, ON</td><td>O1 6%, O2, O3, O4 −6%, OX</td><td>DB 5%, O1 5%, OX</td></tr>
+        <tr><td>Input codes</td><td>I*, N*/U*, D*, V*</td><td>R1/R2, U1 8%, U2 10%, U3 5% (NVV), UY, M1</td><td>I1 5%, I2 3%, I3 15%, IX, D1–D3, C1 (0% posted / 5% reported)</td></tr>
+        <tr><td>WHT</td><td>3x / 4x / 5x</td><td>BA–BE at payment</td><td>B0 / B2 at payment</td></tr>
+        <tr><td>Segments</td><td>CIT_TH, PITA1_TH, PITA3_TH, PSC_TH, MTJDA</td><td>CIT_MY, PSC_MY</td><td>CIT_MM, PSC_MM</td></tr>
+        <tr><td>LC1 / LC2 / LC3</td><td>THB / USD / USDTH</td><td>MYR / USD / –</td><td><span class="ev tbc">T001-WAERS</span> / USD / –</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Malaysia SD billing ที่ใช้ <code>OX</code> ต้องมี Tax Exemption Reason text <code>Z001</code> สำหรับ MyInvois (DRC, TAX-ENH-11)</p>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">✓</span><h2>Self-check</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. USD invoice ใน CoCd TH01 segment CIT_TH — LC2 กับ LC3 ควรเป็นเท่าไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">LC2 = LC3 = doc amount (USD doc) และ CIT_TH ทำให้ LC3 = LC2 ทุกบรรทัดอยู่แล้ว</div></details></div>
+      <div class="selfq"><p>2. Input VAT บนเอกสาร EUR ใช้ rate LC1 ของวันไหน และเกิดบรรทัดอะไรเพิ่ม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">rate B @ document date −1 · เกิด Realized FX (from VAT) ใน LC1 = DC × rate(doc date −1) − DC × rate(posting date)</div></details></div>
+      <div class="selfq"><p>3. Segment ของบรรทัดมาจากไหน ตามลำดับ?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">GGB1 TAX-ENH-4: ZTAXB_T04 (G/L) → ZTAXB_T05 (CC + IO) → segment ของ profit center</div></details></div>
+      <div class="selfq"><p>4. MIRO ที่มาก่อน GR เอา segment จากไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">IR derive เอง 009 → 010 → PC ด้วยข้อมูลของ PO (EKKN) · GR ที่มาทีหลังจะรับ segment จาก IR ใน PO history</div></details></div>
+      <div class="selfq"><p>5. เอกสาร stock ของ MY มี LC2 rate ต่างกันรายบรรทัด — เปิด defect ไหม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ไม่ (อย่างเดียว) — LC2 ของ stock มาจาก material valuation · ตรวจว่า Σ KSL = 0 และ LC3 ว่าง (MY ไม่มี LC3)</div></details></div>
+    </div>
+    <div class="seealso"><span>ดูต่อ</span>
+      <a href="overview.html">Client FI design</a>
+      <a href="sit.html">SIT execution</a>
+      <a href="se16n.html">SE16N</a>
+      <a href="decisions.html#locked">Expected-not-defect list</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · Role 2 · FI Document Verification</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

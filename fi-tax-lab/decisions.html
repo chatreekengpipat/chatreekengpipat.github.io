@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decisions & Open Points — อ่านก่อนเรียกอะไรว่า defect · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  [hidden]{display:none!important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  a{color:var(--petrol);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin:0 6px 22px 0;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(27px,5.2vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .easy{margin:18px 0 6px;border-radius:12px;padding:14px 18px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.22);font-size:14px;}
+  .easy::before{content:"อธิบายง่าย";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:15px;font-weight:700;margin:2px 0 8px;color:var(--petrol-deep);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  .small{font-size:12.5px;color:var(--ink-soft);}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+  .tblwrap table{margin:0;}
+  @media(max-width:600px){.tblwrap table{min-width:540px;}.tblwrap table td,.tblwrap table th{word-break:normal;overflow-wrap:normal;}}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .num{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:11px 0 11px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  ol.flow>li b{font-weight:600;}
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;margin:12px 0;background:var(--card);}
+  .card .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .grid2>.card,.grid3>.card{margin:0;}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(185,28,28,.05);font-size:13.8px;}
+  .trap b{color:var(--warn);}
+  .lock{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(29,78,216,.06);font-size:13.8px;}
+  .lock::before{content:"🔒 Locked design — ไม่ใช่ defect";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 18px 16px;font-size:14px;}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  /* evidence tags (knowledge-base convention) */
+  .ev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:1px;white-space:nowrap;border:1px solid transparent;}
+  .ev.std{color:var(--ink-soft);border-color:var(--line);}
+  .ev.bp{color:var(--petrol-deep);background:rgba(37,99,235,.10);}
+  .ev.fd{color:var(--petrol);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+  .ev.sys{color:#fff;background:var(--petrol);}
+  .ev.agreed{color:#fff;background:var(--petrol-deep);}
+  .ev.infer{color:var(--brass);border:1px dashed var(--brass);}
+  .ev.tbc{color:var(--warn);border:1px dashed var(--warn);background:rgba(185,28,28,.06);}
+  :root[data-theme="dark"] .ev.sys,:root[data-theme="dark"] .ev.agreed{color:var(--paper);}
+  .evlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;}
+  .evlegend .ev{margin-left:0;margin-right:4px;}
+  /* status pills */
+  .st{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;border-radius:20px;padding:1px 8px;white-space:nowrap;}
+  .st.open{color:var(--warn);background:rgba(185,28,28,.09);}
+  .st.block{color:#fff;background:var(--warn);}
+  .st.wip{color:var(--brass);background:rgba(180,83,9,.13);}
+  .st.done{color:var(--petrol-deep);background:rgba(37,99,235,.12);}
+  :root[data-theme="dark"] .st.block{color:var(--paper);}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .seealso{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;font-size:12.5px;align-items:center;}
+  .seealso>span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .seealso a{text-decoration:none;border:1.3px solid var(--line);border-radius:20px;padding:3px 11px;color:var(--petrol-deep);background:var(--card);}
+  .seealso a:hover{border-color:var(--petrol);}
+  /* interactive tools (T39) — state in memory only */
+  .tool{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;margin:18px 0;background:linear-gradient(160deg,rgba(37,99,235,.06),rgba(180,83,9,.04));}
+  .tool-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tool-h b{font-size:15px;}
+  .tool-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:5px;padding:2px 7px;}
+  .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;}
+  @media(max-width:640px){.fgrid{grid-template-columns:1fr;}}
+  .fld{display:flex;flex-direction:column;gap:5px;margin:7px 0;}
+  .fld>.lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;}
+  .seg button{font:inherit;font-size:12.5px;border:1.4px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.3;}
+  .seg button:hover{border-color:var(--petrol);}
+  .seg button[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol);color:#fff;}
+  .seg button:disabled{opacity:.4;cursor:not-allowed;}
+  .tool input,.tool textarea,.tool select{font:inherit;font-size:13.5px;color:var(--ink);background:var(--card);border:1.4px solid var(--line);border-radius:8px;padding:6px 9px;width:100%;}
+  .tool textarea{min-height:56px;resize:vertical;}
+  .tool input:focus,.tool textarea:focus,.tool select:focus,.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  .outs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+  .outs.two{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:640px){.outs,.outs.two{grid-template-columns:1fr;}}
+  .out{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:11px;padding:10px 12px;background:var(--card);}
+  .out.b{--_c:var(--brass);} .out.d{--_c:var(--petrol-deep);} .out.w{--_c:var(--warn);}
+  .out .k{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--_c,var(--petrol));}
+  .out .v{font-size:15px;font-weight:700;margin:3px 0;line-height:1.35;}
+  .out .why{font-size:12px;color:var(--ink-soft);}
+  .notes{margin-top:10px;font-size:13px;}
+  .notes li{margin:4px 0 4px 18px;}
+  .copyout{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:12px 14px;margin-top:10px;}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .btn{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--petrol);background:var(--petrol);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--petrol);}
+  .btnmsg{font-size:12px;color:var(--petrol-deep);}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .btn:not(.ghost),:root[data-theme="dark"] .tool-h .tg{color:var(--paper);}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.lock,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb,.seealso{display:none;}details.fold,details.ans{border-color:#ccc;}.tblwrap{overflow:visible;}}
+  /* page-specific */
+  .reg td:first-child{font-family:'JetBrains Mono',monospace;font-weight:600;white-space:nowrap;color:var(--petrol-deep);}
+  .lesson{counter-reset:ls;list-style:none;margin:10px 0;}
+  .lesson li{counter-increment:ls;position:relative;padding:9px 0 9px 40px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  .lesson li::before{content:counter(ls);position:absolute;left:0;top:8px;width:26px;height:26px;border-radius:7px;background:rgba(185,28,28,.1);color:var(--warn);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-decisions">
+<div class="wrap">
+<a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Decisions</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>Locked · Open · Gaps · Lessons</span>
+    </div>
+    <h1>Decisions &amp; Open Points<br><span class="accent">อ่านหน้านี้ก่อนเรียกอะไรว่า defect</span></h1>
+    <div class="meta">
+      <span>Scope · <b>FI-Tax S/4 Program</b></span>
+      <span>As at · <b>16-Oct-2026</b></span>
+      <span>Owner · <b>Chatree K.</b></span>
+    </div>
+    <p class="src">Source: knowledge base <code>80-locked-decisions</code> · <code>85-open-points</code> · <code>90-lessons-learned</code> · conflict register in <code>10-client-fi-design §11</code>. ชื่อบุคคลถูกแทนด้วย role</p>
+  </header>
+
+  <div class="easy">หน้านี้คือ “สมุดกติกา” ของทีม — อะไรที่ <b>ตกลงกันแล้ว</b> ห้ามเปิดเป็น defect ซ้ำ, อะไรที่ <b>รอคนตัดสิน</b> ห้ามพูดเหมือนเป็นข้อเท็จจริง, และ <b>ความผิดพลาดที่เคยทำ</b> จะได้ไม่ทำซ้ำ — เปิดทุกครั้งก่อนกด Create ใน JIRA</div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#locked">Locked decisions</a>
+    <a href="#waiting">รอการตัดสิน (D)</a>
+    <a href="#gaps">Gaps radar (G)</a>
+    <a href="#conflicts">Conflict register (C)</a>
+    <a href="#tbc">Technical TBC</a>
+    <a href="#lessons">Lessons learned</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>3 คำถามก่อนเปิด defect</b>
+    <ul>
+      <li>อยู่ใน <b>Locked decisions</b> ไหม? → ถ้าใช่ = by design ไม่ใช่ defect (เปลี่ยนต้องเป็น CR)</li>
+      <li>ไล่ <b>three-layer model</b> แล้วหรือยัง — master data มีไหม → config ของ CoCd ถูกไหม → posted จริงเป็นอะไร</li>
+      <li>เช็ก <b>selection screen</b> แล้วหรือยัง (CoCd ถูกไหม · placeholder ค้าง · value-help บัง Go) — ความมั่นใจต้อง &gt;95% ก่อน escalate</li>
+    </ul>
+    <div class="evlegend">
+      <span><span class="ev std">STD</span>standard SAP / กฎหมายทั่วไป</span>
+      <span><span class="ev bp">BP</span>Blueprint / BPE</span>
+      <span><span class="ev fd">FD</span>Functional Design</span>
+      <span><span class="ev sys">SYS</span>เห็นในระบบ</span>
+      <span><span class="ev agreed">AGREED</span>ตกลงกับ client / team lead</span>
+      <span><span class="ev infer">INFER</span>เหตุผลเรา ยังไม่พิสูจน์</span>
+      <span><span class="ev tbc">TBC</span>ยังเปิด</span>
+    </div>
+  </div>
+
+    <div class="tool" id="dfTool">
+      <div class="tool-h"><span class="tg">Interactive</span><b>Is this a defect? — ตอบทีละข้อ ระบบจะบอกว่าเป็นเรื่องอะไรและส่งใคร</b></div>
+      <div id="dfCrumbs" class="small" style="margin-bottom:8px"></div>
+      <div id="dfBody" aria-live="polite"></div>
+      <div class="btnrow"><button type="button" class="btn ghost" id="dfReset">เริ่มใหม่</button></div>
+    </div>
+<script>
+(function(){
+  var root=document.getElementById("dfTool"); if(!root) return;
+  var S=[
+    {q:"เรื่องนี้อยู่ใน Locked decisions หรือรายการ “SIT — expected ไม่ใช่ defect” ไหม?",h:"เช่น VAT36 base ≠ WT base บนแถวจ่าย FC · LC3 ว่างของ MY/MM · WHT amount 0 ตอน invoice ของ MY/MM · NVV ไม่มีบรรทัดภาษี · RPT-2 report-only",yes:"by",no:1},
+    {q:"Selection screen ถูกไหม? (CoCd · output group / variant · ช่วงวันที่ · ไม่มี placeholder ค้าง · กด Go แล้ว)",h:"บทเรียน: CoCd ผิด (Client-Intl vs MY01) · “SEL_VN” ค้างในช่อง venture · value-help บังปุ่ม Go",yes:2,no:"setup"},
+    {q:"Layer 1 — master data มีและถูกไหม?",h:"BP WHT tab / recipient type · branch ใน DFKKBPTAXNUM · PC ↔ segment ใน CEPC (KE53) · cost center / WBS ที่ถูกตัวจริง · PO item tax code",yes:3,no:"data"},
+    {q:"Layer 2 — config ของ CoCd ถูกไหม?",h:"FTXP / OB40 · T059P / T059Z / OBWW · TCURR (OB08) · ZTAXB_T04 / 010 validity · ZCAX_P01 whitelist · T8JJ RI",yes:4,no:"config"},
+    {q:"Layer 3 — ค่าที่ post จริงใน BSEG / BSET / WITH_ITEM / ACDOCA ถูกไหม?",h:"ตรวจด้วย SE16N + FB03 GL view · Σ HSL/KSL/OSL = 0 · implied rate ต่อบรรทัด",yes:5,no:"post"},
+    {q:"Layer 4 — ข้อมูลในตารางถูก แต่ output (report / form / file) ผิดหรือหาย?",h:"ไล่ row-disappearance ladder: select → BAdI → check_witht → PC/RI filter → output",yes:"code",no:"pass"}
+  ];
+  var R={
+    by:["ไม่ใช่ defect — by design","ถ้าธุรกิจอยากให้เปลี่ยน ต้องเป็น CR · อ้างข้อ locked ในคำตอบ","decisions.html#locked","ดู locked decisions"],
+    setup:["Test-setup error","แก้ selection แล้วรันใหม่ · capture selection screen ก่อน Execute ทุกครั้ง · ห้ามเปิด JIRA","delivery-fut.html#loop","FUT loop"],
+    data:["Data issue (master data)","ส่งเจ้าของ master: BP / MDG (partner, branch, WHT tab) · CO (PC, segment, cost center) · JVA (venture, RI) · MM (PO tax code) — ไม่ใช่ defect ของ WRICEF","doc-verification.html#tworef","2 references / field"],
+    config:["Config issue","Tax config owner (FTXP, OB40, T059*, OBWW) · Client config owner (TCURR / OB08) · Tax team (validity ของ ZTAXB_T04 / 010) — เตรียม evidence: what we found / what it means / what we need","decisions.html#gaps","Gaps radar"],
+    post:["Posting logic","GL team สำหรับ posting / LC (เช่น TKT-02, GL-ENH-1) · owner ของ enhancement ที่เขียนข้อมูล (ENH-2 WITH_ITEM, ENH-3 VAT36, ENH-4 segment) · route: project lead → GL lead → GL team","delivery-fut.html#jira","Routing"],
+    code:["Report / form logic → FUT defect","เปิด JIRA หนึ่งเอกสาร หนึ่ง root cause · ระบุ FD step + expected numbers · regression sibling บน ZTAXB_R01","delivery-fut.html#jiraTool","เปิด JIRA drafter"],
+    pass:["ไม่พบปัญหา","บันทึก evidence ว่า Pass (AQ) · ถ้ายังสงสัย ให้หา discriminating pair เพิ่ม","sit.html#aqTool","AQ note builder"]
+  };
+  var path=[], $=function(id){return document.getElementById(id);};
+  function show(i){
+    var crumbs=path.map(function(p,n){return (n+1)+". "+(p.a?"ใช่":"ไม่");}).join(" → ");
+    $("dfCrumbs").textContent=crumbs?("เส้นทาง: "+crumbs):"";
+    if(typeof i==="number"){
+      var s=S[i];
+      $("dfBody").innerHTML='<div class="out"><div class="k">คำถาม '+(i+1)+' / '+S.length+'</div><div class="v">'+s.q+'</div><div class="why">'+s.h+'</div>'+
+        '<div class="btnrow"><button type="button" class="btn" data-a="1">ใช่</button><button type="button" class="btn ghost" data-a="0">ไม่ / ไม่แน่ใจ</button></div></div>';
+      $("dfBody").setAttribute("data-i",i);
+    } else {
+      var r=R[i];
+      $("dfBody").innerHTML='<div class="out b"><div class="k">ผล</div><div class="v">'+r[0]+'</div><div class="why">'+r[1]+'</div><div class="btnrow"><a class="btn ghost" href="'+r[2]+'" style="text-decoration:none">'+r[3]+' →</a></div></div>'+
+        '<p class="small" style="margin-top:8px">ก่อน escalate: ความมั่นใจ &gt;95% · มี discriminating pair · ถ้าเป็นคำถามเชิงกฎหมาย (rate / date / base) ส่ง Client tax reviewer ก่อน transport</p>';
+      $("dfBody").removeAttribute("data-i");
+    }
+  }
+  root.addEventListener("click",function(e){
+    var b=e.target.closest("[data-a]"); if(!b) return;
+    var i=+$("dfBody").getAttribute("data-i"), yes=b.getAttribute("data-a")==="1";
+    path.push({i:i,a:yes}); show(yes?S[i].yes:S[i].no);
+  });
+  $("dfReset").addEventListener("click",function(){ path=[]; show(0); });
+  show(0);
+})();
+</script>
+  <!-- LOCKED -->
+  <section id="locked">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Locked decisions — ห้าม raise เป็น defect</h2></div>
+    <p class="sec-sub">ตัดสินแล้ว · มีคนเซ็นรับ · เปลี่ยนได้ทางเดียวคือ CR</p>
+
+    <h3>TAX-RPT-1 — สอง FX columns ห้ามปนกัน <span class="ev agreed">AGREED</span></h3>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Column</th><th>FD step</th><th>Source</th><th>Date</th><th>Serves</th></tr></thead>
+      <tbody>
+        <tr><td><b>Fx on TaxPmt</b></td><td>22</td><td><code>BKPF-KURSF</code> ของ payment doc ที่ post แล้ว</td><td>T (วัน posting ของ payment)</td><td>WHT / ภ.ง.ด.54</td></tr>
+        <tr><td><b>Fx on Posting date</b></td><td>28</td><td>รายงาน lookup <code>TCURR</code> เอง</td><td>T-1 (GDATU = BUDAT − 1, ≤ fallback)</td><td>VAT / ภ.พ.36</td></tr>
+      </tbody>
+    </table></div>
+    <div class="trap"><b>กติกาสื่อสาร:</b> GL fix ของ TKT-02 แตะเฉพาะ <b>Fx on TaxPmt</b> · <b>ห้ามพูด “T-1” กับ GL team</b> — ประโยคเดียวที่ใช้: <i>“bank line uses the payment document’s date”</i></div>
+
+    <h3>TAX-RPT-1 — step 28 final (3-Sep-2026, แทน FD v0.1) <span class="ev agreed">AGREED</span></h3>
+    <ul class="clean">
+      <li>เลิกใช้ ratio approach → <b>TCURR rate type <code>M</code> เท่านั้น</b></li>
+      <li>FCURR = สกุล invoice (<code>BSAK-WAERS</code> จาก step 19) → THB · GDATU = วันที่ของ step 24 − 1 แบบ ≤ fallback · guard <code>UKURS</code>/<code>FFACT</code> = 0 · ทศนิยม 5 ตำแหน่ง</li>
+      <li>เปลี่ยนเดือน Sep: <b>VAT36 FC → THB สองขั้น</b> (invoice ccy → USD → THB, ทั้งสองขั้นใช้ TCURR ที่ T-1 ของวัน posting payment) เขียนเป็นการคูณ rate สองตัว · ใช้กับ <b>คอลัมน์ VAT36 เท่านั้น</b> ห้ามแตะคอลัมน์ WHT</li>
+      <li>Step 24 = <code>BKPF-BUDAT</code> ของ payment · แถว 5A ใช้ <code>KURSF</code> ของเอกสารตัวเอง</li>
+      <li>ผลที่ตามมา: <b>VAT36 base ≠ WT base บนแถวที่จ่ายเป็น FC — by design</b></li>
+      <li>Sign fix เสร็จแล้ว: <code>abs(FC) × sign(RC)</code></li>
+      <li>WITH_ITEM key: <code>BUKRS + GJAHR + BELNR + WITHT + WT_WITHCD</code> (ไม่มี QSREC)</li>
+      <li>Steps 11/12 (WT base/amt RC) อ่าน WITH_ITEM ของ payment — ถูก · Steps 20/21 (WT base/amt FC) อ่าน WITH_ITEM ของ invoice ตาม FD — accepted 16-Sep · เปลี่ยนต้อง CR · <b>ไม่ใช่ defect</b></li>
+    </ul>
+
+    <h3>TAX-RPT-1 — multi-PC / RI = split lines (3-Sep, TKT-01) <span class="ev agreed">AGREED</span></h3>
+    <ul class="clean">
+      <li><b>1 แถวรายงานต่อ 1 ACDOCA WIT line</b> (HSL ≠ 0, ข้ามบรรทัดศูนย์) — ไม่ใช่ต่อ comma</li>
+      <li>WHT amount ต่อแถว = <code>HSL</code> ของ WIT line นั้น (ไม่ prorate)</li>
+      <li>Base prorate ตาม WIT ratio · บรรทัดสุดท้ายรับเศษ (remainder) ให้ยอดรวมตรงกับที่ยื่น</li>
+      <li>Payment หลาย vendor ไม่เข้า PC split</li>
+      <li>ยังเปิด: คอลัมน์ VAT36 บนแถว split · partial payment → รอ team lead (D2)</li>
+    </ul>
+
+    <h3>Statutory conflict — รอคำตัดสิน (ไม่ใช่ defect)</h3>
+    <div class="callout"><b>PND54</b> = สกุลจ่ายจริง @ T-1 · <b>VAT36</b> = ยอด invoice × table rate @ T-1 → ต่างกันได้ต่อเอกสาร (doc 581: <b>76.57 THB</b>) · ต้องได้ sign-off จาก Client tax reviewer / team lead หรือตัดสินย้ายจุด — ดู D1</div>
+
+    <h3>DRC statutory forms — ไม่ใช้ (Cadence 23-Jul-2026) <span class="ev agreed">AGREED</span></h3>
+    <ul class="clean">
+      <li>CR-A dropped — DRC statutory forms จะไม่ถูกใช้ · DRC ใช้สร้าง <b>PP30 text file</b> เท่านั้น (UTC ยืนยันแล้ว)</li>
+      <li>แบบ / ใบแนบมาจาก WRICEF: FRM-4 · FRM-1 · FRM-3 · FRM-6 · RPT-6 — <b>อย่า raise</b> ว่า DRC form ไม่ออก · ดู <a href="statutory.html#drcmap">DRC vs WRICEF map</a></li>
+    </ul>
+
+    <h3>TAX-RPT-2 — by design</h3>
+    <ul class="clean">
+      <li>เป็น <b>report อย่างเดียว ไม่ post</b> · tab “Tax payable posting” ที่ติดมาจาก RFUMSV00 — ซ่อนหรือทำ negative test ยังรอ (D5)</li>
+      <li>Venture / equity filter มีผลเฉพาะเมื่อติ๊ก <b>“Activate JVA Splitting”</b></li>
+      <li>รันแล้วว่างเพราะ placeholder <code>SEL_VN</code> / <code>SEL</code> ค้างในช่อง = <b>test-setup error</b> ไม่ใช่ defect</li>
+    </ul>
+
+    <h3>SIT — expected ไม่ใช่ defect</h3>
+    <ul class="clean">
+      <li>เอกสาร stock: LC2 rate มาจาก material valuation (rate ต่อบรรทัดต่างกันได้)</li>
+      <li>เอกสารไทยที่ไม่มี tax code แต่มี business place default ของ CoCd</li>
+      <li>NVV codes ไม่มีบรรทัดภาษีแยก (ภาษีรวมในบรรทัด cost)</li>
+      <li>WHT amount = 0 บน invoice สำหรับ type ที่หักตอนจ่าย (MY / MM)</li>
+      <li>LC3 ว่างสำหรับ company code MY / MM</li>
+    </ul>
+  </section>
+
+  <!-- WAITING -->
+  <section id="waiting">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Decisions waiting on people (D1–D7)</h2></div>
+    <p class="sec-sub">ห้ามพูดถึงเรื่องเหล่านี้เหมือนตัดสินแล้ว — ทุกข้อมีเจ้าของคำตอบ</p>
+    <div class="tblwrap"><table class="reg">
+      <thead><tr><th>#</th><th>คำถาม</th><th>รอใคร (role)</th></tr></thead>
+      <tbody>
+        <tr><td>D1</td><td>ฐานทางกฎหมาย PND54 vs VAT36 (doc 581 ต่าง 76.57 THB)</td><td>Client tax reviewer / team lead</td></tr>
+        <tr><td>D2</td><td>คอลัมน์ VAT36 บนแถว split ของ RPT-1 · partial payment</td><td>Team lead (SI)</td></tr>
+        <tr><td>D3</td><td>RPT-1 multi-invoice payment: แบ่ง WHT ของ payment ตาม invoice (<code>WT_QBSHB</code>) หรือ prorate ตาม base</td><td>Team lead (SI)</td></tr>
+        <tr><td>D4</td><td>RPT-2 / RPT-6: PC ของเอกสาร multi-PC มาจาก tax line หรือ document · total แบบไม่กรอง PC อิง BSET หรือ Σ ACDOCA split lines</td><td>Project lead</td></tr>
+        <tr><td>D5</td><td>RPT-2: ซ่อน tab “Tax payable posting” หรือเก็บเป็น negative test</td><td>Project lead</td></tr>
+        <tr><td>D6</td><td>Scope ของ TAX-FRM-2 (Myanmar) ว่าเป็นของซีหรือไม่</td><td>Project lead</td></tr>
+        <tr><td>D7</td><td><code>ZTAXB_R01</code> Display vs Maintain ใน authorization matrix · 5 T-code มาตรฐานอาจเป็นของ GL roles</td><td>GL lead</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- GAPS -->
+  <section id="gaps">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Gaps radar (G1–G17)</h2></div>
+    <p class="sec-sub">ช่องโหว่ของ design / data ที่ยังไม่มีเจ้าของปิด — แต่ละข้อมี next step ที่ทำได้ทันที</p>
+    <div class="tblwrap"><table class="reg">
+      <thead><tr><th>#</th><th>Gap</th><th>Owner</th><th>Next step</th></tr></thead>
+      <tbody>
+        <tr><td>G1</td><td>SET ใน <code>EJVA017</code> อ่าน GL 8 หลัก แต่ S/4 ใช้ 10 หลัก → I0 อาจไม่ถูกเติม</td><td>RPT-2 ABAP + substitution owner</td><td><code>BSEG-MWSKZ</code> ของ JD/JK บน <code>A213X025</code> + GGB1</td></tr>
+        <tr><td>G2</td><td>Input-tax account key: KDS ว่า NVV แต่ FUT เห็น VST</td><td>Tax config</td><td>เทียบ FTXP D1/I1 ใน DEV</td></tr>
+        <tr><td>G3</td><td>RPT-1 FD v0.1 step 28 ≠ design 3-Sep</td><td>ซี + RPT-1 ABAP</td><td>FD v0.2 / CR ก่อน UAT sign-off</td></tr>
+        <tr><td>G4</td><td>ENH-3 suspense GL <code>A149X019</code> vs <code>A149X018</code></td><td>ENH-3 owner</td><td>Lock ค่าเดียว</td></tr>
+        <tr><td>G5</td><td>TH WHT codes ถูก redesign</td><td>Tax TH</td><td>ได้ list สุดท้าย → อัปเดต constants ของ ENH-1 / <code>ZCAX_P01</code></td></tr>
+        <tr><td>G6</td><td>e-WHT 1% (Ministerial Reg. 389) หมดอายุ 31-Dec-2025</td><td>Tax TH</td><td>ยืนยันอัตราปัจจุบัน</td></tr>
+        <tr><td>G7</td><td>บัญชีภาษีใน JVA cutback A → B · เอกสาร cutback เข้า T1 ไหม</td><td>JVA team + Tax</td><td>ขอ mapping · เทสด้วย IG data</td></tr>
+        <tr><td>G8</td><td>LC3 TH-only vs overseas-branch ledger</td><td>GL + Tax</td><td>เช็ก currency settings ราย CoCd</td></tr>
+        <tr><td>G9</td><td>Output VAT ตอน asset write-off ยังไม่มี design</td><td>FA + Tax</td><td>ใช้ FUT workbook AA-WFL-1</td></tr>
+        <tr><td>G10</td><td>RPT-2 rate <code>ZOM</code> vs mid</td><td>RPT-2 FD owner</td><td>ปิดใน FD</td></tr>
+        <tr><td>G11</td><td>Tambon (ตำบล) กระจายอยู่ใน street fields ของ <code>ADRC</code> (กระทบ ENH-1)</td><td>BP/MDG + ENH-6 owner</td><td>ADRC trace ใน SE16N ก่อนเขียน mapping</td></tr>
+        <tr><td>G12</td><td>Lease (Nakisa) เข้า T1 / LC3 ไหม</td><td>GL / FA</td><td>ยืนยัน ledger ของ GL-INT-1</td></tr>
+        <tr><td>G13</td><td>VIM WHT capture “may need enhancement”</td><td>AP / VIM</td><td>ยืนยัน WRICEF</td></tr>
+        <tr><td>G14</td><td>Go-live 1-Jul-2027 vs Jan-2027</td><td>PMO</td><td>ยืนยัน → งวดยื่นแรก</td></tr>
+        <tr><td>G15</td><td>ชื่อชน JVA-RPT-1 vs TAX-RPT-2</td><td>PMO</td><td>ใช้ prefix เต็มเสมอ</td></tr>
+        <tr><td>G16</td><td>PCO (ENH-22/062), non-op billing (ENH-18), JV funding (GJFDP) ยังไม่มี tax treatment</td><td>Tax TH + JVA</td><td>ถามก่อน JVA SIT round</td></tr>
+        <tr><td>G17</td><td>ลำดับ JVA-ENH-2 vs TAX-ENH-4 ใน GGB1 (ทั้งคู่ key ด้วย G/L)</td><td>เจ้าของ JVA-ENH-2 + ENH-4</td><td>เทสเอกสารที่โดนทั้งคู่ แล้วอ่าน <code>SEGMENT</code> / <code>RECID</code> ใน ACDOCA</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- CONFLICTS -->
+  <section id="conflicts">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Conflict register (C) — เอกสารขัดกันเอง</h2></div>
+    <p class="sec-sub">ถ้าสองแหล่งพูดไม่ตรงกัน ให้ <b>อ้างทั้งสอง</b> และบอกว่ายึดตัวไหนชั่วคราว — อย่าเลือกเงียบ ๆ</p>
+    <div class="tblwrap"><table class="reg">
+      <thead><tr><th>#</th><th>ประเด็น</th><th>สองฝั่งที่ขัดกัน</th></tr></thead>
+      <tbody>
+        <tr><td>C1</td><td>Go-live date</td><td>ภาพ statutory ~Jan-2027 / ยื่นแรก ~Feb-2027 vs Cutover plan v3.0 <b>1-Jul-2027</b> (= G14)</td></tr>
+        <tr><td>C3</td><td>ชื่อ / ทิศทาง rate PITA</td><td>LC concept: <code>PITB</code> (buy) / <code>PITM</code> (sell) vs GL BPE: PITB / PITS</td></tr>
+        <tr><td>C4</td><td>Scope ของ LC3</td><td>TH CoCds only (0L, T1) vs overseas-branch ledger ใน training (= G8)</td></tr>
+        <tr><td>C5</td><td>Account key input tax</td><td>NVV (KDS) vs VST (FUT) (= G2)</td></tr>
+        <tr><td>C6</td><td>Account key ของ V1</td><td>ต้องยืนยันใน FTXP</td></tr>
+        <tr><td>C9</td><td>RPT-1 step 28</td><td>FD v0.1 vs design 3-Sep (= G3)</td></tr>
+        <tr><td>C10</td><td>Segment substitution</td><td>TAX-ENH-9 (เดิม) vs TAX-ENH-4 (แทนที่ด้วย CR-TKT-03)</td></tr>
+        <tr><td>C11</td><td>RPT-6 split</td><td>ต่อ PC vs ต่อ PC + RI</td></tr>
+        <tr><td>C13</td><td>Doc types ของ cash call</td><td>FD / RPT-2 FUT: <code>JD</code> / <code>JK</code> (JD ยังไม่ maintain ใน ZGLX_T01) vs GL KDS: cash call = <code>CC</code> / <code>DA</code> / <code>KK</code> · ECC ใช้ CC (<code>CC_21500020_I0</code>) · rate: JK = LC1 M / LC3 PITB · JD = LC1 B / LC3 PITM (email 14-Aug)</td></tr>
+        <tr><td>C14</td><td>Tax procedure</td><td>QAS <code>T005-KALSM</code> + BPE: <code>TAXTH</code> vs training deck / knowledge base เดิม: <code>ZTXP_TH</code> → <b>ยึด TAXTH</b> <span class="ev sys">SYS</span></td></tr>
+        <tr><td>C17 / C20</td><td>ชื่อชน “074”, “RPT-2”</td><td>TAX-RPT-1 vs ตัวเลขเดียวกันใน workstream อื่น · TAX-RPT-2 vs JVA-RPT-1 → ใช้ prefix TAX- / FIAR- / JVA- เสมอ</td></tr>
+        <tr><td>C18</td><td>FX ของ RPT-2</td><td><code>ZOM</code> vs mid rate (= G10)</td></tr>
+        <tr><td>C21</td><td>Company code ของ Oman</td><td>Tax / RPT-2 ใช้ <code>OM01</code> vs FA BP: Oman = <code>OM02</code> (area 54–56 “tax not posted”) และไม่มี AA data ของ OM01 → อาจคนละ entity ต้องยืนยัน</td></tr>
+        <tr><td>C22</td><td>LC1 ของ WHT at payment</td><td>LC concept: M @ posting date (“M9”) vs AP BPE: selling @ payment date −1</td></tr>
+        <tr><td>C23</td><td>DRC statutory forms</td><td>Blueprint / BPE: DRC สร้าง P.P.30 (และเคยรวม PND54 ผ่าน FRM-5) vs Cadence 23-Jul: <b>CR-A dropped</b> — ใช้แค่ DRC PP30 text file → <b>ยึด Cadence</b></td></tr>
+        <tr><td>C24</td><td>Scope ENH-1 / FRM-4</td><td>Deck: ENH-1 = PND1, 1ก, 2ก, 3, 53 (PND2 อยู่ที่ ENH-5) vs ฉบับเดิม PND1 / 1A / 2 / 2A / 3 / 53 · FRM-4: FUT table = PND1, 1ก, 2ก แต่ DRC deck s13 มี PND2 ด้วย</td></tr>
+        <tr><td>C19</td><td>Scope ของ T1</td><td>BPE: TH + MY + XB01 overseas branch vs training: TH + MY + MM XB02 holding only</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- TBC -->
+  <section id="tbc">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Technical TBC — เรื่องที่ต้องพิสูจน์ในระบบ</h2></div>
+    <ul class="clean">
+      <li><b>5G gross-up</b>: สูตร (logic G vs I) และรวมอยู่ใน filter PND54 ของ RPT-1 / FRM-1 หรือไม่ <span class="ev tbc">TBC</span></li>
+      <li>ชื่อ field LC2/LC3 ใน <code>WITH_ITEM</code> (เช็ก SE11)</li>
+      <li>“M9” ใน LC concept หมายถึงอะไร (ไม่ใช่ rate type ใน TCURR)</li>
+      <li>สูตร PITA FC หารด้วย PITM(USD:THB) ไม่ใช่ PITB — เทสทั้งสองแบบ</li>
+      <li>LC3 rate ใน 0L: BPE (ZTH, PITA ใน T1) vs LC concept 2026 (PITB ใน 0L) — ยึดไฟล์ใหม่ เช็กทั้ง 0L และ T1</li>
+      <li>TCURR เก็บ rate LC3 ใต้ USDTH หรือ USD · PITB/PITM โหลดวันที่ 1 ของเดือน หรือวันสุดท้ายของเดือนก่อน</li>
+      <li>Field ของ counterparty branch code บนเอกสาร (SE11)</li>
+      <li>Business place บน MIRO / SD billing: default หรือ derive</li>
+      <li>T-code ของ RPT-7 ใน client 300 · output group ของ SWC · deadline PND2 Kor · R21/R22 ใน client 300</li>
+    </ul>
+  </section>
+
+  <!-- LESSONS -->
+  <section id="lessons">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Lessons learned — อย่าทำซ้ำ</h2></div>
+    <ol class="lesson">
+      <li><b>แบบ PND54 ไม่ได้มาจาก SAP DRC</b> — TAX-FRM-5 ถูกยกเลิก · มาจาก FRM-3 output group <code>AP1</code> Print form 2 แม้ Blueprint ยังเขียนว่า DRC</li>
+      <li>พูดว่า <b>output group</b> ไม่ใช่ “output code”</li>
+      <li>RPT-7 รันบนแอป Generic WHT Reporting มาตรฐานตาม FD — อย่าสรุปว่าเป็น <code>ZTAXB_R01</code></li>
+      <li>“BEPS คำนวณจาก CIT” ผิด — CIT/PITA เป็น covered taxes · ฐานคือ accounting profit</li>
+      <li>วงเล็บในชื่อคอร์ส “(BEPS&amp;PITA)” = <b>กลุ่มผู้เข้าอบรม</b> — อย่าเถียงชื่อจาก scope WRICEF</li>
+      <li>ระวังชื่อเล่นคนซ้ำ/คล้ายกันในทีม client — ยืนยันตัวคนก่อนส่งงาน</li>
+      <li>ก่อนประกาศ defect ให้เช็ก config และ selection screen (CoCd ผิด Client-Intl vs MY01 · placeholder “SEL_VN” · value-help pop-up บังปุ่ม Go)</li>
+      <li>Caption ของ screenshot ต้องตรงกับสิ่งที่ภาพพิสูจน์ (ใส่ PC แล้ว · กด Go แล้ว · CoCd ถูก · form ถูก เช่น BC/A5 = CP37A ไม่ใช่ CP37)</li>
+      <li>กับฝั่ง client อย่าเสนอวันที่เอง และอย่าขอให้เขา “ช่วยเช็กงานเรา”</li>
+      <li>FD ขึ้นหน้าใหม่ซ่อนเงื่อนไขได้ — เคยสรุปว่า RPT-1 step 33 “ไม่มี KTOSL” ผิด (เงื่อนไขอยู่หน้าถัดไป) และถอนคำพูดแล้ว</li>
+      <li>เคยเดาเกินหลักฐาน: ค่าความมั่นใจของ 5A, root cause “FC = 0” ก่อนเวลา, ใช้ CPUDT เป็นวันอ้างอิง WHT — เช็ก config และเอกสารก่อนเสมอ</li>
+      <li>Same-day vs backdated · Sunday fallback: TCURR “−1” ที่ตกวันหยุดจะถอยไปศุกร์ — doc 552 ดูถูกเพราะบังเอิญ</li>
+      <li>แก้ RPT-2 path เดียวโดยไม่แก้อีก path — กลับมาเป็น defect เสมอ</li>
+      <li>ห้ามใช้คำว่า “T-1” กับ GL team เรื่อง TKT-02 — acceptance คือ “bank line uses the payment doc’s date”</li>
+    </ol>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">✓</span><h2>Self-check</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. RPT-1 แถวที่จ่ายเป็น FC แสดง VAT36 base ≠ WT base — เปิด defect ได้ไหม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ไม่ได้ — by design ตาม step 28 final (3-Sep): VAT36 ใช้สกุล invoice × TCURR M @ T-1 ส่วน WHT ใช้มูลค่าจ่ายจริง · เช็กว่า FC เท่ากันก่อนตีความส่วนต่าง THB</div></details></div>
+      <div class="selfq"><p>2. Payment มี 2 PC — รายงาน RPT-1 ต้องออกกี่แถว และ WHT amount ต่อแถวมาจากไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">1 แถวต่อ ACDOCA WIT line (HSL ≠ 0) · WHT = HSL ของบรรทัดนั้น · base prorate ตาม ratio โดยบรรทัดสุดท้ายรับเศษ</div></details></div>
+      <div class="selfq"><p>3. RPT-2 รันแล้วว่างทั้งที่มีข้อมูล และช่อง venture ยังเป็น “SEL_VN” — เป็น defect ไหม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ไม่ — test-setup error (placeholder ค้าง) · venture filter มีผลเฉพาะเมื่อติ๊ก Activate JVA Splitting</div></details></div>
+      <div class="selfq"><p>4. แบบ PND54 ออกจากระบบไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ไม่ใช่ DRC (FRM-5 ยกเลิก) — ออกจาก FRM-3 output group AP1 บน Generic WHT Reporting</div></details></div>
+      <div class="selfq"><p>5. เอกสาร MY มี WHT amount = 0 บน invoice และ LC3 ว่าง — ผ่านไหม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ผ่าน — MY หักตอนจ่าย (amount 0 ที่ invoice) และ LC3 มีเฉพาะ CoCd ไทย</div></details></div>
+    </div>
+    <div class="seealso"><span>ดูต่อ</span>
+      <a href="rpt1-wht-vat-recon.html">TAX-RPT-1 design</a>
+      <a href="rpt2-oman-vat.html">TAX-RPT-2</a>
+      <a href="doc-verification.html">FI document verification</a>
+      <a href="delivery-fut.html">FUT &amp; JIRA</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · Decisions &amp; Open Points</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

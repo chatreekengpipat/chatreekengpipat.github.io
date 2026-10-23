@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAX-FRM-2 Deep-Dive (WHT Form · Myanmar) · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .lede{margin:22px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .src{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);}
+
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+
+  section{margin-top:46px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .num{font-family:'JetBrains Mono',monospace;color:var(--ink-soft);text-align:center;}
+  .rate{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--petrol-deep);}
+
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:18px 20px;margin:14px 0;background:var(--card);}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+
+  table.kv td:first-child{width:210px;font-weight:600;color:var(--petrol-deep);}
+
+  .fxrules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0;}
+  @media(max-width:720px){.fxrules{grid-template-columns:1fr;}}
+  .fxr{border:1.5px solid var(--line);border-top:3px solid var(--brass);border-radius:12px;padding:14px 15px;background:var(--card);}
+  .fxr .n{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);font-weight:600;}
+  .fxr .case{font-size:13.5px;font-weight:700;margin:4px 0 8px;}
+  .fxr .rule{font-size:12.8px;color:var(--ink-soft);line-height:1.5;}
+  .fxr .rule b{color:var(--ink);}
+
+  /* certificate mini-mock */
+  .cert{border:2px solid var(--ink);border-radius:8px;padding:0;margin:14px 0;overflow:hidden;font-size:12.5px;background:var(--card);}
+  .cert .cbanner{background:rgba(180,83,9,.14);color:var(--ink);font-size:11.5px;text-align:center;padding:7px 12px;border-bottom:1px solid var(--line);line-height:1.4;}
+  .cert .ctitle{text-align:center;font-weight:700;padding:10px 12px 2px;font-size:14px;}
+  .cert .csub{text-align:center;font-size:11px;color:var(--ink-soft);padding:0 12px 10px;}
+  .cert .cparties{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line);}
+  @media(max-width:560px){.cert .cparties{grid-template-columns:1fr;}}
+  .cert .cparty{padding:11px 14px;font-size:11.5px;}
+  .cert .cparty:first-child{border-right:1px solid var(--line);}
+  .cert .cparty b{display:block;font-size:11px;color:var(--petrol-deep);margin-bottom:5px;}
+  .cert .cparty>span{display:block;color:var(--ink-soft);padding:3px 0;}
+  .cert .cfoot{border-top:1px solid var(--line);padding:10px 14px;font-size:11px;color:var(--ink-soft);}
+  .fnum{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;color:var(--paper);background:var(--brass);border-radius:4px;padding:0 5px;margin-right:4px;}
+
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:14px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 16px 14px;font-size:14px;overflow-x:auto;}
+
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.fxr,.cert,section,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}details.fold[open] .fold-body{overflow:visible;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-f008">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">TAX-FRM-2 · ★ my object (scope TBC)</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>WHT Form · Myanmar</span>
+    </div>
+    <h1>TAX-FRM-2 — WHT Certificate Form<br><span class="accent">พิมพ์หนังสือรับรองหัก ณ ที่จ่าย ยื่นกรมสรรพากรเมียนมา (IRD) · แบบ IRD(IT)-05-01</span></h1>
+    <div class="meta">
+      <span>Smart Form · <b>ZTAXA_F01_MM3</b></span>
+      <span>Type · <b>Form (Retrofit)</b></span>
+      <span>Process · <b>01.01.07.03 WHT</b></span>
+      <span>Priority · <b>P1 · Medium</b></span>
+    </div>
+    <div class="src">Source: FSD TAX-FRM-2 v1.0 (10/09/2025) · Business Owner: Client Tax team · Geography: Myanmar · ชื่อผู้ review ในเอกสารต้นฉบับถูกตัดออกเพื่อความเป็นส่วนตัว</div>
+  </header>
+
+  <p class="lede">
+    หนึ่งใน <b>3 object หลักที่คุณดูแล</b> (คู่กับ RPT-2 / RPT-1). object นี้เป็น <b>Form (Smart Form)</b> ไม่ใช่ report —
+    หน้าที่คือ <b>generate + print หนังสือรับรอง WHT</b> ตามฟอร์มทางการของเมียนมา <code>IRD(IT)-05-01</code>
+    (ออกตาม Section 16(b) ของ Income Tax Law). แก่นที่ต้องเข้าใจ = <b>เลือกสกุลเงินพิมพ์</b> (MMK / USD / doc)
+    และ <b>logic ใส่อัตรา DTA ในช่อง Remark</b>
+  </p>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">Object Overview</a>
+    <a href="#objective">Objective + Currency</a>
+    <a href="#cert">ตัวฟอร์ม IRD(IT)-05-01</a>
+    <a href="#selection">Selection Changes</a>
+    <a href="#logic">Logic (3 ข้อ)</a>
+    <a href="#mapping">Data / Tax ID Mapping</a>
+    <a href="#taxcode">Tax Code Mapping</a>
+    <a href="#layout">Form Layout (24)</a>
+    <a href="#test">Test Conditions</a>
+    <a href="#usage">Usage</a>
+    <a href="#compare">เทียบกับ FRM-1</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways — TAX-FRM-2</b>
+    <ul>
+      <li>เป็น <b>Form (Smart Form <code>ZTAXA_F01_MM3</code>)</b> ไม่ใช่ report — พิมพ์ใบรับรอง WHT ยื่น <b>IRD เมียนมา</b> (แบบ IRD(IT)-05-01)</li>
+      <li>สกุลเงินที่พิมพ์ขึ้นกับ <b>สกุลที่จ่าย</b>: จ่าย MMK → พิมพ์ MMK · จ่ายไม่ใช่ MMK/USD → พิมพ์ USD · หรือเลือกพิมพ์ <b>document currency</b> (เช่น THB)</li>
+      <li>Selection: <b>ลบ</b> radio LC1/LC2/LC3 เดิม · <b>เพิ่ม</b> radio “LC1/LC2 Currency” และ “Document Currency”</li>
+      <li>ยอดเงินดึงจาก <code>WITH_ITEM</code> — 3 ชุด field ตามสกุล: MMK=<code>WT_QSSHH/QBSHH</code> · USD=<code>WT_QSSH2/QBSH2</code> · doc=<code>WT_QSSHB/QBSHB</code></li>
+      <li>ช่อง <b>Remark</b> ใส่อัตรา DTA (จาก tax code <code>D1..H4</code>) + ชื่อประเทศ vendor (<code>BSAK→LFA1→T005T</code>)</li>
+      <li>Dependency: ต้องมี <b>TAX-RPT-8</b> (MM WHT Report) เพื่อรัน · volume ~80–100/เดือน</li>
+    </ul>
+  </div>
+
+  <div class="trap"><b>Scope ยังไม่ยืนยัน (D6):</b> ต้องยืนยันกับ project lead ก่อนลงแรงต่อ · คอร์ส TAX-406 WHT-MM สอนแล้ว 8-Jul-2026 คู่กับ RPT-8 · MM WHT types <code>B0</code> resident / <code>B2</code> non-resident หักตอนจ่าย</div>
+  <div class="callout"><b>สิ่งที่ต้องเคลียร์ก่อนเทส (FUT notes, 7-Sep):</b>
+    <ul class="clean">
+      <li>FD ขัดกันเองเรื่องสกุลที่ไม่ใช่ MMK/USD — พิมพ์เป็น USD หรือ raise error <span class="todo">TBC กับ MM tax team</span></li>
+      <li>สำหรับ WHT ที่หักตอน invoice: <code>BKPF</code> ของเอกสารไหน (payment หรือ invoice) เป็นตัวตัดสินสกุล — ยังไม่ชัด</li>
+      <li>Comment “TAX-FRM-2” ในโค้ด <code>ZTAXA_R01</code> อยู่ข้าง logic PC/RI ของไทย — น่าจะ label ผิด (ควรเป็น FRM-1) ต้องยืนยัน ownership</li>
+      <li>Checkbox “Signature Not Required” + การ maintain <code>ZTAXA_T09</code> · MM company code และ specimens ยังไม่ได้ระบุ</li>
+    </ul>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Object Overview</h2></div>
+    <table class="kv"><tbody>
+      <tr><td>WRICEF ID</td><td><code>TAX-FRM-2</code></td></tr>
+      <tr><td>Title</td><td>WHT Form</td></tr>
+      <tr><td>Module</td><td>SAP Finance — Tax Accounting</td></tr>
+      <tr><td>Description</td><td>generate + print หนังสือรับรองหัก ณ ที่จ่าย ยื่นกรมสรรพากรเมียนมา (Internal Revenue Department)</td></tr>
+      <tr><td>Type</td><td>Form (Smart Form)</td></tr>
+      <tr><td>Nature</td><td>Retrofit with change</td></tr>
+      <tr><td>Business Process</td><td><code>01.01.07.03</code> Withholding Tax</td></tr>
+      <tr><td>Complexity / Priority</td><td>Medium · P1</td></tr>
+      <tr><td>Smart Form / Legacy</td><td><code>ZTAXA_F01_MM3</code> · “MM3 Myanmar Withholding Tax Certificate”</td></tr>
+      <tr><td>Trigger / Batch program</td><td><code>ZTAXA_R01</code> · post invoice ที่มี WHT (FB60 / MIRO / FB01)</td></tr>
+      <tr><td>Cert form no.</td><td><code>IRD(IT)-05-01</code> · Under Section 16(b), Income Tax Law</td></tr>
+      <tr><td>Dependency</td><td><code>TAX-RPT-8</code> (MM: WHT Report) — ต้องมีเพื่อรัน</td></tr>
+      <tr><td>Geography</td><td>Myanmar</td></tr>
+    </tbody></table>
+    <div class="callout"><b>Related docs:</b> BPE = <code>[S/4 Program]_D2.1_Blueprint_01.01.07 Tax Accounting</code> · Previous FS = <code>70_390 FS ZTAXA_F01</code> (MM3-Myanmar IRD-IT-05-01)</div>
+  </section>
+
+  <!-- OBJECTIVE + CURRENCY -->
+  <section id="objective">
+    <div class="sec-head"><span class="sec-num">2</span><h2>วัตถุประสงค์ + การเลือกสกุลเงินพิมพ์</h2></div>
+    <p class="sec-sub">ต้องพิมพ์ใบรับรองได้ทั้ง MMK และ USD — สกุลขึ้นกับ “สกุลที่จ่าย (payment currency)”</p>
+
+    <h3>สกุลที่พิมพ์บนใบรับรอง</h3>
+    <div class="fxrules">
+      <div class="fxr"><span class="n">Rule 1</span><div class="case">จ่ายเป็น MMK</div><div class="rule">payment currency = <b>MMK</b> → พิมพ์ใบรับรองเป็น <b>MMK</b></div></div>
+      <div class="fxr"><span class="n">Rule 2</span><div class="case">จ่ายไม่ใช่ MMK / USD</div><div class="rule">payment currency ≠ MMK และ ≠ USD → พิมพ์เป็น <b>USD</b> (global currency)</div></div>
+      <div class="fxr"><span class="n">Rule 3</span><div class="case">Document Currency</div><div class="rule">กรณีต้องพิมพ์ตาม <b>สกุลเอกสารจริง</b> (เช่น THB) → เลือก radio “Document Currency”</div></div>
+    </div>
+    <div class="callout"><b>จำง่าย ๆ:</b> จ่าย MMK → MMK · อย่างอื่น → USD · ยกเว้นสั่งพิมพ์ตามสกุลเอกสาร (THB ฯลฯ) ด้วย radio “Document Currency”</div>
+
+    <h3>ยอดเงินดึงจากไหน (WITH_ITEM 3 ชุด)</h3>
+    <p class="body">field ยอดเงิน ([14] ยอดจ่าย · [15] ยอด WHT · [16]/[17] รวม) ทั้งหมดมาจาก <code>WITH_ITEM</code> โดยส่งคีย์ <code>BUKRS</code> + <code>GJAHR</code> + WHT code ≠ blank แล้วเลือก field ตามสกุล:</p>
+    <table>
+      <thead><tr><th style="width:200px">โหมด (radio)</th><th>เงื่อนไข</th><th>ยอดจ่าย [14/16]</th><th>ยอด WHT [15/17]</th></tr></thead>
+      <tbody>
+        <tr><td><b>LC1/LC2 · MMK</b></td><td><code>BKPF-WAERS</code> = MMK</td><td><code>WT_QSSHH</code></td><td><code>WT_QBSHH</code></td></tr>
+        <tr><td><b>LC1/LC2 · USD</b></td><td><code>BKPF-WAERS</code> ≠ MMK</td><td><code>WT_QSSH2</code></td><td><code>WT_QBSH2</code></td></tr>
+        <tr><td><b>Document Currency</b></td><td>เลือก radio doc</td><td><code>WT_QSSHB</code></td><td><code>WT_QBSHB</code></td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>เกร็ด suffix ของ WITH_ITEM:</b> <code>...HH</code> = local currency 1 (MMK) · <code>...H2</code> = local currency 2 (USD) · <code>...HB</code> = document currency · [18] Total in Letter = ยอดรวมเป็นตัวอักษร</div>
+  </section>
+
+  <!-- CERTIFICATE -->
+  <section id="cert">
+    <div class="sec-head"><span class="sec-num">3</span><h2>ตัวฟอร์ม — IRD(IT)-05-01</h2></div>
+    <p class="sec-sub">โครงใบรับรอง: 2 ฝ่าย (ผู้ถูกหัก / ผู้หัก) → ตารางประเภทเงินได้ + อัตรา → สรุปยอด → ลายเซ็น</p>
+
+    <div class="cert" role="img" aria-label="โครงหนังสือรับรอง WHT ของเมียนมา IRD(IT)-05-01">
+      <div class="cbanner">According to Article 389 of the Constitution of the Republic of the Union of Myanmar, 2008, every citizen has the obligation to pay the taxes due to the law</div>
+      <div class="ctitle">Withholding Tax Certificate <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brass)">IRD(IT)-05-01</span></div>
+      <div class="csub">(Under Section 16, Sub Section (b) of the Income Tax Law)</div>
+      <div class="cparties">
+        <div class="cparty"><b>The person from whom tax was withheld</b>
+          <span><span class="fnum">1</span>Taxpayer Name · <span class="fnum">2</span>Tax ID · <span class="fnum">3</span>Revenue office</span>
+          <span><span class="fnum">4</span>Citizen/Nat. Reg. Card · <span class="fnum">5</span>Reg. No · <span class="fnum">6</span>Full Address</span>
+        </div>
+        <div class="cparty"><b>Withholding Tax Agent (the person who withheld)</b>
+          <span><span class="fnum">7</span>Taxpayer Name · <span class="fnum">8</span>Tax ID · <span class="fnum">9</span>Revenue office</span>
+          <span><span class="fnum">10</span>Citizen/Nat. Reg. Card · <span class="fnum">11</span>Reg. No · <span class="fnum">12</span>Full Address</span>
+        </div>
+      </div>
+      <div class="cfoot">Item table: <span class="fnum">13</span>Date of Payment · <span class="fnum">14</span>Amount of Payment · <span class="fnum">15</span>Amount of WHT &nbsp;|&nbsp; Summary <span class="fnum">16</span>Total Payment · <span class="fnum">17</span>Total WT · <span class="fnum">18</span>Total in Letter &nbsp;|&nbsp; Footer <span class="fnum">19</span>Signature · <span class="fnum">20</span>Name · <span class="fnum">21</span>Position · <span class="fnum">22</span>Company · <span class="fnum">23</span>Issue Date · <span class="fnum">24</span>FI Doc</div>
+    </div>
+
+    <h3>ประเภทเงินได้ + อัตราหัก (ในตารางกลางฟอร์ม)</h3>
+    <table>
+      <thead><tr><th style="width:34px">Sr</th><th>Type of Payment</th><th style="width:150px">Resident</th><th style="width:150px">Non-resident foreigner</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Interests</td><td class="rate">—</td><td class="rate">15%</td></tr>
+        <tr><td class="num">2</td><td>Royalties (licenses, trademarks, patent rights ฯลฯ)</td><td class="rate">10%</td><td class="rate">15%</td></tr>
+        <tr><td class="num">3</td><td>Payment by Union-Level orgs / ministries / state govs / SEE / MDO — ซื้อของ/งาน/บริการ (tender/quotation/auction/contract)</td><td class="rate">2%</td><td class="rate">2.5%</td></tr>
+        <tr><td class="num">4</td><td>Payment by business entities (partnership / JV / company / association / cooperative / foreign & foreign-owned) — ซื้อของ/งาน/บริการ</td><td class="rate">—</td><td class="rate">2.5%</td></tr>
+        <tr><td class="num">5</td><td>Payment for professions &amp; services — healthcare providers (private centers, resident)</td><td class="rate">2%</td><td class="rate">—</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>DTA override:</b> ถ้าเป็นประเทศที่มี DTA กับเมียนมา (<b>UK · Vietnam · Korea · India · Malaysia · Singapore · Laos · Thailand</b>) และเข้าเงื่อนไข Sr.1(b) / 2(b) → ใส่อัตรา DTA ที่ลดแล้วในช่อง <b>Remark</b> พร้อมชื่อประเทศ (เช่น “Thailand 8%”) แทนอัตรามาตรฐาน</div>
+  </section>
+
+  <!-- SELECTION CHANGES -->
+  <section id="selection">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Selection Screen — สิ่งที่เปลี่ยน</h2></div>
+    <p class="sec-sub">รันบนจอ Generic Withholding Tax Reporting — แก้เฉพาะส่วน Display Currency</p>
+    <ul class="clean">
+      <li><b>ลบ</b> radio button <code>LC1</code> / <code>LC2</code> / <code>LC3</code> เดิม (เพราะพิมพ์ตามสกุลจ่าย/สกุลเอกสารแทน)</li>
+      <li><b>เพิ่ม</b> radio <b>“LC1/LC2 Currency”</b> → logic ตาม §2 (MMK ถ้าจ่าย MMK, ไม่งั้น USD)</li>
+      <li><b>เพิ่ม</b> radio <b>“Document Currency”</b> → พิมพ์ตามสกุลเอกสารจริง</li>
+      <li>มี checkbox <b>“Signature Not Required”</b> (ใต้ Display Currency) — คุมว่าจะพิมพ์ลายเซ็นหรือไม่</li>
+      <li>Further Selections มี <b>Profit Center</b> / <b>Recovery Indicator</b> (เหมือนตระกูล WHT อื่น)</li>
+    </ul>
+    <div class="trap"><b>เชื่อมกับ test:</b> radio 2 ตัวนี้ = TC-004 (LC1/LC2) และ TC-008 (Document Currency) · checkbox ลายเซ็น = TC-006 / TC-007</div>
+  </section>
+
+  <!-- LOGIC -->
+  <section id="logic">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Logic Changes (3 ข้อ)</h2></div>
+    <p class="sec-sub">อ่าน 3 ข้อนี้ครบ = เข้าใจหัวใจของ object นี้</p>
+
+    <h3>Logic 1 — radio “LC1/LC2 Currency”</h3>
+    <p class="body">ส่งคีย์ <code>WITH_ITEM</code> = company code (<code>BUKRS</code>) + fiscal year (<code>GJAHR</code>) + WHT code ≠ blank แล้วเลือก field ตามสกุลของ <code>BKPF-WAERS</code>:</p>
+    <ul class="clean">
+      <li><b>ถ้า MMK</b> (BKPF-WAERS = MMK): [14]=<code>WT_QSSHH</code> · [15]=<code>WT_QBSHH</code> · [16]=SUM(QSSHH) · [17]=SUM(QBSHH) · [18]=amount in words</li>
+      <li><b>ถ้า ≠ MMK</b>: [14]=<code>WT_QSSH2</code> · [15]=<code>WT_QBSH2</code> · [16]=SUM(QSSH2) · [17]=SUM(QBSH2) · [18]=amount in words</li>
+    </ul>
+
+    <h3>Logic 2 — radio “Document Currency”</h3>
+    <p class="body">คีย์เดียวกัน แต่ใช้ field สกุลเอกสาร: [14]=<code>WT_QSSHB</code> · [15]=<code>WT_QBSHB</code> · [16]=SUM(QSSHB) · [17]=SUM(QBSHB) · [18]=amount in words</p>
+
+    <h3>Logic 3 — อัตรา DTA ในช่อง Remark</h3>
+    <p class="body">อ่าน <code>WITH_ITEM-WT_WITHCD</code> (ตาม BUKRS + GJAHR) ถ้าเป็น DTA code ให้พิมพ์อัตราในช่อง Remark แล้ว concatenate กับชื่อประเทศ vendor · ถ้าไม่ใช่ code เหล่านี้ = ปล่อยว่าง</p>
+    <table>
+      <thead><tr><th>WHT Code</th><th style="width:80px">Rate</th><th>WHT Code</th><th style="width:80px">Rate</th></tr></thead>
+      <tbody>
+        <tr><td><code>D1</code></td><td class="rate">8%</td><td><code>D2</code></td><td class="rate">10%</td></tr>
+        <tr><td><code>H1</code></td><td class="rate">8%</td><td><code>H2</code></td><td class="rate">10%</td></tr>
+        <tr><td><code>D3</code></td><td class="rate">5%</td><td><code>D4</code></td><td class="rate">10%</td></tr>
+        <tr><td><code>H3</code></td><td class="rate">5%</td><td><code>H4</code></td><td class="rate">10%</td></tr>
+      </tbody>
+    </table>
+    <h3>หาชื่อประเทศ vendor ยังไง</h3>
+    <div class="kit-dfd" role="group" aria-label="Vendor country lookup chain">
+      <div class="kit-dfd__in">
+        <div class="dfd-stage"><div class="dfd-slabel">1 · Payment</div><div class="dfd-node src"><div class="dt">เอกสารจ่าย</div><div class="dsub">payment doc + BUKRS + GJAHR</div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">2 · Vendor</div><div class="dfd-node tbl"><div class="dt">BSAK</div><div class="dsub">→ Supplier <code>LIFNR</code></div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">3 · Country code</div><div class="dfd-node tbl"><div class="dt">LFA1</div><div class="dsub">LIFNR → <code>LAND1</code> (เช่น TH)</div></div></div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">4 · Country name</div><div class="dfd-node out"><div class="dt">T005T</div><div class="dsub">LAND1 + SPRAS=EN → <code>LANDX</code> (เช่น Thailand)</div></div></div>
+      </div>
+    </div>
+    <div class="callout"><b>ตัวอย่างผลลัพธ์ Remark:</b> vendor ไทย + tax code <code>D1</code> → พิมพ์ “<b>Thailand 8%</b>” · tax code <code>D3</code> → “<b>Thailand 5%</b>”</div>
+  </section>
+
+  <!-- MAPPING -->
+  <section id="mapping">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Data / Tax-ID Mapping</h2></div>
+    <p class="sec-sub">ช่องสำคัญที่ดึงข้ามตาราง — เลข Tax ID ทั้ง 2 ฝ่าย + ลายเซ็น/สาขา</p>
+    <table>
+      <thead><tr><th style="width:210px">ช่องในฟอร์ม</th><th>ที่มา / Logic</th></tr></thead>
+      <tbody>
+        <tr><td><b>Tax ID ผู้ถูกหัก (vendor)</b> [2]</td><td>ส่ง Vendor <code>WT_ACCO</code> → <code>DFKKBPTAXNUM-PARTNER</code> · เช็ค <code>TAXTYPE</code> = <code>MM3</code>/<code>MM0</code> → ดึง <code>TAXNUM</code> หรือ <code>TAXNUMXL</code> (อันที่ไม่ว่าง) · ว่างทั้งคู่ = เว้นว่าง</td></tr>
+        <tr><td><b>Tax ID ผู้หัก (agent)</b> [8]</td><td><code>T001-STCEG</code> โดย <code>T001-BUKRS</code> = <code>WITH_ITEM-BUKRS</code></td></tr>
+        <tr><td><b>ชื่อประเทศ vendor</b> (Remark)</td><td><code>BSAK</code> → <code>LIFNR</code> → <code>LFA1-LAND1</code> → <code>T005T-LANDX</code> (SPRAS=EN)</td></tr>
+        <tr><td><b>ชื่อ + ตำแหน่งผู้ลงนาม</b> [20][21]</td><td>mapping ตาม company code จากตาราง <code>ZTAXA_T09</code> (Name &amp; Position — Myanmar)</td></tr>
+        <tr><td><b>รูปลายเซ็น / ตรา</b> [19]</td><td>bitmap เก็บใน <code>SE78</code> (BMAP) ผูกกับ Smart Form <code>ZTAXA_F01_MM3</code> · คุมด้วย checkbox “Signature Not Required”</td></tr>
+        <tr><td><b>ชื่อสาขา (branch)</b></td><td>ตาราง <code>ZTAXA_T13</code> (map profit center ↔ company description)</td></tr>
+        <tr><td><b>FI Doc</b> [24]</td><td>= Doc.No + “/” + Fiscal Year</td></tr>
+      </tbody>
+    </table>
+    <div class="trap"><b>หมายเหตุลายเซ็น:</b> logic ลายเซ็น <b>ไม่เปลี่ยน</b> — เป็น reference (bitmap + ตาราง mapping) · แค่ checkbox คุมว่าจะโชว์หรือไม่</div>
+  </section>
+
+  <!-- TAX CODE MAPPING -->
+  <section id="taxcode">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Tax Code Mapping (ECC → S/4)</h2></div>
+    <p class="sec-sub">โยงประเภทเงินได้บนฟอร์ม ↔ WHT type/code ใน SAP</p>
+    <table>
+      <thead><tr><th style="width:44px">Sr</th><th>Type of Payment</th><th style="width:120px">ECC (Type / Code)</th><th>S/4 (Type / Codes)</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1b</td><td>Interest — Non-resident foreign</td><td><code>B6</code> / <code>A1</code></td><td><code>B2</code> / <code>A1,D1,D2,G1,H1,H2</code></td></tr>
+        <tr><td class="num">2a</td><td>Royalty — Resident</td><td><code>B0</code> / —</td><td><code>B0</code> / <code>A2,G2</code></td></tr>
+        <tr><td class="num">2b</td><td>Royalty — Non-resident foreign</td><td><code>B6</code> / <code>D3</code></td><td><code>B2</code> / <code>A3,D3,D4,G3,H3,H4</code></td></tr>
+        <tr><td class="num">4b</td><td>Contract payment — Non-resident foreign</td><td><code>B6</code> / <code>A6</code></td><td><code>B2</code> / <code>A4,G4</code></td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>สังเกต:</b> ฝั่ง S/4 WHT type รวมเป็น <code>B2</code> (invoice/payment) และ <code>B0</code> — DTA code (<code>D#/H#</code>) อยู่ในกลุ่ม non-resident (1b, 2b) ตรงกับ Logic 3</div>
+  </section>
+
+  <!-- FORM LAYOUT -->
+  <section id="layout">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Form Output Layout — 24 ช่อง</h2></div>
+    <p class="sec-sub">ตำแหน่งเลข [n] ตรงกับ mock ด้านบน (§3)</p>
+    <details class="fold" open>
+      <summary>Header — ผู้ถูกหัก [1–6] + ผู้หัก [7–12]</summary>
+      <div class="fold-body">
+        <table>
+          <thead><tr><th style="width:60px">#</th><th>ผู้ถูกหัก (person withheld from)</th><th style="width:60px">#</th><th>ผู้หัก (WHT agent)</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>Taxpayer Name</td><td class="num">7</td><td>Taxpayer Name</td></tr>
+            <tr><td class="num">2</td><td>Taxpayer Identification No.</td><td class="num">8</td><td>Taxpayer Identification No.</td></tr>
+            <tr><td class="num">3</td><td>Revenue office</td><td class="num">9</td><td>Revenue office</td></tr>
+            <tr><td class="num">4</td><td>Citizen/National Registration Card No.</td><td class="num">10</td><td>Citizen/National Registration Card No.</td></tr>
+            <tr><td class="num">5</td><td>Registration No.</td><td class="num">11</td><td>Registration No.</td></tr>
+            <tr><td class="num">6</td><td>Full Address</td><td class="num">12</td><td>Full Address</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <details class="fold">
+      <summary>Item table [13–15] · Summary [16–18] · Footer [19–24]</summary>
+      <div class="fold-body">
+        <table>
+          <thead><tr><th style="width:60px">#</th><th>ช่อง</th><th>ที่มา / หมายเหตุ</th></tr></thead>
+          <tbody>
+            <tr><td class="num">13</td><td>Date of Payment</td><td>—</td></tr>
+            <tr><td class="num">14</td><td>Amount of Payment</td><td><code>WITH_ITEM</code> (QSSHH / QSSH2 / QSSHB ตามโหมด §2)</td></tr>
+            <tr><td class="num">15</td><td>Amount of Withholding Tax</td><td><code>WITH_ITEM</code> (QBSHH / QBSH2 / QBSHB)</td></tr>
+            <tr><td class="num">16</td><td>Total Amount of payment</td><td>SUM ของ [14]</td></tr>
+            <tr><td class="num">17</td><td>Total Amount of WT</td><td>SUM ของ [15]</td></tr>
+            <tr><td class="num">18</td><td>Total Withholding tax (In Letter)</td><td>ยอดรวมเป็นตัวอักษร</td></tr>
+            <tr><td class="num">19</td><td>Signature</td><td>bitmap (SE78) · คุมด้วย checkbox</td></tr>
+            <tr><td class="num">20</td><td>Name</td><td><code>ZTAXA_T09</code> ตาม company code</td></tr>
+            <tr><td class="num">21</td><td>Position</td><td><code>ZTAXA_T09</code></td></tr>
+            <tr><td class="num">22</td><td>Company / Department / Organization</td><td>—</td></tr>
+            <tr><td class="num">23</td><td>Date of issuing certificate</td><td>DD/MM/YYYY</td></tr>
+            <tr><td class="num">24</td><td>FI Doc.</td><td>= Doc.No + “/” + Fiscal Year</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <p class="body" style="font-size:12.5px;color:var(--ink-soft)">QR Code / Barcode = N/A · Logo = no change · No page break · print A4, English</p>
+  </section>
+
+  <!-- TEST -->
+  <section id="test">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Test Scenarios (Given / When / Then)</h2></div>
+    <p class="sec-sub">9 เคสจาก FSD จริง (ทั้งหมดเป็น FSD-authoritative) · จัดกลุ่ม: data · print · currency · signature · DTA</p>
+    <div class="kit-tc">
+      <div class="tc pos">
+        <div class="tc-h"><span class="tc-id">TC-001</span><span class="tc-cat">Data · fetch all</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">ข้อมูลครบตาม layout §8 (Form Output Layout)</span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v">ดึงข้อมูลทุกช่องถูกต้องตาม layout</span>
+        </div>
+      </div>
+      <div class="tc neg">
+        <div class="tc-h"><span class="tc-id">TC-002</span><span class="tc-cat">Data · missing</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">ข้อมูลบางช่อง <b>ไม่มี</b> ในตารางที่เกี่ยว</span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v">เว้นช่องนั้นว่าง + ขึ้นข้อความ “field xxx is not available in table xxx”</span>
+        </div>
+      </div>
+      <div class="tc pos">
+        <div class="tc-h"><span class="tc-id">TC-003</span><span class="tc-cat">Print</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">ต้องการพิมพ์</span>
+          <span class="l">When</span><span class="v">สั่งพิมพ์</span>
+          <span class="l">Then</span><span class="v">พิมพ์ <b>A4</b> ภาษา <b>English</b></span>
+        </div>
+      </div>
+      <div class="tc cur">
+        <div class="tc-h"><span class="tc-id">TC-004</span><span class="tc-cat">Currency · LC1/LC2</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">เลือก radio <b>“LC1/LC2 Currency”</b></span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v">ถ้า txn currency = <b>MMK</b> → พิมพ์ MMK · ถ้าไม่ใช่ → global <b>USD</b></span>
+        </div>
+      </div>
+      <div class="tc neg">
+        <div class="tc-h"><span class="tc-id">TC-005</span><span class="tc-cat">Currency · error</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">radio “LC1/LC2” แต่สกุล <b>ไม่ใช่</b> MMK หรือ USD</span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v">ขึ้น <b>error</b> ที่เหมาะสม</span>
+        </div>
+      </div>
+      <div class="tc pos">
+        <div class="tc-h"><span class="tc-id">TC-006</span><span class="tc-cat">Signature · show</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">checkbox “Signature not require” <b>ไม่ถูกเลือก</b></span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v">พิมพ์ <b>ลายเซ็น</b> บนฟอร์ม</span>
+        </div>
+      </div>
+      <div class="tc pos">
+        <div class="tc-h"><span class="tc-id">TC-007</span><span class="tc-cat">Signature · hide</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">checkbox “Signature not require” <b>ถูกเลือก</b></span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v"><b>ไม่</b> พิมพ์ลายเซ็น</span>
+        </div>
+      </div>
+      <div class="tc cur">
+        <div class="tc-h"><span class="tc-id">TC-008</span><span class="tc-cat">Currency · Document</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">เลือก radio <b>“Document Currency”</b></span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v">พิมพ์ตาม <b>สกุลเอกสารเดียวกัน</b> (เช่น THB)</span>
+        </div>
+      </div>
+      <div class="tc map">
+        <div class="tc-h"><span class="tc-id">TC-009</span><span class="tc-cat">DTA · Remark</span><span class="tc-src fsd">FSD</span></div>
+        <div class="gwt">
+          <span class="l">Given</span><span class="v">vendor เป็นประเทศที่มี <b>DTA</b> (ตาม tax code D#/H#)</span>
+          <span class="l">When</span><span class="v">generate ฟอร์ม</span>
+          <span class="l">Then</span><span class="v">ช่อง <b>Remark</b> ใส่ชื่อประเทศ + อัตรา (เช่น “Thailand 8%”)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USAGE -->
+  <section id="usage">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Usage &amp; Roles</h2></div>
+    <table class="kv"><tbody>
+      <tr><td>Form Type</td><td>Smart Form (<code>ZTAXA_F01_MM3</code>) · print · English</td></tr>
+      <tr><td>Trigger</td><td>Manual / Batch (<code>ZTAXA_R01</code>) · post invoice WHT (FB60/MIRO/FB01)</td></tr>
+      <tr><td>Frequency</td><td>Monthly · Ad Hoc</td></tr>
+      <tr><td>Volume</td><td>~80–100 / เดือน</td></tr>
+      <tr><td>Printer</td><td>Laser · A4 · no page break</td></tr>
+      <tr><td>Roles</td><td>Accountant / Tax Accountant = generate · Business Analyst = display</td></tr>
+      <tr><td>Dependency</td><td><code>TAX-RPT-8</code> (MM WHT Report) เพื่อรัน</td></tr>
+      <tr><td>Error handling</td><td>ไม่มี exception ใหม่ (No new exception)</td></tr>
+    </tbody></table>
+  </section>
+
+  <!-- COMPARE -->
+  <section id="compare">
+    <div class="sec-head"><span class="sec-num">10.5</span><h2>เทียบกับ TAX-FRM-1 — WHT Form อีกตัวของโปรเจกต์</h2></div>
+    <p class="sec-sub">ข้อมูลใหม่จาก FD ปี 2025 · <b>สอง form ในกระบวนการเดียวกัน แต่คนละเทคโนโลยี คนละประเทศ</b></p>
+
+    <div class="callout"><b>ทำไมต้องเทียบ:</b> เวลาคุยกับ dev หรือรายงาน defect
+      <b>ต้องบอกให้ถูกว่าฟอร์มไหนใช้เทคโนโลยีอะไร</b> — Smart Form กับ Adobe Form
+      แก้ layout คนละเครื่องมือ · คนละ skill set ของ dev · คนละวิธี debug</div>
+
+    <table class="sticky-head">
+      <thead><tr><th style="width:150px">มิติ</th><th>TAX-FRM-2 (หน้านี้)</th><th>TAX-FRM-1</th></tr></thead>
+      <tbody>
+        <tr><td><b>ประเทศ / แบบ</b></td><td><b>เมียนมา</b> — WHT Certificate <code>IRD(IT)-05-01</code></td><td><b>ไทย</b> — ใบแนบ ภ.ง.ด. 3 / 53 / 54</td></tr>
+        <tr><td><b>เทคโนโลยีฟอร์ม</b></td><td><b>Smart Form</b> · <code>ZTAXA_F01_MM3</code></td><td><b>Adobe Form</b></td></tr>
+        <tr><td><b>เอกสารคือ</b></td><td><b>หนังสือรับรอง</b> ให้ผู้ถูกหักภาษี (1 ใบ / 1 ราย)</td><td><b>ใบแนบ</b> ยื่นต่อกรมสรรพากร (ลิสต์หลายราย / 1 ใบ)</td></tr>
+        <tr><td><b>ตัวเรียก</b></td><td>รันหลัง <code>TAX-RPT-8</code> (MM WHT Report)</td><td><code>S_P00_07000134</code> · ต้องพึ่ง <code>TAX-RPT-1</code></td></tr>
+        <tr><td><b>Output group / legacy</b></td><td>—</td><td><b><code>R03</code></b> — Attachment P.N.D. 3, 53 and 54</td></tr>
+        <tr><td><b>ภาษา / กระดาษ</b></td><td>อังกฤษ (IRD)</td><td><b>ไทย · A4</b></td></tr>
+        <tr><td><b>จำนวน field</b></td><td><b>24 ช่อง</b></td><td><b>18 ช่อง</b> (เปลี่ยนแค่ [7])</td></tr>
+        <tr><td><b>Tax ID ผู้ขาย</b></td><td>ตาม mapping ของ MM</td><td><code>DFKKBPTAXNUM</code> — <code>TAXTYPE</code> TH1/TH3 → <code>TAXNUM</code>/<code>TAXNUMXL</code></td></tr>
+        <tr><td><b>สกุลเงิน</b></td><td><b>3 ทาง</b> — MMK / USD / document currency</td><td>ตามเอกสาร (ไม่มี logic เลือกสกุลพิเศษ)</td></tr>
+        <tr><td><b>Output Determination</b></td><td>—</td><td><b>ไม่มี</b> (N/A — no output management)</td></tr>
+        <tr><td><b>Volume</b></td><td>ตาม FD ของ FRM-2</td><td>≤ 500 / เดือน</td></tr>
+      </tbody>
+    </table>
+
+    <div class="keybox">
+      <b>สิ่งที่เหมือนกันและควรใช้ซ้ำ (transferable skill)</b>
+      <ul>
+        <li>ทั้งคู่เป็น <b>form ที่พึ่ง report ตัวอื่นให้รันก่อน</b> — FRM-2 พึ่ง <code>TAX-RPT-8</code> · FRM-1 พึ่ง <code>TAX-RPT-1</code></li>
+        <li>ทั้งคู่ตรวจ defect ด้วยวิธีเดียวกัน: <b>ไล่ field ที่ว่าง → หา table ต้นทาง → เช็คด้วย <a href="se16n.html" style="color:var(--petrol);font-weight:600">SE16N</a></b> ก่อนโทษฟอร์ม</li>
+        <li>ทั้งคู่มี test แบบ negative ที่บังคับให้ “ปล่อยช่องว่าง + ขึ้นข้อความ” แทนที่จะ dump error</li>
+        <li>ประสบการณ์ที่คุณมีจาก FRM-2 (อ่าน layout ทีละช่อง · map กลับไป table) <b>ใช้กับ FRM-1 ได้ทันที</b></li>
+      </ul>
+    </div>
+
+    <p class="body" style="margin-top:10px">
+      → <a href="frm1-wht-attachment.html" style="color:var(--petrol);font-weight:600">เปิด TAX-FRM-1 deep-dive</a> ·
+      <a href="enh1-rd-text-files.html" style="color:var(--petrol);font-weight:600">TAX-ENH-1 (text file e-Filing)</a> ·
+      <a href="statutory.html" style="color:var(--petrol);font-weight:600">Statutory Filing Guide</a>
+    </p>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">11</span><h2>Self-check</h2></div>
+    <p class="sec-sub">ตอบในใจก่อนกดเฉลย — โฟกัสจุดที่ทดสอบบ่อย</p>
+    <div class="qbox">
+      <div class="selfq"><p>1. TAX-FRM-2 เป็น WRICEF type อะไร ใช้ Smart Form ตัวไหน และยื่นให้ใคร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>Form</b> · Smart Form <b>ZTAXA_F01_MM3</b> · ยื่น <b>IRD เมียนมา</b> (แบบ IRD(IT)-05-01)</div></details></div>
+      <div class="selfq"><p>2. จ่ายเป็น EUR แล้วเลือก radio “LC1/LC2 Currency” — ใบรับรองพิมพ์เป็นสกุลอะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>USD</b> (เพราะสกุลจ่าย ≠ MMK → global USD · TC-004)</div></details></div>
+      <div class="selfq"><p>3. ยอดจ่าย [14] กรณี MMK / USD / Document มาจาก field ไหนของ WITH_ITEM?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">MMK = <b>WT_QSSHH</b> · USD = <b>WT_QSSH2</b> · Document = <b>WT_QSSHB</b></div></details></div>
+      <div class="selfq"><p>4. ช่อง Remark ใส่อะไร และดึงชื่อประเทศ vendor ผ่านตารางใดบ้าง?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">อัตรา DTA (จาก tax code D#/H#) + ชื่อประเทศ · chain: <b>BSAK → LFA1(LAND1) → T005T(LANDX)</b></div></details></div>
+      <div class="selfq"><p>5. Tax ID ของผู้ถูกหัก (vendor) ดึงจากตาราง/field อะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>DFKKBPTAXNUM</b> (PARTNER=WT_ACCO, TAXTYPE=MM3/MM0) → <b>TAXNUM</b> หรือ <b>TAXNUMXL</b> ที่ไม่ว่าง</div></details></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · TAX-FRM-2 Deep-Dive (จาก FSD v1.0)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+</div>
+</body>
+</html>

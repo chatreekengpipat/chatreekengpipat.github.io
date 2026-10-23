@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indirect Tax — VAT · VAT36 · tax codes · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  [hidden]{display:none!important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  a{color:var(--petrol);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin:0 6px 22px 0;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(27px,5.2vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .easy{margin:18px 0 6px;border-radius:12px;padding:14px 18px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.22);font-size:14px;}
+  .easy::before{content:"อธิบายง่าย";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:15px;font-weight:700;margin:2px 0 8px;color:var(--petrol-deep);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  .small{font-size:12.5px;color:var(--ink-soft);}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+  .tblwrap table{margin:0;}
+  @media(max-width:600px){.tblwrap table{min-width:540px;}.tblwrap table td,.tblwrap table th{word-break:normal;overflow-wrap:normal;}}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .num{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:11px 0 11px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  ol.flow>li b{font-weight:600;}
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;margin:12px 0;background:var(--card);}
+  .card .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .grid2>.card,.grid3>.card{margin:0;}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(185,28,28,.05);font-size:13.8px;}
+  .trap b{color:var(--warn);}
+  .lock{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(29,78,216,.06);font-size:13.8px;}
+  .lock::before{content:"🔒 Locked design — ไม่ใช่ defect";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 18px 16px;font-size:14px;}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  /* evidence tags (knowledge-base convention) */
+  .ev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:1px;white-space:nowrap;border:1px solid transparent;}
+  .ev.std{color:var(--ink-soft);border-color:var(--line);}
+  .ev.bp{color:var(--petrol-deep);background:rgba(37,99,235,.10);}
+  .ev.fd{color:var(--petrol);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+  .ev.sys{color:#fff;background:var(--petrol);}
+  .ev.agreed{color:#fff;background:var(--petrol-deep);}
+  .ev.infer{color:var(--brass);border:1px dashed var(--brass);}
+  .ev.tbc{color:var(--warn);border:1px dashed var(--warn);background:rgba(185,28,28,.06);}
+  :root[data-theme="dark"] .ev.sys,:root[data-theme="dark"] .ev.agreed{color:var(--paper);}
+  .evlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;}
+  .evlegend .ev{margin-left:0;margin-right:4px;}
+  /* status pills */
+  .st{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;border-radius:20px;padding:1px 8px;white-space:nowrap;}
+  .st.open{color:var(--warn);background:rgba(185,28,28,.09);}
+  .st.block{color:#fff;background:var(--warn);}
+  .st.wip{color:var(--brass);background:rgba(180,83,9,.13);}
+  .st.done{color:var(--petrol-deep);background:rgba(37,99,235,.12);}
+  :root[data-theme="dark"] .st.block{color:var(--paper);}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .seealso{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;font-size:12.5px;align-items:center;}
+  .seealso>span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .seealso a{text-decoration:none;border:1.3px solid var(--line);border-radius:20px;padding:3px 11px;color:var(--petrol-deep);background:var(--card);}
+  .seealso a:hover{border-color:var(--petrol);}
+  /* interactive tools (T39) — state in memory only */
+  .tool{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;margin:18px 0;background:linear-gradient(160deg,rgba(37,99,235,.06),rgba(180,83,9,.04));}
+  .tool-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tool-h b{font-size:15px;}
+  .tool-h .tg{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:5px;padding:2px 7px;}
+  .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 16px;}
+  @media(max-width:640px){.fgrid{grid-template-columns:1fr;}}
+  .fld{display:flex;flex-direction:column;gap:5px;margin:7px 0;}
+  .fld>.lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;}
+  .seg button{font:inherit;font-size:12.5px;border:1.4px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.3;}
+  .seg button:hover{border-color:var(--petrol);}
+  .seg button[aria-pressed="true"]{border-color:var(--petrol);background:var(--petrol);color:#fff;}
+  .seg button:disabled{opacity:.4;cursor:not-allowed;}
+  .tool input,.tool textarea,.tool select{font:inherit;font-size:13.5px;color:var(--ink);background:var(--card);border:1.4px solid var(--line);border-radius:8px;padding:6px 9px;width:100%;}
+  .tool textarea{min-height:56px;resize:vertical;}
+  .tool input:focus,.tool textarea:focus,.tool select:focus,.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  .outs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+  .outs.two{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:640px){.outs,.outs.two{grid-template-columns:1fr;}}
+  .out{border:1.5px solid var(--line);border-top:4px solid var(--_c,var(--petrol));border-radius:11px;padding:10px 12px;background:var(--card);}
+  .out.b{--_c:var(--brass);} .out.d{--_c:var(--petrol-deep);} .out.w{--_c:var(--warn);}
+  .out .k{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--_c,var(--petrol));}
+  .out .v{font-size:15px;font-weight:700;margin:3px 0;line-height:1.35;}
+  .out .why{font-size:12px;color:var(--ink-soft);}
+  .notes{margin-top:10px;font-size:13px;}
+  .notes li{margin:4px 0 4px 18px;}
+  .copyout{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:var(--chip);color:var(--chip-text);border-radius:10px;padding:12px 14px;margin-top:10px;}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .btn{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--petrol);background:var(--petrol);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--petrol);}
+  .btnmsg{font-size:12px;color:var(--petrol-deep);}
+  :root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .btn:not(.ghost),:root[data-theme="dark"] .tool-h .tg{color:var(--paper);}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.lock,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb,.seealso{display:none;}details.fold,details.ans{border-color:#ccc;}.tblwrap{overflow:visible;}}
+  /* page-specific */
+  .chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0;font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .chain span{border:1.3px solid var(--line);border-radius:8px;padding:5px 9px;background:var(--card);}
+  .chain i{color:var(--brass);font-style:normal;font-weight:700;}
+  .dir{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  @media(max-width:600px){.dir{grid-template-columns:1fr;}}
+  .dir .card h4{font-size:18px;}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-indirect">
+<div class="wrap">
+<a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="overview.html">Client FI design →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">Foundation</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>Indirect tax</span>
+    </div>
+    <h1>Indirect Tax<br><span class="accent">VAT · VAT36 (reverse charge) · tax codes · deferred VAT</span></h1>
+    <div class="meta">
+      <span>L4 · <b>01.01.07.02</b></span>
+      <span>Course · <b>TAX-402 (1-Dec)</b></span>
+      <span>Objects · <b>RPT-2 (Oman)</b> · pairs with <b>RPT-1</b></span>
+    </div>
+    <p class="src">Source: knowledge base <code>tax-fundamentals</code> (STD) · <code>10-client-fi-design §8–9</code> · BPE KDS · <code>40-role-kut</code> (course TAX-402 content) · RPT-1 FUT notes (VAT36 posting)</p>
+  </header>
+
+  <div class="easy">VAT คิดตอน <b>invoice</b> เสมอ (MIRO / billing / FB60 / FB70) — ไม่เคยเกิดตอน GR, SES หรือ goods issue · ทุกอย่างไหลจาก <b>tax code</b>: code บอกอัตราและ account key แล้ว account key บอก GL · ผลลัพธ์ลง <code>BSET</code> หนึ่งแถวต่อหนึ่ง tax code ต่อเอกสาร แล้วรายงาน VAT ทุกตัวก็แค่อ่าน BSET</div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#chain">Tax code chain</a>
+    <a href="#direction">Input vs Output</a>
+    <a href="#account">Account determination</a>
+    <a href="#codes">Tax codes</a>
+    <a href="#vat36">VAT36 / PND54</a>
+    <a href="#deferred">Deferred VAT · P.P.30</a>
+    <a href="#objects">Related WRICEFs</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <!-- CHAIN -->
+  <section id="chain">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Tax code chain <span class="ev std">STD</span></h2></div>
+    <div class="chain" aria-label="tax determination chain">
+      <span>Company code</span><i>→</i><span>T001-LAND1</span><i>→</i><span>Tax procedure <b>TAXTH</b></span><i>→</i><span>Tax code (FTXP)</span><i>→</i><span>Condition + rate</span><i>→</i><span>Account key</span><i>→</i><span>GL (OB40 / T030K)</span>
+    </div>
+    <ul class="clean">
+      <li>Tax codes เป็นของ <b>ประเทศ</b> ไม่ใช่ของ company code — CoCd ที่ LAND1 เดียวกันใช้ชุด code เดียวกัน</li>
+      <li>Tax procedure: QAS <code>T005-KALSM</code> ของ TH = <code>TAXTH</code> (ตรงกับ BPE) · MY = <code>ZTXP_MY</code> · Oman = <code>ZTXP_OM</code> <span class="ev sys">SYS</span> — training deck เคยเขียน <code>ZTXP_TH</code> → ยึดค่าใน T005 (C14)</li>
+      <li>Account keys: <b>VST</b> input (เคลมได้) · <b>NVV</b> non-deductible (บวกเข้าบรรทัด expense / GR-IR จึงไม่มีบรรทัดภาษีแยก) · <b>MWS</b> output · <b>ESA/ESE</b> คู่ acquisition / reverse charge</li>
+      <li>Tax code มาจาก: PO item (MIRO) · user กรอก (FB60/FB70) · SD condition MWST (VK11) ตาม customer + material tax classification</li>
+      <li><code>BSET</code>: MWSKZ, KTOSL, FWBAS/FWSTE (doc ccy), HWBAS/HWSTE (LC1), H2BAS/H2STE (LC2), H3BAS/H3STE (LC3), KBETR (rate)</li>
+      <li>Standard VAT return report: <b>RFUMSV00</b> (S_ALR_87012357) — line items, totals ต่อ code, balance ต่อ CoCd, optional “tax payable” posting · <a href="rpt2-oman-vat.html">TAX-RPT-2</a> คือ Z-copy ของมัน</li>
+    </ul>
+  </section>
+
+  <!-- DIRECTION -->
+  <section id="direction">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Input vs Output VAT</h2></div>
+    <div class="dir">
+      <div class="card"><span class="ct">ซื้อ · Purchase · KTOSL VST</span><h4>Input VAT = Dr</h4><p class="body">ภาษีซื้อ — สินทรัพย์รอเครดิตกับภาษีขาย ไม่รวมเป็นต้นทุน (เว้นแต่ code แบบ unclaimable / NVV)</p></div>
+      <div class="card"><span class="ct">ขาย · Sales · KTOSL MWS</span><h4>Output VAT = Cr</h4><p class="body">ภาษีขาย — หนี้สินที่ต้องนำส่งในงวด</p></div>
+    </div>
+    <div class="callout"><b>ภ.พ.30:</b> Output VAT − Input VAT = ภาษีที่ต้องชำระ (หรือขอคืน / ยกไป) · ยอดในแบบต้อง = ยอดใน GL เสมอ · ไทย 7% · FC แปลงเป็น THB ด้วย BOT rate ของวันทำการก่อนหน้า (T-1) <span class="ev std">STD</span></div>
+  </section>
+
+  <!-- ACCOUNT -->
+  <section id="account">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Account determination — OB40 vs OBYC</h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Transaction</th><th>คุมโดย</th><th>ใช้กับ</th></tr></thead>
+      <tbody>
+        <tr><td>ภาษี (VAT)</td><td>tax code → account key → <b>OB40</b></td><td>บัญชี input / output VAT · tax GL ของ Oman: <code>A149X017</code> input · <code>A212X020</code> output</td></tr>
+        <tr><td>MM automatic postings</td><td><b>OBYC</b> (เช่น <code>BSX</code> stock, <code>WRX</code> GR/IR)</td><td>บัญชีสต็อก · GR/IR clearing</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">จุดที่สับสนบ่อย: บัญชีภาษี <b>ไม่ได้</b> ตั้งที่ OBYC · บรรทัดภาษีใน ACDOCA แยกด้วย KTOSL VST / MWS / NVV</p>
+    <h3>บรรทัด “Realized FX (from VAT)” — ทำไมโผล่ใน LC1 <span class="ev agreed">Cadence 23-Jul-2026</span></h3>
+    <div class="kit-dfd" role="group" aria-label="Why a realized FX line appears on a foreign-currency invoice with VAT">
+      <div class="kit-dfd__in">
+        <div class="dfd-stage"><div class="dfd-slabel">บรรทัด expense / AP</div><div class="dfd-node src"><div class="dt">M @ posting date</div><div class="dsub">เอกสาร FC → LC1</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">บรรทัด input VAT</div><div class="dfd-node tbl"><div class="dt">B @ doc date −1</div><div class="dsub">rate ต่างประเภท ต่างวัน</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">ผล</div><div class="dfd-node out"><div class="dt">LC1 ไม่ balance</div><div class="dsub">ระบบเติมบรรทัด Realized FX (from VAT) — LC1 เท่านั้น</div></div></div>
+        <div class="dfd-arrow" aria-hidden="true"></div>
+        <div class="dfd-stage"><div class="dfd-slabel">GL</div><div class="dfd-node gl"><div class="dt">A490X035</div><div class="dsub">Realized Gain/Loss FX Rate — Indirect tax</div></div></div>
+      </div>
+    </div>
+    <ul class="clean">
+      <li><b>Option 1 (ยืนยันแล้ว):</b> สร้าง GL ใหม่ (non-operating) ของ TH เพื่อให้ document splitting ทำงาน · MM / MY ใช้บัญชีเดิมตาม allocation requirement · บัญชีที่เสนอครั้งแรก = <code>A490X033</code> · ฝั่ง direct tax (ENH-2) = <code>A490X034</code></li>
+      <li>Error <code>F5A49</code> “Item 005 must be corrected” ตอน post ผ่าน <b>FB60 / FB70</b> — SAP incident (ID removed) แนะนำ note 3588754 แต่ยังเกิด · <b>ไม่เกิด</b>เมื่อ post ผ่าน TAX-ENH-3 หรือ F-04 · ส่งเคสกลับ SAP 22-Jul <span class="ev tbc">open</span></li>
+      <li>เทสต์: เห็นบรรทัด FX ใน LC1 ของเอกสาร FC ที่มี VAT = <b>expected</b> ไม่ใช่ defect · กฎ rate ต่อบรรทัดอยู่ที่ <a href="doc-verification.html#lc">LC rules</a></li>
+    </ul>
+  </section>
+
+  <!-- CODES -->
+  <section id="codes">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Tax codes ของ Client <span class="ev bp">BP</span></h2></div>
+    <div class="grid2">
+      <div class="card"><span class="ct">TH · หลักแรก</span>
+        <div class="tblwrap"><table><tbody>
+          <tr><td><b>I</b></td><td>claimable input</td></tr>
+          <tr><td><b>N</b></td><td>unclaimable · CIT non-deductible</td></tr>
+          <tr><td><b>U</b></td><td>unclaimable · CIT deductible</td></tr>
+          <tr><td><b>D</b></td><td>deferred input (services; โอนตอนจ่ายโดย ENH-8)</td></tr>
+          <tr><td><b>V</b></td><td>P.P.36 (VAT36)</td></tr>
+          <tr><td><b>O</b></td><td>output</td></tr>
+          <tr><td><b>DB</b></td><td>deferred output</td></tr>
+          <tr><td><b>S1</b></td><td>SBT 3.3%</td></tr>
+        </tbody></table></div>
+        <p class="small">หลักที่ 2: 0 = 0% · 1 = 7% · 2 = 10% · X exempt · N no VAT base · Y out of scope</p>
+      </div>
+      <div class="card"><span class="ct">Global first-letter map (BPE KDS)</span>
+        <div class="tblwrap"><table><tbody>
+          <tr><td><b>I</b> · <b>O</b></td><td>claimable input · output (VAT/GST/SST)</td></tr>
+          <tr><td><b>D</b></td><td>deferred VAT</td></tr>
+          <tr><td><b>N</b> / <b>U</b></td><td>unclaimable (non-deductible / deductible)</td></tr>
+          <tr><td><b>V</b> / <b>R</b></td><td>reverse charge — V = deferred input (VAT36) · R = reverse charge / IST</td></tr>
+          <tr><td><b>S · C · M · T · P</b></td><td>SBT · overseas CT · MY e-invoicing · US AP/Sales · US use tax</td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+    <h3>Tax code decoder — ทุก code ของ procedure <span class="ev sys">SYS</span> <span class="ev bp">BP</span></h3>
+    <div class="tool" id="txTool">
+      <div class="tool-h"><span class="tg">Interactive</span><b>คลิก code → ดูว่ามันทำอะไร ลงบัญชีไหน และไปโผล่รายงาน / แบบไหน</b></div>
+      <div class="fld"><span class="lbl">Tax procedure (T005-KALSM)</span><div class="seg" data-name="proc">
+        <button type="button" data-v="TAXTH" aria-pressed="true">TAXTH · TH (26)</button><button type="button" data-v="ZTXP_OM">ZTXP_OM · Oman OM01 (11)</button><button type="button" data-v="ZTXP_MY">ZTXP_MY · MY MY01</button></div></div>
+      <div id="txGrid" class="txgrid" role="group" aria-label="tax codes"></div>
+      <p class="small txlegend"><span class="c kout">output</span> <span class="c kclm">เคลมได้</span> <span class="c kunc">เคลมไม่ได้</span> <span class="c kdef">deferred</span> <span class="c kv36">VAT36 / reverse charge</span> <span class="c kgap">ยังไม่มีข้อมูลทดสอบ (RPT-2 FUT)</span></p>
+      <div class="outs" aria-live="polite">
+        <div class="out"><div class="k" id="txCode">CODE</div><div class="v" id="txWhat"></div><div class="why" id="txRule"></div></div>
+        <div class="out b"><div class="k">ลงบัญชี</div><div class="v" id="txKey"></div><div class="why" id="txGl"></div></div>
+        <div class="out d"><div class="k">ไปต่อที่</div><div class="v" id="txFlow"></div><div class="why" id="txFlowW"></div></div>
+      </div>
+      <ul class="notes" id="txNotes"></ul>
+      <p class="small">TAXTH 26 codes + ZTXP_OM 11 codes: training material p.61/65 · T005-KALSM (TH = TAXTH, MY = ZTXP_MY): verification guide (QAS) · GL: verification guide p.15 + FUT field map · MY: รายชื่อ code จาก FI design §8 — ความหมายรายตัวยังต้องยืนยันกับทีม MY</p>
+    </div>
+<style>
+  .txgrid{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px;}
+  .txrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
+  .txrow .txl{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);min-width:118px;}
+  .txgrid button,.txlegend .c{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;border:1.5px solid var(--_c);color:var(--_c);background:var(--card);border-radius:7px;padding:4px 9px;cursor:pointer;line-height:1.2;}
+  .txlegend .c{font-size:10.5px;padding:1px 6px;cursor:default;margin:0 4px 4px 0;display:inline-block;white-space:nowrap;}
+  .txgrid .kout,.txlegend .kout{--_c:var(--ink);} .txgrid .kclm,.txlegend .kclm{--_c:var(--petrol);} .txgrid .kunc,.txlegend .kunc{--_c:var(--warn,#B91C1C);}
+  .txgrid .kdef,.txlegend .kdef{--_c:var(--brass);} .txgrid .kv36,.txlegend .kv36{--_c:var(--petrol-deep);}
+  .txgrid .kgap,.txlegend .kgap{border-style:dashed;opacity:.72;}
+  .txgrid button[aria-pressed="true"]{background:var(--_c);color:#fff;}
+  :root[data-theme="dark"] .txgrid button[aria-pressed="true"]{color:var(--paper);}
+  .txgrid button:focus-visible{outline:2px solid var(--petrol);outline-offset:1px;}
+  @media(max-width:520px){.txrow .txl{min-width:100%;}}
+</style>
+<script>
+(function(){
+  var root=document.getElementById("txTool"); if(!root) return;
+  var $=function(id){return document.getElementById(id);};
+  var R069='<a href="overview.html#runorder">RPT-6</a> VAT report → net VAT clearing (doc SO) → ภ.พ.30 text file (DRC)';
+  var D2={"0":"0%","1":"7%","2":"10%","X":"exempt","N":"no VAT base","Y":"out of scope"};
+  var L1={O:"Output VAT",I:"Input VAT · เคลมได้",N:"Input เคลมไม่ได้ · CIT หักไม่ได้",U:"Input เคลมไม่ได้ · CIT หักได้",D:"Deferred input (บริการ)",V:"VAT36 — P.P.36 reverse charge"};
+  function th(c){
+    var a=c.charAt(0), b=c.slice(1), r={cls:"kout",what:"",rule:"",key:"",gl:"",flow:"",fw:"",notes:[]};
+    r.rule="หลัก 1 <b>"+a+"</b> = "+(L1[a]||"")+(D2[b]?" · หลัก 2 <b>"+b+"</b> = "+D2[b]:"");
+    if(a==="O"){ r.what="Output VAT "+D2[b]; r.key="MWS"; r.gl=c==="O1"?"<code>A212X020</code> Output tax":c==="OX"?"<code>A212X024</code> (verification guide)":"OB40 ของ MWS"; r.flow="ภาษีขาย → ภ.พ.30"; r.fw=R069;
+      if(c==="O1") r.notes.push("ตรวจเร็ว: tax ÷ base — doc 3364322004: 2,157.55 ÷ 30,822.09 = 7.00% → code ถูก");
+      if(c==="ON"||c==="OY") r.notes.push("ได้ 0.00 เพราะไม่มีฐาน VAT / อยู่นอกขอบเขต — ไม่ใช่ defect"); }
+    else if(a==="I"){ r.cls="kclm"; r.what="Input VAT "+D2[b]+" · เคลมได้"; r.key="VST"; r.gl="<code>A149X017</code> Input tax"; r.flow="เครดิตใน ภ.พ.30"; r.fw=R069+" · listing <a href=\"wricef-portfolio.html\">TAX-INT-1</a>"; }
+    else if(a==="N"||a==="U"){ r.cls="kunc"; r.what="Input "+D2[b]+" · เคลมไม่ได้ · CIT "+(a==="N"?"<b>หักไม่ได้</b>":"<b>หักได้</b>"); r.key="NVV (KDS) <span class=\"ev tbc\">C5</span>"; r.gl="NVV = ภาษีบวกเข้าบรรทัด expense / GR-IR (ไม่มีบรรทัดภาษีแยก) · แต่ FUT เห็น VST"; r.flow="ไม่เข้าเครดิต ภ.พ.30"; r.fw=a==="N"?"เป็นต้นทุนที่ต้อง add back ตอนคำนวณ CIT":"เป็นรายจ่ายทางภาษีได้ (CIT deductible)"; }
+    else if(a==="D"){ r.cls="kdef"; r.what="Deferred input "+D2[b]+" — ยังเคลมไม่ได้จนกว่าจะจ่าย"; r.key="deferred input → VST ตอนโอน"; r.gl="โอนด้วย doc <code>ST</code>"; r.flow="TAX-ENH-8 (<code>ZTAXA_R09</code>) ตอนจ่าย"; r.fw="aging = TAX-RPT-10 · ENH-8 พึ่ง LC3 จาก GL-ENH-1"; }
+    else if(a==="V"){ r.cls="kv36"; var n=+b; r.rule="หลัก 1 <b>V</b> = "+L1.V+" · ความหมายหลัก 2 ของ V <b>ไม่</b>ใช่ legend 0/1/2 — ยึด label ในระบบ";
+      r.what=n===0?"VAT36 อัตรา 0%":(n<=2?"VAT36 · <b>เคลมได้</b> (“ClaimPP36” 7%)":"VAT36 · เคลมไม่ได้ · CIT "+(n%2?"<b>หักไม่ได้</b>":"<b>หักได้</b>"));
+      r.key="คู่ Def Inp VAT (สิทธิ์) + Inp VAT Pay (หน้าที่) → หักล้างเป็นศูนย์"; r.gl="VAT36 suspense <code>A149X019</code> / <code>A149X018</code> (FD ให้มาทั้งสอง)";
+      r.flow="TAX-ENH-3 (<code>ZTAXA_R02</code>, doc SA) → ภ.พ.36"; r.fw="แบบ = TAX-FRM-6 · เคลมใน ภ.พ.30 งวดถัดไป · recon กับ PND54 ใน <a href=\"rpt1-wht-vat-recon.html\">RPT-1</a>";
+      if(n===0) r.notes.push("V0 ไม่ใช่ “ไม่มี VAT36” — ยังเป็น code กลุ่ม VAT36 → ได้ 0.00 แล้วแยกไม่ออกว่าเพราะอัตราหรือ defect");
+      if(n===1||n===2) r.notes.push("สเปรดชีต config เก่าว่า V2 = 10% → outdated · ยึด label ในระบบ · account key ของ V1 ยังต้องยืนยัน (C6) · V1 (PP36) conversion solution เสร็จแล้ว (DM, Jul-2026)");
+      if(n>=3) r.notes.push("V3–V6 = edge case ของ SIT — อัตราดูที่ FTXP ก่อนตั้ง expected"); }
+    if(c==="DB"){ r.cls="kout"; r.what="Deferred output — ภาษีขายที่ยังไม่ถึงจุดความรับผิด"; r.rule="<b>DB</b> = deferred output (2 ตัวอักษร ไม่ใช้ legend หลัก 2)"; r.key="deferred output → MWS ตอนโอน"; r.gl="โอนด้วย doc <code>D2</code>"; r.flow="AR-ENH-1 (batch) โอนเป็น output"; r.fw="แล้วจึงเข้า "+R069; }
+    if(c==="S1"){ r.cls="kout"; r.what="SBT 3.3% — ภาษีธุรกิจเฉพาะ (ไม่ใช่ VAT)"; r.rule="<b>S</b> = SBT · S1 = 3.3%"; r.key="—"; r.gl="แยกจาก VAT"; r.flow="ภ.ธ.40"; r.fw="ยื่น e-filing ภายในวันที่ 23 · ดู <a href=\"statutory.html#sbt\">SBT</a>"; }
+    return r;
+  }
+  var OMgap={IY:1,R3:1,R4:1,U1:1};
+  function om(c){
+    var a=c.charAt(0), b=c.slice(1), r={cls:"kout",what:"",rule:"",key:"",gl:"",flow:"TAX-RPT-2 (<code>ZTAXA_R04</code>)",fw:"<a href=\"rpt2-oman-vat.html#evidence\">RPT-2 evidence</a> · Oman VAT 5%",notes:[]};
+    var d={"0":"0%","1":"5%","X":"exempt","Y":"out of scope"};
+    if(a==="I"){ r.cls="kclm"; r.what="Input VAT "+d[b]; r.key="VST"; r.gl="<code>A149X017</code> Input tax"; }
+    if(a==="O"){ r.what="Output VAT "+d[b]; r.key="MWS"; r.gl="<code>A212X020</code> Output tax"; }
+    if(a==="R"){ r.cls="kv36"; r.what="Reverse charge — "+(c==="R3"?"service":"goods"); r.key="ESA (output) + ESE (input)"; r.gl="ลงสองขา → run ครบควรเห็น 13 บรรทัดภาษี ไม่ใช่ 11"; }
+    if(c==="U1"){ r.cls="kunc"; r.what="Unclaimable input"; r.key="NVV"; r.gl="ลงคอลัมน์ non-deductible"; }
+    r.rule="ZTXP_OM · 11 codes · หลัก 2: 0 = 0% · 1 = 5% · X exempt · Y out of scope";
+    if(OMgap[c]) r.notes.push("FUT (Jul-2026) ยังไม่มีเอกสารทดสอบของ "+c+" — coverage 7 / 11");
+    if(c==="I0") r.notes.push("Cash call JD/JK ใช้ I0 แต่ไม่มีแถว BSET → RPT-2 path B อ่านจาก BSEG (2J/3J)");
+    return r;
+  }
+  function my(c){
+    var a=c.charAt(0), r={cls:"kout",what:"",rule:"",key:"",gl:"",flow:"TAX-RPT-16 Indirect Tax Report MY",fw:"MyInvois ผ่าน DRC (TAX-ENH-11)",notes:["รายชื่อ code มาจาก FI design §8 · อัตรา / account key รายตัวยังไม่มีในแหล่งข้อมูล <span class=\"ev tbc\">TBC</span>"]};
+    var g={O:"Service / sales tax (output)",R:"Reverse charge",U:"Unclaimable",M:"MY e-invoicing"};
+    r.what=(g[a]||"")+(c==="OX"?" · exempt":"")+(c==="UY"?" · out of scope":"");
+    r.cls=a==="R"?"kv36":a==="U"?"kunc":"kout";
+    r.rule="หลัก 1 ตาม global first-letter map ของ BPE KDS";
+    r.key=a==="O"?"MWS":a==="U"?"NVV (คาด)":"—"; r.gl="ดู OB40 / ทีม MY";
+    if(c==="OX") r.notes.unshift("SD billing ที่ใช้ OX ต้องมี Tax Exemption Reason text <code>Z001</code> สำหรับ MyInvois");
+    return r;
+  }
+  var SETS={
+    TAXTH:{f:th,rows:[["Output · 8",["DB","O0","O1","O2","OX","ON","OY","S1"]],["Input · 8",["I0","I1","I2","IX","N1","N2","U1","U2"]],["Deferred input · 3",["D0","D1","D2"]],["VAT36 · 7",["V0","V1","V2","V3","V4","V5","V6"]]],def:"V1"},
+    ZTXP_OM:{f:om,rows:[["Input",["I0","I1","IX","IY"]],["Output",["O0","O1","OX","OY"]],["Reverse charge",["R3","R4"]],["Unclaimable",["U1"]]],def:"R3"},
+    ZTXP_MY:{f:my,rows:[["Output",["O1","O2","O3","O4","OX"]],["Reverse charge",["R1","R2"]],["Unclaimable",["U1","U2","U3","UY"]],["e-invoicing",["M1"]]],def:"OX"}
+  };
+  var proc="TAXTH";
+  function show(c){
+    var r=SETS[proc].f(c);
+    Array.prototype.forEach.call($("txGrid").querySelectorAll("button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-c")===c?"true":"false");});
+    $("txCode").textContent=proc+" · "+c; $("txWhat").innerHTML=r.what; $("txRule").innerHTML=r.rule;
+    $("txKey").innerHTML=r.key; $("txGl").innerHTML=r.gl; $("txFlow").innerHTML=r.flow; $("txFlowW").innerHTML=r.fw;
+    $("txNotes").innerHTML=r.notes.map(function(n){return "<li>"+n+"</li>";}).join("");
+  }
+  function draw(){
+    var s=SETS[proc], h="";
+    s.rows.forEach(function(row){
+      h+='<div class="txrow"><span class="txl">'+row[0]+'</span>'+row[1].map(function(c){var k=s.f(c).cls+(proc==="ZTXP_OM"&&OMgap[c]?" kgap":"");return '<button type="button" class="'+k+'" data-c="'+c+'" aria-pressed="false">'+c+'</button>';}).join("")+'</div>';
+    });
+    $("txGrid").innerHTML=h; show(s.def);
+  }
+  $("txGrid").addEventListener("click",function(e){var b=e.target.closest("button[data-c]"); if(b) show(b.getAttribute("data-c"));});
+  root.querySelector('[data-name="proc"]').addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return; proc=b.getAttribute("data-v");
+    Array.prototype.forEach.call(this.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b?"true":"false");}); draw();
+  });
+  draw();
+})();
+</script>
+
+    <h3>VAT36 codes ในระบบ <span class="ev sys">SYS</span></h3>
+    <ul class="clean">
+      <li>TH VAT36 = <code>V0</code>–<code>V6</code> (claimable / unclaimable × deductible) · <code>V1</code>/<code>V2</code> = 7% “ClaimPP36” — ยึด label ในระบบ (สเปรดชีต config เก่าที่ว่า V2 = 10% outdated)</li>
+      <li><code>V0</code> ไม่ใช่ “ไม่มี VAT36” — ยังเป็น code กลุ่ม VAT36 อัตรา 0% (แยกไม่ออกว่า 0.00 เพราะอัตราหรือ defect) · V3–V6 unclaimable = edge case ของ SIT</li>
+      <li>Account key ของ input tax: KDS ว่า NVV แต่ FUT เห็น VST (G2 / C5) · account key ของ V1 ยังต้องยืนยัน (C6) <span class="ev tbc">TBC</span></li>
+    </ul>
+    <h3>Oman OM01 (TAX-RPT-2)</h3>
+    <p class="body"><code>I0</code> · <code>I1</code> 5% · <code>IX</code> · <code>IY</code> · <code>O0</code> · <code>O1</code> 5% · <code>OX</code> · <code>OY</code> · <code>R3</code> RC service · <code>R4</code> RC goods · <code>U1</code> unclaimable · MY / MM codes ดู <a href="doc-verification.html#country">country reference</a></p>
+  </section>
+
+  <!-- VAT36 -->
+  <section id="vat36">
+    <div class="sec-head"><span class="sec-num">5</span><h2>VAT36 / PND54 — reverse charge</h2></div>
+    <p class="sec-sub">จ่ายค่าบริการให้ผู้ประกอบการต่างประเทศ → ผู้จ่ายในไทย self-assess VAT แทน · นำส่งด้วย <b>ภ.พ.36</b> แล้วเคลมเป็น input ใน ภ.พ.30 งวดถัดไป · ธุรกรรมเดียวกันมักเกิด WHT <b>ภ.ง.ด.54</b> ด้วย</p>
+    <div class="kit-swim" role="group" aria-label="VAT36 reverse-charge swimlane — Overseas Vendor, Thai Company (System), Tax Team, Revenue Department">
+      <div class="kit-swim__in" style="--lanes:4">
+        <div class="kit-swim__head">
+          <div class="swim-lane la1"><span class="dotc"></span>Overseas Vendor</div>
+          <div class="swim-lane la2"><span class="dotc"></span>Thai Co · System</div>
+          <div class="swim-lane la3"><span class="dotc"></span>Tax Team</div>
+          <div class="swim-lane la4"><span class="dotc"></span>Revenue Dept</div>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"><div class="swim-node la1"><span class="sn">1</span><div class="st">Invoice ค่าบริการต่างประเทศ</div><div class="sd">ไม่มี VAT ไทย</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link">
+          <span class="swim-h" style="grid-column:1 / 3"></span>
+          <span class="swim-down" style="grid-column:2"></span>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">2</span><div class="st">Post AP ด้วย V1/V2 (FB60)</div><div class="sd">ขาคู่ Def Inp VAT + Inp VAT Pay หักล้างกัน · LC1 = B @ doc date −1</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:2"></span></div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">3</span><div class="st">Payment + WHT 5A/5D → ENH-2</div><div class="sd">PND54 side · FX adj doc SW</div><span class="sc">ZTAXA_R03</span></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:2"></span></div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">4</span><div class="st">After month-end · ENH-3</div><div class="sd">สร้าง VAT36 liability จาก payment docs · doc SA</div><span class="sc">ZTAXA_R02</span></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link">
+          <span class="swim-h" style="grid-column:2 / 4"></span>
+          <span class="swim-down" style="grid-column:3"></span>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la3"><span class="sn">5</span><div class="st">Recon TAX-RPT-1 · RPT-12</div><div class="sd">PND54 ↔ VAT36 · แบบ P.P.36 = FRM-6</div></div></div>
+          <div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link">
+          <span class="swim-h" style="grid-column:3 / 5"></span>
+          <span class="swim-down" style="grid-column:4"></span>
+        </div>
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la4"><span class="sn">6</span><div class="st">ยื่น ภ.พ.36 (+ ภ.ง.ด.54)</div><div class="sd">เคลม input ใน ภ.พ.30 งวดถัดไป</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="trap"><b>อย่าสลับ:</b> <code>ZTAXA_R02</code> = TAX-ENH-3 (VAT36 liability, doc SA) · <code>ZTAXA_R03</code> = TAX-ENH-2 (WHT FX, doc SW) · ENH-3 suspense GL <code>A149X019</code> vs <code>A149X018</code> ยังไม่ lock (G4) · doc 9004391363 rate 37.6651 ยังอธิบายไม่ได้ (เปิดกับ ENH-3 owner)</div>
+    <div class="seealso"><span>ฝั่ง recon</span><a href="rpt1-wht-vat-recon.html">TAX-RPT-1 design</a><a href="decisions.html#locked">PND54 vs VAT36 statutory basis (D1)</a></div>
+  </section>
+
+  <!-- DEFERRED -->
+  <section id="deferred">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Deferred VAT → net VAT clearing → ภ.พ.30</h2></div>
+    <ol class="flow">
+      <li><b>TAX-ENH-8</b> (manual, doc <code>ST</code>) — โอน deferred input VAT (D*) เป็น input ปกติเมื่อจ่ายเงิน</li>
+      <li><b>AR-ENH-1</b> (batch, doc <code>D2</code>) — โอน deferred output (DB)</li>
+      <li><b>TAX-RPT-6</b> <code>ZTAXB_R04</code> (manual, doc <code>SO</code>) — VAT report + net VAT clearing · split ต่อ PC หรือ PC + RI ยังขัดกัน (C11)</li>
+      <li><b>ภ.พ.30</b>: DRC ใช้สร้าง <b>text file</b> เท่านั้น — DRC statutory forms ไม่ใช้แล้ว (CR-A dropped, Jul-2026) <span class="ev agreed">CR-A dropped</span> · reconcile ด้วย TAX-RPT-11 · aging deferred input = TAX-RPT-10 · input tax listing = TAX-INT-1 (BPE: RPT-15)</li>
+    </ol>
+    <div class="callout"><b>Bug ข้าม object:</b> TAX-RPT-6 มีปัญหา Total ของเอกสาร multi-PC แบบเดียวกับ <a href="rpt2-oman-vat.html#defects">TAX-RPT-2</a> — บน RPT-6 ยอด Total ขับ clearing posting จึงต้องแก้แบบเดียวกัน · LC ของเอกสาร ENH-8/ENH-3: THB doc → LC1 = doc amount, LC2 = ZTH, LC3 = ZTH/PITB · net VAT clearing (SO) → historical รายบรรทัด</div>
+  </section>
+
+  <!-- OBJECTS -->
+  <section id="objects">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Related WRICEFs (Indirect · TH)</h2></div>
+    <div class="tblwrap"><table>
+      <thead><tr><th>ID</th><th>ชื่อ</th><th>ในคอร์ส TAX-402</th></tr></thead>
+      <tbody>
+        <tr><td><code>TAX-INT-1</code></td><td>Input tax listing + interface to Doc Center (BPE list เขียนเป็น TAX-RPT-15)</td><td>✓</td></tr>
+        <tr><td><code>TAX-ENH-8</code></td><td>Transfer deferred input tax (doc ST)</td><td>✓</td></tr>
+        <tr><td><code>TAX-RPT-10</code></td><td>Aging input VAT (deferred)</td><td>✓</td></tr>
+        <tr><td><code>TAX-ENH-3</code></td><td>ZTAXA_R02 — VAT36 liability (doc SA)</td><td>✓</td></tr>
+        <tr><td><code>TAX-FRM-6</code></td><td>P.P.36 form (PDF) + DRC offsetting</td><td>✓</td></tr>
+        <tr><td><code>TAX-RPT-12</code></td><td>VAT36 &amp; e-VAT36 reconciliation (+PC)</td><td>—</td></tr>
+        <tr><td><code>TAX-RPT-11</code></td><td>TH VAT submission reconciliation</td><td>✓</td></tr>
+        <tr><td><code>TAX-RPT-6</code></td><td>VAT report + net VAT clearing (doc SO) + P.P.30</td><td>✓</td></tr>
+        <tr><td><code>TAX-ENH-4</code></td><td>Segment substitution (แทน ENH-9)</td><td>✓</td></tr>
+        <tr><td><code>TAX-ENH-11</code></td><td>DRC enhancement: document selection + XML fields (P.P.30 text file · MY MyInvois)</td><td>✓</td></tr>
+        <tr><td><code>TAX-RPT-2</code></td><td>Oman VAT incl. cash call — <b>my object</b></td><td>ไม่อยู่ในคอร์ส (เสนอ segment สั้น)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="seealso"><span>รายการเต็ม 52 objects</span><a href="blueprint.html#wricef">Blueprint WRICEF list</a></div>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">✓</span><h2>Self-check</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. GR (MIGO 101) post ภาษีไหม?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ไม่ — ภาษีเกิดตอน invoice (MIRO / billing / FB60 / FB70) เท่านั้น</div></details></div>
+      <div class="selfq"><p>2. ทำไม code แบบ NVV ไม่มีบรรทัดภาษีแยก?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">NVV บวกภาษีเข้าไปในบรรทัด expense / GR-IR — expected ไม่ใช่ defect</div></details></div>
+      <div class="selfq"><p>3. ZTAXA_R02 กับ ZTAXA_R03 ต่างกันอย่างไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">030 = ENH-3 สร้าง VAT36 liability หลังปิดงวด (SA) · 032 = ENH-2 ปรับ WHT FX (SW)</div></details></div>
+      <div class="selfq"><p>4. Tax code “D1” ในไทยหมายถึงอะไร และถูกโอนเมื่อไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">Deferred input VAT (บริการ) อัตรา 7% · โอนเป็น input ปกติตอนจ่ายเงินโดย TAX-ENH-8 (doc ST)</div></details></div>
+      <div class="selfq"><p>5. บัญชี VAT กำหนดที่ OB40 หรือ OBYC?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">OB40 ผ่าน tax code / account key · OBYC เป็นของ MM automatic postings (BSX, WRX …)</div></details></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · Indirect Tax (VAT / VAT36)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+</div>
+</body>
+</html>

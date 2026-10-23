@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPE + System Integration — D2.1 Tax Blueprint · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:980px;margin:0 auto;padding:40px 0 90px;}
+
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(26px,5vw,38px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);}
+  .lede{margin:22px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.8px;}
+  thead th{text-align:left;font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  td .ac{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--petrol-deep);}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:15px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.6px;}
+  .trap b{color:var(--warn);}
+
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 16px 14px;font-size:13px;overflow-x:auto;}
+  details.fold .fold-body .wc{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
+
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  .ok{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--petrol-deep);background:rgba(37,99,235,.10);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+
+  /* systems grid */
+  .sys{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+  @media(max-width:640px){.sys{grid-template-columns:1fr;}}
+  .syscard{border:1.5px solid var(--line);border-left:4px solid var(--_c,var(--petrol));border-radius:11px;padding:12px 14px;background:var(--card);}
+  .syscard .n{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--_c,var(--petrol));}
+  .syscard .r{font-size:12.5px;color:var(--ink);margin-top:4px;line-height:1.5;}
+  .syscard.core{--_c:var(--petrol);} .syscard.cap{--_c:var(--ink-soft);} .syscard.comp{--_c:var(--brass);} .syscard.out{--_c:var(--warn);} .syscard.arch{--_c:var(--petrol-deep);}
+
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10pt;}.masthead{animation:none;}.keybox,.callout,.trap,.syscard,section,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-bpe">
+<div class="wrap">
+
+  <a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">BPE · D2.1 Blueprint</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>System Integration</span>
+    </div>
+    <h1>Tax BPE + System Integration<br><span class="accent">01.01.07 Tax Accounting &amp; Processing — เห็นภาพทั้งระบบเร็วที่สุด</span></h1>
+    <div class="meta">
+      <span>L3 · <b>01.01.07</b></span>
+      <span>L4 · <b>6 processes</b></span>
+      <span>Scope · <b>TH / MY / MM + overseas</b></span>
+      <span>WRICEF · <b>52 objects</b></span>
+    </div>
+    <div class="src">Source: [S/4 Program] D2.1 BPE (PDO) 01.01.07 v1.0 · L2 01.01 Financial Accounting · L1 01 Finance &amp; Accounting · Owner: Client Tax team</div>
+  </header>
+
+  <p class="lede">
+    BPE (Business Blueprint / <b>PDO — Process &amp; Data Overview</b>) คือ “แผนที่แม่” — มัน define <b>To-Be process</b>, master data,
+    และ key data structure ของภาษีทั้งกลุ่ม หน้านี้ย่อให้เห็น <b>ระบบทั้งหมดต่อกันยังไง (system integration)</b> →
+    กระบวนการมาตรฐาน → 6 L4 → tax code/segment → WRICEF 52 ตัว เพื่อ get ภาพรวมเร็วที่สุด
+  </p>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#overview">Overview</a>
+    <a href="#integration">System Integration</a>
+    <a href="#backbone">Process Backbone</a>
+    <a href="#l4">6 L4 Processes</a>
+    <a href="#kds">Key Data Structure</a>
+    <a href="#wricef">WRICEF (52)</a>
+    <a href="#acronyms">Acronyms</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <div class="keybox">
+    <b>Key Takeaways</b>
+    <ul>
+      <li>Backbone มาตรฐาน 1 ชุดใช้ทุกภาษี: <b>คัดกรอง (VIM) → รัน report (S/4) → recon → เตรียมแบบ (DRC) → review/approve (DAS) → ยื่น (portal) → จ่าย (AP) → archive (xECM)</b></li>
+      <li>ระบบหลักที่ต่อกัน: <b>S/4HANA · OpenText VIM · SAP DRC · SAC · Online Tax Portal · Bank (HSBC/BOFA) · xECM · Business Network</b></li>
+      <li>Client = ปิโตรเลียม → เสีย <b>CIT + PITA</b> · ใช้ <b>Segment = tax regime</b> (CIT/PITA/PSC/MTJDA) เป็นตัวขับการแยกภาษี + FX</li>
+      <li>Currency: <b>LC1</b>=COO · <b>LC2</b>=USD (group) · <b>LC3</b>=USDTH (tax, เฉพาะ 0L/T1 บริษัทไทย)</li>
+      <li>DRC ใช้กับ <b>P.P.30 text file / e-Tax / MY e-invoice</b> (DRC statutory forms ไม่ใช้ — CR-A dropped, Jul-2026) — แต่แบบ / ใบแนบ / ไฟล์ WHT ไทยออกจาก <code>ZTAXB_R01</code> (TAX-FRM-5 ถูกยกเลิก แม้ BPE ยังเขียน DRC)</li>
+    </ul>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Overview — 6 L4 Processes</h2></div>
+    <p class="sec-sub">L3 <code>01.01.07</code> Tax Accounting &amp; Processing แตกเป็น 6 process (รวม 1 TH-specific)</p>
+    <table>
+      <thead><tr><th style="width:130px">L4</th><th>Process</th><th style="width:150px">แบบ/ผลลัพธ์หลัก</th></tr></thead>
+      <tbody>
+        <tr><td class="ac">01.01.07.01</td><td>Direct Tax (CIT, PITA) — advance/quarterly/annual, CbCR, BEPS 2.0 Pillar Two</td><td>PND50/51 · ภ.ง.ป.70/71 · GloBE/CbCR</td></tr>
+        <tr><td class="ac">01.01.07.02</td><td>Indirect Tax (VAT, GST, SST, SBT, CT) — domestic + cross-border</td><td>PP30 · PP36 · PT40 · SST-02 · CT return</td></tr>
+        <tr><td class="ac">01.01.07.03</td><td>Withholding Tax (Global)</td><td>PND · CP37/37A/37D · MM WHT</td></tr>
+        <tr><td class="ac">01.01.07.03*</td><td>Withholding Tax (TH Specific) — paper + e-WHT</td><td>PND1/2/3/53/54 · 50BIS</td></tr>
+        <tr><td class="ac">01.01.07.04</td><td>Period-End Tax Reporting &amp; Compliance — current/deferred tax (IAS 12), ETR</td><td>current/deferred tax · revaluation</td></tr>
+        <tr><td class="ac">01.01.07.05</td><td>Year-End Tax Reporting &amp; Compliance — half-year + annual</td><td>PND50/51 · ภ.ง.ป.70/71</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>Client-specific:</b> ปิโตรเลียมคือรายได้หลัก → เสีย 2 ภาษีเงินได้ (<b>CIT</b> + <b>PITA</b>) · ระบบใช้ field <b>Segment</b> แทน tax regime แยก CIT/PITA และขับการแปลงค่าเงิน (มี Document Splitting) · dependency: FI (data), MM (PO), Enterprise Design (jurisdiction)</div>
+  </section>
+
+  <!-- SYSTEM INTEGRATION -->
+  <section id="integration">
+    <div class="sec-head"><span class="sec-num">2</span><h2>System Integration Landscape</h2></div>
+    <p class="sec-sub">ธุรกรรม → คัดกรอง → S/4 core → compliance → ยื่น/จ่าย → archive · เส้นทางข้อมูลของภาษีทั้งกลุ่ม</p>
+
+    <div class="kit-dfd" role="group" aria-label="Tax system integration landscape">
+      <div class="kit-dfd__in" style="min-width:820px">
+        <div class="dfd-stage">
+          <div class="dfd-slabel">Capture</div>
+          <div class="dfd-node src"><div class="dt">Business Network (BN)</div><div class="dsub">workflow กลาง: payment init + vendor invoice</div></div>
+          <div class="dfd-node src"><div class="dt">OpenText VIM</div><div class="dsub">รับ invoice · tax screening/advisory (MY/MM) · payment request</div></div>
+        </div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage">
+          <div class="dfd-slabel">Core · S/4HANA</div>
+          <div class="dfd-node prog"><div class="dt">Tax determination</div><div class="dsub">tax code (Indirect+WHT) → OB40 · Business Place</div></div>
+          <div class="dfd-node prog"><div class="dt">Tax ledgers</div><div class="dsub">0L + T1 · LC1/2/3 · ACDOCA · Segment (tax regime)</div></div>
+          <div class="dfd-node prog"><div class="dt">WRICEF programs</div><div class="dsub">ZTAXA_R02/032/042 · deferred tax · recon</div></div>
+        </div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage">
+          <div class="dfd-slabel">Compliance</div>
+          <div class="dfd-node tbl"><div class="dt">SAP DRC</div><div class="dsub">P.P.30 text file (จาก RPT-6) · e-Tax listing · MY e-invoice (MyInvois API) · <b>ไม่ใช่</b> แบบ WHT (FRM-5 ยกเลิก)</div></div>
+          <div class="dfd-node tbl"><div class="dt">SAP Analytics (SAC)</div><div class="dsub">PITA · GloBE · deferred/current tax · cost recovery</div></div>
+        </div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage">
+          <div class="dfd-slabel">Submit &amp; Pay</div>
+          <div class="dfd-node out"><div class="dt">Online Tax Portals</div><div class="dsub">RD (TH) · MySST (MY) · IRD (MM)</div></div>
+          <div class="dfd-node out"><div class="dt">Banks HSBC / BOFA</div><div class="dsub">e-WHT: จ่าย RD ใน 4 วัน · ห้ามออก 50BIS ผ่าน DRC</div></div>
+        </div>
+        <div class="dfd-arrow"></div>
+        <div class="dfd-stage">
+          <div class="dfd-slabel">Archive</div>
+          <div class="dfd-node gl"><div class="dt">xECM / Doc Center</div><div class="dsub">แบบ · receipt · 50BIS · retention</div></div>
+        </div>
+      </div>
+      <div class="dfd-legend">
+        <span><i style="background:var(--ink-soft)"></i>capture/input</span>
+        <span><i style="background:var(--petrol)"></i>S/4 core</span>
+        <span><i style="background:var(--brass)"></i>compliance</span>
+        <span><i style="background:var(--warn)"></i>submit/pay</span>
+        <span><i style="background:var(--petrol-deep)"></i>archive</span>
+      </div>
+    </div>
+
+    <h3>ระบบแต่ละตัวทำอะไร</h3>
+    <div class="sys">
+      <div class="syscard core"><div class="n">S/4HANA</div><div class="r">FI/tax engine — posting, tax determination (tax codes → OB40), Extended WHT, tax ledgers 0L/T1, ACDOCA, WRICEF programs</div></div>
+      <div class="syscard cap"><div class="n">OpenText VIM</div><div class="r">Vendor Invoice Mgmt — รับ invoice, tax screening/advisory (MY/MM), review/update tax code, payment request</div></div>
+      <div class="syscard cap"><div class="n">Business Network (BN)</div><div class="r">Workflow กลาง — payment initiation (tax team = internal vendor) + vendor invoice processing</div></div>
+      <div class="syscard comp"><div class="n">SAP DRC</div><div class="r">Document &amp; Reporting Compliance — P.P.30 <b>text file</b> (input จาก TAX-RPT-6; DRC statutory forms ไม่ใช้ตาม CR-A dropped), e-tax invoice listing (ENH-13 / ENH-14), MY e-invoice ผ่าน API ตรงกับ MyInvois (IRBM) · BPE เดิมเขียนว่าแบบ PND ออกจาก DRC ด้วย แต่ TAX-FRM-5 ถูกยกเลิก → แบบ/ใบแนบ/ไฟล์ WHT ไทยออกจาก ZTAXB_R01</div></div>
+      <div class="syscard comp"><div class="n">SAP Analytics Cloud (SAC)</div><div class="r">รายงานวิเคราะห์ — PITA, BEPS/GloBE, deferred/current tax, cost recovery, tax analysis</div></div>
+      <div class="syscard out"><div class="n">Online Tax Portals</div><div class="r">ยื่น + รับ receipt — RD e-filing (TH), MySST (MY), IRD (MM)</div></div>
+      <div class="syscard out"><div class="n">Banks (HSBC / BOFA)</div><div class="r">e-WHT — ธนาคารจ่าย WHT ให้ RD ใน 4 วัน, FX = BOT rate T-2, ออกหลักฐานแทน (ไม่ 50BIS ผ่าน DRC)</div></div>
+      <div class="syscard arch"><div class="n">OpenText xECM / Doc Center</div><div class="r">จัดเก็บเอกสาร — แบบยื่น, receipt, 50BIS, working paper ตาม retention (tax มีสิทธิ์ display)</div></div>
+    </div>
+    <p class="body" style="font-size:12.5px;color:var(--ink-soft)">Design-time: กระบวนการ model ใน <b>Signavio</b> (ไม่ใช่ runtime)</p>
+  </section>
+
+  <!-- BACKBONE -->
+  <section id="backbone">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Process Backbone — มาตรฐานเดียวทุกภาษี</h2></div>
+    <p class="sec-sub">BPE ออกแบบ “standardized global flow” 1 ชุด แล้วแตก sub-process เฉพาะเมื่อกฎต่างจริง · swimlane ตามบทบาท</p>
+    <div class="kit-swim" role="group" aria-label="Standardized tax process backbone by role">
+      <div class="kit-swim__in" style="--lanes:4">
+        <div class="kit-swim__head">
+          <div class="swim-lane la1"><span class="dotc"></span>Finance &amp; Acct</div>
+          <div class="swim-lane la2"><span class="dotc"></span>Tax Accountant</div>
+          <div class="swim-lane la3"><span class="dotc"></span>Tax Reviewer</div>
+          <div class="swim-lane la4"><span class="dotc"></span>AP · Bank · System</div>
+        </div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"><div class="swim-node la1"><span class="sn">1</span><div class="st">แชร์ข้อมูล / trial balance</div><div class="sd">revenue · expense · asset (email)</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-h" style="grid-column:1 / 3"></span><span class="swim-down" style="grid-column:2"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">2</span><div class="st">คัดกรอง / extract</div><div class="sd">tax screening ใน VIM · เลือก tax code</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:2"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">3</span><div class="st">รัน WRICEF report / program</div><div class="sd">S/4HANA (custom Z-report)</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:2"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">4</span><div class="st">verify + reconcile</div><div class="sd">report ต้อง = GL</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:2"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">5</span><div class="st">เตรียมแบบ/ฟอร์ม draft</div><div class="sd">SAP DRC หรือ manual (paper/online form)</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-h" style="grid-column:2 / 4"></span><span class="swim-down" style="grid-column:3"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la3"><span class="sn">6</span><div class="st">review + comment</div><div class="sd">Tax Manager / Finance Manager</div></div></div>
+          <div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-v" style="grid-column:3"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la3"><span class="sn">7</span><div class="st">approve (per DAS)</div><div class="sd">MY: HOD · digital/physical sign-off</div></div></div>
+          <div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-h" style="grid-column:2 / 4"></span><span class="swim-down" style="grid-column:2"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">8</span><div class="st">ยื่น (submit)</div><div class="sd">Online Portal / paper</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-h" style="grid-column:2 / 5"></span><span class="swim-down" style="grid-column:4"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div><div class="swim-cell"></div><div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la4"><span class="sn">9</span><div class="st">จ่ายเงิน</div><div class="sd">AP ผ่าน VIM/BN · e-WHT ผ่าน bank</div></div></div>
+        </div>
+        <div class="kit-swim__link"><span class="swim-h" style="grid-column:2 / 5"></span><span class="swim-down" style="grid-column:2"></span></div>
+
+        <div class="kit-swim__band">
+          <div class="swim-cell"></div>
+          <div class="swim-cell"><div class="swim-node la2"><span class="sn">10</span><div class="st">รับ receipt + archive</div><div class="sd">xECM / Document Center</div></div></div>
+          <div class="swim-cell"></div><div class="swim-cell"></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout"><b>อ่าน backbone แล้วเทียบ:</b> ทุก L4 คือ backbone นี้ + WRICEF/แบบยื่นเฉพาะของตัวเอง · ตัวอย่าง end-to-end จริงดูที่ <a href="overview.html#threads" style="color:var(--petrol);font-weight:600">5 golden threads</a> · WHT flow ที่ <a href="wht.html" style="color:var(--petrol);font-weight:600">WHT</a></div>
+  </section>
+
+  <!-- 6 L4 PROCESSES -->
+  <section id="l4">
+    <div class="sec-head"><span class="sec-num">4</span><h2>6 L4 Processes — ขั้นตอน + WRICEF</h2></div>
+    <p class="sec-sub">แต่ละ process: trigger, ขั้นสำคัญ, WRICEF/โปรแกรม, ผลลัพธ์</p>
+    <table>
+      <thead><tr><th style="width:88px">L4</th><th>Trigger &amp; ขั้นสำคัญ</th><th style="width:200px">WRICEF / โปรแกรมเด่น</th></tr></thead>
+      <tbody>
+        <tr><td class="ac">.01 Direct</td><td>Extract reports → ขอข้อมูล F&amp;A → prepare tax comp → review/approve → submit → pay → archive</td><td>TAX-RPT-5/037/062/067 · SAC-RPT-5/272/276/294</td></tr>
+        <tr><td class="ac">.02 Indirect</td><td>รับ invoice (VIM) → screen/update tax code → transfer deferred VAT → run indirect tax report → recon → เตรียมแบบ (DRC) → review/approve → submit → pay → archive</td><td>TAX-ENH-8 · RPT-20/002/005/031/034/044/052/055/069/070/080 · ENH-3/045/071/072/081 · FRM-6</td></tr>
+        <tr><td class="ac">.03 WHT (Global)</td><td>รับ invoice (VIM) → screen/update WHT code → auto WHT FX update → generate WHT report → verify → prepare form → review/approve → submit → pay → archive</td><td>TAX-ENH-2 (ZTAXA_R03) · FRM-2 · RPT-7/041/059 · RPT-18 · ENH-12/082</td></tr>
+        <tr><td class="ac">.03* WHT-TH</td><td>auto WHT FX update → generate 50BIS + แจก vendor → compile monthly → generate PND forms/files → check GL → validate → review/approve → submit RD (paper/e-WHT) → archive</td><td>TAX-ENH-2 · FRM-3 (50BIS) · FRM-4/078 · ENH-1/077/079 · RPT-13/074</td></tr>
+        <tr><td class="ac">.04 Period-End</td><td>extract FI/asset → post tax adj (tax ledger) → run current/deferred tax → review → upload template → post → revaluation → period-end report</td><td>TAX-RPT-4/028 · ENH-10/076 · SAC-RPT-3</td></tr>
+        <tr><td class="ac">.05 Year-End</td><td>extract reports → BU Head approval → prepare tax comp (half/annual) → review/approve (DAS) → submit → offset/refund → pay → archive</td><td>ใช้ report จาก .01/.04 · PND50/51 · ภ.ง.ป.70/71</td></tr>
+      </tbody>
+    </table>
+    <div class="trap"><b>จุดร่วมที่ต้องจำ:</b> ทุก process มีขั้น <b>Transfer Deferred VAT</b> (input รอเคลม → input ปกติ), <b>DAS approval</b> ก่อนยื่น, และ payment ผ่าน <b>VIM/BN</b> (tax team = internal vendor) · MM: deferred VAT ทำโดย <b>Cost Controller</b></div>
+  </section>
+
+  <!-- KDS -->
+  <section id="kds">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Key Data Structure (KDS) — อยู่ที่ไหนในคิท</h2></div>
+    <p class="sec-sub">Section 6 ของ BPE กำหนดโครงสร้างข้อมูลที่ขับภาษี · แต่ละหัวข้อมี “บ้าน” หน้าเดียวในคิท (ยืนยันจาก BPE แล้ว <span class="ok">CONFIRMED</span>)</p>
+    <table>
+      <thead><tr><th style="width:190px">KDS item</th><th>สรุปหนึ่งบรรทัด</th><th style="width:170px">อ่านเต็มที่</th></tr></thead>
+      <tbody>
+        <tr><td class="ac">Segment = tax regime</td><td>CIT / PITA1 / PITA3 / PSC / MTJDA ต่อประเทศ · derive ด้วย substitution TAX-ENH-4 (G/L → CC+IO → PC) · ตัดสิน LC3 rate</td><td><a href="overview.html#segment" style="color:var(--petrol);font-weight:600">Overview §5</a> · <a href="doc-verification.html#segment" style="color:var(--petrol);font-weight:600">ENH-4</a></td></tr>
+        <tr><td class="ac">Currency LC1 / LC2 / LC3</td><td>type 10 / 30 / 40 · TH = THB / USD / USDTH · LC3 เฉพาะ CoCd ไทย ledger 0L &amp; T1</td><td><a href="overview.html#currency" style="color:var(--petrol);font-weight:600">Overview §4</a> · <a href="doc-verification.html#lc" style="color:var(--petrol);font-weight:600">LC rules</a></td></tr>
+        <tr><td class="ac">Indirect tax code</td><td>หลักแรก I / O / D / N / U / V / R / S / C / M / T / P · TH VAT36 = V0–V6 · SBT S1 3.3%</td><td><a href="indirect-tax.html#codes" style="color:var(--petrol);font-weight:600">Indirect §4</a></td></tr>
+        <tr><td class="ac">WHT type &amp; code</td><td>type A/B = invoice/payment + recipient digit · code A/D/G/H/I/J = standard / DTA / gross-up · TH recipient 01/02/03/53/54</td><td><a href="wht.html#codes" style="color:var(--petrol);font-weight:600">WHT §2</a></td></tr>
+        <tr><td class="ac">Business place (TH)</td><td>สาขาตาม RD · TIN + branch 5 หลัก ทั้งผู้ซื้อ/ผู้ขาย · S/4 4 หลัก · 1 doc = 1 business place</td><td><a href="doc-verification.html#fields" style="color:var(--petrol);font-weight:600">Field rules</a></td></tr>
+        <tr><td class="ac">WHT rates (TH)</td><td>ตาม ม.40 × ผู้รับ · e-WHT 1% หมดอายุ 31-Dec-2025 (G6)</td><td><a href="statutory.html#rates" style="color:var(--petrol);font-weight:600">Statutory · rates</a></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- WRICEF LIST -->
+  <section id="wricef">
+    <div class="sec-head"><span class="sec-num">6</span><h2>WRICEF List — 52 objects</h2></div>
+    <p class="sec-sub">ตัวย่ออักษรกลาง: R=Report · E=Enhancement · F=Form · SAC=Analytics Cloud (final list ยึด agreed WRICEF file)</p>
+
+    <details class="fold" open>
+      <summary>Direct Tax (.01) — 9 objects</summary>
+      <div class="fold-body">
+        <table><thead><tr><th style="width:110px">ID</th><th>Description</th></tr></thead><tbody>
+          <tr><td class="ac">TAX-RPT-5</td><td>Loss Carried Forward (LCF) Tax Report — all countries</td></tr>
+          <tr><td class="ac">TAX-RPT-25</td><td>PITA Report: Malaysia</td></tr>
+          <tr><td class="ac">TAX-RPT-26</td><td>PPE Report for AUC &amp; AC by WBS</td></tr>
+          <tr><td class="ac">TAX-RPT-27</td><td>Cost Allocation &amp; Charge Out Report (segment transfer) · P1-Ph2</td></tr>
+          <tr><td class="ac">TAX-RPT-9</td><td>Overseas Tax Report for AA</td></tr>
+          <tr><td class="ac">SAC-RPT-5</td><td>PBT &amp; PPE reconciliation by PSC (MY)</td></tr>
+          <tr><td class="ac">SAC-RPT-6</td><td>MY Tax Analysis Report</td></tr>
+          <tr><td class="ac">SAC-RPT-1</td><td>Tax Report for Cost Recovery</td></tr>
+          <tr><td class="ac">SAC-RPT-2</td><td>BEPS 2.0 — GloBE Return report</td></tr>
+        </tbody></table>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>Indirect Tax (.02) — 21 objects</summary>
+      <div class="fold-body">
+        <table><thead><tr><th style="width:110px">ID</th><th>Description</th></tr></thead><tbody>
+          <tr><td class="ac">TAX-RPT-20</td><td>Listing of XML/PDF File Name (Vendor)</td></tr>
+          <tr><td class="ac">TAX-RPT-14</td><td>Commercial Tax (Overseas &amp; Local) Report (MM)</td></tr>
+          <tr><td class="ac">TAX-RPT-16</td><td>Indirect Tax Report (MY)</td></tr>
+          <tr><td class="ac">TAX-RPT-17</td><td>Commercial Tax Return (MM) — quarterly + annual</td></tr>
+          <tr><td class="ac">TAX-RPT-15</td><td>Input Tax Listing + Interface to Doc Center</td></tr>
+          <tr><td class="ac">TAX-ENH-8</td><td>Transfer Deferred Input Tax</td></tr>
+          <tr><td class="ac">TAX-RPT-10</td><td>Aging input VAT report (deferred input VAT)</td></tr>
+          <tr><td class="ac">TAX-RPT-24</td><td>Net VAT Clearing Report + PP30 form</td></tr>
+          <tr><td class="ac">TAX-RPT-21</td><td>E-invoice reconciliation report (MY)</td></tr>
+          <tr><td class="ac">TAX-ENH-3</td><td>Enhancement — ZTAXA_R02 (VAT36)</td></tr>
+          <tr><td class="ac">TAX-RPT-2</td><td><b style="color:var(--brass)">★ my object</b> · ZTAXA_R04 — OMAN Tax Report (Cash Call) · <a href="rpt2-oman-vat.html" style="color:var(--petrol);font-weight:600">page</a></td></tr>
+          <tr><td class="ac">TAX-ENH-9</td><td>Validation/Substitution for Tax Regime — <b>แทนที่ด้วย TAX-ENH-4</b> (CR-TKT-03)</td></tr>
+          <tr><td class="ac">TAX-FRM-6</td><td>PP36 VAT Return form (PDF) + DRC offsetting</td></tr>
+          <tr><td class="ac">TAX-RPT-12</td><td>VAT36 &amp; e-VAT36 Reconciliation Submission (+PC)</td></tr>
+          <tr><td class="ac">TAX-RPT-11</td><td>TH VAT Submission Reconciliation (ZTAXA_R10)</td></tr>
+          <tr><td class="ac">TAX-RPT-6</td><td>Net VAT Clearing Report + PP30</td></tr>
+          <tr><td class="ac">TAX-RPT-22</td><td>Input &amp; e-Input VAT report (Summary to RD)</td></tr>
+          <tr><td class="ac">TAX-ENH-13</td><td>Listing XML (Output) DRC — e-Tax evidence</td></tr>
+          <tr><td class="ac">TAX-ENH-14</td><td>Listing XML (Output) DRC — validate digital signature</td></tr>
+          <tr><td class="ac">TAX-RPT-23</td><td>Output &amp; e-Output VAT report (Summary to RD)</td></tr>
+          <tr><td class="ac">TAX-ENH-23</td><td>VAT report by Project (JVA field)</td></tr>
+        </tbody></table>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>Withholding Tax (.03) — 16 objects</summary>
+      <div class="fold-body">
+        <table><thead><tr><th style="width:110px">ID</th><th>Description</th></tr></thead><tbody>
+          <tr><td class="ac">TAX-FRM-2</td><td><b style="color:var(--brass)">★ my object</b> · WHT Certificate form &amp; report (MM) · <a href="frm2-mm-wht-certificate.html" style="color:var(--petrol);font-weight:600">page</a></td></tr>
+          <tr><td class="ac">TAX-RPT-7</td><td>WHT Report</td></tr>
+          <tr><td class="ac">TAX-ENH-12</td><td>Block WHT Generation for PITA</td></tr>
+          <tr><td class="ac">TAX-RPT-13</td><td>WHT listing + Interface to Doc Center</td></tr>
+          <tr><td class="ac">TAX-ENH-2</td><td>ZTAXA_R03 (WHT FX) — Lift &amp; Shift TH + MY</td></tr>
+          <tr><td class="ac">TAX-FRM-3</td><td>Forms PND1 &amp; PND1 Kor — WHT certificate (50BIS)</td></tr>
+          <tr><td class="ac">TAX-RPT-18</td><td>e-WHT &amp; WHT Reconciliation Report (+PC)</td></tr>
+          <tr><td class="ac">TAX-RPT-8</td><td>MM WHT Report</td></tr>
+          <tr><td class="ac">TAX-RPT-19</td><td>MY WHT Report</td></tr>
+          <tr><td class="ac">TAX-FRM-4</td><td>Attachment (PDF) — PND1, PND1 Kor, PND2 Kor</td></tr>
+          <tr><td class="ac">TAX-ENH-1</td><td><b style="color:var(--brass)">★ my object</b> · Attachment text file — BPE: PND1, PND1 Kor, PND2 Kor · FD: PND1 / 1A / 2 / 2A / 3 / 53 · <a href="enh1-rd-text-files.html" style="color:var(--petrol);font-weight:600">page</a></td></tr>
+          <tr><td class="ac">TAX-RPT-1</td><td><b style="color:var(--brass)">★ my object</b> · Reconciliation Report PND54 (+PC) · <a href="rpt1-wht-vat-recon.html" style="color:var(--petrol);font-weight:600">page</a></td></tr>
+          <tr><td class="ac">TAX-ENH-6</td><td>Text file (SWC) — PND3, PND53</td></tr>
+          <tr><td class="ac">TAX-FRM-1</td><td><b style="color:var(--brass)">★ my object</b> · Attachment 1 (PDF) — BPE: PND54 (+PC) · FD: PND3 / 53 / 54 · <a href="frm1-wht-attachment.html" style="color:var(--petrol);font-weight:600">page</a></td></tr>
+          <tr><td class="ac">TAX-ENH-5</td><td>Text file (SWC) — PND1, PND1 Kor, PND2, PND2 Kor</td></tr>
+          <tr><td class="ac">TAX-ENH-16</td><td>Reversal of WHT FX rate if payment reversed</td></tr>
+        </tbody></table>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>Period-End (.04) — 6 objects</summary>
+      <div class="fold-body">
+        <table><thead><tr><th style="width:120px">ID</th><th>Description</th></tr></thead><tbody>
+          <tr><td class="ac">TAX-RPT-4</td><td>Current Tax Report (Overseas)</td></tr>
+          <tr><td class="ac">TAX-RPT-3</td><td>Current Tax Report (TH) + custom tables (ZTAXA_T05–037)</td></tr>
+          <tr><td class="ac">TAX-ENH-10</td><td>ZTAXA_R06 — Upload File for Current tax report</td></tr>
+          <tr><td class="ac">TAX-ENH-15</td><td>Upload — Deferred Tax Report</td></tr>
+          <tr><td class="ac">SAC-RPT-4/101/102</td><td>Tax — Friday Performance Project Report</td></tr>
+          <tr><td class="ac">SAC-RPT-3</td><td>TH/Overseas Deferred Income Tax Report</td></tr>
+        </tbody></table>
+      </div>
+    </details>
+    <p class="body" style="font-size:12.5px;color:var(--ink-soft)"><b>Interface note:</b> TAX-RPT-15 &amp; TAX-RPT-13 มีทั้ง report + file download (interface to Document Center) แม้ ID เป็น “R”</p>
+  </section>
+
+  <!-- ACRONYMS -->
+  <section id="acronyms">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Acronyms (จาก BPE ยืนยัน)</h2></div>
+    <table>
+      <thead><tr><th style="width:130px">ตัวย่อ</th><th>Full form</th></tr></thead>
+      <tbody>
+        <tr><td class="ac">BPE / PDO</td><td>Business Blueprint · Process &amp; Data Overview (เอกสาร D2.1 นี้)</td></tr>
+        <tr><td class="ac">KDS</td><td><b>Key Data Structure</b> (Section 6 — segment/business place/tax code)</td></tr>
+        <tr><td class="ac">BPML</td><td>Business Process Master List</td></tr>
+        <tr><td class="ac">DAS</td><td>Delegation of Authority and Signature</td></tr>
+        <tr><td class="ac">DTA</td><td>Double Tax Agreement</td></tr>
+        <tr><td class="ac">CIT / PITA</td><td>Corporate Income Tax / Petroleum Income Tax Act</td></tr>
+        <tr><td class="ac">VAT / GST / SST / SBT / CT</td><td>Value Added / Goods&amp;Services / Sales&amp;Service / Specific Business / Commercial Tax</td></tr>
+        <tr><td class="ac">SAP DRC</td><td>Document and Reporting Compliance</td></tr>
+        <tr><td class="ac">SAC</td><td>SAP Analytics Cloud</td></tr>
+        <tr><td class="ac">VIM · xECM · BN</td><td>Vendor Invoice Mgmt · Extended ECM · Business Network</td></tr>
+        <tr><td class="ac">e-WHT · e-TT · VA</td><td>Electronic WHT · Electronic Telegraphic Transfer · Virtual Account</td></tr>
+        <tr><td class="ac">RD · IRBM · RMCD</td><td>Revenue Dept (TH) · Inland Revenue Board (MY) · Royal Malaysia Customs</td></tr>
+        <tr><td class="ac">MTJDA · MOGE</td><td>Malaysia-Thailand Joint Development Area · Myanmar Oil &amp; Gas Enterprise</td></tr>
+        <tr><td class="ac">PSC · NR · ETR · RC</td><td>Production Sharing Contract · Non-Resident · Effective Tax Rate · Revenue Code</td></tr>
+      </tbody>
+    </table>
+    <p class="body" style="font-size:12.5px;color:var(--ink-soft)">ศัพท์ delivery (FSD/FUT/FIT/UAT) ดูที่ <a href="delivery-fut.html" style="color:var(--petrol);font-weight:600">Delivery Process</a> · ศัพท์ภาษีที่ <a href="glossary.html" style="color:var(--petrol);font-weight:600">Glossary</a></p>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Self-check</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. ระบบไหนสร้าง “แบบยื่น statutory” (PP30/PND) และระบบไหนจัดเก็บเอกสาร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">P.P.30 text file / e-Tax = <b>SAP DRC</b> (ไม่ใช้ DRC statutory forms) · แบบ/ใบแนบ/ไฟล์ WHT ไทย = <b>ZTAXB_R01</b> output groups (ไม่ใช่ DRC) · จัดเก็บ = <b>xECM / Document Center</b></div></details></div>
+      <div class="selfq"><p>2. e-WHT จ่ายผ่านใคร ภายในกี่วัน และมีข้อห้ามอะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ธนาคาร <b>HSBC / BOFA</b> จ่าย RD ภายใน <b>4 วัน</b> · ห้ามออก <b>50BIS ผ่าน DRC</b></div></details></div>
+      <div class="selfq"><p>3. LC3 คือสกุลอะไร ใช้กับ ledger/บริษัทใด?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><b>USDTH</b> (tax currency, PITA) · เฉพาะ ledger <b>0L &amp; T1</b> และ <b>บริษัทไทย</b></div></details></div>
+      <div class="selfq"><p>4. Segment ใน Client ใช้แทนอะไร และ derive จากไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">แทน <b>tax regime</b> (CIT/PITA/PSC/MTJDA) · derive ด้วย substitution <b>TAX-ENH-4</b>: ZTAXB_T04 (G/L) → ZTAXB_T05 (CC + IO) → segment ของ profit center</div></details></div>
+      <div class="selfq"><p>5. หลักแรกของ WHT Code <code>D</code> และ <code>G</code> หมายถึงอะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a"><code>D</code> = <b>DTA rate</b> · <code>G</code> = <b>Gross Up – Standard rate</b></div></details></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · BPE + System Integration (D2.1)</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+</div>
+</body>
+</html>

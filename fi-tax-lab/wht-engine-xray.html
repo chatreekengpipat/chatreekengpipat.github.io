@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZTAXA_R01 X-ray — one program, many WRICEFs · SAP FI-Tax Knowledge Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
+    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --warn:#B91C1C;--dr:#1D4ED8;--cr:#B45309;--card:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 0 90px;}
+  a{color:var(--petrol);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin:0 6px 22px 0;transition:.15s;}
+  .crumb:hover{background:rgba(37,99,235,.14);}
+  .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .kicker .pill{background:var(--petrol);color:var(--paper);padding:2px 9px;border-radius:5px;letter-spacing:.12em;}
+  .kicker .pill.conf{background:var(--warn);}
+  h1{font-size:clamp(27px,5.2vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.015em;}
+  h1 .accent{color:var(--petrol);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-weight:600;}
+  .src{font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .lede{margin:24px 0 6px;font-size:15px;color:var(--ink-soft);border-left:3px solid var(--brass);padding-left:18px;}
+  .lede b{color:var(--ink);font-weight:600;}
+  .easy{margin:18px 0 6px;border-radius:12px;padding:14px 18px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.22);font-size:14px;}
+  .easy::before{content:"อธิบายง่าย";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  .pagenav{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  .pagenav a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);text-decoration:none;border:1.3px solid var(--line);border-radius:8px;padding:7px 12px;transition:.15s;}
+  .pagenav a:hover{border-color:var(--petrol);color:var(--petrol);}
+  section{margin-top:48px;scroll-margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;border-bottom:2px solid var(--ink);padding-bottom:10px;flex-wrap:wrap;}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--paper);background:var(--petrol);padding:3px 11px;border-radius:6px;white-space:nowrap;}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .sec-sub{color:var(--ink-soft);font-size:14px;margin:12px 0 18px;}
+  h3{font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.11em;color:var(--petrol-deep);margin:24px 0 9px;display:flex;align-items:center;gap:10px;}
+  h3::before{content:"";width:16px;height:2px;background:var(--brass);flex:0 0 16px;}
+  h4{font-size:15px;font-weight:700;margin:2px 0 8px;color:var(--petrol-deep);}
+  p.body{font-size:14.5px;margin:8px 0;}
+  .small{font-size:12.5px;color:var(--ink-soft);}
+  ul.clean{list-style:none;margin:8px 0;}
+  ul.clean li{padding:5px 0 5px 22px;position:relative;font-size:14px;border-bottom:1px dotted var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"▸";position:absolute;left:2px;color:var(--brass);font-weight:700;}
+  ul.clean li b{font-weight:600;}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+  .tblwrap table{margin:0;}
+  @media(max-width:600px){.tblwrap table{min-width:540px;}.tblwrap table td,.tblwrap table th{word-break:normal;overflow-wrap:normal;}}
+  thead th{text-align:left;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 9px;}
+  tbody td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:rgba(37,99,235,.035);}
+  code,.code{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .num{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;}
+  .dr{color:var(--dr);font-weight:600;} .cr{color:var(--cr);font-weight:600;}
+  ol.flow{list-style:none;counter-reset:step;margin:12px 0;}
+  ol.flow>li{counter-increment:step;position:relative;padding:11px 0 11px 46px;border-bottom:1px solid var(--line-soft);font-size:14px;}
+  ol.flow>li:last-child{border-bottom:none;}
+  ol.flow>li::before{content:counter(step);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--petrol);color:var(--paper);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  ol.flow>li b{font-weight:600;}
+  .card{border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;margin:12px 0;background:var(--card);}
+  .card .ct{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .grid2>.card,.grid3>.card{margin:0;}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(37,99,235,.05);font-size:14px;}
+  .keybox b{color:var(--petrol-deep);}
+  .keybox ul{list-style:none;margin:8px 0 2px;}
+  .keybox li{padding:5px 0 5px 20px;position:relative;font-size:13.8px;}
+  .keybox li::before{content:"✔";position:absolute;left:0;color:var(--petrol);font-weight:700;}
+  .callout{border:1.5px dashed var(--brass);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:13.8px;background:rgba(180,83,9,.05);}
+  .callout b{color:var(--brass);}
+  .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(185,28,28,.05);font-size:13.8px;}
+  .trap b{color:var(--warn);}
+  .lock{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:14px 18px;margin:16px 0;background:rgba(29,78,216,.06);font-size:13.8px;}
+  .lock::before{content:"🔒 Locked design — ไม่ใช่ defect";display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:4px;}
+  details.fold{border:1.5px solid var(--line);border-radius:12px;margin:12px 0;background:var(--card);overflow:hidden;}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:11px;color:var(--ink);}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::before{content:"▸";color:var(--brass);font-weight:700;transition:transform .2s;flex:0 0 auto;}
+  details.fold[open]>summary::before{transform:rotate(90deg);}
+  details.fold>summary:hover{color:var(--petrol);}
+  details.fold .fold-body{padding:0 18px 16px;font-size:14px;}
+  .todo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);background:rgba(185,28,28,.08);border:1px dashed var(--warn);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+  /* evidence tags (knowledge-base convention) */
+  .ev{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:1px;white-space:nowrap;border:1px solid transparent;}
+  .ev.std{color:var(--ink-soft);border-color:var(--line);}
+  .ev.bp{color:var(--petrol-deep);background:rgba(37,99,235,.10);}
+  .ev.fd{color:var(--petrol);background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+  .ev.sys{color:#fff;background:var(--petrol);}
+  .ev.agreed{color:#fff;background:var(--petrol-deep);}
+  .ev.infer{color:var(--brass);border:1px dashed var(--brass);}
+  .ev.tbc{color:var(--warn);border:1px dashed var(--warn);background:rgba(185,28,28,.06);}
+  :root[data-theme="dark"] .ev.sys,:root[data-theme="dark"] .ev.agreed{color:var(--paper);}
+  .evlegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--ink-soft);margin:12px 0 0;}
+  .evlegend .ev{margin-left:0;margin-right:4px;}
+  /* status pills */
+  .st{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;border-radius:20px;padding:1px 8px;white-space:nowrap;}
+  .st.open{color:var(--warn);background:rgba(185,28,28,.09);}
+  .st.block{color:#fff;background:var(--warn);}
+  .st.wip{color:var(--brass);background:rgba(180,83,9,.13);}
+  .st.done{color:var(--petrol-deep);background:rgba(37,99,235,.12);}
+  :root[data-theme="dark"] .st.block{color:var(--paper);}
+  .qbox{background:linear-gradient(120deg,rgba(37,99,235,.07),rgba(180,83,9,.06));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .selfq{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .selfq:last-child{border-bottom:none;}
+  .selfq p{font-size:14px;font-weight:600;margin-bottom:6px;}
+  details.ans>summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--petrol);list-style:none;}
+  details.ans>summary::-webkit-details-marker{display:none;}
+  details.ans>summary::before{content:"เฉลย ▸ ";color:var(--brass);}
+  details.ans[open]>summary::before{content:"เฉลย ▾ ";}
+  details.ans .a{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .seealso{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;font-size:12.5px;align-items:center;}
+  .seealso>span{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .seealso a{text-decoration:none;border:1.3px solid var(--line);border-radius:20px;padding:3px 11px;color:var(--petrol-deep);background:var(--card);}
+  .seealso a:hover{border-color:var(--petrol);}
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @media print{body{background:#fff;padding:0;font-size:10.5pt;}.masthead{animation:none;}.card,.keybox,.callout,.trap,.lock,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb,.seealso{display:none;}details.fold,details.ans{border-color:#ccc;}.tblwrap{overflow:visible;}}
+  /* page-specific */
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+  .chips button{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:4px 11px;cursor:pointer;transition:.15s;}
+  .chips button:hover{border-color:var(--petrol);}
+  .chips button[aria-pressed="true"]{background:var(--brass);border-color:var(--brass);color:#fff;}
+  :root[data-theme="dark"] .chips button[aria-pressed="true"]{color:var(--paper);}
+  .xray{position:relative;margin:14px 0;padding-left:22px;}
+  .xray::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line);}
+  .ev-h{position:relative;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--petrol-deep);margin:18px 0 8px;}
+  .ev-h::before{content:"";position:absolute;left:-19px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--petrol);box-shadow:0 0 0 3px var(--paper);}
+  .blk{border:1.5px solid var(--line);border-left:4px solid var(--_c,var(--ink-soft));border-radius:10px;padding:9px 12px;margin:7px 0;background:var(--card);font-size:13.2px;transition:opacity .2s,box-shadow .2s,border-color .2s;}
+  .blk.std{--_c:var(--ink-soft);}
+  .blk.badi{--_c:var(--petrol);}
+  .blk.cus{--_c:var(--brass);}
+  .blk.dis{--_c:var(--warn);}
+  .blk .bt{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;}
+  .blk .tags{float:right;display:flex;gap:4px;flex-wrap:wrap;margin-left:8px;}
+  .blk .tags span{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;border-radius:4px;padding:1px 5px;background:rgba(180,83,9,.14);color:var(--brass);}
+  .blk .bd{color:var(--ink-soft);font-size:12.6px;margin-top:3px;}
+  .xray.focus .blk{opacity:.28;}
+  .xray.focus .blk.hit{opacity:1;border-color:var(--brass);box-shadow:0 0 0 3px rgba(180,83,9,.18);}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink-soft);margin:6px 0;}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  @media(max-width:640px){.split{grid-template-columns:1fr;}}
+  .route{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card);}
+  .route .rt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .route.std .rt{color:var(--petrol-deep);} .route.cus .rt{color:var(--brass);}
+  .tl{list-style:none;margin:12px 0;border-left:2px solid var(--line);padding-left:16px;}
+  .tl li{position:relative;padding:6px 0 8px;font-size:13.5px;}
+  .tl li::before{content:"";position:absolute;left:-22px;top:11px;width:10px;height:10px;border-radius:50%;background:var(--card);border:2px solid var(--brass);}
+  .tl li .d{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:var(--petrol-deep);margin-right:8px;}
+  .tl li.hit::before{background:var(--brass);}
+  .blast{border:1.5px dashed var(--brass);border-radius:12px;padding:12px 16px;background:rgba(180,83,9,.05);font-size:13.6px;min-height:52px;}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+</head>
+<body data-page="tax-engine">
+<div class="wrap">
+<a class="crumb" href="index.html">← หน้ารวม (Hub)</a>
+  <a class="crumb" href="wricef-portfolio.html">My 5 WRICEFs →</a>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span class="pill">X-ray</span>
+      <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
+      <span>Shared engine</span>
+    </div>
+    <h1>ZTAXA_R01 X-ray<br><span class="accent">โปรแกรมเดียว — WRICEF กว่า 10 ตัวแก้อยู่ในนั้น</span></h1>
+    <div class="meta">
+      <span>T-code · <b>ZTAXB_R01</b></span>
+      <span>Base · <b>RFIDYYWT</b> (Generic WHT)</span>
+      <span>Code snapshot · <b>31-Aug-2026</b></span>
+    </div>
+    <p class="src">Source: ABAP main program <code>ZTAXA_R01</code> (header, change history and event blocks) อ่านเมื่อ 31-Aug-2026 · ชื่อผู้แก้ในโค้ดถูกตัดออก · ตีความ include ที่ไม่ได้เห็นโค้ดติดป้าย <span class="ev infer">INFER</span></p>
+  </header>
+
+  <div class="easy">ทำไม bug หนึ่งตัวถึงพังหลาย object พร้อมกัน? เพราะใน SAP ไม่ได้มี “โปรแกรม RPT-1” “โปรแกรม FRM-1” แยกกัน — ทุกตัวคือ <b>ทางแยกในโปรแกรมเดียว</b> ที่ copy มาจาก RFIDYYWT ตั้งแต่ปี 2016 แล้วแต่ละ WRICEF ก็เข้าไปเติมโค้ดของตัวเองไว้ตรงจุดต่าง ๆ · หน้านี้ <b>เอ็กซ์เรย์โปรแกรมจริง</b> ให้เห็นว่าใครแก้ตรงไหน และกดเลือก WRICEF เพื่อดู “รัศมีความเสียหาย” ได้เลย</div>
+
+  <nav class="pagenav" aria-label="ข้ามไปยังหัวข้อ">
+    <a href="#identity">Identity</a>
+    <a href="#xray">Execution X-ray</a>
+    <a href="#routing">Output-group routing</a>
+    <a href="#history">Change history</a>
+    <a href="#lessons">สิ่งที่โค้ดสอน</a>
+    <a href="#selfcheck">Self-check</a>
+  </nav>
+
+  <!-- IDENTITY -->
+  <section id="identity">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Identity card</h2></div>
+    <div class="tblwrap"><table><tbody>
+      <tr><td style="width:200px">Report</td><td><code>REPORT zfitaxr034 MESSAGE-ID id_wt</code> · T-code <code>ZTAXB_R01</code> · dump แสดงเป็น main program <code>SAPLZTAXA_R01</code></td></tr>
+      <tr><td>Origin (ECC)</td><td>01-Feb-2016 · <code>ECDK924266</code> “Copy report from RFIDYYWT … generate report layout by <b>ALV Grid</b> instead of ALV_list” · โค้ด custom หลักอยู่ใน method <code>ZTAX_PRINT_ALV</code></td></tr>
+      <tr><td>Includes</td><td><code>I_RFIDYYWT_TOP</code> (global) · <code>ZTAXA_R01_TOP</code> · <code>ZTAXA_R01_001</code> (selection screen) · <code>ZTAXA_R01_I01</code> (processing) · <code>I_RFIDYYWT_F01</code> · <code>I_RFIDYYWT_FICA_*</code> · <code>I_RFIDYYWT_I02</code> · <code>ZTAXA_R01_I02</code></td></tr>
+      <tr><td>Custom helpers</td><td>Function <code>ZTAXA_R01_DISPATCHER</code> · class <code>ZTAXA_R_UTIL_CLASS</code> ถือค่า static: <code>GT_PRCTR_VAL</code>, <code>GT_RECID_VAL</code> (PC/RI จากจอ), <code>GV_LAND1</code>, <code>GV_OUT_GRP</code></td></tr>
+      <tr><td>BAdIs ที่เรียก</td><td>Country BAdI <code>IDWTREP_ADDFUNCINT</code> (instance <code>exit</code>) · User BAdI <code>WTAXREPORT_MODIFY</code> (instance <code>userexit</code>)</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <!-- XRAY -->
+  <section id="xray">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Execution X-ray — กด WRICEF เพื่อดูว่าแก้ตรงไหน</h2></div>
+    <div class="chips" role="group" aria-label="เลือก WRICEF เพื่อไฮไลต์" id="chips">
+      <button type="button" data-w="ALL" aria-pressed="true">ทั้งหมด</button>
+      <button type="button" data-w="RPT-1" aria-pressed="false">★ RPT-1</button>
+      <button type="button" data-w="FRM-1" aria-pressed="false">★ FRM-1</button>
+      <button type="button" data-w="ENH-1" aria-pressed="false">★ ENH-1</button>
+      <button type="button" data-w="RPT-7" aria-pressed="false">RPT-7</button>
+      <button type="button" data-w="RPT-8" aria-pressed="false">RPT-8</button>
+      <button type="button" data-w="ENH-7" aria-pressed="false">ENH-7</button>
+      <button type="button" data-w="ENH-6" aria-pressed="false">ENH-6</button>
+      <button type="button" data-w="ENH-5" aria-pressed="false">ENH-5</button>
+      <button type="button" data-w="FRM-4" aria-pressed="false">FRM-4</button>
+    </div>
+    <div class="blast" id="blast" aria-live="polite">เลือก WRICEF ด้านบน → จะเห็นบล็อกที่มันแก้ และรายการที่ต้อง regression</div>
+    <div class="legend">
+      <span><i style="background:var(--ink-soft)"></i>standard RFIDYYWT</span>
+      <span><i style="background:var(--petrol)"></i>BAdI hook</span>
+      <span><i style="background:var(--brass)"></i>custom insert (WRICEF)</span>
+      <span><i style="background:var(--warn)"></i>dispatch / output</span>
+    </div>
+
+    <div class="xray" id="xr">
+      <div class="ev-h">INITIALIZATION</div>
+      <div class="blk std" data-w=""><span class="bt">i01_initialization</span> <span class="bd">+ FICA init include</span></div>
+
+      <div class="ev-h">AT SELECTION-SCREEN</div>
+      <div class="blk std" data-w=""><span class="bt">ON block m1 / p_land1 / p_budat / p_bukrs / p_witht / p_wthcd / p_bupla</span><div class="bd">ตรวจ output group · additional field ต่อประเทศ · reporting period · company codes · WT types / codes · business place · ALV variants</div></div>
+      <div class="blk badi" data-w=""><span class="bt">Country BAdI · screen_checks_after_input</span></div>
+      <div class="blk cus" data-w="ENH-5"><span class="tags"><span>ENH-5</span></span><span class="bt">validate_year</span><div class="bd">เมื่อกด Execute (ONLI) — ตรวจปีของ reporting period (14-May-2026)</div></div>
+
+      <div class="ev-h">START-OF-SELECTION</div>
+      <div class="blk cus" data-w="ENH-7"><span class="tags"><span>ENH-7</span></span><span class="bt">validate_ap2_screen → set_err_msg</span><div class="bd">output group AP2/AP3: reporting period ต้องอยู่ในปีเดียวกัน ไม่งั้นหยุดด้วย error</div></div>
+      <div class="blk badi" data-w="RPT-1 ENH-6 ENH-7"><span class="tags"><span>RPT-1</span><span>ENH-6</span><span>ENH-7</span></span><span class="bt">Country BAdI · addinfo_enter_before_selection (pop-up)</span><div class="bd">ถูกห่อด้วย <code>IF p_land1 &lt;&gt; 'TH'</code> (RPT-1) แล้วเปิดให้ TH อีกครั้งเฉพาะ output group <code>E05</code> PND3 · <code>E06</code> PND53 · <code>AP2</code> · <code>AP3</code> · background job ใช้ค่าจาก memory ID</div></div>
+      <div class="blk badi" data-w=""><span class="bt">User BAdI · enter_addinfo_before_selection</span></div>
+      <div class="blk cus" data-w="RPT-1 FRM-1 ENH-1"><span class="tags"><span>RPT-1</span><span>FRM-1</span><span>ENH-1</span></span><span class="bt">check_pftctr → ZTAXA_R_UTIL_CLASS=&gt;GT_PRCTR_VAL / GT_RECID_VAL</span><div class="bd">PC และ RI จากจอเลือกถูกเก็บเป็น static range ให้ include อื่นใช้กรอง (17-Dec-2025)</div></div>
+      <div class="blk cus" data-w="RPT-1 RPT-7"><span class="tags"><span>RPT-1</span><span>RPT-7</span></span><span class="bt">GV_LAND1 = p_land1 · GV_OUT_GRP = p_cust</span><div class="bd">ประเทศ (RPT-1, 12-Jan-2026) และ output group (RPT-7, 19-Jan-2026) ถูกเก็บไว้ให้ทุกจุดถัดไปตัดสินใจ</div></div>
+      <div class="blk std" data-w="RPT-1 FRM-1 ENH-1"><span class="tags"><span>RPT-1</span><span>FRM-1</span><span>ENH-1</span></span><span class="bt">i01_select_wt_data</span><div class="bd">LDB + callback → ตาราง <code>QSTRMAIN</code> · จุดที่ PC/RI filter ลบระดับเอกสาร (<code>ZTAXA_R01_I01</code>) <span class="ev infer">INFER จาก FUT</span></div></div>
+
+      <div class="ev-h">END-OF-SELECTION</div>
+      <div class="blk badi" data-w=""><span class="bt">Country BAdI · qstrmain_modify_before_output</span></div>
+      <div class="blk badi" data-w=""><span class="bt">User BAdI · modify_fidoc_before_output</span></div>
+      <div class="blk std" data-w=""><span class="bt">i01_create_reporting_data</span><div class="bd">สร้างตาราง IDWT: <code>COMPCD</code> · <code>PARTNER</code> · <code>FIDOC</code></div></div>
+      <div class="blk badi" data-w="RPT-7"><span class="tags"><span>RPT-7</span></span><span class="bt">Country BAdI · alldata_modify_before_output</span><div class="bd"><b>ข้ามสำหรับ output group AP1 / AR1</b> · ตาราง partner ถูกเก็บสำรองแล้วคืนค่าหลังเรียก (22-Jun-2026)</div></div>
+      <div class="blk badi" data-w=""><span class="bt">User BAdI · modify_data_before_output</span></div>
+      <div class="blk std" data-w=""><span class="bt">User program ของ output group (ถ้าตั้งไว้)</span></div>
+      <div class="blk cus" data-w="RPT-1 RPT-7"><span class="tags"><span>RPT-1</span><span>RPT-7</span></span><span class="bt">check_witht</span><div class="bd">whitelist WHT type จาก <code>ZCAX_P01</code> (param WHT_TYPE_PND54) · <b>ข้ามสำหรับ AP1 / AR1</b></div></div>
+      <div class="blk cus" data-w="ENH-7"><span class="tags"><span>ENH-7</span></span><span class="bt">sum_amount_ap3</span><div class="bd">AP3 (PND1 Kor): รวมยอดต่อ CoCd / business place / vendor แล้ว map เป็น income type · ตัด recipient type ที่ไม่เกี่ยว</div></div>
+
+      <div class="ev-h">DISPATCH</div>
+      <div class="blk dis" data-w=""><span class="bt">ไม่มีรายการเหลือ → message 7Q 702 “No items have been selected”</span></div>
+      <div class="blk dis" data-w="ENH-1 ENH-6 ENH-5"><span class="tags"><span>ENH-1</span><span>ENH-6</span><span>ENH-5</span></span><span class="bt">ติ๊ก File อย่างเดียว → กรองตามหลักแรกของ WITHT → IDWT_DISPATCHER (standard)</span><div class="bd"><code>E05</code>→3 · <code>E06</code>→4 · <code>E07</code>/<code>E08</code>→1 · <code>E09</code>/<code>E10</code>→2 แล้ว DELETE แถวอื่นใน FIDOC และ ERROR · ไฟล์ DMEEX ออกจาก standard dispatcher</div></div>
+      <div class="blk dis" data-w="RPT-1 FRM-1 ENH-7 FRM-4"><span class="tags"><span>RPT-1</span><span>FRM-1</span><span>ENH-7</span><span>FRM-4</span></span><span class="bt">อื่น ๆ → EXPORT output group TO MEMORY ID 'ZTAXA_R01_OUTPUTGROUP' → ZTAXA_R01_DISPATCHER</span><div class="bd">ALV / forms แบบ custom · ส่ง radio สกุล LC1 หรือ LC3 (LC2 ถูก comment ออก) · memory ID ถูกเพิ่มโดย ENH-7 (03-Aug-2026)</div></div>
+    </div>
+  </section>
+
+  <!-- ROUTING -->
+  <section id="routing">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Output-group routing — ตามที่โค้ดเขียนจริง</h2></div>
+    <div class="split">
+      <div class="route std"><span class="rt">Standard path · IDWT_DISPATCHER</span><p class="body">เงื่อนไข: ติ๊ก <b>File</b> และไม่ติ๊ก Form 1 / Form 2 · ใช้กับ text file (DMEEX) ของ ENH-1 / ENH-6 / ENH-5</p></div>
+      <div class="route cus"><span class="rt">Custom path · ZTAXA_R01_DISPATCHER</span><p class="body">ทุกกรณีอื่น · ALV ของ RPT-1 · ใบแนบ FRM-1 · AP2 / AP3 · output group ถูกส่งผ่าน memory ID <code>ZTAXA_R01_OUTPUTGROUP</code></p></div>
+    </div>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Output group</th><th>ในโค้ด</th><th>ใช้กับ</th><th>หมายเหตุ</th></tr></thead>
+      <tbody>
+        <tr><td><code>AP1</code> · <code>AR1</code></td><td>อยู่ใน range ยกเว้น</td><td>AP1 = 50 ทวิ + แบบ PND54 (FRM-3)</td><td>ข้าม country BAdI alldata_modify และ <code>check_witht</code> (RPT-7)</td></tr>
+        <tr><td><code>AP2</code></td><td><code>gc_pnd_output-wht_54</code></td><td>WHT Certificate for Thailand &amp; Form No. 54 (ตรงกับ F4 ที่เห็นตอน FUT)</td><td>ตรวจปีของ reporting period (ENH-7) · <span class="ev sys">SYS</span> แก้ข้อขัดแย้งที่ knowledge base เขียนว่า AP2 = PND1 Kor</td></tr>
+        <tr><td><code>AP3</code></td><td><code>gc_pnd_output-wht_pnd1k</code></td><td>PND1 Kor</td><td>sum_amount_ap3 · ตัด recipient type ที่ไม่เกี่ยว · ปรับ posting/issued date (ENH-7)</td></tr>
+        <tr><td><code>E05</code> / <code>E06</code></td><td><code>pnd3</code> / <code>pnd53</code></td><td>SWC text PND3 / PND53 (ENH-6)</td><td>กรอง WITHT ขึ้นต้น 3 / 4</td></tr>
+        <tr><td><code>E07</code> / <code>E08</code></td><td><code>pnd1</code> / <code>pnd1k</code></td><td>SWC text PND1 / PND1 Kor (ENH-5)</td><td>กรอง WITHT ขึ้นต้น 1</td></tr>
+        <tr><td><code>E09</code> / <code>E10</code></td><td><code>pnd2</code> / <code>pnd2k</code></td><td>SWC text PND2 / PND2 Kor (ENH-5)</td><td>กรอง WITHT ขึ้นต้น 2</td></tr>
+        <tr><td><code>R03</code></td><td>(custom dispatcher)</td><td>RPT-1 ALV + ใบแนบ FRM-1</td><td>ผ่าน <code>check_witht</code></td></tr>
+        <tr><td><code>E01</code>–<code>E04</code> · <code>E1K</code> · <code>E2K</code></td><td>(ไม่ได้อยู่ในบล็อกนี้)</td><td>ENH-1 ใบแนบ + e-filing</td><td>จาก knowledge base / FD <span class="ev fd">FD</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="history">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Change history — ใครเข้ามาแก้โปรแกรมนี้บ้าง</h2></div>
+    <p class="sec-sub">จาก header ของโปรแกรม + comment BOC/EOC ในโค้ด · transport ยังเก็บไว้เพื่อใช้ไล่ใน SE09/SE10</p>
+    <ul class="tl" id="tl">
+      <li data-w=""><span class="d">01-Feb-2016</span>ECC: copy จาก RFIDYYWT → ALV Grid (<code>ECDK924266</code>)</li>
+      <li data-w="RPT-8"><span class="d">27-Nov-2025</span><b>TAX-RPT-8</b> Tax report changed (<code>DEVK900002</code>) — MM WHT report ที่ FRM-2 พึ่ง</li>
+      <li data-w="RPT-1 FRM-1 ENH-1"><span class="d">17-Dec-2025</span>PC / RI → static range ใน util class</li>
+      <li data-w="RPT-1"><span class="d">12-Jan-2026</span><b>TAX-RPT-1</b> Reconciliation PND54 incl. PC (<code>DEVK900003 / DEVK900005</code>) · ห่อ pop-up ด้วย <code>p_land1 &lt;&gt; 'TH'</code> · เก็บ GV_LAND1</li>
+      <li data-w="RPT-8"><span class="d">13-Jan-2026</span><b>TAX-RPT-8</b> defect TKT-07</li>
+      <li data-w="RPT-7"><span class="d">19-Jan-2026</span><b>TAX-RPT-7</b> WHT report incl. PC — GV_OUT_GRP + ยกเว้น AP1 / AR1</li>
+      <li data-w="FRM-1"><span class="d">19-Jan-2026</span><b>TAX-FRM-1</b> ใบแนบ PND3 / 53 / 54 incl. PC (<code>DEVK900004</code>)</li>
+      <li data-w="ENH-5"><span class="d">14-May-2026</span><b>TAX-ENH-5</b> (header เขียน FRM-7) validate reporting period</li>
+      <li data-w="RPT-7"><span class="d">22-Jun-2026</span>เก็บ/คืนตาราง partner รอบ alldata_modify BAdI</li>
+      <li data-w="FRM-4"><span class="d">24-Jun-2026</span><b>TAX-FRM-4</b> fix branch code / page number</li>
+      <li data-w="ENH-5"><span class="d">02–07-Jul-2026</span><b>TAX-ENH-5</b> top include · กรอง PND1 / 2 · fix ไฟล์ว่าง 0 byte</li>
+      <li data-w="ENH-7"><span class="d">13–24-Jul-2026</span><b>TAX-ENH-7</b> AP3 sum + recipient filter · ปรับวันที่ · ตรวจปี · เพิ่ม AP2 / AP3 ใน pop-up</li>
+      <li data-w="ENH-7"><span class="d">03-Aug-2026</span><b>TAX-ENH-7</b> export output group → memory ID <code>ZTAXA_R01_OUTPUTGROUP</code></li>
+    </ul>
+    <p class="small">ยังเห็นร่องรอย <b>TAX-RPT-6</b> (บล็อก E05/E06 เดิมถูก comment ออก 24-Jul) และ <b>TAX-ENH-6 / ENH-1</b> (BOI blocks ที่ dispatch) · รวมแล้ว <b>11 WRICEF</b> แตะโปรแกรมนี้</p>
+  </section>
+
+  <!-- LESSONS -->
+  <section id="lessons">
+    <div class="sec-head"><span class="sec-num">5</span><h2>สิ่งที่โค้ดสอน (เอาไปใช้ตอนเทส)</h2></div>
+    <div class="grid2">
+      <div class="card"><span class="ct">RPT-7 ≠ RPT-1</span><p class="body">AP1 / AR1 <b>ข้าม</b> <code>check_witht</code> และ country BAdI alldata_modify — ถ้า RPT-7 กับ RPT-1 ให้แถวไม่เท่ากัน ให้ดูตรงนี้ก่อนสงสัย data</p></div>
+      <div class="card"><span class="ct">sy-tcode ใช้ไม่ได้</span><p class="body">เงื่อนไข <code>sy-tcode &lt;&gt; 'ZTAXB_R01'</code> ถูก comment ทิ้ง · ตัวจริงที่ใช้คือ <code>GV_OUT_GRP</code> และ memory ID <code>ZTAXA_R01_OUTPUTGROUP</code> — ตรงกับบทเรียนว่า background job ไม่มี T-code ให้พึ่ง</p></div>
+      <div class="card"><span class="ct">รายงานว่าง ≠ bug</span><p class="body">ถ้าทุกแถวถูกกรองหมด จะขึ้น <b>7Q 702 “No items have been selected”</b> · ไล่ row-disappearance ladder: select → BAdI → check_witht → PC/RI → output</p></div>
+      <div class="card"><span class="ct">ไฟล์ vs ฟอร์ม</span><p class="body">ENH-1 / ENH-6 / ENH-5 วิ่ง standard dispatcher ส่วน RPT-1 / FRM-1 / AP2 / AP3 วิ่ง custom dispatcher — แก้ฝั่งหนึ่งไม่ทำให้อีกฝั่งเปลี่ยน แต่ <b>แก้ตอน select / filter กระทบทั้งคู่</b></p></div>
+    </div>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="sec-head"><span class="sec-num">✓</span><h2>Self-check</h2></div>
+    <div class="qbox">
+      <div class="selfq"><p>1. Output group ไหนไม่ผ่าน check_witht?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">AP1 และ AR1 (เพิ่มโดย RPT-7)</div></details></div>
+      <div class="selfq"><p>2. AP2 กับ AP3 ในโค้ดคืออะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">AP2 = <code>wht_54</code> (WHT certificate &amp; Form No. 54) · AP3 = <code>wht_pnd1k</code> (PND1 Kor)</div></details></div>
+      <div class="selfq"><p>3. Text file ของ ENH-6 PND3 ถูกกรองอย่างไรก่อนออกไฟล์?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">output group E05 → เก็บเฉพาะ WITHT ที่ขึ้นต้นด้วย 3 แล้วส่ง IDWT_DISPATCHER</div></details></div>
+      <div class="selfq"><p>4. Custom dispatcher รู้ output group จากไหน?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">EXPORT p_cust TO MEMORY ID 'ZTAXA_R01_OUTPUTGROUP' (ENH-7, 03-Aug-2026) ไม่ใช่ sy-tcode</div></details></div>
+      <div class="selfq"><p>5. แก้ check_pftctr แล้วต้อง regression อะไร?</p>
+        <details class="ans"><summary>ดูเฉลย</summary><div class="a">ทุก output ที่ใช้ PC/RI: RPT-1, FRM-1, ENH-1 (และ RPT-7 / FRM-3 ที่ใช้ selection เดียวกัน)</div></details></div>
+    </div>
+    <div class="seealso"><span>ดูต่อ</span><a href="wricef-portfolio.html#engine">Shared engine summary</a><a href="rpt1-wht-vat-recon.html#agreed">RPT-1 filter layers</a><a href="wht.html#outputs">Output groups</a></div>
+  </section>
+
+  <footer>
+    <span>FI-TAX Knowledge Lab · ZTAXA_R01 X-ray</span>
+    <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
+  </footer>
+
+<script>
+(function(){
+  var REG = {
+    "RPT-1":"Regression: RPT-1 ALV · FRM-1 ใบแนบ (PC/RI เดียวกัน) · ENH-1 (ถ้าแก้ select/filter) · RPT-7 (selection เดียวกัน)",
+    "FRM-1":"Regression: RPT-1 (R03 เดียวกัน) · ENH-1 (PC/RI) · FRM-4 (forms ใน custom dispatcher)",
+    "ENH-1":"Regression: ENH-6 / ENH-5 (standard dispatcher path เดียวกัน) · RPT-1 / FRM-1 ถ้าแก้ selection หรือ PC/RI",
+    "RPT-7":"Regression: AP1 / AR1 outputs (50 ทวิ, แบบ PND54) · เทียบจำนวนแถวกับ RPT-1 — ต่างกันได้เพราะ AP1 ข้าม check_witht",
+    "RPT-8":"Regression: TAX-FRM-2 (certificate MM พิมพ์จาก RPT-8) · ไม่แตะ TH output groups โดยตรง",
+    "ENH-7":"Regression: AP2 / AP3 · ทุก output ใน custom dispatcher (memory ID) · pop-up ของ TH",
+    "ENH-6":"Regression: E05 / E06 ไฟล์ SWC · pop-up TH · ENH-1 (dispatch path เดียวกัน)",
+    "ENH-5":"Regression: E07–E10 ไฟล์ SWC · ไฟล์ 0 byte · reporting-period validation ของทุก output",
+    "FRM-4":"Regression: forms ใน custom dispatcher (branch code / page number) · FRM-1 ใบแนบ"
+  };
+  var chips=document.getElementById("chips"), xr=document.getElementById("xr"), tl=document.getElementById("tl"), blast=document.getElementById("blast");
+  if(!chips) return;
+  var hasW=function(el,w){ return (" "+(el.getAttribute("data-w")||"")+" ").indexOf(" "+w+" ")>-1; };
+  chips.addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    var w=b.getAttribute("data-w");
+    Array.prototype.forEach.call(chips.querySelectorAll("button"),function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); });
+    var blocks=xr.querySelectorAll(".blk"), items=tl.querySelectorAll("li"), n=0;
+    if(w==="ALL"){
+      xr.classList.remove("focus");
+      Array.prototype.forEach.call(blocks,function(x){ x.classList.remove("hit"); });
+      Array.prototype.forEach.call(items,function(x){ x.classList.remove("hit"); });
+      blast.textContent="เลือก WRICEF ด้านบน → จะเห็นบล็อกที่มันแก้ และรายการที่ต้อง regression";
+      return;
+    }
+    xr.classList.add("focus");
+    Array.prototype.forEach.call(blocks,function(x){ var h=hasW(x,w); x.classList.toggle("hit",h); if(h) n++; });
+    Array.prototype.forEach.call(items,function(x){ x.classList.toggle("hit",hasW(x,w)); });
+    blast.innerHTML="<b>TAX-"+w+"</b> "+(n?"แตะ <b>"+n+"</b> บล็อกในโปรแกรมหลัก":"แก้อยู่ใน include / form ที่ไม่ได้เห็นโค้ดในไฟล์นี้ (ดู timeline)")+" · "+(REG[w]||"");
+  });
+})();
+</script>
+</div>
+</body>
+</html>
