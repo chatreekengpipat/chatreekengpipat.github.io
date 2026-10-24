@@ -128,6 +128,12 @@
     d.head.appendChild(sh);
     setTimeout(shellFail, 6000);
   } catch (e) { shellFail(); }
+  /* T47 · ambient smoke / water-flow layer behind the content (fx-flow.js, async, optional) */
+  try {
+    var fx = d.createElement("script");
+    fx.src = BASE + "fx-flow.js"; fx.async = true;
+    d.head.appendChild(fx);
+  } catch (e) {}
 
   function currentTheme() { return root.getAttribute("data-theme") === "dark" ? "dark" : "light"; }
   function setTheme(t) {
