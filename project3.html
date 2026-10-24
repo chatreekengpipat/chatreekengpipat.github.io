@@ -377,7 +377,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           <div class="nav-dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
           <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
-          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="functional-specification.html">Functional Specification (FD)</a>
           <a href="business-process-map.html">Business Process Master List</a>
           <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
           <a href="integration-architecture.html">Integration Architecture</a>
@@ -1170,7 +1170,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </tbody>
     </table>
 
-    <!-- XEERSOFT-NATIVE: MODULE FLOW + DATA MODEL + FSD -->
+    <!-- XEERSOFT-NATIVE: MODULE FLOW + DATA MODEL + FD -->
     <h3 class="content-h3">Validation Evidence · <em>Defect Log</em></h3>
     <p class="content-p">The central UAT artifact: every defect tracked with ID, area, severity, the cycle it surfaced in, and status. DEF-001 (the silent bulk-assign failure) was the entry blocker; the rest span the validation scope below.</p>
 
@@ -1212,7 +1212,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">Functional Spec &amp; <em>Data Model</em></h3>
     <p class="content-p">
-      The logical entities I specified for the loyalty module in the FSD: field design defined by me, physical implementation by the development team.
+      The logical entities I specified for the loyalty module in the FD: field design defined by me, physical implementation by the development team.
     </p>
 
     <table class="process-table">
@@ -1250,8 +1250,8 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </p>
 
     <figure class="lx-code">
-    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FSD-P3-02 · bulk-assign fix</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
-    <div class="code-block"><span class="comment">// FSD-P3-02 · DEF-001 corrected behaviour: iterate ALL selected students</span>
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FD-P3-02 · bulk-assign fix</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
+    <div class="code-block"><span class="comment">// FD-P3-02 · DEF-001 corrected behaviour: iterate ALL selected students</span>
 <span class="keyword">FUNCTION</span> assign_stars(selected[], stars, reason, user):
    <span class="keyword">FOR EACH</span> student <span class="keyword">IN</span> selected:        <span class="comment">// defect stopped after the 1st record</span>
       bal = find_balance(student, current_year)
@@ -1262,7 +1262,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </figure>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
-    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
+    <p class="content-p">An interactive simulation that runs the FD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
 
     <div class="xsim xnative-section" id="sim3">
       <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
@@ -1285,7 +1285,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
             <button class="xsim-btn ghost" id="p3reset">Reset balances</button>
           </div>
           <div class="xsim-panel">
-            <p class="xsim-h">Result &middot; FSD-P3-02</p>
+            <p class="xsim-h">Result &middot; FD-P3-02</p>
             <div id="p3chip"></div>
             <p class="content-p" style="font-size:.78rem;margin:.7rem 0 0">Toggle the bug to reproduce exactly what I caught in UAT Cycle 1: the loop exits after the first record, so only one student is updated while the rest fail <em>silently</em>.</p>
             <p class="xsim-h" style="margin-top:.9rem">Transaction log</p>
@@ -1332,8 +1332,8 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
-      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>: owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
+      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>: owning requirements, configuration, FD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
     </div>
 
     <h3 class="content-h3">Validation <em>Scope</em></h3>
@@ -1728,10 +1728,10 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
       <div class="trk-two">
         <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
       </div>
     </div>
 

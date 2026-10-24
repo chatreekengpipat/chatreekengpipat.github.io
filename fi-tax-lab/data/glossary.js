@@ -133,7 +133,7 @@ window.KIT_GLOSSARY = [
   {"t":"WRICEF","th":"","c":"delivery","d":"ประเภท custom object: Workflow · Report · Interface · Conversion · Enhancement · Form (ตัวอักษรกลางของ ID บอกชนิด)","ln":"wricef-portfolio.html","lt":"WRICEF page"},
   {"t":"Fit-Gap","th":"","c":"delivery","d":"เทียบ requirement กับ standard → ระบุ Fit หรือ Gap แล้วตัดสินว่า config/custom"},
   {"t":"Retrofit","th":"","c":"delivery","d":"ยก logic เดิมจาก ECC มาปรับใช้บน S/4 — nature ของ TAX-RPT-2 / TAX-RPT-1","ln":"wricef-portfolio.html","lt":"WRICEF page"},
-  {"t":"FSD / FS","th":"","c":"delivery","d":"Functional Specification Document — แปลง requirement เป็น logic ที่ทำได้"},
+  {"t":"FD / FS","th":"","c":"delivery","d":"Functional Specification Document — แปลง requirement เป็น logic ที่ทำได้"},
   {"t":"SIT / UAT","th":"","c":"delivery","d":"System Integration Test / User Acceptance Test — ทุก tax scenario ต้องมีหลักฐาน"},
   {"t":"Cutover / Go-live","th":"","c":"delivery","d":"Cutover = ย้ายขึ้น production · Go-live = เริ่มใช้จริง — S/4 Program: ภาพ statutory ~Jan-2027 vs cutover plan v3.0 1-Jul-2027 (conflict C1 — ยืนยันกับ PMO)","ln":"decisions.html#conflicts","lt":"Conflict C1"},
   {"t":"Hypercare","th":"","c":"delivery","d":"ช่วงเฝ้าระวังหลัง go-live — จับรอบจ่าย/ยื่นภาษีรอบแรกใกล้ชิด"},

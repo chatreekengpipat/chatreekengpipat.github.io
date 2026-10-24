@@ -147,6 +147,8 @@
     box-shadow: 0 24px 60px -24px #000; z-index: 5;
   }
   .dd:hover .dd-panel, .dd:focus-within .dd-panel { opacity: 1; visibility: visible; transform: none; }
+  /* desktop: the Projects panel scrolls inside itself — it is taller than most screens */
+  @media (min-width: 901px) { .dd-panel { max-height: calc(100vh - 84px); overflow-y: auto; overscroll-behavior: contain; } }
   .dd-group { padding: 0.3rem; }
   .dd-group + .dd-group { border-top: 1px solid var(--steel); margin-top: 0.2rem; padding-top: 0.5rem; }
   .dd-head { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gas); padding: 0.2rem 0.5rem 0.35rem; }
@@ -1247,11 +1249,12 @@
           <a href="traceability.html">Traceability Explorer</a>
           <a href="operating-model.html">Target Operating Model</a>
           <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
         <div class="dd-group">
           <div class="dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
           <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
-          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="functional-specification.html">Functional Specification (FD)</a>
           <a href="business-process-map.html">Business Process Master List</a>
           <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
           <a href="integration-architecture.html">Integration Architecture</a>

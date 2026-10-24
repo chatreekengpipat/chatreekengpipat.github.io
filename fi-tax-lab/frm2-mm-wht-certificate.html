@@ -142,7 +142,7 @@
       <span>Process · <b>01.01.07.03 WHT</b></span>
       <span>Priority · <b>P1 · Medium</b></span>
     </div>
-    <div class="src">Source: FSD TAX-FRM-2 v1.0 (10/09/2025) · Business Owner: Client Tax team · Geography: Myanmar · ชื่อผู้ review ในเอกสารต้นฉบับถูกตัดออกเพื่อความเป็นส่วนตัว</div>
+    <div class="src">Source: FD TAX-FRM-2 v1.0 (10/09/2025) · Business Owner: Client Tax team · Geography: Myanmar · ชื่อผู้ review ในเอกสารต้นฉบับถูกตัดออกเพื่อความเป็นส่วนตัว</div>
   </header>
 
   <p class="lede">
@@ -410,10 +410,10 @@
   <!-- TEST -->
   <section id="test">
     <div class="sec-head"><span class="sec-num">9</span><h2>Test Scenarios (Given / When / Then)</h2></div>
-    <p class="sec-sub">9 เคสจาก FSD จริง (ทั้งหมดเป็น FSD-authoritative) · จัดกลุ่ม: data · print · currency · signature · DTA</p>
+    <p class="sec-sub">9 เคสจาก FD จริง (ทั้งหมดเป็น FD-authoritative) · จัดกลุ่ม: data · print · currency · signature · DTA</p>
     <div class="kit-tc">
       <div class="tc pos">
-        <div class="tc-h"><span class="tc-id">TC-001</span><span class="tc-cat">Data · fetch all</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-001</span><span class="tc-cat">Data · fetch all</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">ข้อมูลครบตาม layout §8 (Form Output Layout)</span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -421,7 +421,7 @@
         </div>
       </div>
       <div class="tc neg">
-        <div class="tc-h"><span class="tc-id">TC-002</span><span class="tc-cat">Data · missing</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-002</span><span class="tc-cat">Data · missing</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">ข้อมูลบางช่อง <b>ไม่มี</b> ในตารางที่เกี่ยว</span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -429,7 +429,7 @@
         </div>
       </div>
       <div class="tc pos">
-        <div class="tc-h"><span class="tc-id">TC-003</span><span class="tc-cat">Print</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-003</span><span class="tc-cat">Print</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">ต้องการพิมพ์</span>
           <span class="l">When</span><span class="v">สั่งพิมพ์</span>
@@ -437,7 +437,7 @@
         </div>
       </div>
       <div class="tc cur">
-        <div class="tc-h"><span class="tc-id">TC-004</span><span class="tc-cat">Currency · LC1/LC2</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-004</span><span class="tc-cat">Currency · LC1/LC2</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">เลือก radio <b>“LC1/LC2 Currency”</b></span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -445,7 +445,7 @@
         </div>
       </div>
       <div class="tc neg">
-        <div class="tc-h"><span class="tc-id">TC-005</span><span class="tc-cat">Currency · error</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-005</span><span class="tc-cat">Currency · error</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">radio “LC1/LC2” แต่สกุล <b>ไม่ใช่</b> MMK หรือ USD</span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -453,7 +453,7 @@
         </div>
       </div>
       <div class="tc pos">
-        <div class="tc-h"><span class="tc-id">TC-006</span><span class="tc-cat">Signature · show</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-006</span><span class="tc-cat">Signature · show</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">checkbox “Signature not require” <b>ไม่ถูกเลือก</b></span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -461,7 +461,7 @@
         </div>
       </div>
       <div class="tc pos">
-        <div class="tc-h"><span class="tc-id">TC-007</span><span class="tc-cat">Signature · hide</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-007</span><span class="tc-cat">Signature · hide</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">checkbox “Signature not require” <b>ถูกเลือก</b></span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -469,7 +469,7 @@
         </div>
       </div>
       <div class="tc cur">
-        <div class="tc-h"><span class="tc-id">TC-008</span><span class="tc-cat">Currency · Document</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-008</span><span class="tc-cat">Currency · Document</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">เลือก radio <b>“Document Currency”</b></span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -477,7 +477,7 @@
         </div>
       </div>
       <div class="tc map">
-        <div class="tc-h"><span class="tc-id">TC-009</span><span class="tc-cat">DTA · Remark</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-009</span><span class="tc-cat">DTA · Remark</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">vendor เป็นประเทศที่มี <b>DTA</b> (ตาม tax code D#/H#)</span>
           <span class="l">When</span><span class="v">generate ฟอร์ม</span>
@@ -564,7 +564,7 @@
   </section>
 
   <footer>
-    <span>FI-TAX Knowledge Lab · TAX-FRM-2 Deep-Dive (จาก FSD v1.0)</span>
+    <span>FI-TAX Knowledge Lab · TAX-FRM-2 Deep-Dive (จาก FD v1.0)</span>
     <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
   </footer>
 

@@ -98,7 +98,7 @@ window.CK_KNOWLEDGE = {
     ['WE02 / BD87','intg','Monitor / reprocess IDocs when an interface message fails.'],
     // Concepts
     ['RICEFW','concept','<b>R</b>eports, <b>I</b>nterfaces, <b>C</b>onversions, <b>E</b>nhancements, <b>F</b>orms, <b>W</b>orkflows — the categories of custom development.',['ricefw-register.html','RICEFW register']],
-    ['FSD','concept','Functional Specification Document — turns a business requirement into a developer-ready design.',['functional-specification.html','See a worked FSD']],
+    ['FD','concept','Functional Specification Document — turns a business requirement into a developer-ready design.',['functional-specification.html','See a worked FD']],
     ['Use Case / User Story','concept','Requirement artifacts describing an actor’s goal / an increment of value.'],
     ['Universal Journal','concept','S/4HANA’s single source of truth (ACDOCA) merging FI and CO — no FI-CO reconciliation.'],
     ['Condition technique','concept','SAP’s pricing rule engine: condition tables → access sequence → condition types → procedure.'],

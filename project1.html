@@ -666,7 +666,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <div class="nav-dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
           <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
-          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="functional-specification.html">Functional Specification (FD)</a>
           <a href="business-process-map.html">Business Process Master List</a>
           <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
           <a href="integration-architecture.html">Integration Architecture</a>
@@ -904,16 +904,16 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <article class="p1-dna-card">
         <span class="p1-dna-k">Logic</span>
         <h4>Rules a developer can build to</h4>
-        <p>I wrote the system's behaviour as decision rules in the FSD &mdash; not prose &mdash; so the build is traceable and testable line by line.</p>
+        <p>I wrote the system's behaviour as decision rules in the FD &mdash; not prose &mdash; so the build is traceable and testable line by line.</p>
         <ul>
-          <li><b>Approval:</b> &le;&#3647;50K &rarr; Dept Head, &gt;&#3647;50K &rarr; Director (FSD-P1-01)</li>
+          <li><b>Approval:</b> &le;&#3647;50K &rarr; Dept Head, &gt;&#3647;50K &rarr; Director (FD-P1-01)</li>
           <li><b>Traceability:</b> 9-char serial + Learn Balance Code per unit, set at issue</li>
           <li><b>Control:</b> reorder fires when on-hand &lt; ROP; 3-way match on receipt</li>
         </ul>
       </article>
     </div>
     <p class="p1-dna-map">
-      <b>Read the rest of this page as proof of the spine above:</b> the <b>Procurement Simulation</b> runs the methodology live, the <b>Order Entry</b> catalog is the configured tooling, and the <b>FSD logic</b> is what the developers received.
+      <b>Read the rest of this page as proof of the spine above:</b> the <b>Procurement Simulation</b> runs the methodology live, the <b>Order Entry</b> catalog is the configured tooling, and the <b>FD logic</b> is what the developers received.
     </p>
 
     <!-- CORE INSIGHT · why two demand models (analytical centrepiece) -->
@@ -1100,7 +1100,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       </svg>
     </div>
 
-    <!-- XEERSOFT-NATIVE: MODULE FLOW + FSD -->
+    <!-- XEERSOFT-NATIVE: MODULE FLOW + FD -->
     <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
       The full P2P process as configured in XeerSoft, driven by module screens and menu navigation (no transaction codes). Each step maps to a <strong>module → function</strong> path in the live system.
@@ -1124,7 +1124,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">Purchase Requisition · <em>Order Entry</em></h3>
     <p class="content-p">
-      Build a requisition from the configured catalog and watch the <strong>planning class</strong> and <strong>approval routing</strong> respond &mdash; the specified behaviour I designed, not the proprietary XeerSoft UI. The catalog is the item master I set up across six classes (<strong>Uniforms, PE Kit, Subject Kit, Stationery, Textbooks, Equipment</strong>). Each stocked line is tagged by its planning model (Poisson for low-volume sizes &amp; minority specialty; Normal-Z for steady consumables; Modified EOQ for textbooks) with a live stock signal against its reorder point; capital equipment is value-routed, not demand-planned. Every unit carries a <strong>9-character serial</strong> and a <strong>Learn Balance Code</strong> (<code>LB######</code>) engraved to the owning student at issue. Submitting applies the <strong>2-level approval rule</strong> (FSD-P1-01: &le; &#3647;50,000 &rarr; Dept Head; &gt; &#3647;50,000 &rarr; Director) &mdash; add an Equipment line and watch routing escalate to Director.
+      Build a requisition from the configured catalog and watch the <strong>planning class</strong> and <strong>approval routing</strong> respond &mdash; the specified behaviour I designed, not the proprietary XeerSoft UI. The catalog is the item master I set up across six classes (<strong>Uniforms, PE Kit, Subject Kit, Stationery, Textbooks, Equipment</strong>). Each stocked line is tagged by its planning model (Poisson for low-volume sizes &amp; minority specialty; Normal-Z for steady consumables; Modified EOQ for textbooks) with a live stock signal against its reorder point; capital equipment is value-routed, not demand-planned. Every unit carries a <strong>9-character serial</strong> and a <strong>Learn Balance Code</strong> (<code>LB######</code>) engraved to the owning student at issue. Submitting applies the <strong>2-level approval rule</strong> (FD-P1-01: &le; &#3647;50,000 &rarr; Dept Head; &gt; &#3647;50,000 &rarr; Director) &mdash; add an Equipment line and watch routing escalate to Director.
     </p>
 
     <div class="pr xnative-section" id="pr1">
@@ -1150,7 +1150,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           <div class="pr-lines" id="prLines"><div class="pr-empty">No lines yet.<br>Pick items from the catalog to build the PR.</div></div>
           <div class="pr-foot">
             <div class="pr-sub"><span class="l">Estimated total</span><span class="v" id="prTotal">&#3647;0</span></div>
-            <div class="pr-route"><span class="rl">Approval routing &middot; FSD-P1-01</span><div id="prRoute"><span class="pr-chip l1">&le; &#3647;50K &middot; DEPT HEAD (L1)</span><span class="hint">single-level approval</span></div></div>
+            <div class="pr-route"><span class="rl">Approval routing &middot; FD-P1-01</span><div id="prRoute"><span class="pr-chip l1">&le; &#3647;50K &middot; DEPT HEAD (L1)</span><span class="hint">single-level approval</span></div></div>
             <button class="pr-submit" id="prSubmit">Submit requisition</button>
             <div id="prOk"></div>
           </div>
@@ -1363,24 +1363,24 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">Functional Spec &amp; <em>Build Evidence</em></h3>
     <p class="content-p">
-      The business logic I authored in the Functional Specification Document (FSD) and handed to the XeerSoft development team to implement.
+      The business logic I authored in the Functional Specification (FD) and handed to the XeerSoft development team to implement.
     </p>
 
     <figure class="p1-code">
-    <figcaption class="p1-code-bar"><span class="p1-code-dots"><i></i><i></i><i></i></span><span class="p1-code-file">FSD-P1 · approval &amp; posting rules</span><span class="p1-code-lang">spec · pseudocode</span></figcaption>
-    <div class="code-block"><span class="comment">// FSD-P1-01 · Workflow Authorization · 2-level PR approval</span>
+    <figcaption class="p1-code-bar"><span class="p1-code-dots"><i></i><i></i><i></i></span><span class="p1-code-file">FD-P1 · approval &amp; posting rules</span><span class="p1-code-lang">spec · pseudocode</span></figcaption>
+    <div class="code-block"><span class="comment">// FD-P1-01 · Workflow Authorization · 2-level PR approval</span>
 <span class="keyword">ON</span> purchase_requisition.submit:
    total = SUM(pr.line_items.amount)
    <span class="keyword">IF</span> total ≤ 50,000  → approver ∈ { Dept Head, Director }
    <span class="keyword">ELSE</span>            → approver = Director only   <span class="comment">// block Dept-Head-only approval</span>
 
-<span class="comment">// FSD-P1-02 · Goods-Receipt GL mapping fix (IT-asset category)</span>
+<span class="comment">// FD-P1-02 · Goods-Receipt GL mapping fix (IT-asset category)</span>
 <span class="keyword">ON</span> goods_receipt.post:
    gl = lookup(GL_determination, item.category)
    <span class="keyword">IF</span> gl is empty → block posting; "account determination missing"
    <span class="comment">// resolution (config): map category 'IT Asset' → GL 160000</span>
 
-<span class="comment">// FSD-P1-03 · Report · Size-Mix vs statistical target</span>
+<span class="comment">// FD-P1-03 · Report · Size-Mix vs statistical target</span>
 <span class="keyword">FOR EACH</span> sku:
    <span class="keyword">IF</span> on_hand &lt; safety_stock        → STOCKOUT
    <span class="keyword">ELSE IF</span> on_hand &gt; target × 1.2   → OVERSTOCK
@@ -1388,7 +1388,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     </figure>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
-    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
+    <p class="content-p">An interactive simulation that runs the FD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
 
     <div class="xsim xnative-section" id="sim1">
       <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
@@ -1411,7 +1411,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
               <button class="xsim-btn" id="p1submit">Submit PR &rarr; route</button>
             </div>
             <div class="xsim-panel">
-              <p class="xsim-h">Routing Decision &middot; FSD-P1-01</p>
+              <p class="xsim-h">Routing Decision &middot; FD-P1-01</p>
               <div id="p1chip"></div>
               <div class="xsim-flow">
                 <span class="xsim-node active">Requester</span><span class="xsim-arr">&rarr;</span>
@@ -1428,7 +1428,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
           </div>
         </div>
         <div data-p="b" hidden>
-          <p class="xsim-h">Stock vs statistical target &middot; FSD-P1-03</p>
+          <p class="xsim-h">Stock vs statistical target &middot; FD-P1-03</p>
           <p class="content-p" style="margin:.1rem 0 .8rem;font-size:.8rem">Drag on-hand to watch status recompute: <b>STOCKOUT</b> if below safety stock, <b>OVERSTOCK</b> if above target &times; 1.2.</p>
           <table class="xsim-tbl" id="p1tbl"><thead><tr><th>SKU</th><th>On-hand</th><th>Safety</th><th>Target</th><th>Status</th></tr></thead><tbody></tbody></table>
         </div>
@@ -1437,7 +1437,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
             <div class="xsim-panel">
               <p class="xsim-h">Equipment catalogue &middot; pick &amp; quantity</p>
               <div id="p1eqList"></div>
-              <p class="content-p" style="margin:.7rem 0 0;font-size:.76rem">Capital / equipment items at Thai-market reference prices; the PR total auto-routes by the &#3647;50K rule (FSD-P1-01).</p>
+              <p class="content-p" style="margin:.7rem 0 0;font-size:.76rem">Capital / equipment items at Thai-market reference prices; the PR total auto-routes by the &#3647;50K rule (FD-P1-01).</p>
             </div>
             <div class="xsim-panel">
               <p class="xsim-h">Purchase Requisition &middot; auto-routed</p>
@@ -1554,8 +1554,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
-      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
+      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
     </div>
 
 <!-- UAT :: Sub-Unit Test Specification styles (Claude) — built on existing tokens -->
@@ -2467,7 +2467,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <span class="module-tag">Jira (Defect Tracking)</span>
       <span class="module-tag">Excel · SQL</span>
       <span class="module-tag">draw.io (Process Flow)</span>
-      <span class="module-tag">Word (FSD/BRD)</span>
+      <span class="module-tag">Word (FD/BRD)</span>
     </div>
 
     <!-- DELIVERY & SCHEDULE -->
@@ -2484,35 +2484,35 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       <p class="trk-h">Project timeline &middot; month-by-month</p>
       <div class="trk-scroll"><div class="trk-gantt" style="--cols:6">
         <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
-        <div class="trk-row"><div class="trk-label">Requirements & As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Requirements & As-Is">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Master data (~180 items)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Master data (~180 items)">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Statistical modelling</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="Statistical modelling">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Config + workflow + FSD</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:2" title="Config + workflow + FSD">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT & defect fixes</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="UAT & defect fixes">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Training + Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:6;--l:1" title="Training + Go-Live">LIVE</span></div></div>
+        <div class="trk-row"><div class="trk-label">Requirements & As-Is</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:1" title="Requirements & As-Is">1 mo</span></div></div><div class="trk-row"><div class="trk-label">Master data (~180 items)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:2" title="Master data (~180 items)">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Statistical modelling</div><div class="trk-track"><span class="trk-bar done" style="--s:2;--l:2" title="Statistical modelling">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Config + workflow + FD</div><div class="trk-track"><span class="trk-bar done" style="--s:3;--l:2" title="Config + workflow + FD">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT & defect fixes</div><div class="trk-track"><span class="trk-bar done" style="--s:4;--l:2" title="UAT & defect fixes">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Training + Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:6;--l:1" title="Training + Go-Live">LIVE</span></div></div>
       </div></div>
       <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Schedule risk &amp; recovery</p>
-      <div class="trk-flag ok"><span class="ic">✓</span><div><b>UAT blocker · Goods receipt could not post</b><p>During UAT, goods-receipt posting was blocked for the IT-asset item category because no GL account determination existed (FSD-P1-02), a silent stopper that would have frozen receiving.<span class="res"> Resolved → I traced it to a missing mapping, specified the fix to dev (category → GL 160000), retested, and kept Go-Live on the intake date.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Adoption risk · staff trusting the system over intuition</b><p>The statistical reorder points were correct, but procurement staff were used to ordering by gut feel: the real risk to the result was non-adoption, not configuration.<span class="res"> Resolved → I ran weekly adoption reviews for the first 3 months post Go-Live until system-driven reorder points became the default.</span></p></div></div>
+      <div class="trk-flag ok"><span class="ic">✓</span><div><b>UAT blocker · Goods receipt could not post</b><p>During UAT, goods-receipt posting was blocked for the IT-asset item category because no GL account determination existed (FD-P1-02), a silent stopper that would have frozen receiving.<span class="res"> Resolved → I traced it to a missing mapping, specified the fix to dev (category → GL 160000), retested, and kept Go-Live on the intake date.</span></p></div></div><div class="trk-flag ok"><span class="ic">✓</span><div><b>Adoption risk · staff trusting the system over intuition</b><p>The statistical reorder points were correct, but procurement staff were used to ordering by gut feel: the real risk to the result was non-adoption, not configuration.<span class="res"> Resolved → I ran weekly adoption reviews for the first 3 months post Go-Live until system-driven reorder points became the default.</span></p></div></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
       <div class="trk-two">
         <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
       </div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Weekly Agile cadence</p>
-      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>Backlog & defect triage by severity</p></div><div class="trk-day"><div class="d">TUE</div><p>Spec clarification with dev</p></div><div class="trk-day"><div class="d">WED</div><p>Build structure review vs FSD</p></div><div class="trk-day"><div class="d">THU</div><p>Test / retest fixed items</p></div><div class="trk-day"><div class="d">FRI</div><p>Demo + stakeholder sign-off</p></div></div>
+      <div class="trk-week"><div class="trk-day"><div class="d">MON</div><p>Backlog & defect triage by severity</p></div><div class="trk-day"><div class="d">TUE</div><p>Spec clarification with dev</p></div><div class="trk-day"><div class="d">WED</div><p>Build structure review vs FD</p></div><div class="trk-day"><div class="d">THU</div><p>Test / retest fixed items</p></div><div class="trk-day"><div class="d">FRI</div><p>Demo + stakeholder sign-off</p></div></div>
       <div class="trk-kpis"><div class="trk-kpi"><div class="v">2× / wk</div><div class="l">Dev structure reviews<span class="trk-confirm">confirm</span></div></div><div class="trk-kpi"><div class="v">12 wk</div><div class="l">Weekly post-live adoption reviews</div></div><div class="trk-kpi"><div class="v">0</div><div class="l">Unauthorised POs since Go-Live</div></div></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Stakeholder network &amp; RACI</p>
       <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>~15 procurement staff &middot; dept heads + director &middot; 10+ vendors &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · Consultant/BA</b></td><td class="cnt">1</td><td>Requirements, config, FSD, UAT, training</td><td class="raci">A / R</td></tr><tr><td><b>Director & Dept Heads</b></td><td class="cnt">2+</td><td>Approval workflow authority (฿50K rule)</td><td class="raci">C / A</td></tr><tr><td><b>Procurement staff</b></td><td class="cnt">~15</td><td>Day-to-day users; trained &amp; on-boarded</td><td class="raci">I / R</td></tr><tr><td><b>Vendors</b></td><td class="cnt">10+</td><td>Master data, lead-time, scorecard</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built config logic from my FSD</td><td class="raci">R</td></tr></tbody></table>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · Consultant/BA</b></td><td class="cnt">1</td><td>Requirements, config, FD, UAT, training</td><td class="raci">A / R</td></tr><tr><td><b>Director & Dept Heads</b></td><td class="cnt">2+</td><td>Approval workflow authority (฿50K rule)</td><td class="raci">C / A</td></tr><tr><td><b>Procurement staff</b></td><td class="cnt">~15</td><td>Day-to-day users; trained &amp; on-boarded</td><td class="raci">I / R</td></tr><tr><td><b>Vendors</b></td><td class="cnt">10+</td><td>Master data, lead-time, scorecard</td><td class="raci">C</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built config logic from my FD</td><td class="raci">R</td></tr></tbody></table>
       <p class="trk-note">I was the only consultant, but not working alone. I was the single node connecting approvers, ~15 users and the vendor dev team, and the only person with end-to-end visibility of requirements, build and adoption.</p>
     </div>
     </div>

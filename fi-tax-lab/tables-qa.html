@@ -298,8 +298,8 @@
     </div>
 
     <h3>แล้วทำไมบาง field ใช้ BSEG?</h3>
-    <p class="body">RPT-1 field “<b>Doc WHT FX Adj</b>” FSD ระบุอ่าน <code>BSEG</code> (BELNR/GJAHR/BUKRS ของเอกสารจ่าย, <code>KTOSL='WIT'</code>) เพื่อดึง <code>AUGBL</code> (clearing document) ของบรรทัด WHT — เป็นการหยิบ <b>line-level clearing linkage</b> ที่ระบุไว้ที่ BSEG · ส่วน PC/RI/VAT code (field 17/18/32/33/34) หยิบจาก <b>ACDOCA</b></p>
-    <div class="trap"><b>ประเด็นตอบ:</b> “S/4 อ่าน analytic dims (PC/RI/segment/MWSKZ) จาก <b>ACDOCA</b> · ส่วน BSEG ใช้เมื่อต้องการ line-level field เฉพาะ (เช่น clearing AUGBL ของ WIT line) — FSD ของ RPT-1 mix ทั้งสองตัวโดยตั้งใจ”</div>
+    <p class="body">RPT-1 field “<b>Doc WHT FX Adj</b>” FD ระบุอ่าน <code>BSEG</code> (BELNR/GJAHR/BUKRS ของเอกสารจ่าย, <code>KTOSL='WIT'</code>) เพื่อดึง <code>AUGBL</code> (clearing document) ของบรรทัด WHT — เป็นการหยิบ <b>line-level clearing linkage</b> ที่ระบุไว้ที่ BSEG · ส่วน PC/RI/VAT code (field 17/18/32/33/34) หยิบจาก <b>ACDOCA</b></p>
+    <div class="trap"><b>ประเด็นตอบ:</b> “S/4 อ่าน analytic dims (PC/RI/segment/MWSKZ) จาก <b>ACDOCA</b> · ส่วน BSEG ใช้เมื่อต้องการ line-level field เฉพาะ (เช่น clearing AUGBL ของ WIT line) — FD ของ RPT-1 mix ทั้งสองตัวโดยตั้งใจ”</div>
   </section>
 
   <!-- 7 · DRILL -->
@@ -311,7 +311,7 @@
       <details class="ans"><summary>เฉลย</summary><div class="a">จาก <b>ACDOCA</b> (<code>RLDNR='0L'</code>) กรอง <b>KTOSL='WIT'</b> สำหรับฝั่งจ่าย และ <b>KTOSL='XST'</b> สำหรับฝั่ง invoice → fetch <code>PRCTR</code> / <code>RECID</code></div></details></div>
 
     <div class="ask"><div class="q"><span class="qi">Q2</span>ทำไม field “Doc WHT FX Adj” ใช้ <code>BSEG</code> ไม่ใช่ ACDOCA?</div>
-      <details class="ans"><summary>เฉลย</summary><div class="a">FSD ระบุอ่าน <b>BSEG</b> (BELNR/GJAHR/BUKRS ของเอกสารจ่าย, <code>KTOSL='WIT'</code>) เพื่อดึง <code>AUGBL</code> (clearing document) ของบรรทัด WHT — เป็น line-level clearing linkage · ส่วน analytic dims (PC/RI/VAT code) หยิบจาก ACDOCA</div></details></div>
+      <details class="ans"><summary>เฉลย</summary><div class="a">FD ระบุอ่าน <b>BSEG</b> (BELNR/GJAHR/BUKRS ของเอกสารจ่าย, <code>KTOSL='WIT'</code>) เพื่อดึง <code>AUGBL</code> (clearing document) ของบรรทัด WHT — เป็น line-level clearing linkage · ส่วน analytic dims (PC/RI/VAT code) หยิบจาก ACDOCA</div></details></div>
 
     <div class="ask"><div class="q"><span class="qi">Q3</span>ACDOCA คืออะไร ต่างจาก BSEG อย่างไร?</div>
       <details class="ans"><summary>เฉลย</summary><div class="a"><b>ACDOCA = Universal Journal</b> — line-item table เดียวของ S/4 รวม FI+CO+ML = source of truth สำหรับ reporting/analytic (PC/RI/segment/MWSKZ) · <b>BSEG</b> = classic FI line items ยัง generate อยู่ ใช้บาง field เฉพาะ</div></details></div>

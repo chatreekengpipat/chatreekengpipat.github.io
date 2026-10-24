@@ -450,7 +450,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
           <div class="nav-dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
           <a href="fico-config-simulator.html">FI/CO Configuration Simulator</a>
-          <a href="functional-specification.html">Functional Specification (FSD)</a>
+          <a href="functional-specification.html">Functional Specification (FD)</a>
           <a href="business-process-map.html">Business Process Master List</a>
           <a href="data-migration-cutover.html">Data Migration &amp; Cutover</a>
           <a href="integration-architecture.html">Integration Architecture</a>
@@ -887,7 +887,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
       </svg>
     </div>
 
-    <!-- XEERSOFT-NATIVE: MODULE FLOW + FSD -->
+    <!-- XEERSOFT-NATIVE: MODULE FLOW + FD -->
     <h3 class="content-h3">XeerSoft <em>Module Flow</em></h3>
     <p class="content-p">
       Pricing and AR process as configured in XeerSoft: module → function paths, no transaction codes.
@@ -909,12 +909,12 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <h3 class="content-h3">Functional Spec &amp; <em>Build Evidence</em></h3>
     <p class="content-p">
-      The pricing and AR business rules I authored in the FSD and submitted to the XeerSoft development team.
+      The pricing and AR business rules I authored in the FD and submitted to the XeerSoft development team.
     </p>
 
     <figure class="lx-code">
-    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FSD-P2 · pricing &amp; AR rules</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
-    <div class="code-block"><span class="comment">// FSD-P2-01 · Pricing rules (best single discount, no stacking — [TODO: Chatree to confirm])</span>
+    <figcaption class="lx-code-bar"><span class="lx-code-dots"><i></i><i></i><i></i></span><span class="lx-code-file">FD-P2 · pricing &amp; AR rules</span><span class="lx-code-lang">spec · pseudocode</span></figcaption>
+    <div class="code-block"><span class="comment">// FD-P2-01 · Pricing rules (best single discount, no stacking — [TODO: Chatree to confirm])</span>
 <span class="keyword">ON</span> enrolment.price:
    base = 350,000                       <span class="comment">// BASE tuition / yr</span>
    <span class="keyword">SIBLING</span> sibling enrolled  → −50,000
@@ -923,7 +923,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
    discount = best_applicable           <span class="comment">// pricing rules do not stack</span>
    net = base − discount                <span class="comment">// → Invoice + AR · GL 400300 contra</span>
 
-<span class="comment">// FSD-P2-02 · AR aging → dunning trigger</span>
+<span class="comment">// FD-P2-02 · AR aging → dunning trigger</span>
 <span class="keyword">FOR EACH</span> open_item:
    overdue = today − due_date
    0      → CURRENT
@@ -933,10 +933,10 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </figure>
 
     <h3 class="content-h3">AR Aging &amp; <em>Dunning Trigger</em></h3>
-    <p class="content-p">The aging analysis the dunning run reads (FSD-P2-02): every open item is bucketed by days overdue, and each bucket fires the matching dunning level. Driving overdue items down moved average days overdue <strong>42 &rarr; 12</strong> and collection <strong>78% &rarr; 96%</strong>.</p>
+    <p class="content-p">The aging analysis the dunning run reads (FD-P2-02): every open item is bucketed by days overdue, and each bucket fires the matching dunning level. Driving overdue items down moved average days overdue <strong>42 &rarr; 12</strong> and collection <strong>78% &rarr; 96%</strong>.</p>
 
     <div class="exh">
-      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; aging buckets per FSD-P2-02 &middot; item counts and amounts illustrative &middot; the 42 &rarr; 12 days and 78% &rarr; 96% aggregates are the real results.</div>
+      <div class="exh-ribbon">&#128274; <b>Representative recreation</b> &middot; aging buckets per FD-P2-02 &middot; item counts and amounts illustrative &middot; the 42 &rarr; 12 days and 78% &rarr; 96% aggregates are the real results.</div>
       <div class="exh-body">
         <table class="exh-table">
           <thead><tr><th>Aging bucket</th><th>Status</th><th>Dunning action</th><th>Open items</th><th>Amount (illus.)</th></tr></thead>
@@ -952,7 +952,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
     </div>
 
     <h3 class="content-h3">Live <em>Spec Simulation</em></h3>
-    <p class="content-p">An interactive simulation that runs the FSD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
+    <p class="content-p">An interactive simulation that runs the FD logic above directly in your browser: it reproduces the <strong>specified behaviour I designed</strong>, not the proprietary XeerSoft UI.</p>
 
     <div class="xsim xnative-section" id="sim2">
       <div class="xsim-bar"><span class="xsim-dots"><i></i><i></i><i></i></span>
@@ -988,7 +988,7 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
               <p class="xsim-h">AR open item</p>
               <label>Days overdue &middot; <b id="p2dval">0 days</b></label>
               <input type="range" id="p2days" min="0" max="60" value="0">
-              <p class="content-p" style="font-size:.78rem;margin-top:.8rem">Bucketed per FSD-P2-02; each bucket triggers the matching dunning level.</p>
+              <p class="content-p" style="font-size:.78rem;margin-top:.8rem">Bucketed per FD-P2-02; each bucket triggers the matching dunning level.</p>
             </div>
             <div class="xsim-panel">
               <p class="xsim-h">Dunning decision</p>
@@ -1046,8 +1046,8 @@ html.js .fx-in .lx-delta-row.after .lx-delta-bar{ transition-delay:.14s; }
 
     <div class="callout">
       <div class="callout-title">Delivery model · role boundary</div>
-      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FSD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
-      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FSD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
+      <p>On XeerSoft Cloud ERP I worked as <strong>Functional Consultant / Business Analyst</strong>, owning requirements, configuration, FD authoring, UAT and defect management. The custom logic below was implemented by XeerSoft’s in-house development team against my specifications.</p>
+      <p>The pseudocode shown is the <em>specified expected behaviour</em> (my FD deliverable), not vendor source code, and deliberately platform-neutral so it reads the same to a XeerSoft or generic ERP reviewer.</p>
     </div>
 
     <h3 class="content-h3">Pricing <em>Configuration</em></h3>
@@ -1444,7 +1444,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
       <span class="module-tag">XeerSoft Pricing Module</span>
       <span class="module-tag">XeerSoft AR Module</span>
       <span class="module-tag">XeerSoft Dunning</span>
-      <span class="module-tag">FSD Authoring (Word)</span>
+      <span class="module-tag">FD Authoring (Word)</span>
       <span class="module-tag">Power BI</span>
       <span class="module-tag">Jira · UAT Defect Log</span>
       <span class="module-tag">draw.io (Process Flow)</span>
@@ -1466,7 +1466,7 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
       <p class="trk-h">Project timeline &middot; month-by-month</p>
       <div class="trk-scroll"><div class="trk-gantt" style="--cols:13">
         <div class="trk-row"><div class="trk-label"></div><div class="trk-track head"><div class="trk-mon">Jun</div><div class="trk-mon">Jul</div><div class="trk-mon">Aug</div><div class="trk-mon">Sep</div><div class="trk-mon">Oct</div><div class="trk-mon">Nov</div><div class="trk-mon">Dec</div><div class="trk-mon">Jan</div><div class="trk-mon">Feb</div><div class="trk-mon">Mar</div><div class="trk-mon">Apr</div><div class="trk-mon">May</div><div class="trk-mon">Jun</div></div></div>
-        <div class="trk-row"><div class="trk-label">Discovery (48 exec sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:6" title="Discovery (48 exec sessions)">6 mo</span></div></div><div class="trk-row"><div class="trk-label">Pattern synthesis → 3 vars</div><div class="trk-track"><span class="trk-bar done" style="--s:7;--l:2" title="Pattern synthesis → 3 vars">2 mo</span></div></div><div class="trk-row"><div class="trk-label">FSD authoring</div><div class="trk-track"><span class="trk-bar done" style="--s:9;--l:2" title="FSD authoring">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Dev build + reviews</div><div class="trk-track"><span class="trk-bar done" style="--s:10;--l:2" title="Dev build + reviews">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT (4 sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:12;--l:1" title="UAT (4 sessions)">UAT</span></div></div><div class="trk-row"><div class="trk-label">Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:13;--l:1" title="Go-Live">LIVE</span></div></div>
+        <div class="trk-row"><div class="trk-label">Discovery (48 exec sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:1;--l:6" title="Discovery (48 exec sessions)">6 mo</span></div></div><div class="trk-row"><div class="trk-label">Pattern synthesis → 3 vars</div><div class="trk-track"><span class="trk-bar done" style="--s:7;--l:2" title="Pattern synthesis → 3 vars">2 mo</span></div></div><div class="trk-row"><div class="trk-label">FD authoring</div><div class="trk-track"><span class="trk-bar done" style="--s:9;--l:2" title="FD authoring">2 mo</span></div></div><div class="trk-row"><div class="trk-label">Dev build + reviews</div><div class="trk-track"><span class="trk-bar done" style="--s:10;--l:2" title="Dev build + reviews">2 mo</span></div></div><div class="trk-row"><div class="trk-label">UAT (4 sessions)</div><div class="trk-track"><span class="trk-bar done" style="--s:12;--l:1" title="UAT (4 sessions)">UAT</span></div></div><div class="trk-row"><div class="trk-label">Go-Live</div><div class="trk-track"><span class="trk-bar live" style="--s:13;--l:1" title="Go-Live">LIVE</span></div></div>
       </div></div>
       <div class="trk-legend"><span><i style="background:var(--t-accent)"></i>Delivered</span><span><i style="background:var(--t-warn)"></i>Risk / slipped</span><span><i style="background:linear-gradient(90deg,var(--t-warn),var(--t-ok))"></i>Recovered</span><span><i style="background:var(--t-ok)"></i>Go-Live</span><span><i style="border:1px dashed var(--t-muted)"></i>Planned / in&nbsp;progress</span></div>
     </div>
@@ -1478,23 +1478,23 @@ ERS → GL 400300  Family Discount (contra-revenue, NEGATIVE)
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Spec design → developer handoff → build verification</p>
-      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FSD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FSD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
+      <div class="trk-steps"><div class="trk-step"><span class="n">01</span><b>Requirements & As-Is</b><span>Stakeholder interviews, executive sessions, current-state process mapping.</span></div><div class="trk-step"><span class="n">02</span><b>To-Be & Acceptance</b><span>Target process design + measurable acceptance criteria agreed up front.</span></div><div class="trk-step"><span class="n">03</span><b>FD Authoring</b><span>Decision tables, field-level data model, GL/workflow rules, edge cases.</span></div><div class="trk-step"><span class="n">04</span><b>Dev Handoff</b><span>Spec walkthrough with the dev team, clarify, agree Definition-of-Done.</span></div><div class="trk-step"><span class="n">05</span><b>Build Verification</b><span>Trace the build back to the FD: data model, posting, workflow, negatives.</span></div><div class="trk-step"><span class="n">06</span><b>UAT → Go-Live → Hypercare</b><span>Cycle sign-offs, defect burn-down, cutover, post-live support.</span></div></div>
       <div class="trk-two">
         <div class="trk-panel"><p class="trk-h">How I spec for developers</p><ul><li>Write every rule as a <b>decision table</b> (input → expected output), not prose.</li><li>Specify the <b>data model</b> field-by-field: keys, types, validation.</li><li>Define <b>GL posting</b> and <b>workflow thresholds</b> explicitly, with examples.</li><li>Enumerate <b>edge & negative cases</b> up front (multi-select, zero, partial, duplicate).</li><li>Agree a <b>Definition-of-Done</b> before the build starts.</li></ul></div>
-        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FSD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
+        <div class="trk-panel"><p class="trk-h">How I verify the build <span style="text-transform:none;letter-spacing:0">(functional, not source-code review)</span></p><ul><li><b>Functional trace</b>: every FD rule reproduced in the build.</li><li><b>Data model check</b>: fields, keys and validation match the spec.</li><li><b>Posting check</b>: correct GL accounts, debit/credit, contra logic.</li><li><b>Workflow check</b>: routing & thresholds behave per the matrix.</li><li><b>Negative / edge tests before happy-path sign-off</b> (the DEF-001 lesson).</li><li><b>Regression after every fix</b>: nothing closes without a retest.</li></ul></div>
       </div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Weekly Agile cadence</p>
-      <div class="trk-week"><div class="trk-day"><div class="d">SUN</div><p>Executive pricing session (4 hr)</p></div><div class="trk-day"><div class="d">MON</div><p>Synthesise notes → variables</p></div><div class="trk-day"><div class="d">WED</div><p>FSD / build review with dev</p></div><div class="trk-day"><div class="d">THU</div><p>Test pricing scenarios</p></div><div class="trk-day"><div class="d">FRI</div><p>Log + sign-off</p></div></div>
+      <div class="trk-week"><div class="trk-day"><div class="d">SUN</div><p>Executive pricing session (4 hr)</p></div><div class="trk-day"><div class="d">MON</div><p>Synthesise notes → variables</p></div><div class="trk-day"><div class="d">WED</div><p>FD / build review with dev</p></div><div class="trk-day"><div class="d">THU</div><p>Test pricing scenarios</p></div><div class="trk-day"><div class="d">FRI</div><p>Log + sign-off</p></div></div>
       <div class="trk-kpis"><div class="trk-kpi"><div class="v">48</div><div class="l">Weekly executive sessions</div></div><div class="trk-kpi"><div class="v">4</div><div class="l">UAT sessions (May 2024)</div></div><div class="trk-kpi"><div class="v">1× / wk</div><div class="l">Dev build sync<span class="trk-confirm">confirm</span></div></div></div>
     </div>
 
     <div class="trk-card xnative-section">
       <p class="trk-h">Stakeholder network &amp; RACI</p>
       <div class="trk-hub"><span class="you">Chatree · sole consultant</span> single point of accountability across <b>school owner / executive &middot; admin staff &middot; ~enrolled families &middot; remote XeerSoft dev team</b></div>
-      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA/Consultant</b></td><td class="cnt">1</td><td>Discovery, FSD, config, UAT lead</td><td class="raci">A / R</td></tr><tr><td><b>School owner</b></td><td class="cnt">1</td><td>Pricing decision authority; sponsor</td><td class="raci">A / C</td></tr><tr><td><b>Admin staff</b></td><td class="cnt">several</td><td>Generate quotes post Go-Live</td><td class="raci">I / R</td></tr><tr><td><b>Families</b></td><td class="cnt">many</td><td>Subjects of the pricing & AR</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built pricing/dunning logic from FSD</td><td class="raci">R</td></tr></tbody></table>
+      <table class="trk-tbl"><thead><tr><th>Stakeholder</th><th>Count</th><th>Their part</th><th>RACI</th></tr></thead><tbody><tr><td><b>You · BA/Consultant</b></td><td class="cnt">1</td><td>Discovery, FD, config, UAT lead</td><td class="raci">A / R</td></tr><tr><td><b>School owner</b></td><td class="cnt">1</td><td>Pricing decision authority; sponsor</td><td class="raci">A / C</td></tr><tr><td><b>Admin staff</b></td><td class="cnt">several</td><td>Generate quotes post Go-Live</td><td class="raci">I / R</td></tr><tr><td><b>Families</b></td><td class="cnt">many</td><td>Subjects of the pricing & AR</td><td class="raci">I</td></tr><tr><td><b>XeerSoft dev team</b></td><td class="cnt">remote</td><td>Built pricing/dunning logic from FD</td><td class="raci">R</td></tr></tbody></table>
       <p class="trk-note">A 12-month project sustained by one consultant volunteering for 48 Sunday sessions: I was the only person translating the owner’s tacit pricing logic into a system the whole admin team could run.</p>
     </div>
     </div>

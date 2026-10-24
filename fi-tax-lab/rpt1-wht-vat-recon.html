@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAX-RPT-1 Deep-Dive (จาก FSD) · SAP FI-Tax Knowledge Lab</title>
+<title>TAX-RPT-1 Deep-Dive (จาก FD) · SAP FI-Tax Knowledge Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -119,11 +119,11 @@
 
   <header class="masthead">
     <div class="kicker">
-      <span class="pill">TAX-RPT-1 · FSD Deep-Dive</span>
+      <span class="pill">TAX-RPT-1 · FD Deep-Dive</span>
       <span class="pill conf">ANONYMIZED · PUBLIC EDITION</span>
       <span>PND54 ↔ VAT36</span>
     </div>
-    <h1>TAX-RPT-1 — Reconciliation Report<br><span class="accent">PND.54 ↔ VAT PP36 (รวม Profit Center) · อ่านจาก FSD จริง</span></h1>
+    <h1>TAX-RPT-1 — Reconciliation Report<br><span class="accent">PND.54 ↔ VAT PP36 (รวม Profit Center) · อ่านจาก FD จริง</span></h1>
     <div class="meta">
       <span>T-code · <b>ZTAXB_R01</b></span>
       <span>Main prog · <b>SAPLZTAXA_R01</b></span>
@@ -131,11 +131,11 @@
       <span>Output grp · <b>R03</b></span>
       <span>CoCd · <b>TH01 · TH</b></span>
     </div>
-    <div class="src">Source: FSD TAX-RPT-1 v0.1 (23/10/2025) · Business Owner: Client Tax team · Geography: Thailand only</div>
+    <div class="src">Source: FD TAX-RPT-1 v0.1 (23/10/2025) · Business Owner: Client Tax team · Geography: Thailand only</div>
   </header>
 
   <p class="lede">
-    สรุปแบบ <b>เข้าใจง่าย</b> จาก FSD ตัวจริง — รายงานนี้เอา <b>PND54</b> (WHT จ่ายไปต่างประเทศ) มากระทบยอดกับ
+    สรุปแบบ <b>เข้าใจง่าย</b> จาก FD ตัวจริง — รายงานนี้เอา <b>PND54</b> (WHT จ่ายไปต่างประเทศ) มากระทบยอดกับ
     <b>VAT36 / PP36</b> (reverse-charge VAT) ที่มักเกิดจากธุรกรรมเดียวกัน (จ่ายค่าบริการต่างประเทศ)
     · FD เขียนว่าใช้ standard report <code>S_P00_07000134</code> แล้วเพิ่ม field ในจอเลือก — ในระบบจริงคือ <b><code>ZTAXA_R01</code> = enhanced copy ของ <code>RFIDYYWT</code></b> เรียกด้วย T-code <code>ZTAXB_R01</code> และ design หลายข้อถูกตกลงใหม่หลัง FD v0.1 (ดู <a href="#agreed" style="color:var(--petrol);font-weight:600">§2.5</a>)
   </p>
@@ -475,12 +475,12 @@
   <!-- TEST -->
   <section id="test">
     <div class="sec-head"><span class="sec-num">7</span><h2>Test Scenarios (Given / When / Then)</h2></div>
-    <p class="sec-sub">9 เคสจาก FSD จริง + validation อีก 2 · จัดกลุ่ม: สกุลเงิน (FX) · selection · dependency · edge/negative</p>
-    <p class="body" style="font-size:12.5px;color:var(--ink-soft)"><b>Badge:</b> <span style="color:var(--petrol-deep);font-weight:600">FSD</span> = จากเอกสารจริง · <span style="color:var(--warn);font-weight:600">PROPOSED</span> = ผม derive ต้อง verify</p>
+    <p class="sec-sub">9 เคสจาก FD จริง + validation อีก 2 · จัดกลุ่ม: สกุลเงิน (FX) · selection · dependency · edge/negative</p>
+    <p class="body" style="font-size:12.5px;color:var(--ink-soft)"><b>Badge:</b> <span style="color:var(--petrol-deep);font-weight:600">FD</span> = จากเอกสารจริง · <span style="color:var(--warn);font-weight:600">PROPOSED</span> = ผม derive ต้อง verify</p>
     <p class="body" style="font-size:13px"><b>ก่อนทดสอบ (precondition):</b> ต้องมี WHT ของ recipient type “54” posted แล้ว · invoice ต้อง post ด้วย VAT PP36 tax code (บางเคสอาจมีแต่ PND54)</p>
     <div class="kit-tc">
       <div class="tc fx">
-        <div class="tc-h"><span class="tc-id">TC-001</span><span class="tc-cat">FX · จ่าย FC</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-001</span><span class="tc-cat">FX · จ่าย FC</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">Vendor invoice + VAT36 + PND54 code เป็น <b>FC</b> (invoice EUR/GBP) และจ่ายเป็น <b>USD</b></span>
           <span class="l">When</span><span class="v">รันรายงาน reconciliation</span>
@@ -488,7 +488,7 @@
         </div>
       </div>
       <div class="tc fx">
-        <div class="tc-h"><span class="tc-id">TC-002</span><span class="tc-cat">FX · THB ล้วน</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-002</span><span class="tc-cat">FX · THB ล้วน</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">invoice + จ่าย เป็น <b>THB</b> ทั้งคู่</span>
           <span class="l">When</span><span class="v">รันรายงาน</span>
@@ -496,7 +496,7 @@
         </div>
       </div>
       <div class="tc fx">
-        <div class="tc-h"><span class="tc-id">TC-003</span><span class="tc-cat">FX · invoice THB</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-003</span><span class="tc-cat">FX · invoice THB</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">invoice <b>THB</b>, จ่าย <b>USD</b></span>
           <span class="l">When</span><span class="v">รันรายงาน</span>
@@ -504,7 +504,7 @@
         </div>
       </div>
       <div class="tc fx">
-        <div class="tc-h"><span class="tc-id">TC-004</span><span class="tc-cat">FX · จ่าย THB</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-004</span><span class="tc-cat">FX · จ่าย THB</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">invoice <b>USD</b>, จ่าย <b>THB</b></span>
           <span class="l">When</span><span class="v">รันรายงาน</span>
@@ -512,7 +512,7 @@
         </div>
       </div>
       <div class="tc sel">
-        <div class="tc-h"><span class="tc-id">TC-005</span><span class="tc-cat">Selection</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-005</span><span class="tc-cat">Selection</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">ธุรกรรมหลาย Profit Center / Recovery Indicator</span>
           <span class="l">When</span><span class="v">ใส่ <b>Profit Center</b> + <b>Recovery Indicator</b> ในจอเลือก</span>
@@ -520,7 +520,7 @@
         </div>
       </div>
       <div class="tc dep">
-        <div class="tc-h"><span class="tc-id">TC-006</span><span class="tc-cat">Dependency</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-006</span><span class="tc-cat">Dependency</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">มีการสร้าง WHT tax adjustment ด้วย <code>ZTAXA_E02</code> (= ZTAXA_R03)</span>
           <span class="l">When</span><span class="v">รัน adjustment <b>ก่อน</b> recon</span>
@@ -528,7 +528,7 @@
         </div>
       </div>
       <div class="tc dep">
-        <div class="tc-h"><span class="tc-id">TC-007</span><span class="tc-cat">Dependency</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-007</span><span class="tc-cat">Dependency</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">มีการรัน <code>ZTAXA_R02</code> (VAT36)</span>
           <span class="l">When</span><span class="v">รัน <b>ก่อน</b> recon</span>
@@ -536,7 +536,7 @@
         </div>
       </div>
       <div class="tc map">
-        <div class="tc-h"><span class="tc-id">TC-008</span><span class="tc-cat">Edge · PND54 only</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-008</span><span class="tc-cat">Edge · PND54 only</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">invoice มีแต่ <b>PND54</b> ไม่มี VAT36 (invoice USD, จ่าย THB)</span>
           <span class="l">When</span><span class="v">รันรายงาน</span>
@@ -544,7 +544,7 @@
         </div>
       </div>
       <div class="tc neg">
-        <div class="tc-h"><span class="tc-id">TC-009</span><span class="tc-cat">Negative</span><span class="tc-src fsd">FSD</span></div>
+        <div class="tc-h"><span class="tc-id">TC-009</span><span class="tc-cat">Negative</span><span class="tc-src fsd">FD</span></div>
         <div class="gwt">
           <span class="l">Given</span><span class="v">มีแต่ <b>VAT36</b> ไม่มี PND54</span>
           <span class="l">When</span><span class="v">รันรายงาน</span>
@@ -647,7 +647,7 @@
   </section>
 
   <footer>
-    <span>FI-TAX Knowledge Lab · TAX-RPT-1 Deep-Dive (จาก FSD v0.1)</span>
+    <span>FI-TAX Knowledge Lab · TAX-RPT-1 Deep-Dive (จาก FD v0.1)</span>
     <span>Chatree Kengpipat · S/4HANA FI-Tax · anonymized knowledge lab</span>
   </footer>
 
