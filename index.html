@@ -227,6 +227,7 @@
     </div>
     <div class="hero-v7-cta">
       <a href="#projects" class="btn btn-primary">View Implementation Projects</a>
+      <a href="#playground" class="btn btn-outline">▶ Play the simulators</a>
       <a href="fi-tax-consultant-scope.html" class="btn btn-outline">SAP FI Tax · Accenture &rarr;</a>
       <a href="#contact" class="btn btn-outline">Contact Me</a>
     </div>
@@ -360,7 +361,7 @@
         <img class="jp-logo" src="workplace/Learn%20Balance.jpg" alt="Learn Balance Group logo" width="64" height="64" loading="lazy">
         <span class="jp-kind">ERP Consultant · 4 Projects (End-to-End) · 2023–2026</span>
         <h3 class="jp-org">Learn Balance</h3>
-        <p class="jp-ctx">Full-time · 4 live XeerSoft go-lives · a top-3 largest education group in Thailand</p>
+        <p class="jp-ctx">Full-time · 4 live XeerSoft go-lives · 3-branch school group</p>
         <span class="jp-go">View 4 projects →</span>
       </div>
     </a>
@@ -371,7 +372,7 @@
         <img class="jp-logo" src="workplace/Accenture.webp" alt="Accenture logo" width="128" height="128" loading="lazy">
         <span class="jp-kind">SAP Functional Consultant · FI/CO · 2026</span>
         <h3 class="jp-org">Accenture</h3>
-        <p class="jp-ctx">Full-time · SAP S/4HANA FI/CO delivery · the world's #1 technology &amp; consulting company</p>
+        <p class="jp-ctx">Full-time · SAP S/4HANA FI/CO delivery</p>
         <span class="jp-go">View SAP FI Tax scope →</span>
       </div>
     </a>
@@ -856,6 +857,173 @@
       </a>
 </section>
 
+<!-- ▶ INTERACTIVE PLAYGROUND — SAP & Thai-tax simulators (playground.js). Standard behaviour, sample numbers. -->
+<style id="playground-styles">
+  .pg-band{position:relative;isolation:isolate;overflow:hidden;color:#e2e8f0;
+    background:radial-gradient(1100px 480px at 12% -12%,rgba(37,99,235,.30),transparent 62%),radial-gradient(900px 420px at 105% 112%,rgba(14,165,233,.16),transparent 60%),#0b1220;
+    border-top:1px solid #1e293b;border-bottom:1px solid #1e293b}
+  .pg-band::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:linear-gradient(rgba(148,163,184,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.07) 1px,transparent 1px);background-size:32px 32px;
+    -webkit-mask-image:linear-gradient(180deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(180deg,transparent,#000 10%,#000 90%,transparent)}
+  #playground{--c-card:#111a2e;--c-card2:#0d1527;--c-line:#26344f;--c-text:#e2e8f0;--c-muted:#9fb0c8;--c-acc:#60a5fa;--c-acc2:#93c5fd;--c-amb:#fbbf24;--c-grn:#34d399;--c-red:#f87171;color:var(--c-text)}
+  #playground .section-header{border-bottom-color:var(--c-line)}
+  #playground .section-title{color:#f8fafc}
+  #playground .section-title em{color:var(--c-acc)}
+  #playground .section-subtitle{color:var(--c-muted)}
+  .pg-lede{max-width:780px;color:var(--c-muted);font-size:.98rem;line-height:1.7;margin:-1.4rem 0 1.6rem}
+  .pg-lede b{color:var(--c-text)}
+  .pg-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+  .pg-tabs [role=tab]{font:600 .88rem Inter,sans-serif;color:var(--c-muted);background:rgba(15,23,42,.6);border:1px solid var(--c-line);border-radius:999px;padding:.55rem 1rem;cursor:pointer;display:inline-flex;gap:.55rem;align-items:center;transition:background .2s,color .2s,border-color .2s,box-shadow .2s}
+  .pg-tabs [role=tab]:hover{color:var(--c-text);border-color:var(--c-acc)}
+  .pg-tabs [role=tab] .pg-tn{font:600 .66rem 'JetBrains Mono',monospace;color:var(--c-acc)}
+  .pg-tabs [role=tab][aria-selected=true]{background:var(--c-acc);color:#0b1220;border-color:var(--c-acc);box-shadow:0 0 0 4px rgba(96,165,250,.18)}
+  .pg-tabs [role=tab][aria-selected=true] .pg-tn{color:#0b1220}
+  .pg-tabs [role=tab]:focus-visible,#playground button:focus-visible,#playground input:focus-visible,#playground a:focus-visible{outline:2px solid var(--c-amb);outline-offset:2px}
+  .pg-panel{background:linear-gradient(180deg,var(--c-card),var(--c-card2));border:1px solid var(--c-line);border-radius:16px;padding:1.35rem;box-shadow:0 30px 70px rgba(0,0,0,.35);margin-bottom:1rem}
+  .pg-panel[hidden]{display:none!important}
+  .pg-static{color:var(--c-muted);font-size:.9rem;line-height:1.6;margin:0 0 1rem}
+  /* shared controls */
+  .pg-row{display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:flex-end;margin-bottom:1rem}
+  .pg-f{display:flex;flex-direction:column;gap:.35rem;min-width:0}
+  .pg-l{font:600 .64rem 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted)}
+  .pg-seg{display:flex;flex-wrap:wrap;gap:.35rem}
+  .pg-seg button{font:500 .82rem Inter,sans-serif;color:var(--c-text);background:#0b1324;border:1px solid var(--c-line);border-radius:8px;padding:.42rem .75rem;cursor:pointer;transition:.15s}
+  .pg-seg button:hover{border-color:var(--c-acc)}
+  .pg-seg button[aria-pressed=true]{background:rgba(96,165,250,.16);border-color:var(--c-acc);color:var(--c-acc2);font-weight:600}
+  .pg-seg button:disabled{opacity:.35;cursor:not-allowed}
+  #playground input[type=number],#playground input[type=text]{font:500 .9rem 'JetBrains Mono',monospace;color:var(--c-text);background:#0b1324;border:1px solid var(--c-line);border-radius:8px;padding:.45rem .65rem;width:150px;font-variant-numeric:tabular-nums}
+  #playground input[type=range]{accent-color:var(--c-acc);width:100%}
+  .pg-btn{font:600 .82rem Inter,sans-serif;color:#0b1220;background:var(--c-acc);border:1px solid var(--c-acc);border-radius:8px;padding:.45rem .85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem}
+  .pg-btn.ghost{background:transparent;color:var(--c-text);border-color:var(--c-line)}
+  .pg-btn.ghost:hover{border-color:var(--c-acc);color:var(--c-acc2)}
+  .pg-btn:disabled{opacity:.4;cursor:not-allowed}
+  .pg-mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+  .pg-chip{display:inline-block;font:600 .68rem 'JetBrains Mono',monospace;color:var(--c-acc2);background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.3);border-radius:6px;padding:.1rem .45rem;margin:.15rem .25rem .15rem 0}
+  .pg-chip.amb{color:var(--c-amb);background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)}
+  .pg-tbl{width:100%;border-collapse:collapse;font:500 .8rem 'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+  .pg-tbl th{font:600 .62rem 'JetBrains Mono',monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--c-muted);text-align:left;padding:.45rem .5rem;border-bottom:1px solid var(--c-line)}
+  .pg-tbl td{padding:.42rem .5rem;border-bottom:1px solid rgba(38,52,79,.6);color:var(--c-text)}
+  .pg-tbl .n{text-align:right;white-space:nowrap}
+  .pg-tbl tr.tot td{border-top:1px solid var(--c-line);font-weight:700}
+  .pg-tbl tr.flash td{animation:pgFlash 1.2s ease-out}
+  @keyframes pgFlash{0%,25%{background:rgba(251,191,36,.18)}100%{background:transparent}}
+  .pg-dr{color:var(--c-acc2)} .pg-cr{color:var(--c-amb)} .pg-ok{color:var(--c-grn)} .pg-bad{color:var(--c-red)} .pg-mut{color:var(--c-muted)}
+  .pg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .pg-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:.4rem 0 1rem}
+  .pg-kpi{background:#0b1324;border:1px solid var(--c-line);border-radius:12px;padding:.7rem .85rem}
+  .pg-kpi .k{font:600 .6rem 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted)}
+  .pg-kpi .v{font:700 1.15rem 'JetBrains Mono',monospace;margin-top:.2rem;font-variant-numeric:tabular-nums}
+  .pg-kpi .s{font-size:.74rem;color:var(--c-muted);margin-top:.15rem}
+  .pg-2col{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1rem}
+  .pg-box{background:#0b1324;border:1px solid var(--c-line);border-radius:12px;padding:.9rem 1rem}
+  .pg-box h4{font:700 .7rem 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted);margin:0 0 .6rem}
+  .pg-note{font-size:.76rem;color:var(--c-muted);margin-top:.7rem;line-height:1.55}
+  /* flow player */
+  .pg-track{position:relative;display:flex;justify-content:space-between;gap:.25rem;padding:1.2rem .5rem 1rem;margin:.2rem 0 1rem;min-width:520px}
+  .pg-track::before{content:"";position:absolute;left:3%;right:3%;top:2.05rem;height:2px;background:var(--c-line)}
+  .pg-fill{position:absolute;left:3%;top:2.05rem;height:2px;background:linear-gradient(90deg,var(--c-acc),var(--c-amb));width:0;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+  .pg-node{position:relative;z-index:1;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.45rem;background:none;border:0;color:var(--c-muted);cursor:pointer;font:500 .74rem Inter,sans-serif;text-align:center;padding:0 .15rem}
+  .pg-node .dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#0b1324;border:2px solid var(--c-line);font:700 .72rem 'JetBrains Mono',monospace;color:var(--c-muted);transition:.3s}
+  .pg-node.done .dot{background:rgba(96,165,250,.15);border-color:var(--c-acc);color:var(--c-acc2)}
+  .pg-node.cur .dot{background:var(--c-acc);border-color:var(--c-acc);color:#0b1220;box-shadow:0 0 0 6px rgba(96,165,250,.2)}
+  .pg-node.cur{color:var(--c-text);font-weight:600}
+  .pg-token{position:absolute;z-index:2;top:1.55rem;left:0;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--c-amb);box-shadow:0 0 0 4px rgba(251,191,36,.25),0 0 18px rgba(251,191,36,.8);transition:transform .7s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+  .pg-step h3{font-size:1.1rem;font-weight:700;color:#f8fafc;margin:0 0 .35rem}
+  .pg-step .who{font:600 .68rem 'JetBrains Mono',monospace;color:var(--c-amb);letter-spacing:.06em;text-transform:uppercase}
+  .pg-step p{color:var(--c-muted);font-size:.9rem;line-height:1.6;margin:.5rem 0 .8rem}
+  .pg-ctrl{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-top:.9rem}
+  .pg-ctrl .sp{margin-left:auto}
+  /* waterfall + bars */
+  .pg-wf{display:flex;align-items:flex-end;gap:.6rem;height:150px;padding:.4rem .2rem 0;border-bottom:1px solid var(--c-line)}
+  .pg-wf .b{flex:1 1 0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:.3rem;height:100%;position:relative}
+  .pg-wf .bar{width:100%;max-width:80px;border-radius:6px 6px 0 0;transition:height .6s cubic-bezier(.2,.7,.2,1),transform .6s;background:var(--c-acc)}
+  .pg-wf .bar.vat{background:#38bdf8} .pg-wf .bar.wht{background:var(--c-red)} .pg-wf .bar.net{background:var(--c-grn)} .pg-wf .bar.gu{background:var(--c-amb)}
+  .pg-wf .lab{font:600 .62rem 'JetBrains Mono',monospace;color:var(--c-muted);text-align:center}
+  .pg-wf .val{font:700 .7rem 'JetBrains Mono',monospace;color:var(--c-text)}
+  .pg-hbar{height:26px;border-radius:7px;background:#0b1324;border:1px solid var(--c-line);overflow:hidden;position:relative;margin:.35rem 0}
+  .pg-hbar>span{position:absolute;top:0;bottom:0;left:0;background:var(--c-acc);transition:width .5s cubic-bezier(.2,.7,.2,1)}
+  .pg-hbar>i{position:absolute;inset:0;display:flex;align-items:center;padding:0 .6rem;font:600 .72rem 'JetBrains Mono',monospace;font-style:normal;color:#f8fafc}
+  .pg-big{font:800 2rem 'JetBrains Mono',monospace;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .pg-spark{width:100%;height:70px;display:block}
+  .pg-stack{display:flex;height:30px;border-radius:8px;overflow:hidden;border:1px solid var(--c-line);margin:.5rem 0}
+  .pg-stack>span{display:flex;align-items:center;justify-content:center;font:600 .68rem 'JetBrains Mono',monospace;color:#0b1220;white-space:nowrap;overflow:hidden;transition:flex-grow .4s}
+  .pg-c0{background:#60a5fa}.pg-c1{background:#fbbf24}.pg-c2{background:#34d399}.pg-c3{background:#c4b5fd}.pg-c4{background:#f9a8d4}
+  /* more to play */
+  .pg-more{margin-top:1.6rem}
+  .pg-more h3{font:700 .72rem 'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted);margin:0 0 .8rem}
+  .pg-mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.7rem}
+  .pg-m{display:flex;flex-direction:column;gap:.3rem;padding:.85rem 1rem;border:1px solid var(--c-line);border-radius:12px;background:rgba(15,23,42,.7);color:var(--c-text);text-decoration:none;transition:border-color .2s,transform .2s,box-shadow .2s}
+  .pg-m:hover{border-color:var(--c-acc);transform:translateY(-2px);box-shadow:0 10px 26px rgba(37,99,235,.25)}
+  .pg-m .t{font-weight:700;font-size:.92rem}
+  .pg-m .d{font-size:.78rem;color:var(--c-muted);line-height:1.5}
+  .pg-m .g{font:600 .6rem 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--c-acc)}
+  @media(max-width:900px){.pg-2col{grid-template-columns:1fr}.pg-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:600px){#playground{padding:3.5rem 1rem}.pg-panel{padding:1rem}.pg-big{font-size:1.5rem}}
+  /* phones: decorative shapes in the hero / about blocks bled past the right edge (pre-existing horizontal scroll) */
+  @media(max-width:768px){.hero-v7,#about{overflow-x:clip}}
+  @media(prefers-reduced-motion:reduce){.pg-fill,.pg-token,.pg-wf .bar,.pg-hbar>span,.pg-stack>span,.pg-m,.pg-node .dot{transition:none!important}.pg-tbl tr.flash td{animation:none}}
+  /* playable defect board (methodology) */
+  .kb-tools{display:flex;flex-wrap:wrap;gap:.5rem .9rem;align-items:center;justify-content:center;margin:0 auto 1rem;max-width:900px}
+  .kb-tools .kb-gate{font:600 .74rem 'JetBrains Mono',monospace;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--border)}
+  .kb-tools .kb-gate.ok{color:var(--success);border-color:var(--success)} .kb-tools .kb-gate.no{color:var(--danger);border-color:var(--danger)}
+  .kb-tools button{font:500 .78rem Inter,sans-serif;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:999px;padding:.3rem .75rem;cursor:pointer}
+  .kb-tools button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);font-weight:600}
+  .kanban-card .kb-mv{font:600 .7rem 'JetBrains Mono',monospace;border:1px solid var(--border);background:var(--bg);color:var(--text-muted);border-radius:6px;padding:0 .4rem;line-height:1.5;cursor:pointer;margin-left:.2rem}
+  .kanban-card .kb-mv:hover{border-color:var(--accent);color:var(--accent)}
+  .kanban-card .kb-mv:disabled{opacity:.3;cursor:not-allowed}
+  .kanban-card.kb-dim{opacity:.25}
+  .kanban-card[draggable=true]{cursor:grab}
+  .kanban-col.kb-over{outline:2px dashed var(--accent);outline-offset:-4px}
+</style>
+<div class="pg-band">
+<section id="playground" aria-labelledby="pg-title">
+  <div class="section-header">
+    <h2 class="section-title" id="pg-title">Interactive <em>playground</em></h2>
+    <span class="section-subtitle">Play with how SAP and Thai tax move money · standard behaviour · sample numbers</span>
+  </div>
+  <p class="pg-lede">Four small simulators built from the work in this portfolio. Change a number, press play, and watch the documents, the postings and the ledger move. <b>Nothing here is a client system</b> — it is standard SAP S/4HANA behaviour and Thai tax rules with sample amounts.</p>
+
+  <div class="pg-tabs" role="tablist" aria-label="Simulators">
+    <button type="button" role="tab" id="pgt-flow" aria-controls="pgp-flow" aria-selected="true"><span class="pg-tn">01</span>SAP flow player</button>
+    <button type="button" role="tab" id="pgt-tax" aria-controls="pgp-tax" aria-selected="false" tabindex="-1"><span class="pg-tn">02</span>Thai WHT &amp; VAT</button>
+    <button type="button" role="tab" id="pgt-fx" aria-controls="pgp-fx" aria-selected="false" tabindex="-1"><span class="pg-tn">03</span>Realized FX</button>
+    <button type="button" role="tab" id="pgt-split" aria-controls="pgp-split" aria-selected="false" tabindex="-1"><span class="pg-tn">04</span>Split lines</button>
+  </div>
+
+  <div class="pg-panel" id="pgp-flow" role="tabpanel" aria-labelledby="pgt-flow" tabindex="0">
+    <p class="pg-static">Animated document flow for four processes — Procure-to-Pay, Order-to-Cash, Thai withholding tax at payment, and a foreign service with PND54 and VAT self-assessment. Each step shows the T-code, the tables written and the debit/credit posting, while a T-account ledger fills up and clears.</p>
+    <div class="pg-app" data-app="flow"></div>
+  </div>
+  <div class="pg-panel" id="pgp-tax" role="tabpanel" aria-labelledby="pgt-tax" tabindex="0">
+    <p class="pg-static">Thai withholding tax and VAT on a payment: pick who you pay and for what, and see the WHT rate, the form (PND3 / PND53 / PND54), the 50 Tawi certificate, the cash that leaves the bank and the posting — including gross-up when the payer bears the tax.</p>
+    <div class="pg-app" data-app="tax"></div>
+  </div>
+  <div class="pg-panel" id="pgp-fx" role="tabpanel" aria-labelledby="pgt-fx" tabindex="0">
+    <p class="pg-static">Book a USD invoice at one rate, settle it at another and watch the realized exchange gain or loss appear — or let the market wander for 30 days and see it tick.</p>
+    <div class="pg-app" data-app="fx"></div>
+  </div>
+  <div class="pg-panel" id="pgp-split" role="tabpanel" aria-labelledby="pgt-split" tabindex="0">
+    <p class="pg-static">One payment, several profit centers: document splitting creates one WHT line per profit center, and a tax report needs one row per line with the base prorated so the totals still tie to what was filed.</p>
+    <div class="pg-app" data-app="split"></div>
+  </div>
+
+  <div class="pg-more">
+    <h3>More to play across the site</h3>
+    <div class="pg-mgrid">
+      <a class="pg-m" href="#impact"><span class="g">ERP delivery</span><span class="t">Implementation Explorer</span><span class="d">Pick one of the four delivered projects, walk its process and open its Power BI dashboard.</span></a>
+      <a class="pg-m" href="fi-document-simulator.html"><span class="g">SAP FI</span><span class="t">FI Document Simulator</span><span class="d">Choose a business event, set the configuration, post it — then read every table and column it wrote.</span></a>
+      <a class="pg-m" href="fico-config-simulator.html"><span class="g">SAP FI/CO</span><span class="t">Config → Posting Simulator</span><span class="d">Tax code, account determination and the posting they produce for goods receipt, vendor invoice and billing.</span></a>
+      <a class="pg-m" href="fi-tax-lab/model-lab.html"><span class="g">SAP FI Tax</span><span class="t">SAP Model Lab</span><span class="d">Five models: split lines, alternative payee, one payment for many invoices, realized FX in three currencies, PC × RI report.</span></a>
+      <a class="pg-m" href="fi-tax-lab/index.html"><span class="g">SAP FI Tax</span><span class="t">FI-Tax Knowledge Lab</span><span class="d">27 interactive pages with a Ctrl K command palette, glossary hover cards, flashcards and a quiz.</span></a>
+      <a class="pg-m" href="traceability.html"><span class="g">Business architecture</span><span class="t">Traceability Explorer</span><span class="d">Click any node to light up the golden thread from strategic objective to capability, value stream and system.</span></a>
+      <a class="pg-m" href="capability-map.html"><span class="g">Business architecture</span><span class="t">Capability Map</span><span class="d">Level 1→3 capability model with a maturity and investment-priority heat map.</span></a>
+      <a class="pg-m" href="information-map.html"><span class="g">Business architecture</span><span class="t">Information Map</span><span class="d">The business information concepts an enterprise runs on, across master, transactional and analytical data.</span></a>
+      <a class="pg-m" href="quiz.html"><span class="g">Self-test</span><span class="t">SAP FI/CO &amp; BA quiz</span><span class="d">18 multiple-choice questions with instant feedback and explanations.</span></a>
+    </div>
+  </div>
+</section>
+</div>
+
 <!-- ★ FEATURED AWARD PROJECT (Mitsubishi) -->
 <style id="award-styles">
   .award-gallery{display:grid;grid-template-columns:1.5fr 1fr;gap:1rem;margin-top:1.1rem;align-items:start}
@@ -980,63 +1148,6 @@
       <p class="method-card-desc">
         Every project starts with a written FSD before code. ERDs map data relationships. UAT test cases trace back to FSD requirements. No code is built without a signed-off spec.
       </p>
-    </div>
-  </div>
-
-  <!-- BA Documentation Hierarchy -->
-  <h3 class="content-h3" style="text-align: center; margin: 4rem 0 1rem;">Documentation <em>hierarchy</em></h3>
-  <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-    How a business need flows into deliverable code: every artifact has a specific audience and purpose.
-  </p>
-
-  <div class="doc-hierarchy">
-    <div class="doc-level">
-      <span class="doc-level-tag">BRD</span>
-      <div class="doc-level-content">
-        <div class="doc-level-name">Business Requirements Document</div>
-        <div class="doc-level-desc">What the business needs and why. The "agreement" between BA and Client.</div>
-      </div>
-      <span class="doc-level-audience">For Client</span>
-    </div>
-    <div class="doc-arrow">↓</div>
-
-    <div class="doc-level">
-      <span class="doc-level-tag">FSD</span>
-      <div class="doc-level-content">
-        <div class="doc-level-name">Functional Specification Document</div>
-        <div class="doc-level-desc">Business rules + system behaviour. The "blueprint" for the developer.</div>
-      </div>
-      <span class="doc-level-audience">For Dev</span>
-    </div>
-    <div class="doc-arrow">↓</div>
-
-    <div class="doc-level">
-      <span class="doc-level-tag">ERD</span>
-      <div class="doc-level-content">
-        <div class="doc-level-name">Entity-Relationship Diagram</div>
-        <div class="doc-level-desc">Data model: tables, fields, and relationships.</div>
-      </div>
-      <span class="doc-level-audience">For Dev + DBA</span>
-    </div>
-    <div class="doc-arrow">↓</div>
-
-    <div class="doc-level">
-      <span class="doc-level-tag">UC</span>
-      <div class="doc-level-content">
-        <div class="doc-level-name">Use Cases & Process Flows</div>
-        <div class="doc-level-desc">Step-by-step user-system interactions for each scenario.</div>
-      </div>
-      <span class="doc-level-audience">For Dev + QA</span>
-    </div>
-    <div class="doc-arrow">↓</div>
-
-    <div class="doc-level">
-      <span class="doc-level-tag">TC</span>
-      <div class="doc-level-content">
-        <div class="doc-level-name">Test Cases & UAT Plan</div>
-        <div class="doc-level-desc">Acceptance criteria traced back to FSD requirements.</div>
-      </div>
-      <span class="doc-level-audience">For QA + User</span>
     </div>
   </div>
 
@@ -1179,89 +1290,6 @@
     </div>
   </div>
 
-  <!-- BA Process Flow -->
-  <h3 class="content-h3" style="text-align: center; margin: 5rem 0 1rem;">My <em>process</em></h3>
-  <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-    From first stakeholder conversation to BAU support: the path I walk for every project.
-  </p>
-
-  <div class="process-flow">
-    <div class="process-step">
-      <div class="process-num">i</div>
-      <div class="process-name">Discover</div>
-      <div class="process-detail">Stakeholder interviews · workshops · As-Is observation</div>
-    </div>
-    <div class="process-step">
-      <div class="process-num">ii</div>
-      <div class="process-name">Specify</div>
-      <div class="process-detail">BRD · FSD · ERD · process flow diagrams</div>
-    </div>
-    <div class="process-step">
-      <div class="process-num">iii</div>
-      <div class="process-name">Design</div>
-      <div class="process-detail">Business rules · data model · workflow design</div>
-    </div>
-    <div class="process-step">
-      <div class="process-num">iv</div>
-      <div class="process-name">Validate</div>
-      <div class="process-detail">UAT/SIT · defect log · iterative fix retest</div>
-    </div>
-    <div class="process-step">
-      <div class="process-num">v</div>
-      <div class="process-name">Deliver</div>
-      <div class="process-detail">Go-Live cutover · user training · BAU hypercare</div>
-    </div>
-  </div>
-</section>
-
-<!-- FUNCTIONAL FOCUS -->
-<section id="focus">
-  <div class="section-header">
-    <h2 class="section-title">Functional <em>focus</em></h2>
-  </div>
-  <div class="focus-grid">
-    <div class="focus-card">
-      <div class="focus-card-title">Procure-to-Pay</div>
-      <div class="focus-card-role">Implementation Lead</div>
-      <ul class="focus-list">
-        <li>PR → PO → GR → Invoice Verification</li>
-        <li>Material Master & Vendor Master Configuration</li>
-        <li>Inventory Management & Stock Control</li>
-        <li>3-Way Match & Payment Processing</li>
-        <li>MRP: Safety Stock, Lot Sizing, Reorder Point</li>
-        <li>2-Level Approval Workflow & Authorization</li>
-        <li>ABC Stock Analysis & Auto-Order Reporting</li>
-      </ul>
-    </div>
-
-    <div class="focus-card">
-      <div class="focus-card-title">Financial Accounting</div>
-      <div class="focus-card-role">FI · AR · AP · GL</div>
-      <ul class="focus-list">
-        <li>AR Open Item Management & Payment Terms</li>
-        <li>Overdue Monitoring & Dunning Process</li>
-        <li>AP Invoice Posting & Vendor Payments</li>
-        <li>GL Account Determination & Mapping</li>
-        <li>POS-to-Accounting Automatic Revenue Posting</li>
-        <li>Cost Allocation & Billing Structure</li>
-        <li>Multi-Branch Account Consolidation</li>
-      </ul>
-    </div>
-
-    <div class="focus-card">
-      <div class="focus-card-title">Pricing · CRM · HR</div>
-      <div class="focus-card-role">UAT & Business Design</div>
-      <ul class="focus-list">
-        <li>Pricing Procedure & Multi-Tier Condition Logic</li>
-        <li>AR Billing Structure & Payment Term Design</li>
-        <li>Loyalty / Reward Programme Configuration</li>
-        <li>Voucher Security & Redemption Validation</li>
-        <li>CRM Campaign & Customer Communication</li>
-        <li>HR & Payroll · ERP Training Delivery</li>
-        <li>POS Integration & Revenue Recognition</li>
-      </ul>
-    </div>
-  </div>
 </section>
 
 <!-- DELIVERED · PROVEN ON XEERSOFT -->
@@ -1426,12 +1454,7 @@
         Built in my <strong>final year</strong>, after the Mitsubishi internship in year three, these capstone engineering projects are where the technical discipline behind my consulting took shape. The structured testing, iterative refinement, and acceptance-criteria design I practised here is exactly what powers my UAT and BA work today.
       </p>
       <div class="acad-skills">
-        <div class="acad-skills-h">Engineering technical stack</div>
-        <div class="acad-skill-rows">
-          <div class="acad-skill"><b>Technical Programming &amp; Software</b><span>Scripting, simulation and automation to solve engineering problems in code.</span></div>
-          <div class="acad-skill"><b>Structural &amp; System Design</b><span>Mechanical modelling, load analysis and part / system design from requirements.</span></div>
-          <div class="acad-skill"><b>Complex &amp; Advanced Calculations</b><span>Numerical methods, control logic and data-driven analysis on large problem spaces.</span></div>
-        </div>
+        <div class="acad-skills-h">Tools used in these projects</div>
         <div class="acad-tools">
           <span class="acad-tool">Python</span>
           <span class="acad-tool">MATLAB</span>
@@ -1514,89 +1537,8 @@
   </a>
 </section>
 
-<!-- KEY ACHIEVEMENTS -->
-<section id="achievements">
-  <div class="section-header">
-    <h2 class="section-title">Key <em>achievements</em></h2>
-  </div>
-
-  <div class="achievements-wrapper">
-    <div class="achievement-item">
-      <div class="achievement-num">01</div>
-      <div class="achievement-content">
-        <div class="achievement-title">End-to-End ERP Consulting <span class="achievement-tag">XeerSoft · Live</span></div>
-        <div class="achievement-desc">
-          <strong>Sole implementation consultant and business analyst</strong> across 4 live ERP projects (P2P, Pricing/AR, CRM Loyalty, Financial Tracking) covering the full lifecycle (requirements, design, configuration, UAT, Go-live, and BAU) for a <strong>200-staff, 3-branch organisation</strong>.
-        </div>
-        <div class="achievement-metrics">
-          <span class="achievement-metric">4 projects delivered</span>
-          <span class="achievement-metric">5 modules integrated</span>
-          <span class="achievement-metric">47 staff trained</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="achievement-num">02</div>
-      <div class="achievement-content">
-        <div class="achievement-title">Inventory Optimisation <span class="achievement-tag">P2P · Poisson · EOQ</span></div>
-        <div class="achievement-desc">
-          Reduced <strong>stockout rate from 22% → &lt;3%</strong> and <strong>textbook write-off from THB 45K → THB 8K/yr</strong> using Poisson Distribution and Modified EOQ models, with parameters entered directly into live ERP master data.
-        </div>
-        <div class="achievement-metrics">
-          <span class="achievement-metric">86% stockout reduction</span>
-          <span class="achievement-metric">82% write-off cut</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="achievement-num">03</div>
-      <div class="achievement-content">
-        <div class="achievement-title">Pricing System Go-Live <span class="achievement-tag">Pricing/AR · 12 months</span></div>
-        <div class="achievement-desc">
-          Designed <strong>multi-tier pricing logic</strong> from executive sessions across 12 months; Go-live June 2024 <strong>eliminated all ad-hoc per-family pricing negotiation</strong> and cut pricing-decision turnaround from 480 to 15 minutes.
-        </div>
-        <div class="achievement-metrics">
-          <span class="achievement-metric">97% decision speed-up</span>
-          <span class="achievement-metric">100% rule-based pricing</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="achievement-num">04</div>
-      <div class="achievement-content">
-        <div class="achievement-title">UAT Leadership <span class="achievement-tag">CRM · 5 build cycles</span></div>
-        <div class="achievement-desc">
-          Detected critical CRM defect at entry (LOOP EXIT bug); led <strong>multi-cycle UAT to Go-live January 2025</strong> with <strong>zero post-launch critical incidents</strong> across 50+ members. 60 defects tracked, 83.8% resolved before launch.
-        </div>
-        <div class="achievement-metrics">
-          <span class="achievement-metric">0 critical post-launch</span>
-          <span class="achievement-metric">50+ members onboarded</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="achievement-num">05</div>
-      <div class="achievement-content">
-        <div class="achievement-title">★ Best Achievement Award <span class="achievement-tag">Mitsubishi · SAP · 2020</span></div>
-        <div class="achievement-desc">
-          <strong>Mitsubishi Motors Thailand MMTh Internship (2020)</strong>: selected from full cohort for outstanding cross-functional project delivery in a <strong>live SAP manufacturing environment</strong>. Managed full procurement workflow (MSR → e-AR → PR → PO) for ฿460K FPDU Assist Device project.
-        </div>
-        <div class="achievement-metrics">
-          <span class="achievement-metric">฿1M risk-cost saved</span>
-          <span class="achievement-metric">29.6s cycle time cut</span>
-          <span class="achievement-metric">11 job sequences eliminated</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- TOOLS -->
-<section id="tools" style="background: var(--surface-2);">
+<section id="tools">
   <div class="section-header">
     <h2 class="section-title">Tools <em>& tech</em></h2>
   </div>
@@ -1657,7 +1599,7 @@
     <div>
       <div class="edu-school">Learn Balance Group · XeerSoft Cloud ERP · 2023 – 2026</div>
       <div class="edu-degree">ERP Implementation Consultant · 4 End-to-End Go-Lives</div>
-      <div class="edu-detail">Delivered four ERP systems end-to-end for a top-3 Thai education group — <strong>Procurement (P2P)</strong>, <strong>Strategic Pricing &amp; AR</strong>, <strong>CRM Star Reward Loyalty</strong>, and <strong>STEM Billing &amp; Profitability (FI-CO)</strong>. As embedded Business Analyst and sole implementation consultant, I owned requirements, FSD authoring, configuration, master data, UAT and defect management through to Go-Live and hypercare. <strong style="color: var(--accent);">View the 4 projects →</strong></div>
+      <div class="edu-detail">Delivered four ERP systems end-to-end for a 3-branch school group — <strong>Procurement (P2P)</strong>, <strong>Strategic Pricing &amp; AR</strong>, <strong>CRM Star Reward Loyalty</strong>, and <strong>STEM Billing &amp; Profitability (FI-CO)</strong>. As embedded Business Analyst and sole implementation consultant, I owned requirements, FSD authoring, configuration, master data, UAT and defect management through to Go-Live and hypercare. <strong style="color: var(--accent);">View the 4 projects →</strong></div>
     </div>
     <div class="edu-badge">4 ERP<br>Go-Lives</div>
   </a>
@@ -1754,6 +1696,7 @@
 </footer>
 
 
+<script src="playground.js?v=2" defer></script>
 <script src="search.js?v=8" defer></script>
 </body>
 </html>
