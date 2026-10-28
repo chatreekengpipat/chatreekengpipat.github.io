@@ -183,7 +183,9 @@
   function closure(id, dir) { var seen = {}, st = [id]; while (st.length) { byId[st.pop()][dir].forEach(function (x) { if (!seen[x]) { seen[x] = 1; st.push(x); } }); } return seen; }
   var KIND = { cfg: 'Configuration · master data', std: 'Standard SAP posting', wricef: 'Custom object (WRICEF)', tool: 'SAP standard tool', file: 'Statutory deadline' };
 
-  /* ---------- build ---------- */
+  /* ---------- build (lazily — see the trigger at the end) ---------- */
+  function init() {
+  if (root.classList.contains('tf-on')) return;
   root.classList.add('tf-on');
   var S = { th: 'A', i: -1, playing: false, t: 0, sp: 1, sel: null, fail: false, seen: false };
   var app = d.createElement('div');
@@ -224,12 +226,12 @@
   function edge(f, t) { for (var i = 0; i < edgeEl.length; i++) if (edgeEl[i].f === f && edgeEl[i].t === t) return edgeEl[i]; return null; }
 
   /* ---------- geometry ---------- */
-  function rect(id) {
-    var r = nodeEl[id].getBoundingClientRect(), m = map.getBoundingClientRect(), l = r.left - m.left, t = r.top - m.top;
-    return { l: l, t: t, r: l + r.width, b: t + r.height, cx: l + r.width / 2, cy: t + r.height / 2 };
-  }
   function layout() {
-    var w = map.offsetWidth, h = map.offsetHeight;
+    /* read everything first … */
+    var m = map.getBoundingClientRect(), w = map.offsetWidth, h = map.offsetHeight, R = {};
+    NODES.forEach(function (n) { var r = nodeEl[n.id].getBoundingClientRect(), l = r.left - m.left, t = r.top - m.top; R[n.id] = { l: l, t: t, r: l + r.width, b: t + r.height, cx: l + r.width / 2, cy: t + r.height / 2 }; });
+    var rect = function (id) { return R[id]; };
+    /* … then write */
     [svgE, svgP].forEach(function (s) { s.setAttribute('width', w); s.setAttribute('height', h); s.setAttribute('viewBox', '0 0 ' + w + ' ' + h); });
     edgeEl.forEach(function (e) {
       var a = rect(e.f), b = rect(e.t), p;
@@ -301,7 +303,7 @@
     drawDots();
     if (S.i < 0) {
       clock.textContent = '◷ ready';
-      panel.innerHTML = '<div class="tf-k">Thread ' + T.id + ' · ' + T.steps.length + ' steps</div><h4>' + esc(T.label.replace(/^[A-E] · /, '')) + '</h4><p>The highlighted boxes are the ones this thread touches. Press <b>▶ Play</b> to follow one document from set-up to filing, or click any box to see what feeds it and what it feeds.</p>';
+      panel.innerHTML = '<div class="tf-k">Thread ' + T.id + ' · ' + T.steps.length + ' steps</div><h3>' + esc(T.label.replace(/^[A-E] · /, '')) + '</h3><p>The highlighted boxes are the ones this thread touches. Press <b>▶ Play</b> to follow one document from set-up to filing, or click any box to see what feeds it and what it feeds.</p>';
     } else {
       var st = T.steps[S.i];
       clock.textContent = '◷ ' + st.when;
@@ -349,7 +351,7 @@
     var dnList = Object.keys(dn);
     panel.innerHTML =
       '<div class="tf-k">' + esc(KIND[n.kind]) + (n.own ? ' · <span class="tf-ownk">★ object I owned' + (n.own === 2 ? ' (scope to be confirmed)' : '') + '</span>' : '') + ' · ' + esc(n.when) + '</div>' +
-      '<h4><span class="tf-code2">' + esc(n.code) + '</span> ' + esc(n.t) + '</h4>' +
+      '<h3><span class="tf-code2">' + esc(n.code) + '</span> ' + esc(n.t) + '</h3>' +
       '<div class="tf-cols"><div><b>What it does</b><p>' + esc(n.does) + '</p></div><div><b>Reads / writes</b><p class="pg-mono">' + esc(n.rw) + '</p></div><div><b>If it is missing or wrong</b><p>' + esc(n.risk) + '</p></div></div>' +
       '<div class="tf-rel"><div><b class="u">⬅ Fed by (upstream)</b><div class="tf-chips">' + chips(n.up, 'u') + '</div></div><div><b class="dd">Feeds (downstream) ➡</b><div class="tf-chips">' + chips(n.dn, 'dd') + '</div></div></div>' +
       (S.fail ? '<p class="tf-failnote">⚡ If <b>' + esc(n.code) + '</b> fails, <b>' + dnList.length + '</b> downstream object' + (dnList.length === 1 ? '' : 's') + ' inherit the error' + (dnList.length ? ': ' + dnList.map(function (x) { return esc(byId[x].kind === 'file' ? byId[x].t : byId[x].code); }).join(' · ') : '') + '.</p>' : '') +
@@ -395,4 +397,16 @@
     io.observe(map);
   }
   window.KitTaxFlow = { nodes: NODES, edges: EDGES, threads: THREADS, go: go, select: select, state: S };
+  }
+
+  /* the map sits below the fold: build it when it is about a screen away, or when the browser is idle after load —
+     keeps the first paint on phones light; the static outline shows until then */
+  var started = false;
+  function start() { if (started) return; started = true; init(); }
+  if ('IntersectionObserver' in window) {
+    var near = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { near.disconnect(); start(); } }, { rootMargin: '900px 0px' });
+    near.observe(root);
+  } else start();
+  var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 1200); };
+  if (d.readyState === 'complete') idle(start, { timeout: 3000 }); else window.addEventListener('load', function () { idle(start, { timeout: 3000 }); });
 })();

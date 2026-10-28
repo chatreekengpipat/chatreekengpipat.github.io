@@ -5425,8 +5425,8 @@ nav.scrolled {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;   /* 100vw includes the scrollbar → sideways scroll */
+  height: 100%;
   z-index: -999;
   /* Token-driven so it tracks the theme automatically (deep slate in dark,
      soft slate-white in light) with no hard-coded values and no flash. */
@@ -6281,4 +6281,14 @@ nav.scrolled {
   text-justify: inter-word;
   -webkit-hyphens: auto;
   hyphens: auto;
+}
+
+/* ====================================
+   MOBILE SAFETY (consolidation 2026-10-28)
+   Wide comparison tables scroll inside themselves instead of pushing the page sideways.
+   ==================================== */
+/* decorative shapes in the hero / about blocks must not widen the phone viewport — this has to load in <head>, before the hero is laid out */
+@media (max-width: 768px) { .hero-v7, #about, .workplace-section { overflow-x: clip; } }
+@media (max-width: 640px) {
+  .process-table, .state-table, .p5co-tbl { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }

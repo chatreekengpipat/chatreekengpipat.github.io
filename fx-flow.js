@@ -178,5 +178,7 @@
       stats: function () { return { w: c.width, h: c.height, paused: paused, alpha: P.k, z: c.style.zIndex }; }
     };
   }
-  if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', start); else start();
+  /* start after the page has loaded and the browser is idle — the shader compile never competes with first paint */
+  function later() { var idle = w.requestIdleCallback || function (f) { return setTimeout(f, 300); }; idle(start, { timeout: 2500 }); }
+  if (d.readyState === 'complete') later(); else w.addEventListener('load', later);
 })();

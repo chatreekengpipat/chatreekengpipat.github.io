@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=13">
+<link rel="stylesheet" href="styles.css?v=16">
 <script src="theme.js"></script>
 <script src="animation.js?v=5" defer></script>
 <!-- FX-ENHANCE :: additive motion + micro-interactions (Claude) -->
@@ -511,6 +511,8 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
 .mrp-cell p{font-size:.84rem;color:var(--text-muted);line-height:1.6;margin:.5rem 0 0}
 .mrp-cell p strong{color:var(--text)}
 .mrp-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:.5rem;margin:1rem 0}
+.mrp-flow.mrp-flow7{grid-template-columns:1fr auto 1fr auto 1fr auto 1fr}
+@media(max-width:700px){.mrp-flow,.mrp-flow.mrp-flow7{grid-template-columns:1fr}.mrp-flow .mrp-arrow{transform:rotate(90deg);justify-self:center}}
 .mrp-node{border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;background:var(--surface);text-align:center;display:flex;flex-direction:column;justify-content:center;gap:.45rem}
 .mrp-node.eng{background:var(--accent);border-color:var(--accent);box-shadow:0 20px 40px -24px color-mix(in srgb,var(--accent) 85%,transparent)}
 .mrp-node .nt{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-subtle)}
@@ -2283,7 +2285,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
     <p class="ps-tl-cap">The longer the bar, the earlier the order must be placed. The Apple / laptop devices (LT5) start the whole procurement, five weeks before term.</p>
 
     <div class="mrp-sub">05 · Flow</div>
-    <div class="mrp-flow" style="grid-template-columns:1fr auto 1fr auto 1fr auto 1fr">
+    <div class="mrp-flow mrp-flow7">
       <div class="mrp-node"><span class="nt">Input</span><b>Headcount</b><div class="it"><span>students · teachers · rooms</span></div></div>
       <div class="mrp-arrow">&rarr;</div>
       <div class="mrp-node"><span class="nt">Map</span><b>3 Kits</b><div class="it"><span>Student · Teacher · Classroom</span></div></div>
@@ -2321,7 +2323,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
       var SCI=[{n:'Lab coat',q:1,price:350,lt:2},{n:'Safety goggles',q:1,price:290,lt:2}];
       var TEACH=[{n:'Laptop (Lenovo)',q:1,dev:'laptop',lt:5,bot:1},{n:'iPad',q:1,dev:'ipad',lt:5,bot:1},{n:'Plan book',q:1,price:100,lt:1},{n:'Teacher stationery set',q:1,price:400,lt:1,common:1}];
       var ROOM=[{n:'MacBook',q:1,dev:'macbook',lt:5,bot:1},{n:'Locker',q:1,price:5000,lt:4},{n:'Paper cutter',q:1,price:3000,lt:3},{n:'Document scanner',q:1,price:12000,lt:3},{n:'Answer sheets (500)',q:1,price:1000,lt:1}];
-      var $=function(id){return root.querySelector(id);};
+      var $=function(id){return document.querySelector(id);};   /* outputs live outside #ps1 */
       var inMath=$('#psMath'),inSci=$('#psSci'),inT=$('#psTeach'),inR=$('#psRoom'),selI=$('#psIpad'),selL=$('#psLaptop'),selM=$('#psMac');
       function v(el){var n=parseInt(el.value,10);return (isNaN(n)||n<0)?0:n;}
       function build(){
@@ -2593,7 +2595,7 @@ html.js .fx-in .p1-delta-row.after .p1-delta-bar{ transition-delay:.14s; }
   setTimeout(function(){ els.forEach(reveal); }, 1600);
 })();
 </script>
-<script src="search.js?v=8" defer></script>
-<script src="fx-flow.js?v=1" defer></script>
+<script src="search.js?v=9" defer></script>
+<script src="fx-flow.js?v=2" defer></script>
 </body>
 </html>

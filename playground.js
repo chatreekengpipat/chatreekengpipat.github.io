@@ -257,7 +257,7 @@
         '<div><span class="pg-chip amb">' + P.form + '</span><span class="pg-chip">50 Tawi certificate</span>' + (V36 ? '<span class="pg-chip amb">PP36</span>' : '') + '</div>' +
         '<p class="pg-note" style="font-size:.86rem">' + (P.form === 'PND54' ? 'Withholding on payments abroad goes on PND54.' : P.form === 'PND53' ? 'Payments to Thai juristic persons go on PND53 with an attachment line per payee.' : 'Payments to individuals go on PND3 with an attachment line per payee.') +
         ' The payee gets a 50 Tawi certificate whose base and tax must equal the attachment.' + (V36 ? ' The service VAT is self-assessed on PP36.' : '') +
-        '<br><b style="color:#e2e8f0">File and pay by the 7th of the next month</b> (e-filing: the 15th).</p>';
+        '<br><b style="color:var(--c-strong)">File and pay by the 7th of the next month</b> (e-filing: the 15th).</p>';
       var invLines = [['—', t[1] + ' expense', A, 0]];
       if (V) invLines.push(['VST', 'Input VAT', V, 0]);
       invLines.push(['K', 'Vendor', 0, inv]);
@@ -287,13 +287,13 @@
         '<div class="pg-f"><label class="pg-l" for="pgxU">Amount · USD</label><input id="pgxU" type="number" min="1" step="100" value="' + S.usd + '"></div>' +
       '</div>' +
       '<div class="pg-2col"><div class="pg-box">' +
-        '<div class="pg-f"><label class="pg-l" for="pgx0">Rate when booked · THB per USD <b class="pg-mono pg-r0" style="color:#e2e8f0"></b></label><input id="pgx0" type="range" min="30" max="40" step="0.01" value="' + S.r0 + '"></div>' +
-        '<div class="pg-f" style="margin-top:.6rem"><label class="pg-l" for="pgx1">Rate when settled · THB per USD <b class="pg-mono pg-r1" style="color:#e2e8f0"></b></label><input id="pgx1" type="range" min="30" max="40" step="0.01" value="' + S.r1 + '"></div>' +
+        '<div class="pg-f"><label class="pg-l" for="pgx0">Rate when booked · THB per USD <b class="pg-mono pg-r0" style="color:var(--c-strong)"></b></label><input id="pgx0" type="range" min="30" max="40" step="0.01" value="' + S.r0 + '"></div>' +
+        '<div class="pg-f" style="margin-top:.6rem"><label class="pg-l" for="pgx1">Rate when settled · THB per USD <b class="pg-mono pg-r1" style="color:var(--c-strong)"></b></label><input id="pgx1" type="range" min="30" max="40" step="0.01" value="' + S.r1 + '"></div>' +
         '<div class="pg-ctrl"><button type="button" class="pg-btn" data-a="walk">↯ Let the market move 30 days</button><button type="button" class="pg-btn ghost" data-a="reset">Reset</button></div>' +
         '<svg class="pg-spark" viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true"></svg>' +
       '</div><div class="pg-box" aria-live="polite">' +
         '<h4>Realized exchange difference</h4><div class="pg-big pg-res"></div><div class="pg-note pg-why" style="margin-top:.2rem"></div>' +
-        '<div class="pg-hbar"><span class="pg-hb0"></span><i class="pg-hl0"></i></div><div class="pg-hbar"><span class="pg-hb1" style="background:#fbbf24"></span><i class="pg-hl1"></i></div>' +
+        '<div class="pg-hbar"><span class="pg-hb0"></span><i class="pg-hl0"></i></div><div class="pg-hbar"><span class="pg-hb1" style="background:rgba(var(--rgb-amb),.32)"></span><i class="pg-hl1"></i></div>' +
       '</div></div>' +
       '<div class="pg-box pg-je" style="margin-top:1rem"></div>' +
       '<div class="pg-note">Single local currency for clarity. SAP posts this difference automatically when the payment clears the item (account determination for exchange differences); the SAP Model Lab extends it to three local currencies.</div>';
@@ -305,7 +305,7 @@
       el.querySelector('.pg-r1').textContent = S.r1.toFixed(2);
       var res = el.querySelector('.pg-res');
       res.textContent = diff === 0 ? '0.00 THB' : fmt(Math.abs(diff)) + ' THB ' + (gain ? 'gain' : 'loss');
-      res.style.color = diff === 0 ? '#e2e8f0' : gain ? '#34d399' : '#f87171';
+      res.style.color = diff === 0 ? 'var(--c-strong)' : gain ? 'var(--c-grn)' : 'var(--c-red)';
       el.querySelector('.pg-why').textContent = S.side === 'ap'
         ? 'Booked at ' + fmt(booked) + ', paid ' + fmt(settled) + ' — ' + (diff > 0 ? 'the baht weakened, so settling costs more.' : diff < 0 ? 'the baht strengthened, so settling costs less.' : 'no rate change.')
         : 'Booked at ' + fmt(booked) + ', received ' + fmt(settled) + ' — ' + (diff > 0 ? 'the baht weakened, so the dollars are worth more.' : diff < 0 ? 'the baht strengthened, so the dollars are worth less.' : 'no rate change.');
@@ -327,7 +327,7 @@
       var lo = Math.min.apply(null, p) - 0.05, hi = Math.max.apply(null, p) + 0.05;
       var pts = p.map(function (v, k) { return (k / (p.length - 1) * 300).toFixed(1) + ',' + (66 - (v - lo) / (hi - lo) * 62).toFixed(1); }).join(' ');
       var y0 = (66 - (S.r0 - lo) / (hi - lo) * 62).toFixed(1);
-      spark.innerHTML = '<line x1="0" x2="300" y1="' + y0 + '" y2="' + y0 + '" stroke="#26344f" stroke-dasharray="4 4"/><polyline points="' + pts + '" fill="none" stroke="#60a5fa" stroke-width="2" vector-effect="non-scaling-stroke"/>';
+      spark.innerHTML = '<line x1="0" x2="300" y1="' + y0 + '" y2="' + y0 + '" style="stroke:var(--c-line2)" stroke-dasharray="4 4"/><polyline points="' + pts + '" fill="none" style="stroke:var(--c-acc)" stroke-width="2" vector-effect="non-scaling-stroke"/>';
     }
     function walk() {
       cancelAnimationFrame(S.anim);
@@ -339,7 +339,7 @@
       var t0 = null;
       (function frame(t) {
         if (t0 === null) t0 = t;
-        var k = Math.min(30, Math.floor((t - t0) / 80));
+        var k = Math.max(0, Math.min(30, Math.floor((t - t0) / 80)));   /* rAF time can precede t0 */
         S.path = path.slice(0, k + 1); S.r1 = path[k]; r1.value = S.r1; render();
         if (k < 30) S.anim = requestAnimationFrame(frame); else S.path = path;
       })(performance.now());

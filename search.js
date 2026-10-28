@@ -119,6 +119,7 @@
     '.cks-btn{appearance:none;display:inline-flex;align-items:center;gap:.4rem;background:transparent;border:1px solid currentColor;color:inherit;',
     'opacity:.7;border-radius:7px;padding:.3rem .55rem;cursor:pointer;font:inherit;font-size:.72rem;transition:opacity .2s;margin-right:.3rem;}',
     '.cks-btn:hover{opacity:1;}',
+    '.cks-li{list-style:none;display:flex;align-items:center;}',
     '.cks-btn .kbd{font-family:ui-monospace,"JetBrains Mono",monospace;font-size:.6rem;opacity:.8;}',
     '@media(max-width:640px){.cks-btn .kbd{display:none;}.cks-ov{padding-top:6vh;}}',
     '@media(prefers-reduced-motion:reduce){.cks-modal{animation:none;}}',
@@ -236,8 +237,9 @@
   function mount() {
     var themeBtn = document.getElementById('theme-toggle') || document.getElementById('themeBtn');
     if (themeBtn && themeBtn.parentNode && !document.querySelector('.cks-btn')) {
-      var host = themeBtn.closest('li') || themeBtn;
-      host.parentNode.insertBefore(makeBtn(), host);
+      var host = themeBtn.closest('li') || themeBtn, btn = makeBtn();
+      if (host.tagName === 'LI') { var li = document.createElement('li'); li.className = 'cks-li'; li.appendChild(btn); host.parentNode.insertBefore(li, host); }   /* a <ul> may only hold <li> */
+      else host.parentNode.insertBefore(btn, host);
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
