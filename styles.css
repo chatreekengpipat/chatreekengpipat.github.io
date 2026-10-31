@@ -1,5 +1,5 @@
 /* ====================================
-   CHATREE KENGPIPAT — Portfolio v18
+   CHATREE KENGPIPAT — Portfolio v19
    Private Ledger · Engineering Red/Champagne · Inter
    ==================================== */
 
@@ -6307,7 +6307,7 @@ nav.scrolled {
 }
 
 /* =====================================================
-   PRIVATE LEDGER · v18
+   PRIVATE LEDGER · v19
    Luxury editorial finish shared by every portfolio page.
    Late overrides intentionally consolidate older visual experiments without
    changing the underlying information architecture or page functionality.
@@ -6530,6 +6530,8 @@ section:hover .section-num {
   max-width: 1280px;
   margin: 0 auto;
   padding-inline: 2rem;
+  /* The following journey section owns the inter-section breathing room. */
+  padding-bottom: 0;
 }
 
 .portfolio-story::before {
@@ -6543,9 +6545,12 @@ section:hover .section-num {
 .story-grid {
   display: grid;
   grid-template-columns: minmax(0, .9fr) minmax(0, 1.35fr);
-  gap: clamp(2rem, 5vw, 5.5rem);
+  column-gap: clamp(2rem, 5vw, 5.5rem);
+  row-gap: clamp(1.25rem, 2vw, 1.75rem);
   align-items: start;
 }
+
+.story-lead { min-width: 0; }
 
 .story-eyebrow {
   margin-bottom: 1rem;
@@ -6570,20 +6575,29 @@ section:hover .section-num {
 
 .story-proof {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: .75rem;
-  margin-top: 1.8rem;
+  margin-top: 0;
 }
 
 .story-proof-item {
+  display: flex;
+  min-height: 96px;
+  flex-direction: column;
+  justify-content: center;
   padding: 1rem 1.05rem;
   background: color-mix(in srgb, var(--surface) 88%, transparent);
   border: 1px solid var(--border);
   border-radius: 14px;
 }
 
-.story-proof-item b { display: block; color: var(--text-strong); font-size: 1.15rem; }
+.story-proof-item b { display: block; margin-bottom: .35rem; color: var(--text-strong); font-size: 1.15rem; }
 .story-proof-item span { color: var(--text-muted); font-size: .78rem; }
+
+.story-evidence {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
 
 .story-router {
   background: color-mix(in srgb, var(--surface) 94%, transparent);
@@ -6633,7 +6647,7 @@ section:hover .section-num {
 .story-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
 .story-actions .btn { padding: .62rem .9rem; font-size: .78rem; }
 
-.proof-key { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
+.proof-key { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; margin-top: .75rem; }
 
 .proof-chip {
   display: inline-flex;
@@ -6656,6 +6670,9 @@ section:hover .section-num {
 @media (max-width: 860px) {
   .story-grid { grid-template-columns: 1fr; }
   .portfolio-story { padding-inline: 1.25rem; }
+  .story-evidence { grid-column: auto; }
+  .story-proof { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .proof-key { justify-content: flex-start; }
 }
 
 @media (max-width: 560px) {
