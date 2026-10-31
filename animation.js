@@ -380,12 +380,20 @@
       particles.push(new Particle());
     }
 
+    let themeRgb = '';
+    function syncThemeRgb() {
+      themeRgb = getComputedStyle(document.documentElement)
+        .getPropertyValue('--accent-rgb').trim() || '125, 31, 36';
+    }
+    syncThemeRgb();
+    document.addEventListener('ck:themechange', syncThemeRgb);
+
     function animate() {
       ctx.clearRect(0, 0, width, height);
 
       // ดึงสีตาม Theme ปัจจุบัน (เชื่อมกับไฟล์ theme.js ของคุณ)
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const rgb = isDark ? '96, 165, 250' : '37, 99, 235'; // ฟ้าสว่าง / น้ำเงิน
+      const rgb = themeRgb;
       const lineAlphaBase = isDark ? 0.3 : 0.2;
       const dotAlpha = isDark ? 0.8 : 0.6;
 
@@ -498,9 +506,8 @@
     init();
   }
 })();
-/* NOTE: the hero signature (#ckSignature) char-split reveal and 3D pointer
-   tilt are owned by theme.js — not duplicated here, to avoid two competing
-   mousemove listeners on the same element. */
+/* The hero signature is intentionally static and typographic. Interactive
+   motion stays on the surrounding interface so the name remains legible. */
 
 /* ===== Mobile nav — left off-canvas drawer ===== */
 (function () {

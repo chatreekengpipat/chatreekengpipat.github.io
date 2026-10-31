@@ -10,19 +10,19 @@
 <meta property="og:title" content="SAP & BA Reference Data — one canonical dataset · Chatree Kengpipat">
 <meta property="og:description" content="Every T-code, table, key and BIZBOK/TOGAF term on this site comes from one JSON dataset. Browse it live, or download the raw JSON — the same source both glossary pages read from.">
 <meta property="og:url" content="https://chatreekengpipat.github.io/knowledge-data.html">
-<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SAP & BA Reference Data — one canonical dataset">
 <meta name="twitter:description" content="One JSON dataset behind both glossaries. Browse it live or download the raw JSON.">
-<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="description" content="A single canonical reference dataset (data/knowledge.js) behind Chatree Kengpipat's SAP glossary and Business Architecture glossary — SAP T-codes, tables, account keys and BIZBOK/TOGAF terms. Browse it live with search and category filters, or export the raw JSON. A demonstration of a single source of truth driving multiple consumers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=17">
-<script src="theme.js?v=17"></script>
-<script src="animation.js?v=6" defer></script>
+<link rel="stylesheet" href="styles.css?v=18">
+<script src="theme.js?v=18"></script>
+<script src="animation.js?v=7" defer></script>
 <style>
   /* ============================================================
      KNOWLEDGE DATA EXPLORER — page-scoped. Reads the single canonical
@@ -31,7 +31,7 @@
      ============================================================ */
   .kd-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
   .kd-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
-  .kd-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .kd-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background:var(--accent-fill);color:var(--on-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
   .kd-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
   .kd-banner-text strong { color: var(--text); font-weight: 600; }
   .kd-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
@@ -51,7 +51,7 @@
   .kd-api-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
   .kd-api-meta b { color: var(--text); font-weight: 600; }
   .kd-api-btns { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; }
-  .kd-btn { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; color: #fff; background: var(--accent); border: 1px solid var(--accent); border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+  .kd-btn { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 600; color:var(--on-accent);background:var(--accent-fill); border: 1px solid var(--accent); border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
   .kd-btn:hover { background: var(--accent-hover); }
   .kd-btn.ghost { color: var(--text); background: var(--bg); border-color: var(--border-strong); }
   .kd-btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
@@ -63,7 +63,7 @@
   .kd-tools { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; margin-bottom: 1rem; }
   .kd-sets { display: inline-flex; gap: 0.35rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px; padding: 0.25rem; }
   .kd-set { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); background: transparent; border: 0; border-radius: 100px; padding: 0.4rem 0.85rem; cursor: pointer; transition: color 0.2s, background 0.2s; }
-  .kd-set[aria-selected="true"] { color: #fff; background: var(--accent); }
+  .kd-set[aria-selected="true"] { color:var(--on-accent);background:var(--accent-fill); }
   .kd-search { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 0.5rem; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; padding: 0.15rem 0.8rem; }
   .kd-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
   .kd-search span { color: var(--text-subtle); font-size: 1rem; }
@@ -72,7 +72,7 @@
   .kd-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
   .kd-cat { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 100px; padding: 0.32rem 0.75rem; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; }
   .kd-cat:hover { color: var(--accent); border-color: var(--accent); }
-  .kd-cat[aria-pressed="true"] { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .kd-cat[aria-pressed="true"] { color:var(--on-accent);background:var(--accent-fill); border-color: var(--accent); }
   .kd-count { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1rem; }
 
   /* Entry grid */
@@ -431,7 +431,7 @@
 })();
 </script>
 
-<script src="search.js?v=10" defer></script>
-<script src="fx-flow.js?v=3" defer></script>
+<script src="search.js?v=11" defer></script>
+<script src="fx-flow.js?v=4" defer></script>
 </body>
 </html>

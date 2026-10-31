@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F7F4EE;--ink:#172126;--ink-soft:#526166;
-    --petrol:#0B5960;--petrol-deep:#083F45;--brass:#94601E;
-    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --paper:#F7F4EE;--ink:#201B1C;--ink-soft:#62595A;
+    --petrol:#7D1F24;--petrol-deep:#5B1519;--brass:#94601E;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#100C0D;--chip-text:#F3EEE2;
     --warn:#B91C1C;--card:#fff;--good:#247464;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -19,8 +19,8 @@
   body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 20px;}
   .wrap{max-width:960px;margin:0 auto;padding:40px 0 90px;}
 
-  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(11,89,96,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
-  .crumb:hover{background:rgba(11,89,96,.14);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(var(--petrol-rgb),.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(var(--petrol-rgb),.14);}
 
   .masthead{border-bottom:3px solid var(--ink);padding-bottom:22px;animation:rise .7s ease both;}
   .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
@@ -64,11 +64,11 @@
   table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.3px;}
   thead th{text-align:left;font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:7px 8px;}
   tbody td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
-  tbody tr:nth-child(even){background:rgba(11,89,96,.035);}
+  tbody tr:nth-child(even){background:rgba(var(--petrol-rgb),.035);}
   code,.code{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;background:var(--chip);color:var(--chip-text);padding:2px 6px;border-radius:5px;white-space:nowrap;}
   .ok{color:var(--good);font-weight:700;} .bad{color:var(--warn);font-weight:700;}
 
-  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(11,89,96,.05);font-size:14px;}
+  .keybox{border:1.5px solid var(--petrol);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(var(--petrol-rgb),.05);font-size:14px;}
   .keybox b{color:var(--petrol-deep);}
   .keybox ul{list-style:none;margin:8px 0 2px;}
   .keybox li{padding:5px 0 5px 22px;position:relative;font-size:13.4px;}
@@ -77,7 +77,7 @@
   .callout b{color:var(--brass);}
   .trap{border:1.5px solid var(--warn);border-radius:12px;padding:14px 17px;margin:14px 0;background:rgba(185,28,28,.05);font-size:13.4px;}
   .trap b{color:var(--warn);}
-  .obj{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:13px 17px;margin:12px 0;background:rgba(29,78,216,.05);font-size:13.8px;}
+  .obj{border:1.5px solid var(--petrol-deep);border-radius:12px;padding:13px 17px;margin:12px 0;background:rgba(var(--petrol-rgb),.05);font-size:13.8px;}
   .obj b{color:var(--petrol-deep);}
 
   /* defect card */
@@ -105,8 +105,8 @@
   @media(max-width:560px){ code,.code{white-space:normal;overflow-wrap:anywhere;} table td,table th{overflow-wrap:anywhere;} }
   @media print{body{background:#fff;padding:0;font-size:10pt;}.masthead{animation:none;}.keybox,.callout,.trap,.obj,.dfc,section,details.fold{break-inside:avoid;}tbody tr:nth-child(even){background:#f4f4f4;}.pagenav,.crumb{display:none;}details.fold .fold-body{display:block!important;}}
 </style>
-<link rel="stylesheet" href="theme.css?v=2">
-<script src="theme.js?v=2"></script>
+<link rel="stylesheet" href="theme.css?v=3">
+<script src="theme.js?v=3"></script>
 </head>
 <body data-page="tax-r074-fut">
 <div class="wrap">

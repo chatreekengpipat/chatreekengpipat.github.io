@@ -10,11 +10,11 @@
 <meta property="og:title" content="Functional Module of Finance — SAP FI · GL · Tax">
 <meta property="og:description" content="An interactive SAP FI methodology reference: the ledger and tax engine, how a tax code is configured (FTXP → OB40 → posting → PP30), the month-end close, and the petroleum tax layer.">
 <meta property="og:url" content="https://chatreekengpipat.github.io/finance-functional-module.html">
-<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Functional Module of Finance — SAP FI · GL · Tax">
 <meta name="twitter:description" content="Interactive SAP FI reference: tax-code config, month-end close, and the petroleum tax layer.">
-<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="description" content="An interactive, public-safe methodology reference for SAP FI Tax on an energy-sector S/4HANA programme: ledger fundamentals, tax determination, close controls, and the upstream petroleum tax layer.">
 <script>
   /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
@@ -32,14 +32,17 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root {
-    --abyss: #0b1215;
-    --deep: #111c1f;
-    --steel: #26383c;
-    --gas: #61b8ad;   /* SAP / system / data */
+    --abyss: #100c0d;
+    --deep: #181214;
+    --steel: #3b292d;
+    --gas: #e08a81;   /* SAP / system / data */
+    --gas-rgb: 224,138,129;
+    --good: #67b7a2;
+    --good-rgb: 103,183,162;
     --flare: #d98272; /* tax flowing to the State */
     --gold: #d6a65f;  /* value / baht / revenue */
-    --mist: #ede7dc;  /* body */
-    --haze: #aab7b6;  /* captions */
+    --mist: #f0e7df;  /* body */
+    --haze: #b7a9a8;  /* captions */
     --royalty: #d0a462;
     --srb: #d58a60;
     --rail-w: 232px;
@@ -64,7 +67,7 @@
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     background-image:
-      radial-gradient(900px 600px at 85% -10%, rgba(97, 184, 173, 0.07), transparent 60%),
+      radial-gradient(900px 600px at 85% -10%, rgba(var(--gas-rgb), 0.07), transparent 60%),
       radial-gradient(700px 500px at 0% 30%, rgba(214, 166, 95, 0.05), transparent 60%);
     background-attachment: fixed;
   }
@@ -83,8 +86,8 @@
     font-family: var(--mono);
     font-weight: 500;
     color: var(--gas);
-    background: rgba(50, 126, 130, 0.09);
-    border: 1px solid rgba(50, 126, 130, 0.28);
+    background: rgba(var(--gas-rgb), 0.09);
+    border: 1px solid rgba(var(--gas-rgb), 0.28);
     border-radius: 5px;
     padding: 0.05em 0.42em;
     font-size: 0.88em;
@@ -119,7 +122,7 @@
     position: fixed; top: 0; left: 0; right: 0; height: var(--bar-h);
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 1.1rem; z-index: 160;
-    background: rgba(15, 23, 42, 0.86);
+    background: rgba(16, 12, 13, 0.86);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--steel);
   }
@@ -134,7 +137,7 @@
     padding: 0.5rem 0.8rem; border-radius: 8px; white-space: nowrap;
     transition: color 0.2s, background 0.2s;
   }
-  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(50, 126, 130, 0.07); }
+  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(var(--gas-rgb), 0.07); }
   .sitemenu > a.cta { color: var(--abyss); background: var(--gas); font-weight: 600; }
   .sitemenu > a.cta:hover { filter: brightness(1.08); background: var(--gas); }
   .dd { position: relative; }
@@ -152,8 +155,8 @@
   .dd-group + .dd-group { border-top: 1px solid var(--steel); margin-top: 0.2rem; padding-top: 0.5rem; }
   .dd-head { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gas); padding: 0.2rem 0.5rem 0.35rem; }
   .dd-panel a { display: block; padding: 0.45rem 0.6rem; font-size: 0.86rem; color: var(--mist); text-decoration: none; border-radius: 7px; }
-  .dd-panel a:hover { background: rgba(50, 126, 130, 0.08); color: var(--gas); }
-  .dd-panel a.is-current { color: var(--gas); background: rgba(50, 126, 130, 0.06); }
+  .dd-panel a:hover { background: rgba(var(--gas-rgb), 0.08); color: var(--gas); }
+  .dd-panel a.is-current { color: var(--gas); background: rgba(var(--gas-rgb), 0.06); }
   .sitebar__burger { display: none; flex-direction: column; gap: 4px; background: none; border: 0; cursor: pointer; padding: 8px; }
   .sitebar__burger span { width: 22px; height: 2px; background: var(--mist); border-radius: 2px; transition: transform 0.2s, opacity 0.2s; }
   .sitebar__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -208,10 +211,10 @@
     transition: color 0.2s, background 0.2s, border-color 0.2s;
   }
   .rail__link .num { font-family: var(--mono); font-size: 0.74rem; color: var(--steel); transition: color 0.2s; }
-  .rail__link:hover { color: var(--mist); background: rgba(50, 126, 130, 0.05); }
+  .rail__link:hover { color: var(--mist); background: rgba(var(--gas-rgb), 0.05); }
   .rail__link.is-active {
     color: var(--mist);
-    background: rgba(50, 126, 130, 0.09);
+    background: rgba(var(--gas-rgb), 0.09);
     border-left-color: var(--gas);
   }
   .rail__link.is-active .num { color: var(--gas); }
@@ -284,8 +287,8 @@
   .mod .name { font-size: 0.74rem; color: var(--haze); margin-top: 0.2rem; display: block; }
   .mod--fi {
     cursor: pointer;
-    border-color: rgba(50, 126, 130, 0.45);
-    background: rgba(50, 126, 130, 0.06);
+    border-color: rgba(var(--gas-rgb), 0.45);
+    background: rgba(var(--gas-rgb), 0.06);
   }
   .mod--fi .code { color: var(--gas); }
   .mod--fi:hover { transform: translateY(-3px); border-color: var(--gas); }
@@ -302,7 +305,7 @@
   .modmap.is-fi-focus .mod--fi {
     transform: scale(1.06);
     border-color: var(--gas);
-    box-shadow: 0 0 0 1px var(--gas), 0 0 38px rgba(50, 126, 130, 0.3);
+    box-shadow: 0 0 0 1px var(--gas), 0 0 38px rgba(var(--gas-rgb), 0.3);
   }
   .modmap.is-fi-focus .mod--fi::after { content: 'click to close ▾'; }
 
@@ -373,7 +376,7 @@
     display: flex;
     flex-direction: column;
   }
-  .flip__face--back { transform: rotateY(180deg); background: #172428; border-color: rgba(50, 126, 130, 0.4); }
+  .flip__face--back { transform: rotateY(180deg); background: #211719; border-color: rgba(var(--gas-rgb), 0.4); }
   .flip__tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); }
   .flip__big { font-family: var(--display); font-size: 2.4rem; font-weight: 700; color: var(--gold); margin: 0.4rem 0; }
   .flip__hint { margin-top: auto; font-family: var(--mono); font-size: 0.68rem; color: var(--haze); }
@@ -421,10 +424,10 @@
   }
   .saythis {
     margin-top: 1rem;
-    border: 1px dashed rgba(50, 126, 130, 0.4);
+    border: 1px dashed rgba(var(--gas-rgb), 0.4);
     border-radius: 10px;
     padding: 0.9rem 1.1rem;
-    background: rgba(50, 126, 130, 0.04);
+    background: rgba(var(--gas-rgb), 0.04);
     font-style: italic;
   }
   .saythis b { font-style: normal; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; margin-bottom: 0.3rem; }
@@ -458,7 +461,7 @@
     border: 1px solid var(--steel);
   }
   .tag .scope { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; margin-left: 0.4rem; }
-  .tag--up { border-color: rgba(50, 126, 130, 0.5); color: var(--gas); background: rgba(50, 126, 130, 0.07); }
+  .tag--up { border-color: rgba(var(--gas-rgb), 0.5); color: var(--gas); background: rgba(var(--gas-rgb), 0.07); }
   .tag--down { border-color: rgba(255, 107, 53, 0.5); color: var(--flare); background: rgba(255, 107, 53, 0.07); }
   .tag--all { border-color: rgba(232, 176, 75, 0.5); color: var(--gold); background: rgba(232, 176, 75, 0.07); }
 
@@ -608,7 +611,7 @@
     text-align: center;
   }
   .fcard__face--q { background: var(--deep); }
-  .fcard__face--a { background: linear-gradient(160deg, #172428, #111c1f); border-color: rgba(50, 126, 130, 0.45); transform: rotateY(180deg); }
+  .fcard__face--a { background: linear-gradient(160deg, #211719, #181214); border-color: rgba(var(--gas-rgb), 0.45); transform: rotateY(180deg); }
   .fcard__kind { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.8rem; }
   .fcard__face--q .fcard__kind { color: var(--gold); }
   .fcard__face--a .fcard__kind { color: var(--gas); }
@@ -726,15 +729,15 @@
     animation: fiHubPulse 3s cubic-bezier(0.16,1,0.3,1) infinite;
   }
   @keyframes fiHubPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(97,184,173,0.28); }
-    55%      { box-shadow: 0 0 0 7px rgba(97,184,173,0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(var(--gas-rgb),0.28); }
+    55%      { box-shadow: 0 0 0 7px rgba(var(--gas-rgb),0); }
   }
 
   /* ---- Invite pulse on the waterfall Drain button until first use ---- */
   .drain-invite { animation: drainInvite 2.2s cubic-bezier(0.16,1,0.3,1) infinite; }
   @keyframes drainInvite {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(97,184,173,0.35); }
-    60%      { box-shadow: 0 0 0 8px rgba(97,184,173,0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(var(--gas-rgb),0.35); }
+    60%      { box-shadow: 0 0 0 8px rgba(var(--gas-rgb),0); }
   }
 
   /* Waterfall segments animate their width smoothly on drain */
@@ -762,7 +765,7 @@
     background: none; border: 1px solid var(--steel); color: var(--mist);
     transition: color 0.2s, border-color 0.2s, background 0.2s;
   }
-  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(50, 126, 130, 0.07); }
+  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(var(--gas-rgb), 0.07); }
   .theme-btn .icon-moon { display: none; }
   html[data-theme="light"] .theme-btn .icon-sun { display: none; }
   html[data-theme="light"] .theme-btn .icon-moon { display: inline; }
@@ -772,25 +775,28 @@
     --abyss: #f7f4ee;
     --deep: #fffcf7;
     --steel: #ded6c8;
-    --gas: #0b5960;
+    --gas: #7d1f24;
+    --gas-rgb: 125,31,36;
+    --good: #247464;
+    --good-rgb: 36,116,100;
     --flare: #a34838;
     --gold: #94601e;
-    --mist: #172126;
-    --haze: #526166;
+    --mist: #201b1c;
+    --haze: #62595a;
     --royalty: #87551b;
     --srb: #9b572f;
   }
   html[data-theme="light"] body {
     background-image:
-      radial-gradient(900px 600px at 85% -10%, rgba(11, 89, 96, 0.10), transparent 60%),
+      radial-gradient(900px 600px at 85% -10%, rgba(var(--gas-rgb), 0.10), transparent 60%),
       radial-gradient(700px 500px at 0% 30%, rgba(148, 96, 30, 0.07), transparent 60%);
   }
   html[data-theme="light"] .sitebar { background: rgba(255, 255, 255, 0.86); }
-  html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.22); }
-  html[data-theme="light"] .tcode { background: rgba(11, 89, 96, 0.08); border-color: rgba(11, 89, 96, 0.30); }
-  html[data-theme="light"] .theme-btn:hover { background: rgba(11, 89, 96, 0.08); }
-  html[data-theme="light"] .flip__face--back { background: #eaf2ef; border-color: rgba(11, 89, 96, 0.35); }
-  html[data-theme="light"] .fcard__face--a { background: linear-gradient(160deg, #eaf2ef, #d7e8e4); border-color: rgba(11, 89, 96, 0.35); }
+  html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(16, 12, 13, 0.22); }
+  html[data-theme="light"] .tcode { background: rgba(var(--gas-rgb), 0.08); border-color: rgba(var(--gas-rgb), 0.30); }
+  html[data-theme="light"] .theme-btn:hover { background: rgba(var(--gas-rgb), 0.08); }
+  html[data-theme="light"] .flip__face--back { background: #f5e9e6; border-color: rgba(var(--gas-rgb), 0.35); }
+  html[data-theme="light"] .fcard__face--a { background: linear-gradient(160deg, #f5e9e6, #ead5d2); border-color: rgba(var(--gas-rgb), 0.35); }
 
   /* ============================================================
      Tax-code config walkthrough (.cfg) + Record-to-Report close (.close)
@@ -815,7 +821,7 @@
     height: 2px; background: var(--steel); z-index: 0;
   }
   .cfg-step:first-child::before { display: none; }
-  .cfg-step.is-done::before { background: var(--gas); }
+  .cfg-step.is-done::before { background: var(--good); }
   .cfg-dot {
     position: relative; z-index: 1; width: 32px; height: 32px; margin: 0 auto 0.4rem;
     display: flex; align-items: center; justify-content: center;
@@ -823,15 +829,15 @@
     font-family: var(--mono); font-size: 0.78rem; font-weight: 600; color: var(--haze);
     transition: border-color 0.3s, color 0.3s, box-shadow 0.3s, background 0.3s;
   }
-  .cfg-step.is-done .cfg-dot { border-color: var(--gas); color: var(--gas); }
+  .cfg-step.is-done .cfg-dot { border-color: var(--good); color: var(--good); }
   .cfg-step.is-active .cfg-dot {
     border-color: var(--gas); color: var(--abyss); background: var(--gas);
-    box-shadow: 0 0 0 4px rgba(97,184,173,0.18);
+    box-shadow: 0 0 0 4px rgba(var(--gas-rgb),0.18);
     animation: cfgActive 2.4s cubic-bezier(0.16,1,0.3,1) infinite;
   }
   @keyframes cfgActive {
-    0%,100% { box-shadow: 0 0 0 4px rgba(97,184,173,0.18); }
-    55%     { box-shadow: 0 0 0 7px rgba(97,184,173,0); }
+    0%,100% { box-shadow: 0 0 0 4px rgba(var(--gas-rgb),0.18); }
+    55%     { box-shadow: 0 0 0 7px rgba(var(--gas-rgb),0); }
   }
   .cfg-tcode { display: block; font-family: var(--mono); font-size: 0.62rem; color: var(--gas); letter-spacing: 0.02em; }
   .cfg-step .cfg-name { display: block; font-size: 0.68rem; margin-top: 0.15rem; line-height: 1.25; }
@@ -896,8 +902,8 @@
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     color: var(--abyss); font-size: 0.8rem; transition: background 0.3s, border-color 0.3s, transform 0.3s;
   }
-  .close-item.is-done .close-check { background: var(--gas); border-color: var(--gas); transform: scale(1); }
-  .close-item.is-done { border-color: rgba(97,184,173,0.4); }
+  .close-item.is-done .close-check { background: var(--good); border-color: var(--good); transform: scale(1); }
+  .close-item.is-done { border-color: rgba(var(--good-rgb),0.4); }
   .close-item.is-running { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 0 18px rgba(232,176,75,0.25); }
   .close-name { font-size: 0.9rem; color: var(--mist); line-height: 1.3; }
   .close-name .cstep { font-family: var(--mono); font-size: 0.66rem; color: var(--gas); margin-right: 0.4rem; }
@@ -917,7 +923,7 @@
     background: var(--deep); border: 1px solid var(--steel); border-radius: 8px;
     padding: 0.42rem 0.7rem; width: 8.5rem; -moz-appearance: textfield;
   }
-  .jrn-amt input:focus { outline: none; border-color: var(--gas); box-shadow: 0 0 0 3px rgba(97,184,173,0.22); }
+  .jrn-amt input:focus { outline: none; border-color: var(--gas); box-shadow: 0 0 0 3px rgba(var(--gas-rgb),0.22); }
   .jrn-amt #jrnScenNote { color: var(--haze); }
 
   .jdoc {
@@ -951,8 +957,8 @@
   .jrow.tax .amt-dr, .jrow.tax .amt-cr { color: var(--flare); }
   .jrow .keytag {
     display: inline-block; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.03em;
-    color: var(--gas); background: rgba(97,184,173,0.12);
-    border: 1px solid rgba(97,184,173,0.3); border-radius: 5px; padding: 0.05rem 0.35rem;
+    color: var(--gas); background: rgba(var(--gas-rgb),0.12);
+    border: 1px solid rgba(var(--gas-rgb),0.3); border-radius: 5px; padding: 0.05rem 0.35rem;
   }
   .jrow.tax .keytag { color: var(--flare); background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.32); }
   .jrow .dash { color: var(--haze); }
@@ -963,8 +969,8 @@
   }
   .jbal { color: var(--haze); }
   .jbal b { color: var(--mist); }
-  .jbal.ok { color: var(--gas); }
-  .jbal.ok b { color: var(--gas); }
+  .jbal.ok { color: var(--good); }
+  .jbal.ok b { color: var(--good); }
   .jstate { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--flare); font-weight: 600; }
   .jstate .dotf { width: 7px; height: 7px; border-radius: 50%; background: var(--flare); box-shadow: 0 0 10px var(--flare); flex-shrink: 0; }
   .jnote { margin-top: 0.95rem; }
@@ -984,10 +990,10 @@
     .jrow { animation: none; }
   }
 </style>
-<meta name="theme-color" content="#0b1215">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#100c0d">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <link rel="manifest" href="/manifest.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Functional Module of Finance — SAP FI · GL · Tax","headline":"Functional Module of Finance — SAP FI · GL · Tax","description":"An interactive SAP FI methodology reference: the ledger and tax engine, how a tax code is configured (FTXP → OB40 → posting → PP30), the month-end close, and the petroleum tax layer.","url":"https://chatreekengpipat.github.io/finance-functional-module.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Functional Module of Finance — SAP FI · GL · Tax","headline":"Functional Module of Finance — SAP FI · GL · Tax","description":"An interactive SAP FI methodology reference: the ledger and tax engine, how a tax code is configured (FTXP → OB40 → posting → PP30), the month-end close, and the petroleum tax layer.","url":"https://chatreekengpipat.github.io/finance-functional-module.html","image":"https://chatreekengpipat.github.io/photos/og-card.png?v=2","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chatreekengpipat.github.io/"},{"@type":"ListItem","position":2,"name":"Functional Module of Finance — SAP FI · GL · Tax","item":"https://chatreekengpipat.github.io/finance-functional-module.html"}]}</script>
 </head>
 <body>
@@ -2346,7 +2352,7 @@
   upd();
 })();
 </script>
-<script src="search.js?v=10" defer></script>
-<script src="fx-flow.js?v=3" defer></script>
+<script src="search.js?v=11" defer></script>
+<script src="fx-flow.js?v=4" defer></script>
 </body>
 </html>

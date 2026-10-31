@@ -10,8 +10,10 @@
 :root{ --card:#FFFCF7; }
 /* ---- T43 shell tokens · rgb triplets for translucent tints (safe in every browser) ---- */
 :root{
-  --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38;
-  --brass-metal:#C89A55; --warn-rgb:163,72,56;
+  --brand:#7D1F24; --brand-strong:#5B1519; --brand-rgb:125,31,36;
+  --petrol:var(--brand); --petrol-deep:var(--brand-strong); --petrol-rgb:var(--brand-rgb);
+  --paper-rgb:247,244,238; --good-rgb:36,116,100; --brass-rgb:148,96,30; --ink-rgb:32,27,28;
+  --brass-metal:#C89A55; --warn-rgb:180,35,24;
   --kb-h:52px; --kit-top:0px; --rail-w:228px; --rail-gap:44px;
   --ease-out:cubic-bezier(.2,.7,.2,1);
   color-scheme:light; accent-color:var(--petrol);
@@ -27,26 +29,31 @@ html.kit-shell{ --kit-top:var(--kb-h); }
 .wrap:focus{ outline:none; }
 
 /* ============================================================
-   DARK PALETTE  ·  obsidian / petrol / champagne
+   DARK PALETTE  ·  red-black / engineering red / champagne
    ============================================================ */
 :root[data-theme="dark"]{
-  --paper:#0B1215;      /* obsidian page */
-  --ink:#EDE7DC;        /* warm ledger ink */
-  --ink-soft:#AAB7B6;   /* secondary copy */
-  --petrol:#61B8AD;     /* accent/link */
-  --petrol-deep:#86D0C5;/* heading/label */
+  --paper:#100c0d;      /* obsidian page */
+  --ink:#F0E7DF;        /* warm ledger ink */
+  --ink-soft:#B7A9A8;   /* secondary copy */
+  --brand:#E08A81;
+  --brand-strong:#F0AAA3;
+  --brand-rgb:224,138,129;
+  --petrol:var(--brand);     /* compatibility alias: accent/link */
+  --petrol-deep:var(--brand-strong);
+  --petrol-rgb:var(--brand-rgb);
   --brass:#D6A65F;      /* champagne accent */
   --brass-metal:#D6A65F;
-  --line:#26383C;
-  --line-soft:#172428;
-  --chip:#071013;
-  --chip-text:#EDE7DC;
-  --card:#111C1F;
-  --warn:#E38A78;
+  --line:#3B292D;
+  --line-soft:#211719;
+  --chip:#0C0809;
+  --chip-text:#F0E7DF;
+  --card:#181214;
+  --warn:#FF8A80;
   --good:#67B7A2;
-  --dr:#86D0C5;
+  --good-rgb:103,183,162;
+  --dr:#76B2C7;
   --cr:#D6A65F;
-  --paper-rgb:11,18,21; --petrol-rgb:97,184,173; --brass-rgb:214,166,95; --ink-rgb:237,231,220; --warn-rgb:227,138,120;
+  --paper-rgb:16,12,13; --brass-rgb:214,166,95; --ink-rgb:240,231,223; --warn-rgb:255,138,128;
   color-scheme:dark;
 }
 
@@ -207,7 +214,8 @@ table.sticky-head thead th{
    ============================================================ */
 .kit-tc{ display:flex; flex-direction:column; gap:10px; margin:14px 0; }
 .kit-tc .tc{ border:1.5px solid var(--line); border-left:4px solid var(--_c,var(--petrol)); border-radius:11px; background:var(--card); padding:12px 15px; }
-.kit-tc .tc.pos,.kit-tc .tc.dep{ --_c:var(--petrol); }
+.kit-tc .tc.pos{ --_c:var(--good); }
+.kit-tc .tc.dep{ --_c:var(--petrol); }
 .kit-tc .tc.fx,.kit-tc .tc.map,.kit-tc .tc.cur{ --_c:var(--brass); }
 .kit-tc .tc.sel{ --_c:var(--petrol-deep); }
 .kit-tc .tc.neg{ --_c:var(--warn,#B91C1C); }
@@ -369,7 +377,7 @@ dialog.kd[open]::backdrop, dialog.kp[open]::backdrop, dialog.kh[open]::backdrop{
 .kd-a[aria-current="page"]{ background:rgba(var(--petrol-rgb),.12); color:var(--petrol-deep); font-weight:600; }
 .kd-a[aria-current="page"]::before{ content:""; position:absolute; left:0; top:7px; bottom:7px; width:3px; border-radius:3px; background:var(--petrol); }
 .kd-v{ flex:0 0 7px; width:7px; height:7px; border-radius:50%; border:1.5px solid var(--line); }
-.kd-v.seen{ background:var(--petrol); border-color:var(--petrol); }
+.kd-v.seen{ background:var(--good); border-color:var(--good); }
 .kd-o{ margin-left:auto; flex:0 0 auto; font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:700; letter-spacing:.04em; color:var(--brass); border:1px solid rgba(var(--brass-rgb),.45); border-radius:5px; padding:0 5px; }
 .kd-toc{ list-style:none; margin:2px 0 8px 19px; padding-left:8px; border-left:1.5px solid var(--line); }
 .kd-toc a{ display:flex; gap:7px; font-size:12.5px; line-height:1.4; color:var(--ink-soft); padding:4px 8px; border-radius:7px; text-decoration:none; }
@@ -567,16 +575,17 @@ code.kterm{ cursor:help; text-decoration:underline dotted rgba(var(--brass-rgb),
    ============================================================ */
 @media print{
   :root[data-theme="dark"]{
-    --paper:#F7F4EE; --ink:#172126; --ink-soft:#526166;
-    --petrol:#0B5960; --petrol-deep:#083F45; --brass:#94601E; --brass-metal:#C89A55;
-    --line:#DED6C8; --line-soft:#F0EBE2; --chip:#0B1215; --chip-text:#EDE7DC;
-    --card:#FFFCF7; --warn:#A34838; --good:#247464; --dr:#083F45; --cr:#94601E;
-    --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38; --warn-rgb:163,72,56;
+    --paper:#F7F4EE; --ink:#201B1C; --ink-soft:#62595A;
+    --brand:#7D1F24; --brand-strong:#5B1519; --brand-rgb:125,31,36;
+    --petrol:var(--brand); --petrol-deep:var(--brand-strong); --petrol-rgb:var(--brand-rgb); --brass:#94601E; --brass-metal:#C89A55;
+    --line:#DED6C8; --line-soft:#F0EBE2; --chip:#100c0d; --chip-text:#F0E7DF;
+    --card:#FFFCF7; --warn:#B42318; --good:#247464; --good-rgb:36,116,100; --dr:#2F687C; --cr:#94601E;
+    --paper-rgb:247,244,238; --brass-rgb:148,96,30; --ink-rgb:32,27,28; --warn-rgb:180,35,24;
   }
   /* คืนค่ากล่องที่ override ไว้เฉพาะ dark ให้กลับเป็นแบบ light ตอนพิมพ์ */
   :root[data-theme="dark"] .org .parent{ background:var(--ink); color:var(--paper); }
   :root[data-theme="dark"] .org .parent span{ color:var(--ink-soft); }
-  :root[data-theme="dark"] .tag.fit{ color:var(--petrol-deep); background:rgba(var(--petrol-rgb),.15); }
+  :root[data-theme="dark"] .tag.fit{ color:var(--good); background:rgba(var(--good-rgb),.15); }
   :root[data-theme="dark"] .tag.gap{ color:var(--brass); background:rgba(var(--brass-rgb),.18); }
   /* ซ่อน UI เชิงโต้ตอบ */
   .theme-toggle, .copy-btn, .chk-actions,
@@ -604,22 +613,24 @@ code.kterm{ cursor:help; text-decoration:underline dotted rgba(var(--brass-rgb),
 
 /* ============================================================
    PUBLIC EDITION · Private Ledger design tokens
-   Inter + JetBrains Mono · parchment / petrol / champagne.
+   Inter + JetBrains Mono · parchment / engineering red / champagne.
    Every text pair ≥ 4.5:1 (checked) in both themes.
    ============================================================ */
 :root:not([data-theme="dark"]){
-  --paper:#F7F4EE; --card:#FFFCF7; --ink:#172126; --ink-soft:#526166;
-  --petrol:#0B5960; --petrol-deep:#083F45; --brass:#94601E; --brass-metal:#C89A55;
-  --line:#DED6C8; --line-soft:#F0EBE2; --chip:#0B1215; --chip-text:#EDE7DC;
-  --warn:#A34838; --good:#247464; --dr:#083F45; --cr:#94601E;
-  --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38; --warn-rgb:163,72,56;
+  --paper:#F7F4EE; --card:#FFFCF7; --ink:#201B1C; --ink-soft:#62595A;
+  --brand:#7D1F24; --brand-strong:#5B1519; --brand-rgb:125,31,36;
+  --petrol:var(--brand); --petrol-deep:var(--brand-strong); --petrol-rgb:var(--brand-rgb); --brass:#94601E; --brass-metal:#C89A55;
+  --line:#DED6C8; --line-soft:#F0EBE2; --chip:#100c0d; --chip-text:#F0E7DF;
+  --warn:#B42318; --good:#247464; --good-rgb:36,116,100; --dr:#2F687C; --cr:#94601E;
+  --paper-rgb:247,244,238; --brass-rgb:148,96,30; --ink-rgb:32,27,28; --warn-rgb:180,35,24;
 }
 :root[data-theme="dark"]{
-  --paper:#0B1215; --card:#111C1F; --ink:#EDE7DC; --ink-soft:#AAB7B6;
-  --petrol:#61B8AD; --petrol-deep:#86D0C5; --brass:#D6A65F; --brass-metal:#D6A65F;
-  --line:#26383C; --line-soft:#172428; --chip:#071013; --chip-text:#EDE7DC;
-  --warn:#E38A78; --good:#67B7A2; --dr:#86D0C5; --cr:#D6A65F;
-  --paper-rgb:11,18,21; --petrol-rgb:97,184,173; --brass-rgb:214,166,95; --ink-rgb:237,231,220; --warn-rgb:227,138,120;
+  --paper:#100c0d; --card:#181214; --ink:#F0E7DF; --ink-soft:#B7A9A8;
+  --brand:#E08A81; --brand-strong:#F0AAA3; --brand-rgb:224,138,129;
+  --petrol:var(--brand); --petrol-deep:var(--brand-strong); --petrol-rgb:var(--brand-rgb); --brass:#D6A65F; --brass-metal:#D6A65F;
+  --line:#3B292D; --line-soft:#211719; --chip:#0C0809; --chip-text:#F0E7DF;
+  --warn:#FF8A80; --good:#67B7A2; --good-rgb:103,183,162; --dr:#76B2C7; --cr:#D6A65F;
+  --paper-rgb:16,12,13; --brass-rgb:214,166,95; --ink-rgb:240,231,223; --warn-rgb:255,138,128;
 }
 body, button, input, select, textarea{ font-family:Inter,'IBM Plex Sans Thai',system-ui,sans-serif; }
 .kb-port{ flex:0 0 auto; font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:4px 10px; margin-left:2px; white-space:nowrap; }
@@ -632,8 +643,41 @@ body, button, input, select, textarea{ font-family:Inter,'IBM Plex Sans Thai',sy
 .kicker .pill.conf{ background:var(--petrol-deep); color:var(--paper); }
 @media print{
   :root[data-theme="dark"]{
-    --paper:#F7F4EE; --card:#FFFCF7; --ink:#172126; --ink-soft:#526166; --petrol:#0B5960; --petrol-deep:#083F45;
-    --brass:#94601E; --brass-metal:#C89A55; --line:#DED6C8; --line-soft:#F0EBE2; --chip:#0B1215; --chip-text:#EDE7DC; --warn:#A34838; --good:#247464;
-    --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38; --warn-rgb:163,72,56;
+    --paper:#F7F4EE; --card:#FFFCF7; --ink:#201B1C; --ink-soft:#62595A;
+    --brand:#7D1F24; --brand-strong:#5B1519; --brand-rgb:125,31,36; --petrol:var(--brand); --petrol-deep:var(--brand-strong); --petrol-rgb:var(--brand-rgb);
+    --brass:#94601E; --brass-metal:#C89A55; --line:#DED6C8; --line-soft:#F0EBE2; --chip:#100c0d; --chip-text:#F0E7DF; --warn:#B42318; --good:#247464; --good-rgb:36,116,100; --dr:#2F687C; --cr:#94601E;
+    --paper-rgb:247,244,238; --brass-rgb:148,96,30; --ink-rgb:32,27,28; --warn-rgb:180,35,24;
   }
+}
+
+/* Semantic completion states stay green even though the brand signal is red. */
+.st.done,
+.pph.done,
+.lab.ok,
+.choice.correct,
+.bridge .bx.ok,
+.codegrid .c.ok,
+.tcc .t.done,
+.chks li.ok::before,
+.badge.ok,
+.drcmap td.use,
+.drclegend .use {
+  border-color:var(--good);
+  color:var(--good);
+  background:rgba(var(--good-rgb),.12);
+}
+
+.lab.ok { color:var(--paper); background:var(--good); }
+.choice.correct .kbd { color:#fff; background:var(--good); }
+.bridge .bx.ok { border-left-color:var(--good); }
+
+/* Compact OK badges in blueprint/statutory pages. */
+.wrap > .ok,
+td > .ok,
+li > .ok,
+p > .ok,
+h2 > .ok,
+h3 > .ok {
+  color:var(--good);
+  background:rgba(var(--good-rgb),.12);
 }

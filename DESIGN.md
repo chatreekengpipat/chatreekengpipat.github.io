@@ -1,25 +1,25 @@
 ---
 name: Chatree Kengpipat — ERP Consultant Portfolio
-description: An engineer's-console portfolio for an ERP implementation consultant — Inter + JetBrains Mono, slate neutrals, a single Implementation Blue accent, flat-by-default surfaces that glow on interaction.
+description: A private engineering-ledger portfolio for an ERP implementation consultant — Inter + JetBrains Mono, warm neutrals, Engineering Oxblood, and precise champagne details.
 colors:
-  implementation-blue: "#2563eb"
-  implementation-blue-hover: "#1d4ed8"
-  implementation-blue-soft: "#3b82f6"
-  accent-light: "#dbeafe"
-  accent-bg: "#eff6ff"
-  bg: "#ffffff"
-  surface: "#f8fafc"
-  surface-2: "#f1f5f9"
-  surface-3: "#e2e8f0"
-  ink: "#0f172a"
-  ink-strong: "#020617"
-  ink-muted: "#64748b"
-  ink-subtle: "#94a3b8"
-  border: "#e2e8f0"
-  border-strong: "#cbd5e1"
-  success: "#059669"
-  danger: "#dc2626"
-  warning: "#d97706"
+  engineering-red: "#7d1f24"
+  engineering-red-hover: "#5b1519"
+  engineering-red-soft: "#a3474d"
+  accent-light: "#ead5d2"
+  accent-bg: "#f5e9e6"
+  bg: "#f7f4ee"
+  surface: "#fffcf7"
+  surface-2: "#f0ebe2"
+  surface-3: "#e8e0d4"
+  ink: "#201b1c"
+  ink-strong: "#100c0d"
+  ink-muted: "#62595a"
+  ink-subtle: "#756a6b"
+  border: "#ded6c8"
+  border-strong: "#c9bba7"
+  success: "#247464"
+  danger: "#b42318"
+  warning: "#94601e"
 typography:
   display:
     fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif"
@@ -59,13 +59,13 @@ spacing:
   xl: "2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.implementation-blue}"
-    textColor: "{colors.bg}"
+    backgroundColor: "{colors.engineering-red}"
+    textColor: "#ffffff"
     rounded: "{rounded.sm}"
     padding: "0.75rem 1.4rem"
   button-primary-hover:
-    backgroundColor: "{colors.implementation-blue-hover}"
-    textColor: "{colors.bg}"
+    backgroundColor: "{colors.engineering-red-hover}"
+    textColor: "#ffffff"
     rounded: "{rounded.sm}"
     padding: "0.75rem 1.4rem"
   button-outline:
@@ -85,7 +85,7 @@ components:
     padding: "0.4rem 0.75rem"
   tag:
     backgroundColor: "{colors.accent-bg}"
-    textColor: "{colors.implementation-blue}"
+    textColor: "{colors.engineering-red}"
     rounded: "{rounded.pill}"
     padding: "0.5rem 1rem"
 ---
@@ -94,20 +94,20 @@ components:
 
 ## 1. Overview
 
-**Creative North Star: "The Engineer's Console"**
+**Creative North Star: "The Engineering Ledger"**
 
 This is the portfolio of an engineer-turned-ERP-consultant, and the interface
 reads like the instrument panel of someone who builds systems for a living:
-precise alignment, a restrained slate palette, monospace labels that frame
-content like readouts, and a single decisive blue that behaves like a signal,
-not decoration. The personality is modern, technical, and bold — bold in the
+precise alignment, a restrained parchment/red-black palette, monospace labels
+that frame content like readouts, and a decisive oxblood signal color. The
+personality is modern, technical, and bold — bold in the
 sense of committed typographic scale and a confident dark mode, never loud or
 noisy. Trust here is earned by specificity (real module names, project phases,
 live dashboards), and the visual system mirrors that: it shows precision rather
 than asserting it.
 
 Depth is conveyed through tonal layering and interaction, not heavy chrome.
-Surfaces sit flat against near-white (or deep slate in dark mode) and come alive
+Surfaces sit flat against warm parchment (or red-black in dark mode) and come alive
 on hover and focus with a soft accent glow. Two type voices carry everything:
 Inter for all prose and headings, JetBrains Mono reserved strictly for labels,
 tags, and metric readouts. The result should feel engineered, not decorated.
@@ -118,7 +118,7 @@ failed. No interchangeable creative-dev scaffolding, no marketing gloss standing
 in for evidence.
 
 **Key Characteristics:**
-- Slate-neutral foundation with one Implementation Blue accent
+- Warm-neutral foundation with one Engineering Oxblood accent
 - Two-voice typography: Inter (prose) + JetBrains Mono (labels only)
 - Flat-by-default surfaces; accent glow appears on interaction
 - Full light/dark theme parity via a toggle
@@ -126,43 +126,42 @@ in for evidence.
 
 ## 2. Colors
 
-A slate-neutral base carrying a single saturated blue that does all the
-signaling. The strategy is **Restrained**: neutrals own the surface, one accent
+A warm-neutral base carrying a single dark engineering red that does the
+signaling. Champagne marks precision and hierarchy without competing with the
+brand. The strategy is **Restrained**: neutrals own the surface, one accent
 earns attention.
 
 ### Primary
-- **Implementation Blue** (#2563eb): The single signal color. Used on primary
-  buttons, active nav, links, metric highlights, and focus accents. In dark mode
-  it lightens to #60a5fa for contrast against deep slate.
-- **Implementation Blue Hover** (#1d4ed8): The pressed/hover state of the primary
+- **Engineering Oxblood** (#7d1f24): The single brand signal. Used on primary
+  actions, active navigation, links, metric highlights, and focus accents. In
+  dark mode it becomes warm signal red (#e08a81) against red-black surfaces.
+- **Engineering Oxblood Hover** (#5b1519): The pressed/hover state of the primary
   action only.
-- **Implementation Blue Soft** (#3b82f6): Secondary accent fills and softer
+- **Engineering Red Soft** (#a3474d): Secondary accent fills and softer
   highlights where full strength would shout.
 
 ### Neutral
-- **Ink** (#0f172a): Primary body text on light surfaces; also the dark-mode
-  background.
-- **Ink Strong** (#020617): Headings and the highest-emphasis text.
-- **Ink Muted** (#64748b): Secondary text, pill labels, captions. Hits ≥4.5:1 on
-  white; do not push lighter for body copy.
-- **Ink Subtle** (#94a3b8): Tertiary metadata and de-emphasized timestamps only;
+- **Ink** (#201b1c): Primary body text on light surfaces.
+- **Ink Strong / Red-black** (#100c0d): Headings and the dark-mode canvas.
+- **Ink Muted** (#62595a): Secondary text, pill labels, and captions. It meets
+  WCAG AA on parchment; do not push lighter for body copy.
+- **Ink Subtle** (#756a6b): Tertiary metadata and de-emphasized timestamps only;
   never body copy.
-- **Background** (#ffffff): The page canvas in light mode.
-- **Surface / Surface-2 / Surface-3** (#f8fafc / #f1f5f9 / #e2e8f0): Tonal
+- **Background** (#f7f4ee): The warm parchment canvas in light mode.
+- **Surface / Surface-2 / Surface-3** (#fffcf7 / #f0ebe2 / #e8e0d4): Tonal
   layering for cards and raised regions. Depth comes from these steps, not from
   shadow.
-- **Border / Border Strong** (#e2e8f0 / #cbd5e1): Hairline dividers and the
+- **Border / Border Strong** (#ded6c8 / #c9bba7): Hairline dividers and the
   outline-button stroke.
 
 ### Tertiary (status, used sparingly)
-- **Success** (#059669), **Danger** (#dc2626), **Warning** (#d97706): Reserved
+- **Success** (#247464), **Danger** (#b42318), **Warning** (#94601e): Reserved
   for genuine status; never decorative.
 
 ### Named Rules
-**The One Accent Rule.** Implementation Blue is the only chromatic voice. Every
-other surface is a slate neutral. If a second hue starts competing for
-attention, it's wrong — emphasis comes from blue, weight, or scale, not from a
-new color.
+**The One Brand Accent Rule.** Engineering Oxblood is the only brand signal.
+Champagne is a precision marker; green, danger red, and warning amber are
+semantic only. If a second decorative hue competes for attention, it is wrong.
 
 **The Twin-Theme Rule.** Light and dark are first-class equals, swapped via the
 `[data-theme]` toggle. Any new color must be defined for both themes and hold
@@ -203,11 +202,10 @@ fakes a code label. Three+ families would read as indecision.
 ## 4. Elevation
 
 **Flat-by-default with accent glow.** Surfaces are flat at rest — depth is built
-from the slate tonal ramp (bg → surface → surface-2 → surface-3), not from
+from the warm tonal ramp (bg → surface → surface-2 → surface-3), not from
 resting shadows. Elevation is a *response to interaction*: on hover and focus,
-cards and buttons lift slightly (`translateY`) and pick up a soft Implementation
-Blue glow. The shadow scale exists for this state work, and stays neutral
-(slate-tinted in light, near-black in dark).
+cards and buttons lift slightly (`translateY`) and pick up a restrained red
+signal glow. The shadow scale stays neutral-warm in light and red-black in dark.
 
 ### Shadow Vocabulary
 - **shadow-sm** (`0 1px 2px rgba(15,23,42,0.04)`): Hairline lift, resting buttons.
@@ -233,7 +231,7 @@ interaction rather than performing.
 ### Buttons
 - **Shape:** Gently rounded (6px, `--radius-sm`), padding 0.75rem 1.4rem, Inter
   600, letter-spacing -0.01em.
-- **Primary:** Implementation Blue fill, white text, resting `--shadow`. On hover:
+- **Primary:** Engineering Oxblood fill, white text, resting `--shadow`. On hover:
   `translateY(-2px) scale(1.02)` with the accent glow. A subtle radial ripple
   expands from center (`.btn::before`).
 - **Outline:** Transparent with a 1px `--border-strong` stroke and ink text. On
@@ -264,14 +262,14 @@ interaction rather than performing.
 
 ### Signature: The Name Lockup (`.ck-signature`)
 The hero stacks CHATREE / KENGPIPAT in Inter 900 at display scale, the first line
-in ink, the second in Implementation Blue. It is the single loudest element and
+in ink, the second in Engineering Red. It is the single loudest element and
 the brand's anchor — one per page, never repeated.
 
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** keep Implementation Blue (#2563eb) as the only accent; carry everything
-  else on slate neutrals (The One Accent Rule).
+- **Do** keep Engineering Oxblood (#7d1f24) as the only brand accent; carry
+  everything else on warm neutrals (The One Brand Accent Rule).
 - **Do** reserve JetBrains Mono for labels, tags, and readouts; set all prose in
   Inter (The Two-Voice Rule).
 - **Do** keep surfaces flat at rest and let shadow/glow appear only on hover,
@@ -297,5 +295,5 @@ the brand's anchor — one per page, never repeated.
   label).
 - **Don't** use marketing buzzwords (streamline, empower, leverage, seamless,
   world-class). Use specific ERP nouns and verbs.
-- **Don't** introduce a third type family or a second accent hue. Emphasis comes
-  from weight, scale, and blue — not from new colors or fonts.
+- **Don't** introduce a third type family or a second decorative accent hue.
+  Emphasis comes from weight, scale, and engineering red — not novelty colors.

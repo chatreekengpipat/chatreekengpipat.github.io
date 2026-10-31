@@ -9,7 +9,7 @@
 
    Readability first: low alpha, calmer in the centre column where
    text sits, palette anchored to the real page background and read
-   from the page's own petrol/champagne tokens. Theme changes are
+   from the page's own engineering-red/champagne tokens. Theme changes are
    interpolated in the render loop instead of visibly snapping.
 
    Cheap by design: rendered at ~1/3 resolution and scaled up (the
@@ -104,7 +104,7 @@
       /* the background token switches instantly; the body colour itself may still be mid-transition */
       var bg = token(['--bg', '--paper', '--abyss']) || rgb(getComputedStyle(d.body).backgroundColor) || [1, 1, 1];
       var dark = lum(bg) < 0.4;
-      var main = token(['--accent', '--petrol', '--gas']) || [0.04, 0.35, 0.38];
+      var main = token(['--accent', '--petrol', '--gas']) || [0.49, 0.12, 0.14];
       var deep = token(['--accent-soft', '--petrol-deep']) || mix(main, dark ? [1, 1, 1] : [0, 0, 0], 0.18);
       var metal = token(['--gold', '--brass', '--flare']) || [0.76, 0.56, 0.27];
 

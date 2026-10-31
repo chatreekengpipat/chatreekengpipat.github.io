@@ -1,26 +1,27 @@
 /* ====================================
-   CHATREE KENGPIPAT — Portfolio v17
-   Private Ledger · Petrol/Champagne · Inter
+   CHATREE KENGPIPAT — Portfolio v18
+   Private Ledger · Engineering Red/Champagne · Inter
    ==================================== */
 
 :root {
-  /* Warm editorial light mode. Petrol is the operating signal; champagne is
-     the precision accent. All text tokens meet WCAG AA on their surfaces. */
+  /* Warm editorial light mode. Oxblood is the engineering signal; champagne
+     marks precision. Semantic green remains reserved for successful states. */
   --bg: #f7f4ee;
   --surface: #fffcf7;
   --surface-2: #f0ebe2;
   --surface-3: #e8e0d4;
-  --text: #172126;
-  --text-strong: #0b1215;
-  --text-muted: #526166;
-  --text-subtle: #647176;
-  --accent: #0b5960;
-  --accent-hover: #083f45;
-  --accent-soft: #327e82;
-  --accent-light: #d7e8e4;
-  --accent-bg: #eaf2ef;
-  --accent-fill: #0b5960;
-  --accent-fill-hover: #083f45;
+  --text: #201b1c;
+  --text-strong: #100c0d;
+  --text-muted: #62595a;
+  --text-subtle: #756a6b;
+  --accent: #7d1f24;
+  --accent-hover: #5b1519;
+  --accent-soft: #a3474d;
+  --accent-light: #ead5d2;
+  --accent-bg: #f5e9e6;
+  --accent-fill: #7d1f24;
+  --accent-fill-hover: #5b1519;
+  --accent-rgb: 125, 31, 36;
   --on-accent: #ffffff;
   --gold: #c89a55;
   --gold-text: #94601e;
@@ -29,13 +30,13 @@
   --border-strong: #c9bba7;
   --success: #247464;
   --success-light: #d7ebe5;
-  --danger: #a34838;
+  --danger: #b42318;
   --warning: #94601e;
-  --shadow-sm: 0 1px 2px rgba(11, 18, 21, 0.05);
-  --shadow: 0 8px 26px rgba(11, 18, 21, 0.07);
-  --shadow-md: 0 14px 38px rgba(11, 18, 21, 0.09);
-  --shadow-lg: 0 24px 70px rgba(11, 18, 21, 0.12);
-  --shadow-xl: 0 34px 90px rgba(11, 18, 21, 0.16);
+  --shadow-sm: 0 1px 2px rgba(16, 12, 13, 0.05);
+  --shadow: 0 8px 26px rgba(16, 12, 13, 0.07);
+  --shadow-md: 0 14px 38px rgba(16, 12, 13, 0.09);
+  --shadow-lg: 0 24px 70px rgba(16, 12, 13, 0.12);
+  --shadow-xl: 0 34px 90px rgba(16, 12, 13, 0.16);
   --radius-sm: 8px;
   --radius: 12px;
   --radius-md: 16px;
@@ -43,30 +44,31 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0b1215;
-  --surface: #111c1f;
-  --surface-2: #172428;
-  --surface-3: #203136;
-  --text: #ede7dc;
-  --text-strong: #fff9ed;
-  --text-muted: #aab7b6;
-  --text-subtle: #95a3a3;
-  --accent: #61b8ad;
-  --accent-hover: #86d0c5;
-  --accent-soft: #438f87;
-  --accent-light: #183d3a;
-  --accent-bg: #102623;
-  --accent-fill: #287267;
-  --accent-fill-hover: #0b5960;
+  --bg: #100c0d;
+  --surface: #181214;
+  --surface-2: #211719;
+  --surface-3: #2b1e21;
+  --text: #f0e7df;
+  --text-strong: #fff8ef;
+  --text-muted: #b7a9a8;
+  --text-subtle: #a69696;
+  --accent: #e08a81;
+  --accent-hover: #f0aaa3;
+  --accent-soft: #b75658;
+  --accent-light: #54272b;
+  --accent-bg: #2a171a;
+  --accent-fill: #8d2c31;
+  --accent-fill-hover: #a13a3f;
+  --accent-rgb: 224, 138, 129;
   --on-accent: #ffffff;
   --gold: #d6a65f;
   --gold-text: #d6a65f;
   --gold-soft: #4a3824;
-  --border: #26383c;
-  --border-strong: #3a4f53;
+  --border: #3b292d;
+  --border-strong: #805a61;
   --success: #67b7a2;
   --success-light: #173b34;
-  --danger: #e38a78;
+  --danger: #ff8a80;
   --warning: #d6a65f;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
@@ -2230,7 +2232,7 @@ footer p {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+  background: linear-gradient(to top, rgba(16, 12, 13, 0.9), transparent);
   color: white;
   padding: 1.5rem 1rem 0.85rem;
   font-family: 'JetBrains Mono', monospace;
@@ -3719,7 +3721,7 @@ button:focus-visible,
     var(--shadow-lg);
 }
 
-/* Section-title emphasis: solid Implementation Blue. Emphasis comes from the
+/* Section-title emphasis: solid engineering red. Emphasis comes from the
    accent + weight, not gradient text (a documented brand ban). The previous
    gradient-clip + perpetual shimmer was both the ban and ambient motion noise. */
 .section-title em {
@@ -4312,8 +4314,8 @@ nav.scrolled {
   z-index: -1;
   pointer-events: none;
   background-image: 
-    linear-gradient(rgba(11, 89, 96, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(11, 89, 96, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(var(--accent-rgb), 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.04) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, transparent 70%);
@@ -4321,8 +4323,8 @@ nav.scrolled {
 
 [data-theme="dark"] .tech-grid {
   background-image: 
-    linear-gradient(rgba(97, 184, 173, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(97, 184, 173, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(var(--accent-rgb), 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.05) 1px, transparent 1px);
 }
 
 /* Floating particles (SVG-based) */
@@ -4685,9 +4687,9 @@ nav.scrolled {
   bottom: 20px;
   left: 20px;
   right: 20px;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(16, 12, 13, 0.85);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(97, 184, 173, 0.3);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
   border-radius: 12px;
   padding: 0.85rem 1.1rem;
   display: flex;
@@ -4954,7 +4956,7 @@ nav.scrolled {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+  background: linear-gradient(to top, rgba(16, 12, 13, 0.9), transparent);
   color: white;
   padding: 2rem 1.25rem 1rem;
   font-family: 'JetBrains Mono', monospace;
@@ -5040,19 +5042,19 @@ nav.scrolled {
   z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(at 15% 20%, rgba(11, 89, 96, 0.12) 0%, transparent 45%),
-    radial-gradient(at 85% 30%, rgba(97, 184, 173, 0.10) 0%, transparent 45%),
-    radial-gradient(at 30% 80%, rgba(50, 126, 130, 0.10) 0%, transparent 45%),
-    radial-gradient(at 75% 90%, rgba(11, 89, 96, 0.08) 0%, transparent 45%);
+    radial-gradient(at 15% 20%, rgba(var(--accent-rgb), 0.12) 0%, transparent 45%),
+    radial-gradient(at 85% 30%, rgba(var(--accent-rgb), 0.10) 0%, transparent 45%),
+    radial-gradient(at 30% 80%, rgba(var(--accent-rgb), 0.10) 0%, transparent 45%),
+    radial-gradient(at 75% 90%, rgba(var(--accent-rgb), 0.08) 0%, transparent 45%);
   animation: meshFloat 30s ease-in-out infinite;
 }
 
 [data-theme="dark"] .gradient-mesh {
   background:
-    radial-gradient(at 15% 20%, rgba(97, 184, 173, 0.15) 0%, transparent 45%),
-    radial-gradient(at 85% 30%, rgba(11, 89, 96, 0.15) 0%, transparent 45%),
-    radial-gradient(at 30% 80%, rgba(50, 126, 130, 0.12) 0%, transparent 45%),
-    radial-gradient(at 75% 90%, rgba(97, 184, 173, 0.10) 0%, transparent 45%);
+    radial-gradient(at 15% 20%, rgba(var(--accent-rgb), 0.15) 0%, transparent 45%),
+    radial-gradient(at 85% 30%, rgba(var(--accent-rgb), 0.15) 0%, transparent 45%),
+    radial-gradient(at 30% 80%, rgba(var(--accent-rgb), 0.12) 0%, transparent 45%),
+    radial-gradient(at 75% 90%, rgba(var(--accent-rgb), 0.10) 0%, transparent 45%);
 }
 
 @keyframes meshFloat {
@@ -5069,15 +5071,15 @@ nav.scrolled {
 .tech-grid {
   background-size: 80px 80px;
   background-image: 
-    linear-gradient(rgba(11, 89, 96, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(11, 89, 96, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(var(--accent-rgb), 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.06) 1px, transparent 1px);
   animation: gridDrift 60s linear infinite;
 }
 
 [data-theme="dark"] .tech-grid {
   background-image: 
-    linear-gradient(rgba(97, 184, 173, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(97, 184, 173, 0.07) 1px, transparent 1px);
+    linear-gradient(rgba(var(--accent-rgb), 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.07) 1px, transparent 1px);
 }
 
 @keyframes gridDrift {
@@ -5230,10 +5232,10 @@ nav.scrolled {
   bottom: 16px;
   left: 16px;
   right: 16px;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(16, 12, 13, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(97, 184, 173, 0.3);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
   border-radius: 12px;
   padding: 0.85rem 1.1rem;
   color: white;
@@ -5351,10 +5353,10 @@ nav.scrolled {
   bottom: 20px;
   left: 20px;
   right: 20px;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(16, 12, 13, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(97, 184, 173, 0.3);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
   border-radius: 12px;
   padding: 0.9rem 1.15rem;
   color: white;
@@ -5534,8 +5536,8 @@ nav.scrolled {
 /* 2. Text Masking Technique */
 .mask-text {
   color: transparent;
-  -webkit-text-stroke: 1px rgba(97, 184, 173, 0.5); /* เส้นขอบบางๆ */
-  background: linear-gradient(135deg, rgba(11, 89, 96, 0.4) 0%, rgba(97, 184, 173, 0.4) 100%);
+  -webkit-text-stroke: 1px rgba(var(--accent-rgb), 0.5); /* เส้นขอบบางๆ */
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.28) 0%, rgba(var(--accent-rgb), 0.48) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   position: relative;
@@ -5581,7 +5583,7 @@ nav.scrolled {
   transform: translate(-50%, -50%);
   width: 120%;
   height: 120%;
-  background: radial-gradient(circle, rgba(11, 89, 96, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.15) 0%, transparent 70%);
   z-index: -1;
   filter: blur(50px);
 }
@@ -5644,7 +5646,7 @@ nav.scrolled {
     text-shadow 450ms cubic-bezier(0.16, 1, 0.3, 1);
   text-shadow:
     0 1px 0 rgba(255, 255, 255, 0.28),
-    0 16px 36px rgba(11, 89, 96, 0.08);
+    0 16px 36px rgba(var(--accent-rgb), 0.08);
   overflow: hidden;
 }
 
@@ -5690,10 +5692,10 @@ nav.scrolled {
     rotateX(var(--ck-rx, 0deg))
     rotateY(var(--ck-ry, 0deg))
     scale(1.018);
-  filter: drop-shadow(0 18px 34px rgba(11, 89, 96, 0.16));
+  filter: drop-shadow(0 18px 34px rgba(var(--accent-rgb), 0.16));
   text-shadow:
     0 1px 0 rgba(255, 255, 255, 0.36),
-    0 24px 56px rgba(11, 89, 96, 0.16);
+    0 24px 56px rgba(var(--accent-rgb), 0.16);
 }
 
 .ck-headline:hover .ck-line::after {
@@ -5730,7 +5732,7 @@ nav.scrolled {
 [data-theme="dark"] .ck-line {
   text-shadow:
     0 1px 0 rgba(255, 255, 255, 0.14),
-    0 18px 42px rgba(97, 184, 173, 0.16);
+    0 18px 42px rgba(var(--accent-rgb), 0.16);
 }
 
 @media (max-width: 768px) {
@@ -5765,7 +5767,7 @@ nav.scrolled {
 .ck-signature {
   --ck-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ck-ink: var(--text-strong);
-  --ck-blue: var(--accent);
+  --ck-brand: var(--accent);
   --ck-glow: color-mix(in srgb, var(--accent) 24%, transparent);
   --ck-glow-strong: color-mix(in srgb, var(--accent) 48%, transparent);
 
@@ -5807,7 +5809,7 @@ nav.scrolled {
   z-index: 5;
   border-radius: 999px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
-  box-shadow: 0 0 22px rgba(97, 184, 173, 0.35);
+  box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.35);
   opacity: 0;
   transform: translateX(-60%) rotate(-8deg);
   animation: ckEdgeComet 3.2s ease-in-out infinite;
@@ -5835,11 +5837,11 @@ nav.scrolled {
     text-shadow 520ms var(--ck-ease);
   text-shadow:
     0 1px 0 rgba(255,255,255,0.34),
-    0 18px 36px rgba(11,89,96,0.08);
+    0 18px 36px rgba(var(--accent-rgb),0.08);
 }
 
-.ck-signature__line--blue {
-  color: var(--ck-blue);
+.ck-signature__line--brand {
+  color: var(--ck-brand);
 }
 
 /* depth layer */
@@ -5883,7 +5885,7 @@ nav.scrolled {
   animation: ckGlassSweep 2.65s ease-in-out infinite;
 }
 
-.ck-signature__line--blue::after {
+.ck-signature__line--brand::after {
   animation-delay: 0.16s;
 }
 
@@ -5914,7 +5916,7 @@ nav.scrolled {
   filter: drop-shadow(0 18px 30px var(--ck-glow));
   text-shadow:
     0 1px 0 rgba(255,255,255,0.42),
-    0 26px 58px rgba(11,89,96,0.16);
+    0 26px 58px rgba(var(--accent-rgb),0.16);
 }
 
 .ck-signature:hover .ck-signature__char {
@@ -5939,7 +5941,7 @@ nav.scrolled {
 [data-theme="dark"] .ck-signature__line {
   text-shadow:
     0 1px 0 rgba(255,255,255,0.16),
-    0 20px 44px rgba(97,184,173,0.18);
+    0 20px 44px rgba(var(--accent-rgb),0.18);
 }
 
 @keyframes ckCharReveal {
@@ -6041,7 +6043,7 @@ nav.scrolled {
 }
 
 /* ถ้ายังใหญ่ไป ลด KENGPIPAT นิดหนึ่งเพราะยาวกว่า */
-.ck-signature__line--blue {
+.ck-signature__line--brand {
   font-size: clamp(3rem, 5.9vw, 6.1rem) !important;
 }
 
@@ -6064,7 +6066,7 @@ nav.scrolled {
     font-size: clamp(2.65rem, 5.3vw, 5.5rem) !important;
   }
 
-  .ck-signature__line--blue {
+  .ck-signature__line--brand {
     font-size: clamp(2.65rem, 5.3vw, 5.5rem) !important;
   }
 }
@@ -6081,7 +6083,7 @@ nav.scrolled {
     text-align: center;
   }
 
-  .ck-signature__line--blue {
+  .ck-signature__line--brand {
     font-size: clamp(2.8rem, 9.4vw, 5rem) !important;
   }
 }
@@ -6104,7 +6106,7 @@ nav.scrolled {
 
   /* "KENGPIPAT" is two chars longer than "CHATREE" — size it a touch smaller so
      both lines clear the right edge together. */
-  .ck-signature__line--blue {
+  .ck-signature__line--brand {
     font-size: clamp(1.85rem, 9.4vw, 3.1rem) !important;
   }
 }
@@ -6112,7 +6114,7 @@ nav.scrolled {
 /* Small phones (≤380px): tighten once more so 320–375px devices never clip. */
 @media (max-width: 380px) {
   .ck-signature__line { font-size: clamp(1.95rem, 10.2vw, 2.9rem) !important; }
-  .ck-signature__line--blue { font-size: clamp(1.7rem, 8.7vw, 2.6rem) !important; }
+  .ck-signature__line--brand { font-size: clamp(1.7rem, 8.7vw, 2.6rem) !important; }
 }
 
 /* =====================================================
@@ -6228,7 +6230,7 @@ nav.scrolled {
   font-size: 1.15rem;
   line-height: 1;
   cursor: pointer;
-  box-shadow: 0 10px 26px -8px var(--glow-color), 0 2px 6px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 10px 26px -8px var(--glow-color), 0 2px 6px rgba(16, 12, 13, 0.18);
   opacity: 0;
   transform: translateY(12px) scale(0.9);
   pointer-events: none;
@@ -6305,7 +6307,7 @@ nav.scrolled {
 }
 
 /* =====================================================
-   PRIVATE LEDGER · v17
+   PRIVATE LEDGER · v18
    Luxury editorial finish shared by every portfolio page.
    Late overrides intentionally consolidate older visual experiments without
    changing the underlying information architecture or page functionality.
@@ -6724,25 +6726,46 @@ section:hover .section-num {
     .tool-group, .academic-feature, .award-feature, .workplace-card) { transition: none !important; }
 }
 
-/* ---- Calm luxury motion -------------------------------------------------
-   Keep purposeful state/flow animation in the SAP interactives, but stop the
-   perpetual ornamental loops that compete with the content. The signature
-   retains its character reveal and receives one restrained highlight pass. */
-.ck-signature::before {
-  opacity: .10;
-  animation: none;
+/* ---- Clean engineering wordmark -----------------------------------------
+   The former 3D depth copy and gloss layer redrew the complete word behind
+   the real glyphs. That duplicate was visible through the open counter of C,
+   making CHATREE look broken. Keep the hero typographic and permanently crisp;
+   motion belongs to the surrounding interface, not the consultant's name. */
+.ck-signature {
+  isolation: auto;
+  perspective: none;
+  transform: none;
 }
 
-.ck-signature::after {
-  display: none;
-  animation: none;
-}
-
+.ck-signature::before,
+.ck-signature::after,
+.ck-signature__line::before,
 .ck-signature__line::after {
-  animation: ckGlassSweep 1.45s var(--ck-ease) 780ms 1 both;
+  content: none !important;
+  display: none !important;
 }
 
-.ck-signature__line--blue::after { animation-delay: 940ms; }
+.ck-signature__line,
+.ck-signature:hover .ck-signature__line {
+  font-weight: 900;
+  line-height: .88;
+  letter-spacing: -.035em;
+  transform: none;
+  filter: none;
+  animation: none;
+  text-shadow: 0 12px 28px rgba(var(--accent-rgb), .08);
+}
+
+/* Also neutralize stale cached markup if an older theme.js has already split
+   the word into characters during a rolling deployment. */
+.ck-signature__char,
+.ck-signature__char:hover {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  animation: none;
+  transition: none;
+}
 
 :where(
   .hero::before,

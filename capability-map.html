@@ -10,22 +10,22 @@
 <meta property="og:title" content="Business Capability Map · Business Architecture — Chatree Kengpipat">
 <meta property="og:description" content="An interactive business capability model (BIZBOK-aligned): 22 Level-1 capabilities across direction, customer, operations and enabling tiers, with a maturity / priority heat-map and click-to-detail sub-capabilities.">
 <meta property="og:url" content="https://chatreekengpipat.github.io/capability-map.html">
-<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Business Capability Map · Business Architecture">
 <meta name="twitter:description" content="Interactive BIZBOK-aligned business capability model with a maturity/priority heat-map and click-to-detail sub-capabilities.">
-<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="description" content="An interactive business capability map by Chatree Kengpipat: a BIZBOK-aligned Level-1→3 business capability model across direction, customer, operations and enabling tiers, with a maturity and investment-priority heat-map and click-to-detail sub-capabilities. A Business Architecture methodology reference.">
-<meta name="theme-color" content="#0b1215">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#100c0d">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=17">
-<script src="theme.js?v=17"></script>
-<script src="animation.js?v=6" defer></script>
+<link rel="stylesheet" href="styles.css?v=18">
+<script src="theme.js?v=18"></script>
+<script src="animation.js?v=7" defer></script>
 <style>
   /* ============================================================
      BUSINESS CAPABILITY MAP — page-scoped. A tiered capability
@@ -34,7 +34,7 @@
      ============================================================ */
   .cm-banner { position: sticky; top: 72px; z-index: 60; max-width: 1400px; margin: 0 auto; padding: 0 2.5rem; }
   .cm-banner-inner { display: flex; gap: 0.85rem; align-items: flex-start; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(160%); border: 1px dashed var(--accent); border-radius: var(--radius-md); padding: 0.85rem 1.2rem; box-shadow: var(--shadow-md); }
-  .cm-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
+  .cm-banner-icon { width: 24px; height: 24px; flex-shrink: 0; background:var(--accent-fill);color:var(--on-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem; }
   .cm-banner-text { font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
   .cm-banner-text strong { color: var(--text); font-weight: 600; }
   .cm-banner-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 0.15rem; }
@@ -47,7 +47,7 @@
   .cm-seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
   .cm-seg button { appearance: none; background: transparent; border: 0; border-radius: var(--radius-sm); padding: 0.45rem 0.9rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s, background 0.2s; white-space: nowrap; }
   .cm-seg button:hover { color: var(--text); }
-  .cm-seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .cm-seg button[aria-pressed="true"] { background:var(--accent-fill);color:var(--on-accent); }
   .cm-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); align-items: center; }
   .cm-legend.hidden { display: none; }
   .cm-legend i { width: 22px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid var(--border-strong); }
@@ -56,7 +56,7 @@
   /* Tiers */
   .cm-tier { margin-bottom: 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
   .cm-tier-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; background: var(--surface-2); border-bottom: 1px solid var(--border); }
-  .cm-tier-k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 4px; padding: 0.14rem 0.45rem; }
+  .cm-tier-k { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color:var(--on-accent);background:var(--accent-fill); border-radius: 4px; padding: 0.14rem 0.45rem; }
   .cm-tier-name { font-size: 0.9rem; font-weight: 700; color: var(--text-strong); }
   .cm-tier-desc { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-muted); margin-left: auto; }
   .cm-boxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 0.5rem; padding: 0.8rem; }
@@ -103,7 +103,7 @@
   .cm-assess-btn, .cm-reset-btn { appearance: none; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; cursor: pointer; border-radius: var(--radius-sm); padding: 0.48rem 0.9rem; transition: border-color 0.2s, background 0.2s, color 0.2s; }
   .cm-assess-btn { background: var(--surface); border: 1px solid var(--border-strong); color: var(--text); }
   .cm-assess-btn:hover { border-color: var(--accent); }
-  .cm-assess-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .cm-assess-btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--on-accent); }
   .cm-reset-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); margin-left: 0.4rem; }
   .cm-reset-btn:hover { border-color: var(--danger); color: var(--danger); }
   .cm-summary { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.2rem 1.4rem; margin-bottom: 1.4rem; box-shadow: var(--shadow-md); }
@@ -440,7 +440,7 @@
 })();
 </script>
 
-<script src="search.js?v=10" defer></script>
-<script src="fx-flow.js?v=3" defer></script>
+<script src="search.js?v=11" defer></script>
+<script src="fx-flow.js?v=4" defer></script>
 </body>
 </html>

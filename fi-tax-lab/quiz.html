@@ -9,17 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F7F4EE;--ink:#172126;--ink-soft:#526166;
-    --petrol:#0B5960;--petrol-deep:#083F45;--brass:#94601E;
-    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
+    --paper:#F7F4EE;--ink:#201B1C;--ink-soft:#62595A;
+    --petrol:#7D1F24;--petrol-deep:#5B1519;--brass:#94601E;
+    --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#100C0D;--chip-text:#F3EEE2;
     --warn:#B91C1C;--good:#247464;--bad:#9A3412;--card:#fff;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 20px;}
   .wrap{max-width:760px;margin:0 auto;padding:40px 0 90px;}
 
-  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(11,89,96,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
-  .crumb:hover{background:rgba(11,89,96,.14);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(var(--petrol-rgb),.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(var(--petrol-rgb),.14);}
 
   .masthead{border-bottom:3px solid var(--ink);padding-bottom:20px;}
   .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
@@ -64,10 +64,10 @@
   .q-text{font-size:17px;font-weight:600;line-height:1.5;margin-bottom:18px;}
   .choices{display:flex;flex-direction:column;gap:10px;}
   .choice{display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--card);border-radius:11px;padding:13px 15px;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--ink);transition:.14s;line-height:1.45;}
-  .choice:hover:not(:disabled){border-color:var(--petrol);background:rgba(11,89,96,.04);}
+  .choice:hover:not(:disabled){border-color:var(--petrol);background:rgba(var(--petrol-rgb),.04);}
   .choice:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
   .choice .kbd{flex:0 0 24px;height:24px;border-radius:6px;background:var(--chip);color:var(--chip-text);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px;}
-  .choice.correct{border-color:var(--good);background:rgba(11,89,96,.10);}
+  .choice.correct{border-color:var(--good);background:rgba(var(--petrol-rgb),.10);}
   .choice.correct .kbd{background:var(--good);color:#fff;}
   .choice.wrong{border-color:var(--bad);background:rgba(185,28,28,.09);}
   .choice.wrong .kbd{background:var(--bad);color:#fff;}
@@ -110,8 +110,8 @@
   @media(prefers-reduced-motion:reduce){.pbar>span,.choice{transition:none;}}
   @media print{.crumb,.q-actions,.startcard .go,.result .acts{display:none;}}
 </style>
-<link rel="stylesheet" href="theme.css?v=2">
-<script src="theme.js?v=2"></script>
+<link rel="stylesheet" href="theme.css?v=3">
+<script src="theme.js?v=3"></script>
 <script src="data/quiz-bank.js"></script>
 </head>
 <body data-page="tax-quiz">

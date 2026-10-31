@@ -10,19 +10,19 @@
 <meta property="og:title" content="FI/CO Configuration Simulator — Chatree Kengpipat">
 <meta property="og:description" content="An interactive SAP FI/CO model: set the configuration a functional consultant maintains — tax code, valuation class, reconciliation account group — and watch the balanced FI document derive itself, each line traced back to the config object that produced it.">
 <meta property="og:url" content="https://chatreekengpipat.github.io/fico-config-simulator.html">
-<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FI/CO Configuration Simulator">
 <meta name="twitter:description" content="Set SAP FI/CO config — tax code, valuation class, reconciliation account — and watch the balanced FI document derive itself, line by line.">
-<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
+<meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png?v=2">
 <meta name="description" content="An interactive SAP FI/CO configuration model by Chatree Kengpipat. Choose a transaction event (goods receipt, vendor invoice, customer billing) and the configuration behind it — tax code (T007), account determination (OBYC/VKOA), reconciliation account group — and the balanced FI document is derived live, with each posting line traced to the config object that generated it. A demonstration of functional configuration judgment.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=17">
-<script src="theme.js?v=17"></script>
-<script src="animation.js?v=6" defer></script>
+<link rel="stylesheet" href="styles.css?v=18">
+<script src="theme.js?v=18"></script>
+<script src="animation.js?v=7" defer></script>
 <style>
   /* ============================================================
      FI/CO CONFIGURATION SIMULATOR — page-scoped components.
@@ -56,7 +56,7 @@
   }
   .sim-banner-icon {
     width: 24px; height: 24px; flex-shrink: 0;
-    background: var(--accent); color: #fff; border-radius: 50%;
+    background:var(--accent-fill);color:var(--on-accent); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-weight: 700; font-size: 0.8rem;
     font-family: 'JetBrains Mono', monospace; margin-top: 0.1rem;
@@ -99,7 +99,7 @@
     transition: color .25s var(--ease-smooth), border-color .25s var(--ease-smooth), background .25s var(--ease-smooth);
   }
   .sim-tab:hover { color: var(--accent); border-color: var(--accent); }
-  .sim-tab[aria-selected="true"] { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .sim-tab[aria-selected="true"] { color:var(--on-accent);background:var(--accent-fill); border-color: var(--accent); }
 
   /* Two-panel workbench: config on the left, FI document on the right */
   .sim-wrap {
@@ -235,7 +235,7 @@
     .sim-row-new { animation: none; }
   }
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"FI/CO Configuration Simulator — Chatree Kengpipat","headline":"FI/CO Configuration Simulator — Chatree Kengpipat","description":"An interactive SAP FI/CO model: choose a transaction event and its configuration (tax code, valuation class, reconciliation account group) and the balanced FI document is derived live, each line traced to the config object that generated it.","url":"https://chatreekengpipat.github.io/fico-config-simulator.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"FI/CO Configuration Simulator — Chatree Kengpipat","headline":"FI/CO Configuration Simulator — Chatree Kengpipat","description":"An interactive SAP FI/CO model: choose a transaction event and its configuration (tax code, valuation class, reconciliation account group) and the balanced FI document is derived live, each line traced to the config object that generated it.","url":"https://chatreekengpipat.github.io/fico-config-simulator.html","image":"https://chatreekengpipat.github.io/photos/og-card.png?v=2","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chatreekengpipat.github.io/"},{"@type":"ListItem","position":2,"name":"FI/CO Configuration Simulator","item":"https://chatreekengpipat.github.io/fico-config-simulator.html"}]}</script>
 </head>
 <body>
@@ -753,7 +753,7 @@
 })();
 </script>
 
-<script src="search.js?v=10" defer></script>
-<script src="fx-flow.js?v=3" defer></script>
+<script src="search.js?v=11" defer></script>
+<script src="fx-flow.js?v=4" defer></script>
 </body>
 </html>

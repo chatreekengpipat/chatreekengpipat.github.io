@@ -94,7 +94,7 @@
     try {
       var m = d.querySelector('meta[name="theme-color"]');
       if (!m) { m = d.createElement("meta"); m.name = "theme-color"; d.head.appendChild(m); }
-      m.content = (t === "dark") ? "#0B1215" : "#F7F4EE";
+      m.content = (t === "dark") ? "#100c0d" : "#F7F4EE";
     } catch (e) {}
   }
   syncThemeColor(initialTheme);
@@ -105,7 +105,7 @@
       var ic = d.createElement("link");
       ic.rel = "icon"; ic.type = "image/svg+xml";
       ic.href = "data:image/svg+xml," + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0B5960"/>' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#7D1F24"/>' +
         '<rect x="8" y="9" width="16" height="2.8" rx="1.4" fill="#F7F4EE"/><rect x="8" y="14.6" width="11" height="2.8" rx="1.4" fill="#F7F4EE" opacity=".72"/>' +
         '<rect x="8" y="20.2" width="16" height="2.8" rx="1.4" fill="#C89A55"/></svg>');
       d.head.appendChild(ic);
@@ -131,7 +131,7 @@
   /* T47 · ambient smoke / water-flow layer behind the content (fx-flow.js, async, optional) */
   try {
     var fx = d.createElement("script");
-    fx.src = BASE + "fx-flow.js?v=2"; fx.async = true;
+    fx.src = BASE + "fx-flow.js?v=3"; fx.async = true;
     d.head.appendChild(fx);
   } catch (e) {}
 
