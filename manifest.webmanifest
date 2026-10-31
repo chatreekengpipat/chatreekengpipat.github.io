@@ -1,12 +1,12 @@
 {
-  "name": "Chatree Kengpipat (Cee) — ERP / SAP FI Consultant",
-  "short_name": "Chatree · Cee",
-  "description": "Portfolio of Chatree Kengpipat, ERP Implementation & SAP FI/CO Consultant.",
+  "name": "Chatree Kengpipat — SAP FI/CO Consultant & ERP Delivery",
+  "short_name": "CK · SAP FI/CO",
+  "description": "Evidence-led portfolio of Chatree Kengpipat: SAP FI/CO functional delivery, ERP implementation, testing, controls and cutover.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
+  "background_color": "#0b1215",
+  "theme_color": "#0b5960",
   "icons": [
     { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
     { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180", "purpose": "any maskable" }

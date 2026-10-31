@@ -2,6 +2,22 @@
 (function() {
   const root = document.documentElement;
 
+  function syncThemeColor(theme) {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#f7f4ee' : '#0b1215');
+  }
+
+  function applyTheme(theme, persist) {
+    root.classList.add('theme-switching');
+    root.setAttribute('data-theme', theme);
+    syncThemeColor(theme);
+    if (persist) {
+      try { localStorage.setItem('theme', theme); } catch (e) {}
+    }
+    try { document.dispatchEvent(new CustomEvent('ck:themechange', { detail: { theme: theme } })); } catch (e) {}
+    window.setTimeout(function () { root.classList.remove('theme-switching'); }, 760);
+  }
+
   // Initialize theme
   function getInitialTheme() {
     try {
@@ -12,18 +28,20 @@
     return 'dark';
   }
 
-  root.setAttribute('data-theme', getInitialTheme());
+  const initialTheme = getInitialTheme();
+  root.setAttribute('data-theme', initialTheme);
+  syncThemeColor(initialTheme);
 
   // Wait for DOM
   document.addEventListener('DOMContentLoaded', function() {
+    syncThemeColor(root.getAttribute('data-theme'));
     const toggle = document.getElementById('theme-toggle');
     if (!toggle) return;
 
     toggle.addEventListener('click', function() {
       const current = root.getAttribute('data-theme');
       const next = current === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
+      applyTheme(next, true);
     });
   });
 })();
@@ -59,8 +77,8 @@
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
 
-    headline.style.setProperty('--ck-ry', `${x * 8}deg`);
-    headline.style.setProperty('--ck-rx', `${y * -6}deg`);
+    headline.style.setProperty('--ck-ry', `${x * 3}deg`);
+    headline.style.setProperty('--ck-rx', `${y * -2}deg`);
   });
 
   headline.addEventListener('mouseleave', () => {

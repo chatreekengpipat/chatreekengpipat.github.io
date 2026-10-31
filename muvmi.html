@@ -20,9 +20,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=16">
-<script src="theme.js"></script>
-<script src="animation.js?v=5" defer></script>
+<link rel="stylesheet" href="styles.css?v=17">
+<script src="theme.js?v=17"></script>
+<script src="animation.js?v=6" defer></script>
 <!-- MUVMI :: page-scoped helpers reusing existing tokens (Claude) -->
 <style id="muvmi-style">
 .muvmi-cost{display:inline-flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text-muted);background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);border-radius:100px;padding:.4rem .9rem;margin:.4rem 0}
@@ -85,13 +85,13 @@
 .mv-svg .axis{stroke:var(--border-strong,#cbd5e1);stroke-width:1}
 .mv-svg .grid{stroke:var(--border);stroke-width:.6}
 .mv-svg .bar-b{fill:color-mix(in srgb,var(--text-subtle) 55%,transparent)}
-.mv-svg .bar-a{fill:var(--accent,#2563eb)}
+.mv-svg .bar-a{fill:var(--accent,#0b5960)}
 .mv-svg .lbl{fill:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:8.5px}
 .mv-svg .val{fill:var(--text-strong);font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700}
-.mv-svg .delta{fill:var(--accent,#2563eb);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700}
-.mv-svg .ln-c{fill:none;stroke:var(--accent-soft,#60a5fa);stroke-width:2;stroke-linejoin:round}
-.mv-svg .ln-e{fill:none;stroke:var(--accent,#2563eb);stroke-width:2;stroke-linejoin:round}
-.mv-svg .cal{fill:none;stroke:var(--accent,#2563eb);stroke-width:2;stroke-linejoin:round}
+.mv-svg .delta{fill:var(--accent,#0b5960);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700}
+.mv-svg .ln-c{fill:none;stroke:var(--accent-soft,#61b8ad);stroke-width:2;stroke-linejoin:round}
+.mv-svg .ln-e{fill:none;stroke:var(--accent,#0b5960);stroke-width:2;stroke-linejoin:round}
+.mv-svg .cal{fill:none;stroke:var(--accent,#0b5960);stroke-width:2;stroke-linejoin:round}
 .mv-axis-wrap{display:grid;grid-template-columns:1.5rem 1fr;align-items:center;gap:.4rem}
 .mv-axis-y{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.04em;color:var(--text-muted);text-align:center;white-space:nowrap}
 .mv-axis-x{grid-column:2;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.04em;color:var(--text-muted);margin-top:.5rem}
@@ -130,7 +130,7 @@
 .mv-mon:first-child{border-left:0}
 .mv-bar{position:absolute;top:5px;bottom:5px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.61rem;white-space:nowrap;overflow:hidden;color:#fff;left:calc((var(--s) - 1)/8*100%);width:calc(var(--l)/8*100%);min-width:8px}
 .mv-bar.soft{background:var(--accent)}
-.mv-bar.hw{background:var(--accent-soft,#60a5fa);color:#0f172a}
+.mv-bar.hw{background:var(--accent-soft,#61b8ad);color:#0b1215}
 .mv-bar.lead{background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--accent) 80%,#000) 0 6px,var(--accent) 6px 12px)}
 .mv-bar.mile{background:var(--success,#059669)}
 .mv-legend{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:.95rem;font-size:.67rem;color:var(--text-muted)}
@@ -183,7 +183,7 @@
 .mv-film-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin:.95rem 0 .2rem}
 .mv-film-tags span{font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--accent);background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:100px;padding:.32rem .8rem;font-variant-numeric:tabular-nums}
 </style>
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0b1215">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"MUVMI Regen-Brake Software & Ergonomics — Chatree Kengpipat","headline":"MUVMI Regen-Brake Software & Ergonomics — Chatree Kengpipat","description":"Chulalongkorn University engineering design project with MUVMI (electric tuk-tuk, Bangkok): EV regenerative-brake software (analog sensor, speed-banded regen, Fusion 360 + MATLAB Simulink) plus driver-ergonomics hardware integration. 5-person team led by Chatree Kengpipat, Aug 2020 to Mar 2021. Mentor-voted Top 3 of 16+ projects.","url":"https://chatreekengpipat.github.io/muvmi.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
@@ -196,7 +196,7 @@
 <nav>
   <a href="index.html" class="nav-logo">
     <span class="nav-logo-mark"></span>
-    Workspace of Chatree Kengpipat (Cee)
+    CK · SAP FI/CO
   </a>
   <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
     <span></span><span></span><span></span>
@@ -520,7 +520,7 @@
     <div class="mv-chart">
       <div class="mv-chart-t">
         <span>Regen function vs brake-lever angle &middot; %F<sub>br,regen</sub></span>
-        <span class="legend"><span><i style="background:var(--accent-soft,#60a5fa)"></i>Comfort (90%)</span><span><i style="background:var(--accent,#2563eb)"></i>Efficiency (100%)</span></span>
+        <span class="legend"><span><i style="background:var(--accent-soft,#61b8ad)"></i>Comfort (90%)</span><span><i style="background:var(--accent,#0b5960)"></i>Efficiency (100%)</span></span>
       </div>
       <div class="mv-fns">
         <div class="mv-fn"><h6>Step</h6><small>0 – 15 km/h</small><div id="mvFnStep"></div></div>
@@ -682,7 +682,7 @@
     <div class="mv-chart">
       <div class="mv-chart-t">
         <span>Average regenerative energy (J) · before vs after</span>
-        <span class="legend"><span><i style="background:color-mix(in srgb,var(--text-subtle) 55%,transparent)"></i>Before</span><span><i style="background:var(--accent,#2563eb)"></i>After</span></span>
+        <span class="legend"><span><i style="background:color-mix(in srgb,var(--text-subtle) 55%,transparent)"></i>Before</span><span><i style="background:var(--accent,#0b5960)"></i>After</span></span>
       </div>
       <div id="mvBars"></div>
     </div>
@@ -829,7 +829,7 @@
         <div class="mv-row"><div class="mv-lab">Integration &amp; weekly delivery<small>me · all eight months</small></div><div class="mv-track"><span class="mv-bar lead" style="--s:1;--l:8">consolidate + submit weekly</span></div></div>
         <div class="mv-row"><div class="mv-lab">Final presentation<small>combined deliverable</small></div><div class="mv-track"><span class="mv-bar mile" style="--s:8;--l:1">present</span></div></div>
       </div></div>
-      <div class="mv-legend"><span><i style="background:var(--accent)"></i>Software (my track)</span><span><i style="background:var(--accent-soft,#60a5fa)"></i>Hardware (teammates)</span><span><i style="background:repeating-linear-gradient(45deg,#1d3a8a 0 4px,var(--accent) 4px 8px)"></i>Integration / lead (me)</span><span><i style="background:var(--success,#059669)"></i>Milestone</span></div>
+      <div class="mv-legend"><span><i style="background:var(--accent)"></i>Software (my track)</span><span><i style="background:var(--accent-soft,#61b8ad)"></i>Hardware (teammates)</span><span><i style="background:repeating-linear-gradient(45deg,#1d3a8a 0 4px,var(--accent) 4px 8px)"></i>Integration / lead (me)</span><span><i style="background:var(--success,#059669)"></i>Milestone</span></div>
 
       <div class="mv-week">
         <div class="mv-day"><div class="d">MON</div><p>Team sync · plan the week across both tracks</p></div>
@@ -995,7 +995,7 @@
   })();
 })();
 </script>
-<script src="search.js?v=9" defer></script>
-<script src="fx-flow.js?v=2" defer></script>
+<script src="search.js?v=10" defer></script>
+<script src="fx-flow.js?v=3" defer></script>
 </body>
 </html>

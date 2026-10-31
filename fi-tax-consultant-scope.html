@@ -8,14 +8,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Chatree Kengpipat (Cee)">
 <meta property="og:title" content="FI Tax Consultant — Scope of Work · SAP FI · GL · Tax">
-<meta property="og:description" content="The scope of an SAP FI tax consultant on an S/4HANA programme for a national energy company: what I own, the SAP Activate lifecycle, in/out-of-scope boundaries, deliverables, and where my depth comes from.">
+<meta property="og:description" content="A public-safe view of the SAP FI tax consultant role on an energy-sector S/4HANA programme: current-role scope, SAP Activate lifecycle, boundaries, deliverables, and evidence.">
 <meta property="og:url" content="https://chatreekengpipat.github.io/fi-tax-consultant-scope.html">
 <meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FI Tax Consultant — Scope of Work · SAP FI · GL · Tax">
-<meta name="twitter:description" content="Scope of an SAP FI tax consultant on an S/4HANA programme for a national energy company — what I own, lifecycle, boundaries, deliverables.">
+<meta name="twitter:description" content="A public-safe view of SAP FI tax consulting on an energy-sector S/4HANA programme — current-role scope, lifecycle, boundaries, deliverables, and evidence.">
 <meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
-<meta name="description" content="The proper scope of work for an SAP FI consultant specializing in tax on an S/4HANA programme for a national energy company: what I own, the lifecycle, in-scope vs out-of-scope boundaries, deliverables, the programme scale, and an honest account of where my depth comes from.">
+<meta name="description" content="A public-safe, consultant-grade account of SAP FI tax work on an energy-sector S/4HANA programme: current-role scope, lifecycle, boundaries, deliverables, evidence, and an honest account of where my depth comes from.">
 <script>
   /* Set theme before paint to avoid a flash. Shared 'theme' key with the rest of the site. */
   (function () {
@@ -32,14 +32,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root {
-    --abyss: #0f172a;
-    --deep: #1e293b;
-    --steel: #334155;
-    --gas: #60a5fa;   /* SAP / system / data / what I own */
-    --flare: #FF6B35; /* tax / the State / boundaries */
-    --gold: #E8B04B;  /* value / deliverables / outcomes */
-    --mist: #f1f5f9;  /* body */
-    --haze: #94a3b8;  /* captions */
+    --abyss: #0b1215;
+    --deep: #111c1f;
+    --steel: #26383c;
+    --gas: #61b8ad;   /* SAP / system / data / what I own */
+    --flare: #d98272; /* tax / the State / boundaries */
+    --gold: #d6a65f;  /* value / deliverables / outcomes */
+    --mist: #ede7dc;  /* body */
+    --haze: #aab7b6;  /* captions */
     --rail-w: 232px;
     --content-w: 800px;
     --bar-h: 56px;
@@ -61,14 +61,14 @@
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     background-image:
-      radial-gradient(900px 600px at 85% -10%, rgba(59, 130, 246, 0.06), transparent 60%),
-      radial-gradient(700px 500px at 0% 30%, rgba(255, 107, 53, 0.05), transparent 60%);
+      radial-gradient(900px 600px at 85% -10%, rgba(97, 184, 173, 0.07), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(214, 166, 95, 0.05), transparent 60%);
     background-attachment: fixed;
   }
 
   h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; text-wrap: balance; }
   p { margin: 0 0 1rem; text-wrap: pretty; }
-  .chapter p:not(.caption), .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
+  .chapter p:not(.caption), .rolestate, .lede { text-align: left; text-wrap: pretty; -webkit-hyphens: none; hyphens: none; }
 
   /* Narrow columns are too tight to justify — ragged right reads better there. */
   .chapter .card p, .chapter .tbls__c p, .chapter .method__i p,
@@ -80,8 +80,8 @@
     font-family: var(--mono);
     font-weight: 500;
     color: var(--gas);
-    background: rgba(59, 130, 246, 0.09);
-    border: 1px solid rgba(59, 130, 246, 0.28);
+    background: rgba(50, 126, 130, 0.09);
+    border: 1px solid rgba(50, 126, 130, 0.28);
     border-radius: 5px;
     padding: 0.05em 0.42em;
     font-size: 0.88em;
@@ -131,7 +131,7 @@
     padding: 0.5rem 0.8rem; border-radius: 8px; white-space: nowrap;
     transition: color 0.2s, background 0.2s;
   }
-  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(59, 130, 246, 0.07); }
+  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(50, 126, 130, 0.07); }
   .sitemenu > a.cta { color: var(--abyss); background: var(--gas); font-weight: 600; }
   .sitemenu > a.cta:hover { filter: brightness(1.08); background: var(--gas); }
   .dd { position: relative; }
@@ -149,8 +149,8 @@
   .dd-group + .dd-group { border-top: 1px solid var(--steel); margin-top: 0.2rem; padding-top: 0.5rem; }
   .dd-head { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gas); padding: 0.2rem 0.5rem 0.35rem; }
   .dd-panel a { display: block; padding: 0.45rem 0.6rem; font-size: 0.86rem; color: var(--mist); text-decoration: none; border-radius: 7px; }
-  .dd-panel a:hover { background: rgba(59, 130, 246, 0.08); color: var(--gas); }
-  .dd-panel a.is-current { color: var(--gas); background: rgba(59, 130, 246, 0.06); }
+  .dd-panel a:hover { background: rgba(50, 126, 130, 0.08); color: var(--gas); }
+  .dd-panel a.is-current { color: var(--gas); background: rgba(50, 126, 130, 0.06); }
   .sitebar__burger { display: none; flex-direction: column; gap: 4px; background: none; border: 0; cursor: pointer; padding: 8px; }
   .sitebar__burger span { width: 22px; height: 2px; background: var(--mist); border-radius: 2px; transition: transform 0.2s, opacity 0.2s; }
   .sitebar__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -205,10 +205,10 @@
     transition: color 0.2s, background 0.2s, border-color 0.2s;
   }
   .rail__link .num { font-family: var(--mono); font-size: 0.74rem; color: var(--steel); transition: color 0.2s; }
-  .rail__link:hover { color: var(--mist); background: rgba(59, 130, 246, 0.05); }
+  .rail__link:hover { color: var(--mist); background: rgba(50, 126, 130, 0.05); }
   .rail__link.is-active {
     color: var(--mist);
-    background: rgba(59, 130, 246, 0.09);
+    background: rgba(50, 126, 130, 0.09);
     border-left-color: var(--gas);
   }
   .rail__link.is-active .num { color: var(--gas); }
@@ -276,7 +276,7 @@
   /* ---------- Hero role statement ---------- */
   .rolestate {
     border-left: 3px solid var(--gas);
-    background: rgba(59, 130, 246, 0.05);
+    background: rgba(50, 126, 130, 0.05);
     border-radius: 0 12px 12px 0;
     padding: 1.1rem 1.3rem;
     margin: 1.6rem 0;
@@ -287,6 +287,8 @@
     color: var(--mist);
   }
   .rolestate b { color: var(--gas); font-weight: 600; }
+  .evidence-state { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0 0 1rem; }
+  .evidence-state .rmx-badge { font-size: 0.61rem; letter-spacing: 0.08em; padding: 0.25rem 0.55rem; }
 
   /* ---------- Segmented selectors (interfaces / lifecycle / boundaries) ---------- */
   .seg { display: flex; gap: 0; margin: 1.3rem 0 1rem; border: 1px solid var(--steel); border-radius: 11px; overflow: hidden; flex-wrap: wrap; }
@@ -368,7 +370,7 @@
   .scope-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.3rem; }
   @media (max-width: 720px) { .scope-cols { grid-template-columns: 1fr; } }
   .scope-col { border: 1px solid var(--steel); border-radius: 13px; padding: 1.2rem 1.3rem; background: var(--deep); }
-  .scope-col--in { border-color: rgba(59, 130, 246, 0.45); }
+  .scope-col--in { border-color: rgba(50, 126, 130, 0.45); }
   .scope-col--out { border-color: rgba(255, 107, 53, 0.45); }
   .scope-col h3 { display: flex; align-items: center; gap: 0.55rem; font-size: 1.1rem; }
   .scope-col--in h3 { color: var(--gas); }
@@ -423,7 +425,7 @@
     transition: border-color 0.2s, background 0.2s;
     margin-top: 1px;
   }
-  .chk[aria-checked="true"] { border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.05); }
+  .chk[aria-checked="true"] { border-color: rgba(50, 126, 130, 0.5); background: rgba(50, 126, 130, 0.05); }
   .chk[aria-checked="true"] .box { border-color: var(--gas); background: var(--gas); color: var(--abyss); }
   .chk .ctext { flex: 1; }
   .chk .ctext .ctitle { font-weight: 500; }
@@ -459,10 +461,10 @@
   .callout .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--flare); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
   .saythis {
     margin-top: 1.3rem;
-    border: 1px dashed rgba(59, 130, 246, 0.4);
+    border: 1px dashed rgba(50, 126, 130, 0.4);
     border-radius: 10px;
     padding: 1rem 1.2rem;
-    background: rgba(59, 130, 246, 0.04);
+    background: rgba(50, 126, 130, 0.04);
     font-style: italic;
     font-size: 1.02rem;
   }
@@ -498,7 +500,7 @@
   .fimap__node:hover { transform: translateY(-2px); border-color: var(--gas); }
   .fimap__node .code { font-family: var(--mono); font-weight: 600; font-size: 0.9rem; display: block; color: var(--gas); }
   .fimap__node .lbl { font-size: 0.64rem; color: var(--haze); display: block; margin-top: 0.18rem; line-height: 1.3; }
-  .fimap__node[aria-pressed="true"] { border-color: var(--gas); background: rgba(59, 130, 246, 0.09); box-shadow: 0 0 0 1px var(--gas); }
+  .fimap__node[aria-pressed="true"] { border-color: var(--gas); background: rgba(50, 126, 130, 0.09); box-shadow: 0 0 0 1px var(--gas); }
   .fimap__node.is-here { border-color: var(--flare); background: rgba(255, 107, 53, 0.08); }
   .fimap__node.is-here .code { color: var(--flare); }
   .fimap__node.is-here[aria-pressed="true"] { box-shadow: 0 0 0 1px var(--flare); }
@@ -526,11 +528,11 @@
   .imgbranch { border-top: 1px solid var(--steel); }
   .imgbranch:first-of-type { border-top: 0; }
   .imgbranch-head { width: 100%; display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1rem; background: transparent; border: 0; cursor: pointer; font: inherit; text-align: left; color: var(--mist); transition: background 0.2s; }
-  .imgbranch-head:hover { background: rgba(96, 165, 250, 0.06); }
+  .imgbranch-head:hover { background: rgba(97, 184, 173, 0.06); }
   .imgbranch-chev { color: var(--gas); font-family: var(--mono); font-size: 0.78rem; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); flex-shrink: 0; }
   .imgbranch.collapsed .imgbranch-chev { transform: rotate(-90deg); }
   .imgbranch-name { font-weight: 600; font-size: 0.92rem; }
-  .imgbranch-name .k { font-family: var(--mono); font-size: 0.62rem; color: var(--gas); background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.28); border-radius: 5px; padding: 0.05rem 0.4rem; margin-right: 0.5rem; }
+  .imgbranch-name .k { font-family: var(--mono); font-size: 0.62rem; color: var(--gas); background: rgba(97,184,173,0.1); border: 1px solid rgba(97,184,173,0.28); border-radius: 5px; padding: 0.05rem 0.4rem; margin-right: 0.5rem; }
   .imgbranch-count { margin-left: auto; font-family: var(--mono); font-size: 0.64rem; color: var(--haze); }
   .imgbranch-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.35s cubic-bezier(0.16,1,0.3,1); }
   .imgbranch.collapsed .imgbranch-body { grid-template-rows: 0fr; }
@@ -542,7 +544,7 @@
   .imgleaf-name .fold { color: var(--haze); }
   .imgleaf-tc { font-family: var(--mono); font-size: 0.72rem; }
   .imgleaf-phase { font-family: var(--mono); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.14rem 0.45rem; border-radius: 5px; white-space: nowrap; }
-  .ph-explore { color: var(--gas); background: rgba(96, 165, 250, 0.12); border: 1px solid rgba(96, 165, 250, 0.3); }
+  .ph-explore { color: var(--gas); background: rgba(97, 184, 173, 0.12); border: 1px solid rgba(97, 184, 173, 0.3); }
   .ph-realize { color: var(--gold); background: rgba(232, 176, 75, 0.12); border: 1px solid rgba(232, 176, 75, 0.3); }
   .ph-run { color: var(--flare); background: rgba(255, 107, 53, 0.12); border: 1px solid rgba(255, 107, 53, 0.3); }
   .imglegend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin-top: 0.9rem; font-family: var(--mono); font-size: 0.68rem; color: var(--haze); }
@@ -589,7 +591,7 @@
   @media (max-width: 720px) { .calc__grid { grid-template-columns: 1fr; gap: 1.1rem; } }
   .calc label { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gas); margin: 0 0 0.35rem; }
   .calc input[type="number"], .calc select { width: 100%; font: inherit; font-family: var(--mono); background: var(--abyss); color: var(--mist); border: 1px solid var(--steel); border-radius: 9px; padding: 0.6rem 0.7rem; }
-  .calc input[type="number"]:focus, .calc select:focus { outline: none; border-color: var(--gas); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25); }
+  .calc input[type="number"]:focus, .calc select:focus { outline: none; border-color: var(--gas); box-shadow: 0 0 0 2px rgba(50, 126, 130, 0.25); }
   .calc__field { margin-bottom: 1rem; }
   .calc__check { display: flex; align-items: center; gap: 0.55rem; font-family: var(--mono); font-size: 0.84rem; color: var(--mist); cursor: pointer; }
   .calc__check input { width: 18px; height: 18px; accent-color: var(--gas); }
@@ -609,7 +611,7 @@
   .taccount td.amt { text-align: right; color: var(--mist); }
   .taccount td.dr { color: var(--mist); }
   .taccount td.cr { color: var(--haze); padding-left: 1.9rem; }
-  .taccount td.sub { color: var(--haze); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; background: rgba(59, 130, 246, 0.04); }
+  .taccount td.sub { color: var(--haze); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; background: rgba(50, 126, 130, 0.04); }
 
   /* ---------- 10 Programme scale / team / impact ---------- */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin: 1.5rem 0; }
@@ -637,8 +639,8 @@
   /* ---------- Image banner ---------- */
   .banner { position: relative; border-radius: 14px; overflow: hidden; margin: 1.5rem 0; border: 1px solid var(--steel); }
   .banner img { width: 100%; height: 230px; object-fit: cover; display: block; filter: saturate(0.96) brightness(0.9); }
-  .banner .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 1.2rem 0.9rem; background: linear-gradient(transparent, rgba(15, 23, 42, 0.92)); font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; color: var(--mist); }
-  .banner .cap b { color: var(--gas); }
+  .banner .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 1.2rem 0.9rem; background: linear-gradient(transparent, rgba(11, 18, 21, 0.94)); font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; color: #ede7dc; }
+  .banner .cap b { color: #86d0c5; }
   .banner--hero img { height: 300px; filter: saturate(0.95) brightness(0.82); }
   .banner--hero .cap { padding-top: 2rem; font-size: 0.75rem; letter-spacing: 0.04em; }
   @media (max-width: 560px) { .banner img { height: 175px; } .banner--hero img { height: 205px; } }
@@ -647,7 +649,7 @@
   .tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.3rem 0; }
   @media (max-width: 720px) { .tracks { grid-template-columns: 1fr; } }
   .track { border: 1px solid var(--steel); border-radius: 12px; background: var(--deep); padding: 1.1rem 1.2rem; }
-  .track--up { border-color: rgba(59, 130, 246, 0.45); }
+  .track--up { border-color: rgba(50, 126, 130, 0.45); }
   .track--down { border-color: rgba(255, 107, 53, 0.4); }
   .track__h { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.6rem; line-height: 1.4; }
   .track--up .track__h { color: var(--gas); }
@@ -757,33 +759,33 @@
     background: none; border: 1px solid var(--steel); color: var(--mist);
     transition: color 0.2s, border-color 0.2s, background 0.2s;
   }
-  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(59, 130, 246, 0.07); }
+  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(50, 126, 130, 0.07); }
   .theme-btn .icon-moon { display: none; }
   html[data-theme="light"] .theme-btn .icon-sun { display: none; }
   html[data-theme="light"] .theme-btn .icon-moon { display: inline; }
 
   /* ---------- Light (Day) theme ---------- */
   html[data-theme="light"] {
-    --abyss: #f5f8fc;
-    --deep: #FFFFFF;
-    --steel: #e2e8f0;
-    --gas: #2563eb;
-    --flare: #C9501E;
-    --gold: #95680F;
-    --mist: #0f172a;
-    --haze: #586379;
-    --royalty: #8a6f1d;
-    --srb: #b1591b;
+    --abyss: #f7f4ee;
+    --deep: #fffcf7;
+    --steel: #ded6c8;
+    --gas: #0b5960;
+    --flare: #a34838;
+    --gold: #94601e;
+    --mist: #172126;
+    --haze: #526166;
+    --royalty: #87551b;
+    --srb: #9b572f;
   }
   html[data-theme="light"] body {
     background-image:
-      radial-gradient(900px 600px at 85% -10%, rgba(37, 99, 235, 0.10), transparent 60%),
-      radial-gradient(700px 500px at 0% 30%, rgba(201, 80, 30, 0.07), transparent 60%);
+      radial-gradient(900px 600px at 85% -10%, rgba(11, 89, 96, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(148, 96, 30, 0.07), transparent 60%);
   }
   html[data-theme="light"] .sitebar { background: rgba(255, 255, 255, 0.86); }
   html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.22); }
-  html[data-theme="light"] .tcode { background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.30); }
-  html[data-theme="light"] .theme-btn:hover { background: rgba(37, 99, 235, 0.08); }
+  html[data-theme="light"] .tcode { background: rgba(11, 89, 96, 0.08); border-color: rgba(11, 89, 96, 0.30); }
+  html[data-theme="light"] .theme-btn:hover { background: rgba(11, 89, 96, 0.08); }
 
   /* ============================================================
      v2 — ADVANCED MOTION (page-scoped)
@@ -825,14 +827,14 @@
     padding: 1.2rem 1.3rem;
     transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
   }
-  .s4card:hover { border-color: var(--gas); transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(96,165,250,0.45); }
+  .s4card:hover { border-color: var(--gas); transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(97,184,173,0.45); }
   .s4head { display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.7rem; margin-bottom: 0.55rem; }
   .s4old { color: var(--haze); text-decoration: line-through; text-decoration-color: var(--steel); }
   .s4arrow { color: var(--gas); animation: s4flow 2.2s cubic-bezier(0.16,1,0.3,1) infinite; }
   @keyframes s4flow { 0%,100% { transform: translateX(0); opacity: 0.7; } 50% { transform: translateX(3px); opacity: 1; } }
   .s4new {
     color: var(--gas); font-weight: 700; letter-spacing: 0.04em;
-    padding: 0.1em 0.5em; border: 1px solid rgba(96,165,250,0.4); border-radius: 5px;
+    padding: 0.1em 0.5em; border: 1px solid rgba(97,184,173,0.4); border-radius: 5px;
   }
   .s4card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
   .s4was { font-size: 0.86rem; color: var(--haze); margin: 0 0 0.45rem; line-height: 1.5; }
@@ -857,7 +859,7 @@
   .rmx-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.6rem; }
   .rmx-name { font-size: 0.92rem; color: var(--mist); font-weight: 500; line-height: 1.25; }
   .rmx-badge { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; padding: 0.14rem 0.42rem; border-radius: 5px; white-space: nowrap; flex-shrink: 0; }
-  .rmx-badge.delivered { color: var(--gas); background: rgba(96,165,250,0.13); border: 1px solid rgba(96,165,250,0.32); }
+  .rmx-badge.delivered { color: var(--gas); background: rgba(97,184,173,0.13); border: 1px solid rgba(97,184,173,0.32); }
   .rmx-badge.concept { color: var(--gold); background: rgba(232,176,75,0.12); border: 1px solid rgba(232,176,75,0.32); }
   .rmx-meter { display: flex; gap: 4px; }
   .rmx-dot { flex: 1; height: 5px; border-radius: 3px; background: var(--steel); transition: background 0.3s; }
@@ -885,11 +887,11 @@
     border-radius: 9px; padding: 0.6rem 0.9rem; transition: border-color 0.2s, background 0.2s, color 0.2s, opacity 0.2s;
   }
   .hcp-opt:hover { border-color: var(--gas); }
-  .hcp-opt.correct { border-color: var(--gas); background: rgba(96,165,250,0.13); color: var(--gas); font-weight: 600; }
+  .hcp-opt.correct { border-color: var(--gas); background: rgba(97,184,173,0.13); color: var(--gas); font-weight: 600; }
   .hcp-opt.dim { opacity: 0.55; }
   .hcp-verdict { border-radius: 10px; padding: 0.9rem 1.05rem; font-size: 0.9rem; line-height: 1.55; color: var(--mist); }
   .hcp-verdict .vlabel { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; font-weight: 700; }
-  .hcp-verdict.ok { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.3); }
+  .hcp-verdict.ok { background: rgba(97,184,173,0.08); border: 1px solid rgba(97,184,173,0.3); }
   .hcp-verdict.ok .vlabel { color: var(--gas); }
   .hcp-verdict.meh { background: rgba(232,176,75,0.07); border: 1px solid rgba(232,176,75,0.28); }
   .hcp-verdict.meh .vlabel { color: var(--gold); }
@@ -897,7 +899,7 @@
   @keyframes hcpReveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   .hcp-res ol { margin: 0.4rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
   .hcp-res li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; align-items: start; font-size: 0.9rem; color: var(--mist); line-height: 1.5; }
-  .hcp-res .rstep { font-family: var(--mono); font-size: 0.62rem; font-weight: 700; color: var(--gas); background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); border-radius: 5px; padding: 0.15rem 0.4rem; white-space: nowrap; margin-top: 0.1rem; }
+  .hcp-res .rstep { font-family: var(--mono); font-size: 0.62rem; font-weight: 700; color: var(--gas); background: rgba(97,184,173,0.12); border: 1px solid rgba(97,184,173,0.3); border-radius: 5px; padding: 0.15rem 0.4rem; white-space: nowrap; margin-top: 0.1rem; }
   .hcp-res .rt { font-family: var(--mono); font-size: 0.72rem; color: var(--gold); font-weight: 600; }
   .hcp-res-title { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gas); margin-bottom: 0.2rem; }
 
@@ -916,10 +918,10 @@
     .hcp-res { animation: none; }
   }
 </style>
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0b1215">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"FI Tax Consultant — Scope of Work · SAP FI · GL · Tax","headline":"FI Tax Consultant — Scope of Work · SAP FI · GL · Tax","description":"The scope of an SAP FI tax consultant on an S/4HANA programme for a national energy company: what I own, the SAP Activate lifecycle, in/out-of-scope boundaries, deliverables, and where my depth comes from.","url":"https://chatreekengpipat.github.io/fi-tax-consultant-scope.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"FI Tax Consultant — Scope of Work · SAP FI · GL · Tax","headline":"FI Tax Consultant — Scope of Work · SAP FI · GL · Tax","description":"A public-safe view of the SAP FI tax consultant role on an energy-sector S/4HANA programme: current-role scope, SAP Activate lifecycle, boundaries, deliverables, and evidence.","url":"https://chatreekengpipat.github.io/fi-tax-consultant-scope.html","image":"https://chatreekengpipat.github.io/photos/og-card.png","author":{"@type":"Person","name":"Chatree Kengpipat","alternateName":"Cee","url":"https://chatreekengpipat.github.io/","jobTitle":"SAP Functional Consultant (FI/CO)"},"inLanguage":"en"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chatreekengpipat.github.io/"},{"@type":"ListItem","position":2,"name":"FI Tax Consultant — Scope of Work · SAP FI · GL · Tax","item":"https://chatreekengpipat.github.io/fi-tax-consultant-scope.html"}]}</script>
 </head>
 <body>
@@ -927,7 +929,7 @@
 
 <!-- SITE NAV BAR — links to every page, mirrors the main site nav -->
 <header class="sitebar">
-  <a class="sitebar__logo" href="index.html"><span class="mark" aria-hidden="true"></span>Chatree Kengpipat (Cee)</a>
+  <a class="sitebar__logo" href="index.html"><span class="mark" aria-hidden="true"></span>CK · SAP FI/CO</a>
   <button type="button" class="sitebar__burger" id="siteBurger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
     <span></span><span></span><span></span>
   </button>
@@ -943,7 +945,7 @@
           <a href="project4.html">STEM Portfolio Financial Tracking</a>
         </div>
         <div class="dd-group">
-          <div class="dd-head">Business Architecture · Accenture</div>
+          <div class="dd-head">Business Architecture · Consulting Practice</div>
           <a href="business-architecture.html">Business Architecture Hub</a>
           <a href="capability-map.html">Capability Map</a>
           <a href="value-streams.html">Value Streams</a>
@@ -971,7 +973,7 @@
           <a href="metrics.html">Metrics, Audited</a>
         </div>
         <div class="dd-group">
-          <div class="dd-head">SAP FI · General Ledger &amp; Tax · Accenture</div>
+          <div class="dd-head">SAP FI · General Ledger &amp; Tax · Consulting Practice</div>
           <a href="finance-functional-module.html">Functional Module of Finance — SAP FI</a>
           <a href="fi-document-simulator.html">FI Document Simulator — tables &amp; columns</a>
           <a href="fi-tax-consultant-scope.html" class="is-current" aria-current="page">FI Tax Consultant — Scope of Work</a>
@@ -1009,7 +1011,7 @@
   <div class="rail__title">FI Tax Consultant<br><b>Scope of Work</b></div>
   <ol>
     <li><a class="rail__link" href="#hero" data-spy><span class="num">00</span><span class="name">The role, in one line</span></a></li>
-    <li><a class="rail__link" href="#own" data-spy><span class="num">01</span><span class="name">What I own</span></a></li>
+    <li><a class="rail__link" href="#own" data-spy><span class="num">01</span><span class="name">Current-role scope</span></a></li>
     <li><a class="rail__link" href="#lifecycle" data-spy><span class="num">02</span><span class="name">Across the lifecycle</span></a></li>
     <li><a class="rail__link" href="#boundaries" data-spy><span class="num">03</span><span class="name">In / out of scope</span></a></li>
     <li><a class="rail__link" href="#deliverables" data-spy><span class="num">04</span><span class="name">Deliverables</span></a></li>
@@ -1034,18 +1036,23 @@
   <section class="chapter" id="hero">
     <div class="banner banner--hero">
       <img src="media/platform-hero.jpg" alt="Offshore oil and gas production platform standing in open sea" loading="eager" width="1600" height="1200">
-      <div class="cap"><b>Accenture</b> · national energy company · SAP S/4HANA — the Financial Accounting (tax) seat</div>
+      <div class="cap"><b>Global systems integrator</b> · energy sector · SAP S/4HANA — Financial Accounting (tax)</div>
     </div>
     <div class="eyebrow"><span class="dot"></span>00 · The mandate</div>
-    <h2>I own the <span style="color:var(--gas)">tax engine</span> inside SAP Financial Accounting.</h2>
+    <h2>My current seat is the <span style="color:var(--gas)">tax-control layer</span> inside SAP Financial Accounting.</h2>
+
+    <div class="evidence-state" aria-label="Evidence classification">
+      <span class="rmx-badge delivered">Current role</span>
+      <span class="rmx-badge concept">Public-safe summary</span>
+    </div>
 
     <div class="rolestate">
-      On an Accenture S/4HANA programme for a <b>national energy company</b>, I own the <b>tax determination and
-      reporting layer</b> of Financial Accounting — principally <b>VAT (Tax on Sales/Purchases)</b>
+      In my current role on an <b>energy-sector S/4HANA programme</b> delivered by a global systems integrator,
+      I contribute to the <b>tax determination and reporting scope</b> of Financial Accounting — principally <b>VAT (Tax on Sales/Purchases)</b>
       and <b>Extended Withholding Tax</b>, with the account determination and statutory reporting
       that sit beneath every posting. My job is to turn an agreed tax design into configuration that
-      stands up to a national energy company's compliance bar. I don't write the tax law — I make
-      SAP apply it correctly, on every document, every period.
+      stands up to energy-sector compliance requirements. I don't interpret the tax law; I translate
+      the approved requirement into testable SAP behaviour, controls and evidence.
     </div>
 
     <p class="lede">A tax consultant is only as strong as the hand-offs around them. On this programme
@@ -1065,10 +1072,14 @@
 
   <!-- 01 WHAT YOU OWN -->
   <section class="chapter" id="own">
-    <div class="eyebrow"><span class="dot"></span>01 · What I own</div>
-    <h2>The seven pillars I carry.</h2>
-    <p class="lede">This is where the hours actually go — the working surface of an FI tax consultant.
-      Open any pillar for the concrete activities and the transactions behind them.</p>
+    <div class="eyebrow"><span class="dot"></span>01 · Current-role scope</div>
+    <h2>The seven pillars of the role.</h2>
+    <div class="evidence-state" aria-label="Evidence classification">
+      <span class="rmx-badge delivered">Current role</span>
+      <span class="rmx-badge concept">Public-safe scope model</span>
+    </div>
+    <p class="lede">This is the working surface of an FI tax consultant in the current programme context.
+      Open any pillar for the public-safe activities and standard SAP transactions behind it.</p>
 
     <div class="pillars" id="pillars">
       <div class="pillar">
@@ -1335,7 +1346,7 @@
     <h2>Where my work lives inside SAP Financial Accounting.</h2>
     <p class="lede">When people ask which part of SAP FI I work on, this is the one-slide answer.
       Financial Accounting spans several sub-ledgers; tax is a layer that runs across them, anchored in
-      <b>Tax &amp; Special Products</b>. Select any node to see how it connects back to the tax engine I own.</p>
+      <b>Tax &amp; Special Products</b>. Select any node to see how it connects back to the tax-control scope I support.</p>
 
     <div class="fimap">
       <div class="fimap__root">
@@ -1494,45 +1505,45 @@
   <!-- 07 PROJECT TIMELINE -->
   <section class="chapter" id="timeline">
     <div class="eyebrow"><span class="dot"></span>07 · Road to Go-Live</div>
-    <h2>I joined at Realize. The lock is Go-Live, January 2027.</h2>
-    <p class="lede">I came onto the programme mid-stream — the design settled, the build under way. From
-      here everything bends toward one fixed date: <b>Go-Live in January 2027</b>, with a hypercare tail
-      behind it. Here is the programme month by month, and where I picked it up.</p>
+    <h2>I joined during Realize. The path runs through proof, cutover and hypercare.</h2>
+    <p class="lede">I entered the programme mid-stream, after the core design decisions and while the build
+      was being hardened. This public view shows the relative SAP Activate sequence and my current-role
+      entry point; client milestones and calendar dates are intentionally omitted.</p>
 
     <div class="gantt-meta">
-      <span class="big">Go-Live · Jan 2027</span>
-      <span class="caption">I enter at Realize (Jul 2026) — roughly six months of runway to cutover.</span>
+      <span class="big">Phase-based delivery path</span>
+      <span class="caption">Relative months only · exact programme dates omitted</span>
     </div>
 
     <div class="gantt-scroll">
       <div class="gantt" style="--cols:14">
         <div class="g-row"><div class="g-label"></div><div class="g-track head">
-          <div class="g-mon yr">Jan'26</div><div class="g-mon">Feb</div><div class="g-mon">Mar</div><div class="g-mon">Apr</div><div class="g-mon">May</div><div class="g-mon">Jun</div><div class="g-mon">Jul</div><div class="g-mon">Aug</div><div class="g-mon">Sep</div><div class="g-mon">Oct</div><div class="g-mon">Nov</div><div class="g-mon">Dec</div><div class="g-mon yr">Jan'27</div><div class="g-mon">Feb</div>
+          <div class="g-mon yr">M−12</div><div class="g-mon">M−11</div><div class="g-mon">M−10</div><div class="g-mon">M−9</div><div class="g-mon">M−8</div><div class="g-mon">M−7</div><div class="g-mon">M−6</div><div class="g-mon">M−5</div><div class="g-mon">M−4</div><div class="g-mon">M−3</div><div class="g-mon">M−2</div><div class="g-mon">M−1</div><div class="g-mon yr">M0</div><div class="g-mon">M+1</div>
         </div></div>
-        <div class="g-row"><div class="g-label">Explore / Blueprint</div><div class="g-track"><span class="g-bar done" style="--s:1;--l:6" title="Explore / Blueprint — 6 mo (before me)">6 mo</span></div></div>
-        <div class="g-row"><div class="g-label">Realize — build &amp; unit test</div><div class="g-track"><span class="g-bar now" style="--s:7;--l:3" title="Realize — build &amp; unit test (I join here)">I join &middot; 3 mo</span></div></div>
+        <div class="g-row"><div class="g-label">Explore / Blueprint</div><div class="g-track"><span class="g-bar done" style="--s:1;--l:6" title="Explore / Blueprint — before my current-role entry">Design</span></div></div>
+        <div class="g-row"><div class="g-label">Realize — build &amp; unit test</div><div class="g-track"><span class="g-bar now" style="--s:7;--l:3" title="Realize — my current-role entry point">I join &middot; Build</span></div></div>
         <div class="g-row"><div class="g-label">Integration test (SIT)</div><div class="g-track"><span class="g-bar plan" style="--s:10;--l:1" title="Integration test (SIT)">SIT</span></div></div>
         <div class="g-row"><div class="g-label">User acceptance (UAT)</div><div class="g-track"><span class="g-bar plan" style="--s:11;--l:1" title="User acceptance test">UAT</span></div></div>
         <div class="g-row"><div class="g-label">Cutover / final prep</div><div class="g-track"><span class="g-bar plan" style="--s:12;--l:1" title="Cutover / final preparation">CUT</span></div></div>
-        <div class="g-row"><div class="g-label">Go-Live</div><div class="g-track"><span class="g-bar live" style="--s:13;--l:1" title="Go-Live · Jan 2027">LIVE</span></div></div>
-        <div class="g-row"><div class="g-label">Hypercare</div><div class="g-track"><span class="g-bar plan" style="--s:13;--l:2" title="Hypercare — 2 mo">2 mo</span></div></div>
+        <div class="g-row"><div class="g-label">Go-Live</div><div class="g-track"><span class="g-bar live" style="--s:13;--l:1" title="Go-Live milestone">LIVE</span></div></div>
+        <div class="g-row"><div class="g-label">Hypercare</div><div class="g-track"><span class="g-bar plan" style="--s:13;--l:2" title="Hypercare and stabilization">Stabilize</span></div></div>
       </div>
     </div>
     <div class="g-legend">
       <span><i style="background:var(--gas)"></i>Delivered (before me)</span>
-      <span><i style="background:var(--flare)"></i>In progress &middot; I am here</span>
+      <span><i style="background:var(--flare)"></i>Current-role entry point</span>
       <span><i style="border:1px dashed var(--haze)"></i>Planned</span>
       <span><i style="background:var(--gold)"></i>Go-Live</span>
     </div>
 
     <div class="g-focus">
       <div class="g-foc"><span class="ph">Explore</span><span>The tax design and Thai localization were settled before me — I inherit and respect it, not redesign it.</span></div>
-      <div class="g-foc now"><span class="ph">Realize · now</span><span>I'm reading the configured tax codes, OB40 determination and Extended WHT, and unit-testing VAT and WHT behaviour.</span></div>
+      <div class="g-foc now"><span class="ph">Realize · current role</span><span>Read the configured tax codes, OB40 determination and Extended WHT, then unit-test VAT and WHT behaviour against the approved design.</span></div>
       <div class="g-foc"><span class="ph">SIT → UAT</span><span>End-to-end P2P / O2C carrying tax, period-end VAT and WHT runs, then business sign-off.</span></div>
       <div class="g-foc"><span class="ph">Cutover</span><span>Migrate open items with tax, opening balances and WHT carry-forward; move transports; dry-run.</span></div>
       <div class="g-foc"><span class="ph">Go-Live → Hypercare</span><span>Validate the first live tax postings, then carry the first month-end PP30 and PND filing before handover.</span></div>
     </div>
-    <p class="note">Dates are an illustrative plan — the live schedule is governed by the programme.</p>
+    <p class="note"><b>PUBLIC-SAFE SUMMARY</b> · Relative sequence only. Exact dates, milestones and the client delivery schedule are intentionally omitted.</p>
   </section>
 
   <!-- 08 PETROLEUM TAX ENGINE -->
@@ -1793,8 +1804,8 @@
   <section class="chapter" id="legal">
     <div class="eyebrow"><span class="dot"></span>09 · Legal watch-list</div>
     <h2>The Thai tax law I design against.</h2>
-    <p class="lede">The statutes and rules that become configuration decisions and test cases on a
-      petroleum client. Open each for what it governs and the SAP implication I watch for.</p>
+    <p class="lede">The statutes and rules that can become configuration decisions and test cases for an
+      upstream energy operator. Open each for what it governs and the SAP implication a consultant validates.</p>
 
     <div class="pillars" id="legallist">
       <div class="pillar">
@@ -1947,10 +1958,15 @@
   <!-- 11 PROGRAMME -->
   <section class="chapter" id="programme">
     <div class="eyebrow"><span class="dot"></span>11 · The programme &amp; the impact</div>
-    <h2>A national-scale S/4HANA transformation — and the slice I own inside it.</h2>
-    <p class="lede">This isn't a one-consultant build. The client's move to S/4HANA is a large, multi-year
-      transformation that Accenture runs with a blended <b>Thailand–India</b> team across a dozen
-      workstreams. Here's the rough shape of it, where I sit, and the value it's built to unlock.</p>
+    <h2>A complex energy-sector S/4HANA transformation — and the FI tax scope within it.</h2>
+    <div class="evidence-state" aria-label="Evidence classification">
+      <span class="rmx-badge delivered">Current role</span>
+      <span class="rmx-badge concept">Public-safe summary</span>
+    </div>
+    <p class="lede">This is not a one-consultant build. On an energy-sector S/4HANA programme delivered by
+      a global systems integrator, FI tax sits inside a cross-functional model spanning business,
+      functional, engineering, data, testing and change teams. This view shows the interfaces and
+      intended controls without disclosing client identity, staffing, locations or programme dates.</p>
 
     <div class="banner">
       <img src="media/upstream.jpg" alt="Offshore oil and gas platform — upstream exploration and production" loading="lazy" width="1100" height="730">
@@ -1958,35 +1974,35 @@
     </div>
 
     <div class="stats">
-      <div class="stat"><div class="v">~200<small>+</small></div><div class="l">people on the programme at peak (estimated)</div></div>
-      <div class="stat"><div class="v">12<small>+</small></div><div class="l">functional &amp; technical workstreams</div></div>
-      <div class="stat"><div class="v">2</div><div class="l">delivery shores — Thailand onshore + India offshore</div></div>
-      <div class="stat"><div class="v">1</div><div class="l">tax sub-stream inside FI/CO — the part I own</div></div>
+      <div class="stat"><div class="v">E2E</div><div class="l">cross-functional S/4HANA delivery</div></div>
+      <div class="stat"><div class="v">FI/CO</div><div class="l">the host workstream for the role</div></div>
+      <div class="stat"><div class="v">TAX</div><div class="l">functional specialization and control scope</div></div>
+      <div class="stat"><div class="v">TRACE</div><div class="l">requirement → posting → evidence</div></div>
     </div>
 
     <h3 style="margin-top:1.8rem">How the team is shaped</h3>
     <div class="team">
       <div class="card onshore">
-        <h3>Onshore — Thailand <span class="flag">client-facing</span></h3>
+        <h3>Business-facing functional layer <span class="flag">client interface</span></h3>
         <ul>
-          <li>Functional consultants across FI/CO, MM, SD, PM &amp; PS — close to the business</li>
-          <li>Thai-speaking leads for tax localization, statutory reporting &amp; UAT with client users</li>
-          <li>Business analysts, PMO &amp; organisational change management</li>
+          <li>Functional consultants across FI/CO and the integrated process streams</li>
+          <li>Tax SMEs and localization leads for statutory requirements and UAT</li>
+          <li>Business analysis, programme governance and organisational change</li>
         </ul>
       </div>
       <div class="card offshore">
-        <h3>Offshore — India <span class="flag">delivery centre</span></h3>
+        <h3>Engineering &amp; platform layer <span class="flag">build and operate</span></h3>
         <ul>
-          <li>ABAP development &amp; form/output build (WHT certificate, PND, VAT layouts)</li>
-          <li>Basis / Security / GRC, data migration &amp; integration</li>
-          <li>A testing factory and AMS / hypercare support at scale</li>
+          <li>ABAP development and form/output build against approved functional specifications</li>
+          <li>Basis, Security/GRC, data migration and integration specialists</li>
+          <li>Independent test, release, hypercare and application-support capabilities</li>
         </ul>
       </div>
     </div>
     <div class="myseat">
-      <b>My seat —</b> inside the <b>FI/CO</b> workstream I own the <b>tax sub-stream</b>: VAT, Extended WHT
-      and the petroleum-levy GL touchpoints. I work between the Thai client &amp; Tax SME and the India build
-      and test teams — one named owner for tax, inside a programme of hundreds.
+      <b>My current seat —</b> within the <b>FI/CO</b> workstream, I contribute to the <b>tax scope</b>:
+      VAT, Extended WHT and petroleum-levy GL touchpoints. The role connects the approved tax requirement
+      to functional design, build clarification, test evidence and handover across the delivery team.
     </div>
 
     <h3 style="margin-top:1.9rem">The impact it's built to unlock <span style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--haze);border:1px solid var(--steel);border-radius:5px;padding:0.14em 0.45em;vertical-align:middle">projected</span></h3>
@@ -2001,8 +2017,8 @@
       correct VAT and WHT, and every month's PP30 and PND filing comes straight out of SAP: on time, traceable
       and defensible in an audit. That compliance risk is what I'm here to retire.
     </div>
-    <p class="note">Team size, shore split and impact figures are an informed estimate for a programme of this
-      type — illustrative only, not official programme numbers.</p>
+    <p class="note"><b>PUBLIC-SAFE SUMMARY</b> · No client identity, staffing level, delivery-location split or
+      programme schedule is disclosed. Outcomes above are intended design objectives, not official client forecasts.</p>
   </section>
 
   <!-- 12 READINESS & HYPERCARE -->
@@ -2242,9 +2258,10 @@
 
 <footer>
   <div class="foot-inner">
-    A personal methodology &amp; positioning page defining the scope of an SAP FI consultant specializing in
-    tax, written for a national-energy-company S/4HANA programme. Independent study material — not affiliated with, endorsed by, or containing confidential material from Accenture, SAP,
-      or any client. Lifecycle uses the SAP Activate phase model; figures and T-codes are for reference only.
+    A public-safe methodology &amp; positioning page defining the current-role scope of an SAP FI consultant
+    specializing in tax on an energy-sector S/4HANA programme delivered by a global systems integrator.
+    Independent study material — not affiliated with, endorsed by, or containing confidential material from
+    SAP, an employer, or any client. Lifecycle uses the SAP Activate phase model; figures and T-codes are for reference only.
     <div class="sources">Companion: <a href="finance-functional-module.html">SAP FI · GL · Tax essentials</a>.
       Sources: SAP Activate methodology · Thai Revenue Department (rd.go.th) · PwC Thailand Tax Summaries.</div>
     <div class="sources">Images via Wikimedia Commons — open-sea platform © Gary Bembridge (CC BY 2.0) · offshore platform © W. Bulach (CC BY-SA 4.0).</div>
@@ -2689,7 +2706,7 @@
   updProg();
 })();
 </script>
-<script src="search.js?v=9" defer></script>
-<script src="fx-flow.js?v=2" defer></script>
+<script src="search.js?v=10" defer></script>
+<script src="fx-flow.js?v=3" defer></script>
 </body>
 </html>

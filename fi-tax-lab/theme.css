@@ -1,5 +1,5 @@
 /* ============================================================
-   theme.css · SAP FI Tax Lab — shared dark palette + Lab UI
+   theme.css · SAP FI Tax Lab — Private Ledger palette + Lab UI
    โหลดหลัง <style> ของแต่ละหน้า · ทุกหน้า import ไฟล์เดียวกันนี้
    - Dark mode: override CSS variables ผ่าน :root[data-theme="dark"]
    - Component ที่ใช้ร่วมทุกหน้า: toggle, reveal, copy, reset, sticky-head
@@ -7,10 +7,11 @@
    ============================================================ */
 
 /* ---- Light default for the surface variable (การ์ด/กล่องพื้นขาว) ---- */
-:root{ --card:#fff; }
+:root{ --card:#FFFCF7; }
 /* ---- T43 shell tokens · rgb triplets for translucent tints (safe in every browser) ---- */
 :root{
-  --paper-rgb:250,248,243; --petrol-rgb:15,110,100; --brass-rgb:181,121,42; --ink-rgb:26,42,46;
+  --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38;
+  --brass-metal:#C89A55; --warn-rgb:163,72,56;
   --kb-h:52px; --kit-top:0px; --rail-w:228px; --rail-gap:44px;
   --ease-out:cubic-bezier(.2,.7,.2,1);
   color-scheme:light; accent-color:var(--petrol);
@@ -26,25 +27,26 @@ html.kit-shell{ --kit-top:var(--kb-h); }
 .wrap:focus{ outline:none; }
 
 /* ============================================================
-   DARK PALETTE  ·  contrast ทุกคู่ข้อความ ≥ 4.5:1 กับ --paper #0F172A
+   DARK PALETTE  ·  obsidian / petrol / champagne
    ============================================================ */
 :root[data-theme="dark"]{
-  --paper:#0F172A;      /* พื้นหลังหลัก (เขียวน้ำมันเข้ม ไม่ดำสนิท) */
-  --ink:#E8E4D8;        /* ตัวอักษรหลัก      · 12.7:1 */
-  --ink-soft:#A8B2AE;   /* ตัวอักษรรอง       · 7.4:1  */
-  --petrol:#3FA396;     /* accent/link       · 5.3:1  */
-  --petrol-deep:#6FBEB1;/* heading/label     · 7.4:1  */
-  --brass:#F59E0B;      /* brass accent      · 7.1:1  */
-  --line:#2A3835;       /* เส้นขอบ */
-  --line-soft:#223029;  /* เส้นขอบจาง */
-  --chip:#0D1514;       /* พื้น code chip */
-  --chip-text:#EDE7DB;  /* ตัวอักษรใน chip */
-  --card:#1C2A27;       /* พื้นการ์ด (ยกตัวจาก paper เล็กน้อย) · ink 11.7:1 */
-  --warn:#E0915F;       /* trap/fix          · 6.5:1  */
-  --good:#3FA396;       /* done              · 5.3:1  */
-  --dr:#5FB5A8;         /* debit             · 6.7:1  */
-  --cr:#D99A6A;         /* credit            · 6.8:1  */
-  --paper-rgb:22,33,31; --petrol-rgb:63,163,150; --brass-rgb:217,161,92; --ink-rgb:232,228,216;
+  --paper:#0B1215;      /* obsidian page */
+  --ink:#EDE7DC;        /* warm ledger ink */
+  --ink-soft:#AAB7B6;   /* secondary copy */
+  --petrol:#61B8AD;     /* accent/link */
+  --petrol-deep:#86D0C5;/* heading/label */
+  --brass:#D6A65F;      /* champagne accent */
+  --brass-metal:#D6A65F;
+  --line:#26383C;
+  --line-soft:#172428;
+  --chip:#071013;
+  --chip-text:#EDE7DC;
+  --card:#111C1F;
+  --warn:#E38A78;
+  --good:#67B7A2;
+  --dr:#86D0C5;
+  --cr:#D6A65F;
+  --paper-rgb:11,18,21; --petrol-rgb:97,184,173; --brass-rgb:214,166,95; --ink-rgb:237,231,220; --warn-rgb:227,138,120;
   color-scheme:dark;
 }
 
@@ -81,7 +83,7 @@ html.kit-shell{ --kit-top:var(--kb-h); }
 }
 .has-js .card:hover, .has-js .week:hover, .has-js .tl:hover, .has-js .org .grp:hover{
   transform:translateY(-2px); border-color:var(--petrol);
-  box-shadow:0 6px 16px rgba(37,99,235,.10);
+  box-shadow:0 6px 16px rgba(var(--petrol-rgb),.10);
 }
 
 /* ============================================================
@@ -116,7 +118,7 @@ nav.toc a.toc-active span{ color:var(--brass); }
   display:inline-flex; align-items:center; min-height:38px;
 }
 /* checklist rows: whole row is a tap target (wired by theme.js) */
-.qitem-tap{ cursor:pointer; -webkit-tap-highlight-color:rgba(37,99,235,.10); }
+.qitem-tap{ cursor:pointer; -webkit-tap-highlight-color:rgba(var(--petrol-rgb),.10); }
 .chk-reset:hover{ border-color:var(--brass); color:var(--brass); }
 .chk-reset:focus-visible{ outline:2px solid var(--brass); outline-offset:1px; }
 
@@ -213,8 +215,8 @@ table.sticky-head thead th{
 .kit-tc .tc-id{ font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#fff; background:var(--_c,var(--petrol)); padding:2px 8px; border-radius:5px; }
 .kit-tc .tc-cat{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--_c,var(--petrol)); border:1px solid var(--line); border-radius:5px; padding:1px 6px; font-weight:600; }
 .kit-tc .tc-src{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.04em; text-transform:uppercase; font-weight:600; border-radius:5px; padding:1px 6px; margin-left:auto; }
-.kit-tc .tc-src.fsd{ color:var(--petrol-deep); background:rgba(37,99,235,.10); }
-.kit-tc .tc-src.prop{ color:var(--warn,#B91C1C); background:rgba(185,28,28,.08); border:1px dashed var(--warn,#B91C1C); }
+.kit-tc .tc-src.fsd{ color:var(--petrol-deep); background:rgba(var(--petrol-rgb),.10); }
+.kit-tc .tc-src.prop{ color:var(--warn,#B91C1C); background:rgba(var(--warn-rgb),.08); border:1px dashed var(--warn,#B91C1C); }
 .kit-tc .gwt{ display:grid; grid-template-columns:60px 1fr; gap:5px 10px; font-size:13px; }
 .kit-tc .gwt .l{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; padding-top:3px; }
 .kit-tc .gwt .v{ line-height:1.5; }
@@ -565,16 +567,17 @@ code.kterm{ cursor:help; text-decoration:underline dotted rgba(var(--brass-rgb),
    ============================================================ */
 @media print{
   :root[data-theme="dark"]{
-    --paper:#F8FAFC; --ink:#1A2A2E; --ink-soft:#4A5A5C;
-    --petrol:#2563EB; --petrol-deep:#1D4ED8; --brass:#B45309;
-    --line:#E4DDCF; --line-soft:#EFEAE0; --chip:#16242A; --chip-text:#F3EEE2;
-    --card:#fff; --warn:#B91C1C; --good:#2563EB; --dr:#1D4ED8; --cr:#B45309;
+    --paper:#F7F4EE; --ink:#172126; --ink-soft:#526166;
+    --petrol:#0B5960; --petrol-deep:#083F45; --brass:#94601E; --brass-metal:#C89A55;
+    --line:#DED6C8; --line-soft:#F0EBE2; --chip:#0B1215; --chip-text:#EDE7DC;
+    --card:#FFFCF7; --warn:#A34838; --good:#247464; --dr:#083F45; --cr:#94601E;
+    --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38; --warn-rgb:163,72,56;
   }
   /* คืนค่ากล่องที่ override ไว้เฉพาะ dark ให้กลับเป็นแบบ light ตอนพิมพ์ */
   :root[data-theme="dark"] .org .parent{ background:var(--ink); color:var(--paper); }
-  :root[data-theme="dark"] .org .parent span{ color:#C9D4D2; }
-  :root[data-theme="dark"] .tag.fit{ color:var(--petrol-deep); background:rgba(37,99,235,.15); }
-  :root[data-theme="dark"] .tag.gap{ color:#8a5a16; background:rgba(180,83,9,.18); }
+  :root[data-theme="dark"] .org .parent span{ color:var(--ink-soft); }
+  :root[data-theme="dark"] .tag.fit{ color:var(--petrol-deep); background:rgba(var(--petrol-rgb),.15); }
+  :root[data-theme="dark"] .tag.gap{ color:var(--brass); background:rgba(var(--brass-rgb),.18); }
   /* ซ่อน UI เชิงโต้ตอบ */
   .theme-toggle, .copy-btn, .chk-actions,
   .kit-search, .kit-results, .kit-searchbox{ display:none !important; }
@@ -600,23 +603,23 @@ code.kterm{ cursor:help; text-decoration:underline dotted rgba(var(--brass-rgb),
 
 
 /* ============================================================
-   PUBLIC EDITION · portfolio design tokens (chatreekengpipat.github.io)
-   Inter + JetBrains Mono · Implementation Blue · slate neutrals.
+   PUBLIC EDITION · Private Ledger design tokens
+   Inter + JetBrains Mono · parchment / petrol / champagne.
    Every text pair ≥ 4.5:1 (checked) in both themes.
    ============================================================ */
 :root:not([data-theme="dark"]){
-  --paper:#F8FAFC; --card:#FFFFFF; --ink:#0F172A; --ink-soft:#586379;
-  --petrol:#2563EB; --petrol-deep:#1D4ED8; --brass:#B45309;
-  --line:#E2E8F0; --line-soft:#F1F5F9; --chip:#0F172A; --chip-text:#E2E8F0;
-  --warn:#B91C1C; --good:#047857; --dr:#1D4ED8; --cr:#B45309;
-  --paper-rgb:248,250,252; --petrol-rgb:37,99,235; --brass-rgb:180,83,9; --ink-rgb:15,23,42;
+  --paper:#F7F4EE; --card:#FFFCF7; --ink:#172126; --ink-soft:#526166;
+  --petrol:#0B5960; --petrol-deep:#083F45; --brass:#94601E; --brass-metal:#C89A55;
+  --line:#DED6C8; --line-soft:#F0EBE2; --chip:#0B1215; --chip-text:#EDE7DC;
+  --warn:#A34838; --good:#247464; --dr:#083F45; --cr:#94601E;
+  --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38; --warn-rgb:163,72,56;
 }
 :root[data-theme="dark"]{
-  --paper:#0F172A; --card:#1E293B; --ink:#F1F5F9; --ink-soft:#94A3B8;
-  --petrol:#60A5FA; --petrol-deep:#93C5FD; --brass:#FBBF24;
-  --line:#334155; --line-soft:#1E2B3F; --chip:#020617; --chip-text:#E2E8F0;
-  --warn:#F87171; --good:#34D399; --dr:#93C5FD; --cr:#FBBF24;
-  --paper-rgb:15,23,42; --petrol-rgb:96,165,250; --brass-rgb:251,191,36; --ink-rgb:241,245,249;
+  --paper:#0B1215; --card:#111C1F; --ink:#EDE7DC; --ink-soft:#AAB7B6;
+  --petrol:#61B8AD; --petrol-deep:#86D0C5; --brass:#D6A65F; --brass-metal:#D6A65F;
+  --line:#26383C; --line-soft:#172428; --chip:#071013; --chip-text:#EDE7DC;
+  --warn:#E38A78; --good:#67B7A2; --dr:#86D0C5; --cr:#D6A65F;
+  --paper-rgb:11,18,21; --petrol-rgb:97,184,173; --brass-rgb:214,166,95; --ink-rgb:237,231,220; --warn-rgb:227,138,120;
 }
 body, button, input, select, textarea{ font-family:Inter,'IBM Plex Sans Thai',system-ui,sans-serif; }
 .kb-port{ flex:0 0 auto; font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600; color:var(--ink-soft); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:4px 10px; margin-left:2px; white-space:nowrap; }
@@ -629,7 +632,8 @@ body, button, input, select, textarea{ font-family:Inter,'IBM Plex Sans Thai',sy
 .kicker .pill.conf{ background:var(--petrol-deep); color:var(--paper); }
 @media print{
   :root[data-theme="dark"]{
-    --paper:#FFFFFF; --card:#FFFFFF; --ink:#0F172A; --ink-soft:#475569; --petrol:#1D4ED8; --petrol-deep:#1E3A8A;
-    --brass:#92400E; --line:#CBD5E1; --line-soft:#E2E8F0; --chip:#0F172A; --chip-text:#F1F5F9; --warn:#991B1B; --good:#065F46;
+    --paper:#F7F4EE; --card:#FFFCF7; --ink:#172126; --ink-soft:#526166; --petrol:#0B5960; --petrol-deep:#083F45;
+    --brass:#94601E; --brass-metal:#C89A55; --line:#DED6C8; --line-soft:#F0EBE2; --chip:#0B1215; --chip-text:#EDE7DC; --warn:#A34838; --good:#247464;
+    --paper-rgb:247,244,238; --petrol-rgb:11,89,96; --brass-rgb:148,96,30; --ink-rgb:23,33,38; --warn-rgb:163,72,56;
   }
 }

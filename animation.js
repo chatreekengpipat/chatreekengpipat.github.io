@@ -483,13 +483,13 @@
   function init() {
     initScrollReveal();
     initNavScroll();
-    initCardFX();          // cursor spotlight + 3D tilt
     initScrollProgress();  // slim top progress bar (index)
     initBackToTop();       // back-to-top pill
     initSmoothScroll();
     initHeroParallax();
     initCounters();
-    initNeuralBg();
+    /* fx-flow.js owns the single ambient background layer. Keeping one canvas
+       avoids double animation, competing palettes and unnecessary GPU work. */
   }
 
   if (document.readyState === 'loading') {

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chatree Kengpipat (Cee) — SAP Functional Consultant (FI/CO) · ERP Implementation</title>
-<meta name="description" content="SAP Functional Consultant (FI/CO) and ERP Implementation Consultant — 3+ years of end-to-end XeerSoft Cloud ERP go-lives across Finance, Procurement, Pricing/AR, Billing and UAT.">
+<meta name="description" content="SAP Functional Consultant focused on S/4HANA FI-Tax, backed by four end-to-end cloud ERP go-lives across finance, procurement, pricing, billing, UAT and cutover.">
 <link rel="canonical" href="https://chatreekengpipat.github.io/">
 <meta name="author" content="Chatree Kengpipat">
 <meta name="robots" content="index, follow">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="Chatree Kengpipat (Cee)">
 <meta property="og:title" content="Chatree Kengpipat (Cee) — SAP Functional Consultant (FI/CO)">
-<meta property="og:description" content="ERP Implementation Consultant, now SAP Functional Consultant (FI/CO) at Accenture. 3+ years of end-to-end XeerSoft Cloud ERP go-lives — Finance, Procurement, Pricing/AR, Billing, UAT.">
+<meta property="og:description" content="Turning finance requirements into controlled, testable ERP delivery — SAP FI/CO depth backed by four production cloud ERP go-lives.">
 <meta property="og:url" content="https://chatreekengpipat.github.io/">
 <meta property="og:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
 <meta property="og:image:width" content="880">
@@ -26,7 +26,7 @@
 <!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Chatree Kengpipat (Cee) — SAP Functional Consultant (FI/CO)">
-<meta name="twitter:description" content="ERP Implementation Consultant, now SAP Functional Consultant (FI/CO) at Accenture. 3+ years of end-to-end XeerSoft Cloud ERP go-lives.">
+<meta name="twitter:description" content="SAP FI/CO consultant with four production cloud ERP go-lives — functional design, configuration, UAT, cutover and controls.">
 <meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
 
 <!-- Structured data: Person (helps Google & AI understand the profile) -->
@@ -40,7 +40,7 @@
   "image": "https://chatreekengpipat.github.io/photos/og-card.png",
   "jobTitle": "SAP Functional Consultant (FI/CO)",
   "worksFor": { "@type": "Organization", "name": "Accenture" },
-  "description": "SAP Functional Consultant (FI/CO) and ERP Implementation Consultant with 3+ years of end-to-end XeerSoft Cloud ERP go-lives across Financial Accounting, Procurement, Pricing/AR, Billing and UAT.",
+  "description": "SAP Functional Consultant focused on S/4HANA FI-Tax, backed by four end-to-end cloud ERP go-lives across financial accounting, procurement, pricing, billing, UAT and cutover.",
   "email": "mailto:chatree.kengpipat@gmail.com",
   "telephone": "+66864010579",
   "address": { "@type": "PostalAddress", "addressLocality": "Bangkok", "addressCountry": "TH" },
@@ -58,8 +58,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"></noscript>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=16">
-<!-- theme.js inlined verbatim to remove a render-blocking request (it must run before paint to avoid a theme flash). Identical to theme.js. -->
+<link rel="stylesheet" href="styles.css?v=17">
+<!-- Tiny pre-paint theme bootstrap. The deferred shared runtime handles controls and signature motion. -->
 <script>
 // Theme toggle with persistence
 (function() {
@@ -69,43 +69,11 @@
     return 'dark';
   }
   root.setAttribute('data-theme', getInitialTheme());
-  document.addEventListener('DOMContentLoaded', function() {
-    const toggle = document.getElementById('theme-toggle');
-    if (!toggle) return;
-    toggle.addEventListener('click', function() {
-      const current = root.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
-    });
-  });
-})();
-(function () {
-  const headline = document.getElementById('ckSignature');
-  if (!headline || headline.dataset.ckReady === 'true') return;
-  headline.dataset.ckReady = 'true';
-  headline.querySelectorAll('.ck-signature__line').forEach((line, lineIndex) => {
-    const text = line.textContent.trim();
-    line.textContent = '';
-    line.style.setProperty('--ck-line-delay', `${lineIndex * 140}ms`);
-    [...text].forEach((char, index) => {
-      const span = document.createElement('span');
-      if (char === ' ') { span.className = 'ck-signature__space'; span.innerHTML = '&nbsp;'; }
-      else { span.className = 'ck-signature__char'; span.textContent = char; span.style.setProperty('--ck-i', index); }
-      line.appendChild(span);
-    });
-  });
-  headline.addEventListener('mousemove', (event) => {
-    const rect = headline.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    headline.style.setProperty('--ck-ry', `${x * 8}deg`);
-    headline.style.setProperty('--ck-rx', `${y * -6}deg`);
-  });
 })();
 </script>
-<script src="animation.js?v=5" defer></script>
-<meta name="theme-color" content="#0f172a">
+<script src="theme.js?v=17" defer></script>
+<script src="animation.js?v=6" defer></script>
+<meta name="theme-color" content="#0b1215">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 </head>
@@ -116,7 +84,7 @@
 <nav>
   <a href="index.html" class="nav-logo">
     <span class="nav-logo-mark"></span>
-    Workspace of Chatree Kengpipat (Cee)
+    CK · SAP FI/CO
   </a>
   <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
     <span></span><span></span><span></span>
@@ -146,6 +114,7 @@
           <a href="traceability.html">Traceability Explorer</a>
           <a href="operating-model.html">Target Operating Model</a>
           <a href="ba-glossary.html">BIZBOK Glossary</a>
+        </div>
         <div class="nav-dd-group">
           <div class="nav-dd-head">My SAP Specification Design</div>
           <a href="sap-design.html">Technical Coding &amp; Business Flow</a>
@@ -207,26 +176,24 @@
 <!-- HERO v7 -->
 <section class="hero-v7">
   <div class="hero-v7-left">
+    <div class="hero-v7-kicker">SAP FI/CO · Functional design · Testing &amp; controls</div>
 <h1 class="ck-signature" id="ckSignature" aria-label="CHATREE KENGPIPAT">
   <span class="ck-signature__line ck-signature__line--ink" data-text="CHATREE">CHATREE</span>
   <span class="ck-signature__line ck-signature__line--blue" data-text="KENGPIPAT">KENGPIPAT</span>
 </h1>
-    <div class="hero-v7-tag-row" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.9rem;">
-      <div class="hero-v7-tag" style="margin:0;"><span>Learn Balance (XeerSoft Cloud ERP)</span></div>
-      <div class="hero-v7-tag" style="margin:0;"><span>↗ Accenture (SAP FI/CO)</span></div>
-    </div>
+    <p class="hero-v7-promise">Turning finance requirements into controlled, testable ERP delivery.</p>
     <p class="hero-v7-desc balanced-text" lang="en">
-    SAP Functional Consultant (FI/CO) at Accenture, on an S/4HANA FI-Tax workstream. Before that, 3+ years owning four end-to-end XeerSoft Cloud ERP implementations — configuration, master data, UAT and go-live — as consultant and embedded business analyst (FD · Use Case · User Story). Mechanical engineer by training; hands-on SAP procurement at Mitsubishi Motors Thailand, where my project won the Best Achievement Award.
+    SAP Functional Consultant at Accenture, focused on S/4HANA FI-Tax. Four production cloud ERP go-lives sit behind that role — from requirements and configuration through UAT, cutover and adoption. I connect each business rule to its posting, table, reconciliation control and test evidence.
     </p>
     <div class="hero-v7-meta">
-      <span class="hero-v7-meta-pill"><span class="icon">★</span> Accenture · SAP FI/CO · Tax</span>
-      <span class="hero-v7-meta-pill"><span class="icon">◧</span> 4 Cloud ERP go-lives · 2023–2026</span>
-      <span class="hero-v7-meta-pill"><span class="icon">⚡</span> MMTh · Best Achievement Award</span>
+      <span class="hero-v7-meta-pill"><span class="icon">★</span> Current · SAP FI/CO · Tax</span>
+      <span class="hero-v7-meta-pill"><span class="icon">◧</span> Delivered · 4 ERP go-lives</span>
+      <span class="hero-v7-meta-pill"><span class="icon">⚡</span> Proven · UAT to hypercare</span>
     </div>
     <div class="hero-v7-cta">
-      <a href="#sap-tax" class="btn btn-primary">▶ SAP FI Tax, end to end</a>
-      <a href="#projects" class="btn btn-outline">Cloud ERP projects</a>
-      <a href="#contact" class="btn btn-outline">Contact</a>
+      <a href="#sap-tax" class="btn btn-primary">Explore SAP delivery</a>
+      <a href="#projects" class="btn btn-outline">Review case studies</a>
+      <a href="cv.html" class="btn btn-outline">View résumé</a>
     </div>
   </div>
   <div class="hero-v7-right">
@@ -242,6 +209,72 @@
           <div class="hero-photo-badge-role">SAP Functional Consultant (FI/CO) · Accenture</div>
         </div>
         <div class="hero-photo-badge-icon">CK</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSULTANT STORY ROUTER · one body of evidence, three useful reading paths -->
+<section class="portfolio-story" id="start" aria-labelledby="story-title">
+  <div class="story-grid">
+    <div>
+      <div class="story-eyebrow">Start with the decision you need to make</div>
+      <h2 class="story-title" id="story-title">From requirement to <em>reconciled posting.</em></h2>
+      <p class="story-intro">This portfolio is organised as a consultant evidence trail: the business problem, the functional decision, the system behaviour, the test proof and the measured outcome. Choose a lens and the site will take you to the most relevant evidence first.</p>
+      <div class="story-proof" aria-label="Credibility at a glance">
+        <div class="story-proof-item"><b>4 go-lives</b><span>Production cloud ERP · 2023–2026</span></div>
+        <div class="story-proof-item"><b>200 users</b><span>Three operating branches</span></div>
+        <div class="story-proof-item"><b>5 modules</b><span>Finance · P2P · AR · billing · CRM</span></div>
+        <div class="story-proof-item"><b>FI-Tax</b><span>Current S/4HANA functional focus</span></div>
+      </div>
+      <div class="proof-key" aria-label="Evidence labels used throughout the site">
+        <span class="proof-chip">Delivered</span>
+        <span class="proof-chip gold">Tested</span>
+        <span class="proof-chip muted">Illustrative</span>
+      </div>
+    </div>
+
+    <div class="story-router" data-story-router>
+      <div class="story-tabs" role="tablist" aria-label="Choose your reading lens">
+        <button class="story-tab" id="lens-recruiter" role="tab" aria-selected="true" aria-controls="panel-recruiter" data-story-tab="recruiter">Recruiter</button>
+        <button class="story-tab" id="lens-sap" role="tab" aria-selected="false" aria-controls="panel-sap" data-story-tab="sap">SAP peer</button>
+        <button class="story-tab" id="lens-manager" role="tab" aria-selected="false" aria-controls="panel-manager" data-story-tab="manager">Hiring manager</button>
+      </div>
+
+      <div class="story-panel" id="panel-recruiter" role="tabpanel" aria-labelledby="lens-recruiter" data-story-panel="recruiter">
+        <span class="story-panel-kicker">Fast profile read · 5 minutes</span>
+        <h3>See the career logic and verified delivery record.</h3>
+        <p>Start with outcomes, then follow the transition from engineering discipline to ERP ownership and SAP FI/CO specialization.</p>
+        <div class="story-steps">
+          <div class="story-step"><span class="n">01</span><span><b>Proof</b><span>Four production ERP launches and their reconciled metrics.</span></span></div>
+          <div class="story-step"><span class="n">02</span><span><b>Career arc</b><span>Engineering → implementation → enterprise SAP.</span></span></div>
+          <div class="story-step"><span class="n">03</span><span><b>Role fit</b><span>Scope, methods, and a print-ready résumé.</span></span></div>
+        </div>
+        <div class="story-actions"><a class="btn btn-primary" href="#impact">View proof</a><a class="btn btn-outline" href="cv.html">Open résumé</a></div>
+      </div>
+
+      <div class="story-panel" id="panel-sap" role="tabpanel" aria-labelledby="lens-sap" data-story-panel="sap" hidden>
+        <span class="story-panel-kicker">Functional depth · process to table</span>
+        <h3>Trace the golden thread through FI and tax.</h3>
+        <p>Move from configuration to document posting, Universal Journal evidence, reconciliation and statutory output using sample data and clearly labelled assumptions.</p>
+        <div class="story-steps">
+          <div class="story-step"><span class="n">01</span><span><b>Set-up</b><span>Tax codes, account determination and master data.</span></span></div>
+          <div class="story-step"><span class="n">02</span><span><b>Posting</b><span>BKPF, BSEG, ACDOCA, BSET and WITH_ITEM.</span></span></div>
+          <div class="story-step"><span class="n">03</span><span><b>Proof</b><span>Controls, FUT hypotheses and report reconciliation.</span></span></div>
+        </div>
+        <div class="story-actions"><a class="btn btn-primary" href="#sap-tax">Trace FI-Tax</a><a class="btn btn-outline" href="fi-document-simulator.html">Open simulator</a></div>
+      </div>
+
+      <div class="story-panel" id="panel-manager" role="tabpanel" aria-labelledby="lens-manager" data-story-panel="manager" hidden>
+        <span class="story-panel-kicker">Delivery judgement · design to adoption</span>
+        <h3>Inspect how I turn ambiguity into controlled delivery.</h3>
+        <p>The evidence is organised around scope, decisions, controls, testing, cutover and adoption — with delivered work kept distinct from proposed SAP design.</p>
+        <div class="story-steps">
+          <div class="story-step"><span class="n">01</span><span><b>Diagnose</b><span>Establish process, data and control failure modes.</span></span></div>
+          <div class="story-step"><span class="n">02</span><span><b>Design &amp; test</b><span>Translate decisions into FD, config and acceptance proof.</span></span></div>
+          <div class="story-step"><span class="n">03</span><span><b>Land the change</b><span>Cutover, training, hypercare and measurable adoption.</span></span></div>
+        </div>
+        <div class="story-actions"><a class="btn btn-primary" href="#projects">Review cases</a><a class="btn btn-outline" href="#methodology">See method</a></div>
       </div>
     </div>
   </div>
@@ -383,13 +416,13 @@
   .pg-band{
     --c-card:var(--surface);--c-card2:var(--bg);--c-well:var(--bg);--c-line:var(--border);--c-line2:var(--border-strong);
     --c-text:var(--text);--c-strong:var(--text-strong);--c-muted:var(--text-muted);--c-acc:var(--accent);--c-acc2:var(--accent-hover);
-    --c-amb:#92400e;--c-grn:#047857;--c-red:#b91c1c;--c-vio:#7c3aed;--c-sky:#0369a1;--c-pink:#be185d;--c-slate:#64748b;--c-on:#ffffff;--c-glow:#f59e0b;--rgb-glow:245,158,11;
-    --rgb-acc:37,99,235;--rgb-amb:146,64,14;--rgb-red:185,28,28;--rgb-hi:15,23,42;
+    --c-amb:#94601e;--c-grn:#247464;--c-red:#a34838;--c-vio:#665b80;--c-sky:#2f687c;--c-pink:#8a5268;--c-slate:#5f6e71;--c-on:#ffffff;--c-glow:#c28f45;--rgb-glow:194,143,69;
+    --rgb-acc:11,89,96;--rgb-amb:148,96,30;--rgb-red:163,72,56;--rgb-hi:23,33,38;
     --c-shadow:0 22px 50px -28px rgba(15,23,42,.28);--c-shadow2:0 12px 26px -10px rgba(15,23,42,.30);
   }
   [data-theme="dark"] .pg-band{
-    --c-amb:#fbbf24;--c-grn:#34d399;--c-red:#f87171;--c-vio:#a78bfa;--c-sky:#38bdf8;--c-pink:#f9a8d4;--c-slate:#64748b;--c-on:#0b1220;--c-glow:#fbbf24;--rgb-glow:251,191,36;
-    --rgb-acc:96,165,250;--rgb-amb:251,191,36;--rgb-red:248,113,113;--rgb-hi:248,250,252;
+    --c-amb:#d6a65f;--c-grn:#61b89f;--c-red:#d98272;--c-vio:#a89bc6;--c-sky:#76b2c7;--c-pink:#c98ea4;--c-slate:#95a3a3;--c-on:#0b1215;--c-glow:#d6a65f;--rgb-glow:214,166,95;
+    --rgb-acc:97,184,173;--rgb-amb:214,166,95;--rgb-red:217,130,114;--rgb-hi:237,231,220;
     --c-shadow:0 30px 70px -20px rgba(0,0,0,.45);--c-shadow2:0 14px 30px rgba(0,0,0,.6);
   }
   /* theme switches glide instead of snapping */
@@ -680,8 +713,8 @@
     .impl-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.3rem; }
     .impl-tab { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; padding: 0.45rem 0.85rem; border-radius: 100px; border: 1px solid var(--border); background: var(--bg); color: var(--text-muted); cursor: pointer; transition: color 0.25s var(--ease-smooth), border-color 0.25s var(--ease-smooth), background 0.25s var(--ease-smooth); }
     .impl-tab:hover { border-color: var(--accent); color: var(--text); }
-    .impl-tab.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
-    [data-theme="dark"] .impl-tab.is-active { background: #2563eb; border-color: #2563eb; }
+    .impl-tab.is-active { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--on-accent); }
+    [data-theme="dark"] .impl-tab.is-active { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--on-accent); }
     .impl-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
     @media (max-width: 860px) { .impl-body { grid-template-columns: 1fr; } }
     .impl-flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.5rem 0; }
@@ -1047,7 +1080,7 @@
   </style>
   <a href="sap-design.html" class="sapcta-card">
     <div>
-      <div class="sapcta-tag">My SAP Specification Design · Proposal</div>
+      <div class="sapcta-tag">Proposed SAP design · Portfolio exercise</div>
       <h3 class="sapcta-title">The same 4 systems, <em>re-designed in SAP</em></h3>
       <p class="sapcta-desc">A tech-consultant exercise: each delivered XeerSoft system above, re-scoped as a proposed SAP design &mdash; business flow, technical/configuration design, a sub-unit test plan (10-step manual criteria), a development pipeline, team shape, and effort estimate.</p>
       <div class="sapcta-mods">
@@ -1368,13 +1401,13 @@
         Mechanical Engineering from <strong>Chulalongkorn University (Class Honors, GPAX 3.40)</strong> who crossed into ERP consulting, bringing analytical rigour from engineering into business process design and system implementation.
       </p>
       <p>
-        I work as the <strong>sole Implementation Consultant</strong> at LearnBalance Group on <strong>XeerSoft Cloud ERP</strong>, owning the full implementation cycle from configuration, master data setup, integration testing, UAT facilitation, Go-live cutover, and BAU support. As part of the role I also serve as the embedded Business Analyst, <strong>gathering requirements, authoring Functional Specs (FD), Use Cases, and User Stories</strong> for the remote development team. Single point of contact for ~200 users across 3 branches and 5 integrated modules: Inventory & Procurement (P2P), Financial Accounting (AR/AP/GL), Web POS & Pricing, CRM & Loyalty, and HR & Payroll.
+        From 2023 to 2026, I delivered <strong>four production go-lives</strong> at Learn Balance Group on <strong>XeerSoft Cloud ERP</strong>. As implementation consultant and embedded Business Analyst, I carried requirements through configuration, master data, functional specifications, integration testing, UAT, cutover and hypercare — serving about 200 users across three branches and five integrated modules.
       </p>
       <p>
         Prior hands-on exposure to <strong>SAP in a live automotive manufacturing environment</strong> at Mitsubishi Motors Thailand, where I operated SAP as an end-user for procurement and asset management of my <strong>FPDU Assist Device engineering project</strong>, which won the <strong>Best Achievement Award</strong> from the full intern cohort.
       </p>
       <p>
-        That SAP track is now my current chapter: I am an <strong>SAP Functional Consultant (FI/CO)</strong> at Accenture, working with the delivery team on a <strong>SAP S/4HANA</strong> programme for <strong>one of Thailand's largest national energy enterprises</strong> &mdash; configuring the <strong>Finance &amp; Controlling (FI/CO)</strong> modules on a foundation of hands-on <strong>MM / procurement</strong> experience &mdash; while completing my S/4HANA <strong>FI/CO certifications (C_TS4FI · C_TS4CO)</strong>. I am now also stepping into a <strong>Business Architecture Analyst</strong> role at Accenture &mdash; building depth in <a href="business-architecture.html" style="color:var(--accent);font-weight:600;">BIZBOK / TOGAF capability mapping, value streams and operating-model design</a>, the discipline that decides which capabilities matter and how they are organised: a natural step up from implementation.
+        My current chapter is <strong>SAP Functional Consulting (FI/CO)</strong> at Accenture, contributing to an energy-sector <strong>SAP S/4HANA</strong> programme. The public portfolio deliberately limits client detail; it demonstrates my functional method through anonymized testing evidence, standard-SAP references and clearly labelled design exercises. In parallel, I am building depth in <a href="business-architecture.html" style="color:var(--accent);font-weight:600;">BIZBOK / TOGAF capability mapping, value streams and operating-model design</a>, and preparing along the S/4HANA FI/CO certification paths.
       </p>
 
       <div class="about-quote-v7">
@@ -1592,7 +1625,7 @@
     <div>
       <div class="edu-school">Accenture · SAP Delivery · 2026</div>
       <div class="edu-degree">SAP Functional Consultant · FI/CO</div>
-      <div class="edu-detail">Cleared the technical interview for the SAP <strong>Finance &amp; Controlling (FI/CO)</strong> track. Currently studying the <strong>S/4HANA FI/CO certifications</strong> (C_TS4FI · C_TS4CO), building on a hands-on <strong>MM / procurement</strong> foundation from my ERP and manufacturing work. <strong style="color: var(--accent);">View SAP specification design →</strong></div>
+      <div class="edu-detail">Cleared the technical interview for the SAP <strong>Finance &amp; Controlling (FI/CO)</strong> track. Preparing along the <strong>S/4HANA FI/CO certification paths</strong> (C_TS4FI · C_TS4CO), while applying functional delivery discipline from ERP implementation and manufacturing procurement. <strong style="color: var(--accent);">View SAP specification design →</strong></div>
     </div>
     <div class="edu-badge">SAP<br>FI/CO</div>
   </a>
@@ -1681,7 +1714,7 @@
       <h3>ERP Platforms</h3>
       <div class="tool-list">
         <div class="tool-item">XeerSoft Cloud ERP <em style="color: var(--success); font-size: 0.7rem;">· Implementation</em></div>
-        <div class="tool-item">SAP S/4HANA <em style="color: var(--text-muted); font-size: 0.7rem;">· End-User + Learning</em></div>
+        <div class="tool-item">SAP S/4HANA <em style="color: var(--accent); font-size: 0.7rem;">· FI/CO Functional Delivery</em></div>
       </div>
     </div>
   </div>
@@ -1704,7 +1737,7 @@
     <div class="contact-text">
       <span class="contact-avail">Available for SAP FI/CO &amp; ERP implementation roles</span>
       <h2>Let's build<br><em>something</em><br>together.</h2>
-      <p>Open to <strong>SAP FI/CO</strong> and <strong>ERP implementation / business-analyst</strong> roles in Bangkok — full-time, with enterprise clients across any industry. I bring <strong>four delivered ERP go-lives</strong> and hands-on SAP FI/CO configuration.</p>
+      <p>Open to <strong>SAP FI/CO</strong> and <strong>ERP implementation / business-analysis</strong> roles in Bangkok. I bring <strong>four delivered ERP go-lives</strong>, current enterprise SAP functional experience, and an evidence-first approach to design, testing, controls and cutover.</p>
       <div class="contact-cta-row">
         <a href="mailto:chatree.kengpipat@gmail.com" class="btn btn-primary">Send Email →</a>
         <a href="cv.html" class="contact-btn-ghost">View résumé (PDF) →</a>
@@ -1745,7 +1778,7 @@
 
 <script src="taxflow.js?v=6" defer></script>
 <script src="playground.js?v=5" defer></script>
-<script src="search.js?v=9" defer></script>
-<script src="fx-flow.js?v=2" defer></script>
+<script src="search.js?v=10" defer></script>
+<script src="fx-flow.js?v=3" defer></script>
 </body>
 </html>

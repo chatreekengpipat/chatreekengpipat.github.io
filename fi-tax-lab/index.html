@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
-    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --paper:#F7F4EE;--ink:#172126;--ink-soft:#526166;
+    --petrol:#0B5960;--petrol-deep:#083F45;--brass:#94601E;
     --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--card:#fff;--warn:#B91C1C;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -25,12 +25,12 @@
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px;}
   @media(max-width:640px){.grid{grid-template-columns:1fr;}}
   a.doc{display:block;text-decoration:none;color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--card);transition:.18s;position:relative;}
-  a.doc:hover{border-color:var(--petrol);transform:translateY(-2px);box-shadow:0 6px 18px rgba(37,99,235,.10);}
+  a.doc:hover{border-color:var(--petrol);transform:translateY(-2px);box-shadow:0 6px 18px rgba(11,89,96,.10);}
   a.doc .tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:600;}
   a.doc h2{font-size:16.5px;font-weight:700;margin:6px 0 4px;line-height:1.3;}
   a.doc p{font-size:12.8px;color:var(--ink-soft);}
-  a.doc .when{display:inline-block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--petrol-deep);background:rgba(37,99,235,.08);padding:2px 8px;border-radius:5px;}
-  a.doc.wide{grid-column:1/-1;border-color:var(--petrol);background:rgba(37,99,235,.04);}
+  a.doc .when{display:inline-block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--petrol-deep);background:rgba(11,89,96,.08);padding:2px 8px;border-radius:5px;}
+  a.doc.wide{grid-column:1/-1;border-color:var(--petrol);background:rgba(11,89,96,.04);}
 
   .soon{border:1.5px dashed var(--line);border-radius:14px;padding:18px 20px;color:var(--ink-soft);}
   .soon .tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
@@ -157,7 +157,7 @@
   .ringleg .sw.i{background:var(--brass);}
   .ringleg .sw.w{background:var(--petrol-deep);}
   .ringleg b{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);margin-left:auto;}
-  .focus{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;background:rgba(37,99,235,.05);}
+  .focus{border:1.5px solid var(--petrol);border-radius:14px;padding:16px 18px;background:rgba(11,89,96,.05);}
   .focus-t{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--petrol-deep);font-weight:700;margin-bottom:8px;}
   .focus .qitem{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--line-soft);align-items:flex-start;}
   .focus .qitem:last-child{border-bottom:none;}
@@ -171,8 +171,8 @@
   @media(prefers-reduced-motion:reduce){.kpi .kt>i{transition:none!important;}}
   @media print{.kit-searchbox,.journey-today,.hub-search,.resume,.hero-bg{display:none!important;}.journey{break-inside:avoid;}h1 .accent{color:var(--petrol)!important;background:none!important;}}
 </style>
-<link rel="stylesheet" href="theme.css">
-<script src="theme.js"></script>
+<link rel="stylesheet" href="theme.css?v=2">
+<script src="theme.js?v=2"></script>
 <script src="data/glossary.js" defer></script>
 <script src="data/quiz-bank.js" defer></script>
 </head>

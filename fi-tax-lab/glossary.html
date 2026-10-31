@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F8FAFC;--ink:#1A2A2E;--ink-soft:#4A5A5C;
-    --petrol:#2563EB;--petrol-deep:#1D4ED8;--brass:#B45309;
+    --paper:#F7F4EE;--ink:#172126;--ink-soft:#526166;
+    --petrol:#0B5960;--petrol-deep:#083F45;--brass:#94601E;
     --line:#E4DDCF;--line-soft:#EFEAE0;--chip:#16242A;--chip-text:#F3EEE2;
     --warn:#B91C1C;--card:#fff;
   }
@@ -18,8 +18,8 @@
   body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans Thai',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 20px;}
   .wrap{max-width:900px;margin:0 auto;padding:40px 0 90px;}
 
-  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(37,99,235,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
-  .crumb:hover{background:rgba(37,99,235,.14);}
+  .crumb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--petrol-deep);text-decoration:none;background:rgba(11,89,96,.07);padding:5px 11px;border-radius:6px;margin-bottom:22px;transition:.15s;}
+  .crumb:hover{background:rgba(11,89,96,.14);}
 
   .masthead{border-bottom:3px solid var(--ink);padding-bottom:20px;}
   .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
@@ -42,7 +42,7 @@
   /* search + chips */
   .search{width:100%;font-family:'IBM Plex Sans Thai',sans-serif;font-size:14.5px;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;transition:.16s;}
   .search::placeholder{color:var(--ink-soft);}
-  .search:focus{outline:none;border-color:var(--petrol);box-shadow:0 0 0 3px rgba(37,99,235,.14);}
+  .search:focus{outline:none;border-color:var(--petrol);box-shadow:0 0 0 3px rgba(11,89,96,.14);}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;}
   .chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);border-radius:20px;padding:7px 14px;cursor:pointer;transition:.15s;}
   .chip:hover{border-color:var(--petrol);color:var(--petrol);}
@@ -95,8 +95,8 @@
   @media(prefers-reduced-motion:reduce){.fc-card,.chip,.tab{transition:none;}}
   @media print{.crumb,.tabs,.search,.chips,.fc-actions,.fc-keys{display:none;}.terms{grid-template-columns:1fr 1fr;}}
 </style>
-<link rel="stylesheet" href="theme.css">
-<script src="theme.js"></script>
+<link rel="stylesheet" href="theme.css?v=2">
+<script src="theme.js?v=2"></script>
 <script src="data/glossary.js"></script>
 </head>
 <body data-page="tax-glossary">

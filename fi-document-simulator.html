@@ -37,16 +37,16 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chatreekengpipat.github.io/"},{"@type":"ListItem","position":2,"name":"FI Document Simulator","item":"https://chatreekengpipat.github.io/fi-document-simulator.html"}]}</script>
 <style>
   :root {
-    --abyss: #0f172a;
-    --deep: #1e293b;
-    --steel: #334155;
-    --gas: #60a5fa;   /* SAP / system / data */
-    --flare: #FF6B35; /* tax flowing to the State */
-    --gold: #E8B04B;  /* value / baht / revenue */
-    --mist: #f1f5f9;  /* body */
-    --haze: #94a3b8;  /* captions */
-    --royalty: #caa23e;
-    --srb: #e8843a;
+    --abyss: #0b1215;
+    --deep: #111c1f;
+    --steel: #26383c;
+    --gas: #61b8ad;   /* SAP / system / data */
+    --flare: #d98272; /* tax flowing to the State */
+    --gold: #d6a65f;  /* value / baht / revenue */
+    --mist: #ede7dc;  /* body */
+    --haze: #aab7b6;  /* captions */
+    --royalty: #d0a462;
+    --srb: #d58a60;
     --rail-w: 232px;
     --content-w: 800px;
     --bar-h: 56px;
@@ -69,14 +69,14 @@
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     background-image:
-      radial-gradient(900px 600px at 85% -10%, rgba(59, 130, 246, 0.06), transparent 60%),
-      radial-gradient(700px 500px at 0% 30%, rgba(255, 107, 53, 0.05), transparent 60%);
+      radial-gradient(900px 600px at 85% -10%, rgba(97, 184, 173, 0.07), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(214, 166, 95, 0.05), transparent 60%);
     background-attachment: fixed;
   }
 
   h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; line-height: 1.15; margin: 0 0 0.5em; text-wrap: balance; }
   p { margin: 0 0 1rem; text-wrap: pretty; }
-  .chapter p:not(.caption), .rolestate, .lede { text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; }
+  .chapter p:not(.caption), .rolestate, .lede { text-align: left; text-wrap: pretty; -webkit-hyphens: none; hyphens: none; }
   a { color: var(--gas); }
 
   .mono { font-family: var(--mono); }
@@ -84,8 +84,8 @@
     font-family: var(--mono);
     font-weight: 500;
     color: var(--gas);
-    background: rgba(59, 130, 246, 0.09);
-    border: 1px solid rgba(59, 130, 246, 0.28);
+    background: rgba(50, 126, 130, 0.09);
+    border: 1px solid rgba(50, 126, 130, 0.28);
     border-radius: 5px;
     padding: 0.05em 0.42em;
     font-size: 0.88em;
@@ -135,7 +135,7 @@
     padding: 0.5rem 0.8rem; border-radius: 8px; white-space: nowrap;
     transition: color 0.2s, background 0.2s;
   }
-  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(59, 130, 246, 0.07); }
+  .sitemenu > a:hover, .dd-btn:hover { color: var(--mist); background: rgba(50, 126, 130, 0.07); }
   .sitemenu > a.cta { color: var(--abyss); background: var(--gas); font-weight: 600; }
   .sitemenu > a.cta:hover { filter: brightness(1.08); background: var(--gas); }
   .dd { position: relative; }
@@ -153,8 +153,8 @@
   .dd-group + .dd-group { border-top: 1px solid var(--steel); margin-top: 0.2rem; padding-top: 0.5rem; }
   .dd-head { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gas); padding: 0.2rem 0.5rem 0.35rem; }
   .dd-panel a { display: block; padding: 0.45rem 0.6rem; font-size: 0.86rem; color: var(--mist); text-decoration: none; border-radius: 7px; }
-  .dd-panel a:hover { background: rgba(59, 130, 246, 0.08); color: var(--gas); }
-  .dd-panel a.is-current { color: var(--gas); background: rgba(59, 130, 246, 0.06); }
+  .dd-panel a:hover { background: rgba(50, 126, 130, 0.08); color: var(--gas); }
+  .dd-panel a.is-current { color: var(--gas); background: rgba(50, 126, 130, 0.06); }
   .sitebar__burger { display: none; flex-direction: column; gap: 4px; background: none; border: 0; cursor: pointer; padding: 8px; }
   .sitebar__burger span { width: 22px; height: 2px; background: var(--mist); border-radius: 2px; transition: transform 0.2s, opacity 0.2s; }
   .sitebar__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -209,10 +209,10 @@
     transition: color 0.2s, background 0.2s, border-color 0.2s;
   }
   .rail__link .num { font-family: var(--mono); font-size: 0.74rem; color: var(--steel); transition: color 0.2s; }
-  .rail__link:hover { color: var(--mist); background: rgba(59, 130, 246, 0.05); }
+  .rail__link:hover { color: var(--mist); background: rgba(50, 126, 130, 0.05); }
   .rail__link.is-active {
     color: var(--mist);
-    background: rgba(59, 130, 246, 0.09);
+    background: rgba(50, 126, 130, 0.09);
     border-left-color: var(--gas);
   }
   .rail__link.is-active .num { color: var(--gas); }
@@ -294,10 +294,10 @@
   }
   .saythis {
     margin-top: 1rem;
-    border: 1px dashed rgba(59, 130, 246, 0.4);
+    border: 1px dashed rgba(50, 126, 130, 0.4);
     border-radius: 10px;
     padding: 0.9rem 1.1rem;
-    background: rgba(59, 130, 246, 0.04);
+    background: rgba(50, 126, 130, 0.04);
     font-style: italic;
   }
   .saythis b { font-style: normal; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gas); display: block; margin-bottom: 0.3rem; }
@@ -331,7 +331,7 @@
     border: 1px solid var(--steel);
   }
   .tag .scope { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; margin-left: 0.4rem; }
-  .tag--up { border-color: rgba(59, 130, 246, 0.5); color: var(--gas); background: rgba(59, 130, 246, 0.07); }
+  .tag--up { border-color: rgba(50, 126, 130, 0.5); color: var(--gas); background: rgba(50, 126, 130, 0.07); }
   .tag--down { border-color: rgba(255, 107, 53, 0.5); color: var(--flare); background: rgba(255, 107, 53, 0.07); }
   .tag--all { border-color: rgba(232, 176, 75, 0.5); color: var(--gold); background: rgba(232, 176, 75, 0.07); }
 
@@ -481,7 +481,7 @@
     text-align: center;
   }
   .fcard__face--q { background: var(--deep); }
-  .fcard__face--a { background: linear-gradient(160deg, #172033, #152238); border-color: rgba(59, 130, 246, 0.45); transform: rotateY(180deg); }
+  .fcard__face--a { background: linear-gradient(160deg, #172428, #111c1f); border-color: rgba(50, 126, 130, 0.45); transform: rotateY(180deg); }
   .fcard__kind { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.8rem; }
   .fcard__face--q .fcard__kind { color: var(--gold); }
   .fcard__face--a .fcard__kind { color: var(--gas); }
@@ -596,35 +596,35 @@
     background: none; border: 1px solid var(--steel); color: var(--mist);
     transition: color 0.2s, border-color 0.2s, background 0.2s;
   }
-  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(59, 130, 246, 0.07); }
+  .theme-btn:hover { color: var(--gas); border-color: var(--gas); background: rgba(50, 126, 130, 0.07); }
   .theme-btn .icon-moon { display: none; }
   html[data-theme="light"] .theme-btn .icon-sun { display: none; }
   html[data-theme="light"] .theme-btn .icon-moon { display: inline; }
 
   /* ---------- Light (Day) theme ---------- */
   html[data-theme="light"] {
-    --abyss: #f5f8fc;
-    --deep: #FFFFFF;
-    --steel: #e2e8f0;
-    --gas: #2563eb;
-    --flare: #C9501E;
-    --gold: #95680F;
-    --mist: #0f172a;
-    --haze: #586379;
-    --royalty: #8a6f1d;
-    --srb: #b1591b;
+    --abyss: #f7f4ee;
+    --deep: #fffcf7;
+    --steel: #ded6c8;
+    --gas: #0b5960;
+    --flare: #a34838;
+    --gold: #94601e;
+    --mist: #172126;
+    --haze: #526166;
+    --royalty: #87551b;
+    --srb: #9b572f;
   }
   html[data-theme="light"] body {
     background-image:
-      radial-gradient(900px 600px at 85% -10%, rgba(37, 99, 235, 0.10), transparent 60%),
-      radial-gradient(700px 500px at 0% 30%, rgba(201, 80, 30, 0.07), transparent 60%);
+      radial-gradient(900px 600px at 85% -10%, rgba(11, 89, 96, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 0% 30%, rgba(148, 96, 30, 0.07), transparent 60%);
   }
   html[data-theme="light"] .sitebar { background: rgba(255, 255, 255, 0.86); }
   html[data-theme="light"] .dd-panel { box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.22); }
-  html[data-theme="light"] .tcode { background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.30); }
-  html[data-theme="light"] .theme-btn:hover { background: rgba(37, 99, 235, 0.08); }
-  html[data-theme="light"] .flip__face--back { background: #eff6ff; border-color: rgba(37, 99, 235, 0.35); }
-  html[data-theme="light"] .fcard__face--a { background: linear-gradient(160deg, #eff6ff, #e8f0fe); border-color: rgba(37, 99, 235, 0.35); }
+  html[data-theme="light"] .tcode { background: rgba(11, 89, 96, 0.08); border-color: rgba(11, 89, 96, 0.30); }
+  html[data-theme="light"] .theme-btn:hover { background: rgba(11, 89, 96, 0.08); }
+  html[data-theme="light"] .flip__face--back { background: #eaf2ef; border-color: rgba(11, 89, 96, 0.35); }
+  html[data-theme="light"] .fcard__face--a { background: linear-gradient(160deg, #eaf2ef, #d7e8e4); border-color: rgba(11, 89, 96, 0.35); }
 
   /* ============================================================
      Tax-code config walkthrough (.cfg) + Record-to-Report close (.close)
@@ -1204,7 +1204,7 @@
 
   .chapter p code, .chapter li code, .method__i p code, .trace__what code, .f-vnote code {
     font-family: var(--mono); font-size: 0.9em;
-    color: var(--gas); background: rgba(59, 130, 246, 0.1);
+    color: var(--gas); background: rgba(50, 126, 130, 0.1);
     border-radius: 3px; padding: 0.02em 0.3em;
   }
 
@@ -1216,7 +1216,7 @@
   :root[data-theme="light"] .chapter p code,
   :root[data-theme="light"] .chapter li code,
   :root[data-theme="light"] .method__i p code,
-  :root[data-theme="light"] .trace__what code { background: rgba(37, 99, 235, 0.1); }
+  :root[data-theme="light"] .trace__what code { background: rgba(11, 89, 96, 0.1); }
 </style>
 </head>
 <body data-page="fi-document-simulator">
@@ -1224,7 +1224,7 @@
 
 <!-- SITE NAV BAR — links to every page, mirrors the main site nav -->
 <header class="sitebar">
-  <a class="sitebar__logo" href="index.html"><span class="mark" aria-hidden="true"></span>Chatree Kengpipat (Cee)</a>
+  <a class="sitebar__logo" href="index.html"><span class="mark" aria-hidden="true"></span>CK · SAP FI/CO</a>
   <button type="button" class="sitebar__burger" id="siteBurger" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
     <span></span><span></span><span></span>
   </button>
@@ -3196,7 +3196,7 @@
   upd();
 })();
 </script>
-<script src="search.js?v=9" defer></script>
-<script src="fx-flow.js?v=2" defer></script>
+<script src="search.js?v=10" defer></script>
+<script src="fx-flow.js?v=3" defer></script>
 </body>
 </html>

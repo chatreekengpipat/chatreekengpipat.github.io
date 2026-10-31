@@ -8,9 +8,9 @@
    and scrolling drifts it, like dragging a hand through water.
 
    Readability first: low alpha, calmer in the centre column where
-   text sits, palette read from the page's own colour tokens
-   (portfolio --accent · Lab/lab --petrol + --brass · FI pages
-   --gas + --flare), re-read when the theme switches.
+   text sits, palette anchored to the real page background and read
+   from the Lab's petrol/champagne tokens. Theme changes are
+   interpolated in the render loop instead of visibly snapping.
 
    Cheap by design: rendered at ~1/3 resolution and scaled up (the
    blur is the look), 30 fps while you interact, 15 fps when idle,
@@ -34,7 +34,7 @@
     c.className = 'fx-flow';
     c.setAttribute('aria-hidden', 'true');
     var behind = d.getElementById('techCanvas');                 /* index-style pages already paint a background canvas at -999 */
-    c.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:' + (behind ? -998 : -1) + ';opacity:0;transition:opacity 1.4s ease';
+    c.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:' + (behind ? -998 : -1) + ';opacity:0;transition:opacity 1.8s cubic-bezier(.2,.7,.2,1)';
     var gl = null;
     try { gl = c.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'low-power', preserveDrawingBuffer: false }); } catch (e) {}
     if (!gl) return;
@@ -53,7 +53,7 @@
       'float fbm(vec2 p){float s=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<5;i++){s+=a*n(p);p=m*p;a*=.5;}return s;}',
       'void main(){',
       '  float as=uR.x/uR.y;vec2 uv=v;',
-      '  vec2 p=vec2(uv.x*as,uv.y+uS)*2.1;float t=uT*.035;',
+      '  vec2 p=vec2(uv.x*as,uv.y+uS)*1.95;float t=uT*.024;',
       /* pointer trail: each point is a small vortex that also pushes outward */
       '  vec2 sw=vec2(0.);float gw=0.;',
       '  for(int i=0;i<8;i++){vec2 q=vec2((uv.x-uP[i].x)*as,uv.y-uP[i].y);float k=exp(-dot(q,q)*48.)*uP[i].z;sw+=vec2(-q.y,q.x)*k*3.2+q*k*.8;gw+=k;}',
@@ -61,8 +61,8 @@
       '  vec2 r=vec2(fbm(p+3.4*q+vec2(1.7,9.2)+t*.6+sw*1.6),fbm(p+3.4*q+vec2(8.3,2.8)-t*.5));',
       '  float f=fbm(p+3.*r);',
       '  vec3 col=mix(uA,uB,clamp(f*f*2.4,0.,1.));',
-      '  col=mix(col,uC,clamp(length(r)-.55,0.,1.)*.75);',
-      '  float a=smoothstep(.40,.95,f+gw*.22);',
+      '  col=mix(col,uC,clamp(length(r)-.55,0.,1.)*.55);',
+      '  float a=smoothstep(.44,.98,f+gw*.20);',
       /* calmer in the reading column, fuller towards the edges */
       '  float e=smoothstep(.10,.62,abs(uv.x-.5));',
       '  a=min(a*uK*(.42+.58*e)*(1.+gw*.6),uK*1.25);',
@@ -94,20 +94,40 @@
     function token(names) { var cs = getComputedStyle(root); for (var i = 0; i < names.length; i++) { var v = rgb(cs.getPropertyValue(names[i])); if (v) return v; } return null; }
     function mix(a, b, k) { return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]; }
     function lum(c3) { return 0.2126 * c3[0] + 0.7152 * c3[1] + 0.0722 * c3[2]; }
-    var P = { k: 0.2 };
+    var P = { a: [0, 0, 0], b: [0, 0, 0], c: [0, 0, 0], k: 0 };
+    var PT = { a: [0, 0, 0], b: [0, 0, 0], c: [0, 0, 0], k: 0 };
+    var paletteReady = false;
+    function copyPalette(to, from) {
+      to.a = from.a.slice(); to.b = from.b.slice(); to.c = from.c.slice(); to.k = from.k;
+    }
     function palette() {
       /* the background token switches instantly; the body colour itself may still be mid-transition */
       var bg = token(['--bg', '--paper', '--abyss']) || rgb(getComputedStyle(d.body).backgroundColor) || [1, 1, 1];
       var dark = lum(bg) < 0.4;
-      var main = token(['--accent', '--petrol', '--gas']) || [0.23, 0.51, 0.96];
-      var second = token(['--brass', '--flare']) || (dark ? [0.13, 0.83, 0.93] : [0.02, 0.71, 0.83]);
-      var third = dark ? [0.65, 0.55, 0.98] : mix(main, [1, 1, 1], 0.35);
-      P.a = dark ? mix(main, bg, 0.55) : mix(main, [1, 1, 1], 0.55);
-      P.b = dark ? mix(main, bg, 0.12) : main;                       /* dark: no lightening — keeps grey text above 4.5:1 */
-      P.c = mix(second, third, 0.45);
-      P.k = (dark ? 0.26 : 0.14) * (w.innerWidth < 700 ? 0.65 : 1);   /* phones: text runs edge to edge */
-      gl.uniform3fv(U.uA, P.a); gl.uniform3fv(U.uB, P.b); gl.uniform3fv(U.uC, P.c); gl.uniform1f(U.uK, P.k);
+      var main = token(['--accent', '--petrol', '--gas']) || [0.04, 0.35, 0.38];
+      var deep = token(['--accent-soft', '--petrol-deep']) || mix(main, dark ? [1, 1, 1] : [0, 0, 0], 0.18);
+      var metal = token(['--gold', '--brass-metal', '--brass', '--flare']) || [0.78, 0.60, 0.33];
+
+      PT.a = mix(main, bg, dark ? 0.72 : 0.76);
+      PT.b = mix(deep, bg, dark ? 0.28 : 0.42);
+      PT.c = mix(metal, bg, dark ? 0.36 : 0.35);
+      PT.k = (dark ? 0.18 : 0.115) * (w.innerWidth < 700 ? 0.62 : 1);
+
+      if (!paletteReady || reduce()) {
+        copyPalette(P, PT);
+        paletteReady = true;
+      }
       if (paused) frame(performance.now(), true);
+    }
+    function blendPalette(dt) {
+      var k = reduce() ? 1 : 1 - Math.exp(-Math.max(0, dt) * 4.8);
+      var keys = ['a', 'b', 'c'];
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        for (var j = 0; j < 3; j++) P[key][j] += (PT[key][j] - P[key][j]) * k;
+      }
+      P.k += (PT.k - P.k) * k;
+      gl.uniform3fv(U.uA, P.a); gl.uniform3fv(U.uB, P.b); gl.uniform3fv(U.uC, P.c); gl.uniform1f(U.uK, P.k);
     }
 
     /* ---------- size ---------- */
@@ -140,6 +160,7 @@
     var flat = new Float32Array(32);
     function frame(now, force) {
       var dt = Math.min(0.1, (now - (last || now)) / 1000);
+      blendPalette(dt);
       for (var k = 0; k < trail.length; k++) { trail[k][2] *= Math.pow(0.9, dt * 30); flat.set(trail[k], k * 4); }
       scrollS += (scrollT - scrollS) * Math.min(1, dt * 3);
       gl.uniform1f(U.uT, reduce() ? 40 : (now - t0) / 1000);

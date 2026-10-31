@@ -16,16 +16,16 @@
 <meta name="twitter:description" content="The system behind the portfolio: architecture, design systems, tokens, infrastructure and conventions. Static HTML/CSS/JS, no framework.">
 <meta name="twitter:image" content="https://chatreekengpipat.github.io/photos/og-card.png">
 <meta name="description" content="Colophon for chatreekengpipat.github.io: the page architecture, the two design systems and their tokens, the shared infrastructure (styles.css / animation.js / theme.js), and the engineering conventions — honesty rule, single-source metrics, WCAG AA, WebP, PWA. Built as hand-written static HTML/CSS/JS with no framework or build step.">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0b1215">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="styles.css?v=16">
-<script src="theme.js"></script>
-<script src="animation.js?v=5" defer></script>
+<link rel="stylesheet" href="styles.css?v=17">
+<script src="theme.js?v=17"></script>
+<script src="animation.js?v=6" defer></script>
 <style>
   /* ============================================================
      COLOPHON — page-scoped. The site documenting its own system:
@@ -94,7 +94,7 @@
 <a class="skip" href="#main-content">Skip to main content</a>
 
 <nav>
-  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>Workspace of Chatree Kengpipat (Cee)</a>
+  <a href="index.html" class="nav-logo"><span class="nav-logo-mark"></span>CK · SAP FI/CO</a>
   <button type="button" id="nav-toggle" class="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span><span></span></button>
   <ul class="nav-links" id="primary-nav">
     <li class="nav-drawer-head"><span class="nav-drawer-title">Menu</span><button type="button" class="nav-drawer-close" aria-label="Close navigation menu">✕</button></li>
@@ -226,34 +226,34 @@
     <!-- DESIGN SYSTEMS -->
     <div class="co-sec">
       <div class="co-eyebrow">02 · Design systems</div>
-      <h2 class="co-title">Two systems, on purpose.</h2>
-      <p class="co-lede">Most of the site runs one shared system; the two FI-Tax pages carry a deliberately separate identity, so the specialization reads as its own body of work.</p>
+      <h2 class="co-title">One palette, two information densities.</h2>
+      <p class="co-lede">The portfolio and the specialist FI-Tax work now share one Private Ledger palette. The main site stays editorial; the SAP workbench pages stay denser and more operational without feeling like a different brand.</p>
       <div class="co-ds">
         <div class="co-dscard">
-          <h3>The Engineer&rsquo;s Console</h3>
+          <h3>Private Ledger · Editorial</h3>
           <div class="where">shared · styles.css · home + projects + SAP cluster + reference</div>
           <div class="co-swatches">
-            <div class="co-sw"><i style="background:#2563eb"></i><span>#2563eb</span></div>
-            <div class="co-sw"><i style="background:#0f172a"></i><span>#0f172a</span></div>
-            <div class="co-sw"><i style="background:#f8fafc"></i><span>#f8fafc</span></div>
-            <div class="co-sw"><i style="background:#586379"></i><span>#586379</span></div>
-            <div class="co-sw"><i style="background:#059669"></i><span>#059669</span></div>
-            <div class="co-sw"><i style="background:#d97706"></i><span>#d97706</span></div>
+            <div class="co-sw"><i style="background:#0b5960"></i><span>petrol</span></div>
+            <div class="co-sw"><i style="background:#0b1215"></i><span>obsidian</span></div>
+            <div class="co-sw"><i style="background:#f7f4ee"></i><span>parchment</span></div>
+            <div class="co-sw"><i style="background:#526166"></i><span>graphite</span></div>
+            <div class="co-sw"><i style="background:#247464"></i><span>success</span></div>
+            <div class="co-sw"><i style="background:#c89a55"></i><span>champagne</span></div>
           </div>
-          <div class="co-ds-type"><b>Inter</b> — display &amp; body &middot; <b>JetBrains Mono</b> — labels/readouts. One <b>Implementation Blue</b> accent; slate neutrals; flat surfaces that glow on interaction. Full light/dark parity.</div>
+          <div class="co-ds-type"><b>Inter</b> — display &amp; body &middot; <b>JetBrains Mono</b> — SAP objects and evidence labels. Deep petrol drives interaction; champagne marks precision; warm surfaces preserve full light/dark parity.</div>
         </div>
         <div class="co-dscard">
-          <h3>SAP FI Tax (self-contained)</h3>
-          <div class="where">finance-functional-module · fi-tax-consultant-scope</div>
+          <h3>Private Ledger · SAP workbench</h3>
+          <div class="where">FI document simulator · FI-Tax scope · Oman VAT case · FI-Tax Lab</div>
           <div class="co-swatches">
-            <div class="co-sw"><i style="background:#60a5fa"></i><span>gas</span></div>
-            <div class="co-sw"><i style="background:#FF6B35"></i><span>flare</span></div>
-            <div class="co-sw"><i style="background:#E8B04B"></i><span>gold</span></div>
-            <div class="co-sw"><i style="background:#0f172a"></i><span>abyss</span></div>
-            <div class="co-sw"><i style="background:#1e293b"></i><span>deep</span></div>
-            <div class="co-sw"><i style="background:#334155"></i><span>steel</span></div>
+            <div class="co-sw"><i style="background:#61b8ad"></i><span>gas</span></div>
+            <div class="co-sw"><i style="background:#d98272"></i><span>exception</span></div>
+            <div class="co-sw"><i style="background:#d6a65f"></i><span>gold</span></div>
+            <div class="co-sw"><i style="background:#0b1215"></i><span>abyss</span></div>
+            <div class="co-sw"><i style="background:#111c1f"></i><span>deep</span></div>
+            <div class="co-sw"><i style="background:#26383c"></i><span>steel</span></div>
           </div>
-          <div class="co-ds-type"><b>Space Grotesk</b> + <b>IBM Plex Sans/Mono</b>. A three-colour language: <b>gas</b> = SAP/data, <b>flare</b> = tax to the State, <b>gold</b> = value. Own inline CSS/JS + left rail nav.</div>
+          <div class="co-ds-type"><b>Space Grotesk</b> + <b>IBM Plex Sans/Mono</b>. The same petrol/champagne foundation carries denser tables, rails and simulators; red and green remain reserved for real exception/success meaning.</div>
         </div>
       </div>
     </div>
@@ -263,9 +263,9 @@
       <div class="co-eyebrow">03 · Shared infrastructure</div>
       <h2 class="co-title">Three files carry the chrome.</h2>
       <div class="co-list">
-        <div class="co-item"><h4>Styles <span class="file">styles.css</span></h4><p>Design tokens (light/dark), components, the nav, the <b>scroll-progress bar</b>, <b>back-to-top</b> pill and the <b>skip link</b>. Cache-busted with <code>?v=13</code>.</p></div>
-        <div class="co-item"><h4>Motion <span class="file">animation.js</span></h4><p>Cursor spotlight + tilt, scroll-reveal, count-ups, hero parallax, and the neural-network background canvas. Every effect is <b>reduced-motion aware</b>.</p></div>
-        <div class="co-item"><h4>Theme <span class="file">theme.js</span></h4><p>Sets light/dark <b>before first paint</b> to avoid a flash, off a shared <code>theme</code> localStorage key. Inlined on the home page to drop a request.</p></div>
+        <div class="co-item"><h4>Styles <span class="file">styles.css</span></h4><p>The Private Ledger token system (parchment light / obsidian dark), shared components, navigation, <b>scroll progress</b>, <b>back to top</b>, and visible focus treatment.</p></div>
+        <div class="co-item"><h4>Motion <span class="file">animation.js + fx-flow.js</span></h4><p>Scroll reveals, count-ups, hero depth, and one restrained ambient flow layer. Motion is <b>reduced-motion aware</b> and never required to read the content.</p></div>
+        <div class="co-item"><h4>Theme <span class="file">theme.js</span></h4><p>A tiny pre-paint bootstrap prevents flashing; the shared runtime then synchronizes the control, browser chrome and smooth light/dark transitions through one local preference.</p></div>
         <div class="co-item"><h4>Discoverability</h4><p><b>sitemap.xml</b> + <b>robots.txt</b>, per-page Open Graph / Twitter / canonical, JSON-LD, a dedicated <b>1200×630 share card</b>, and a <b>web manifest</b> + touch icon.</p></div>
       </div>
     </div>
@@ -275,7 +275,7 @@
       <div class="co-eyebrow">04 · Conventions</div>
       <h2 class="co-title">The rules that keep it honest and precise.</h2>
       <ul class="co-principles">
-        <li><span class="co-pk">Honesty</span><span><b>XeerSoft is the delivery; SAP is methodology.</b> Every SAP page states that its content is design/preparation, never a claim of configured SAP production work.</span></li>
+        <li><span class="co-pk">Honesty</span><span><b>Evidence levels stay explicit.</b> XeerSoft cases are delivered production work; current SAP material is a public-safe role summary; simulations and redesigns are labelled tested, illustrative, standard SAP, or proposed.</span></li>
         <li><span class="co-pk">One source</span><span><b>Every number reconciles to one file.</b> A single internal source of truth governs the metrics; the public <a href="metrics.html" style="color:var(--accent)">Metrics page</a> shows the reconciliation.</span></li>
         <li><span class="co-pk">A11y</span><span><b>WCAG 2.1 AA.</b> Contrast holds in both themes, every interactive control is keyboard-reachable with a visible focus ring, and a skip link leads each page.</span></li>
         <li><span class="co-pk">Motion</span><span><b>Reveals enhance, never gate.</b> Content is visible by default; motion only layers on when JS runs and <code>prefers-reduced-motion</code> allows.</span></li>
@@ -313,7 +313,7 @@
   <p>Bangkok · Thailand</p>
 </footer>
 
-<script src="search.js?v=9" defer></script>
-<script src="fx-flow.js?v=2" defer></script>
+<script src="search.js?v=10" defer></script>
+<script src="fx-flow.js?v=3" defer></script>
 </body>
 </html>
